@@ -30,6 +30,34 @@ The payload begins with an ASCII magic `PS3<Type>File`:
 After the magic comes a container header (length/checksum fields) then the payload body (a TDB, or a
 compressed TDB — see below). The full per-save inventory is `../audits/data/savefile-inventory.csv`.
 
+## Container header (verified)
+
+The payload begins with a fixed header, then the inner content:
+
+| Version | Header size | Layout |
+|---|---:|---|
+| v1 (NHL10–11, some 12) | 32 bytes | `magic(16, null-padded)` + `checksum(4 @0x10)` + `version(4 @0x14)` + `0(4)` + `hash(4 @0x1C)` + inner content @0x20 |
+| v2/v3 (NHL12–legacy) | 44 bytes | `magic(16)` + `checksum(4 @0x10)` + `version(4 @0x14)` + `0` + `1` + `1` + `inner_length(4 @0x24)` + `hash(4 @0x28)` + inner content @0x2C |
+
+- `checksum` @0x10 and `hash` cover the payload (CRC-family; **algorithm not yet reversed** — so
+  re-injecting a *modified* inner DB requires recomputing it, which is deferred).
+- The inner content is a plaintext TDB (`DB\x00\x08…`) or a compressed blob (NHL14+ large payloads).
+
+## ⚠️ Saves contain MORE than the inner DB (handle with care)
+
+A save payload is **not** simply `[header + DB]`. Verified across all anchors:
+
+- **BEAGM / BEAPRO / SEASON** carry **150 KB – 900 KB of additional non-DB data *after* the inner
+  database** (dynasty / career / season state). E.g. nhl10 BEAGM: DB is 2.47 MB but 871 KB follows it.
+- **SETTINGS** is a tiny **132-byte** DB followed by ~1.15 MB of profile/settings data.
+- **HOCKEYCARD** contains **no TDB** at all (card/image data).
+
+**Implication:** "pull the DB out and drop the container" is **lossy** — it would discard these
+sections — and a modified DB cannot be re-injected yet anyway (checksum not reversed; NHL14+ payloads
+compressed). Treat the **whole payload** as the unit to preserve. For lossless size reduction, prefer
+**compressing the payload at rest** over stripping the container (see the project's anchors storage
+decision).
+
 ## Single vs multi-part payload
 
 - **Single `SYS-DATA`**: SETTINGS, ROSTER, HOCKEYCARD always; and BEAGM/BEAPRO/SEASON in
