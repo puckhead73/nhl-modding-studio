@@ -3,6 +3,12 @@
 > **Canonical architecture document.** Derived from the prior app's design brief
 > ([rebuild-design.md](rebuild-design.md), kept as the reference source) and updated for the
 > agreed release-candidate scope. For sequencing see [ROADMAP.md](ROADMAP.md).
+>
+> **The database-editing model is binding and lives in [EDIT-MODEL.md](EDIT-MODEL.md)** — the
+> metadata-driven, entity-first, illegal-states-unrepresentable contract distilled from NHLViewNG
+> ([nhlviewng-functional-report.md](nhlviewng-functional-report.md),
+> [studio-vs-nhlviewng-comparison.md](studio-vs-nhlviewng-comparison.md)). The "Cross-cutting
+> systems" and `studio-domain` sections below implement it.
 
 ## Context
 

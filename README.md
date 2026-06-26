@@ -50,6 +50,7 @@ See [docs/DESIGN.md](docs/DESIGN.md) for the architecture and rationale.
 | Doc | Purpose |
 |-----|---------|
 | [docs/DESIGN.md](docs/DESIGN.md) | Architecture, crate set, service layers, feature inventory, cross-cutting systems |
+| [docs/EDIT-MODEL.md](docs/EDIT-MODEL.md) | **Binding** database-editing contract — metadata-driven, entity-first guardrails |
 | [docs/ROADMAP.md](docs/ROADMAP.md) | Phased plan and verification gates |
 
 **Topic deep-dives:**
@@ -68,6 +69,8 @@ See [docs/DESIGN.md](docs/DESIGN.md) for the architecture and rationale.
 | Doc | Purpose |
 |-----|---------|
 | [docs/rebuild-design.md](docs/rebuild-design.md) | Original design+roadmap brief (source for DESIGN/ROADMAP) |
+| [docs/nhlviewng-functional-report.md](docs/nhlviewng-functional-report.md) | NHLViewNG feature/edit/save map (source for EDIT-MODEL) |
+| [docs/studio-vs-nhlviewng-comparison.md](docs/studio-vs-nhlviewng-comparison.md) | Gap analysis + redesign direction (source for EDIT-MODEL) |
 | [docs/MESH_IMPORT_EXCLUSIVE_PATH.md](docs/MESH_IMPORT_EXCLUSIVE_PATH.md) | Head-mesh import research (deferred / out of RC scope) |
 
 ## Legal & ethics
