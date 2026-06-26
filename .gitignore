@@ -48,3 +48,12 @@ tmp/
 *.sav
 *.roster
 fixtures/private/
+
+# ---- Anchors: vanilla EA game data (copyright). The "single source of truth" for vanilla
+#      databases/saves, packaged with the program as a SEPARATE data pack at distribution time —
+#      never committed to git. Only derived schema/metadata under docs/audits/ is committed.
+/anchors/
+
+# ---- Staging: transient review area. Contents are unverified until checked against anchors and
+#      promoted into docs/. Not tracked.
+/Staging/

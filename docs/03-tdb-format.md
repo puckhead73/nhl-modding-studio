@@ -1,5 +1,9 @@
 # 03 — EA TDB Database Format
 
+> **Superseded for PS3 by the VERIFIED spec:** [formats/tdb-v6-format.md](formats/tdb-v6-format.md)
+> (reverse-engineered and validated 100% vs the meta XML). This draft remains for general/cross-platform
+> context; use the verified spec for the actual byte layout.
+
 > Engine home: the `tdb-core` / `tdb-defs` crates and the **(title, platform) schema/codec
 > registry** in [DESIGN.md](DESIGN.md#cross-cutting-the-title-platform-registry). The reference app
 > proved the format for **Legacy / 14 / 15**; per-title schemas for the rest of NHL 10–21 are

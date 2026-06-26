@@ -1,5 +1,9 @@
 # 05 — Save Data Handling
 
+> **Superseded for PS3 by the VERIFIED spec:** [formats/ps3-save-container.md](formats/ps3-save-container.md)
+> (structure + read/extract verified against every anchor save). This draft remains for general/
+> cross-platform context.
+
 > Engine home: the `tdb-savedata` crate ([DESIGN.md](DESIGN.md#engine-crate-set-consolidated)).
 > Sequencing: [ROADMAP.md](ROADMAP.md) (PS3/Xbox parity in Phases 1–8; **PS4 is net-new in Phase 9**).
 >
