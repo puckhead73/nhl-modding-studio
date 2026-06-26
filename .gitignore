@@ -49,10 +49,12 @@ tmp/
 *.roster
 fixtures/private/
 
-# ---- Anchors: vanilla EA game data (copyright). The "single source of truth" for vanilla
-#      databases/saves, packaged with the program as a SEPARATE data pack at distribution time —
-#      never committed to git. Only derived schema/metadata under docs/audits/ is committed.
-/anchors/
+# ---- Anchors: vanilla EA databases + saves shipped WITH the tool as the clean-slate baseline.
+#      COMMITTED per user decision 2026-06-26 (this is data shipped with the tool, not proprietary
+#      code — overrides the broad EA-data patterns above for this path only). Large binaries are
+#      tracked via Git LFS (see .gitattributes). Re-include despite the *.db etc. patterns above.
+!/anchors/
+!/anchors/**
 
 # ---- Staging: transient review area. Contents are unverified until checked against anchors and
 #      promoted into docs/. Not tracked.
