@@ -41,14 +41,20 @@ Read [README.md](README.md) and the [docs/](docs/) folder for full context befor
 
 ## Hard rules
 
-1. **Never commit copyrighted EA game data.** No real `.tdb`/`.db`/`.viv`/save files in the repo.
+1. **Clean-room repository — no outside influence.** This repo is built from the ground up. Do
+   **not** read, open, search, clone, or copy from any other tool repository on this machine — the
+   prior `nhl-database-studio` app, `E:\Tools\rexglue-sdk`, or anything else — **unless the user
+   explicitly points you at it for that specific instance**. The only prior-app material permitted
+   here is what the user has deliberately placed in this repo (e.g. `docs/rebuild-design.md`,
+   `docs/MESH_IMPORT_EXCLUSIVE_PATH.md`). When prior-app knowledge would help, ask first.
+2. **Never commit copyrighted EA game data.** No real `.tdb`/`.db`/`.viv`/save files in the repo.
    `.gitignore` enforces this; do not weaken it. Use synthetic/redacted fixtures for tests.
-2. **Format facts must be verified, not guessed.** TDB has real per-year/per-platform nuances.
-   Do not assert binary-layout specifics you have not confirmed against the reference
-   implementation or real (locally held, un-committed) data. Mark unverified specifics clearly.
-3. **Version- and platform-aware by default.** Anything touching game data must account for the
+3. **Format facts must be verified, not guessed.** TDB has real per-year/per-platform nuances.
+   Do not assert binary-layout specifics you have not confirmed against material the user has
+   provided in this repo or real (locally held, un-committed) data. Mark unverified specifics clearly.
+4. **Version- and platform-aware by default.** Anything touching game data must account for the
    title (10–21) and platform (Xbox / PS3 / PS4 / Legacy) it targets.
-4. **Two audiences.** Keep the common path simple; put depth behind progressive disclosure.
+5. **Two audiences.** Keep the common path simple; put depth behind progressive disclosure.
 
 ## Conventions
 
@@ -58,5 +64,9 @@ Read [README.md](README.md) and the [docs/](docs/) folder for full context befor
 
 ## Useful references
 
-- Prior rough-draft application (referenced, not imported) — ask the user for its location.
-- Reference working dir on this machine: `E:\Tools\rexglue-sdk` (graphics/Vulkan reference).
+- The canonical docs above and any material the user places in this repo are the **only** in-repo
+  sources of prior-app knowledge.
+- Other repositories on this machine (the prior `nhl-database-studio` app, `E:\Tools\rexglue-sdk`,
+  etc.) are **off-limits** unless the user explicitly directs you to one (see Hard rule 1). The
+  design/roadmap describe *intent* to port the proven engine; the actual code is only consulted when
+  the user opens that door.
