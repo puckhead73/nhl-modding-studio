@@ -1,5 +1,8 @@
 # 05 — Save Data Handling
 
+> Engine home: the `tdb-savedata` crate ([DESIGN.md](DESIGN.md#engine-crate-set-consolidated)).
+> Sequencing: [ROADMAP.md](ROADMAP.md) (PS3/Xbox parity in Phases 1–8; **PS4 is net-new in Phase 9**).
+>
 > **Verification status: DRAFT.** Platform save-data containers have exact, platform-specific
 > structures. Details below marked `[UNVERIFIED]` must be confirmed against the reference
 > implementation or real (locally held, never-committed) saves before being relied upon.

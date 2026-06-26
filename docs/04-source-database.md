@@ -1,48 +1,54 @@
-# 04 — Historical Source Database
+# 04 — Historical Source Database (FHM corpus)
 
 A defining feature of NHL Modding Studio is a **built-in historical hockey database** used as a
 *source* from which to import players, teams, and rosters into any supported game.
+
+> **This is the FHM corpus.** In the engine and [DESIGN.md](DESIGN.md) this dataset is the
+> **FHM corpus** — an embedded **SQLite** database built by the `tdb-fhm` / `tdb-fhm-store` /
+> `tdb-fhm-build` pipeline from FHM CSV data. "Historical source database (1909→present)" and "FHM
+> corpus" are the same thing.
 
 ## Scope of the source database
 
 - **Time span:** 1909 → present (~117 years of hockey).
 - **Breadth:** hundreds of leagues worldwide, not just the NHL.
-- **Entities:** players (with biographical and rating-relevant data), teams, and rosters/seasons.
+- **Entities:** players (bio + career + rating-relevant data), teams, rosters/seasons, contracts,
+  jerseys, captaincy, draft.
 
-This is an **independently compiled** dataset. It contains no EA-copyrighted content and is the
-project's own data asset.
+Independently compiled; contains no EA-copyrighted content.
 
 ## Role in the tool
 
 ```
-Historical source DB ──► mapping/import pipeline ──► target game's TDB
-   (format-agnostic)        (domain model)           (version/platform-specific)
+FHM corpus (SQLite) ──► formula engine ──► import pipeline ──► target game's TDB
+   (1909→present)        (FHM→EA ratings)   (preview/commit)    (title/platform-specific)
 ```
 
-- The source DB is expressed in the format-agnostic **domain model** (Player/Team/Roster/League/
-  Season).
-- The **import pipeline** maps domain entities onto a specific game's schema for a chosen
-  (title, platform), handling attribute scaling, name/ID fitting, and roster-size constraints.
+- The corpus is read-mostly SQLite (`rusqlite`).
+- The **formula engine** computes EA ratings from FHM/biographical data (normalisation modes,
+  archetype classification, saved profiles) — ratings scales differ across NHL 10–21.
+- The **import pipeline** is two-phase **preview → commit** over an `ImportChangeSet` PLAN; preview
+  and commit lower through the *same* code path so they are byte-identical (a golden-test invariant).
+- The **instance registry** (separate SQLite sidecar) ledgers imported player-season instances for
+  dedup (non-blocking).
 
-## Open design questions (to resolve with the roadmap)
+See [DESIGN.md](DESIGN.md#service-layer--studio-api--studio-domain) for the import pipeline and
+formula engine, and [ROADMAP.md](ROADMAP.md) Phase 5.
 
-- **Storage format:** embedded SQLite is the leading candidate (queryable, file-based, ships with
-  the app); alternatives include a packed binary or a set of structured data files. **TBD.**
-- **Distribution:** bundled with the app vs downloaded/updatable as a separate data pack. Given its
-  size and update cadence, a separately versioned, downloadable data pack is the working assumption.
-  (Note: `.gitignore` currently excludes `*.db`; if the source DB is committed in any form, add an
-  explicit exception and confirm it carries no copyrighted data.)
-- **Schema:** canonical tables for players, teams, leagues, seasons, and roster memberships, plus
-  the attribute fields needed to drive game imports.
-- **Provenance & licensing:** track where data came from and under what terms; document before
-  release.
-- **Attribute mapping:** how historical/biographical data becomes game ratings per title (ratings
-  scales differ across NHL 10–21).
+## Build & distribution
+
+- **Build:** `tdb-fhm-build` ingests FHM CSV (season/career/captaincy/jersey/contract/draft) into the
+  SQLite corpus as a build-time step (a separate bin, not part of the app runtime).
+- **Distribution:** the corpus ships as bundled resources / a versioned data pack. Because it can be
+  large, prefer a separately versioned downloadable data pack over committing it to the repo.
+  (Note: `.gitignore` currently excludes `*.db`; if any corpus artifact is committed, add an explicit
+  exception and confirm it carries no copyrighted data.)
 
 ## Requirements
 
-- Fast lookup/search across a large dataset (responsive UI for the import wizard).
-- Deterministic, repeatable imports (same source + same target → same result).
-- Clear handling of partial matches and constraints (e.g., a target roster that can't fit all
-  selected players).
-- Versioned schema so the data pack can evolve independently of the app.
+- Fast lookup/search across a large dataset (responsive Roster Builder UI), e.g. a lazy
+  `EaSlugIndex` for slug→EA-player matching (ambiguity-aware).
+- Deterministic, repeatable imports (same source + same target → same bytes).
+- Clear handling of partial matches and capacity constraints (a target roster that can't fit all
+  selected players surfaces storage blockers in the preview).
+- Versioned schema so the data pack evolves independently of the app.

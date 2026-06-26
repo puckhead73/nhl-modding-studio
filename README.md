@@ -36,24 +36,39 @@ title × platform compatibility matrix.
 
 ## Technology
 
-- **Core:** Rust (via [Tauri](https://tauri.app/)) — fast, safe binary parsing for TDB and save formats.
-- **UI:** Web frontend (framework chosen in the architecture doc) inside a Tauri shell.
+- **Core:** Rust (via [Tauri v2](https://tauri.app/)) — fast, safe binary parsing for TDB and save formats.
+- **UI:** React + TanStack Query inside a Tauri shell.
+- **Historical store:** SQLite (the FHM corpus).
 - **Packaging:** Small native installers per OS.
 
-See [docs/02-architecture.md](docs/02-architecture.md) for the architecture and rationale.
+See [docs/DESIGN.md](docs/DESIGN.md) for the architecture and rationale.
 
 ## Documentation
+
+**Canonical:**
+
+| Doc | Purpose |
+|-----|---------|
+| [docs/DESIGN.md](docs/DESIGN.md) | Architecture, crate set, service layers, feature inventory, cross-cutting systems |
+| [docs/ROADMAP.md](docs/ROADMAP.md) | Phased plan and verification gates |
+
+**Topic deep-dives:**
 
 | Doc | Purpose |
 |-----|---------|
 | [docs/00-vision.md](docs/00-vision.md) | Why this exists, principles, success criteria |
 | [docs/01-scope-and-compatibility.md](docs/01-scope-and-compatibility.md) | Titles, platforms, and the compatibility matrix |
-| [docs/02-architecture.md](docs/02-architecture.md) | System architecture and technology rationale |
 | [docs/03-tdb-format.md](docs/03-tdb-format.md) | EA TDB database format notes and per-year nuances |
-| [docs/04-source-database.md](docs/04-source-database.md) | The 1909→present historical hockey database |
+| [docs/04-source-database.md](docs/04-source-database.md) | The 1909→present historical hockey database (FHM corpus) |
 | [docs/05-save-data.md](docs/05-save-data.md) | Platform save-data handling |
-| [docs/06-roadmap.md](docs/06-roadmap.md) | Feature roadmap (to be populated from the prior app) |
 | [docs/glossary.md](docs/glossary.md) | Domain terminology |
+
+**Reference (from the prior app):**
+
+| Doc | Purpose |
+|-----|---------|
+| [docs/rebuild-design.md](docs/rebuild-design.md) | Original design+roadmap brief (source for DESIGN/ROADMAP) |
+| [docs/MESH_IMPORT_EXCLUSIVE_PATH.md](docs/MESH_IMPORT_EXCLUSIVE_PATH.md) | Head-mesh import research (deferred / out of RC scope) |
 
 ## Legal & ethics
 

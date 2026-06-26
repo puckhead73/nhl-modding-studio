@@ -1,5 +1,10 @@
 # 03 — EA TDB Database Format
 
+> Engine home: the `tdb-core` / `tdb-defs` crates and the **(title, platform) schema/codec
+> registry** in [DESIGN.md](DESIGN.md#cross-cutting-the-title-platform-registry). The reference app
+> proved the format for **Legacy / 14 / 15**; per-title schemas for the rest of NHL 10–21 are
+> reversed in [ROADMAP.md](ROADMAP.md) Phase 10.
+>
 > **Verification status: DRAFT.** This document captures intent and a place to record confirmed
 > facts. EA's TDB format has real nuances that vary by **year (NHL 10–21)** and **platform**.
 > **Do not treat any binary-layout specific here as fact until it is confirmed** against the prior
@@ -49,7 +54,14 @@ As each is verified, replace the checkbox with the confirmed detail and cite the
 - **Tolerant reads where safe:** surface unknown/extra tables rather than failing outright, so new
   titles degrade gracefully.
 
+## Mechanics confirmed by the reference engine
+
+The reference app's `tdb-core` already encodes these as verified (port faithfully, fold specifics
+in here as they are documented): **CRC recomputation** on serialize, **Huffman type-66 pool rebuild**
+(string/localization pools), **RawId namespace reversal** (byte-reversed namespace bridge), and
+endian handling for the PowerPC platforms. PS4 little-endian paths extend this (net-new).
+
 ## References
 
-- Prior rough-draft application (ask the user for its path) — likely the best source of confirmed
-  format details to fold in here.
+- Prior rough-draft application (ask the user for its path) — the best source of confirmed format
+  details to fold in here. Its design brief is captured in [rebuild-design.md](rebuild-design.md).

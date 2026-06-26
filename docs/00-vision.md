@@ -1,5 +1,8 @@
 # 00 — Vision
 
+> Architecture: [DESIGN.md](DESIGN.md) · Sequencing: [ROADMAP.md](ROADMAP.md) · Scope matrix:
+> [01-scope-and-compatibility.md](01-scope-and-compatibility.md).
+
 ## Why NHL Modding Studio exists
 
 The EA NHL modding community has long relied on a patchwork of aging, single-purpose tools.

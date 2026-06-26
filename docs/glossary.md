@@ -13,8 +13,19 @@ Domain terminology used across NHL Modding Studio.
 - **Save data** — per-user, platform-wrapped saved game state, distinct from the shipped TDB
   databases. See [05-save-data.md](05-save-data.md).
 - **Source database / historical database** — the built-in, independently compiled database of
-  hockey players/teams/rosters from 1909 → present, used as an import source. See
-  [04-source-database.md](04-source-database.md).
+  hockey players/teams/rosters from 1909 → present, used as an import source. Implemented as the
+  **FHM corpus**. See [04-source-database.md](04-source-database.md).
+- **FHM corpus** — the SQLite embodiment of the historical source database, built from FHM
+  (Franchise Hockey Manager) CSV data by the `tdb-fhm*` pipeline. Read-mostly; the import source.
+- **studio-api / studio-domain** — the two Rust service layers above the engine: `studio-api` is the
+  thin Tauri/DTO/registry surface; `studio-domain` is pure, GUI-agnostic orchestration. See
+  [DESIGN.md](DESIGN.md).
+- **ImportChangeSet / preview→commit** — the import PLAN model; preview and commit lower through the
+  same code path so they produce byte-identical results (a golden-test invariant).
+- **Parity** — byte-for-byte equivalence with the NHLViewNG / reference-app save/write output;
+  the engine's correctness guardrail.
+- **type-66 pool** — Huffman-coded string/localization pool in the TDB that must be rebuilt
+  (pool-fit constrained) when localized strings change.
 - **Domain model** — the format-agnostic representation (Player, Team, Roster, League, Season) the
   UI and import pipeline operate on, decoupled from any single game's raw schema.
 - **Codec / schema registry** — the layer that resolves the correct binary layout for a given
