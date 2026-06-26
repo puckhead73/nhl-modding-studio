@@ -1,0 +1,66 @@
+# NHL Modding Studio
+
+A comprehensive, polished toolkit for modding EA's NHL games — the spiritual successor to **NHLViewNG**.
+
+NHL Modding Studio aims to be the single place where the community edits, imports, and manages
+the data behind the EA NHL series: rosters, players, teams, save data, and the game databases
+themselves. The design goal is **simple and efficient for casual users, with deep capability for
+power users** who want to go further.
+
+> **Status:** Pre-release scaffold. Architecture and documentation are being established now; a
+> detailed feature roadmap (derived from the prior rough-draft application) is being ingested.
+> No application code has been committed yet.
+
+---
+
+## What it covers
+
+| Dimension        | Coverage |
+|------------------|----------|
+| **Game titles**  | NHL 10 → NHL 21 |
+| **Platforms**    | Xbox (360/One family), PlayStation 3, PlayStation 4, and the **NHL Legacy Recompilation** (based on the Xbox build) |
+| **Data formats** | EA **TDB** databases (with their per-year nuances), platform save data |
+| **Imports**      | Players, teams, and rosters sourced from a built-in historical hockey database spanning **1909 → present** (117 years, hundreds of leagues) |
+
+See [docs/01-scope-and-compatibility.md](docs/01-scope-and-compatibility.md) for the full
+title × platform compatibility matrix.
+
+## Key capabilities (planned)
+
+- **TDB database editing** — read/write EA's TDB databases across NHL 10–21 with version-aware
+  schema handling for the format's many year-to-year nuances.
+- **Save data handling** — open, inspect, and edit platform save data (Xbox, PS3, PS4, Legacy).
+- **Historical source database** — a curated database of players, teams, and rosters going back
+  to 1909, used as an import source to populate any supported game.
+- **Roster / team / player management** — high-level editing flows on top of the raw databases.
+
+## Technology
+
+- **Core:** Rust (via [Tauri](https://tauri.app/)) — fast, safe binary parsing for TDB and save formats.
+- **UI:** Web frontend (framework chosen in the architecture doc) inside a Tauri shell.
+- **Packaging:** Small native installers per OS.
+
+See [docs/02-architecture.md](docs/02-architecture.md) for the architecture and rationale.
+
+## Documentation
+
+| Doc | Purpose |
+|-----|---------|
+| [docs/00-vision.md](docs/00-vision.md) | Why this exists, principles, success criteria |
+| [docs/01-scope-and-compatibility.md](docs/01-scope-and-compatibility.md) | Titles, platforms, and the compatibility matrix |
+| [docs/02-architecture.md](docs/02-architecture.md) | System architecture and technology rationale |
+| [docs/03-tdb-format.md](docs/03-tdb-format.md) | EA TDB database format notes and per-year nuances |
+| [docs/04-source-database.md](docs/04-source-database.md) | The 1909→present historical hockey database |
+| [docs/05-save-data.md](docs/05-save-data.md) | Platform save-data handling |
+| [docs/06-roadmap.md](docs/06-roadmap.md) | Feature roadmap (to be populated from the prior app) |
+| [docs/glossary.md](docs/glossary.md) | Domain terminology |
+
+## Legal & ethics
+
+NHL Modding Studio is a fan-made tool for editing legally owned copies of EA NHL games. It ships
+**no copyrighted EA game data**. The historical source database is independently compiled.
+See [docs/00-vision.md](docs/00-vision.md#legal--ethics) for details.
+
+## License
+
+To be determined. See [docs/00-vision.md](docs/00-vision.md).

@@ -1,0 +1,50 @@
+# ---- Rust / Cargo (Tauri core) ----
+/target/
+**/target/
+Cargo.lock.orig
+*.pdb
+
+# ---- Node / web frontend ----
+node_modules/
+dist/
+dist-ssr/
+.vite/
+*.local
+.eslintcache
+
+# ---- Tauri ----
+src-tauri/target/
+src-tauri/gen/
+.tauri/
+
+# ---- Environment / secrets ----
+.env
+.env.*
+!.env.example
+
+# ---- Editor / OS ----
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.shared.json
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---- Logs / temp ----
+*.log
+logs/
+tmp/
+*.tmp
+
+# ---- Game data & user artifacts (NEVER commit copyrighted EA data) ----
+# Real game databases, saves, and extracted assets must stay out of the repo.
+/sample-data/real/
+*.tdb
+*.db
+*.viv
+*.bh
+*.sav
+*.roster
+fixtures/private/
