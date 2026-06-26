@@ -72,20 +72,29 @@ is keyed per `(title, platform)` precisely so years plug in independently.
 
 ## Layer 2 — Entity model
 
-Edits operate on typed entities backed by the documented join model, never on bare rows.
+Edits operate on typed entities backed by the join model, never on bare rows. The model below is
+**verified against the anchors** (all games) — see
+[audits/roster-relationships.md](audits/roster-relationships.md).
 
-- **Player** — the `ubPc` bio row **plus** its `ZBac` bridge **plus** companion rows
-  (`dSvy`/`xmja` skater-AI, `mHuy`/`fMVl` goalie companions). A Player is the whole cluster, not just
-  the bio row; its lifecycle (create/delete) owns every member.
-- **RosterSlot** — an `eGlu` row inside a team's 40-slot `toWX` block, carrying the per-slot
-  attributes (`dXSB` team, `XSWT` player-instance, `sVRt` jersey, `mCcl` captaincy, `QgFs` archetype
-  *[label binding unconfirmed]*) and the **19 line-group 1-bit position flags**
+- **Player** — the `ubPc` (bio, key `wBIz`) row **plus** its `ZBac` index row **plus** companion
+  rows that **share `ubPc.wBIz` 1:1**: `dSvy` (skater AI) + `xmja` (skater equipment) for skaters,
+  `mHuy` (goalie AI) + `fMVl` (goalie equipment) for goalies. A Player is the whole cluster; its
+  lifecycle (create/delete) owns every member. *Verified: all four companions key on `wBIz`.*
+- **RosterSlot** — an `eGlu` (roster+lines) row, key `toWX`. Bridges to the player via
+  **`eGlu.XSWT → ZBac.vfEq` (a meta-declared FK), then `ZBac.ykFq → ubPc.wBIz`**. Per-slot fields:
+  `dXSB` (team → `kOtt.vfEq`, 8-bit), `sVRt` (jersey #, 7-bit), `mCcl` (captaincy, 2-bit),
+  `QgFs` (player style, 4-bit), `hSZj` (roster status flag, 1-bit), plus **71 one-bit
+  line-assignment flags** (NHL13+; ~60 in NHL11/12 before the OT lines were added) — the per-player
+  "occupies slot S" activation flags the UI groups into the 19 line buckets
   (`C, LW, RW, LD, RD, G, PP5-1/2, PP4-1/2, PK4-1/2, PK3-1/2, SO, X, OT1/2/3`).
-- **Team** — the `kOtt` row.
-- **Roster status** — `ZBac.RREB` tri-state `0/1/3` = Dressed / Scratched / In-Minors.
+- **Team** — the `kOtt` (key `vfEq`) row.
+- **Roster status** — `ZBac.RREB` (2-bit) holds the roster-player status enum. *Label→value mapping
+  (Scratched/Dressed/In-Minors + default) is **candidate**, pending operator/data confirmation.*
 
-The `toWX` block alignment (a player's slots must stay within its team's contiguous block) is an
-entity-level invariant, not a free-field edit.
+> **Carried-forward invariant to (re)confirm:** the prior app modeled a per-team contiguous `toWX`
+> block ("40-slot block alignment"). Our anchors confirm `toWX` is `eGlu`'s primary key, but the
+> contiguous-block invariant itself is a prior-app claim **not yet re-verified** against our data —
+> confirm with the record decoder before relying on it.
 
 ---
 
@@ -165,11 +174,15 @@ Three explicit tiers, all sharing predicates with the invariant engine:
 
 ## Open items
 
-- **Metadata files** — pending user delivery into the repo (Layer 1 source).
-- **Referenced-but-absent docs** — the reports cite `nhlviewng-validation-audit.md`,
-  `nhlviewng-line-visibility-audit.md`, `nhlviewng-semantic-audit.md`, `edit-session-architecture.md`,
-  `roster-view-model.md`, `player-view-model.md`, `db-capacity-limits.md`. They hold load-bearing
-  detail (validation contract, `eGlu`/`ZBac` line storage, capacity ceilings) and are **not in this
-  repo**; not fetched (clean-room). Bring in if/when you choose.
-- **`eGlu.QgFs` archetype label binding** — unconfirmed in the source reports.
+- **Metadata files** — anchor `nhlng-meta.xml` delivered (nhl11→legacy); nhl10 has none.
+- **Relationship/companion/line model** — ✅ **verified** against the anchors and folded into Layer 2
+  ([audits/roster-relationships.md](audits/roster-relationships.md)). The validation/line-visibility
+  staging audits were verified at the schema level; remaining audit docs (`edit-session-architecture`,
+  view-models, `db-capacity-limits`) are not in-repo — bring in if/when you choose.
+- **Data-level FK resolution** — confirming actual record values resolve needs the TDB **record
+  decoder** (descriptor bytes 8:16 not yet decoded); see
+  [formats/tdb-v6-format.md](formats/tdb-v6-format.md#open-items).
+- **Enum value→label mappings** — `eGlu.mCcl` (captaincy), `ZBac.RREB` (status), `eGlu.QgFs`
+  (player style): field depths verified, **labels remain candidate** pending operator/data confirmation.
+- **Per-slot labels** — the 71 one-bit line-assignment flags → hockey-position names not fully mapped.
 - **17–21 metadata** — net-new; not covered by NHLViewNG (ROADMAP Phase 10).

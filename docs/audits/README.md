@@ -11,6 +11,7 @@ staging file or reference doc without verification.
 | [staging-tsv-verification.md](staging-tsv-verification.md) | **Verdict: all 5 staging TSVs verified EXACT** against the binaries |
 | [schema-drift-matrix.md](schema-drift-matrix.md) | Field-set drift of all 7 games vs Legacy (extends the TSVs to nhl14) |
 | [nhlng-schema.md](nhlng-schema.md) | Verified field-level schema corpus (7 games) overview |
+| [roster-relationships.md](roster-relationships.md) | Verified roster→player bridge chain, companions, eGlu line layout, enum-field depths |
 | [anchors-manifest.md](anchors-manifest.md) | Inventory of every anchors file (sha256) |
 | [nhlviewng-internals.md](nhlviewng-internals.md) | Static EXE audit; cross-references the functional report |
 
