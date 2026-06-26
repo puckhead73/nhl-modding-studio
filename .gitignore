@@ -51,8 +51,9 @@ fixtures/private/
 
 # ---- Anchors: vanilla EA databases + saves shipped WITH the tool as the clean-slate baseline.
 #      COMMITTED per user decision 2026-06-26 (this is data shipped with the tool, not proprietary
-#      code — overrides the broad EA-data patterns above for this path only). Large binaries are
-#      tracked via Git LFS (see .gitattributes). Re-include despite the *.db etc. patterns above.
+#      code — overrides the broad EA-data patterns above for this path only). Stored as plain git
+#      binaries (all files are small; git's own packing compresses them). Re-include despite the
+#      *.db etc. patterns above.
 !/anchors/
 !/anchors/**
 

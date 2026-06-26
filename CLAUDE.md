@@ -49,9 +49,10 @@ Read [README.md](README.md) and the [docs/](docs/) folder for full context befor
    `docs/MESH_IMPORT_EXCLUSIVE_PATH.md`). When prior-app knowledge would help, ask first.
 2. **EA data policy (updated 2026-06-26).** Vanilla EA game data that **ships with the tool** — the
    `anchors/` databases and save files (the clean-slate baseline) — **is committed** (it's data
-   shipped with the tool, not proprietary code). Large anchor binaries go through **Git LFS**
-   (`.gitattributes`). Outside `anchors/`, still keep stray/real game files and private working data
-   out of the repo (the broad `*.db`/`*.sav`/… patterns remain); use synthetic fixtures for tests.
+   shipped with the tool, not proprietary code). Anchors are **plain git binaries** (all files are
+   small — largest ~6.5 MB — so no LFS; git's own packing keeps `.git` small). Outside `anchors/`,
+   still keep stray/real game files and private working data out of the repo (the broad
+   `*.db`/`*.sav`/… patterns remain); use synthetic fixtures for tests.
 3. **Format facts must be verified, not guessed.** TDB has real per-year/per-platform nuances.
    Do not assert binary-layout specifics you have not confirmed against material the user has
    provided in this repo or real (locally held, un-committed) data. Mark unverified specifics clearly.
