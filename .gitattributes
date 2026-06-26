@@ -1,10 +1,6 @@
-anchors/**/*.SFO filter=lfs diff=lfs merge=lfs -text
-anchors/**/SYS-DATA filter=lfs diff=lfs merge=lfs -text
-anchors/**/DATA[0-9][0-9][0-9][0-9] filter=lfs diff=lfs merge=lfs -text
-anchors/**/*.db filter=lfs diff=lfs merge=lfs -text
-anchors/**/*.PNG filter=lfs diff=lfs merge=lfs -text
-anchors/**/*.db !text !filter !merge !diff
-anchors/**/*.PNG !text !filter !merge !diff
-anchors/**/*.SFO !text !filter !merge !diff
-anchors/**/SYS-DATA !text !filter !merge !diff
-anchors/**/DATA[0-9][0-9][0-9][0-9] !text !filter !merge !diff
+# Vanilla anchor data — binary files, no EOL conversion, no LFS (all well under size limits).
+anchors/**/*.db                      -text
+anchors/**/*.PNG                     -text
+anchors/**/*.SFO                     -text
+anchors/**/SYS-DATA                  -text
+anchors/**/DATA[0-9][0-9][0-9][0-9]  -text
