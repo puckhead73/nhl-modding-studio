@@ -179,10 +179,13 @@ Three explicit tiers, all sharing predicates with the invariant engine:
   ([audits/roster-relationships.md](audits/roster-relationships.md)). The validation/line-visibility
   staging audits were verified at the schema level; remaining audit docs (`edit-session-architecture`,
   view-models, `db-capacity-limits`) are not in-repo — bring in if/when you choose.
-- **Data-level FK resolution** — confirming actual record values resolve needs the TDB **record
-  decoder** (descriptor bytes 8:16 not yet decoded); see
-  [formats/tdb-v6-format.md](formats/tdb-v6-format.md#open-items).
-- **Enum value→label mappings** — `eGlu.mCcl` (captaincy), `ZBac.RREB` (status), `eGlu.QgFs`
-  (player style): field depths verified, **labels remain candidate** pending operator/data confirmation.
+- **Record decoder — ✅ SOLVED & verified.** The TDB v6 descriptor layout (`kind_code`, bit-offset,
+  id, bit_width) and BE bit-packing are verified ([formats/tdb-v6-format.md](formats/tdb-v6-format.md));
+  records decode to sane values. **Write-path CRCs also verified** (inner-DB CRC-32/MPEG-2; container
+  checksum_a/b) — so validated writes are now possible for `.db` and v2/v4 saves.
+- **Enums — value-distribution VERIFIED** for `eGlu.mCcl` (captaincy 0/1/2), position, skin, jersey
+  (decoded from anchors and confirmed). Full mappings (incl. nationality/birth-state/style, and
+  `ZBac.RREB` status) are in [formats/tdb-v6-format-spec.md §6](formats/tdb-v6-format-spec.md#6-confirmed-valuelabel-mappings)
+  and [audits/roster-relationships.md](audits/roster-relationships.md).
 - **Per-slot labels** — the 71 one-bit line-assignment flags → hockey-position names not fully mapped.
 - **17–21 metadata** — net-new; not covered by NHLViewNG (ROADMAP Phase 10).

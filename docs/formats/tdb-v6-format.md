@@ -1,99 +1,78 @@
 # TDB v6 Binary Format (verified)
 
-> **Verification status: VERIFIED** against the anchor `nhlng.db` files (nhl10–nhl15 + legacy, PS3).
-> The table list and field list reproduce the `nhlng-meta.xml` schema with **100% agreement**, and
-> per-field bit-depths match with **zero discrepancies** across ~17,000 fields (nhl11–legacy). nhl10
-> has no meta and is validated structurally (filesize + directory consistency). Reverse-engineered
-> from the anchors with read-only tooling; cross-referenced to the NHLViewNG EXE
-> (`TtdbDatabaseHeader/MetaTable/MetaField`).
+> **VERIFIED.** Full byte-exact spec: **[tdb-v6-format-spec.md](tdb-v6-format-spec.md)** (user-provided
+> from the prior app, independently verified against our anchors). This page is the short summary +
+> what we confirmed. **Big-endian** on PS3 (endianness is file-header byte `[4]`: 0=LE, 1=BE).
+> Internal `version = 6`. Applies to `nhlng.db`, `nhl_eng_us.db`, `draft_roster.db`, `dynamic_ratings.db`.
 
-Applies to the EA NHL **`*.db`** databases (`nhlng.db`, `nhl_eng_us.db`, `draft_roster.db`,
-`dynamic_ratings.db`). **Big-endian** (PS3/PowerPC). Internal `version = 6`.
+## Id-reversal rule
 
-## The id-reversal rule (read first)
+4-char ids are byte-reversed on big-endian files. The **binary and `nhlng-meta.xml`** use the **raw**
+order (table `cPbu`, field `BSXd`); the **EA DB Editor XML / TSV audits / EDIT-MODEL** use the
+**reversed "real id"** (`ubPc`, `dXSB`). Reverse the 4 chars to convert.
 
-Two conventions exist for the 4-character table/field ids:
-
-- **Raw** order — used by **the binary itself** and by **`nhlng-meta.xml`** (e.g. table `cPbu`,
-  field `BSXd`).
-- **"Real" / reversed** order — the same 4 chars reversed — used by the **EA DB Editor XML**, the
-  **staging TSV audits**, the **functional report**, and **EDIT-MODEL.md** (e.g. `ubPc`, `dXSB`).
-
-Convert by reversing the 4 characters: `cPbu` ⇄ `ubPc`. The binary and the per-game meta XML match
-**without** reversal; reverse only to reach the human/"real id" convention.
-
-## File header (24 bytes)
-
-| Offset | Size | Endian | Field | Notes |
-|---:|---:|---|---|---|
-| `0x00` | 2 | – | magic | ASCII `"DB"` (`44 42`) |
-| `0x02` | 6 | – | format bytes | constant `00 08 01 00 00 00` (version/format marker) |
-| `0x08` | 4 | BE | **file length** | equals the file size (verified every DB) |
-| `0x0C` | 4 | BE | reserved | `0` |
-| `0x10` | 4 | BE | **table count** | matches meta XML table count exactly |
-| `0x14` | 4 | – | head hash | integrity value (CRC-family; algorithm not yet reversed) |
-| `0x18` | — | — | table directory | begins here |
-
-## Table directory
-
-`table_count` entries × **8 bytes**: `tag(4 raw chars) + u32 BE block_offset`. Offsets are relative to
-the end of the directory:
+## Layout (verified)
 
 ```
-data_base   = 0x18 + 8 * table_count
-block_abs   = data_base + block_offset      # absolute file offset of the table's block
-block_size  = next_block_offset - block_offset   (last table runs to EOF)
+[0x00] File header (0x18 = 24 B): "DB"(0x00); endian byte(0x04); db_size u32(0x08);
+       table_count u32(0x10); header CRC(0x14)  [covers file[0x00..0x14]]
+[0x18] Table directory: table_count × 8 B = { id(4) , u32 data_offset } ; data_base = 0x18+8*count
+[...]  Per table:
+         Table header (0x28 = 40 B): prior_crc(+0), data_alloc_type(+4), record_len_bytes(+8),
+            record_len_bits(+0x0C), max_records u16(+0x14), current_records u16(+0x16),
+            num_fields u8(+0x1C), index_count u8(+0x1D), header_crc(+0x24)
+         num_fields × FieldDescriptor (0x10 = 16 B)
+         Record block (record_len_bytes × rows)
+         [type 34/66 only] varchar extra-data pool (uncompressed / Huffman)
+[EOF-4] trailing EOF CRC
 ```
 
-Offsets are monotonically increasing.
+### Field descriptor (16 bytes) — CORRECTED
 
-## Per-table block
+| Offset | Field | Meaning |
+|---:|---|---|
+| `[0..4]` | `kind_code` | type tag: `0`=inline string, `1`=inline binary, `3`=fixed-bit uint (the workhorse), `13`/`14`=varchar (1/2-byte len prefix into the pool), `2`=signed, `4`=float |
+| `[4..8]` | `record_bit_offset` | bit position of the field within a record |
+| `[8..12]` | `id` | 4-char field id (raw; reverse for real id) |
+| `[12..16]` | `bit_width` | storage width ("depth"); matches meta `depth` |
 
-A **0x30-byte block header** followed by the field-descriptor array, then the packed record region.
+> **Correction:** an earlier version of this page placed the `id` at `[0..4]` and a 0x30 header. That
+> was a +8-shifted read that *happened* to capture id+width correctly; the true layout (40-byte header;
+> `kind_code, bit_offset, id, bit_width`) is verified above. Signedness is **not** in `kind_code` — a
+> field is signed iff its meta `range_low < 0` (two's-complement at the meta layer).
 
-| Offset (in block) | Size | Endian | Field | Notes |
-|---:|---:|---|---|---|
-| `0x00` | 4 | – | table hash | CRC-family |
-| `0x04` | 4 | BE | const | `2` |
-| `0x08` | 4 | BE | (record/layout) | varies; not the field count |
-| `0x1C` | 4 | **LE** | **field count** | the reliable count — matches meta XML 100% |
-| `0x30` | — | — | field descriptors | `field_count` × 16 bytes |
+### Record decoding
 
-> The field count at `+0x1C` is stored **little-endian** (`count, 00, 00, 00`) even though the rest of
-> the format is big-endian. This is the authoritative count.
+Records are bit-packed; **big-endian = MSB-first** (PS3). A value =
+`read_be_bits(record, bit_offset, bit_width)`. Record `i` starts at `i * record_len_bytes` in the
+block; row count from `data_alloc_type` (`current_records`, except types 2/6 use `max_records`).
+Varchars (kind 13/14) store a **4-byte BE offset** into the table's extra-data pool. See spec §1, §3.
 
-### Field descriptor (16 bytes)
+## Integrity (verified — write path unlocked)
 
-| Offset | Size | Endian | Field | Notes |
-|---:|---:|---|---|---|
-| `+0x00` | 4 | – | field id | raw 4 chars (reverse for "real id") |
-| `+0x04` | 4 | BE | **bit-depth** | storage width; matches meta `depth` exactly |
-| `+0x08` | 8 | – | record-layout | type/bit-offset packing — **not** a clean type code; **to refine** |
+| Hash | Algorithm | Covers / stored |
+|---|---|---|
+| Inner-DB CRCs (header, prior_crc, header_crc, EOF) | **CRC-32/MPEG-2** (poly `0x04C11DB7`, init `0xFFFFFFFF`, no reflection, xorout 0) | header hash covers `file[0x00..0x14]`, stored at `0x14` (file endianness) |
+| Save container `checksum_a` @`0x10` | **CRC-32/IEEE** (reflected) | `file[0x1C..EOF]`, stored BE |
+| Save container `checksum_b` @`0x28` | **CRC-32/BZIP2** | `file[0x2C..EOF]`, stored BE |
 
-Descriptors are stored sorted ascending by raw id. The **field type, legal range, key, update flag,
-FK parent, and human name come from the meta XML**, not the descriptor (the descriptor's last 8 bytes
-do not decode to a stable type; the last descriptor's trailing bytes overlap the record region).
+Recompute order on write: inner-DB CRCs (prior_crc → header_crc → EOF → header CRC last); then save
+container `checksum_b` then `checksum_a`. See spec §2.
 
-## Integrity
+## What we independently verified (against `anchors/ps3/**`)
 
-- File length (`0x08`) is verified for every database.
-- The head hash (`0x14`) and per-table hash (`+0x00`) are CRC-family values; the exact algorithm is
-  **not yet reversed** (read verification only this pass — write/recompute is deferred to the engine).
+- table set + per-field id & `bit_width` match `nhlng-meta.xml` 100% (all games, ~17k fields);
+- **records tile cleanly** (offset+width within `record_len_bits`) for 134/134 tables;
+- **inner-DB header CRC matches all 7 games**; CRC known-answers pass;
+- **container `checksum_a`/`checksum_b` match** on every v2/v4 save tested;
+- **record decode → sane values** (position 0–4, captaincy `{0:4872,1:220,2:440}`, jersey 0–99, skin 1–10).
 
-## Validation
+Verified per-game schema corpus: `../audits/data/schema/<game>-schema.json`; drift:
+`../audits/data/drift-matrix.csv` ([../audits/nhlng-schema.md](../audits/nhlng-schema.md)).
 
-Independently validated against `nhlng-meta.xml` for nhl11/12/13/14/15/legacy:
+## Still open
 
-- **table set**: identical, 100% (131/131 … 134/134).
-- **per-table field set**: identical, 100% every table.
-- **per-field bit-depth**: 0 mismatches across all ~17,000 fields.
-
-The verified per-game schema corpus is `../audits/data/schema/<game>-schema.json`; the cross-game
-drift is `../audits/data/drift-matrix.csv` (see [../audits/nhlng-schema.md](../audits/nhlng-schema.md)).
-
-## Open items
-
-- Decode the descriptor's trailing 8 bytes (record bit-offset / type encoding).
-- Reverse the head/table CRC algorithm (needed for the write path, not for reads).
-- Localization `nhl_eng_us.db` uses large varchar/string fields (depth in bytes, up to 32000) and a
-  Huffman string pool — structure noted; full pool handling deferred.
+- **Huffman varchar codec** (type-66 pools) — spec §3.1; verify when we decode varchar strings.
+- **PFD/AES** for raw (non-exported) PS3 saves — **net-new**, no implementation exists (spec §5);
+  the anchors are already-decrypted exports.
+- **v1 container write** (NHL10/11) — `tag_1c@0x1C` un-reversed → v1 read-only (spec §4).

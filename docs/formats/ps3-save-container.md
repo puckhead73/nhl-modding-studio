@@ -1,9 +1,18 @@
-# PS3 Save Container Format (verified — read/extract)
+# PS3 Save Container Format (verified)
 
-> **Verification status: VERIFIED (read/extract).** Container structure, save-type taxonomy, and the
-> plaintext/compressed boundary were confirmed against every PS3 save in `anchors/ps3/**`. The
-> anchors are already-decrypted emulator exports, so no PFD/AES decryption was needed. Write-path
-> (checksum recompute, re-encrypt) is **deferred** per the audit plan.
+> **Verification status: VERIFIED, incl. the write checksums.** Container structure, save-type
+> taxonomy, plaintext/compressed boundary, and the **v2/v4 container checksums** are confirmed against
+> the anchors. Full byte-exact container spec (v1/v2/v4 headers, zlib body, recompute order):
+> **[tdb-v6-format-spec.md §4](tdb-v6-format-spec.md#4-save-container-layout)**.
+>
+> **Checksums (verified on every v2/v4 save tested):** `checksum_a` @`0x10` = **CRC-32/IEEE** over
+> `file[0x1C..EOF]` (BE); `checksum_b` @`0x28` = **CRC-32/BZIP2** over `file[0x2C..EOF]` (BE). So the
+> **save write-path is unlocked for v2 (NHL12/13) and v4 (NHL14/15/Legacy)**. **v1 (NHL10/11) is
+> read-only** — its `tag_1c@0x1C` is un-reversed. **PFD/AES is net-new** (the anchors are already
+> RPCS3-decrypted exports; no PFD code exists to port).
+>
+> **Container version varies by save TYPE, not just game** — e.g. NHL12 ROSTER is v2 but NHL12 BEAGM
+> is v1. Detect by body marker, not the version byte (see spec §4).
 
 ## Save directory layout
 
@@ -32,16 +41,18 @@ compressed TDB — see below). The full per-save inventory is `../audits/data/sa
 
 ## Container header (verified)
 
-The payload begins with a fixed header, then the inner content:
+Three header variants; full field maps in [tdb-v6-format-spec.md §4](tdb-v6-format-spec.md#4-save-container-layout):
 
-| Version | Header size | Layout |
-|---|---:|---|
-| v1 (NHL10–11, some 12) | 32 bytes | `magic(16, null-padded)` + `checksum(4 @0x10)` + `version(4 @0x14)` + `0(4)` + `hash(4 @0x1C)` + inner content @0x20 |
-| v2/v3 (NHL12–legacy) | 44 bytes | `magic(16)` + `checksum(4 @0x10)` + `version(4 @0x14)` + `0` + `1` + `1` + `inner_length(4 @0x24)` + `hash(4 @0x28)` + inner content @0x2C |
+| Version | Header | Games | Body | Writeable |
+|---|---:|---|---|---|
+| **v1 RawV1** | 32 B (`0x20`) | NHL10/11 (+ some NHL12 types) | raw TDB | **No** (`tag_1c@0x1C` un-reversed) |
+| **v2 RawV2** | 44 B (`0x2C`) | NHL12/13 | raw TDB, tight | Yes |
+| **v4 ZlibV4** | 48 B (`0x30`) | NHL14/15/Legacy | zlib stream @`0x30` + zero pad | Yes |
 
-- `checksum` @0x10 and `hash` cover the payload (CRC-family; **algorithm not yet reversed** — so
-  re-injecting a *modified* inner DB requires recomputing it, which is deferred).
-- The inner content is a plaintext TDB (`DB\x00\x08…`) or a compressed blob (NHL14+ large payloads).
+Both checksums are at fixed offsets in all variants: `checksum_a`@`0x10` (CRC-32/IEEE over `[0x1C..]`),
+`checksum_b`@`0x28` (CRC-32/BZIP2 over `[0x2C..]`) — **both verified**; v4 also has `uncompressed_size`@`0x24`
+and `compressed_size`@`0x2C` (LE). The inner content is a plaintext TDB (`DB\x00\x08…`) or, for v4, a
+zlib/DEFLATE stream wrapping the TDB.
 
 ## ⚠️ Saves contain MORE than the inner DB (handle with care)
 
@@ -53,37 +64,38 @@ A save payload is **not** simply `[header + DB]`. Verified across all anchors:
 - **HOCKEYCARD** contains **no TDB** at all (card/image data).
 
 **Implication:** "pull the DB out and drop the container" is **lossy** — it would discard these
-sections — and a modified DB cannot be re-injected yet anyway (checksum not reversed; NHL14+ payloads
-compressed). Treat the **whole payload** as the unit to preserve. For lossless size reduction, prefer
-**compressing the payload at rest** over stripping the container (see the project's anchors storage
-decision).
+sections. The checksums are now reversed (above), so a modified DB *can* be re-injected into a v2/v4
+single-file save by patching the body and recomputing `checksum_b`→`checksum_a` — but you must
+**preserve the whole payload** (header + DB + the trailing non-DB sections), not just the DB.
 
-## Single vs multi-part payload
+## Single vs multi-part payload (⚠️ discrepancy with the spec)
 
-- **Single `SYS-DATA`**: SETTINGS, ROSTER, HOCKEYCARD always; and BEAGM/BEAPRO/SEASON in
-  **NHL10–NHL12**.
-- **Multi-part `DATA0000..N`**: BEAGM/BEAPRO/SEASON in **NHL13 and later** (the body is split across
-  ~1 MB / 3 MB chunks that concatenate into one payload). The split begins at NHL13.
+- **Single `SYS-DATA`**: SETTINGS, ROSTER, HOCKEYCARD always; and BEAGM/BEAPRO/SEASON in **NHL10–12**.
+- **Multi-part `DATA0000..N`**: BEAGM/BEAPRO/SEASON in **NHL13+** (~1 MB / 3 MB chunks).
 
-## Plaintext vs compressed payload (key boundary)
+> The spec ([§4](tdb-v6-format-spec.md#4-save-container-layout)) states the prior app handled
+> **single-file saves only** ("`DATA000N` reassembly: NOT PRESENT") — it worked with the ROSTER save
+> (single `SYS-DATA`). But our anchors contain multi-part dynasty/season saves, so **`DATA000N`
+> reassembly is net-new / unverified** for those types. Our checksum verification was on single-file
+> saves; whether plain concatenation is the correct reassembly for multi-part is **not yet confirmed**.
 
-The inner database is stored either as a **plaintext TDB** (`DB\x00\x08\x01…`) or **compressed**:
+## Plaintext vs zlib payload (key boundary)
 
-- **NHL10–NHL13**: payloads embed a **plaintext TDB** (extracted and header-validated for SETTINGS,
-  BEAGM, ROSTER, BEAPRO, SEASON; HOCKEYCARD carries no TDB).
-- **NHL14 / NHL15 / Legacy**: large payloads (ROSTER, BEAGM, BEAPRO, SEASON) embed a **compressed
-  TDB** — no plaintext `DB` magic is present. Small SETTINGS stays plaintext even here.
+The inner content is either a **plaintext TDB** (`DB\x00\x08\x01…`) or a **zlib stream** — note this is
+the **save-container zlib** (v4), which is *separate from* the DB-internal Huffman varchar codec
+(don't conflate; see spec §3):
 
-This matches the NHLViewNG EXE's `CompressionSizeTrigger` + Huffman evidence (see
-[../audits/nhlviewng-internals.md](../audits/nhlviewng-internals.md)): payloads above a size threshold
-are compressed. **Decompression is required to read NHL14+ roster/dynasty saves** and is deferred to
-the engine's save phase.
+- **NHL10–13** (v1/v2 containers): plaintext TDB body.
+- **NHL14/15/Legacy** (v4 ZlibV4): the body is an **RFC-1950 zlib/DEFLATE** stream at `0x30` (small
+  SETTINGS may stay plaintext). Inflate to get the TDB; the engine deflates + repads + recomputes the
+  two checksums on write.
 
 ## Verified vs deferred
 
-- ✅ Verified: SFO `TITLE` parse; container magic + save-type map; single/multi-part split point
-  (NHL13); plaintext-TDB extraction + header validation for NHL10–13 payloads; identification of the
-  compression boundary at NHL14+.
-- ⏳ Deferred (engine save phase): container header field semantics (length/checksum offsets), the
-  compression codec (Huffman) for NHL14+, `DATA000N` exact reassembly semantics, checksum recompute,
-  and any PFD/AES re-encryption for write-back. PS4/Xbox360 containers are out of scope (no anchors).
+- ✅ **Verified:** SFO `TITLE`; container magic + save-type map; v1/v2/v4 header layouts;
+  **checksum_a/checksum_b** (write-path for v2/v4 single-file saves); plaintext-TDB extraction; the
+  zlib boundary at NHL14+.
+- ⏳ **Deferred / open:** `DATA000N` multi-part reassembly (net-new — see discrepancy above); **v1
+  write** (`tag_1c` un-reversed → NHL10/11 read-only); the DB-internal Huffman varchar codec (spec
+  §3.1, verify when decoding pools); **PFD/AES** for raw console saves (net-new). PS4/Xbox360
+  containers out of scope (no anchors).
