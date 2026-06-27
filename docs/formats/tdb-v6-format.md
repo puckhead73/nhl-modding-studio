@@ -79,9 +79,16 @@ container `checksum_b` then `checksum_a`. See spec §2.
 Verified per-game schema corpus: `../audits/data/schema/<game>-schema.json`; drift:
 `../audits/data/drift-matrix.csv` ([../audits/nhlng-schema.md](../audits/nhlng-schema.md)).
 
-## Still open
+## Read path: COMPLETE & verified
 
-- **Huffman varchar codec** (type-66 pools) — spec §3.1; verify when we decode varchar strings.
-- **PFD/AES** for raw (non-exported) PS3 saves — **net-new**, no implementation exists (spec §5);
-  the anchors are already-decrypted exports.
+uint (kind 3), inline strings (kind 0), and **Huffman varchars (kind 13/14, type-66 pool)** all decode
+correctly — the `nhl_eng_us.db` `vCJG` pool decodes to clean localization text. **String encoding is
+Windows-1252** (not strict UTF-8) for chars like the curly apostrophe (`0x92`) / nbsp (`0xA0`).
+
+## Still open (write-side / net-new)
+
+- **Huffman re-compress** — spec §3.1/§3.2 reuse the on-disk tree with a *no-new-glyph* constraint;
+  verifies when we implement string writes.
+- **Multi-part `DATA000N` save reassembly** — net-new (prior app did single-file only).
 - **v1 container write** (NHL10/11) — `tag_1c@0x1C` un-reversed → v1 read-only (spec §4).
+- **PFD/AES** for raw (non-exported) PS3 saves — **net-new**; anchors are already-decrypted exports.

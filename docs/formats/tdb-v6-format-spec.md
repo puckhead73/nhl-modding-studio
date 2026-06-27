@@ -14,8 +14,11 @@
 > - **Record decoding** (BE MSB-first): decodes known fields to sane values — position 0–4, captaincy
 >   `{0:4872,1:220,2:440}`, jersey 0–99, skin 1–10.
 > - **Enums** §6 (position/captaincy/skin) confirmed by value distribution.
-> - **Not yet verified:** Huffman varchar codec §3.1 (verify when decoding type-66 pools).
->   **Out of scope / net-new:** PFD/AES §5 (the spec itself states none exists — matches our finding).
+> - **Huffman varchar codec §3.1 (decode): VERIFIED** — worked vector `0x5A`→"ABCAB" reproduces, and
+>   the real `nhl_eng_us.db` `vCJG` type-66 pool decodes to clean localization strings. *(Strings use
+>   Windows-1252, not strict UTF-8, for chars like the curly apostrophe `0x92`.)* Huffman **re-compress**
+>   (reuse-tree, no-new-glyph §3.1/§3.2) verifies when we implement string writes.
+> - **Out of scope / net-new:** PFD/AES §5 (the spec itself states none exists — matches our finding).
 >
 > The `file:line` citations point at the prior `nhl-database-studio` repo (provenance only — that code
 > was **not** read; verification used the anchor binaries).
