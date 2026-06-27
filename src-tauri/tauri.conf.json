@@ -1,0 +1,28 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "NHL Modding Studio",
+  "version": "0.0.0",
+  "identifier": "com.nhlmoddingstudio.app",
+  "build": {
+    "frontendDist": "../app/dist",
+    "devUrl": "http://localhost:1420",
+    "beforeDevCommand": "npm --prefix ../app run dev",
+    "beforeBuildCommand": "npm --prefix ../app run build"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "NHL Modding Studio",
+        "width": 1200,
+        "height": 800
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": false,
+    "targets": "all"
+  }
+}

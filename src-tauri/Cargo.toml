@@ -1,0 +1,21 @@
+[package]
+name = "nhl-studio"
+description = "NHL Modding Studio — Tauri desktop app."
+version = "0.0.0"
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[lib]
+name = "nhl_studio_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+ts-rs = "10"
+tdb-core = { path = "../crates/tdb-core" }

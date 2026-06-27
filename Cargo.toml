@@ -3,7 +3,7 @@
 # workspace in a later Phase 0 step. See docs/DESIGN.md.
 [workspace]
 resolver = "2"
-members = ["crates/tdb-core"]
+members = ["crates/tdb-core", "src-tauri"]
 
 [workspace.package]
 edition = "2021"
