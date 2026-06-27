@@ -1,8 +1,8 @@
 # Cross-Platform Format Audit (Xbox360 + PS4)
 
 > **Verification status: VERIFIED.** The TDB v6 read+write core extends across the whole matrix.
-> Checked the newly-added Xbox360 (nhl10–15+legacy) and PS4 (nhl19/20/21; nhl18 saves only) anchors
-> against the verified spec ([../formats/tdb-v6-format.md](../formats/tdb-v6-format.md)).
+> Checked the Xbox360 (nhl10–15+legacy) and PS4 (**nhl17–21**) anchors against the verified spec
+> ([../formats/tdb-v6-format.md](../formats/tdb-v6-format.md)). Every DB parses; size + CRC verify.
 
 ## Headline
 
@@ -54,16 +54,15 @@ save phase; reading/extracting is solved.
 |---|---|---|---|---|
 | PS3 nhl10–15+legacy | ✅ | ✅ | ✅ | ✅ (v2/v4) / v1 read-only |
 | Xbox360 nhl10–15+legacy | ✅ (=PS3) | ✅ | ✅ (=PS3) | ⬜ net-new |
-| PS4 nhl19/20/21 | ✅ | ✅ | ⬜ to extract | ⬜ net-new (Sony dir) |
-| PS4 nhl18 | — (no DBs added) | — | — | ⬜ (saves only) |
-| NHL16; NHL17 | ⬜ no anchors | | | |
+| PS4 nhl17–21 | ✅ | ✅ | ✅ | ✅ (records + LZ4 → LE TDB) |
+| NHL16 | **excluded from project** | | | |
 
 ## PS4 schema corpus — extracted & verified
 
-The PS4 field-level corpus is generated for nhl19/20/21: **17 schema files** under
-`data/schema/ps4/<game>-<db>.json`, covering `nhl_game.db` (111 tables / 3156 fields; nhl21 = 115 /
-3265), `eng_us.db`, and the secondary DBs (`entry_draft`, `expansion_draft`, `initial_experience`,
-`threes_campaign`, `proam`). Every field matched its meta — `nhl_game.db`/`eng_us.db` against their own
+The PS4 field-level corpus is generated for **nhl17–21**: **26 schema files** under
+`data/schema/ps4/<game>-<db>.json`, covering `nhl_game.db` (111–118 tables), `eng_us.db`, and the
+secondary DBs (`entry_draft`, `expansion_draft`, `initial_experience`, `threes_campaign`, `proam`).
+NHL17 carries a leaner DB set (no draft/threes DBs). Every field matched its meta — `nhl_game.db`/`eng_us.db` against their own
 meta XML, and the secondary DBs **100% via borrowed `nhl_game-meta.xml`** (they are strict subsets of
 the main schema, ids stable). The **LE record decoder** was validated against the spec's own worked
 vector (`read(31,5)==1`) and `position` decodes to the valid 0–4 range.
@@ -81,6 +80,5 @@ vector (`read(31,5)==1`) and `position` decodes to the valid 0–4 range.
 2. **PS4 read-path interpretation**: identify the active-roster player table (the base `KdqM` shows
    default values; confirm where real jerseys/ratings live in the roster TDB).
 
-> **Scope:** **NHL16 is excluded** from the project. **NHL17 (PS4)** has no anchors; **NHL18 (PS4)** is
-> saves-only (no base DBs). Everything else (NHL10–15+Legacy on PS3/Xbox360; NHL19–21 on PS4) is
-> format-complete.
+> **Scope:** **NHL16 is excluded** from the project. Everything in scope is now format-complete:
+> NHL10–15+Legacy on PS3/Xbox360, and NHL17–21 on PS4 (DBs + schema corpus + save containers).
