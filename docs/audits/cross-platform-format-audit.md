@@ -35,19 +35,18 @@ as the spec's "reverse only on big-endian" rule predicts. Confirmed against the 
 So the verified TDB core (header, directory, descriptors, record decoding, all CRC scopes, Huffman) is
 **endianness-parametric and covers PS4 reading + writing** — only the per-game schema corpus is new.
 
-## Save containers — net-new (the remaining reverse work)
+## Save containers — REVERSED & verified
 
-Neither platform uses PS3's `PS3<Type>File` framing:
+- **Xbox360 = the same v1/v2/v4 container as PS3**, just a shorter magic (`RosterFile`/`Dynasty`/
+  `BeAPros`/…, no `PS3` prefix) and platform marker `field_20`=`1` (vs PS3 `2`). nhl12 ROSTER is
+  RawV2 with **both checksums verified**. Covered by [../formats/ps3-save-container.md](../formats/ps3-save-container.md).
+- **PS4 = Sony save dir** (`DATA`/`INDEX`/`NAME`/`sce_sys`). `DATA` is a length-prefixed record stream;
+  the roster record is `[codec 0x01][LZ4 frame]` → a **little-endian TDB** (verified: inner header CRC
+  OK, real data decodes — the 31 NHL cities). This is where the live PS4 roster lives. Full spec:
+  [../formats/ps4-save-container.md](../formats/ps4-save-container.md).
 
-- **Xbox360**: single save file per type with its own ASCII magic — e.g. `Dynasty`, `BeAPros` (vs PS3
-  `PS3DynastyFile`/`PS3BeAProFile`). Likely a CON/STFS-extracted blob wrapping the TDB; header/checksum
-  layout not yet reversed.
-- **PS4**: each save is a **Sony save directory** — `DATA` / `INDEX` / `NAME` / `sce_sys/` — with the
-  `DATA` blob carrying JSON-ish metadata (`{"IsBackup"…}`) plus the payload. A different, more involved
-  container (PS4 save-data structure); not yet reversed.
-
-Both are deferrable: they don't block DB editing on the proven titles. They become relevant for
-save read/write on those platforms.
+Write-back (recompute container checksums / LZ4 re-compress + record rebuild) is deferred to the engine
+save phase; reading/extracting is solved.
 
 ## Coverage status after this audit
 
@@ -76,6 +75,12 @@ vector (`read(31,5)==1`) and `position` decodes to the valid 0–4 range.
 
 ## Next steps
 
-1. **Reverse the two save containers** (Xbox360 magic-blob; PS4 Sony save dir) — needed for save
-   read/write, and (per the note above) likely where the PS4 live roster actually lives.
-2. NHL16 (any platform) and NHL17 (PS4) still have **no anchors**; NHL18 PS4 is saves-only.
+1. **Save write-back** (deferred): container-checksum recompute (PS3/Xbox360 v2/v4 — already reversed),
+   LZ4 re-compress + PS4 record-stream rebuild, PS3 multi-part `DATA000N` reassembly, v1 (NHL10/11)
+   container write.
+2. **PS4 read-path interpretation**: identify the active-roster player table (the base `KdqM` shows
+   default values; confirm where real jerseys/ratings live in the roster TDB).
+
+> **Scope:** **NHL16 is excluded** from the project. **NHL17 (PS4)** has no anchors; **NHL18 (PS4)** is
+> saves-only (no base DBs). Everything else (NHL10–15+Legacy on PS3/Xbox360; NHL19–21 on PS4) is
+> format-complete.

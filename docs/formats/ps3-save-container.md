@@ -1,5 +1,12 @@
-# PS3 Save Container Format (verified)
+# PS3 / Xbox360 Save Container Format (verified)
 
+> **Also covers Xbox360.** Xbox360 saves use the **same v1/v2/v4 container** as PS3 — verified:
+> nhl12 Xbox360 ROSTER is RawV2 with `checksum_a`/`checksum_b` both matching. Differences from PS3:
+> the magic has **no `PS3` prefix** (`RosterFile`, `Dynasty`, `BeAPros`, `HockeyCards`, `SeasonFile`,
+> `UserProfileFile`), and the platform marker `field_20`@`0x20` = **1** (Xbox360) vs **2** (PS3). Saves
+> are single files named after the save type. Everything else below applies unchanged. (PS4 uses a
+> different container — see [ps4-save-container.md](ps4-save-container.md).)
+>
 > **Verification status: VERIFIED, incl. the write checksums.** Container structure, save-type
 > taxonomy, plaintext/compressed boundary, and the **v2/v4 container checksums** are confirmed against
 > the anchors. Full byte-exact container spec (v1/v2/v4 headers, zlib body, recompute order):
