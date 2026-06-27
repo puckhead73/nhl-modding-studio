@@ -1,0 +1,14 @@
+# NHL Modding Studio — Cargo workspace (Rust engine).
+# The engine crates are Tauri-independent (pure, testable); the Tauri app joins the
+# workspace in a later Phase 0 step. See docs/DESIGN.md.
+[workspace]
+resolver = "2"
+members = ["crates/tdb-core"]
+
+[workspace.package]
+edition = "2021"
+rust-version = "1.96"
+publish = false
+
+[profile.release]
+opt-level = 3

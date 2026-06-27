@@ -1,0 +1,10 @@
+[package]
+name = "tdb-core"
+description = "Byte-exact reader for EA NHL TDB v6 databases (PS3/Xbox360 BE, PS4 LE)."
+version = "0.0.0"
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+# Pure Rust, no dependencies — the verified read path only needs std.
+[dependencies]
