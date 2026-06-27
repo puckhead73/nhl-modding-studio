@@ -59,6 +59,15 @@ Varchars (kind 13/14) store a **4-byte BE offset** into the table's extra-data p
 Recompute order on write: inner-DB CRCs (prior_crc → header_crc → EOF → header CRC last); then save
 container `checksum_b` then `checksum_a`. See spec §2.
 
+> **CRC body scope (verified refinement):** each table's "body" — hashed by the *next* table's
+> `prior_crc`, and by the EOF CRC for the last table — is `[table_block + 0x28 .. body_end)`, i.e. it
+> **starts right after the 40-byte header and includes the field descriptors**, not just the record
+> region. `body_end = (block+0x28+num_fields*16) + record_len_bytes * rows` where `rows = max_records`
+> for alloc types {2,6,10,14} else `current_records`; for alloc types {34,66} (extra-data pool)
+> `body_end` = the next table's block start. Table 0's `prior_crc` hashes the directory
+> (`file[0x18 .. 0x18+8*num_tables]`). **Verified: all four CRC scopes match across all 7 games** —
+> so a no-op read→serialize is byte-identical, and edited writes are valid.
+
 ## What we independently verified (against `anchors/ps3/**`)
 
 - table set + per-field id & `bit_width` match `nhlng-meta.xml` 100% (all games, ~17k fields);
