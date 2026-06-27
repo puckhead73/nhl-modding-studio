@@ -59,10 +59,23 @@ save read/write on those platforms.
 | PS4 nhl18 | — (no DBs added) | — | — | ⬜ (saves only) |
 | NHL16; NHL17 | ⬜ no anchors | | | |
 
+## PS4 schema corpus — extracted & verified
+
+The PS4 field-level corpus is generated for nhl19/20/21: **17 schema files** under
+`data/schema/ps4/<game>-<db>.json`, covering `nhl_game.db` (111 tables / 3156 fields; nhl21 = 115 /
+3265), `eng_us.db`, and the secondary DBs (`entry_draft`, `expansion_draft`, `initial_experience`,
+`threes_campaign`, `proam`). Every field matched its meta — `nhl_game.db`/`eng_us.db` against their own
+meta XML, and the secondary DBs **100% via borrowed `nhl_game-meta.xml`** (they are strict subsets of
+the main schema, ids stable). The **LE record decoder** was validated against the spec's own worked
+vector (`read(31,5)==1`) and `position` decodes to the valid 0–4 range.
+
+> **Structural note (PS4):** the base `nhl_game.db` appears to hold **default/template** values —
+> `jersey` is uniformly 19, `overall` uniformly 50 across rows. So unlike PS3 (`nhlng.db` *was* the
+> roster), the **live edited roster on PS4 likely lives in the save data**, with `nhl_game.db` as the
+> base/template. Confirm when the PS4 save container is reversed.
+
 ## Next steps
 
-1. **Extend the schema corpus to PS4** (`nhl_game.db` + the secondary DBs, nhl19/20/21) — mechanical
-   with the endian-aware parser; produces the FieldMetaIndex source for those titles.
-2. **Reverse the two save containers** (Xbox360 magic-blob; PS4 Sony save dir) when save read/write on
-   those platforms is needed.
-3. NHL16 (any platform) and NHL17 (PS4) still have **no anchors**.
+1. **Reverse the two save containers** (Xbox360 magic-blob; PS4 Sony save dir) — needed for save
+   read/write, and (per the note above) likely where the PS4 live roster actually lives.
+2. NHL16 (any platform) and NHL17 (PS4) still have **no anchors**; NHL18 PS4 is saves-only.
