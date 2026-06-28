@@ -34,6 +34,10 @@ macro_rules! command_handler {
             $crate::commands::validate_project,
             $crate::commands::list_players,
             $crate::commands::player_view,
+            $crate::commands::list_teams,
+            $crate::commands::team_view,
+            $crate::commands::list_arenas,
+            $crate::commands::arena_view,
             $crate::commands::set_field,
             $crate::commands::set_captaincy,
             $crate::commands::create_player,
@@ -66,5 +70,9 @@ mod bindings {
         OpOutcomeDto::export_all().expect("export OpOutcomeDto");
         PlayerViewDto::export_all().expect("export PlayerViewDto + deps");
         PlayerSummaryDto::export_all().expect("export PlayerSummaryDto");
+        TeamViewDto::export_all().expect("export TeamViewDto + deps");
+        TeamSummaryDto::export_all().expect("export TeamSummaryDto");
+        ArenaViewDto::export_all().expect("export ArenaViewDto + deps");
+        ArenaSummaryDto::export_all().expect("export ArenaSummaryDto");
     }
 }

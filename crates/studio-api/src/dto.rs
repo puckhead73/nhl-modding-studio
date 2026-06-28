@@ -140,3 +140,54 @@ pub struct PlayerViewDto {
     pub memberships: Vec<RosterMembershipDto>,
     pub all_fields: Vec<FieldViewDto>,
 }
+
+/// A compact team row for the master list.
+#[derive(Serialize, TS)]
+pub struct TeamSummaryDto {
+    #[ts(type = "number")]
+    pub team_id: u64,
+    pub record: u32,
+    pub name: String,
+    pub abbrev: String,
+}
+
+/// A resolved arena reference (a team's home rink).
+#[derive(Serialize, TS)]
+pub struct ArenaRefDto {
+    #[ts(type = "number")]
+    pub arena_id: u64,
+    pub name: String,
+    pub city: String,
+}
+
+/// The full Team detail: curated identity, resolved arena, roster size, and all `kOtt` fields.
+#[derive(Serialize, TS)]
+pub struct TeamViewDto {
+    #[ts(type = "number")]
+    pub team_id: u64,
+    pub record: u32,
+    pub identity: Vec<FieldViewDto>,
+    pub arena: Option<ArenaRefDto>,
+    pub roster_count: usize,
+    pub all_fields: Vec<FieldViewDto>,
+}
+
+/// A compact arena row for the master list.
+#[derive(Serialize, TS)]
+pub struct ArenaSummaryDto {
+    #[ts(type = "number")]
+    pub arena_id: u64,
+    pub record: u32,
+    pub name: String,
+    pub city: String,
+}
+
+/// The full Arena detail: curated identity plus all `StEO` fields.
+#[derive(Serialize, TS)]
+pub struct ArenaViewDto {
+    #[ts(type = "number")]
+    pub arena_id: u64,
+    pub record: u32,
+    pub identity: Vec<FieldViewDto>,
+    pub all_fields: Vec<FieldViewDto>,
+}

@@ -34,8 +34,8 @@ export function FieldRow({
         ...(field.is_string ? { textValue: val } : { intValue: Number(val) }),
       }),
     onSuccess: async () => {
-      await qc.invalidateQueries({ queryKey: ["player", projectId] });
-      await qc.invalidateQueries({ queryKey: ["players", projectId] });
+      // Refresh whatever view is open (player/team/arena lists + details) and the dirty flag.
+      await qc.invalidateQueries();
       update(await call("project_summary", { projectId }));
     },
   });

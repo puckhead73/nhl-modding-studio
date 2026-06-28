@@ -9,6 +9,10 @@ import type { ProjectSummaryDto } from "../bindings/ProjectSummaryDto";
 import type { IntegrityReportDto } from "../bindings/IntegrityReportDto";
 import type { PlayerSummaryDto } from "../bindings/PlayerSummaryDto";
 import type { PlayerViewDto } from "../bindings/PlayerViewDto";
+import type { TeamSummaryDto } from "../bindings/TeamSummaryDto";
+import type { TeamViewDto } from "../bindings/TeamViewDto";
+import type { ArenaSummaryDto } from "../bindings/ArenaSummaryDto";
+import type { ArenaViewDto } from "../bindings/ArenaViewDto";
 import type { OpOutcomeDto } from "../bindings/OpOutcomeDto";
 
 export type Platform = "ps3" | "xbox" | "ps4" | "recomp";
@@ -23,6 +27,10 @@ type Commands = {
   validate_project: { args: { projectId: number }; ret: IntegrityReportDto };
   list_players: { args: { projectId: number }; ret: PlayerSummaryDto[] };
   player_view: { args: { projectId: number; playerId: number }; ret: PlayerViewDto | null };
+  list_teams: { args: { projectId: number }; ret: TeamSummaryDto[] };
+  team_view: { args: { projectId: number; teamId: number }; ret: TeamViewDto | null };
+  list_arenas: { args: { projectId: number }; ret: ArenaSummaryDto[] };
+  arena_view: { args: { projectId: number; arenaId: number }; ret: ArenaViewDto | null };
   set_field: {
     args: {
       projectId: number;

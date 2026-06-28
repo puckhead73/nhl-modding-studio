@@ -9,8 +9,8 @@ use studio_domain::{EditSession, FieldValue, Platform, Project, ProjectRole};
 
 use crate::convert;
 use crate::dto::{
-    CreatePlayerDto, IntegrityReportDto, OpOutcomeDto, PlayerSummaryDto, PlayerViewDto,
-    ProjectSummaryDto,
+    ArenaSummaryDto, ArenaViewDto, CreatePlayerDto, IntegrityReportDto, OpOutcomeDto,
+    PlayerSummaryDto, PlayerViewDto, ProjectSummaryDto, TeamSummaryDto, TeamViewDto,
 };
 use crate::error::ApiError;
 
@@ -78,6 +78,34 @@ impl Registry {
     pub fn player_view(&self, id: u32, player_id: u64) -> Result<Option<PlayerViewDto>, ApiError> {
         self.with_session(id, |s| {
             Ok(s.player_view(player_id)?.as_ref().map(convert::player_view_dto))
+        })
+    }
+
+    /// The team master list (view-models).
+    pub fn list_teams(&self, id: u32) -> Result<Vec<TeamSummaryDto>, ApiError> {
+        self.with_session(id, |s| {
+            Ok(s.team_summaries()?.iter().map(convert::team_summary_dto).collect())
+        })
+    }
+
+    /// The full Team detail for one `kOtt.vfEq`, or `None` if absent.
+    pub fn team_view(&self, id: u32, team_id: u64) -> Result<Option<TeamViewDto>, ApiError> {
+        self.with_session(id, |s| {
+            Ok(s.team_view(team_id)?.as_ref().map(convert::team_view_dto))
+        })
+    }
+
+    /// The arena master list (view-models).
+    pub fn list_arenas(&self, id: u32) -> Result<Vec<ArenaSummaryDto>, ApiError> {
+        self.with_session(id, |s| {
+            Ok(s.arena_summaries()?.iter().map(convert::arena_summary_dto).collect())
+        })
+    }
+
+    /// The full Arena detail for one `StEO.vfEq`, or `None` if absent.
+    pub fn arena_view(&self, id: u32, arena_id: u64) -> Result<Option<ArenaViewDto>, ApiError> {
+        self.with_session(id, |s| {
+            Ok(s.arena_view(arena_id)?.as_ref().map(convert::arena_view_dto))
         })
     }
 

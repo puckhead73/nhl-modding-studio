@@ -3,7 +3,10 @@
 
 use std::path::{Path, PathBuf};
 
-use studio_domain::{entity_fields, player_summaries, player_view, FieldKind};
+use studio_domain::{
+    arena_summaries, arena_view, entity_fields, player_summaries, player_view, team_summaries,
+    team_view, FieldKind,
+};
 use tdb_core::TdbFile;
 use tdb_defs::FieldMetaIndex;
 use tdb_enums::EnumRegistry;
@@ -139,4 +142,46 @@ fn player_view_assembles_detail() {
     assert!(!view.memberships.is_empty(), "slotted player has a membership");
 
     assert!(player_view(&db, &meta, &enums, &model, 0xFFFF_FFFF).is_none());
+}
+
+/// Team summaries cover the model with readable names; the detail resolves identity, arena, roster.
+#[test]
+fn team_views_resolve_identity_and_arena() {
+    let (bytes, meta, enums) = fixtures();
+    let db = TdbFile::parse(&bytes).unwrap();
+    let model = RosterModel::build(&db).unwrap();
+
+    let teams = team_summaries(&db, &meta, &model);
+    assert_eq!(teams.len(), model.teams.len());
+    assert!(teams.iter().any(|t| !t.name.is_empty()), "teams have names");
+    assert!(teams.iter().any(|t| !t.abbrev.is_empty()), "teams have abbreviations");
+
+    let view = team_view(&db, &meta, &enums, &model, teams[0].team_id).expect("team resolves");
+    assert!(view.identity.iter().any(|f| f.name == "fullname"));
+    assert_eq!(view.roster_count, model.team_roster(teams[0].team_id).len());
+    // At least one team in the league resolves its home arena via kOtt.buDa -> StEO.vfEq.
+    assert!(
+        teams
+            .iter()
+            .filter_map(|t| team_view(&db, &meta, &enums, &model, t.team_id))
+            .any(|v| v.arena.is_some()),
+        "at least one team resolves an arena"
+    );
+
+    assert!(team_view(&db, &meta, &enums, &model, 0xFFFF_FFFF).is_none());
+}
+
+/// Arena summaries list the rinks; the detail resolves identity (name/city).
+#[test]
+fn arena_views_resolve() {
+    let (bytes, meta, enums) = fixtures();
+    let db = TdbFile::parse(&bytes).unwrap();
+
+    let arenas = arena_summaries(&db, &meta);
+    assert!(!arenas.is_empty(), "anchor has arenas");
+    assert!(arenas.iter().any(|a| !a.name.is_empty()), "arenas have names");
+
+    let view = arena_view(&db, &meta, &enums, arenas[0].arena_id).expect("arena resolves");
+    assert!(view.identity.iter().any(|f| f.name == "arenaname"));
+    assert!(!view.all_fields.is_empty());
 }

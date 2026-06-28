@@ -2,13 +2,15 @@
 //! `raw_id` string helpers carried over from the prior app.
 
 use studio_domain::{
-    DbOverview, EditSession, FieldRaw, FieldView, Finding, IntegrityReport, OpOutcome, PlayerSummary,
-    PlayerView, RosterMembership, Severity, Source,
+    ArenaRef, ArenaSummary, ArenaView, DbOverview, EditSession, FieldRaw, FieldView, Finding,
+    IntegrityReport, OpOutcome, PlayerSummary, PlayerView, RosterMembership, Severity, Source,
+    TeamSummary, TeamView,
 };
 
 use crate::dto::{
-    CreatePlayerDto, FieldViewDto, FindingDto, IntegrityReportDto, OpOutcomeDto, PlayerSummaryDto,
-    PlayerViewDto, ProjectSummaryDto, RosterMembershipDto, TableSummaryDto,
+    ArenaRefDto, ArenaSummaryDto, ArenaViewDto, CreatePlayerDto, FieldViewDto, FindingDto,
+    IntegrityReportDto, OpOutcomeDto, PlayerSummaryDto, PlayerViewDto, ProjectSummaryDto,
+    RosterMembershipDto, TableSummaryDto, TeamSummaryDto, TeamViewDto,
 };
 
 /// Build the project summary DTO for a session (reflects the current working db, incl. any growth).
@@ -133,6 +135,52 @@ pub fn player_view_dto(v: &PlayerView) -> PlayerViewDto {
         ratings_record: v.ratings_record,
         ratings_table: v.ratings_table.to_string(),
         memberships: v.memberships.iter().map(membership_dto).collect(),
+        all_fields: v.all_fields.iter().map(field_view_dto).collect(),
+    }
+}
+
+pub fn team_summary_dto(t: &TeamSummary) -> TeamSummaryDto {
+    TeamSummaryDto {
+        team_id: t.team_id,
+        record: t.record,
+        name: t.name.clone(),
+        abbrev: t.abbrev.clone(),
+    }
+}
+
+fn arena_ref_dto(a: &ArenaRef) -> ArenaRefDto {
+    ArenaRefDto {
+        arena_id: a.arena_id,
+        name: a.name.clone(),
+        city: a.city.clone(),
+    }
+}
+
+pub fn team_view_dto(v: &TeamView) -> TeamViewDto {
+    TeamViewDto {
+        team_id: v.team_id,
+        record: v.record,
+        identity: v.identity.iter().map(field_view_dto).collect(),
+        arena: v.arena.as_ref().map(arena_ref_dto),
+        roster_count: v.roster_count,
+        all_fields: v.all_fields.iter().map(field_view_dto).collect(),
+    }
+}
+
+pub fn arena_summary_dto(a: &ArenaSummary) -> ArenaSummaryDto {
+    ArenaSummaryDto {
+        arena_id: a.arena_id,
+        record: a.record,
+        name: a.name.clone(),
+        city: a.city.clone(),
+    }
+}
+
+pub fn arena_view_dto(v: &ArenaView) -> ArenaViewDto {
+    ArenaViewDto {
+        arena_id: v.arena_id,
+        record: v.record,
+        identity: v.identity.iter().map(field_view_dto).collect(),
         all_fields: v.all_fields.iter().map(field_view_dto).collect(),
     }
 }

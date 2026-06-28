@@ -119,6 +119,43 @@ impl EditSession {
         ))
     }
 
+    /// The team master list over the current working state.
+    pub fn team_summaries(&self) -> Result<Vec<crate::TeamSummary>> {
+        let db = TdbFile::parse(&self.working)?;
+        let model = self.build_model(&db)?;
+        Ok(crate::view::team_summaries(&db, self.project.meta(), &model))
+    }
+
+    /// The full Team detail for one `kOtt.vfEq`, or `None` if absent.
+    pub fn team_view(&self, team_id: u64) -> Result<Option<crate::TeamView>> {
+        let db = TdbFile::parse(&self.working)?;
+        let model = self.build_model(&db)?;
+        Ok(crate::view::team_view(
+            &db,
+            self.project.meta(),
+            self.project.enums(),
+            &model,
+            team_id,
+        ))
+    }
+
+    /// The arena master list over the current working state.
+    pub fn arena_summaries(&self) -> Result<Vec<crate::ArenaSummary>> {
+        let db = TdbFile::parse(&self.working)?;
+        Ok(crate::view::arena_summaries(&db, self.project.meta()))
+    }
+
+    /// The full Arena detail for one `StEO.vfEq`, or `None` if absent.
+    pub fn arena_view(&self, arena_id: u64) -> Result<Option<crate::ArenaView>> {
+        let db = TdbFile::parse(&self.working)?;
+        Ok(crate::view::arena_view(
+            &db,
+            self.project.meta(),
+            self.project.enums(),
+            arena_id,
+        ))
+    }
+
     fn build_model<'a>(&self, db: &TdbFile<'a>) -> Result<RosterModel> {
         RosterModel::build(db).map_err(|e| DomainError::Edit(EditError::Entity(e.to_string())))
     }

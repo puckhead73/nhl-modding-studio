@@ -7,7 +7,9 @@ import styles from "./AppShell.module.css";
 
 const NAV = [
   { to: "players", label: "Players" },
-  // Teams / Arenas / Lines / Dashboard / Pending Edits land in later phases.
+  { to: "teams", label: "Teams" },
+  { to: "arenas", label: "Arenas" },
+  // Lines / Dashboard / Pending Edits land in later phases.
 ];
 
 export function AppShell() {

@@ -7,8 +7,8 @@ use tauri::State;
 use studio_domain::FieldValue;
 
 use crate::dto::{
-    CreatePlayerDto, IntegrityReportDto, OpOutcomeDto, PlayerSummaryDto, PlayerViewDto,
-    ProjectSummaryDto,
+    ArenaSummaryDto, ArenaViewDto, CreatePlayerDto, IntegrityReportDto, OpOutcomeDto,
+    PlayerSummaryDto, PlayerViewDto, ProjectSummaryDto, TeamSummaryDto, TeamViewDto,
 };
 use crate::registry::{parse_platform, parse_role, Registry};
 
@@ -68,6 +68,37 @@ pub fn player_view(
     registry
         .player_view(project_id, player_id)
         .map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub fn list_teams(registry: State<'_, Registry>, project_id: u32) -> CmdResult<Vec<TeamSummaryDto>> {
+    registry.list_teams(project_id).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub fn team_view(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    team_id: u64,
+) -> CmdResult<Option<TeamViewDto>> {
+    registry.team_view(project_id, team_id).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub fn list_arenas(
+    registry: State<'_, Registry>,
+    project_id: u32,
+) -> CmdResult<Vec<ArenaSummaryDto>> {
+    registry.list_arenas(project_id).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub fn arena_view(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    arena_id: u64,
+) -> CmdResult<Option<ArenaViewDto>> {
+    registry.arena_view(project_id, arena_id).map_err(|e| e.to_string())
 }
 
 /// Stage a validated field edit. Provide exactly one of `text_value` (string fields) or `int_value`

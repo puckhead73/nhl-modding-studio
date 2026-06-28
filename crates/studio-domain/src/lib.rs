@@ -26,8 +26,9 @@ pub use overview::{DbOverview, TableOverview};
 pub use project::{Platform, Project, ProjectRole, Source};
 pub use session::{EditSession, FieldValue};
 pub use view::{
-    entity_fields, player_summaries, player_view, read_field, FieldKind, FieldRaw, FieldView,
-    PlayerSummary, PlayerView, RosterMembership,
+    arena_summaries, arena_view, entity_fields, player_summaries, player_view, read_field,
+    team_summaries, team_view, ArenaRef, ArenaSummary, ArenaView, FieldKind, FieldRaw, FieldView,
+    PlayerSummary, PlayerView, RosterMembership, TeamSummary, TeamView,
 };
 
 /// A convenience result alias for the domain layer.

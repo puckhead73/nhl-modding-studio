@@ -289,6 +289,204 @@ pub fn player_summaries(
         .collect()
 }
 
+// ---------------------------------------------------------------------------
+// Team & arena view-models
+// ---------------------------------------------------------------------------
+
+/// Studio ids for the arena link (verified: `kOtt.buDa → StEO.vfEq`, audited 2026-05-24).
+const ARENA_TABLE: &str = "StEO";
+const ARENA_KEY: &str = "vfEq";
+const TEAM_ARENA_FK: &str = "buDa";
+
+/// Curated team identity fields (metadata `name`s), in display order.
+const TEAM_IDENTITY: &[&str] = &[
+    "fullname",
+    "abbrname",
+    "shortname",
+    "artabbr",
+    "arenaid",
+    "leaguegroup",
+    "divisiongroup",
+    "conferencegroup",
+];
+
+/// Curated arena identity fields (metadata `name`s), in display order.
+const ARENA_IDENTITY: &[&str] = &["arenaname", "cityname", "arenatype", "maxattendance"];
+
+/// A compact team row for the master list.
+#[derive(Clone, Debug)]
+pub struct TeamSummary {
+    pub team_id: u64,
+    pub record: u32,
+    pub name: String,
+    pub abbrev: String,
+}
+
+/// A resolved arena reference (the team's home rink).
+#[derive(Clone, Debug)]
+pub struct ArenaRef {
+    pub arena_id: u64,
+    pub name: String,
+    pub city: String,
+}
+
+/// The full Team detail: curated identity, resolved arena, roster size, and all `kOtt` fields.
+#[derive(Clone, Debug)]
+pub struct TeamView {
+    pub team_id: u64,
+    pub record: u32,
+    pub identity: Vec<FieldView>,
+    pub arena: Option<ArenaRef>,
+    pub roster_count: usize,
+    pub all_fields: Vec<FieldView>,
+}
+
+/// A compact arena row for the master list.
+#[derive(Clone, Debug)]
+pub struct ArenaSummary {
+    pub arena_id: u64,
+    pub record: u32,
+    pub name: String,
+    pub city: String,
+}
+
+/// The full Arena detail: curated identity plus all `StEO` fields.
+#[derive(Clone, Debug)]
+pub struct ArenaView {
+    pub arena_id: u64,
+    pub record: u32,
+    pub identity: Vec<FieldView>,
+    pub all_fields: Vec<FieldView>,
+}
+
+/// Read a fixed-bit field's raw value by studio id from one record of a table.
+fn read_u64_by_studio(db: &TdbFile, table: &Table, index: u32, studio_field: &str) -> Option<u64> {
+    let f = table
+        .fields
+        .iter()
+        .find(|f| f.id.canonical(db.endian) == studio_field)?;
+    db.read_u64(table, index, f)
+}
+
+/// Read an inline string by metadata `name` from one record of a table.
+fn read_str_by_name(
+    db: &TdbFile,
+    meta: &FieldMetaIndex,
+    table: &Table,
+    index: u32,
+    name: &str,
+) -> String {
+    descriptor_by_name(meta, table, name)
+        .and_then(|f| db.read_inline_str(table, index, f))
+        .map(|b| String::from_utf8_lossy(b).into_owned())
+        .unwrap_or_default()
+}
+
+/// Pick curated fields (by metadata `name`, in the given order) from a record's full field list.
+fn curate(all_fields: &[FieldView], names: &[&str]) -> Vec<FieldView> {
+    names
+        .iter()
+        .filter_map(|name| all_fields.iter().find(|f| &f.name == name).cloned())
+        .collect()
+}
+
+/// The `StEO` record index whose `vfEq` equals `arena_id`.
+fn arena_record(db: &TdbFile, arena_id: u64) -> Option<u32> {
+    let arena = db.table_canonical(ARENA_TABLE)?;
+    (0..arena.current_records as u32)
+        .find(|&i| read_u64_by_studio(db, arena, i, ARENA_KEY) == Some(arena_id))
+}
+
+/// Resolve a team's home arena (`kOtt.buDa → StEO.vfEq`).
+fn arena_ref(db: &TdbFile, meta: &FieldMetaIndex, arena_id: u64) -> Option<ArenaRef> {
+    let rec = arena_record(db, arena_id)?;
+    let arena = db.table_canonical(ARENA_TABLE)?;
+    Some(ArenaRef {
+        arena_id,
+        name: read_str_by_name(db, meta, arena, rec, "arenaname"),
+        city: read_str_by_name(db, meta, arena, rec, "cityname"),
+    })
+}
+
+/// The team master list.
+pub fn team_summaries(
+    db: &TdbFile,
+    meta: &FieldMetaIndex,
+    model: &RosterModel,
+) -> Vec<TeamSummary> {
+    let Some(kott) = db.table_canonical(ids::TEAM) else {
+        return Vec::new();
+    };
+    model
+        .teams
+        .iter()
+        .map(|t| TeamSummary {
+            team_id: t.team_id,
+            record: t.record,
+            name: read_str_by_name(db, meta, kott, t.record, "fullname"),
+            abbrev: read_str_by_name(db, meta, kott, t.record, "abbrname"),
+        })
+        .collect()
+}
+
+/// The full Team detail for one `kOtt.vfEq`.
+pub fn team_view(
+    db: &TdbFile,
+    meta: &FieldMetaIndex,
+    enums: &EnumRegistry,
+    model: &RosterModel,
+    team_id: u64,
+) -> Option<TeamView> {
+    let team = model.team(team_id)?;
+    let kott = db.table_canonical(ids::TEAM)?;
+    let all_fields = entity_fields(db, meta, enums, ids::TEAM, team.record);
+    let arena = read_u64_by_studio(db, kott, team.record, TEAM_ARENA_FK)
+        .and_then(|aid| arena_ref(db, meta, aid));
+    Some(TeamView {
+        team_id,
+        record: team.record,
+        identity: curate(&all_fields, TEAM_IDENTITY),
+        arena,
+        roster_count: model.team_roster(team_id).len(),
+        all_fields,
+    })
+}
+
+/// The arena master list (iterates the `StEO` table directly).
+pub fn arena_summaries(db: &TdbFile, meta: &FieldMetaIndex) -> Vec<ArenaSummary> {
+    let Some(arena) = db.table_canonical(ARENA_TABLE) else {
+        return Vec::new();
+    };
+    (0..arena.current_records as u32)
+        .filter_map(|i| {
+            let arena_id = read_u64_by_studio(db, arena, i, ARENA_KEY)?;
+            Some(ArenaSummary {
+                arena_id,
+                record: i,
+                name: read_str_by_name(db, meta, arena, i, "arenaname"),
+                city: read_str_by_name(db, meta, arena, i, "cityname"),
+            })
+        })
+        .collect()
+}
+
+/// The full Arena detail for one `StEO.vfEq`.
+pub fn arena_view(
+    db: &TdbFile,
+    meta: &FieldMetaIndex,
+    enums: &EnumRegistry,
+    arena_id: u64,
+) -> Option<ArenaView> {
+    let rec = arena_record(db, arena_id)?;
+    let all_fields = entity_fields(db, meta, enums, ARENA_TABLE, rec);
+    Some(ArenaView {
+        arena_id,
+        record: rec,
+        identity: curate(&all_fields, ARENA_IDENTITY),
+        all_fields,
+    })
+}
+
 /// Build the full Player detail view for one `wBIz`. Returns `None` if the player is not in the model.
 pub fn player_view(
     db: &TdbFile,

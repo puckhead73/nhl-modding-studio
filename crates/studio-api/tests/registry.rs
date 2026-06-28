@@ -103,3 +103,27 @@ fn players_listing_view_and_edit_through_registry() {
             .is_err());
     }
 }
+
+#[test]
+fn teams_and_arenas_through_registry() {
+    let reg = Registry::default();
+    reg.load_project(
+        &s(repo(DB)),
+        parse_platform("ps3").unwrap(),
+        parse_role("nhlng").unwrap(),
+        &s(repo(META)),
+        &s(repo(DEFS)),
+    )
+    .unwrap();
+
+    let teams = reg.list_teams(0).unwrap();
+    assert!(!teams.is_empty(), "anchor has teams");
+    let team = reg.team_view(0, teams[0].team_id).unwrap().expect("team resolves");
+    assert!(team.identity.iter().any(|f| f.name == "fullname"));
+    assert!(reg.team_view(0, u64::MAX).unwrap().is_none());
+
+    let arenas = reg.list_arenas(0).unwrap();
+    assert!(!arenas.is_empty(), "anchor has arenas");
+    let arena = reg.arena_view(0, arenas[0].arena_id).unwrap().expect("arena resolves");
+    assert!(arena.identity.iter().any(|f| f.name == "arenaname"));
+}
