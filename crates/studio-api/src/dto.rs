@@ -145,6 +145,13 @@ pub struct PlayerViewDto {
     pub all_fields: Vec<FieldViewDto>,
 }
 
+/// A read-only career-stats table for one player (stock season data).
+#[derive(Serialize, TS)]
+pub struct CareerStatsDto {
+    pub columns: Vec<String>,
+    pub rows: Vec<Vec<String>>,
+}
+
 /// One roster entry on a team's depth chart.
 #[derive(Serialize, TS)]
 pub struct LineEntryDto {

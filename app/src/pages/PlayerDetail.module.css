@@ -45,8 +45,27 @@
 .muted {
   color: #5b6470;
   font-size: 12px;
+  font-weight: 400;
 }
 
 .err {
   color: #b3261e;
+}
+
+.stats {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.stats th,
+.stats td {
+  text-align: left;
+  padding: 4px 8px;
+  border-bottom: 1px solid #f0f1f4;
+}
+
+.stats th {
+  background: #eef0f3;
+  font-size: 12px;
 }

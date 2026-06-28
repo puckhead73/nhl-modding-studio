@@ -234,7 +234,7 @@ There are **two id namespaces** for the same 4-char tags, related by character r
 ## Phase 3.7 — Career-stats spike (bounded) + read-only display
 
 **What to implement**
-1. **Spike (verify, ≤ half a day):** against the anchor binary, confirm `ySst` (stock career season stats) parses, its `zIBw` joins to `ubPc.wBIz`, and the stat fields (`goals`/`assists`/`points`/`gamesplayed`/`year`) decode sensibly for a known player. Record findings in this doc. If `ySst` is absent/again ambiguous on a proven title, fall back to league tables (`CtBM`/`TKKI`) and document which is authoritative per `ProjectRole`.
+1. **Spike — DONE (verified 2026-06-28).** Against the NHL Legacy anchor: `stockcareerseasonplayerstats` (on-disk `ySst`, studio `tsSy`) **is present and populated**, joins by `game_id`(`zIBw`) == `ubPc.wBIz`, and decodes — e.g. player wBIz 6 has 9 season rows × 12 columns (year/teams/GP/G/A/P/+−/PIM/shots/PPG/SHG/GWG). It is **stock reference data → displayed read-only**. League-mode tables (`CtBM` season, `TKKI` career, `NFkQ` playoffs) exist for league saves but are not used for the base `nhlng.db` display. Builder: `studio_domain::view::career_stats` (resolves columns by metadata `name`, so it adapts across titles and skips absent columns).
 2. Backend: `career_stats(project_id, player_id) -> Vec<CareerStatRowDto>` (read-only) joined by `wBIz`.
 3. Frontend: a **read-only** career-stats table on the Player detail page.
 

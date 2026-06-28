@@ -4,8 +4,8 @@
 use std::path::{Path, PathBuf};
 
 use studio_domain::{
-    arena_summaries, arena_view, entity_fields, lines_view, player_summaries, player_view,
-    team_summaries, team_view, FieldKind,
+    arena_summaries, arena_view, career_stats, entity_fields, lines_view, player_summaries,
+    player_view, team_summaries, team_view, FieldKind,
 };
 use tdb_core::TdbFile;
 use tdb_defs::FieldMetaIndex;
@@ -211,4 +211,28 @@ fn lines_view_builds_depth_chart() {
     );
 
     assert!(lines_view(&db, &meta, &enums, &model, 0xFFFF_FFFF).is_none());
+}
+
+/// Career stats (stock ySst) resolve: the table is present, joins by wBIz, and at least one player
+/// in the anchor has season rows with the expected columns. (Phase 3.7 spike + read path.)
+#[test]
+fn career_stats_resolve_for_some_player() {
+    let (bytes, meta, enums) = fixtures();
+    let db = TdbFile::parse(&bytes).unwrap();
+    let model = RosterModel::build(&db).unwrap();
+
+    // Scan players until we find one with stock career rows (not every player has them).
+    let mut found: Option<(u64, usize, usize)> = None;
+    for p in model.players.iter().take(2000) {
+        let cs = career_stats(&db, &meta, &enums, p.player_id);
+        if !cs.rows.is_empty() {
+            assert!(!cs.columns.is_empty(), "career table has columns");
+            assert!(cs.columns.iter().any(|c| c == "goals"), "has a goals column");
+            assert!(cs.rows.iter().all(|r| r.len() == cs.columns.len()), "rectangular");
+            found = Some((p.player_id, cs.columns.len(), cs.rows.len()));
+            break;
+        }
+    }
+    let (pid, cols, rows) = found.expect("at least one player in the first 2000 has career stats");
+    eprintln!("career stats: player {pid} -> {rows} season rows x {cols} columns");
 }

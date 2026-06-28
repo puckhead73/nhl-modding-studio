@@ -34,6 +34,7 @@ macro_rules! command_handler {
             $crate::commands::validate_project,
             $crate::commands::list_players,
             $crate::commands::player_view,
+            $crate::commands::career_stats,
             $crate::commands::list_teams,
             $crate::commands::team_view,
             $crate::commands::lines_view,
@@ -76,5 +77,6 @@ mod bindings {
         ArenaViewDto::export_all().expect("export ArenaViewDto + deps");
         ArenaSummaryDto::export_all().expect("export ArenaSummaryDto");
         LinesViewDto::export_all().expect("export LinesViewDto + deps");
+        CareerStatsDto::export_all().expect("export CareerStatsDto");
     }
 }

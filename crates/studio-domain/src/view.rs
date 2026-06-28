@@ -290,6 +290,74 @@ pub fn player_summaries(
 }
 
 // ---------------------------------------------------------------------------
+// Career stats (read-only) — stock per-season player stats (ySst), joined by wBIz.
+// ---------------------------------------------------------------------------
+
+/// On-disk / studio ids of the stock career-season-stats table (`stockcareerseasonplayerstats`).
+const CAREER_TABLE_RAW: &str = "ySst";
+const CAREER_TABLE_STUDIO: &str = "tsSy";
+
+/// Career-stat columns (metadata `name`s), in display order. Missing columns are skipped.
+const CAREER_COLUMNS: &[&str] = &[
+    "year",
+    "teams",
+    "gamesplayed",
+    "goals",
+    "assists",
+    "points",
+    "plusminus",
+    "penaltyminutes",
+    "shots",
+    "powerplaygoals",
+    "shorthandedgoals",
+    "gamewinninggoals",
+];
+
+/// A read-only career-stats table for one player (stock data; not editable).
+#[derive(Clone, Debug, Default)]
+pub struct CareerStats {
+    pub columns: Vec<String>,
+    pub rows: Vec<Vec<String>>,
+}
+
+/// Read a player's stock career-season stats (`ySst`), joined by the `game_id`(`zIBw`)==`wBIz` key.
+/// Returns empty columns/rows if the table is absent from this db variant.
+pub fn career_stats(
+    db: &TdbFile,
+    meta: &FieldMetaIndex,
+    enums: &EnumRegistry,
+    player_id: u64,
+) -> CareerStats {
+    let Some(table) = db
+        .table(CAREER_TABLE_RAW)
+        .or_else(|| db.table_canonical(CAREER_TABLE_STUDIO))
+    else {
+        return CareerStats::default();
+    };
+    let Some(join) = descriptor_by_name(meta, table, "game_id") else {
+        return CareerStats::default();
+    };
+    let cols: Vec<(&str, &FieldDescriptor)> = CAREER_COLUMNS
+        .iter()
+        .filter_map(|n| descriptor_by_name(meta, table, n).map(|f| (*n, f)))
+        .collect();
+
+    let rows = (0..table.current_records as u32)
+        .filter(|&i| db.read_u64(table, i, join) == Some(player_id))
+        .map(|i| {
+            cols.iter()
+                .map(|(_, f)| read_field(db, meta, enums, table, i, f).display)
+                .collect()
+        })
+        .collect();
+
+    CareerStats {
+        columns: cols.iter().map(|(n, _)| n.to_string()).collect(),
+        rows,
+    }
+}
+
+// ---------------------------------------------------------------------------
 // Lines / depth chart view-model
 // ---------------------------------------------------------------------------
 

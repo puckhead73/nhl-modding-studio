@@ -7,8 +7,9 @@ use tauri::State;
 use studio_domain::FieldValue;
 
 use crate::dto::{
-    ArenaSummaryDto, ArenaViewDto, CreatePlayerDto, IntegrityReportDto, LinesViewDto, OpOutcomeDto,
-    PlayerSummaryDto, PlayerViewDto, ProjectSummaryDto, TeamSummaryDto, TeamViewDto,
+    ArenaSummaryDto, ArenaViewDto, CareerStatsDto, CreatePlayerDto, IntegrityReportDto,
+    LinesViewDto, OpOutcomeDto, PlayerSummaryDto, PlayerViewDto, ProjectSummaryDto, TeamSummaryDto,
+    TeamViewDto,
 };
 use crate::registry::{parse_platform, parse_role, Registry};
 
@@ -68,6 +69,15 @@ pub fn player_view(
     registry
         .player_view(project_id, player_id)
         .map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub fn career_stats(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    player_id: u64,
+) -> CmdResult<CareerStatsDto> {
+    registry.career_stats(project_id, player_id).map_err(|e| e.to_string())
 }
 
 #[tauri::command]

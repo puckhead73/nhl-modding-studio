@@ -17,6 +17,12 @@ export function PlayerDetail() {
     enabled: Number.isFinite(playerId),
   });
 
+  const career = useQuery({
+    queryKey: ["career", projectId, playerId],
+    queryFn: () => call("career_stats", { projectId, playerId }),
+    enabled: Number.isFinite(playerId),
+  });
+
   if (view.isLoading) return <p className={styles.muted}>Loading…</p>;
   if (view.isError) return <p className={styles.err}>{String(view.error)}</p>;
   const player = view.data;
@@ -62,6 +68,30 @@ export function PlayerDetail() {
           />
         ))}
       </details>
+
+      {career.data && career.data.rows.length > 0 && (
+        <section className={styles.card}>
+          <h3>Career stats <span className={styles.muted}>(stock, read-only)</span></h3>
+          <table className={styles.stats}>
+            <thead>
+              <tr>
+                {career.data.columns.map((c) => (
+                  <th key={c}>{c}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {career.data.rows.map((row, i) => (
+                <tr key={i}>
+                  {row.map((cell, j) => (
+                    <td key={j}>{cell}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
+      )}
 
       <details className={styles.card}>
         <summary>All bio fields ({player.all_fields.length})</summary>

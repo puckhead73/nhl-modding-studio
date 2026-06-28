@@ -2,15 +2,16 @@
 //! `raw_id` string helpers carried over from the prior app.
 
 use studio_domain::{
-    ArenaRef, ArenaSummary, ArenaView, DbOverview, EditSession, FieldRaw, FieldView, Finding,
-    IntegrityReport, LineEntry, LinesView, OpOutcome, PlayerSummary, PlayerView, RosterMembership,
-    Severity, Source, TeamSummary, TeamView,
+    ArenaRef, ArenaSummary, ArenaView, CareerStats, DbOverview, EditSession, FieldRaw, FieldView,
+    Finding, IntegrityReport, LineEntry, LinesView, OpOutcome, PlayerSummary, PlayerView,
+    RosterMembership, Severity, Source, TeamSummary, TeamView,
 };
 
 use crate::dto::{
-    ArenaRefDto, ArenaSummaryDto, ArenaViewDto, CreatePlayerDto, FieldViewDto, FindingDto,
-    IntegrityReportDto, LineEntryDto, LinesViewDto, OpOutcomeDto, PlayerSummaryDto, PlayerViewDto,
-    ProjectSummaryDto, RosterMembershipDto, TableSummaryDto, TeamSummaryDto, TeamViewDto,
+    ArenaRefDto, ArenaSummaryDto, ArenaViewDto, CareerStatsDto, CreatePlayerDto, FieldViewDto,
+    FindingDto, IntegrityReportDto, LineEntryDto, LinesViewDto, OpOutcomeDto, PlayerSummaryDto,
+    PlayerViewDto, ProjectSummaryDto, RosterMembershipDto, TableSummaryDto, TeamSummaryDto,
+    TeamViewDto,
 };
 
 /// Build the project summary DTO for a session (reflects the current working db, incl. any growth).
@@ -138,6 +139,13 @@ pub fn player_view_dto(v: &PlayerView) -> PlayerViewDto {
         ratings_table: v.ratings_table.to_string(),
         memberships: v.memberships.iter().map(membership_dto).collect(),
         all_fields: v.all_fields.iter().map(field_view_dto).collect(),
+    }
+}
+
+pub fn career_stats_dto(c: &CareerStats) -> CareerStatsDto {
+    CareerStatsDto {
+        columns: c.columns.clone(),
+        rows: c.rows.clone(),
     }
 }
 

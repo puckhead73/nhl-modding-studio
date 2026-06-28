@@ -9,8 +9,9 @@ use studio_domain::{EditSession, FieldValue, Platform, Project, ProjectRole};
 
 use crate::convert;
 use crate::dto::{
-    ArenaSummaryDto, ArenaViewDto, CreatePlayerDto, IntegrityReportDto, LinesViewDto, OpOutcomeDto,
-    PlayerSummaryDto, PlayerViewDto, ProjectSummaryDto, TeamSummaryDto, TeamViewDto,
+    ArenaSummaryDto, ArenaViewDto, CareerStatsDto, CreatePlayerDto, IntegrityReportDto,
+    LinesViewDto, OpOutcomeDto, PlayerSummaryDto, PlayerViewDto, ProjectSummaryDto, TeamSummaryDto,
+    TeamViewDto,
 };
 use crate::error::ApiError;
 
@@ -107,6 +108,11 @@ impl Registry {
         self.with_session(id, |s| {
             Ok(s.arena_view(arena_id)?.as_ref().map(convert::arena_view_dto))
         })
+    }
+
+    /// A player's read-only stock career stats.
+    pub fn career_stats(&self, id: u32, player_id: u64) -> Result<CareerStatsDto, ApiError> {
+        self.with_session(id, |s| Ok(convert::career_stats_dto(&s.career_stats(player_id)?)))
     }
 
     /// The depth chart (lines) for one team, or `None` if the team is absent.

@@ -156,6 +156,17 @@ impl EditSession {
         ))
     }
 
+    /// A player's read-only stock career stats over the current working state.
+    pub fn career_stats(&self, player_id: u64) -> Result<crate::CareerStats> {
+        let db = TdbFile::parse(&self.working)?;
+        Ok(crate::view::career_stats(
+            &db,
+            self.project.meta(),
+            self.project.enums(),
+            player_id,
+        ))
+    }
+
     /// The depth chart (lines) for one team over the current working state.
     pub fn lines_view(&self, team_id: u64) -> Result<Option<crate::LinesView>> {
         let db = TdbFile::parse(&self.working)?;

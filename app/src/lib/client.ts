@@ -14,6 +14,7 @@ import type { TeamViewDto } from "../bindings/TeamViewDto";
 import type { ArenaSummaryDto } from "../bindings/ArenaSummaryDto";
 import type { ArenaViewDto } from "../bindings/ArenaViewDto";
 import type { LinesViewDto } from "../bindings/LinesViewDto";
+import type { CareerStatsDto } from "../bindings/CareerStatsDto";
 import type { OpOutcomeDto } from "../bindings/OpOutcomeDto";
 
 export type Platform = "ps3" | "xbox" | "ps4" | "recomp";
@@ -28,6 +29,7 @@ type Commands = {
   validate_project: { args: { projectId: number }; ret: IntegrityReportDto };
   list_players: { args: { projectId: number }; ret: PlayerSummaryDto[] };
   player_view: { args: { projectId: number; playerId: number }; ret: PlayerViewDto | null };
+  career_stats: { args: { projectId: number; playerId: number }; ret: CareerStatsDto };
   list_teams: { args: { projectId: number }; ret: TeamSummaryDto[] };
   team_view: { args: { projectId: number; teamId: number }; ret: TeamViewDto | null };
   list_arenas: { args: { projectId: number }; ret: ArenaSummaryDto[] };
