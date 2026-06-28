@@ -1,0 +1,14 @@
+{
+  "name": "nhl-modding-studio-workspace",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Repo-root scripts for the Tauri app. The Rust app lives in src-tauri/, the React frontend in app/. Run the desktop app from here (the Tauri CLI discovers src-tauri/tauri.conf.json from the repo root).",
+  "scripts": {
+    "dev": "tauri dev",
+    "build": "tauri build",
+    "tauri": "tauri"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2"
+  }
+}
