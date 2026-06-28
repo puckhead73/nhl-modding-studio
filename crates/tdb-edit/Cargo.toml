@@ -8,3 +8,4 @@ publish.workspace = true
 
 [dependencies]
 tdb-core = { path = "../tdb-core" }
+tdb-defs = { path = "../tdb-defs" }

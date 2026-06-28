@@ -7,6 +7,7 @@
 
 use std::fmt;
 use tdb_core::TdbFile;
+use tdb_defs::{FieldMetaIndex, ValidationError};
 
 /// A single staged field edit (raw on-disk ids).
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -21,8 +22,21 @@ pub struct FieldEdit {
 pub enum EditError {
     Parse(String),
     UnknownTable(String),
-    UnknownField { table: String, field: String },
-    OutOfRange { table: String, record: u32 },
+    UnknownField {
+        table: String,
+        field: String,
+    },
+    OutOfRange {
+        table: String,
+        record: u32,
+    },
+    /// No metadata for this `(table, field)` — a validated edit cannot be staged.
+    NoMeta {
+        table: String,
+        field: String,
+    },
+    /// The value failed metadata validation at entry (range / not-updatable).
+    Invalid(ValidationError),
 }
 
 impl fmt::Display for EditError {
@@ -36,6 +50,10 @@ impl fmt::Display for EditError {
             EditError::OutOfRange { table, record } => {
                 write!(f, "record {record} out of range in table {table:?}")
             }
+            EditError::NoMeta { table, field } => {
+                write!(f, "no metadata for {table:?}.{field:?}")
+            }
+            EditError::Invalid(e) => write!(f, "{e}"),
         }
     }
 }
@@ -73,6 +91,28 @@ impl EditSession {
             value,
         });
         self
+    }
+
+    /// Stage a **validated** edit from a logical value (the EDIT-MODEL edit-entry guardrail).
+    ///
+    /// Looks up the field's metadata, validates `value` against it at entry (legal range, and the
+    /// `update` flag), encodes it to raw bits (two's-complement / sentinel aware), and stages it.
+    /// On rejection the edit is **not** staged and the reason is returned.
+    pub fn set_field_checked(
+        &mut self,
+        meta: &FieldMetaIndex,
+        table: &str,
+        record: u32,
+        field: &str,
+        value: i64,
+    ) -> Result<(), EditError> {
+        let fm = meta.field(table, field).ok_or_else(|| EditError::NoMeta {
+            table: table.to_string(),
+            field: field.to_string(),
+        })?;
+        fm.validate(value).map_err(EditError::Invalid)?;
+        self.set_field(table, record, field, fm.encode(value));
+        Ok(())
     }
 
     /// Apply all staged edits to `original` and return new bytes with all CRCs recomputed.

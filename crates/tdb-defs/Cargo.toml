@@ -1,0 +1,13 @@
+[package]
+name = "tdb-defs"
+description = "FieldMeta backbone — ingests EA nhlng-meta.xml into a typed, validating field index."
+version = "0.0.0"
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+roxmltree = "0.20"
+
+[dev-dependencies]
+tdb-core = { path = "../tdb-core" }
