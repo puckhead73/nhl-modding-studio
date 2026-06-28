@@ -2,7 +2,9 @@
 //! stringifying errors (Tauri serializes `Err(String)` to the frontend). Register these in the
 //! Tauri builder via `tauri::generate_handler!` (see `src-tauri`).
 
-use tauri::State;
+use std::path::{Path, PathBuf};
+
+use tauri::{Manager, State};
 
 use studio_domain::FieldValue;
 
@@ -34,6 +36,53 @@ pub fn load_project(
 #[tauri::command]
 pub fn close_project(registry: State<'_, Registry>, project_id: u32) -> bool {
     registry.close_project(project_id)
+}
+
+/// Resolve the bundled `defs/` directory: a packaged resource in release, falling back to the
+/// in-repo `defs/` during development.
+fn resolve_defs(app: &tauri::AppHandle) -> PathBuf {
+    if let Ok(res) = app.path().resource_dir() {
+        let p = res.join("defs");
+        if p.join("enums").is_dir() {
+            return p;
+        }
+    }
+    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../defs")
+}
+
+/// One-step project open for onboarding: the user picks only the database (or save container); the
+/// metadata XML is derived as its sibling `nhlng-meta.xml` and `defs/` is resolved automatically.
+/// Use `load_project` (with explicit meta/defs) for the Advanced override path.
+#[tauri::command]
+pub fn open_project(
+    app: tauri::AppHandle,
+    registry: State<'_, Registry>,
+    db_path: String,
+    platform: String,
+    role: String,
+) -> CmdResult<ProjectSummaryDto> {
+    let platform = parse_platform(&platform).map_err(|e| e.to_string())?;
+    let role = parse_role(&role).map_err(|e| e.to_string())?;
+    let meta = Path::new(&db_path)
+        .parent()
+        .map(|d| d.join("nhlng-meta.xml"))
+        .ok_or_else(|| "could not derive the database folder".to_string())?;
+    if !meta.exists() {
+        return Err(format!(
+            "no nhlng-meta.xml found beside the database ({}). Use Advanced to pick it manually.",
+            meta.display()
+        ));
+    }
+    let defs = resolve_defs(&app);
+    registry
+        .load_project(
+            &db_path,
+            platform,
+            role,
+            &meta.to_string_lossy(),
+            &defs.to_string_lossy(),
+        )
+        .map_err(|e| e.to_string())
 }
 
 #[tauri::command]

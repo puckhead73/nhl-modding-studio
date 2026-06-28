@@ -29,6 +29,7 @@ macro_rules! command_handler {
     () => {
         ::tauri::generate_handler![
             $crate::commands::load_project,
+            $crate::commands::open_project,
             $crate::commands::close_project,
             $crate::commands::project_summary,
             $crate::commands::validate_project,

@@ -25,6 +25,10 @@ type Commands = {
     args: { dbPath: string; platform: Platform; role: Role; metaXml: string; defsRoot: string };
     ret: ProjectSummaryDto;
   };
+  open_project: {
+    args: { dbPath: string; platform: Platform; role: Role };
+    ret: ProjectSummaryDto;
+  };
   project_summary: { args: { projectId: number }; ret: ProjectSummaryDto };
   validate_project: { args: { projectId: number }; ret: IntegrityReportDto };
   list_players: { args: { projectId: number }; ret: PlayerSummaryDto[] };
