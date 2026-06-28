@@ -132,9 +132,15 @@ holes such as dup-on-team spread across two commands).
 > not refusal**: promoting a Captain auto-demotes the prior one, and the post-condition reuses the
 > save-time `single_captain` predicate. *Verified against the NHL Legacy anchor:* promote → prior
 > captain demoted → exactly one captain → commit yields CRC-valid, audit-clean bytes; failed ops roll
-> back untouched. **Deferred** (need record-allocation primitives — table growth + the swap-pop
-> tail-row hazard): `create_player`, `delete_player`, `trade`/`move_player`, `assign_line_slot`. They
-> land on the same harness.
+> back untouched.
+>
+> **Record-allocation primitives now exist** (`tdb-core::append_record` / `remove_record`): append
+> reuses a slack slot or grows a full table (insert one record, shift later tables' directory offsets,
+> bump `db_size`/`max`/`current`, recompute CRCs); remove is swap-pop (relocate the tail into the gap,
+> leave reusable slack) and returns the moved tail index so the caller can repoint references — the
+> documented hazard. *Verified on the anchor: full-table growth preserves every other record and keeps
+> all CRC scopes self-consistent.* Still to wire onto the harness: `create_player`, `delete_player`,
+> `trade`/`move_player`, `assign_line_slot`.
 
 ---
 

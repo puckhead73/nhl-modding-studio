@@ -67,6 +67,35 @@ impl fmt::Display for TdbError {
 }
 impl std::error::Error for TdbError {}
 
+/// Errors from the record-allocation primitives ([`TdbFile::append_record`] /
+/// [`TdbFile::remove_record`]).
+#[derive(Debug, PartialEq, Eq)]
+pub enum AllocError {
+    /// No table with that on-disk (raw) id.
+    UnknownTable,
+    /// Record index past `current_records`.
+    IndexOutOfRange,
+    /// `max_records` is already `u16::MAX`; the table cannot grow.
+    CapacityExhausted,
+    /// A computed byte range fell outside the file.
+    OutOfBounds,
+    /// The grown buffer failed to re-parse (should not happen — a bug guard).
+    Reparse(TdbError),
+}
+
+impl fmt::Display for AllocError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            AllocError::UnknownTable => write!(f, "unknown table"),
+            AllocError::IndexOutOfRange => write!(f, "record index out of range"),
+            AllocError::CapacityExhausted => write!(f, "table at max_records capacity"),
+            AllocError::OutOfBounds => write!(f, "computed byte range outside file"),
+            AllocError::Reparse(e) => write!(f, "grown buffer failed to re-parse: {e}"),
+        }
+    }
+}
+impl std::error::Error for AllocError {}
+
 /// A 16-byte field descriptor.
 #[derive(Clone, Debug)]
 pub struct FieldDescriptor {
@@ -327,6 +356,14 @@ fn write_u32(b: &mut [u8], o: usize, v: u32, e: Endian) {
     b[o..o + 4].copy_from_slice(&a);
 }
 
+fn write_u16(b: &mut [u8], o: usize, v: u16, e: Endian) {
+    let a = match e {
+        Endian::Big => v.to_be_bytes(),
+        Endian::Little => v.to_le_bytes(),
+    };
+    b[o..o + 2].copy_from_slice(&a);
+}
+
 /// Write `width` bits at `bit_offset` in `data` (inverse of [`read_bits`]); leaves other bits intact.
 pub fn write_bits(data: &mut [u8], bit_offset: u32, width: u32, value: u64, endian: Endian) {
     if width == 0 {
@@ -465,6 +502,113 @@ impl TdbFile<'_> {
             self.endian,
         );
         true
+    }
+
+    /// Append a zeroed record to a table and return the **new file bytes** (CRCs recomputed) plus the
+    /// new record's index.
+    ///
+    /// Two paths:
+    /// * **Slack reuse** — if `current_records < max_records`, the table already has an allocated slot;
+    ///   zero it and bump `current_records`. The file length is unchanged.
+    /// * **Table growth** — if the table is full (`current == max`, the vanilla state of every anchor
+    ///   table), the allocation is grown by one record: `record_len` zero bytes are inserted at the
+    ///   end of the table's record region, every later table's directory offset is shifted, `db_size`
+    ///   and the table's `max_records`/`current_records` are updated, and all CRCs are recomputed.
+    ///
+    /// The new record is zero-filled; populate it with [`TdbFile::set_u64`] on the returned bytes.
+    pub fn append_record(&self, table_raw: &str) -> Result<(Vec<u8>, u32), AllocError> {
+        let t = self.table(table_raw).ok_or(AllocError::UnknownTable)?;
+        let reclen = t.record_len_bytes as usize;
+        let cur = t.current_records;
+        let max = t.max_records;
+        let new_index = cur as u32;
+
+        // --- Slack path: a free allocated slot already exists. ---
+        if cur < max {
+            let slot = t.record_block + cur as usize * reclen;
+            if slot + reclen > self.bytes.len() {
+                return Err(AllocError::OutOfBounds);
+            }
+            let mut buf = self.bytes.to_vec();
+            buf[slot..slot + reclen].fill(0);
+            write_u16(&mut buf, t.block_offset + 0x16, cur + 1, self.endian);
+            self.recompute_crcs(&mut buf);
+            return Ok((buf, new_index));
+        }
+
+        // --- Growth path: table is full; grow its allocation by one record. ---
+        if max == u16::MAX {
+            return Err(AllocError::CapacityExhausted);
+        }
+        let insert_at = t.record_block + max as usize * reclen;
+        if insert_at > self.bytes.len() {
+            return Err(AllocError::OutOfBounds);
+        }
+        let block_offset = t.block_offset;
+
+        let mut buf = Vec::with_capacity(self.bytes.len() + reclen);
+        buf.extend_from_slice(&self.bytes[..insert_at]);
+        buf.extend(std::iter::repeat_n(0u8, reclen));
+        buf.extend_from_slice(&self.bytes[insert_at..]);
+
+        // Shift the directory offset of every table whose block begins at/after the insertion point.
+        let dir_end = FILE_HEADER + 8 * self.tables.len();
+        for i in 0..self.tables.len() {
+            let entry = FILE_HEADER + i * 8;
+            let off = u32_at(&buf, entry + 4, self.endian) as usize;
+            if dir_end + off >= insert_at {
+                write_u32(&mut buf, entry + 4, (off + reclen) as u32, self.endian);
+            }
+        }
+        // Grow the table's max + current, and the file's db_size.
+        write_u16(&mut buf, block_offset + 0x14, max + 1, self.endian);
+        write_u16(&mut buf, block_offset + 0x16, cur + 1, self.endian);
+        write_u32(&mut buf, 0x08, self.db_size + reclen as u32, self.endian);
+
+        // Recompute all CRCs over the new structure (re-parse a clone to satisfy the borrow checker).
+        let view = buf.clone();
+        let db = TdbFile::parse(&view).map_err(AllocError::Reparse)?;
+        db.recompute_crcs(&mut buf);
+        Ok((buf, new_index))
+    }
+
+    /// Remove a record by **swap-pop**: the last record is moved into the removed slot and
+    /// `current_records` is decremented (the freed slot stays allocated as reusable slack, so the file
+    /// length is unchanged). Returns the **new file bytes** (CRCs recomputed) and, when a relocation
+    /// happened, `Some(old_tail_index)` — the index the moved record *used to* occupy.
+    ///
+    /// ⚠️ **Swap-pop tail-row hazard.** When `Some(old)` is returned, any reference elsewhere to record
+    /// `old` of this table now dangles (that row lives at `index` now). The caller (a Layer 3
+    /// `delete_*` operation) must repoint such references from `old` → `index`.
+    pub fn remove_record(
+        &self,
+        table_raw: &str,
+        index: u32,
+    ) -> Result<(Vec<u8>, Option<u32>), AllocError> {
+        let t = self.table(table_raw).ok_or(AllocError::UnknownTable)?;
+        let cur = t.current_records as u32;
+        if index >= cur {
+            return Err(AllocError::IndexOutOfRange);
+        }
+        let reclen = t.record_len_bytes as usize;
+        let last = cur - 1;
+        let tail = t.record_block + last as usize * reclen;
+        if tail + reclen > self.bytes.len() {
+            return Err(AllocError::OutOfBounds);
+        }
+
+        let mut buf = self.bytes.to_vec();
+        let moved = if index != last {
+            let dst = t.record_block + index as usize * reclen;
+            buf.copy_within(tail..tail + reclen, dst);
+            Some(last)
+        } else {
+            None
+        };
+        buf[tail..tail + reclen].fill(0); // clear the vacated tail slot
+        write_u16(&mut buf, t.block_offset + 0x16, (cur - 1) as u16, self.endian);
+        self.recompute_crcs(&mut buf);
+        Ok((buf, moved))
     }
 }
 
