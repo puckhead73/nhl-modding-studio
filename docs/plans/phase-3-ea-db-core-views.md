@@ -1,6 +1,10 @@
 # Phase 3 — EA DB core views (implementation plan)
 
-> **Status:** ready to execute. Authored 2026-06-28 after Phase 2 (commit `c2a54c2`).
+> **Status:** ✅ implemented 2026-06-28 (commits `28de8c2`, `e1519bf`, `6cb995a`, `9ed27b1`,
+> `4fa4f26`). All six views shipped; backend fully tested (85 workspace tests, clippy clean, app
+> builds); the Players slice was verified live in-app. Remaining manual step: live smoke of the
+> Teams/Arenas/Lines/Dashboard/Pending views (backend-tested + type-checked; not yet clicked through).
+> Authored after Phase 2 (commit `c2a54c2`).
 > **Gate (ROADMAP.md:35):** a *usable editor* for the proven titles — Dashboard, Teams, Arenas,
 > Players (+career stats), Lines/depth chart, Pending Edits, save-as/pack.
 >
