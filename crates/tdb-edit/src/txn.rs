@@ -22,8 +22,9 @@
 //! here as further operations on the same harness.
 
 use crate::EditError;
+use std::collections::HashSet;
 use tdb_core::TdbFile;
-use tdb_domain_validation::single_captain;
+use tdb_domain_validation::{companion_presence, single_captain};
 use tdb_relations::entity::ids;
 use tdb_relations::RosterModel;
 
@@ -97,6 +98,93 @@ impl EditTransaction {
         Ok(())
     }
 
+    /// Append a zeroed record to a studio-named table, updating the working bytes; returns its index.
+    fn append(&mut self, studio_table: &str) -> Result<u32, EditError> {
+        let view = self.working.clone();
+        let db = TdbFile::parse(&view).map_err(|e| EditError::Parse(e.to_string()))?;
+        let raw = db
+            .table_canonical(studio_table)
+            .ok_or_else(|| EditError::UnknownTable(studio_table.to_string()))?
+            .id
+            .raw();
+        let (new_bytes, index) = db
+            .append_record(&raw)
+            .map_err(|e| EditError::Alloc(e.to_string()))?;
+        self.working = new_bytes;
+        Ok(index)
+    }
+
+    /// Mint a fresh unique id for a key field: the **smallest free value** in `1..sentinel` not already
+    /// used by any record. (`max + 1` is wrong here — these 14-bit id spaces are nearly full and their
+    /// top value is the all-ones "none" sentinel, so `max + 1` would alias it; the spaces are sparse,
+    /// so a low free value exists.)
+    fn mint_id(&self, studio_table: &str, studio_field: &str) -> Result<u64, EditError> {
+        let view = self.working.clone();
+        let db = TdbFile::parse(&view).map_err(|e| EditError::Parse(e.to_string()))?;
+        let table = db
+            .table_canonical(studio_table)
+            .ok_or_else(|| EditError::UnknownTable(studio_table.to_string()))?;
+        let field = table
+            .fields
+            .iter()
+            .find(|f| f.id.canonical(db.endian) == studio_field)
+            .ok_or_else(|| EditError::UnknownField {
+                table: studio_table.to_string(),
+                field: studio_field.to_string(),
+            })?;
+        let sentinel = if field.bit_width >= 64 {
+            u64::MAX
+        } else {
+            (1u64 << field.bit_width) - 1
+        };
+        let mut used = HashSet::new();
+        for i in 0..table.current_records as u32 {
+            if let Some(v) = db.read_u64(table, i, field) {
+                used.insert(v);
+            }
+        }
+        (1..sentinel)
+            .find(|c| !used.contains(c))
+            .ok_or_else(|| EditError::Alloc(format!("no free id for {studio_table}.{studio_field}")))
+    }
+
+    /// Swap-pop every record of a studio table whose studio field value is in `wanted`. Re-scans from
+    /// scratch after each removal (swap-pop relocates the tail). Cluster references are by value, so
+    /// no repointing is needed. Returns how many rows were removed.
+    fn remove_matching(
+        &mut self,
+        studio_table: &str,
+        studio_field: &str,
+        wanted: &HashSet<u64>,
+    ) -> Result<u32, EditError> {
+        let mut removed = 0;
+        loop {
+            let view = self.working.clone();
+            let db = TdbFile::parse(&view).map_err(|e| EditError::Parse(e.to_string()))?;
+            let table = db
+                .table_canonical(studio_table)
+                .ok_or_else(|| EditError::UnknownTable(studio_table.to_string()))?;
+            let field = table
+                .fields
+                .iter()
+                .find(|f| f.id.canonical(db.endian) == studio_field)
+                .ok_or_else(|| EditError::UnknownField {
+                    table: studio_table.to_string(),
+                    field: studio_field.to_string(),
+                })?;
+            let hit = (0..table.current_records as u32)
+                .find(|&i| db.read_u64(table, i, field).is_some_and(|v| wanted.contains(&v)));
+            let Some(index) = hit else { break };
+            let raw = table.id.raw();
+            let (new_bytes, _moved) = db
+                .remove_record(&raw, index)
+                .map_err(|e| EditError::Alloc(e.to_string()))?;
+            self.working = new_bytes;
+            removed += 1;
+        }
+        Ok(removed)
+    }
+
     /// Run `op` inside a repairing transaction: snapshot, stage, then audit the shared invariants;
     /// roll the working bytes back to the snapshot if the op errors or the audit finds violations.
     pub fn with_repairing_transaction<F>(&mut self, op: F) -> Result<OpOutcome, EditError>
@@ -107,13 +195,23 @@ impl EditTransaction {
         let result = op(self).and_then(|outcome| {
             let view = self.working.clone();
             let db = TdbFile::parse(&view).map_err(|e| EditError::Parse(e.to_string()))?;
-            // Share the save-time predicate so operation-time and save-time agree.
-            let violations = single_captain(&db);
+            // Share the save-time predicates so operation-time and save-time agree. (Predicates that
+            // need the def registries — referential/enum — are verified at save time; the db-only
+            // invariants run here.)
+            let mut violations = single_captain(&db);
+            let predicate = if violations.is_empty() {
+                let comp = companion_presence(&db);
+                let p = if comp.is_empty() { "" } else { "companion_presence" };
+                violations = comp;
+                p
+            } else {
+                "single_captain"
+            };
             if violations.is_empty() {
                 Ok(outcome)
             } else {
                 Err(EditError::AuditFailed {
-                    predicate: "single_captain",
+                    predicate,
                     violations: violations.len(),
                 })
             }
@@ -169,6 +267,146 @@ impl EditTransaction {
                 repairs,
             })
         })
+    }
+
+    /// Create a new player as a complete, audit-clean **cluster** wired onto a team: the `ubPc` bio
+    /// (fresh unique `wBIz`, `vjla` position, `dXSB` team), the kind-correct companion pair
+    /// (`dSvy`+`xmja` for skaters, `mHuy`+`fMVl` for goalies — all keyed on the new `wBIz`), a `ZBac`
+    /// index row (`ykFq` → bio, fresh `vfEq`), and an `eGlu` roster slot (`XSWT` → the index, `dXSB`
+    /// team). All rows are allocated atomically inside a repairing transaction; the post-condition
+    /// audit guarantees the companion invariant holds. Returns the new `wBIz`.
+    pub fn create_player(
+        &mut self,
+        team_id: u64,
+        position: u64,
+    ) -> Result<(u64, OpOutcome), EditError> {
+        if position > 4 {
+            return Err(EditError::InvalidValue {
+                what: "position",
+                value: position as i64,
+            });
+        }
+        if self.model()?.team(team_id).is_none() {
+            return Err(EditError::InvalidValue {
+                what: "team_id (no such team)",
+                value: team_id as i64,
+            });
+        }
+        let new_pid = self.mint_id(ids::BIO, ids::PLAYER_ID)?;
+        let new_vfeq = self.mint_id(ids::INDEX, ids::INDEX_KEY)?;
+        let new_slot_key = self.mint_id(ids::ROSTER_LINES, ids::SLOT_KEY)?;
+        let goalie = position == 4;
+
+        let outcome = self.with_repairing_transaction(|tx| {
+            // Bio (ubPc): identity + position + team affiliation.
+            let bio = tx.append(ids::BIO)?;
+            tx.set_field(ids::BIO, bio, ids::PLAYER_ID, new_pid)?;
+            tx.set_field(ids::BIO, bio, ids::POSITION, position)?;
+            tx.set_field(ids::BIO, bio, ids::SLOT_TEAM, team_id)?; // ubPc.dXSB
+
+            // Kind-correct companion pair, keyed on the new wBIz.
+            let (ai, equip) = if goalie {
+                (ids::GOALIE_AI, ids::GOALIE_EQUIP)
+            } else {
+                (ids::SKATER_AI, ids::SKATER_EQUIP)
+            };
+            let ai_rec = tx.append(ai)?;
+            tx.set_field(ai, ai_rec, ids::PLAYER_ID, new_pid)?;
+            let eq_rec = tx.append(equip)?;
+            tx.set_field(equip, eq_rec, ids::PLAYER_ID, new_pid)?;
+
+            // Player index (ZBac): bridge the bio.
+            let zb = tx.append(ids::INDEX)?;
+            tx.set_field(ids::INDEX, zb, ids::INDEX_KEY, new_vfeq)?;
+            tx.set_field(ids::INDEX, zb, ids::INDEX_TO_BIO, new_pid)?;
+
+            // Roster slot (eGlu): wire onto the team via the index.
+            let slot = tx.append(ids::ROSTER_LINES)?;
+            tx.set_field(ids::ROSTER_LINES, slot, ids::SLOT_KEY, new_slot_key)?;
+            tx.set_field(ids::ROSTER_LINES, slot, ids::SLOT_TO_INDEX, new_vfeq)?;
+            tx.set_field(ids::ROSTER_LINES, slot, ids::SLOT_TEAM, team_id)?;
+
+            Ok(OpOutcome {
+                edits: 10,
+                repairs: vec![format!(
+                    "created {} cluster wBIz={new_pid}: bio + {ai}/{equip} + index + slot on team {team_id}",
+                    if goalie { "goalie" } else { "skater" }
+                )],
+            })
+        })?;
+        Ok((new_pid, outcome))
+    }
+
+    /// Delete a player and its **whole cluster** without orphans: the `eGlu` slots that bridge to it,
+    /// its `ZBac` index rows, every companion row (any of `dSvy`/`xmja`/`mHuy`/`fMVl`) keyed on its
+    /// `wBIz`, and the `ubPc` bio. Removal is swap-pop; cluster references are by value (`wBIz`/`vfEq`)
+    /// so the relocated tail rows need no repointing. Atomic + audited.
+    pub fn delete_player(&mut self, player_id: u64) -> Result<OpOutcome, EditError> {
+        // Resolve the player and the set of ZBac index keys (vfEq) it owns, before any removal.
+        let model = self.model()?;
+        if model.player(player_id).is_none() {
+            return Err(EditError::NoSuchPlayer(player_id));
+        }
+        let index_keys: HashSet<u64> = self.player_index_keys(player_id)?;
+        let id_set = HashSet::from([player_id]);
+
+        self.with_repairing_transaction(|tx| {
+            let mut edits = 0;
+            // 1. Roster slots that bridge to this player's index rows.
+            edits += tx.remove_matching(ids::ROSTER_LINES, ids::SLOT_TO_INDEX, &index_keys)?;
+            // 2. The player-index rows themselves.
+            edits += tx.remove_matching(ids::INDEX, ids::INDEX_KEY, &index_keys)?;
+            // 3. Every companion row sharing the wBIz (kind-agnostic, robust to stray rows).
+            for companion in [
+                ids::SKATER_AI,
+                ids::SKATER_EQUIP,
+                ids::GOALIE_AI,
+                ids::GOALIE_EQUIP,
+            ] {
+                edits += tx.remove_matching(companion, ids::PLAYER_ID, &id_set)?;
+            }
+            // 4. The bio last.
+            edits += tx.remove_matching(ids::BIO, ids::PLAYER_ID, &id_set)?;
+
+            Ok(OpOutcome {
+                edits,
+                repairs: vec![format!("deleted full cluster for wBIz={player_id}")],
+            })
+        })
+    }
+
+    /// The set of `ZBac.vfEq` index keys whose `ykFq` points at `player_id`.
+    fn player_index_keys(&self, player_id: u64) -> Result<HashSet<u64>, EditError> {
+        let view = self.working.clone();
+        let db = TdbFile::parse(&view).map_err(|e| EditError::Parse(e.to_string()))?;
+        let t = db
+            .table_canonical(ids::INDEX)
+            .ok_or_else(|| EditError::UnknownTable(ids::INDEX.to_string()))?;
+        let find = |name: &str| {
+            t.fields
+                .iter()
+                .find(|f| f.id.canonical(db.endian) == name)
+                .cloned()
+        };
+        let (key, to_bio) = (
+            find(ids::INDEX_KEY).ok_or_else(|| EditError::UnknownField {
+                table: ids::INDEX.to_string(),
+                field: ids::INDEX_KEY.to_string(),
+            })?,
+            find(ids::INDEX_TO_BIO).ok_or_else(|| EditError::UnknownField {
+                table: ids::INDEX.to_string(),
+                field: ids::INDEX_TO_BIO.to_string(),
+            })?,
+        );
+        let mut keys = HashSet::new();
+        for i in 0..t.current_records as u32 {
+            if db.read_u64(t, i, &to_bio) == Some(player_id) {
+                if let Some(v) = db.read_u64(t, i, &key) {
+                    keys.insert(v);
+                }
+            }
+        }
+        Ok(keys)
     }
 
     /// Finalize: recompute all CRCs over the working bytes and return the new database.

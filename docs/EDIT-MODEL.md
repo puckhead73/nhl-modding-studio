@@ -139,7 +139,18 @@ holes such as dup-on-team spread across two commands).
 > bump `db_size`/`max`/`current`, recompute CRCs); remove is swap-pop (relocate the tail into the gap,
 > leave reusable slack) and returns the moved tail index so the caller can repoint references — the
 > documented hazard. *Verified on the anchor: full-table growth preserves every other record and keeps
-> all CRC scopes self-consistent.* Still to wire onto the harness: `create_player`, `delete_player`,
+> all CRC scopes self-consistent.*
+>
+> **`create_player` / `delete_player` now ship** on the harness. `create_player(team, position)`
+> allocates the whole cluster atomically — `ubPc` bio (freshly **minted unique** `wBIz`, `vjla`,
+> `dXSB`), the kind-correct companion pair (`dSvy`+`xmja` / `mHuy`+`fMVl`), the `ZBac` index bridge,
+> and an `eGlu` slot wired to the team — then the audit confirms the companion invariant.
+> `delete_player` swap-pops the full cluster (slots → index rows → companions → bio); since every
+> intra-cluster reference is **by value** (`wBIz`/`vfEq`), the relocated tail rows need no repointing.
+> *Verified on the anchor with the full save-time predicate set (relations + enums): create/delete are
+> CRC-valid and audit-clean; delete returns counts to baseline.* Note: id minting must pick the
+> **smallest free non-sentinel** value — the 14-bit `wBIz`/`vfEq` spaces are nearly full and their
+> top value is the all-ones "none" sentinel, so `max + 1` would alias it. Still to wire:
 > `trade`/`move_player`, `assign_line_slot`.
 
 ---

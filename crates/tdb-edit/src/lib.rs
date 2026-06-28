@@ -45,6 +45,10 @@ pub enum EditError {
     NoSuchSlot { team_id: u64, player_id: u64 },
     /// An operation argument was outside its legal set.
     InvalidValue { what: &'static str, value: i64 },
+    /// No player with that `wBIz` id exists.
+    NoSuchPlayer(u64),
+    /// A record-allocation primitive failed.
+    Alloc(String),
     /// A repairing transaction's post-condition audit failed; the operation was rolled back.
     AuditFailed {
         predicate: &'static str,
@@ -74,6 +78,8 @@ impl fmt::Display for EditError {
             EditError::InvalidValue { what, value } => {
                 write!(f, "invalid {what}: {value}")
             }
+            EditError::NoSuchPlayer(id) => write!(f, "no player with wBIz {id}"),
+            EditError::Alloc(e) => write!(f, "record allocation failed: {e}"),
             EditError::AuditFailed {
                 predicate,
                 violations,
