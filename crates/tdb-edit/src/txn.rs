@@ -409,6 +409,170 @@ impl EditTransaction {
         Ok(keys)
     }
 
+    /// The index of the first record whose studio field equals `value`, if any.
+    fn find_record(
+        &self,
+        studio_table: &str,
+        studio_field: &str,
+        value: u64,
+    ) -> Result<Option<u32>, EditError> {
+        let view = self.working.clone();
+        let db = TdbFile::parse(&view).map_err(|e| EditError::Parse(e.to_string()))?;
+        let table = db
+            .table_canonical(studio_table)
+            .ok_or_else(|| EditError::UnknownTable(studio_table.to_string()))?;
+        let field = table
+            .fields
+            .iter()
+            .find(|f| f.id.canonical(db.endian) == studio_field)
+            .ok_or_else(|| EditError::UnknownField {
+                table: studio_table.to_string(),
+                field: studio_field.to_string(),
+            })?;
+        Ok((0..table.current_records as u32)
+            .find(|&i| db.read_u64(table, i, field) == Some(value)))
+    }
+
+    /// The storage bit-width of a studio field.
+    fn field_width(&self, studio_table: &str, studio_field: &str) -> Result<u32, EditError> {
+        let view = self.working.clone();
+        let db = TdbFile::parse(&view).map_err(|e| EditError::Parse(e.to_string()))?;
+        let table = db
+            .table_canonical(studio_table)
+            .ok_or_else(|| EditError::UnknownTable(studio_table.to_string()))?;
+        table
+            .fields
+            .iter()
+            .find(|f| f.id.canonical(db.endian) == studio_field)
+            .map(|f| f.bit_width)
+            .ok_or_else(|| EditError::UnknownField {
+                table: studio_table.to_string(),
+                field: studio_field.to_string(),
+            })
+    }
+
+    /// Move/trade a player to another team: rewrite the team affiliation on the bio (`ubPc.dXSB`) and
+    /// every roster slot (`eGlu.dXSB`) the player occupies. Appearance/equipment companions are keyed
+    /// on `wBIz` and carry no team, so they follow the trade automatically. A traded player **loses
+    /// any captaincy** on arrival (a repair that keeps the single-captain invariant by construction).
+    pub fn move_player(&mut self, player_id: u64, to_team: u64) -> Result<OpOutcome, EditError> {
+        {
+            let model = self.model()?;
+            if model.team(to_team).is_none() {
+                return Err(EditError::InvalidValue {
+                    what: "to_team (no such team)",
+                    value: to_team as i64,
+                });
+            }
+            if model.player(player_id).is_none() {
+                return Err(EditError::NoSuchPlayer(player_id));
+            }
+        }
+        self.with_repairing_transaction(|tx| {
+            let model = tx.model()?;
+            let bio_record = model.player(player_id).unwrap().bio_record;
+            let slots: Vec<(u32, Option<u64>)> = model
+                .slots
+                .iter()
+                .filter(|s| s.player_id == Some(player_id))
+                .map(|s| (s.record, s.captaincy))
+                .collect();
+            drop(model);
+
+            let mut edits = 1;
+            let mut repairs = Vec::new();
+            tx.set_field(ids::BIO, bio_record, ids::SLOT_TEAM, to_team)?; // ubPc.dXSB
+            for (record, captaincy) in slots {
+                tx.set_field(ids::ROSTER_LINES, record, ids::SLOT_TEAM, to_team)?;
+                edits += 1;
+                if captaincy.is_some_and(|c| c != captaincy::NONE) {
+                    tx.set_field(ids::ROSTER_LINES, record, ids::SLOT_CAPTAINCY, captaincy::NONE)?;
+                    edits += 1;
+                    repairs.push(format!("cleared captaincy on trade (slot {record})"));
+                }
+            }
+            Ok(OpOutcome { edits, repairs })
+        })
+    }
+
+    /// Set a player's jersey number on a team (`eGlu.sVRt`). Validated against the field width and
+    /// **unique within the team**: a number already worn by another player is rejected (a jersey
+    /// collision has no unambiguous auto-repair, so it surfaces a structured error).
+    pub fn set_jersey_number(
+        &mut self,
+        team_id: u64,
+        player_id: u64,
+        number: u64,
+    ) -> Result<OpOutcome, EditError> {
+        let max = (1u64 << self.field_width(ids::ROSTER_LINES, ids::SLOT_JERSEY)?) - 1;
+        if number > max {
+            return Err(EditError::InvalidValue {
+                what: "jersey number",
+                value: number as i64,
+            });
+        }
+        self.with_repairing_transaction(|tx| {
+            let model = tx.model()?;
+            let target_record = model
+                .slots
+                .iter()
+                .find(|s| s.team_id == team_id && s.player_id == Some(player_id))
+                .ok_or(EditError::NoSuchSlot { team_id, player_id })?
+                .record;
+            if model
+                .slots
+                .iter()
+                .any(|s| s.team_id == team_id && s.record != target_record && s.jersey == Some(number))
+            {
+                return Err(EditError::JerseyTaken {
+                    team: team_id,
+                    number,
+                });
+            }
+            tx.set_field(ids::ROSTER_LINES, target_record, ids::SLOT_JERSEY, number)?;
+            Ok(OpOutcome {
+                edits: 1,
+                repairs: Vec::new(),
+            })
+        })
+    }
+
+    /// Set a player's roster status on the bridged player-index row (`ZBac.RREB`, 2-bit). The
+    /// label→value mapping (Scratched / Dressed / In-Minors) is **candidate**; this writes the raw
+    /// 2-bit code (`0..=3`).
+    pub fn set_roster_status(
+        &mut self,
+        team_id: u64,
+        player_id: u64,
+        status: u64,
+    ) -> Result<OpOutcome, EditError> {
+        if status > 3 {
+            return Err(EditError::InvalidValue {
+                what: "roster status (2-bit)",
+                value: status as i64,
+            });
+        }
+        self.with_repairing_transaction(|tx| {
+            let model = tx.model()?;
+            let index_key = model
+                .slots
+                .iter()
+                .find(|s| s.team_id == team_id && s.player_id == Some(player_id))
+                .ok_or(EditError::NoSuchSlot { team_id, player_id })?
+                .index_key
+                .ok_or(EditError::NoSuchSlot { team_id, player_id })?;
+            drop(model);
+            let zbac_record = tx
+                .find_record(ids::INDEX, ids::INDEX_KEY, index_key)?
+                .ok_or_else(|| EditError::Entity(format!("no ZBac row with vfEq {index_key}")))?;
+            tx.set_field(ids::INDEX, zbac_record, ids::INDEX_STATUS, status)?;
+            Ok(OpOutcome {
+                edits: 1,
+                repairs: Vec::new(),
+            })
+        })
+    }
+
     /// Finalize: recompute all CRCs over the working bytes and return the new database.
     pub fn commit(mut self) -> Result<Vec<u8>, EditError> {
         let view = self.working.clone();

@@ -49,6 +49,8 @@ pub enum EditError {
     NoSuchPlayer(u64),
     /// A record-allocation primitive failed.
     Alloc(String),
+    /// A jersey number is already worn by another player on the team (unique-where-required).
+    JerseyTaken { team: u64, number: u64 },
     /// A repairing transaction's post-condition audit failed; the operation was rolled back.
     AuditFailed {
         predicate: &'static str,
@@ -80,6 +82,9 @@ impl fmt::Display for EditError {
             }
             EditError::NoSuchPlayer(id) => write!(f, "no player with wBIz {id}"),
             EditError::Alloc(e) => write!(f, "record allocation failed: {e}"),
+            EditError::JerseyTaken { team, number } => {
+                write!(f, "jersey {number} already worn on team {team}")
+            }
             EditError::AuditFailed {
                 predicate,
                 violations,

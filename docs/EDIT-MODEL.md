@@ -150,8 +150,15 @@ holes such as dup-on-team spread across two commands).
 > *Verified on the anchor with the full save-time predicate set (relations + enums): create/delete are
 > CRC-valid and audit-clean; delete returns counts to baseline.* Note: id minting must pick the
 > **smallest free non-sentinel** value — the 14-bit `wBIz`/`vfEq` spaces are nearly full and their
-> top value is the all-ones "none" sentinel, so `max + 1` would alias it. Still to wire:
-> `trade`/`move_player`, `assign_line_slot`.
+> top value is the all-ones "none" sentinel, so `max + 1` would alias it.
+>
+> **`move_player`/`trade`, `set_jersey_number`, `set_roster_status` also ship.** `move_player` retags
+> the bio + slot `dXSB` to the new team (equipment follows by `wBIz`) and clears captaincy on arrival
+> (single-captain repair); `set_jersey_number` (`eGlu.sVRt`) is width- and **uniqueness-within-team**
+> validated (a collision is a structured error — no unambiguous repair); `set_roster_status` writes
+> the bridged `ZBac.RREB` 2-bit code (labels candidate). All verified audit-clean on the anchor.
+> **Still deferred:** `assign_line_slot` — the 71 one-bit line flags are not yet mapped to positions,
+> so wiring it now would be guesswork (verify-don't-guess).
 
 ---
 
