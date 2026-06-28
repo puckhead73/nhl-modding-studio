@@ -98,6 +98,74 @@ impl EditTransaction {
         Ok(())
     }
 
+    /// Write an inline-string field on one record, addressed by **studio** `(table, field)` ids.
+    fn set_field_str(
+        &mut self,
+        studio_table: &str,
+        record: u32,
+        studio_field: &str,
+        text: &str,
+    ) -> Result<(), EditError> {
+        let view = self.working.clone();
+        let db = TdbFile::parse(&view).map_err(|e| EditError::Parse(e.to_string()))?;
+        let table = db
+            .table_canonical(studio_table)
+            .ok_or_else(|| EditError::UnknownTable(studio_table.to_string()))?;
+        let field = table
+            .fields
+            .iter()
+            .find(|f| f.id.canonical(db.endian) == studio_field)
+            .ok_or_else(|| EditError::UnknownField {
+                table: studio_table.to_string(),
+                field: studio_field.to_string(),
+            })?;
+        if !db.set_inline_str(&mut self.working, table, record, field, text) {
+            return Err(EditError::OutOfRange {
+                table: studio_table.to_string(),
+                record,
+            });
+        }
+        Ok(())
+    }
+
+    /// Set a single fixed-bit cell (studio ids) inside a repairing transaction. `value` is the
+    /// **already-validated, encoded** raw value — entry-time validation (range / updatable / enum) is
+    /// the caller's job (`studio-domain` does it against the metadata). The post-condition audit still
+    /// runs, so a cell edit that would break a shared invariant is rolled back.
+    pub fn set_cell_int(
+        &mut self,
+        studio_table: &str,
+        record: u32,
+        studio_field: &str,
+        value: u64,
+    ) -> Result<OpOutcome, EditError> {
+        self.with_repairing_transaction(|tx| {
+            tx.set_field(studio_table, record, studio_field, value)?;
+            Ok(OpOutcome {
+                edits: 1,
+                repairs: Vec::new(),
+            })
+        })
+    }
+
+    /// Set a single inline-string cell (studio ids) inside a repairing transaction. `text` must
+    /// already fit the field width (the caller validates against metadata).
+    pub fn set_cell_str(
+        &mut self,
+        studio_table: &str,
+        record: u32,
+        studio_field: &str,
+        text: &str,
+    ) -> Result<OpOutcome, EditError> {
+        self.with_repairing_transaction(|tx| {
+            tx.set_field_str(studio_table, record, studio_field, text)?;
+            Ok(OpOutcome {
+                edits: 1,
+                repairs: Vec::new(),
+            })
+        })
+    }
+
     /// Append a zeroed record to a studio-named table, updating the working bytes; returns its index.
     fn append(&mut self, studio_table: &str) -> Result<u32, EditError> {
         let view = self.working.clone();

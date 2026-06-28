@@ -32,6 +32,9 @@ macro_rules! command_handler {
             $crate::commands::close_project,
             $crate::commands::project_summary,
             $crate::commands::validate_project,
+            $crate::commands::list_players,
+            $crate::commands::player_view,
+            $crate::commands::set_field,
             $crate::commands::set_captaincy,
             $crate::commands::create_player,
             $crate::commands::delete_player,
@@ -61,5 +64,7 @@ mod bindings {
         IntegrityReportDto::export_all().expect("export IntegrityReportDto + deps");
         CreatePlayerDto::export_all().expect("export CreatePlayerDto + deps");
         OpOutcomeDto::export_all().expect("export OpOutcomeDto");
+        PlayerViewDto::export_all().expect("export PlayerViewDto + deps");
+        PlayerSummaryDto::export_all().expect("export PlayerSummaryDto");
     }
 }

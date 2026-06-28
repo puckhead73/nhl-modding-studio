@@ -9,6 +9,7 @@
 use std::path::Path;
 
 use tdb_core::TdbFile;
+use tdb_defs::ValidationError;
 use tdb_domain_validation::{validate_invariants, IntegrityReport};
 use tdb_edit::txn::{EditTransaction, OpOutcome};
 use tdb_edit::EditError;
@@ -17,6 +18,26 @@ use tdb_relations::RosterModel;
 use crate::error::DomainError;
 use crate::project::Project;
 use crate::Result;
+
+/// A logical value for a generic field edit — an integer (sign-aware) or inline-string text.
+#[derive(Clone, Debug)]
+pub enum FieldValue {
+    Int(i64),
+    Text(String),
+}
+
+/// A validated, encoded edit ready to write transactionally (produced by `prepare_field_edit`).
+struct PreparedEdit {
+    table: String,
+    field: String,
+    record: u32,
+    payload: PreparedPayload,
+}
+
+enum PreparedPayload {
+    Int(u64),
+    Text(String),
+}
 
 /// A live edit session: working bytes + undo/redo history over a loaded [`Project`].
 pub struct EditSession {
@@ -73,6 +94,35 @@ impl EditSession {
         RosterModel::build(&db).map_err(|e| DomainError::Edit(EditError::Entity(e.to_string())))
     }
 
+    /// The player master list (view-models) over the current working state.
+    pub fn player_summaries(&self) -> Result<Vec<crate::PlayerSummary>> {
+        let db = TdbFile::parse(&self.working)?;
+        let model = self.build_model(&db)?;
+        Ok(crate::view::player_summaries(
+            &db,
+            self.project.meta(),
+            self.project.enums(),
+            &model,
+        ))
+    }
+
+    /// The full Player detail view for one `wBIz`, or `None` if no such player.
+    pub fn player_view(&self, player_id: u64) -> Result<Option<crate::PlayerView>> {
+        let db = TdbFile::parse(&self.working)?;
+        let model = self.build_model(&db)?;
+        Ok(crate::view::player_view(
+            &db,
+            self.project.meta(),
+            self.project.enums(),
+            &model,
+            player_id,
+        ))
+    }
+
+    fn build_model<'a>(&self, db: &TdbFile<'a>) -> Result<RosterModel> {
+        RosterModel::build(db).map_err(|e| DomainError::Edit(EditError::Entity(e.to_string())))
+    }
+
     /// Run the full Layer 4 audit (every shared predicate) over the current working state.
     pub fn validate(&self) -> Result<IntegrityReport> {
         let db = TdbFile::parse(&self.working)?;
@@ -117,6 +167,89 @@ impl EditSession {
             }
             None => false,
         }
+    }
+
+    /// Validate and stage a generic field edit (studio ids): integer fields are range/updatable
+    /// checked and two's-complement encoded against the metadata; string fields are length-checked.
+    /// The write runs through the repairing transaction (audited + undoable). Rejected edits leave
+    /// the working bytes untouched and return the reason.
+    pub fn set_field(
+        &mut self,
+        studio_table: &str,
+        record: u32,
+        studio_field: &str,
+        value: FieldValue,
+    ) -> Result<OpOutcome> {
+        let prepared = self.prepare_field_edit(studio_table, record, studio_field, value)?;
+        self.run(|tx| match &prepared.payload {
+            PreparedPayload::Int(v) => tx.set_cell_int(&prepared.table, prepared.record, &prepared.field, *v),
+            PreparedPayload::Text(s) => tx.set_cell_str(&prepared.table, prepared.record, &prepared.field, s),
+        })
+    }
+
+    /// Resolve the field descriptor + metadata and validate `value` at entry, returning an owned
+    /// encoded edit. All borrows of `self` end with the returned value, so the caller can then take
+    /// `&mut self` for `run`.
+    fn prepare_field_edit(
+        &self,
+        studio_table: &str,
+        record: u32,
+        studio_field: &str,
+        value: FieldValue,
+    ) -> Result<PreparedEdit> {
+        let view = self.working.clone();
+        let db = TdbFile::parse(&view)?;
+        let table = db
+            .table_canonical(studio_table)
+            .ok_or_else(|| EditError::UnknownTable(studio_table.to_string()))?;
+        let field = table
+            .fields
+            .iter()
+            .find(|f| f.id.canonical(db.endian) == studio_field)
+            .ok_or_else(|| EditError::UnknownField {
+                table: studio_table.to_string(),
+                field: studio_field.to_string(),
+            })?;
+        // Metadata is keyed by the on-disk id (`raw()` — endian-correct).
+        let meta = self
+            .project
+            .meta()
+            .field(&table.id.raw(), &field.id.raw())
+            .ok_or_else(|| EditError::NoMeta {
+                table: studio_table.to_string(),
+                field: studio_field.to_string(),
+            })?;
+
+        let payload = match value {
+            FieldValue::Int(i) => {
+                meta.validate(i).map_err(EditError::Invalid)?;
+                PreparedPayload::Int(meta.encode(i))
+            }
+            FieldValue::Text(s) => {
+                if !meta.updatable {
+                    return Err(EditError::Invalid(ValidationError::NotUpdatable {
+                        field: studio_field.to_string(),
+                    })
+                    .into());
+                }
+                let width_bytes = (field.bit_width / 8) as usize;
+                if s.len() > width_bytes {
+                    return Err(EditError::InvalidValue {
+                        what: "string length",
+                        value: s.len() as i64,
+                    }
+                    .into());
+                }
+                PreparedPayload::Text(s)
+            }
+        };
+
+        Ok(PreparedEdit {
+            table: studio_table.to_string(),
+            field: studio_field.to_string(),
+            record,
+            payload,
+        })
     }
 
     // --- Layer 3 operations (the Phase 1 slice), each audited + undoable ---

@@ -19,11 +19,16 @@ mod error;
 mod overview;
 mod project;
 mod session;
+mod view;
 
 pub use error::DomainError;
 pub use overview::{DbOverview, TableOverview};
 pub use project::{Platform, Project, ProjectRole, Source};
-pub use session::EditSession;
+pub use session::{EditSession, FieldValue};
+pub use view::{
+    entity_fields, player_summaries, player_view, read_field, FieldKind, FieldRaw, FieldView,
+    PlayerSummary, PlayerView, RosterMembership,
+};
 
 /// A convenience result alias for the domain layer.
 pub type Result<T> = std::result::Result<T, DomainError>;

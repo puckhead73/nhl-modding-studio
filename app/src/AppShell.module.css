@@ -1,0 +1,76 @@
+.shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 16px;
+  background: #1c1f23;
+  color: #f5f6f8;
+}
+
+.brand {
+  font-weight: 600;
+}
+
+.meta {
+  font-size: 12px;
+  opacity: 0.8;
+  display: flex;
+  gap: 8px;
+}
+
+.dirty {
+  color: #ffcf5c;
+}
+
+.actions {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+}
+
+.body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.nav {
+  width: 180px;
+  background: #e9ebef;
+  padding: 12px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.navLink,
+.navActive {
+  padding: 6px 10px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #1c1f23;
+}
+
+.navActive {
+  background: #d2d6dd;
+  font-weight: 600;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+  padding: 16px;
+}
+
+.error {
+  padding: 8px 16px;
+  background: #fdecea;
+  color: #b3261e;
+}

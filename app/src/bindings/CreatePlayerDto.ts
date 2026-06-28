@@ -4,4 +4,8 @@ import type { OpOutcomeDto } from "./OpOutcomeDto";
 /**
  * The outcome of creating a player: the new `wBIz` id plus the op outcome.
  */
-export type CreatePlayerDto = { player_id: bigint, outcome: OpOutcomeDto, };
+export type CreatePlayerDto = { 
+/**
+ * `u64` but always within JS safe-integer range; emitted as `number` to match Tauri's JSON IPC.
+ */
+player_id: number, outcome: OpOutcomeDto, };

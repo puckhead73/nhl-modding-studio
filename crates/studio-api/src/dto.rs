@@ -65,6 +65,78 @@ pub struct OpOutcomeDto {
 /// The outcome of creating a player: the new `wBIz` id plus the op outcome.
 #[derive(Serialize, TS)]
 pub struct CreatePlayerDto {
+    /// `u64` but always within JS safe-integer range; emitted as `number` to match Tauri's JSON IPC.
+    #[ts(type = "number")]
     pub player_id: u64,
     pub outcome: OpOutcomeDto,
+}
+
+/// One field of one record, ready to display or edit.
+#[derive(Serialize, TS)]
+pub struct FieldViewDto {
+    pub studio_table: String,
+    pub studio_field: String,
+    pub name: String,
+    /// `"integer"` | `"string"` | `"real"` | `"other"`.
+    pub kind: String,
+    /// What to render: enum label, decoded number, or string text.
+    pub display: String,
+    /// Sign/sentinel-decoded value for integers; `null` for strings.
+    #[ts(type = "number | null")]
+    pub decoded: Option<i64>,
+    pub enum_label: Option<String>,
+    /// Raw stored bits for integer fields (`null` for strings).
+    #[ts(type = "number | null")]
+    pub raw_int: Option<u64>,
+    /// Text for string fields (`null` for integers).
+    pub text: Option<String>,
+    #[ts(type = "number | null")]
+    pub range_low: Option<i64>,
+    #[ts(type = "number | null")]
+    pub range_high: Option<i64>,
+    pub editable: bool,
+    pub is_string: bool,
+}
+
+/// A compact player row for the master list.
+#[derive(Serialize, TS)]
+pub struct PlayerSummaryDto {
+    #[ts(type = "number")]
+    pub player_id: u64,
+    pub first_name: String,
+    pub last_name: String,
+    pub position_label: String,
+    #[ts(type = "number | null")]
+    pub team_id: Option<u64>,
+}
+
+/// A player's roster membership on one team.
+#[derive(Serialize, TS)]
+pub struct RosterMembershipDto {
+    #[ts(type = "number")]
+    pub team_id: u64,
+    #[ts(type = "number | null")]
+    pub jersey: Option<u64>,
+    #[ts(type = "number | null")]
+    pub captaincy: Option<u64>,
+    #[ts(type = "number | null")]
+    pub roster_status: Option<u64>,
+}
+
+/// The full Player detail: curated identity, ratings, memberships, and the complete bio field list.
+#[derive(Serialize, TS)]
+pub struct PlayerViewDto {
+    #[ts(type = "number")]
+    pub player_id: u64,
+    pub bio_record: u32,
+    /// `"skater"` | `"goalie"`.
+    pub kind: String,
+    pub identity: Vec<FieldViewDto>,
+    pub ratings: Vec<FieldViewDto>,
+    /// The companion record index the ratings belong to (needed to edit them); `null` if absent.
+    pub ratings_record: Option<u32>,
+    /// The companion table id the ratings belong to (`dSvy` or `mHuy`).
+    pub ratings_table: String,
+    pub memberships: Vec<RosterMembershipDto>,
+    pub all_fields: Vec<FieldViewDto>,
 }

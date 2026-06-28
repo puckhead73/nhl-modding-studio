@@ -107,3 +107,39 @@ fn single_field_edit_is_valid() {
     // And the edit is a real change (guard against a no-op masking the test).
     assert_ne!(new_pos, original_pos);
 }
+
+/// Editing an inline string (player firstname) round-trips through `set_inline_str` → re-parse, and
+/// the value reads back exactly (NUL-padded remainder), with neighbors untouched.
+#[test]
+fn inline_string_edit_round_trips() {
+    let bytes = read_anchor("ps3/nhllegacy/databases/nhlng.db");
+    let db = TdbFile::parse(&bytes).unwrap();
+    let t = db.table_canonical("ubPc").unwrap();
+    // firstname — on-disk shortname `PedH` (byte-aligned, 200-bit / 25-byte inline string).
+    let first = t.fields.iter().find(|f| f.id.raw() == "PedH").unwrap();
+    let other = t.fields.iter().find(|f| f.id.0 != first.id.0).unwrap().clone();
+
+    let rec = 0u32;
+    let original_other = db.read_u64(t, rec, &other).unwrap();
+
+    let mut buf = bytes.clone();
+    assert!(db.set_inline_str(&mut buf, t, rec, first, "Gretzky"));
+    db.recompute_crcs(&mut buf);
+
+    let db2 = TdbFile::parse(&buf).unwrap();
+    assert!(db2.header_crc_ok());
+    assert!(db2.serialize() == buf, "edited file is self-consistent");
+
+    let t2 = db2.table_canonical("ubPc").unwrap();
+    let first2 = t2.fields.iter().find(|f| f.id.raw() == "PedH").unwrap();
+    let read_back = db2.read_inline_str(t2, rec, first2).unwrap();
+    assert_eq!(read_back, b"Gretzky", "string edit took effect and reads back exactly");
+
+    let other2 = t2.fields.iter().find(|f| f.id.0 == other.id.0).unwrap();
+    assert_eq!(db2.read_u64(t2, rec, other2).unwrap(), original_other, "neighbor unchanged");
+
+    // Too-long strings are refused, not truncated.
+    let width_bytes = (first.bit_width / 8) as usize;
+    let too_long = "X".repeat(width_bytes + 1);
+    assert!(!db.set_inline_str(&mut buf, t, rec, first, &too_long));
+}

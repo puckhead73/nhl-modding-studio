@@ -4,7 +4,12 @@
 
 use tauri::State;
 
-use crate::dto::{CreatePlayerDto, IntegrityReportDto, OpOutcomeDto, ProjectSummaryDto};
+use studio_domain::FieldValue;
+
+use crate::dto::{
+    CreatePlayerDto, IntegrityReportDto, OpOutcomeDto, PlayerSummaryDto, PlayerViewDto,
+    ProjectSummaryDto,
+};
 use crate::registry::{parse_platform, parse_role, Registry};
 
 type CmdResult<T> = Result<T, String>;
@@ -44,6 +49,47 @@ pub fn validate_project(
     project_id: u32,
 ) -> CmdResult<IntegrityReportDto> {
     registry.validate(project_id).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub fn list_players(
+    registry: State<'_, Registry>,
+    project_id: u32,
+) -> CmdResult<Vec<PlayerSummaryDto>> {
+    registry.list_players(project_id).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub fn player_view(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    player_id: u64,
+) -> CmdResult<Option<PlayerViewDto>> {
+    registry
+        .player_view(project_id, player_id)
+        .map_err(|e| e.to_string())
+}
+
+/// Stage a validated field edit. Provide exactly one of `text_value` (string fields) or `int_value`
+/// (integer fields).
+#[tauri::command]
+pub fn set_field(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    table: String,
+    record: u32,
+    field: String,
+    int_value: Option<i64>,
+    text_value: Option<String>,
+) -> CmdResult<OpOutcomeDto> {
+    let value = match (text_value, int_value) {
+        (Some(s), _) => FieldValue::Text(s),
+        (None, Some(i)) => FieldValue::Int(i),
+        (None, None) => return Err("set_field requires int_value or text_value".to_string()),
+    };
+    registry
+        .set_field(project_id, &table, record, &field, value)
+        .map_err(|e| e.to_string())
 }
 
 #[tauri::command]

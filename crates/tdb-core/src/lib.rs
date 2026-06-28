@@ -504,6 +504,41 @@ impl TdbFile<'_> {
         true
     }
 
+    /// Overwrite an inline-string (kind 0) field for record `index` in `buf` with `text` (does **not**
+    /// recompute CRCs — call [`TdbFile::recompute_crcs`] afterwards). The field's full byte-width is
+    /// zeroed first, then `text`'s bytes are written and the remainder stays NUL (so
+    /// [`TdbFile::read_inline_str`] reads it back exactly). Both `bit_offset` and `bit_width` must be
+    /// byte-aligned. Returns `false` if out of range or if `text` is longer than the field width.
+    pub fn set_inline_str(
+        &self,
+        buf: &mut [u8],
+        table: &Table,
+        index: u32,
+        field: &FieldDescriptor,
+        text: &str,
+    ) -> bool {
+        if !field.bit_offset.is_multiple_of(8) || !field.bit_width.is_multiple_of(8) {
+            return false;
+        }
+        if index >= table.current_records as u32 {
+            return false;
+        }
+        let start = table.record_block + index as usize * table.record_len_bytes as usize;
+        let fs = start + (field.bit_offset / 8) as usize;
+        let width = (field.bit_width / 8) as usize;
+        let fe = fs + width;
+        if fe > buf.len() {
+            return false;
+        }
+        let bytes = text.as_bytes();
+        if bytes.len() > width {
+            return false;
+        }
+        buf[fs..fe].fill(0);
+        buf[fs..fs + bytes.len()].copy_from_slice(bytes);
+        true
+    }
+
     /// Append a zeroed record to a table and return the **new file bytes** (CRCs recomputed) plus the
     /// new record's index.
     ///

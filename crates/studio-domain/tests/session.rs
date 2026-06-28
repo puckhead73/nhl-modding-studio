@@ -7,8 +7,12 @@
 
 use std::path::{Path, PathBuf};
 
-use studio_domain::{DomainError, EditSession, Platform, Project, ProjectRole, Source};
+use studio_domain::{
+    entity_fields, DomainError, EditSession, FieldValue, Platform, Project, ProjectRole, Source,
+};
 use tdb_core::TdbFile;
+use tdb_defs::FieldMetaIndex;
+use tdb_enums::EnumRegistry;
 use tdb_savedata::SaveContainer;
 
 fn repo(rel: &str) -> PathBuf {
@@ -126,6 +130,56 @@ fn v4_container_save_spine_round_trips() {
         inner,
         "inner db survives the container save spine"
     );
+}
+
+/// Generic validated field edits: an in-range integer persists, out-of-range is refused, a string
+/// edit round-trips through save, and undo restores the baseline.
+#[test]
+fn generic_field_edit_validates_and_round_trips() {
+    let project = load_nhlng();
+    let mut session = EditSession::begin(project);
+
+    // Resolve the firstname studio field id from the view layer (handles the id reversal).
+    let meta = FieldMetaIndex::from_xml(&std::fs::read_to_string(repo(META)).unwrap()).unwrap();
+    let enums = EnumRegistry::from_dir(repo(DEFS).join("enums")).unwrap();
+    let record = 0u32;
+    let first_field = {
+        let db = TdbFile::parse(session.bytes()).unwrap();
+        let fields = entity_fields(&db, &meta, &enums, "ubPc", record);
+        fields
+            .iter()
+            .find(|f| f.name == "firstname")
+            .unwrap()
+            .studio_field
+            .clone()
+    };
+
+    // In-range integer edit on position (vjla, 0..=4): persists, dirty, audit clean.
+    let outcome = session
+        .set_field("ubPc", record, "vjla", FieldValue::Int(2))
+        .unwrap();
+    assert_eq!(outcome.edits, 1);
+    assert!(session.is_dirty());
+    assert!(session.validate().unwrap().is_clean());
+
+    // Out-of-range integer is refused, working bytes untouched.
+    let dirty_before = session.bytes().to_vec();
+    let err = session.set_field("ubPc", record, "vjla", FieldValue::Int(99));
+    assert!(matches!(err, Err(DomainError::Edit(_))), "out-of-range rejected");
+    assert_eq!(session.bytes(), dirty_before.as_slice(), "rejected edit changed nothing");
+
+    // String edit round-trips through a save + reparse.
+    session
+        .set_field("ubPc", record, &first_field, FieldValue::Text("Wayne".into()))
+        .unwrap();
+    let saved = session.save().unwrap();
+    let db2 = TdbFile::parse(&saved).unwrap();
+    let bio2 = db2.table_canonical("ubPc").unwrap();
+    let first2 = bio2.fields.iter().find(|f| f.id.raw() == "PedH").unwrap();
+    assert_eq!(db2.read_inline_str(bio2, record, first2).unwrap(), b"Wayne");
+
+    // Undo unwinds the last edit.
+    assert!(session.undo());
 }
 
 /// Loading a big-endian db while declaring a little-endian platform is refused.

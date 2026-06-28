@@ -5,10 +5,13 @@
 use std::collections::HashMap;
 use std::sync::Mutex;
 
-use studio_domain::{EditSession, Platform, Project, ProjectRole};
+use studio_domain::{EditSession, FieldValue, Platform, Project, ProjectRole};
 
 use crate::convert;
-use crate::dto::{CreatePlayerDto, IntegrityReportDto, OpOutcomeDto, ProjectSummaryDto};
+use crate::dto::{
+    CreatePlayerDto, IntegrityReportDto, OpOutcomeDto, PlayerSummaryDto, PlayerViewDto,
+    ProjectSummaryDto,
+};
 use crate::error::ApiError;
 
 #[derive(Default)]
@@ -59,6 +62,37 @@ impl Registry {
     /// Run the Layer 4 audit over the current working state.
     pub fn validate(&self, id: u32) -> Result<IntegrityReportDto, ApiError> {
         self.with_session(id, |s| Ok(convert::report_dto(&s.validate()?)))
+    }
+
+    /// The player master list (view-models).
+    pub fn list_players(&self, id: u32) -> Result<Vec<PlayerSummaryDto>, ApiError> {
+        self.with_session(id, |s| {
+            Ok(s.player_summaries()?
+                .iter()
+                .map(convert::player_summary_dto)
+                .collect())
+        })
+    }
+
+    /// The full Player detail for one `wBIz`, or `None` if absent.
+    pub fn player_view(&self, id: u32, player_id: u64) -> Result<Option<PlayerViewDto>, ApiError> {
+        self.with_session(id, |s| {
+            Ok(s.player_view(player_id)?.as_ref().map(convert::player_view_dto))
+        })
+    }
+
+    /// Stage a generic validated field edit (studio ids); the value is integer or string text.
+    pub fn set_field(
+        &self,
+        id: u32,
+        table: &str,
+        record: u32,
+        field: &str,
+        value: FieldValue,
+    ) -> Result<OpOutcomeDto, ApiError> {
+        self.with_session(id, |s| {
+            Ok(convert::outcome_dto(s.set_field(table, record, field, value)?))
+        })
     }
 
     pub fn set_captaincy(
