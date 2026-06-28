@@ -3,14 +3,14 @@
 
 use studio_domain::{
     ArenaRef, ArenaSummary, ArenaView, DbOverview, EditSession, FieldRaw, FieldView, Finding,
-    IntegrityReport, OpOutcome, PlayerSummary, PlayerView, RosterMembership, Severity, Source,
-    TeamSummary, TeamView,
+    IntegrityReport, LineEntry, LinesView, OpOutcome, PlayerSummary, PlayerView, RosterMembership,
+    Severity, Source, TeamSummary, TeamView,
 };
 
 use crate::dto::{
     ArenaRefDto, ArenaSummaryDto, ArenaViewDto, CreatePlayerDto, FieldViewDto, FindingDto,
-    IntegrityReportDto, OpOutcomeDto, PlayerSummaryDto, PlayerViewDto, ProjectSummaryDto,
-    RosterMembershipDto, TableSummaryDto, TeamSummaryDto, TeamViewDto,
+    IntegrityReportDto, LineEntryDto, LinesViewDto, OpOutcomeDto, PlayerSummaryDto, PlayerViewDto,
+    ProjectSummaryDto, RosterMembershipDto, TableSummaryDto, TeamSummaryDto, TeamViewDto,
 };
 
 /// Build the project summary DTO for a session (reflects the current working db, incl. any growth).
@@ -31,6 +31,8 @@ pub fn project_summary_dto(
         header_crc_ok: overview.header_crc_ok,
         size_ok: overview.size_ok,
         dirty: session.is_dirty(),
+        undo_depth: session.undo_depth(),
+        redo_depth: session.redo_depth(),
         tables: table_dtos(&overview),
     })
 }
@@ -136,6 +138,26 @@ pub fn player_view_dto(v: &PlayerView) -> PlayerViewDto {
         ratings_table: v.ratings_table.to_string(),
         memberships: v.memberships.iter().map(membership_dto).collect(),
         all_fields: v.all_fields.iter().map(field_view_dto).collect(),
+    }
+}
+
+fn line_entry_dto(e: &LineEntry) -> LineEntryDto {
+    LineEntryDto {
+        slot_record: e.slot_record,
+        player_id: e.player_id,
+        name: e.name.clone(),
+        position_label: e.position_label.clone(),
+        jersey: e.jersey,
+        captaincy: e.captaincy,
+        roster_status: e.roster_status,
+        slots: e.slots.clone(),
+    }
+}
+
+pub fn lines_view_dto(v: &LinesView) -> LinesViewDto {
+    LinesViewDto {
+        team_id: v.team_id,
+        entries: v.entries.iter().map(line_entry_dto).collect(),
     }
 }
 

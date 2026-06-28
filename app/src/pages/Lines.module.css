@@ -1,0 +1,61 @@
+.wrap {
+  max-width: 1000px;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.controls select {
+  padding: 6px 8px;
+  border: 1px solid #ccd2da;
+  border-radius: 6px;
+}
+
+.badge {
+  font-size: 11px;
+  color: #b26a00;
+  border: 1px solid #e7c48a;
+  background: #fff7ea;
+  border-radius: 10px;
+  padding: 2px 8px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border: 1px solid #e3e6ea;
+  border-radius: 8px;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: 5px 10px;
+  border-bottom: 1px solid #f0f1f4;
+  font-size: 13px;
+}
+
+.table th {
+  background: #eef0f3;
+  font-size: 12px;
+}
+
+.slots {
+  color: #5b6470;
+  font-family: ui-monospace, monospace;
+  font-size: 12px;
+}
+
+.muted {
+  color: #5b6470;
+  font-size: 12px;
+}
+
+.err {
+  color: #b3261e;
+}

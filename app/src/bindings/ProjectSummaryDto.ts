@@ -12,4 +12,12 @@ source: string, endian: string, table_count: number, db_size: number, header_crc
 /**
  * `true` once the working bytes differ from the loaded baseline.
  */
-dirty: boolean, tables: Array<TableSummaryDto>, };
+dirty: boolean, 
+/**
+ * Number of committed operations that can be reverted.
+ */
+undo_depth: number, 
+/**
+ * Number of reverted operations that can be re-applied.
+ */
+redo_depth: number, tables: Array<TableSummaryDto>, };

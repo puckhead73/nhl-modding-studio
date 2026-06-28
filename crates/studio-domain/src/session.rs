@@ -156,6 +156,19 @@ impl EditSession {
         ))
     }
 
+    /// The depth chart (lines) for one team over the current working state.
+    pub fn lines_view(&self, team_id: u64) -> Result<Option<crate::LinesView>> {
+        let db = TdbFile::parse(&self.working)?;
+        let model = self.build_model(&db)?;
+        Ok(crate::view::lines_view(
+            &db,
+            self.project.meta(),
+            self.project.enums(),
+            &model,
+            team_id,
+        ))
+    }
+
     fn build_model<'a>(&self, db: &TdbFile<'a>) -> Result<RosterModel> {
         RosterModel::build(db).map_err(|e| DomainError::Edit(EditError::Entity(e.to_string())))
     }

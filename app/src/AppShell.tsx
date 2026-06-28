@@ -6,10 +6,12 @@ import type { ProjectSummaryDto } from "./bindings/ProjectSummaryDto";
 import styles from "./AppShell.module.css";
 
 const NAV = [
+  { to: "dashboard", label: "Dashboard" },
   { to: "players", label: "Players" },
   { to: "teams", label: "Teams" },
+  { to: "lines", label: "Lines" },
   { to: "arenas", label: "Arenas" },
-  // Lines / Dashboard / Pending Edits land in later phases.
+  { to: "pending", label: "Pending Edits" },
 ];
 
 export function AppShell() {

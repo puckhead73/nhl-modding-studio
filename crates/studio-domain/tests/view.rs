@@ -4,8 +4,8 @@
 use std::path::{Path, PathBuf};
 
 use studio_domain::{
-    arena_summaries, arena_view, entity_fields, player_summaries, player_view, team_summaries,
-    team_view, FieldKind,
+    arena_summaries, arena_view, entity_fields, lines_view, player_summaries, player_view,
+    team_summaries, team_view, FieldKind,
 };
 use tdb_core::TdbFile;
 use tdb_defs::FieldMetaIndex;
@@ -184,4 +184,31 @@ fn arena_views_resolve() {
     let view = arena_view(&db, &meta, &enums, arenas[0].arena_id).expect("arena resolves");
     assert!(view.identity.iter().any(|f| f.name == "arenaname"));
     assert!(!view.all_fields.is_empty());
+}
+
+/// The depth chart lists a team's roster with resolved names and situational slot labels.
+#[test]
+fn lines_view_builds_depth_chart() {
+    let (bytes, meta, enums) = fixtures();
+    let db = TdbFile::parse(&bytes).unwrap();
+    let model = RosterModel::build(&db).unwrap();
+
+    // A team that actually has a roster.
+    let team_id = model
+        .teams
+        .iter()
+        .map(|t| t.team_id)
+        .find(|&id| !model.team_roster(id).is_empty())
+        .expect("a team with a roster");
+
+    let lines = lines_view(&db, &meta, &enums, &model, team_id).expect("lines resolve");
+    assert_eq!(lines.entries.len(), model.team_roster(team_id).len());
+    assert!(lines.entries.iter().any(|e| !e.name.is_empty()), "names resolve");
+    // Situational flag labels are metadata names (e.g. line/pp/pk slots) when set.
+    assert!(
+        lines.entries.iter().flat_map(|e| &e.slots).any(|s| !s.is_empty()),
+        "at least one roster entry has a labelled situational slot"
+    );
+
+    assert!(lines_view(&db, &meta, &enums, &model, 0xFFFF_FFFF).is_none());
 }

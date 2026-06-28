@@ -290,6 +290,112 @@ pub fn player_summaries(
 }
 
 // ---------------------------------------------------------------------------
+// Lines / depth chart view-model
+// ---------------------------------------------------------------------------
+
+/// One roster entry on a team's depth chart: the player + per-slot situational assignments.
+#[derive(Clone, Debug)]
+pub struct LineEntry {
+    pub slot_record: u32,
+    pub player_id: Option<u64>,
+    pub name: String,
+    pub position_label: String,
+    pub jersey: Option<u64>,
+    pub captaincy: Option<u64>,
+    pub roster_status: Option<u64>,
+    /// Labels (metadata `name`s) of the 1-bit situational flags that are set on this `eGlu` row
+    /// (e.g. `l1c`, `pp1lw`). **Meta-derived — in-game semantics unverified.**
+    pub slots: Vec<String>,
+}
+
+/// A team's depth chart: its roster entries with situational assignments.
+#[derive(Clone, Debug)]
+pub struct LinesView {
+    pub team_id: u64,
+    pub entries: Vec<LineEntry>,
+}
+
+/// Player display name ("Last, First") + position label, by `wBIz`.
+fn player_name_pos(
+    db: &TdbFile,
+    meta: &FieldMetaIndex,
+    enums: &EnumRegistry,
+    model: &RosterModel,
+    player_id: u64,
+) -> (String, String) {
+    let Some(p) = model.player(player_id) else {
+        return (String::new(), String::new());
+    };
+    let Some(bio) = db.table_canonical(ids::BIO) else {
+        return (String::new(), String::new());
+    };
+    let first = read_str_by_name(db, meta, bio, p.bio_record, "firstname");
+    let last = read_str_by_name(db, meta, bio, p.bio_record, "lastname");
+    let name = if first.is_empty() {
+        last
+    } else {
+        format!("{last}, {first}")
+    };
+    let position_label = descriptor_by_name(meta, bio, "position")
+        .map(|f| read_field(db, meta, enums, bio, p.bio_record, f).display)
+        .unwrap_or_default();
+    (name, position_label)
+}
+
+/// Build a team's depth chart: each roster slot's player plus the set 1-bit situational flags,
+/// labelled from the metadata field names.
+pub fn lines_view(
+    db: &TdbFile,
+    meta: &FieldMetaIndex,
+    enums: &EnumRegistry,
+    model: &RosterModel,
+    team_id: u64,
+) -> Option<LinesView> {
+    model.team(team_id)?;
+    let eglu = db.table_canonical(ids::ROSTER_LINES)?;
+
+    // The 1-bit situational flag descriptors, paired with their human label (metadata name).
+    let flags: Vec<(&str, &FieldDescriptor)> = eglu
+        .fields
+        .iter()
+        .filter(|f| f.bit_width == 1)
+        .filter_map(|f| {
+            meta.field(&eglu.id.raw(), &f.id.raw())
+                .filter(|m| !m.name.is_empty())
+                .map(|m| (m.name.as_str(), f))
+        })
+        .collect();
+
+    let entries = model
+        .team_roster(team_id)
+        .iter()
+        .map(|slot| {
+            let set_slots = flags
+                .iter()
+                .filter(|(_, f)| db.read_u64(eglu, slot.record, f) == Some(1))
+                .map(|(name, _)| name.to_string())
+                .collect();
+            let (name, position_label) = slot
+                .player_id
+                .map(|pid| player_name_pos(db, meta, enums, model, pid))
+                .unwrap_or_default();
+            LineEntry {
+                slot_record: slot.record,
+                player_id: slot.player_id,
+                name,
+                position_label,
+                jersey: slot.jersey,
+                captaincy: slot.captaincy,
+                roster_status: slot.roster_status,
+                slots: set_slots,
+            }
+        })
+        .collect();
+
+    Some(LinesView { team_id, entries })
+}
+
+// ---------------------------------------------------------------------------
 // Team & arena view-models
 // ---------------------------------------------------------------------------
 

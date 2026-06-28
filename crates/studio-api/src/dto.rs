@@ -29,6 +29,10 @@ pub struct ProjectSummaryDto {
     pub size_ok: bool,
     /// `true` once the working bytes differ from the loaded baseline.
     pub dirty: bool,
+    /// Number of committed operations that can be reverted.
+    pub undo_depth: usize,
+    /// Number of reverted operations that can be re-applied.
+    pub redo_depth: usize,
     pub tables: Vec<TableSummaryDto>,
 }
 
@@ -139,6 +143,32 @@ pub struct PlayerViewDto {
     pub ratings_table: String,
     pub memberships: Vec<RosterMembershipDto>,
     pub all_fields: Vec<FieldViewDto>,
+}
+
+/// One roster entry on a team's depth chart.
+#[derive(Serialize, TS)]
+pub struct LineEntryDto {
+    pub slot_record: u32,
+    #[ts(type = "number | null")]
+    pub player_id: Option<u64>,
+    pub name: String,
+    pub position_label: String,
+    #[ts(type = "number | null")]
+    pub jersey: Option<u64>,
+    #[ts(type = "number | null")]
+    pub captaincy: Option<u64>,
+    #[ts(type = "number | null")]
+    pub roster_status: Option<u64>,
+    /// Labels of the set 1-bit situational flags (meta-derived; in-game semantics unverified).
+    pub slots: Vec<String>,
+}
+
+/// A team's depth chart.
+#[derive(Serialize, TS)]
+pub struct LinesViewDto {
+    #[ts(type = "number")]
+    pub team_id: u64,
+    pub entries: Vec<LineEntryDto>,
 }
 
 /// A compact team row for the master list.

@@ -13,6 +13,7 @@ import type { TeamSummaryDto } from "../bindings/TeamSummaryDto";
 import type { TeamViewDto } from "../bindings/TeamViewDto";
 import type { ArenaSummaryDto } from "../bindings/ArenaSummaryDto";
 import type { ArenaViewDto } from "../bindings/ArenaViewDto";
+import type { LinesViewDto } from "../bindings/LinesViewDto";
 import type { OpOutcomeDto } from "../bindings/OpOutcomeDto";
 
 export type Platform = "ps3" | "xbox" | "ps4" | "recomp";
@@ -31,6 +32,7 @@ type Commands = {
   team_view: { args: { projectId: number; teamId: number }; ret: TeamViewDto | null };
   list_arenas: { args: { projectId: number }; ret: ArenaSummaryDto[] };
   arena_view: { args: { projectId: number; arenaId: number }; ret: ArenaViewDto | null };
+  lines_view: { args: { projectId: number; teamId: number }; ret: LinesViewDto | null };
   set_field: {
     args: {
       projectId: number;

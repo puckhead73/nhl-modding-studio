@@ -9,7 +9,7 @@ use studio_domain::{EditSession, FieldValue, Platform, Project, ProjectRole};
 
 use crate::convert;
 use crate::dto::{
-    ArenaSummaryDto, ArenaViewDto, CreatePlayerDto, IntegrityReportDto, OpOutcomeDto,
+    ArenaSummaryDto, ArenaViewDto, CreatePlayerDto, IntegrityReportDto, LinesViewDto, OpOutcomeDto,
     PlayerSummaryDto, PlayerViewDto, ProjectSummaryDto, TeamSummaryDto, TeamViewDto,
 };
 use crate::error::ApiError;
@@ -106,6 +106,13 @@ impl Registry {
     pub fn arena_view(&self, id: u32, arena_id: u64) -> Result<Option<ArenaViewDto>, ApiError> {
         self.with_session(id, |s| {
             Ok(s.arena_view(arena_id)?.as_ref().map(convert::arena_view_dto))
+        })
+    }
+
+    /// The depth chart (lines) for one team, or `None` if the team is absent.
+    pub fn lines_view(&self, id: u32, team_id: u64) -> Result<Option<LinesViewDto>, ApiError> {
+        self.with_session(id, |s| {
+            Ok(s.lines_view(team_id)?.as_ref().map(convert::lines_view_dto))
         })
     }
 

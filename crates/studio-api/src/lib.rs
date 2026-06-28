@@ -36,6 +36,7 @@ macro_rules! command_handler {
             $crate::commands::player_view,
             $crate::commands::list_teams,
             $crate::commands::team_view,
+            $crate::commands::lines_view,
             $crate::commands::list_arenas,
             $crate::commands::arena_view,
             $crate::commands::set_field,
@@ -74,5 +75,6 @@ mod bindings {
         TeamSummaryDto::export_all().expect("export TeamSummaryDto");
         ArenaViewDto::export_all().expect("export ArenaViewDto + deps");
         ArenaSummaryDto::export_all().expect("export ArenaSummaryDto");
+        LinesViewDto::export_all().expect("export LinesViewDto + deps");
     }
 }
