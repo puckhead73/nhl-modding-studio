@@ -3,10 +3,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { call } from "../lib/client";
 import { useProject } from "../lib/project";
 import type { FieldViewDto } from "../bindings/FieldViewDto";
-import styles from "./FieldRow.module.css";
 
 /// One field row: label + value, with an inline editor when the field is updatable. Commits on
-/// Enter or blur (when changed) via `set_field`, then refreshes the player + summary (dirty flag).
+/// Enter or blur (when changed) via `set_field`, then refreshes the open views + dirty flag.
 export function FieldRow({
   projectId,
   record,
@@ -21,7 +20,6 @@ export function FieldRow({
   const baseline = field.is_string ? field.text ?? "" : String(field.decoded ?? 0);
   const [draft, setDraft] = useState(baseline);
 
-  // Re-sync the local draft whenever the underlying value changes (after a refetch).
   useEffect(() => setDraft(baseline), [baseline]);
 
   const mut = useMutation({
@@ -34,7 +32,6 @@ export function FieldRow({
         ...(field.is_string ? { textValue: val } : { intValue: Number(val) }),
       }),
     onSuccess: async () => {
-      // Refresh whatever view is open (player/team/arena lists + details) and the dirty flag.
       await qc.invalidateQueries();
       update(await call("project_summary", { projectId }));
     },
@@ -45,14 +42,13 @@ export function FieldRow({
   };
 
   return (
-    <div className={styles.row}>
-      <span className={styles.label} title={field.studio_field}>
+    <div className="grid grid-cols-[180px_1fr] items-center gap-2 border-b border-slate-800/60 py-1">
+      <span className="text-xs text-slate-400" title={field.studio_field}>
         {field.name}
       </span>
       {field.editable ? (
-        <span className={styles.editor}>
+        <span className="flex items-center gap-2">
           <input
-            className={styles.input}
             type={field.is_string ? "text" : "number"}
             value={draft}
             min={field.range_low ?? undefined}
@@ -60,13 +56,14 @@ export function FieldRow({
             onChange={(e) => setDraft(e.target.value)}
             onBlur={commit}
             onKeyDown={(e) => e.key === "Enter" && commit()}
+            className="w-52 max-w-full rounded border border-slate-700 bg-slate-950 px-2 py-1 text-sm text-slate-100 placeholder-slate-600 focus:border-sky-600 focus:outline-none"
           />
-          {field.enum_label && <span className={styles.hint}>{field.enum_label}</span>}
-          {mut.isPending && <span className={styles.hint}>…</span>}
-          {mut.isError && <span className={styles.err}>{String(mut.error)}</span>}
+          {field.enum_label && <span className="text-xs text-slate-400">{field.enum_label}</span>}
+          {mut.isPending && <span className="text-xs text-slate-500">…</span>}
+          {mut.isError && <span className="text-xs text-rose-400">{String(mut.error)}</span>}
         </span>
       ) : (
-        <span className={styles.readonly}>{field.display}</span>
+        <span className="text-slate-100">{field.display}</span>
       )}
     </div>
   );

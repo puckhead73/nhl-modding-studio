@@ -2,8 +2,9 @@ import { NavLink, Navigate, Outlet, useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useProject } from "./lib/project";
 import { call } from "./lib/client";
+import { Pill } from "./components/primitives";
+import headerLogo from "./assets/ui/NHL Modding Studio Header.png";
 import type { ProjectSummaryDto } from "./bindings/ProjectSummaryDto";
-import styles from "./AppShell.module.css";
 
 const NAV = [
   { to: "dashboard", label: "Dashboard" },
@@ -11,7 +12,6 @@ const NAV = [
   { to: "teams", label: "Teams" },
   { to: "lines", label: "Lines" },
   { to: "arenas", label: "Arenas" },
-  { to: "pending", label: "Pending Edits" },
 ];
 
 export function AppShell() {
@@ -28,51 +28,83 @@ function Shell({ project, dbPath }: { project: ProjectSummaryDto; dbPath: string
   const save = useMutation({
     mutationFn: () => call("save_project", { projectId: project.project_id, outPath: dbPath }),
     onSuccess: async () => {
-      const summary = await call("project_summary", { projectId: project.project_id });
-      update(summary);
+      update(await call("project_summary", { projectId: project.project_id }));
       qc.invalidateQueries();
     },
   });
 
+  const navClass = ({ isActive }: { isActive: boolean }) =>
+    "rounded-md px-3 py-1.5 text-sm font-medium transition-colors " +
+    (isActive
+      ? "bg-sky-900/40 text-sky-100"
+      : "text-slate-300 hover:bg-slate-800/60 hover:text-slate-100");
+
   return (
-    <div className={styles.shell}>
-      <header className={styles.header}>
-        <div className={styles.brand}>NHL Modding Studio</div>
-        <div className={styles.meta}>
-          {project.platform} · {project.role} · {project.source}
-          {project.dirty && <span className={styles.dirty}>● unsaved</span>}
-        </div>
-        <div className={styles.actions}>
-          <button onClick={() => save.mutate()} disabled={save.isPending || !project.dirty}>
+    <div className="flex h-full flex-col bg-slate-950 text-slate-100">
+      <header className="flex h-12 shrink-0 items-center gap-6 border-b border-slate-800 bg-slate-900/60 px-4">
+        <img
+          src={headerLogo}
+          alt="NHL Modding Studio"
+          draggable={false}
+          className="h-7 w-auto shrink-0 select-none object-contain"
+        />
+        <nav className="flex flex-1 items-center gap-1">
+          {NAV.map((n) => (
+            <NavLink key={n.to} to={n.to} className={navClass}>
+              {n.label}
+            </NavLink>
+          ))}
+          <NavLink
+            to="pending"
+            className={({ isActive }) =>
+              "ml-1 flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-sm font-medium transition-colors " +
+              (isActive
+                ? "border-sky-700 bg-sky-900/40 text-sky-100"
+                : project.dirty
+                  ? "border-amber-800/70 bg-amber-900/30 text-amber-100 hover:bg-amber-900/50"
+                  : "border-slate-700 text-slate-300 hover:bg-slate-800/60")
+            }
+          >
+            Pending Edits
+            {(project.undo_depth > 0 || project.dirty) && (
+              <Pill tone={project.dirty ? "warn" : "neutral"}>{project.undo_depth}</Pill>
+            )}
+          </NavLink>
+        </nav>
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-slate-400">
+            {project.platform} · {project.role} · {project.source}
+          </span>
+          <button
+            type="button"
+            onClick={() => save.mutate()}
+            disabled={save.isPending || !project.dirty}
+            className="rounded-md border border-sky-500/40 bg-sky-600 px-3 py-1 text-xs font-medium text-white transition-colors hover:bg-sky-500 disabled:cursor-not-allowed disabled:opacity-50"
+          >
             {save.isPending ? "Saving…" : "Save"}
           </button>
           <button
+            type="button"
             onClick={() => {
               close();
               navigate("/", { replace: true });
             }}
+            className="rounded-md border border-slate-700 px-2.5 py-1 text-xs text-slate-300 hover:bg-slate-800"
           >
             Close
           </button>
         </div>
       </header>
-      <div className={styles.body}>
-        <nav className={styles.nav}>
-          {NAV.map((n) => (
-            <NavLink
-              key={n.to}
-              to={n.to}
-              className={({ isActive }) => (isActive ? styles.navActive : styles.navLink)}
-            >
-              {n.label}
-            </NavLink>
-          ))}
-        </nav>
-        <main className={styles.content}>
+      <main className="flex min-h-0 flex-1 flex-col overflow-hidden">
+        <div className="min-h-0 flex-1 overflow-y-auto px-6 py-6">
+          {save.isError && (
+            <p className="mb-3 rounded-md border border-rose-800 bg-rose-950/60 px-3 py-2 text-sm text-rose-100">
+              {String(save.error)}
+            </p>
+          )}
           <Outlet />
-        </main>
-      </div>
-      {save.isError && <div className={styles.error}>{String(save.error)}</div>}
+        </div>
+      </main>
     </div>
   );
 }

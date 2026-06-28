@@ -2,12 +2,13 @@ import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { call } from "../lib/client";
 import { useProject } from "../lib/project";
-import styles from "./PendingEdits.module.css";
+import { Button, Card } from "../components/primitives";
 
 export function PendingEdits() {
   const { project, dbPath, update } = useProject();
   const qc = useQueryClient();
-  const projectId = project!.project_id;
+  const p = project!;
+  const projectId = p.project_id;
   const [saveAsPath, setSaveAsPath] = useState(dbPath ?? "");
 
   const refresh = async () => {
@@ -25,53 +26,51 @@ export function PendingEdits() {
   const busy = undo.isPending || redo.isPending || save.isPending;
 
   return (
-    <div className={styles.wrap}>
-      <h2>Pending edits</h2>
+    <div className="max-w-3xl space-y-3">
+      <h2 className="text-lg font-semibold text-slate-100">Pending edits</h2>
 
-      <section className={styles.card}>
-        <p>
-          Status: {project!.dirty ? <b className={styles.dirty}>unsaved changes</b> : "saved"} ·
-          undo depth {project!.undo_depth} · redo depth {project!.redo_depth}
+      <Card title="Session">
+        <p className="text-sm text-slate-200">
+          Status:{" "}
+          {p.dirty ? (
+            <b className="text-amber-300">unsaved changes</b>
+          ) : (
+            <span className="text-slate-400">saved</span>
+          )}{" "}
+          · undo depth {p.undo_depth} · redo depth {p.redo_depth}
         </p>
-        <div className={styles.actions}>
-          <button onClick={() => undo.mutate()} disabled={busy || project!.undo_depth === 0}>
+        <div className="mt-3 flex items-center gap-2">
+          <Button variant="secondary" onClick={() => undo.mutate()} disabled={busy || p.undo_depth === 0}>
             Undo
-          </button>
-          <button onClick={() => redo.mutate()} disabled={busy || project!.redo_depth === 0}>
+          </Button>
+          <Button variant="secondary" onClick={() => redo.mutate()} disabled={busy || p.redo_depth === 0}>
             Redo
-          </button>
-          <button
-            className={styles.primary}
-            onClick={() => dbPath && save.mutate(dbPath)}
-            disabled={busy || !project!.dirty || !dbPath}
-          >
+          </Button>
+          <Button onClick={() => dbPath && save.mutate(dbPath)} disabled={busy || !p.dirty || !dbPath}>
             Save (in place)
-          </button>
+          </Button>
         </div>
-      </section>
+      </Card>
 
-      <section className={styles.card}>
-        <h3>Save as / Pack</h3>
-        <p className={styles.muted}>
-          Writes the current database to a new path. Container projects are repacked automatically
-          ({project!.source}).
-        </p>
-        <div className={styles.actions}>
+      <Card title="Save as / Pack" subtitle={`Container projects repack automatically (${p.source}).`}>
+        <div className="flex items-center gap-2">
           <input
-            className={styles.path}
             value={saveAsPath}
             onChange={(e) => setSaveAsPath(e.target.value)}
             placeholder="output path"
+            className="flex-1 rounded-md border border-slate-700 bg-slate-950 px-2 py-1.5 text-sm text-slate-100 placeholder-slate-600 focus:border-sky-600 focus:outline-none"
           />
-          <button onClick={() => save.mutate(saveAsPath)} disabled={busy || !saveAsPath}>
+          <Button variant="secondary" onClick={() => save.mutate(saveAsPath)} disabled={busy || !saveAsPath}>
             Save as
-          </button>
+          </Button>
         </div>
-      </section>
+      </Card>
 
-      {save.isSuccess && <p className={styles.ok}>Wrote {Number(save.data).toLocaleString()} bytes.</p>}
+      {save.isSuccess && (
+        <p className="text-sm text-emerald-400">Wrote {Number(save.data).toLocaleString()} bytes.</p>
+      )}
       {(undo.isError || redo.isError || save.isError) && (
-        <p className={styles.err}>{String(undo.error || redo.error || save.error)}</p>
+        <p className="text-sm text-rose-400">{String(undo.error || redo.error || save.error)}</p>
       )}
     </div>
   );

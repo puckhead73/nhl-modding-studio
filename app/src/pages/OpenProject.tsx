@@ -3,9 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { call, type Platform, type Role } from "../lib/client";
 import { useProject } from "../lib/project";
-import styles from "./OpenProject.module.css";
+import { Button, ErrorBanner } from "../components/primitives";
+import headerLogo from "../assets/ui/NHL Modding Studio Header.png";
 
-// Dev convenience: prefill with the committed NHL Legacy anchor so the slice is one click to load.
+// Dev convenience: prefill with the committed NHL Legacy anchor.
 const DEFAULTS = {
   dbPath: "anchors/ps3/nhllegacy/databases/nhlng.db",
   metaXml: "anchors/ps3/nhllegacy/databases/nhlng-meta.xml",
@@ -30,55 +31,68 @@ export function OpenProject() {
       }),
     onSuccess: (summary) => {
       open(summary, form.dbPath);
-      navigate("/app/players");
+      navigate("/app/dashboard");
     },
   });
 
   const set = (k: keyof typeof form) => (e: { target: { value: string } }) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
 
+  const input =
+    "w-full rounded-md border border-slate-700 bg-slate-950 px-2 py-1.5 text-sm text-slate-100 placeholder-slate-600 focus:border-sky-600 focus:outline-none";
+  const labelCls = "mb-1 block text-xs font-medium text-slate-300";
+
   return (
-    <div className={styles.wrap}>
-      <h1>NHL Modding Studio</h1>
-      <p className={styles.sub}>Open a TDB database or save container.</p>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-6 backdrop-blur-sm">
+      <div className="w-full max-w-2xl rounded-lg border border-slate-800 bg-slate-900 p-6 shadow-2xl">
+        <img src={headerLogo} alt="NHL Modding Studio" className="mx-auto mb-5 h-12 w-auto object-contain" />
 
-      <label className={styles.field}>
-        <span>Database / save path</span>
-        <input value={form.dbPath} onChange={set("dbPath")} />
-      </label>
-      <label className={styles.field}>
-        <span>Metadata XML</span>
-        <input value={form.metaXml} onChange={set("metaXml")} />
-      </label>
-      <label className={styles.field}>
-        <span>Defs root</span>
-        <input value={form.defsRoot} onChange={set("defsRoot")} />
-      </label>
-      <div className={styles.row}>
-        <label className={styles.field}>
-          <span>Platform</span>
-          <select value={form.platform} onChange={set("platform")}>
-            <option value="ps3">PS3</option>
-            <option value="xbox">Xbox 360</option>
-            <option value="ps4">PS4</option>
-            <option value="recomp">Legacy Recomp</option>
-          </select>
-        </label>
-        <label className={styles.field}>
-          <span>Role</span>
-          <select value={form.role} onChange={set("role")}>
-            <option value="nhlng">nhlng.db</option>
-            <option value="roster">Roster save</option>
-            <option value="localization">Localization</option>
-          </select>
-        </label>
+        <div className="space-y-3">
+          <div>
+            <label className={labelCls}>Database / save path</label>
+            <input className={input} value={form.dbPath} onChange={set("dbPath")} />
+          </div>
+          <div>
+            <label className={labelCls}>Metadata XML</label>
+            <input className={input} value={form.metaXml} onChange={set("metaXml")} />
+          </div>
+          <div>
+            <label className={labelCls}>Defs root</label>
+            <input className={input} value={form.defsRoot} onChange={set("defsRoot")} />
+          </div>
+          <div className="flex gap-3">
+            <div className="flex-1">
+              <label className={labelCls}>Platform</label>
+              <select className={input} value={form.platform} onChange={set("platform")}>
+                <option value="ps3">PS3</option>
+                <option value="xbox">Xbox 360</option>
+                <option value="ps4">PS4</option>
+                <option value="recomp">Legacy Recomp</option>
+              </select>
+            </div>
+            <div className="flex-1">
+              <label className={labelCls}>Role</label>
+              <select className={input} value={form.role} onChange={set("role")}>
+                <option value="nhlng">nhlng.db</option>
+                <option value="roster">Roster save</option>
+                <option value="localization">Localization</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-5 flex justify-end">
+          <Button onClick={() => load.mutate()} disabled={load.isPending}>
+            {load.isPending ? "Loading…" : "Load project"}
+          </Button>
+        </div>
+
+        {load.isError && (
+          <div className="mt-4">
+            <ErrorBanner title="Couldn't load" message={String(load.error)} />
+          </div>
+        )}
       </div>
-
-      <button className={styles.load} onClick={() => load.mutate()} disabled={load.isPending}>
-        {load.isPending ? "Loading…" : "Load project"}
-      </button>
-
-      {load.isError && <p className={styles.error}>{String(load.error)}</p>}
     </div>
   );
 }
