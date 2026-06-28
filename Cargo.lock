@@ -3192,6 +3192,8 @@ version = "0.0.0"
 dependencies = [
  "tdb-core",
  "tdb-defs",
+ "tdb-domain-validation",
+ "tdb-relations",
 ]
 
 [[package]]

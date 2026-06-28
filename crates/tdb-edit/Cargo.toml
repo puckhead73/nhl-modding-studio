@@ -9,3 +9,5 @@ publish.workspace = true
 [dependencies]
 tdb-core = { path = "../tdb-core" }
 tdb-defs = { path = "../tdb-defs" }
+tdb-relations = { path = "../tdb-relations" }
+tdb-domain-validation = { path = "../tdb-domain-validation" }

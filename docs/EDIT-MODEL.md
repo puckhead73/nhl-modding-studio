@@ -125,6 +125,17 @@ holes such as dup-on-team spread across two commands).
 **Roster scopes.** Operations are aware of the three roster pools: **main**, **free agents**,
 **hidden** (NHLViewNG's `LoadRoster` / `LoadFreeAgentsRoster` / `LoadHiddenRoster`).
 
+> **Status (first increment).** `tdb-edit::txn::EditTransaction` ships the repairing-transaction
+> harness — `with_repairing_transaction` does *snapshot → stage (+auto-repair) → audit shared
+> predicate → commit / rollback*, mutating working bytes so operations **compose against pending
+> state**. The first operation, **`set_captaincy`**, enforces the single-captain rule **by repair,
+> not refusal**: promoting a Captain auto-demotes the prior one, and the post-condition reuses the
+> save-time `single_captain` predicate. *Verified against the NHL Legacy anchor:* promote → prior
+> captain demoted → exactly one captain → commit yields CRC-valid, audit-clean bytes; failed ops roll
+> back untouched. **Deferred** (need record-allocation primitives — table growth + the swap-pop
+> tail-row hazard): `create_player`, `delete_player`, `trade`/`move_player`, `assign_line_slot`. They
+> land on the same harness.
+
 ---
 
 ## Layer 4 — Invariant engine (auto-repair, not refuse)

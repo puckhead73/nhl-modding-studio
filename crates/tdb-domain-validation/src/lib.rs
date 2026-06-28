@@ -31,7 +31,7 @@
 //! those across the big-endian on-disk reversal; field lookups use [`tdb_core::RawId::canonical`] the
 //! same way. Tables/fields absent from a given db variant are skipped, not flagged.
 
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 use tdb_core::{Endian, FieldDescriptor, Table, TdbFile};
 use tdb_enums::EnumRegistry;
 use tdb_relations::{RelBinding, RelationRegistry, RosterModel};
@@ -267,6 +267,44 @@ pub fn companion_presence(db: &TdbFile) -> Vec<Finding> {
         .collect()
 }
 
+/// The captaincy code that designates a team Captain (`eGlu.mCcl == 1`, confirmed enum).
+pub const CAPTAIN: u64 = 1;
+
+/// Single-captain predicate: a team must carry at most one Captain (`eGlu.mCcl == 1`). Each captain
+/// beyond the first is an [`Severity::Error`]. Shared with the Layer 3 `set_captaincy` operation, so
+/// its auto-repair and this audit agree by construction.
+pub fn single_captain(db: &TdbFile) -> Vec<Finding> {
+    let Ok(model) = RosterModel::build(db) else {
+        return Vec::new();
+    };
+    let mut by_team: HashMap<u64, Vec<u32>> = HashMap::new();
+    for slot in &model.slots {
+        if slot.captaincy == Some(CAPTAIN) {
+            by_team.entry(slot.team_id).or_default().push(slot.record);
+        }
+    }
+    let mut findings = Vec::new();
+    for (team_id, records) in by_team {
+        if records.len() > 1 {
+            // Flag every captain past the first.
+            for &record in records.iter().skip(1) {
+                findings.push(Finding {
+                    severity: Severity::Error,
+                    predicate: "single_captain",
+                    message: format!(
+                        "team {team_id} has {} captains (eGlu.mCcl == 1); only one is allowed",
+                        records.len()
+                    ),
+                    table: tdb_relations::entity::ids::ROSTER_LINES.to_string(),
+                    field: tdb_relations::entity::ids::SLOT_CAPTAINCY.to_string(),
+                    record: Some(record),
+                });
+            }
+        }
+    }
+    findings
+}
+
 /// Run every shared predicate and collect the findings into one report (the save-time audit entry).
 pub fn validate_invariants(
     db: &TdbFile,
@@ -276,6 +314,7 @@ pub fn validate_invariants(
     let mut findings = referential_integrity(db, relations);
     findings.extend(enum_vocabulary(db, enums));
     findings.extend(companion_presence(db));
+    findings.extend(single_captain(db));
     IntegrityReport { findings }
 }
 

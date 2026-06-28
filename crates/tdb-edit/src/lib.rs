@@ -5,6 +5,8 @@
 //! (on-disk) table/field ids. Metadata-driven validation (ranges, `update` flag, enums) and the
 //! entity/structural operations from `docs/EDIT-MODEL.md` are later increments.
 
+pub mod txn;
+
 use std::fmt;
 use tdb_core::TdbFile;
 use tdb_defs::{FieldMetaIndex, ValidationError};
@@ -37,6 +39,17 @@ pub enum EditError {
     },
     /// The value failed metadata validation at entry (range / not-updatable).
     Invalid(ValidationError),
+    /// The entity model could not be assembled from the working bytes.
+    Entity(String),
+    /// No roster slot matches the requested `(team, player)` pair.
+    NoSuchSlot { team_id: u64, player_id: u64 },
+    /// An operation argument was outside its legal set.
+    InvalidValue { what: &'static str, value: i64 },
+    /// A repairing transaction's post-condition audit failed; the operation was rolled back.
+    AuditFailed {
+        predicate: &'static str,
+        violations: usize,
+    },
 }
 
 impl fmt::Display for EditError {
@@ -54,6 +67,20 @@ impl fmt::Display for EditError {
                 write!(f, "no metadata for {table:?}.{field:?}")
             }
             EditError::Invalid(e) => write!(f, "{e}"),
+            EditError::Entity(e) => write!(f, "entity model error: {e}"),
+            EditError::NoSuchSlot { team_id, player_id } => {
+                write!(f, "no roster slot for player {player_id} on team {team_id}")
+            }
+            EditError::InvalidValue { what, value } => {
+                write!(f, "invalid {what}: {value}")
+            }
+            EditError::AuditFailed {
+                predicate,
+                violations,
+            } => write!(
+                f,
+                "operation rolled back: {predicate} audit failed with {violations} violation(s)"
+            ),
         }
     }
 }

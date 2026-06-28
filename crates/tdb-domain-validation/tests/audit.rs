@@ -2,7 +2,9 @@
 
 use std::path::{Path, PathBuf};
 use tdb_core::TdbFile;
-use tdb_domain_validation::{audit_edge, companion_presence, validate_invariants, Severity};
+use tdb_domain_validation::{
+    audit_edge, companion_presence, single_captain, validate_invariants, Severity,
+};
 use tdb_enums::EnumRegistry;
 use tdb_relations::RelationRegistry;
 
@@ -79,6 +81,21 @@ fn companion_presence_clean_on_anchor() {
     assert!(
         findings.is_empty(),
         "expected zero companion violations, got {}: {:?}",
+        findings.len(),
+        findings.iter().take(5).collect::<Vec<_>>()
+    );
+}
+
+/// The single-captain predicate finds zero violations on the vanilla anchor (EA data carries at most
+/// one captain per team) — so it is safe to compose into the write-clean save-time audit.
+#[test]
+fn single_captain_clean_on_anchor() {
+    let bytes = anchor("ps3/nhllegacy/databases/nhlng.db");
+    let db = TdbFile::parse(&bytes).unwrap();
+    let findings = single_captain(&db);
+    assert!(
+        findings.is_empty(),
+        "expected zero multi-captain teams, got {}: {:?}",
         findings.len(),
         findings.iter().take(5).collect::<Vec<_>>()
     );
