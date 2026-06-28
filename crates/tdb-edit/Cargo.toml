@@ -1,0 +1,10 @@
+[package]
+name = "tdb-edit"
+description = "Staged edit session over a TDB snapshot — applies field edits and re-serializes via tdb-core."
+version = "0.0.0"
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+tdb-core = { path = "../tdb-core" }

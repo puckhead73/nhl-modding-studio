@@ -3163,6 +3163,13 @@ name = "tdb-core"
 version = "0.0.0"
 
 [[package]]
+name = "tdb-edit"
+version = "0.0.0"
+dependencies = [
+ "tdb-core",
+]
+
+[[package]]
 name = "tendril"
 version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"

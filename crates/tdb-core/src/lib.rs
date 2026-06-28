@@ -319,6 +319,155 @@ fn u16_at(b: &[u8], o: usize, e: Endian) -> u16 {
     }
 }
 
+fn write_u32(b: &mut [u8], o: usize, v: u32, e: Endian) {
+    let a = match e {
+        Endian::Big => v.to_be_bytes(),
+        Endian::Little => v.to_le_bytes(),
+    };
+    b[o..o + 4].copy_from_slice(&a);
+}
+
+/// Write `width` bits at `bit_offset` in `data` (inverse of [`read_bits`]); leaves other bits intact.
+pub fn write_bits(data: &mut [u8], bit_offset: u32, width: u32, value: u64, endian: Endian) {
+    if width == 0 {
+        return;
+    }
+    debug_assert!(width <= 64);
+    let bs = (bit_offset / 8) as usize;
+    let be = (bit_offset + width).div_ceil(8) as usize;
+    let span = &mut data[bs..be];
+    let from_top = bit_offset - (bs as u32) * 8;
+    let mask: u128 = if width >= 128 {
+        u128::MAX
+    } else {
+        (1u128 << width) - 1
+    };
+    let v = (value as u128) & mask;
+    match endian {
+        Endian::Little => {
+            let mut acc: u128 = 0;
+            for (i, &b) in span.iter().enumerate() {
+                acc |= (b as u128) << (8 * i);
+            }
+            acc &= !(mask << from_top);
+            acc |= v << from_top;
+            for (i, b) in span.iter_mut().enumerate() {
+                *b = (acc >> (8 * i)) as u8;
+            }
+        }
+        Endian::Big => {
+            let mut acc: u128 = 0;
+            for &b in span.iter() {
+                acc = (acc << 8) | b as u128;
+            }
+            let span_bits = (span.len() as u32) * 8;
+            let shift = span_bits - from_top - width;
+            acc &= !(mask << shift);
+            acc |= v << shift;
+            let len = span.len();
+            for (i, b) in span.iter_mut().enumerate() {
+                *b = (acc >> ((len - 1 - i) * 8)) as u8;
+            }
+        }
+    }
+}
+
+impl TdbFile<'_> {
+    /// `[start, end)` byte range of a table's CRC "body": the descriptors + record region. It begins
+    /// right after the 40-byte header and runs to the **next table's block offset** (`next_block`),
+    /// i.e. it includes any inter-table padding; for the last table `next_block` is `file_len - 4`
+    /// (just before the EOF CRC). Verified across all anchors, including padded layouts.
+    fn body_range(&self, idx: usize, next_block: usize) -> (usize, usize) {
+        (self.tables[idx].block_offset + 0x28, next_block)
+    }
+
+    /// Recompute all four inner-DB CRC scopes in `buf` (in place), in the spec's order:
+    /// per-table `prior_crc`, per-table `header_crc`, the EOF CRC, then the file-header hash.
+    /// For an unedited buffer this reproduces the original bytes.
+    pub fn recompute_crcs(&self, buf: &mut [u8]) {
+        let e = self.endian;
+        let n = buf.len();
+        let table_count = self.tables.len();
+        if table_count == 0 {
+            return;
+        }
+        // Tables in data-offset (file layout) order, and each one's successor block offset.
+        let mut order: Vec<usize> = (0..table_count).collect();
+        order.sort_by_key(|&i| self.tables[i].block_offset);
+        let next_block: Vec<usize> = (0..order.len())
+            .map(|k| {
+                if k + 1 < order.len() {
+                    self.tables[order[k + 1]].block_offset
+                } else {
+                    n - 4
+                }
+            })
+            .collect();
+
+        // 1. prior_crc @ block+0x00: table 0 hashes the directory; table k hashes table k-1's body.
+        let dir = 0x18..0x18 + 8 * table_count;
+        for k in 0..order.len() {
+            let scope = if k == 0 {
+                crc::crc32_mpeg2(&buf[dir.clone()])
+            } else {
+                let (s, en) = self.body_range(order[k - 1], next_block[k - 1]);
+                crc::crc32_mpeg2(&buf[s..en])
+            };
+            write_u32(buf, self.tables[order[k]].block_offset, scope, e);
+        }
+        // 2. header_crc @ block+0x24 over table[+4..+36].
+        for &idx in &order {
+            let b = self.tables[idx].block_offset;
+            let v = crc::crc32_mpeg2(&buf[b + 4..b + 36]);
+            write_u32(buf, b + 0x24, v, e);
+        }
+        // 3. EOF CRC (last 4 bytes) over the last table's body.
+        let last = order.len() - 1;
+        let (s, en) = self.body_range(order[last], next_block[last]);
+        let v = crc::crc32_mpeg2(&buf[s..en]);
+        write_u32(buf, n - 4, v, e);
+        // 4. File-header hash @ 0x14 over file[0x00..0x14].
+        let v = crc::crc32_mpeg2(&buf[0..0x14]);
+        write_u32(buf, 0x14, v, e);
+    }
+
+    /// Clone the source bytes and recompute all CRCs. For an unedited file this returns a
+    /// byte-identical copy (the round-trip invariant).
+    pub fn serialize(&self) -> Vec<u8> {
+        let mut buf = self.bytes.to_vec();
+        self.recompute_crcs(&mut buf);
+        buf
+    }
+
+    /// Patch a fixed-bit field's value for record `index` in `buf` (does **not** recompute CRCs —
+    /// call [`TdbFile::recompute_crcs`] afterwards). Returns `false` if out of range.
+    pub fn set_u64(
+        &self,
+        buf: &mut [u8],
+        table: &Table,
+        index: u32,
+        field: &FieldDescriptor,
+        value: u64,
+    ) -> bool {
+        if index >= table.current_records as u32 || field.bit_width > 64 {
+            return false;
+        }
+        let start = table.record_block + index as usize * table.record_len_bytes as usize;
+        let end = start + table.record_len_bytes as usize;
+        if end > buf.len() {
+            return false;
+        }
+        write_bits(
+            &mut buf[start..end],
+            field.bit_offset,
+            field.bit_width,
+            value,
+            self.endian,
+        );
+        true
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -336,5 +485,33 @@ mod tests {
         assert_eq!(id.raw(), "cPbu");
         assert_eq!(id.canonical(Endian::Big), "ubPc");
         assert_eq!(id.canonical(Endian::Little), "cPbu");
+    }
+
+    #[test]
+    fn write_is_inverse_of_read() {
+        for endian in [Endian::Big, Endian::Little] {
+            for &(off, width, val) in &[
+                (0u32, 1u32, 1u64),
+                (3, 5, 17),
+                (7, 9, 300),
+                (1, 16, 0xABCD),
+                (5, 31, 0x1234_5678),
+            ] {
+                let masked = val & ((1u128 << width) - 1) as u64;
+                let mut b = [0u8; 8];
+                write_bits(&mut b, off, width, val, endian);
+                assert_eq!(
+                    read_bits(&b, off, width, endian),
+                    masked,
+                    "{endian:?} {off}/{width}"
+                );
+            }
+        }
+        // Adjacent fields don't disturb each other.
+        let mut b = [0u8; 8];
+        write_bits(&mut b, 0, 3, 0b101, Endian::Big);
+        write_bits(&mut b, 3, 5, 0b10110, Endian::Big);
+        assert_eq!(read_bits(&b, 0, 3, Endian::Big), 0b101);
+        assert_eq!(read_bits(&b, 3, 5, Endian::Big), 0b10110);
     }
 }
