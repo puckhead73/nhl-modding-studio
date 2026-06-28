@@ -1,0 +1,252 @@
+# Confirmed enum: Glove Model (xmja.NmUR on skater equipment rows).
+#
+# Sourced from the operator's equipment-ID catalog CSV
+# (Data/Equipment/glove.csv). NHLViewNG's field registry labels
+# xmja.NmUR as "Gloves". Crosby anchor: NmUR=68 → "CCM Tacks Ultra".
+#
+# Several IDs in the CSV share an identical model string (operator
+# "?" placeholders where the brand/model isn't yet identified, plus
+# the EA-Sports paint variants that ship as consecutive-ID pairs).
+# The loader rejects duplicate labels, so each member of a shared
+# label group carries a `(#<id>)` disambiguator — same convention as
+# `stick-model.toml`. Disambiguated groups:
+#   Reebok ?                    → 18 / 25 / 49
+#   CCM ?                       → 20 / 41
+#   Easton EQ Pro               → 21 / 45
+#   Warrior ?                   → 44 / 52
+#   Bauer Supreme (EA Sports)   → 70 / 71
+#   CCM CL 500 (EA Sports)      → 72 / 73
+#   Easton Mako (EA Sports)     → 74 / 75
+#   EA Sports                   → 76 / 77
+#   Warrior Covert (EA Sports)  → 100 / 101
+
+name = "Glove Model"
+confidence = "Confirmed"
+notes = """
+Skater glove model asset id on xmja.NmUR (7-bit; 128-slot field). The
+54 IDs below are the catalogued glove models; raws not listed have no
+catalog entry and surface as `raw N / uncatalogued` in the editor.
+"""
+
+[source]
+kind = "operator-research"
+description = "Equipment ID catalog CSV (NHL Legacy Edition Modding Tools, Data/Equipment/glove.csv, 2026)"
+
+[[bindings]]
+field_name = "Gloves"
+field_raw_id = "NmUR"
+table_raw_id = "xmja"
+
+# --- Entries (sorted by raw ID) --------------------------------------
+
+[[entries]]
+raw = 15
+label = "Warrior Franchise"
+
+[[entries]]
+raw = 18
+label = "Reebok ? (#18)"
+
+[[entries]]
+raw = 20
+label = "CCM ? (#20)"
+
+[[entries]]
+raw = 21
+label = "Easton EQ Pro (#21)"
+
+[[entries]]
+raw = 23
+label = "TPS Response"
+
+[[entries]]
+raw = 24
+label = "Bauer Retro"
+
+[[entries]]
+raw = 25
+label = "Reebok ? (#25)"
+
+[[entries]]
+raw = 27
+label = "Eagle ?"
+
+[[entries]]
+raw = 28
+label = "Bauer PK88 WC Edition"
+
+[[entries]]
+raw = 29
+label = "CCM 4R Pro"
+
+[[entries]]
+raw = 30
+label = "Torspo 521"
+
+[[entries]]
+raw = 33
+label = "Rebellion Airstrike"
+
+[[entries]]
+raw = 38
+label = "Bauer Vapor X:60 Pro"
+
+[[entries]]
+raw = 39
+label = "Bauer Supreme"
+
+[[entries]]
+raw = 40
+label = "Easton Synergy"
+
+[[entries]]
+raw = 41
+label = "CCM ? (#41)"
+
+[[entries]]
+raw = 42
+label = "Bauer Supreme TotalOne"
+
+[[entries]]
+raw = 43
+label = "Bauer ?"
+
+[[entries]]
+raw = 44
+label = "Warrior ? (#44)"
+
+[[entries]]
+raw = 45
+label = "Easton EQ Pro (#45)"
+
+[[entries]]
+raw = 46
+label = "Easton S19"
+
+[[entries]]
+raw = 48
+label = "Reebok 11K"
+
+[[entries]]
+raw = 49
+label = "Reebok ? (#49)"
+
+[[entries]]
+raw = 51
+label = "Graf G75 Ultra"
+
+[[entries]]
+raw = 52
+label = "Warrior ? (#52)"
+
+[[entries]]
+raw = 53
+label = "CCM CL500"
+
+[[entries]]
+raw = 54
+label = "Bauer Nexus 1000"
+
+[[entries]]
+raw = 55
+label = "Bauer Supreme TotalOne NXG"
+
+[[entries]]
+raw = 56
+label = "Winwell ?"
+
+[[entries]]
+raw = 57
+label = "Easton Mako"
+
+[[entries]]
+raw = 58
+label = "Warrior Dynasty AX1"
+
+[[entries]]
+raw = 59
+label = "Reebok 50K"
+
+[[entries]]
+raw = 61
+label = "Bauer Vapor APX Pro"
+
+[[entries]]
+raw = 62
+label = "Sherwood Rekker"
+
+[[entries]]
+raw = 65
+label = "STX Stallion"
+
+[[entries]]
+raw = 66
+label = "Warrior QR1"
+
+[[entries]]
+raw = 67
+label = "STX Surgeon"
+
+[[entries]]
+raw = 68
+label = "CCM Tacks Ultra"
+
+[[entries]]
+raw = 69
+label = "CCM 30K"
+
+[[entries]]
+raw = 70
+label = "Bauer Supreme (EA Sports) (#70)"
+
+[[entries]]
+raw = 71
+label = "Bauer Supreme (EA Sports) (#71)"
+
+[[entries]]
+raw = 72
+label = "CCM CL 500 (EA Sports) (#72)"
+
+[[entries]]
+raw = 73
+label = "CCM CL 500 (EA Sports) (#73)"
+
+[[entries]]
+raw = 74
+label = "Easton Mako (EA Sports) (#74)"
+
+[[entries]]
+raw = 75
+label = "Easton Mako (EA Sports) (#75)"
+
+[[entries]]
+raw = 76
+label = "EA Sports (#76)"
+
+[[entries]]
+raw = 77
+label = "EA Sports (#77)"
+
+[[entries]]
+raw = 80
+label = "Bauer Supreme TotalOne MX3"
+
+[[entries]]
+raw = 81
+label = "Easton Stealth"
+
+[[entries]]
+raw = 82
+label = "Bauer Vapor 1X"
+
+[[entries]]
+raw = 83
+label = "Bauer Nexus 1N"
+
+[[entries]]
+raw = 100
+label = "Warrior Covert (EA Sports) (#100)"
+
+[[entries]]
+raw = 101
+label = "Warrior Covert (EA Sports) (#101)"

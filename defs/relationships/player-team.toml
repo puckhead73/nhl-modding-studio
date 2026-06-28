@@ -1,0 +1,51 @@
+# Confirmed relationship: each player bio row (ubPc) references its
+# affiliated team via the `dXSB` Team ID join into the kOtt teams
+# table.
+#
+# Promoted in Task #26 after evidence-based validation against NHL
+# Legacy `default.db`:
+#
+#   * 215 distinct ubPc.dXSB values across 5632 populated bio rows
+#   * 252 distinct kOtt.vfEq team rows
+#   * 215 / 215 = 100 % source-subset score (no orphan team ids)
+#   * 0 nonzero source-only values
+#   * Cardinality: many-to-one (many players → one team row)
+#
+# Semantic source: NHLViewNG DB Editor XML "Player Bios" view labels
+# `ubPc.dXSB` as **Team ID** and "Teams" view labels `kOtt.vfEq` as
+# the Teams primary key. Captured in Task #25's NHLViewNG semantic
+# audit (`docs/nhlviewng-semantic-audit.md`, §2 Field semantic names
+# and §5 Relationship candidates).
+#
+# Subset characteristic: 215 / 252 teams are referenced by at least
+# one player (84 %). The 37 teams without any player references are
+# legitimately empty kOtt rows in the operator's `default.db` (likely
+# free-agent / placeholder franchises). This is **not** an orphan —
+# the FK direction is from the player to the team, so unreferenced
+# teams are expected.
+#
+# Architectural rule (carried forward): every binding here is an
+# explicit, audited promotion. No wildcard. No silent inference.
+
+name = "player-team"
+kind = "ForeignKey"
+cardinality = "ManyToOne"
+confidence = "Confirmed"
+notes = """
+Player bio rows reference their team affiliation via the ubPc.dXSB
+"Team ID" field, which is a many-to-one foreign key into kOtt.vfEq.
+Promoted in Task #26 with 100 % source-subset evidence against NHL
+Legacy default.db; see docs/roster-relationship-confirmation.md for
+the full audit trail (overlap stats, cardinality, sample joins).
+"""
+
+[source]
+kind = "operator-research"
+description = "Task #26 roster-relationship confirmation (NHL Legacy default.db, May 2026) + Task #25 NHLViewNG semantic audit"
+
+[[bindings]]
+source_table = "ubPc"
+source_field = "dXSB"
+target_table = "kOtt"
+target_field = "vfEq"
+evidence_notes = "5632 populated player bios across 215 distinct team ids; all 215 values land in kOtt's 252-team set (subset 1.0). 0 nonzero orphans. ManyToOne — verified default.db sha256 74f91369ea79033ec752e6cb53cf7ad2ad178b0520fdd12a9dd14887c4ffd43d."

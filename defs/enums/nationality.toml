@@ -1,0 +1,175 @@
+# Confirmed enum: Nationality (player citizenship code on player bio rows).
+#
+# The raw 7-bit ubPc.Lelh field stores the player's nationality.
+#
+# Origin: Task #35's 22-player audit confirmed the first six entries
+# (Canada/USA/Finland/Latvia/Russia/Czech Republic). 2026-05-29: the
+# enum_audit cross-reference workflow (see docs/nhlviewng-enum-vocabulary.md
+# + docs/enum-audit-nhlng-legacy.md) surfaced the remaining populated
+# codes with example players, and the operator confirmed each against the
+# NHLViewNG editor — they are now promoted below.
+#
+# Note the early population-histogram guesses were partly wrong: the
+# confirmed encoding is 85=Germany, 95=Slovakia, 97=Switzerland, and
+# 127 is the "-- N/A --" fallback sentinel. Any code still absent here
+# (rare/unobserved) renders as a raw integer until operator-confirmed.
+
+name = "Nationality"
+confidence = "Confirmed"
+notes = """
+Player nationality code on the player bio table. NHLViewNG XML labels
+the field "Nationality". The first six values are Task #35 anchor matches
+(22/22 across NHL Legacy default.db); the rest were confirmed 2026-05-29
+via the enum_audit cross-reference against NHLViewNG. Codes still absent
+render as `Country #${raw}` until operator-confirmed.
+
+Anchor population (default.db, 5632 populated rows):
+  Lelh=0  → 2428 players (Canada)
+  Lelh=14 →  718 players (USA)
+  Lelh=67 →  434 players (Finland)
+  Lelh=74 →   23 players (Latvia)
+  Lelh=76 →   87 players (Russia)
+  Lelh=82 →  443 players (Czech Republic)
+"""
+
+[source]
+kind = "operator-research"
+description = "Task #35 anchor-set audit (NHL Legacy default.db, 2026)"
+
+[[bindings]]
+field_name = "Nationality"
+field_raw_id = "Lelh"
+table_raw_id = "ubPc"
+
+[[entries]]
+raw = 0
+label = "Canada"
+
+[[entries]]
+raw = 14
+label = "United States"
+
+[[entries]]
+raw = 67
+label = "Finland"
+
+[[entries]]
+raw = 74
+label = "Latvia"
+
+[[entries]]
+raw = 76
+label = "Russia"
+
+[[entries]]
+raw = 82
+label = "Czech Republic"
+
+# ---- Confirmed 2026-05-29 (operator NHLViewNG cross-reference) ----
+[[entries]]
+raw = 66
+label = "Denmark"
+
+[[entries]]
+raw = 68
+label = "Norway"
+
+[[entries]]
+raw = 69
+label = "Sweden"
+
+[[entries]]
+raw = 70
+label = "Belarus"
+
+[[entries]]
+raw = 71
+label = "Estonia"
+
+[[entries]]
+raw = 72
+label = "Kazakhstan"
+
+[[entries]]
+raw = 75
+label = "Lithuania"
+
+[[entries]]
+raw = 77
+label = "Ukraine"
+
+[[entries]]
+raw = 78
+label = "Austria"
+
+[[entries]]
+raw = 81
+label = "Croatia"
+
+[[entries]]
+raw = 83
+label = "England"
+
+[[entries]]
+raw = 84
+label = "France"
+
+[[entries]]
+raw = 85
+label = "Germany"
+
+[[entries]]
+raw = 86
+label = "Hungary"
+
+[[entries]]
+raw = 87
+label = "Italy"
+
+[[entries]]
+raw = 89
+label = "Netherlands"
+
+[[entries]]
+raw = 91
+label = "Poland"
+
+[[entries]]
+raw = 92
+label = "Romania"
+
+[[entries]]
+raw = 93
+label = "Scotland"
+
+[[entries]]
+raw = 95
+label = "Slovakia"
+
+[[entries]]
+raw = 96
+label = "Slovenia"
+
+[[entries]]
+raw = 97
+label = "Switzerland"
+
+[[entries]]
+raw = 98
+label = "Australia"
+
+[[entries]]
+raw = 106
+label = "Fiji"
+
+[[entries]]
+raw = 109
+label = "Japan"
+
+[[entries]]
+raw = 110
+label = "Liberia"
+
+[[entries]]
+raw = 127
+label = "-- N/A --"

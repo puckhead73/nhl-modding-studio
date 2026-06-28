@@ -1,0 +1,57 @@
+# Confirmed relationship: each team row (kOtt) references its home
+# arena via the `buDa` field, a 0-indexed record-index into the
+# canonical `StEO` arena directory.
+#
+# Promoted in the 2026-05-24 arena-directory rekey after the operator
+# flagged the Arenas tab as "very messy and inaccurate." Root cause:
+# the directory had historically been keyed by `StEO.ClpB` under the
+# assumption that `kOtt.buDa` references it. The audit revealed:
+#
+#   - `StEO.ClpB` is NOT unique: ~30 AHL/CHL rows share `0`, multiple
+#     NHL arenas have duplicate-row twins (rows 4/160, 11/161, 16/30),
+#     and several European arenas overlap on `32`/`45`/`61`.
+#   - `kOtt.buDa` actually carries the **0-based StEO record index**.
+#     Anchored: Anaheim's `buDa=0` resolves to StEO row 0 (Honda
+#     Center); Bakersfield Condors' `buDa=32` resolves to StEO row 32
+#     (Rabobank Arena); Bridgestone Arena exists at BOTH row 16 (used
+#     by NSH) and row 30 (an unused twin) — both have `ClpB=16`.
+#
+# The legacy ClpB-keyed lookup worked for NHL rows 0..=29 only because
+# those rows coincidentally have `ClpB == record_index`. For ~70% of
+# arenas the lookup either dropped the row entirely (ClpB collision
+# overwrote it) or resolved to the wrong arena (the row with the same
+# ClpB that survived the dedup).
+#
+# `StEO.vfEq` (8-bit) is the canonical self-pointer: every populated
+# StEO row has `vfEq == record_index`. That's why the binding uses
+# `vfEq` as the target field — it carries the same value as the row
+# index, exactly like `Teix.vfEq` does in `team-links.toml`.
+#
+# Architectural rule (carried forward): every binding here is an
+# explicit, audited promotion. No wildcard. No silent inference.
+
+name = "kott-buda-to-steo"
+kind = "ForeignKey"
+cardinality = "ManyToOne"
+confidence = "Confirmed"
+notes = """
+Team home-arena FK. kOtt.buDa is a 0-indexed record-index into the
+StEO arena directory (NOT into StEO.ClpB, which collides across
+rows). Many teams may point at the same arena (many-to-one).
+Promoted in the 2026-05-24 arena-directory rekey; before that, the
+GUI's arena lookup was ClpB-keyed and silently dropped ~70% of
+arenas. See `crates/tdb-gui-api/src/arena_directory.rs` for the
+field-map docstring and `crates/tdb-gui-api/tests/commands.rs` for
+the operator-real assertions.
+"""
+
+[source]
+kind = "operator-research"
+description = "2026-05-24 arena-directory audit + operator-real anchor set (default.db sha256 74f91369ea79033ec752e6cb53cf7ad2ad178b0520fdd12a9dd14887c4ffd43d). Anchors: Anaheim(0)→Honda Center, Calgary(4)→Saddledome, Nashville(16)→Bridgestone Arena, Bakersfield Condors(32)→Rabobank Arena, Albany Devils(31)→Times Union Center."
+
+[[bindings]]
+source_table = "kOtt"
+source_field = "buDa"
+target_table = "StEO"
+target_field = "vfEq"
+evidence_notes = "kOtt has 252 populated team rows; every buDa value lands in StEO's 187-populated-row index range. Anaheim (team 0, buDa=0) → StEO row 0 = Honda Center, Anaheim CA. Bakersfield Condors (team 33, buDa=32) → StEO row 32 = Rabobank Arena, Bakersfield CA. ManyToOne — multiple teams may share an arena (e.g. EA SPORTS hub rows). Verified default.db sha256 74f91369ea79033ec752e6cb53cf7ad2ad178b0520fdd12a9dd14887c4ffd43d."

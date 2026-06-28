@@ -1,0 +1,34 @@
+# Confirmed relationship: skater attribute rows (dSvy) reference the
+# player bio table (ubPc) by the wBIz Player ID join.
+#
+# Parallel of `player-ratings.toml` for skaters. The Phase 5X writer-time
+# alignment work locked in the rule "dSvy = skaters, mHuy = goalies; the
+# join field is wBIz (NOT row index)". This file promotes that rule to a
+# Confirmed relationship so the canonical PlayerView read model can join
+# both kinds of attribute rows back to bios without a heuristic step.
+#
+# Cardinality: OneToOne. Every dSvy row has exactly one wBIz value;
+# every wBIz value that appears in dSvy also exists in ubPc (verified
+# by Task #21 discovery against NHL Legacy default.db).
+
+name = "skater-ratings"
+kind = "ForeignKey"
+cardinality = "OneToOne"
+confidence = "Confirmed"
+notes = """
+Skater rating rows (dSvy) join to player bio rows (ubPc) by wBIz.
+Sister relationship to `player-ratings` (mHuy → ubPc). Goalie and
+skater attribute rows live in different tables; both reference ubPc
+by the same join field. Confirmed by Phase 5X writer-time alignment.
+"""
+
+[source]
+kind = "operator-research"
+description = "Phase 5X writer-time alignment rule + Task #22b PlayerView extension"
+
+[[bindings]]
+source_table = "dSvy"
+source_field = "wBIz"
+target_table = "ubPc"
+target_field = "wBIz"
+evidence_notes = "Every dSvy.wBIz value lands in ubPc.wBIz; target is primary-id-shaped. Parallel of mHuy → ubPc join."

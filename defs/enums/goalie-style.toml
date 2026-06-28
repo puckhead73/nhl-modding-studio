@@ -1,0 +1,46 @@
+# Confirmed enum: Goalie Style (goalie posture / play-style code).
+#
+# Operator-confirmed mapping (Phase 5T research): a two-bit code on the
+# goalie AI table (`mHuy`) selects between three labelled styles. Raw
+# value 3 is reachable through the bit-width but is not labelled by the
+# in-game editor and is therefore not listed here. The shipped writer
+# has been validated for raw 0..2 only.
+#
+# Goalie Style is a SEPARATE field from the skater Player Style code
+# (`dSvy.QgFs`) — both fields share the same `QgFs` raw id, but they
+# live on different tables and represent different concepts. Each enum
+# is scoped to its own `table_raw_id` so they do not collide in the
+# `tdb-enums` registry.
+
+name = "Goalie Style"
+confidence = "Confirmed"
+notes = """
+Three-value goalie style code on the goalie AI table. Mapping locked in
+during the operator's Phase 5T research; the same code is the one the
+in-game goalie-style selector renders. The underlying field is encoded
+with two bits — raw value 3 is reachable through the encoding but has
+no labelled meaning in the editor and is therefore not listed.
+"""
+
+[source]
+kind = "operator-research"
+description = "Phase 5T goalie-style promotion (NHL Legacy default.db)"
+
+[[bindings]]
+# Goalie AI table; the two-bit goalie-style code is the same `QgFs`
+# raw id used by the skater Player Style enum, but scoped to `mHuy`.
+field_name = "Goalie Style"
+field_raw_id = "QgFs"
+table_raw_id = "mHuy"
+
+[[entries]]
+raw = 0
+label = "Standup"
+
+[[entries]]
+raw = 1
+label = "Hybrid"
+
+[[entries]]
+raw = 2
+label = "Butterfly"

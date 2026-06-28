@@ -1,0 +1,158 @@
+# Confirmed enum: Skate Model (xmja.AOOe on skater equipment rows).
+#
+# Sourced from the operator's equipment-ID catalog CSV
+# (Data/Equipment/skate.csv). NHLViewNG's field registry labels
+# xmja.AOOe as "Skates". Crosby anchor: AOOe=44 → "CCM Ribcore 50K Pump".
+#
+# Note: NHLViewNG's stick-change cascade *shifts* AOOe (see the
+# SkaterEquipmentNotice banner / stick-model.toml editing recipe), so a
+# stick swap can move this value off its catalogued ID. Duplicate-label
+# groups carry a `(#<id>)` disambiguator (loader rejects duplicate
+# labels):
+#   Easton Mako             → 37 / 45
+#   Bauer APX2 (EA Sports)  → 70 / 71
+#   CCM RBZ (EA Sports)     → 72 / 73
+#   Easton Mako (EA Sports) → 74 / 75
+
+name = "Skate Model"
+confidence = "Confirmed"
+notes = """
+Skater skate model asset id on xmja.AOOe (7-bit; 128-slot field). 31
+IDs catalogued below (ID 8 is the generic goalie skate). Raws not
+listed surface as `raw N / uncatalogued` in the editor.
+"""
+
+[source]
+kind = "operator-research"
+description = "Equipment ID catalog CSV (NHL Legacy Edition Modding Tools, Data/Equipment/skate.csv, 2026)"
+
+[[bindings]]
+field_name = "Skates"
+field_raw_id = "AOOe"
+table_raw_id = "xmja"
+
+# --- Entries (sorted by raw ID) --------------------------------------
+
+[[entries]]
+raw = 7
+label = "GRAF Supra G5"
+
+[[entries]]
+raw = 8
+label = "Generic Goalie Skates"
+
+[[entries]]
+raw = 15
+label = "CCM Vector U+ Pro"
+
+[[entries]]
+raw = 16
+label = "Easton S17"
+
+[[entries]]
+raw = 17
+label = "Bauer Vapor X:60"
+
+[[entries]]
+raw = 23
+label = "Bauer Kane Skates"
+
+[[entries]]
+raw = 24
+label = "Reebok 11k Pumps"
+
+[[entries]]
+raw = 28
+label = "Easton EQ5"
+
+[[entries]]
+raw = 30
+label = "Easton EQ50"
+
+[[entries]]
+raw = 31
+label = "Bauer Vapor APX"
+
+[[entries]]
+raw = 32
+label = "Reebok 20k Pumps"
+
+[[entries]]
+raw = 35
+label = "GRAF Ultra G75"
+
+[[entries]]
+raw = 36
+label = "CCM RBZ"
+
+[[entries]]
+raw = 37
+label = "Easton Mako (#37)"
+
+[[entries]]
+raw = 38
+label = "Bauer APX2"
+
+[[entries]]
+raw = 39
+label = "CCM Tacks (10s)"
+
+[[entries]]
+raw = 40
+label = "Reebok Ribcore Pumps"
+
+[[entries]]
+raw = 41
+label = "Bauer Nexus 8000"
+
+[[entries]]
+raw = 42
+label = "Bauer Supreme TotalOne"
+
+[[entries]]
+raw = 43
+label = "CCM JetSpeed"
+
+[[entries]]
+raw = 44
+label = "CCM Ribcore 50K Pump"
+
+[[entries]]
+raw = 45
+label = "Easton Mako (#45)"
+
+[[entries]]
+raw = 46
+label = "Graf Ultra G9035"
+
+[[entries]]
+raw = 47
+label = "Bauer Vapor 1X"
+
+[[entries]]
+raw = 48
+label = "Bauer Supreme 1S"
+
+[[entries]]
+raw = 70
+label = "Bauer APX2 (EA Sports) (#70)"
+
+[[entries]]
+raw = 71
+label = "Bauer APX2 (EA Sports) (#71)"
+
+[[entries]]
+raw = 72
+label = "CCM RBZ (EA Sports) (#72)"
+
+[[entries]]
+raw = 73
+label = "CCM RBZ (EA Sports) (#73)"
+
+[[entries]]
+raw = 74
+label = "Easton Mako (EA Sports) (#74)"
+
+[[entries]]
+raw = 75
+label = "Easton Mako (EA Sports) (#75)"

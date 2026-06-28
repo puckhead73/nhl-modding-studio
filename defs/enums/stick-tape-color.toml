@@ -1,0 +1,75 @@
+# Confirmed enum: Stick Tape Color (xmja.NISO on skater equipment rows).
+#
+# Task #61 — single-attribute equip.db diff anchors (Backes/Benoit/
+# Berglund/Bortuzzo):
+#   - David Backes  default Black tape           → NISO=0
+#   - Andre Benoit  changed White tape           → NISO=1
+#   - Patrik Berglund changed Blue tape          → NISO=2
+#   - Robert Bortuzzo changed Red tape           → NISO=3
+#
+# NHLViewNG field registry labels xmja.NISO as "Stick Tape Color".
+# Localization keys (vCJG, nhl_eng_us.db): black / white / blue / red.
+#
+# 2026-05-25: extended from the original 4 Task #61 anchors to the full
+# 10-colour vocabulary supplied by the operator's equipment-ID catalog
+# CSV (Data/Equipment/sticktape.csv). The first four (0..3) match the
+# Task #61 single-attribute diffs exactly; 4..9 are catalog-sourced.
+
+name = "Stick Tape Color"
+confidence = "Confirmed"
+notes = """
+Ten-value stick tape color on the skater equipment table. NISO is a
+4-bit field (max 16 reachable values); the catalog defines 10 colours
+(raws 0..9). The first four were anchored by Task #61 equip.db diffs
+(Backes Black, Benoit White, Berglund Blue, Bortuzzo Red); 4..9 come
+from the operator's equipment catalog CSV. Raws 10..15 stay unmapped.
+"""
+
+[source]
+kind = "operator-research"
+description = "Task #61 single-attribute equip.db diff (0..3) + equipment ID catalog CSV (sticktape.csv, 4..9) — NHL Legacy, 2026"
+
+[[bindings]]
+field_name = "Stick Tape Color"
+field_raw_id = "NISO"
+table_raw_id = "xmja"
+
+[[entries]]
+raw = 0
+label = "Black"
+
+[[entries]]
+raw = 1
+label = "White"
+
+[[entries]]
+raw = 2
+label = "Blue"
+
+[[entries]]
+raw = 3
+label = "Red"
+
+[[entries]]
+raw = 4
+label = "Yellow"
+
+[[entries]]
+raw = 5
+label = "Green"
+
+[[entries]]
+raw = 6
+label = "Orange"
+
+[[entries]]
+raw = 7
+label = "Light Blue"
+
+[[entries]]
+raw = 8
+label = "Pink"
+
+[[entries]]
+raw = 9
+label = "Purple"

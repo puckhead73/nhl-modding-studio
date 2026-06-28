@@ -1,0 +1,59 @@
+# Confirmed enum: Roster Captaincy (per-player captaincy designation).
+#
+# Operator-confirmed mapping (Task #29, May 2026): a two-bit code on the
+# rosters-and-lines table (`eGlu.mCcl`) records each player's captaincy
+# role. The vocabulary was recovered verbatim from the NHLViewNG
+# executable (`nhlviewng_unpacked.exe`, strings region 2661274..2661434)
+# as `TNHLRosterPlayerCaptaincy { rcNone, rcCaptain, rcAlternate }`, and
+# the live-data distribution on NHL Legacy `default.db` matches the
+# expected NHL captaincy rules near-exactly:
+#
+#   * raw 0 → 4872 rows (88.07 %) — rcNone, the default state
+#   * raw 1 →  220 rows  (3.98 %) — rcCaptain, ~1 per active team
+#     (220 captains across 222 active teams)
+#   * raw 2 →  440 rows  (7.95 %) — rcAlternate, ~2 per active team
+#     (exactly 2× the captain count)
+#
+# The 1:2 ratio of captains to alternates and the per-team count of
+# ~1 captain / ~2 alternates are NHL-canonical and provide independent
+# evidence on top of the EXE's literal Pascal label names.
+#
+# Captaincy is a SEPARATE field from the `mCcl` codes that may appear on
+# other tables — this binding is scoped to `eGlu.mCcl` only. The
+# `dSvy.QgFs` / `mHuy.QgFs` / `eGlu.QgFs` triplet remains separately
+# managed (skater style / goalie style / unconfirmed eGlu style).
+
+name = "Roster Captaincy"
+confidence = "Confirmed"
+notes = """
+Three-value captaincy designation on the rosters-and-lines table. Label
+mapping recovered from the NHLViewNG executable's
+`TNHLRosterPlayerCaptaincy` enum class (rcNone / rcCaptain /
+rcAlternate); the on-disk raw codes match the Pascal ordinal order
+(0/1/2). The underlying field is encoded with two bits — raw value 3 is
+reachable through the encoding but is not labelled by the in-game
+editor and is therefore not listed.
+"""
+
+[source]
+kind = "operator-research"
+description = "Task #29 roster-captaincy promotion (NHL Legacy default.db, May 2026) + Task #28 NHLViewNG line-visibility audit (EXE vocab `TNHLRosterPlayerCaptaincy`)"
+
+[[bindings]]
+# eGlu (Rosters And Lines) table; per-player captaincy designation on
+# the table's (ID)-block.
+field_name = "Captaincy"
+field_raw_id = "mCcl"
+table_raw_id = "eGlu"
+
+[[entries]]
+raw = 0
+label = "None"
+
+[[entries]]
+raw = 1
+label = "Captain"
+
+[[entries]]
+raw = 2
+label = "Alternate"

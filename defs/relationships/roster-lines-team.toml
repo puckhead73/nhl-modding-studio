@@ -1,0 +1,64 @@
+# Confirmed relationship: each "Rosters And Lines" row (eGlu) belongs
+# to one team via the `dXSB` Team ID join into the kOtt teams table.
+#
+# Promoted in Task #26 after evidence-based validation against NHL
+# Legacy `default.db`:
+#
+#   * 5532 populated eGlu rows across 222 distinct team ids
+#   * 252 distinct kOtt.vfEq team rows
+#   * 222 / 222 = 100 % source-subset score (no orphan team ids)
+#   * 0 nonzero source-only values
+#   * Cardinality: many-to-one (every team has multiple eGlu line-
+#     variant rows — empirically ~22 rows per team on `default.db`,
+#     consistent with the NHLViewNG hypothesis of 22 stored line
+#     configurations per team)
+#
+# Semantic source: NHLViewNG DB Editor XML labels eGlu as **"Rosters
+# And Lines"** and lists `dXSB` as the leading field of its (ID)
+# block. The matching Pascal class in `nhlviewng_unpacked.exe` is
+# `TNHLElementTeamRosterPlayerLineAssignmentNG`, confirming that each
+# eGlu row records a line/roster assignment owned by a specific team.
+#
+# Subset characteristic: 222 / 252 kOtt teams have at least one eGlu
+# row (88 %). The 30 teams without eGlu rows in `default.db` are
+# legitimately unrostered franchises (most likely junior/international
+# placeholders carried by kOtt for league-table completeness). Their
+# absence is **not** an orphan — the FK direction is eGlu → kOtt, so
+# unreferenced teams are expected.
+#
+# **What this binding does NOT confirm**: the eGlu position-slot
+# fields (PKtc/C0, EfuP/C1, XvAa/LW0, …) are NOT player FKs. They are
+# 1-bit boolean flags on a wide line-assignment row. See
+# `docs/roster-relationship-confirmation.md` §4 for the rejected
+# hypothesis and the underlying evidence (every slot's bit_width = 1,
+# max observed value = 1, source-subset = 0 % against ubPc.wBIz). A
+# future task may revisit eGlu's structural layout to locate where
+# per-line player references actually live.
+
+name = "roster-lines-team"
+kind = "ForeignKey"
+cardinality = "ManyToOne"
+confidence = "Confirmed"
+notes = """
+"Rosters And Lines" rows (eGlu) are owned by a team via the
+eGlu.dXSB → kOtt.vfEq many-to-one foreign key. Promoted in Task #26
+with 100 % source-subset evidence; ~22 eGlu rows per team in NHL
+Legacy default.db, matching the NHLViewNG hypothesis of stored
+line-configuration variants per franchise.
+
+This binding confirms only the team-ownership edge. The per-slot
+player references implied by the NHLViewNG XML grid layout are NOT
+confirmed (rejected by Task #26 — see rejection notes inline and the
+full evidence in docs/roster-relationship-confirmation.md).
+"""
+
+[source]
+kind = "operator-research"
+description = "Task #26 roster-relationship confirmation (NHL Legacy default.db, May 2026) + Task #25 NHLViewNG semantic audit"
+
+[[bindings]]
+source_table = "eGlu"
+source_field = "dXSB"
+target_table = "kOtt"
+target_field = "vfEq"
+evidence_notes = "5532 populated eGlu rows across 222 distinct team ids; all 222 values land in kOtt's 252-team set (subset 1.0). 0 nonzero orphans. ManyToOne — verified default.db sha256 74f91369ea79033ec752e6cb53cf7ad2ad178b0520fdd12a9dd14887c4ffd43d."

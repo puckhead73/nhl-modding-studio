@@ -1,0 +1,41 @@
+# Confirmed enum: Handedness (shooting/catching hand on player bio rows).
+#
+# Operator-confirmed mapping (Task #35 research): the raw 1-bit field
+# ubPc.GRkp stores the player's shooting hand for skaters / catching
+# hand for goalies. Anchor-set match was 21/22 known players. The sole
+# outlier (Alexander Semin) is treated as an EA-roster data-source
+# discrepancy rather than evidence against the mapping.
+#
+# Bit width on disk is 1, so values 0..1 are the only reachable codes.
+
+name = "Handedness"
+confidence = "Confirmed"
+notes = """
+Two-value handedness code on the player bio table. NHLViewNG XML
+labels the field as "Handedness"; the EXE references both
+`TNHLPlayerHandedness` and the `cmbPlrHandedness` combo box. The
+0=Left / 1=Right mapping was confirmed against a 22-player anchor
+set during Task #35 (21/22 match; the lone Semin outlier matches
+EA's stored value, not real-life handedness).
+
+Population distribution across `default.db` (5632 populated rows):
+Left = 3781 (67%), Right = 1851 (33%) — consistent with the NHL's
+real-world ~2:1 left-shot bias.
+"""
+
+[source]
+kind = "operator-research"
+description = "Task #35 anchor-set audit (NHL Legacy default.db, 2026)"
+
+[[bindings]]
+field_name = "Handedness"
+field_raw_id = "GRkp"
+table_raw_id = "ubPc"
+
+[[entries]]
+raw = 0
+label = "Left"
+
+[[entries]]
+raw = 1
+label = "Right"

@@ -1,0 +1,15 @@
+[package]
+name = "tdb-relations"
+description = "Confirmed inter-table relationship registry (EDIT-MODEL Layer 2 join model)."
+version = "0.0.0"
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+toml = "0.8"
+tdb-core = { path = "../tdb-core" }
+
+[dev-dependencies]
+tdb-defs = { path = "../tdb-defs" }

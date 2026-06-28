@@ -1,0 +1,78 @@
+# Confirmed enum: Skin Color (player appearance code on player bio rows).
+#
+# Source field: `ubPc.KTDQ` — 4 bits wide, full palette = 16 values
+# (0..15). Operator-verified in-game (CreateAPlayer) that the palette
+# does in fact span all 16 slots. NHLViewNG's Appearance combobox
+# (`cmbPlrAppearanceSkinColor`, populated via `GetPossibleSkinColors()`)
+# exposes a 7-entry subset; this file ships those 7 anchored labels.
+# 2026-05-29: the operator checked NHLViewNG for the three populated
+# leftovers {5, 7, 8} (20 default.db players carry them) — NHLViewNG's
+# combobox shows NOTHING for these, i.e. they're not real palette
+# entries (duplicate / junk values). They're labelled "Unused (#N)"
+# below purely to stop the editor flagging them as missing-enum errors;
+# they are not selectable real tones. Raws 0 and 11..15 stay unlabelled
+# (unused by any shipped player — render raw).
+
+name = "Skin Color"
+confidence = "Confirmed"
+notes = """
+Skin Color code on `ubPc.KTDQ`. The field is 4 bits (16 palette slots
+total, operator-verified in-game CreateAPlayer). Labels below are the
+7 entries the operator pulled from NHLViewNG's Appearance combobox;
+the remaining 9 raws (0, 5, 7, 8, 11..15) are real palette positions
+pending operator anchoring. 20 default.db players carry raws 5/7/8
+(visibly intermediate / olive / brown tones); raws 0 and 11..15 are
+unused by any shipped player but are reachable through CreateAPlayer.
+"""
+
+[source]
+kind = "operator-research"
+description = "NHLViewNG Appearance editor Skin Color combobox (NHL Legacy default.db)"
+
+[[bindings]]
+field_name = "Skin Color"
+field_raw_id = "KTDQ"
+table_raw_id = "ubPc"
+
+[[entries]]
+raw = 1
+label = "White 1"
+
+[[entries]]
+raw = 2
+label = "White 2"
+
+[[entries]]
+raw = 3
+label = "Tanned White"
+
+[[entries]]
+raw = 4
+label = "Pale White"
+
+[[entries]]
+raw = 6
+label = "Light Brown"
+
+[[entries]]
+raw = 9
+label = "Dark Brown"
+
+[[entries]]
+raw = 10
+label = "Black"
+
+# ---- Hidden 2026-05-29 — NHLViewNG shows nothing for these (junk /
+# duplicate values, not real palette tones). Labelled only to suppress
+# the missing-enum flag. ----
+[[entries]]
+raw = 5
+label = "Unused (#5)"
+
+[[entries]]
+raw = 7
+label = "Unused (#7)"
+
+[[entries]]
+raw = 8
+label = "Unused (#8)"

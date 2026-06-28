@@ -1,0 +1,67 @@
+# Confirmed enum: Player Style (position-aware default-style code).
+#
+# Operator-confirmed mapping (Phase 5T research): a single 4-bit code
+# encodes either a forward style (raw 5..10) or a defenseman style
+# (raw 1..4). Raw 0 is unused; the goalie style code lives in a
+# different field. Sub-range membership is interpreted on the consumer
+# side — this enum simply ships the ten labels with their raw codes.
+
+name = "Player Style"
+confidence = "Confirmed"
+notes = """
+Ten-value player style code combining defenseman roles (raw 1..4) and
+forward roles (raw 5..10). Mapping locked in during the operator's Phase
+5T research; the unified table is the one the in-game default-style
+selector renders. Raw 0 is unused. The goalie-style code is a separate
+two-bit field with its own enum (not shipped here yet).
+"""
+
+[source]
+kind = "operator-research"
+description = "Phase 5T unified default-style promotion (NHL Legacy default.db)"
+
+[[bindings]]
+# Skater AI table; field also known as the 4-bit default-style code.
+field_name = "Player Style"
+field_raw_id = "QgFs"
+table_raw_id = "dSvy"
+
+[[entries]]
+raw = 1
+label = "Defensive Defenseman"
+
+[[entries]]
+raw = 2
+label = "Offensive Defenseman"
+
+[[entries]]
+raw = 3
+label = "Enforcer Defenseman"
+
+[[entries]]
+raw = 4
+label = "Two-Way Defenseman"
+
+[[entries]]
+raw = 5
+label = "Grinder"
+
+[[entries]]
+raw = 6
+label = "Playmaker"
+
+[[entries]]
+raw = 7
+label = "Sniper"
+
+[[entries]]
+raw = 8
+label = "Power Forward"
+
+[[entries]]
+raw = 9
+label = "Two-Way Forward"
+
+[[entries]]
+raw = 10
+label = "Enforcer Forward"

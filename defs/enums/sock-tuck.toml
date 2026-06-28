@@ -1,0 +1,40 @@
+# Confirmed enum: Sock Tuck (xmja.DUUx on skater equipment rows).
+#
+# Sourced from the operator's equipment-ID catalog CSV
+# (Data/Equipment/tonguestyle.csv). The underlying field-name registry
+# calls xmja.DUUx "Sock Tuck"; NHLViewNG's UI labels the same field
+# "Tongue Tuck" and the catalog CSV is named tonguestyle.csv — all
+# three name the one xmja.DUUx field. Crosby anchor: DUUx=3 →
+# "Skate Tongue In/Back Sock Tuck".
+
+name = "Sock Tuck"
+confidence = "Confirmed"
+notes = """
+Sock / skate-tongue tuck style on the skater equipment table. DUUx is
+a 2-bit field; the four values below fully fill the field.
+"""
+
+[source]
+kind = "operator-research"
+description = "Equipment ID catalog CSV (NHL Legacy Edition Modding Tools, Data/Equipment/tonguestyle.csv, 2026)"
+
+[[bindings]]
+field_name = "Sock Tuck"
+field_raw_id = "DUUx"
+table_raw_id = "xmja"
+
+[[entries]]
+raw = 0
+label = "Sock Fully Untucked"
+
+[[entries]]
+raw = 1
+label = "Sock Fully Tucked"
+
+[[entries]]
+raw = 2
+label = "Skate Tongue Out/Front Sock Tuck"
+
+[[entries]]
+raw = 3
+label = "Skate Tongue In/Back Sock Tuck"

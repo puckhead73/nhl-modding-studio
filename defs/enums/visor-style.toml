@@ -1,0 +1,39 @@
+# Confirmed enum: Visor Style (xmja.cnFB on skater equipment rows).
+#
+# Sourced from the operator's equipment-ID catalog CSV
+# (Data/Equipment/visorstyle.csv). NHLViewNG's field registry labels
+# xmja.cnFB as "Visor Style". Crosby anchor: cnFB=0 → "Standard".
+#
+# Distinct from Visor *Tint* (xmja.DBYQ, see visor-tint.toml): style
+# selects the visor shape (or none), tint selects its colour. When
+# style = "No Visor" the tint value is cosmetic and renderers should
+# suppress it.
+
+name = "Visor Style"
+confidence = "Confirmed"
+notes = """
+Visor style on the skater equipment table. cnFB is a 2-bit field
+(max 4 reachable values); the catalog defines three (raw 3 is
+unobserved and stays unmapped).
+"""
+
+[source]
+kind = "operator-research"
+description = "Equipment ID catalog CSV (NHL Legacy Edition Modding Tools, Data/Equipment/visorstyle.csv, 2026)"
+
+[[bindings]]
+field_name = "Visor Style"
+field_raw_id = "cnFB"
+table_raw_id = "xmja"
+
+[[entries]]
+raw = 0
+label = "Standard"
+
+[[entries]]
+raw = 1
+label = "Aviator"
+
+[[entries]]
+raw = 2
+label = "No Visor"

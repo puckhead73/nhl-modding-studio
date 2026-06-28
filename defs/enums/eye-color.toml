@@ -1,0 +1,52 @@
+# Confirmed enum: Eye Color (player appearance code on player bio rows).
+#
+# Operator-confirmed mapping (Phase 7B research): NHLViewNG's appearance
+# editor labels the seven-value field with the labels below. The raw
+# bit-width on disk is 3, so values 0..6 are reachable and value 7 is
+# unreachable through the encoding.
+
+name = "Eye Color"
+confidence = "Confirmed"
+notes = """
+Seven-value eye-color code on the player bio table. Mapping cross-checked
+against NHLViewNG's appearance editor. The underlying field is encoded
+with three bits; raw value 7 is unreachable through the editor and is
+therefore not listed.
+"""
+
+[source]
+kind = "operator-research"
+description = "Phase 7B NHLViewNG label correspondence (NHL Legacy default.db)"
+
+[[bindings]]
+field_name = "Eye Color"
+field_raw_id = "Zufj"
+table_raw_id = "ubPc"
+
+[[entries]]
+raw = 0
+label = "Blue"
+
+[[entries]]
+raw = 1
+label = "Light Blue"
+
+[[entries]]
+raw = 2
+label = "Brown"
+
+[[entries]]
+raw = 3
+label = "Light Brown"
+
+[[entries]]
+raw = 4
+label = "Hazel"
+
+[[entries]]
+raw = 5
+label = "Green"
+
+[[entries]]
+raw = 6
+label = "Yellow"

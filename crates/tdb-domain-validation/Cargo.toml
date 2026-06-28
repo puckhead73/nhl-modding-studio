@@ -1,0 +1,15 @@
+[package]
+name = "tdb-domain-validation"
+description = "Whole-DB integrity engine — shared invariant predicates (EDIT-MODEL Layer 4)."
+version = "0.0.0"
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+tdb-core = { path = "../tdb-core" }
+tdb-relations = { path = "../tdb-relations" }
+tdb-enums = { path = "../tdb-enums" }
+
+[dev-dependencies]
+tdb-defs = { path = "../tdb-defs" }

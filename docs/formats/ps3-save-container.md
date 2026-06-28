@@ -61,6 +61,18 @@ Both checksums are at fixed offsets in all variants: `checksum_a`@`0x10` (CRC-32
 and `compressed_size`@`0x2C` (LE). The inner content is a plaintext TDB (`DB\x00\x08…`) or, for v4, a
 zlib/DEFLATE stream wrapping the TDB.
 
+> **Correction (2026-06-28, verified against anchors during `tdb-savedata` build).** Two empirical
+> findings override earlier claims:
+> 1. **Even ROSTER carries a small trailer.** The nhllegacy v4 ROSTER payload inflates to 2,456,076
+>    bytes but the inner DB's own `db_size@0x08` is 2,456,072 — a **4-byte, non-zero trailer** follows
+>    the DB *inside the payload*. So "ROSTER is just the DB" is not exact. `tdb-savedata::extract_db`
+>    returns the bare DB (trimmed to `db_size`); `repack_db` reconstructs `new_db ++ original_trailer`
+>    so the trailer is never dropped. (v2 ROSTER is genuinely trailer-free — proven by a byte-identical
+>    same-DB repack.)
+> 2. **`field_20`@`0x20` is not a reliable platform marker.** A real PS3 v4 save (nhllegacy ROSTER)
+>    carries `field_20 = 1`, contradicting the "2 = PS3 / 1 = Xbox360" note below. The codec preserves
+>    it verbatim and never derives platform from it.
+
 ## ⚠️ Saves contain MORE than the inner DB (handle with care)
 
 A save payload is **not** simply `[header + DB]`. Verified across all anchors:

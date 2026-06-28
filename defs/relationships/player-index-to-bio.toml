@@ -1,0 +1,59 @@
+# Confirmed relationship: each player-index row (ZBac) references the
+# player-bio row (ubPc) it indexes via the `ykFq` Player ID field.
+#
+# Promoted in Task #29 after evidence-based validation against NHL Legacy
+# `default.db`:
+#
+#   * 6087 populated ZBac rows across 5634 distinct `ykFq` values
+#   * 5632 distinct `ubPc.wBIz` player rows
+#   * 5632 / 5634 = 99.96 % source-subset score
+#   * 2 source-only values that do not appear on ubPc — documented as
+#     sentinel / null markers (likely value 0 and one secondary null
+#     marker). These are intentional encoding sentinels, not data drift
+#   * 0 ubPc players unreferenced — every player bio is covered by at
+#     least one ZBac entry
+#   * Cardinality: many-to-one. A player can occupy more than one ZBac
+#     slot (e.g. when their team affiliation changes mid-season or for
+#     special-team line entries), so `ykFq` repeats on the source side
+#     while `wBIz` is unique on the target side
+#
+# Semantic source: Task #28's passive EXE string extraction recovered the
+# NG-class layout (TNHLElementPlayerIndexEntry → FPlayerIndex on raw id
+# `jZSh`) confirming that the player-index table holds a
+# back-pointer to the player bio. In NHL 14 Legacy's schema the
+# field is named `ykFq` on `ZBac` and the bio row is `ubPc.wBIz`.
+# Captured in `docs/nhlviewng-line-visibility-audit.md`, §3 hop 2.
+#
+# Architectural rule (carried forward from Tasks #21–#28): every binding
+# here is an explicit, audited promotion with named provenance. No
+# wildcard. No silent inference. The full bridge-chain re-validation
+# lives in `tdb_relations::audit_bridge_chain` (Task #29) and writes its
+# evidence to `docs/roster-player-bridge-summary.json`.
+
+name = "player-index-to-bio"
+kind = "ForeignKey"
+cardinality = "ManyToOne"
+confidence = "Confirmed"
+notes = """
+Player-index rows on ZBac reference the player bio they index via the
+ZBac.ykFq → ubPc.wBIz many-to-one foreign key. Promoted in Task #29
+with 5632 / 5634 source-subset evidence against NHL Legacy default.db;
+the 2 source-only values are documented sentinel/null markers (not
+data integrity breaks). See docs/roster-player-bridge.md for the
+two-hop chain audit (eGlu → ZBac → ubPc).
+
+This binding is Hop 2 of the roster→player chain. Hop 1 lives in
+defs/relationships/roster-player-index.toml (eGlu.XSWT → ZBac.vfEq).
+Together they unblock RosterView and the named-slot LineView.
+"""
+
+[source]
+kind = "operator-research"
+description = "Task #29 roster-player-bridge promotion (NHL Legacy default.db, May 2026) + Task #28 NHLViewNG line-visibility audit + Task #25 NHLViewNG semantic audit"
+
+[[bindings]]
+source_table = "ZBac"
+source_field = "ykFq"
+target_table = "ubPc"
+target_field = "wBIz"
+evidence_notes = "6087 populated ZBac rows; 5634 distinct ykFq values; 5632 land in ubPc.wBIz (subset 0.9996). 2 source-only sentinels (documented as null markers). 0 ubPc orphans. ManyToOne — verified default.db sha256 74f91369ea79033ec752e6cb53cf7ad2ad178b0520fdd12a9dd14887c4ffd43d."

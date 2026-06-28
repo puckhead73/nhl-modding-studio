@@ -3177,11 +3177,49 @@ dependencies = [
 ]
 
 [[package]]
+name = "tdb-domain-validation"
+version = "0.0.0"
+dependencies = [
+ "tdb-core",
+ "tdb-defs",
+ "tdb-enums",
+ "tdb-relations",
+]
+
+[[package]]
 name = "tdb-edit"
 version = "0.0.0"
 dependencies = [
  "tdb-core",
  "tdb-defs",
+]
+
+[[package]]
+name = "tdb-enums"
+version = "0.0.0"
+dependencies = [
+ "serde",
+ "tdb-core",
+ "tdb-defs",
+ "toml 0.8.2",
+]
+
+[[package]]
+name = "tdb-relations"
+version = "0.0.0"
+dependencies = [
+ "serde",
+ "tdb-core",
+ "tdb-defs",
+ "toml 0.8.2",
+]
+
+[[package]]
+name = "tdb-savedata"
+version = "0.0.0"
+dependencies = [
+ "flate2",
+ "tdb-core",
 ]
 
 [[package]]

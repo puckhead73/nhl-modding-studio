@@ -1,0 +1,92 @@
+# Confirmed enum: Visor Tint (xmja.DBYQ on skater equipment rows).
+#
+# NHLViewNG field registry labels xmja.DBYQ as "Visor Tint".
+#
+# 2026-05-25: replaced the original 3-entry Task #61 guess with the
+# full 15-colour vocabulary from the operator's equipment-ID catalog
+# CSV (Data/Equipment/visortint.csv). The catalog *supersedes* the two
+# Task #61 labels that were screenshot guesses:
+#   - DBYQ=0 was "Clear" → catalog says "None"
+#   - DBYQ=1 was "Grey"  → catalog says "Dark"
+# (DBYQ=2 "Yellow" already matched the catalog.)
+
+name = "Visor Tint"
+confidence = "Confirmed"
+notes = """
+Visor tint colour on the skater equipment table. DBYQ is a 4-bit
+field (max 16 reachable values); the catalog defines 15 (raws 0..14,
+raw 15 unmapped).
+
+When the player has no visor (Visor Style = No Visor), DBYQ is
+cosmetic — renderers should suppress the tint row. DBYQ=0 ("None") is
+the no-tint default.
+"""
+
+[source]
+kind = "operator-research"
+description = "Equipment ID catalog CSV (NHL Legacy Edition Modding Tools, Data/Equipment/visortint.csv, 2026)"
+
+[[bindings]]
+field_name = "Visor Tint"
+field_raw_id = "DBYQ"
+table_raw_id = "xmja"
+
+[[entries]]
+raw = 0
+label = "None"
+
+[[entries]]
+raw = 1
+label = "Dark"
+
+[[entries]]
+raw = 2
+label = "Yellow"
+
+[[entries]]
+raw = 3
+label = "Orange"
+
+[[entries]]
+raw = 4
+label = "Green"
+
+[[entries]]
+raw = 5
+label = "Light Blue"
+
+[[entries]]
+raw = 6
+label = "Blue"
+
+[[entries]]
+raw = 7
+label = "Red"
+
+[[entries]]
+raw = 8
+label = "Purple"
+
+[[entries]]
+raw = 9
+label = "Pink"
+
+[[entries]]
+raw = 10
+label = "White"
+
+[[entries]]
+raw = 11
+label = "Sky"
+
+[[entries]]
+raw = 12
+label = "Sunburst"
+
+[[entries]]
+raw = 13
+label = "Aqua"
+
+[[entries]]
+raw = 14
+label = "Haze"

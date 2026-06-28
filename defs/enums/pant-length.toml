@@ -1,0 +1,37 @@
+# Confirmed enum: Pant Length (xmja.sQPG on skater equipment rows).
+#
+# Task #61 — equip.db diff anchors:
+#   - David Backes default Long pants  → sQPG=1
+#   - Andre Benoit default Short pants → sQPG=0
+#   - Patrik Berglund Long pants       → sQPG=1
+#
+# NHLViewNG field registry labels xmja.sQPG as "Pant Length".
+
+name = "Pant Length"
+confidence = "Confirmed"
+notes = """
+Binary pant length on the skater equipment table. sQPG is 1-bit so
+the two labels below are the only reachable codes.
+
+Note: Robert Bortuzzo's operator-reported "Short" did not persist
+during the multi-edit equip.db pass — his sQPG stayed at 1 (Long).
+The two clean anchors (Backes/Long, Benoit/Short) are sufficient for
+the binary mapping.
+"""
+
+[source]
+kind = "operator-research"
+description = "Task #61 single-attribute equip.db diff (NHL Legacy default.db, 2026)"
+
+[[bindings]]
+field_name = "Pant Length"
+field_raw_id = "sQPG"
+table_raw_id = "xmja"
+
+[[entries]]
+raw = 0
+label = "Short"
+
+[[entries]]
+raw = 1
+label = "Long"

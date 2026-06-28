@@ -1,0 +1,61 @@
+# Confirmed relationship: each "Rosters And Lines" row (eGlu) references
+# its corresponding entry in the per-team player-index table (ZBac) via
+# the `XSWT` sparse-id field.
+#
+# Promoted in Task #29 after evidence-based validation against NHL Legacy
+# `default.db`:
+#
+#   * 5532 populated eGlu rows across 5532 distinct `XSWT` values
+#   * 6087 distinct `ZBac.vfEq` rows
+#   * 5532 / 5532 = 100 % source-subset score (zero orphan XSWT values)
+#   * 0 nonzero source-only values
+#   * 555 ZBac rows are not referenced by any eGlu row — legitimate free
+#     agents / unattached players (ZBac carries 6087 entries vs. eGlu's
+#     5532 active roster slots), so the unreferenced count is expected,
+#     not an integrity break
+#   * Cardinality: one-to-one. Each eGlu row's `XSWT` value is unique
+#     (no repeats on the source side), and each ZBac row has a unique
+#     `vfEq` (no repeats on the target side). Every successful match is
+#     a 1:1 pairing
+#
+# Semantic source: NHLViewNG's `nhlviewng_unpacked.exe` declares a
+# `TNHLElementPlayerIndexEntry` class with an `FPlayerIndex` field
+# (raw id `jZSh`) on its per-roster-player line-assignment class. NHL 14
+# Legacy uses different raw IDs but the same structural pattern: eGlu
+# rows carry the player-index pointer (`XSWT` here), and `ZBac` is the
+# player-index table itself. Captured in Task #28's NHLViewNG
+# line-visibility audit (`docs/nhlviewng-line-visibility-audit.md`,
+# §3 The eGlu → ZBac → ubPc chain).
+#
+# Architectural rule (carried forward from Tasks #21–#28): every binding
+# here is an explicit, audited promotion with named provenance. No
+# wildcard. No silent inference. The full bridge-chain re-validation
+# lives in `tdb_relations::audit_bridge_chain` (Task #29) and writes its
+# evidence to `docs/roster-player-bridge-summary.json`.
+
+name = "roster-player-index"
+kind = "ForeignKey"
+cardinality = "OneToOne"
+confidence = "Confirmed"
+notes = """
+Per-team roster-player rows on eGlu reference their per-player entry on
+the ZBac player-index table via the eGlu.XSWT → ZBac.vfEq one-to-one
+foreign key. Promoted in Task #29 with 100 % source-subset evidence
+against NHL Legacy default.db; see docs/roster-player-bridge.md for the
+two-hop chain audit (eGlu → ZBac → ubPc) and its sample traversals.
+
+This binding is Hop 1 of the roster→player chain. Hop 2 lives in
+defs/relationships/player-index-to-bio.toml (ZBac.ykFq → ubPc.wBIz).
+Together they unblock RosterView and the named-slot LineView.
+"""
+
+[source]
+kind = "operator-research"
+description = "Task #29 roster-player-bridge promotion (NHL Legacy default.db, May 2026) + Task #28 NHLViewNG line-visibility audit + Task #25 NHLViewNG semantic audit"
+
+[[bindings]]
+source_table = "eGlu"
+source_field = "XSWT"
+target_table = "ZBac"
+target_field = "vfEq"
+evidence_notes = "5532 populated eGlu rows; all 5532 XSWT values land in ZBac.vfEq (subset 1.0). 0 nonzero source-only orphans. OneToOne — verified default.db sha256 74f91369ea79033ec752e6cb53cf7ad2ad178b0520fdd12a9dd14887c4ffd43d."

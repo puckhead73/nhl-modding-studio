@@ -1,0 +1,39 @@
+# Confirmed relationship: Goalie attribute rows (mHuy) reference the
+# player bio table (ubPc) by the wBIz Player ID join.
+#
+# Confirmed during Task #21 relationship discovery: mHuy.wBIz → ubPc.wBIz
+# was emitted as a ForeignKey candidate with one-to-one cardinality and
+# 100% of source values landing in the target (566 of 5632 distinct).
+# This matches the operator's Phase 5X writer-time alignment rule
+# documented in memory: "dSvy = skaters, mHuy = goalies; the join is
+# wBIz (Player ID), NOT row index". Promoting the binding to Confirmed
+# here gives downstream callers (canonical read models, GUI) an
+# authoritative anchor without re-running the discovery heuristic.
+#
+# Scope: this file confirms only the mHuy → ubPc edge. The parallel
+# dSvy → ubPc edge by the same wBIz join is intentionally NOT confirmed
+# in this initial registry — it requires an independent value-overlap
+# check against the dSvy.wBIz values (5066 skaters), which the operator
+# has not yet anchored. Future work can add it as a second binding under
+# this same `name` (or a sibling file) once that audit is complete.
+
+name = "player-ratings"
+kind = "ForeignKey"
+cardinality = "OneToOne"
+confidence = "Confirmed"
+notes = """
+Goalie rating rows (mHuy) join to player bio rows (ubPc) by wBIz.
+Confirmed by Task #21 relationship discovery against NHL Legacy
+default.db and cross-checked with Phase 5X writer-time alignment.
+"""
+
+[source]
+kind = "operator-research"
+description = "Task #21 relationship discovery + Phase 5X writer-time alignment rule"
+
+[[bindings]]
+source_table = "mHuy"
+source_field = "wBIz"
+target_table = "ubPc"
+target_field = "wBIz"
+evidence_notes = "100% of mHuy.wBIz values land in ubPc.wBIz; target is primary-id-shaped (1:1)."

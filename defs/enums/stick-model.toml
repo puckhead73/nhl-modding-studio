@@ -1,0 +1,377 @@
+# Confirmed enum: Stick Model (xmja.wXFx on skater equipment rows).
+#
+# Catalog history:
+#   - Task #61 (2026-05-xx): 4 sticks initially anchored via
+#     single-attribute equip.db diff. **Three of those four labels
+#     were superseded on 2026-05-18 when the operator identified each
+#     wXFx ID from its `texlib_N.rpsgl` painted texture** — see
+#     `playerstick/texlib_*.rpsgl` for the source artwork. The label
+#     for ID 112 changed from "Bauer Nexus 1N" (NHLViewNG screenshot
+#     anchor) to "CCM Ribcore 40K" (texture anchor); IDs 94, 97, 111
+#     gained more specific model suffixes.
+#
+#   - 2026-05-18 orphan-stick test (the renderability proof): wrote
+#     55 distinct orphan IDs to USRDIR/db/nhlng.db + zeroed the
+#     cascade (NISO/jmjk/MMuu/FCNk) on each player. Confirmed every
+#     orphan ID renders a distinct stick on-ice.
+#
+#   - 2026-05-18 texture-based catalog (this file's main expansion):
+#     operator opened every `texlib_N.rpsgl` in the Texture Lab,
+#     read the painted brand+model directly off the artwork. 74 IDs
+#     identified; 5 pairs share a name (consecutive-ID paint variants
+#     of the same model, disambiguated below with `(#N)` suffixes).
+#
+# Whitelist origin: `USRDIR/fe/ion/artassets/createplayer/sticks/`
+# contains 106 `stick{N}.big` UI thumbnails (IDs 1-9, 12-13, 15-79,
+# 81-95, 98-112). The texture pool at `USRDIR/rendering/playerstick/
+# texlib_{N}.rpsgl` covers 74 of those — the IDs enumerated below.
+# The other 32 createplayer IDs (1-9, 12-13, 15-17, 19-23, 27-29,
+# 42-44, 57-59, 61-62, 66, 69, 76, 80) have no texlib and fall back
+# to vanilla on-ice even with a cascade-reset assignment.
+#
+# Editing recipe (for assigning a stick to a specific player):
+#   1. Set xmja.wXFx = <new ID>
+#   2. Set NISO = 0, jmjk = 0, MMuu = 0, FCNk = 0 (cascade reset)
+#   3. Write to USRDIR/db/nhlng.db (NOT the repo's default.db — that
+#      file is never loaded by the running game)
+#   4. Cold-restart NHL Legacy.
+#
+# In-game create-player UI is a separate, narrower whitelist (~23
+# entries the operator can pick from the dropdown). Expanding that
+# in-game dropdown is gated by an unidentified filter outside the
+# database — future work.
+
+name = "Stick Model"
+confidence = "Confirmed"
+notes = """
+Skater stick model asset id on xmja.wXFx (7-bit; 128-slot field, but
+only 74 IDs have rendering assets in `rendering/playerstick/texlib_N.rpsgl`).
+
+All 74 IDs render distinctly on-ice when paired with a cascade reset
+(NISO=0, jmjk=0, MMuu=0, FCNk=0) — verified by the 2026-05-18 orphan-stick
+test against USRDIR/db/nhlng.db.
+
+All 74 brand-identified via Texture-Lab inspection of the painted
+artwork on each `texlib_N.rpsgl` (2026-05-18). 5 ID pairs share the
+same brand+model and are disambiguated with `(#N)` suffixes — these
+are paint-variant siblings of the same stick model:
+   64 / 112  → CCM Ribcore 40K
+   70 /  71  → Bauer Vapor APX2 (EA Sports)
+   72 /  73  → CCM RBZ Stage 2 (White)
+   74 /  75  → Easton V9E (Black)
+  100 / 101  → WARRIOR Covert DT3 LT Grip
+
+Three Task #61 anchors were refined or corrected by the texture pass:
+  -  94: "Busch HPC 2.0" (Task #61) → "Busch hpc" (texture spelling)
+  -  97: "STX Surgeon" (Task #61, model unspecified) → "STX Surgeon 500"
+  - 111: "Bauer Supreme 1S" (Task #61) → "Bauer Supreme 1S MPK"
+  - 112: "Bauer Nexus 1N" (Task #61, NHLViewNG anchor) → "CCM Ribcore 40K"
+         (texture anchor — supersedes; Bauer Nexus 1N is actually ID 108)
+"""
+
+[source]
+kind = "operator-research"
+description = "2026-05-18 Texture Lab pass over USRDIR/rendering/playerstick/texlib_*.rpsgl (NHL Legacy on RPCS3)"
+
+[[bindings]]
+field_name = "Stick"
+field_raw_id = "wXFx"
+table_raw_id = "xmja"
+
+# --- Entries (sorted by raw ID) --------------------------------------
+
+[[entries]]
+raw = 18
+label = "Easton Stealth S17"
+
+[[entries]]
+raw = 24
+label = "TPS Response R10"
+
+[[entries]]
+raw = 25
+label = "Reebok 10K"
+
+[[entries]]
+raw = 26
+label = "Reebok 8.0.8 O-Stick"
+
+[[entries]]
+raw = 30
+label = "TPS Response R8"
+
+[[entries]]
+raw = 31
+label = "Sher-wood RM19"
+
+[[entries]]
+raw = 32
+label = "Bauer Vapor X60"
+
+[[entries]]
+raw = 33
+label = "Warrior Dolomite"
+
+[[entries]]
+raw = 34
+label = "Warrior Dolomite Spyne"
+
+[[entries]]
+raw = 35
+label = "Titan TPM2020"
+
+[[entries]]
+raw = 36
+label = "Sher-wood P.M.P. 5030"
+
+[[entries]]
+raw = 37
+label = "Bauer Supreme One95"
+
+[[entries]]
+raw = 39
+label = "Rebellion Black Line"
+
+[[entries]]
+raw = 40
+label = "Sher-wood T90"
+
+[[entries]]
+raw = 41
+label = "Easton Stealth S19"
+
+[[entries]]
+raw = 45
+label = "CCM U+"
+
+[[entries]]
+raw = 46
+label = "Bauer TotalOne"
+
+[[entries]]
+raw = 47
+label = "CCM U+ Crazy Light"
+
+[[entries]]
+raw = 48
+label = "Warrior Dolomite (Green)"
+
+[[entries]]
+raw = 49
+label = "Warrior Dolomite (Orange)"
+
+[[entries]]
+raw = 50
+label = "Reebok 11K"
+
+[[entries]]
+raw = 51
+label = "CCM U+ CL"
+
+[[entries]]
+raw = 52
+label = "Easton EQ50"
+
+[[entries]]
+raw = 53
+label = "Rebellion Attitude"
+
+[[entries]]
+raw = 54
+label = "Warrior Dynasty"
+
+[[entries]]
+raw = 55
+label = "Warrior Widow"
+
+[[entries]]
+raw = 56
+label = "Bauer Vapor APX"
+
+[[entries]]
+raw = 60
+label = "Easton Mako"
+
+[[entries]]
+raw = 63
+label = "Warrior Covert DT1"
+
+[[entries]]
+raw = 64
+label = "CCM Ribcore 40K (#64)"
+
+[[entries]]
+raw = 65
+label = "CCM RBZ"
+
+[[entries]]
+raw = 67
+label = "CCM RBZ Stage 2"
+
+[[entries]]
+raw = 68
+label = "Reebok Ribcore Tri Matrix"
+
+[[entries]]
+raw = 70
+label = "Bauer Vapor APX2 (EA Sports) (#70)"
+
+[[entries]]
+raw = 71
+label = "Bauer Vapor APX2 (EA Sports) (#71)"
+
+[[entries]]
+raw = 72
+label = "CCM RBZ Stage 2 (White) (#72)"
+
+[[entries]]
+raw = 73
+label = "CCM RBZ Stage 2 (White) (#73)"
+
+[[entries]]
+raw = 74
+label = "Easton V9E (Black) (#74)"
+
+[[entries]]
+raw = 75
+label = "Easton V9E (Black) (#75)"
+
+[[entries]]
+raw = 77
+label = "Easton Stealth RS"
+
+[[entries]]
+raw = 78
+label = "Bauer Vapor APX2 (Black)"
+
+[[entries]]
+raw = 79
+label = "Sher-wood True Touch T100"
+
+[[entries]]
+raw = 81
+label = "Easton V9"
+
+[[entries]]
+raw = 82
+label = "Easton V9E (Orange)"
+
+[[entries]]
+raw = 83
+label = "Warrior Dynasty AX1 LT"
+
+[[entries]]
+raw = 84
+label = "Warrior Covert DR1"
+
+[[entries]]
+raw = 85
+label = "Easton Synergy HTX"
+
+[[entries]]
+raw = 86
+label = "CCM RBZ Superfast"
+
+[[entries]]
+raw = 87
+label = "CCM Tacks"
+
+[[entries]]
+raw = 88
+label = "Reebok Ribcore"
+
+[[entries]]
+raw = 89
+label = "Bauer Nexus 8000"
+
+[[entries]]
+raw = 90
+label = "Bauer Supreme MX3"
+
+[[entries]]
+raw = 91
+label = "Sher-wood Rekker EK15"
+
+[[entries]]
+raw = 92
+label = "Winnwell AMP 1100"
+
+[[entries]]
+raw = 93
+label = "Winnwell ProFlex"
+
+[[entries]]
+raw = 94
+label = "Busch hpc"
+
+[[entries]]
+raw = 95
+label = "Sher-wood T120"
+
+[[entries]]
+raw = 96
+label = "STX Stallion"
+
+[[entries]]
+raw = 97
+label = "STX Surgeon 500"
+
+[[entries]]
+raw = 98
+label = "Warrior Dynasty HD1"
+
+[[entries]]
+raw = 99
+label = "CCM UltraTacks"
+
+[[entries]]
+raw = 100
+label = "Warrior Covert DT3 LT Grip (#100)"
+
+[[entries]]
+raw = 101
+label = "Warrior Covert DT3 LT Grip (#101)"
+
+[[entries]]
+raw = 102
+label = "CCM RBZ SpeedBurner"
+
+[[entries]]
+raw = 103
+label = "CCM Ribcore Reckoner"
+
+[[entries]]
+raw = 104
+label = "Easton Stealth CX Hyperlite"
+
+[[entries]]
+raw = 105
+label = "Bauer Vapor 1X"
+
+[[entries]]
+raw = 106
+label = "Graf Revolt G95"
+
+[[entries]]
+raw = 107
+label = "STX Surgeon RX"
+
+[[entries]]
+raw = 108
+label = "Bauer Nexus 1N"
+
+[[entries]]
+raw = 109
+label = "Sher-wood Rekker EK60"
+
+[[entries]]
+raw = 110
+label = "STX Stallion 600"
+
+[[entries]]
+raw = 111
+label = "Bauer Supreme 1S MPK"
+
+[[entries]]
+raw = 112
+label = "CCM Ribcore 40K (#112)"

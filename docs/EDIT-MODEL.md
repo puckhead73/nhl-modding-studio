@@ -96,6 +96,14 @@ Edits operate on typed entities backed by the join model, never on bare rows. Th
 > contiguous-block invariant itself is a prior-app claim **not yet re-verified** against our data —
 > confirm with the record decoder before relying on it.
 
+> **Status (shipped).** `tdb-relations::entity` ships the typed model — `RosterModel::build(db)`
+> assembles `Player` (bio + companion cluster), `RosterSlot`, and `Team`, resolving the roster→player
+> two-hop bridge and the team join by construction. *Verified against the PS3 NHL Legacy anchor:*
+> 252 teams / 5632 players / 5532 slots; the skater↔goalie split (5066 / 566) matches the
+> `dSvy`+`xmja` / `mHuy`+`fMVl` companion populations exactly; **0 companion-invariant violations**;
+> 5531/5531 populated slots resolve to both a player and a team (100%). The `toWX` contiguous-block
+> invariant above is still **not** modelled (slots are keyed, not yet block-validated).
+
 ---
 
 ## Layer 3 — Transactional operations
@@ -136,6 +144,15 @@ Policy, in order:
 This is the decisive difference from the prior studio, which **blocked** where NHLViewNG **repairs**,
 and which read **on-disk** state (missing pending composition).
 
+> **Status (first increment).** `tdb-domain-validation` ships the shared-predicate backbone:
+> `validate_invariants(db, relations, enums)` composes a whole-DB `IntegrityReport` from two
+> predicates — `referential_integrity` (every confirmed FK resolves; dangling values are **warnings**,
+> since the defs carry no machine-readable FK *totality* and real data holds documented partial-subset
+> FKs / null sentinels — flag-don't-refuse) and `enum_vocabulary` (unlabelled-but-reachable codes are
+> `Info`). The remaining predicates (dup-on-team, companion presence, `toWX` coherence, single-captain)
+> and the `with_repairing_transaction` harness land as further increments, each a shared predicate so
+> operation-time and save-time never drift.
+
 ---
 
 ## Validation tiers (how the layers map)
@@ -157,6 +174,10 @@ Three explicit tiers, all sharing predicates with the invariant engine:
 - **Container parity (target).** Read/write across plain TDB, PS3 (de/encrypt), Xbox360, and — beyond
   what the prior studio could do — **v1 (NHL 10/11)** and **PS4**. (PS4 is ROADMAP Phase 9; v1 write
   is Phase 8.) See [05-save-data.md](05-save-data.md).
+  **Shipped:** `tdb-savedata` reads v1/v2/v4 containers (magic + save-type + variant discriminator),
+  extracts the inner TDB (raw, or zlib-inflate for v4), and **repacks v2 (byte-identical) and v4
+  (semantic round-trip + edit), recomputing both verified checksums** and preserving any trailing
+  payload. v1 stays read-only (`tag_1c` un-reversed); PFD/AES and `DATA000N` multi-part are deferred.
 - **External-edit guard.** SHA check before overwrite so a file changed underneath us is not clobbered.
 
 ---
@@ -179,6 +200,9 @@ Three explicit tiers, all sharing predicates with the invariant engine:
   ([audits/roster-relationships.md](audits/roster-relationships.md)). The validation/line-visibility
   staging audits were verified at the schema level; remaining audit docs (`edit-session-architecture`,
   view-models, `db-capacity-limits`) are not in-repo — bring in if/when you choose.
+  **Shipped:** the confirmed FK edges now live as the `tdb-relations` registry (`defs/relationships/`),
+  and the whole roster→player→team bridge chain re-verifies at ≥99.98 % resolution against the
+  committed PS3 NHL Legacy anchor (see `tdb-domain-validation`'s referential-integrity audit).
 - **Record decoder — ✅ SOLVED & verified.** The TDB v6 descriptor layout (`kind_code`, bit-offset,
   id, bit_width) and BE bit-packing are verified ([formats/tdb-v6-format.md](formats/tdb-v6-format.md));
   records decode to sane values. **Write-path CRCs also verified** (inner-DB CRC-32/MPEG-2; container
@@ -187,5 +211,8 @@ Three explicit tiers, all sharing predicates with the invariant engine:
   (decoded from anchors and confirmed). Full mappings (incl. nationality/birth-state/style, and
   `ZBac.RREB` status) are in [formats/tdb-v6-format-spec.md §6](formats/tdb-v6-format-spec.md#6-confirmed-valuelabel-mappings)
   and [audits/roster-relationships.md](audits/roster-relationships.md).
+  **Shipped:** the 19 confirmed vocabularies now live as the `tdb-enums` registry (`defs/enums/`),
+  keyed per studio `(table, field)` so `dSvy.QgFs` (player style) and `mHuy.QgFs` (goalie style) do
+  not collide; the registry validates enum membership at edit entry and renders labels on read.
 - **Per-slot labels** — the 71 one-bit line-assignment flags → hockey-position names not fully mapped.
 - **17–21 metadata** — net-new; not covered by NHLViewNG (ROADMAP Phase 10).

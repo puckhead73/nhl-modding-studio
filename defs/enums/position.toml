@@ -1,0 +1,48 @@
+# Confirmed enum: Position (skater + goalie position code on player bio rows).
+#
+# Operator-confirmed anchor (NHL Legacy default.db, Phase 6B research):
+# the raw codes 0..4 were re-anchored against five named players
+# (Lemieux/Perron/Tarasenko/Pietrangelo/Lundqvist) and locked in to the
+# values below. The same enum applies to any field decoded into the
+# player-position numeric space — primarily ubPc.vjla on the Player Bio
+# table, but the binding is left scope-free for future tables that
+# reuse the same code space.
+
+name = "Position"
+confidence = "Confirmed"
+notes = """
+Five-value position code: Centre / Left Wing / Right Wing / Defenseman / Goalie.
+Anchor mapping confirmed by named-player audit against NHL Legacy default.db
+during the operator's Phase 6B research; identical to the mapping used by
+NHLViewNG. Code values outside 0..4 are not expected and produce no label
+fallback in this enum.
+"""
+
+[source]
+kind = "operator-research"
+description = "Phase 6B named-player audit (NHL Legacy default.db, 2026)"
+
+[[bindings]]
+field_name = "Position"
+field_raw_id = "vjla"
+table_raw_id = "ubPc"
+
+[[entries]]
+raw = 0
+label = "C"
+
+[[entries]]
+raw = 1
+label = "LW"
+
+[[entries]]
+raw = 2
+label = "RW"
+
+[[entries]]
+raw = 3
+label = "D"
+
+[[entries]]
+raw = 4
+label = "G"

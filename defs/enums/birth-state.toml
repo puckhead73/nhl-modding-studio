@@ -1,0 +1,486 @@
+# Confirmed enum: Birth State (player birthplace state/province/country
+# on player bio rows).
+#
+# Operator-confirmed anchors:
+#
+#   - Task #38 (A.J. Gale): `ubPc.QvxI = 2` → "Canada, British Columbia"
+#   - Task #39 (Aaron Palushaj, Livonia): `QvxI = 37` → "USA, Michigan"
+#   - Task #39 (Aaron Ness, Roseau): `QvxI = 38` → "USA, Minnesota"
+#
+# Combined with the Task #35 anchors (Mike Green / Zajac / Letang /
+# Yandle / Thompson / Shannon / Kessel / Stastny etc.), these
+# establish the encoding:
+#
+#   QvxI  1..13 → Canada provinces & territories, **alphabetical**
+#                 (Alberta, BC, Manitoba, NB, NL, NT, NS, NU, ON,
+#                 PEI, QC, SK, YT).
+#   QvxI  15..65 → USA states + DC, **alphabetical** (Alabama through
+#                  Wyoming, with District of Columbia inserted
+#                  between Delaware and Florida).
+#   QvxI 66+    → Non-NA country fallback codes that mirror Lelh
+#                 (e.g. 67 = Finland, 76 = Russia, 82 = Czech,
+#                 74 = Latvia). These are NOT alphabetical; each
+#                 needs its own anchor.
+#
+# The dropdown labels are taken verbatim from the NHLViewNG
+# `nhlviewng_unpacked.exe` UTF-16 string table (extracted via
+# `tmp/extract_strings.py`). The one quirk: the EXE itself
+# misspells Connecticut as "USA, Connectcut" — we ship the correct
+# spelling here because the value `21` is identified by the Shannon
+# anchor and the on-disk EXE typo would be confusing to the user.
+#
+# Population validation across `default.db`'s 5632 populated ubPc
+# rows (skater + goalie pool):
+#
+#   ON 856 · QC 443 · AB 347 · BC 319 · SK 195 · MB 113 · NS 63
+#   NB 30 · NL 22 · PE 18 · NT/NU/YT 0  — matches NHL representation.
+#   MI 109 · MN 106 · NY 71 · MA 58 · IL 48 · CA 40 · PA 34 · WI 27
+#   CT 26 · CO 22 · NJ 21 · AK 16 · MO 15 · OH 15 · FL 13 · TX 13
+#   WA 9 · ND 8 · AZ 7 · IN 7 · ME 6 · NH 4 · NC 4 · VA 4 · etc.
+#
+# Codes with 0 anchor players in this DB (NT/NU/YT, some sparsely
+# populated US states) are still shipped so a future re-rostered DB
+# with those codes resolves cleanly.
+#
+# Bit width on disk: `QvxI` is 7-bit, so reachable codes are 0..127.
+# 2026-05-29: the operator cross-referenced the remaining populated codes
+# against NHLViewNG (enum_audit List B). `QvxI == 0` = "Canada" and
+# `QvxI == 14` = "USA" — the bare country codes for a player with no
+# specific province/state (they sit just outside the alphabetical
+# province/state ranges, not sentinels as previously assumed). The 66+
+# non-NA country fallbacks confirmed to mirror Lelh exactly, plus a few
+# exotic birthplaces (94=Serbia, 101=Brunei, 112=Nigeria, 116=Singapore,
+# 117=South Africa). All promoted below.
+
+name = "Birth State"
+confidence = "Confirmed"
+notes = """
+Player birthplace state/province/country code on the player bio
+table. NHLViewNG XML labels the field "State" but the editor's
+"Personal Data" tab shows it as a combined "Country, State/Province"
+dropdown. The 13 Canada-province + 51 USA-state slots are
+alphabetical (with DC inserted between Delaware and Florida);
+non-NA country codes are non-contiguous and need per-country
+anchors. Labels are sourced verbatim from `nhlviewng_unpacked.exe`'s
+UTF-16 string table (the operator's research corpus), with the EXE's
+"Connectcut" typo corrected here.
+"""
+
+[source]
+kind = "operator-research"
+description = "Task #35/#38/#39 anchor-set audit + nhlviewng_unpacked.exe string table"
+
+[[bindings]]
+field_name = "Birth State"
+field_raw_id = "QvxI"
+table_raw_id = "ubPc"
+
+# ---- Canada (provinces + territories, alphabetical) ----
+[[entries]]
+raw = 1
+label = "Canada, Alberta"
+
+[[entries]]
+raw = 2
+label = "Canada, British Columbia"
+
+[[entries]]
+raw = 3
+label = "Canada, Manitoba"
+
+[[entries]]
+raw = 4
+label = "Canada, New Brunswick"
+
+[[entries]]
+raw = 5
+label = "Canada, Newfoundland and Labrador"
+
+[[entries]]
+raw = 6
+label = "Canada, Northwest Territories"
+
+[[entries]]
+raw = 7
+label = "Canada, Nova Scotia"
+
+[[entries]]
+raw = 8
+label = "Canada, Nunavut"
+
+[[entries]]
+raw = 9
+label = "Canada, Ontario"
+
+[[entries]]
+raw = 10
+label = "Canada, Prince Edward Island"
+
+[[entries]]
+raw = 11
+label = "Canada, Quebec"
+
+[[entries]]
+raw = 12
+label = "Canada, Saskatchewan"
+
+[[entries]]
+raw = 13
+label = "Canada, Yukon"
+
+# ---- USA (states + DC, alphabetical) ----
+[[entries]]
+raw = 15
+label = "USA, Alabama"
+
+[[entries]]
+raw = 16
+label = "USA, Alaska"
+
+[[entries]]
+raw = 17
+label = "USA, Arizona"
+
+[[entries]]
+raw = 18
+label = "USA, Arkansas"
+
+[[entries]]
+raw = 19
+label = "USA, California"
+
+[[entries]]
+raw = 20
+label = "USA, Colorado"
+
+[[entries]]
+raw = 21
+label = "USA, Connecticut"
+
+[[entries]]
+raw = 22
+label = "USA, Delaware"
+
+[[entries]]
+raw = 23
+label = "USA, District of Columbia"
+
+[[entries]]
+raw = 24
+label = "USA, Florida"
+
+[[entries]]
+raw = 25
+label = "USA, Georgia"
+
+[[entries]]
+raw = 26
+label = "USA, Hawaii"
+
+[[entries]]
+raw = 27
+label = "USA, Idaho"
+
+[[entries]]
+raw = 28
+label = "USA, Illinois"
+
+[[entries]]
+raw = 29
+label = "USA, Indiana"
+
+[[entries]]
+raw = 30
+label = "USA, Iowa"
+
+[[entries]]
+raw = 31
+label = "USA, Kansas"
+
+[[entries]]
+raw = 32
+label = "USA, Kentucky"
+
+[[entries]]
+raw = 33
+label = "USA, Louisiana"
+
+[[entries]]
+raw = 34
+label = "USA, Maine"
+
+[[entries]]
+raw = 35
+label = "USA, Maryland"
+
+[[entries]]
+raw = 36
+label = "USA, Massachusetts"
+
+[[entries]]
+raw = 37
+label = "USA, Michigan"
+
+[[entries]]
+raw = 38
+label = "USA, Minnesota"
+
+[[entries]]
+raw = 39
+label = "USA, Mississippi"
+
+[[entries]]
+raw = 40
+label = "USA, Missouri"
+
+[[entries]]
+raw = 41
+label = "USA, Montana"
+
+[[entries]]
+raw = 42
+label = "USA, Nebraska"
+
+[[entries]]
+raw = 43
+label = "USA, Nevada"
+
+[[entries]]
+raw = 44
+label = "USA, New Hampshire"
+
+[[entries]]
+raw = 45
+label = "USA, New Jersey"
+
+[[entries]]
+raw = 46
+label = "USA, New Mexico"
+
+[[entries]]
+raw = 47
+label = "USA, New York"
+
+[[entries]]
+raw = 48
+label = "USA, North Carolina"
+
+[[entries]]
+raw = 49
+label = "USA, North Dakota"
+
+[[entries]]
+raw = 50
+label = "USA, Ohio"
+
+[[entries]]
+raw = 51
+label = "USA, Oklahoma"
+
+[[entries]]
+raw = 52
+label = "USA, Oregon"
+
+[[entries]]
+raw = 53
+label = "USA, Pennsylvania"
+
+[[entries]]
+raw = 54
+label = "USA, Rhode Island"
+
+[[entries]]
+raw = 55
+label = "USA, South Carolina"
+
+[[entries]]
+raw = 56
+label = "USA, South Dakota"
+
+[[entries]]
+raw = 57
+label = "USA, Tennessee"
+
+[[entries]]
+raw = 58
+label = "USA, Texas"
+
+[[entries]]
+raw = 59
+label = "USA, Utah"
+
+[[entries]]
+raw = 60
+label = "USA, Vermont"
+
+[[entries]]
+raw = 61
+label = "USA, Virginia"
+
+[[entries]]
+raw = 62
+label = "USA, Washington"
+
+[[entries]]
+raw = 63
+label = "USA, West Virginia"
+
+[[entries]]
+raw = 64
+label = "USA, Wisconsin"
+
+[[entries]]
+raw = 65
+label = "USA, Wyoming"
+
+# ---- Non-NA: country fallback (mirrors Lelh — Task #35) ----
+# Each non-NA entry needs its own player anchor; only the four below
+# are confirmed. Other codes in the 66+ range (Sweden, Slovakia,
+# Germany / Switzerland, etc.) are not promoted here.
+
+[[entries]]
+raw = 67
+label = "Finland"
+
+[[entries]]
+raw = 74
+label = "Latvia"
+
+[[entries]]
+raw = 76
+label = "Russia"
+
+[[entries]]
+raw = 82
+label = "Czech Republic"
+
+# ---- Confirmed 2026-05-29 (operator NHLViewNG cross-reference) ----
+# Bare country codes (no province/state) + non-NA fallbacks that mirror
+# Lelh + exotic birthplaces.
+[[entries]]
+raw = 0
+label = "Canada"
+
+[[entries]]
+raw = 14
+label = "USA"
+
+[[entries]]
+raw = 66
+label = "Denmark"
+
+[[entries]]
+raw = 68
+label = "Norway"
+
+[[entries]]
+raw = 69
+label = "Sweden"
+
+[[entries]]
+raw = 70
+label = "Belarus"
+
+[[entries]]
+raw = 71
+label = "Estonia"
+
+[[entries]]
+raw = 72
+label = "Kazakhstan"
+
+[[entries]]
+raw = 75
+label = "Lithuania"
+
+[[entries]]
+raw = 77
+label = "Ukraine"
+
+[[entries]]
+raw = 78
+label = "Austria"
+
+[[entries]]
+raw = 81
+label = "Croatia"
+
+[[entries]]
+raw = 83
+label = "England"
+
+[[entries]]
+raw = 84
+label = "France"
+
+[[entries]]
+raw = 85
+label = "Germany"
+
+[[entries]]
+raw = 86
+label = "Hungary"
+
+[[entries]]
+raw = 87
+label = "Italy"
+
+[[entries]]
+raw = 89
+label = "Netherlands"
+
+[[entries]]
+raw = 91
+label = "Poland"
+
+[[entries]]
+raw = 92
+label = "Romania"
+
+[[entries]]
+raw = 94
+label = "Serbia"
+
+[[entries]]
+raw = 95
+label = "Slovakia"
+
+[[entries]]
+raw = 96
+label = "Slovenia"
+
+[[entries]]
+raw = 97
+label = "Switzerland"
+
+[[entries]]
+raw = 98
+label = "Australia"
+
+[[entries]]
+raw = 101
+label = "Brunei"
+
+[[entries]]
+raw = 109
+label = "Japan"
+
+[[entries]]
+raw = 110
+label = "Liberia"
+
+[[entries]]
+raw = 112
+label = "Nigeria"
+
+[[entries]]
+raw = 116
+label = "Singapore"
+
+[[entries]]
+raw = 117
+label = "South Africa"
+
+[[entries]]
+raw = 127
+label = "-- N/A --"

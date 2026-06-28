@@ -1,0 +1,63 @@
+# Confirmed team-link relationships — every binding here is an
+# explicit, audited promotion of a single (source_table, vfEq)
+# → Teix.vfEq foreign key.
+#
+# Background (Task #21 + #23):
+#
+# Initial confirmation used a wildcard binding `*.vfEq → Teix.vfEq`
+# under the assumption that any table carrying the `vfEq` field
+# referenced the 30-row team table. The TeamView build (Task #23) and
+# the relationship-candidates audit then revealed that `vfEq` is
+# heavily overloaded — most other tables use it as their own primary
+# row id, and the "subset overlap" with Teix is a coincidence of
+# small integer ranges sharing the same number line. Only two tables
+# survived the operator's audit with structural evidence beyond
+# numeric coincidence:
+#
+#   - PuTc.vfEq → Teix.vfEq   (60 rows = 30 teams × 2 entries each;
+#                              50% subset; ManyToOne)
+#   - puoR.vfEq → Teix.vfEq   (20 rows, 100% subset; ManyToMany or
+#                              ManyToOne)
+#
+# Task #23b (this file's current shape) replaced the wildcard with
+# these two explicit bindings. Every other `*.vfEq` candidate is
+# documented in `docs/team-relationship-review.md` as
+# `NotTeamOwned` or `CandidateTeamOwned` and is intentionally
+# *not* a confirmed relationship.
+#
+# Architectural rule (carried forward from Task #23):
+# rejected candidates must never be silently promoted. Any future
+# confirmation requires an explicit binding here, not a wildcard
+# catch-all.
+
+name = "team-links"
+kind = "ForeignKey"
+cardinality = "ManyToOne"
+confidence = "Confirmed"
+notes = """
+Explicit confirmed bindings only. Task #23b retired the wildcard
+`*.vfEq → Teix.vfEq` after the value-overlap audit revealed it
+was attaching numerically-coincident tables (vfEq is overloaded as
+an own-row-id across most tables). PuTc and puoR remain confirmed
+on the operator's prior audit (Task #21 + #23). Other `*.vfEq`
+candidates stay in the `NotTeamOwned` / `CandidateTeamOwned` bands
+documented in `docs/team-relationship-review.md`.
+"""
+
+[source]
+kind = "operator-research"
+description = "Task #21 discovery + Task #23b explicit-binding audit (NHL Legacy default.db, 2026)"
+
+[[bindings]]
+source_table = "PuTc"
+source_field = "vfEq"
+target_table = "Teix"
+target_field = "vfEq"
+evidence_notes = "60 rows = 30 teams × 2 entries each (paired by mCXg). 30 of 60 source vfEq values land in Teix's 30-team set; the other 30 stay as orphan synthetic TeamViews. Operator-confirmed Task #21."
+
+[[bindings]]
+source_table = "puoR"
+source_field = "vfEq"
+target_table = "Teix"
+target_field = "vfEq"
+evidence_notes = "20 rows, 100% source-subset into the 30-team Teix set. ManyToOne. Operator-confirmed Task #21."

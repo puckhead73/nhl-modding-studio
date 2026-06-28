@@ -1,0 +1,15 @@
+[package]
+name = "tdb-enums"
+description = "Confirmed value↔label enum registry (EDIT-MODEL Layer 1 enum validation)."
+version = "0.0.0"
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+toml = "0.8"
+
+[dev-dependencies]
+tdb-core = { path = "../tdb-core" }
+tdb-defs = { path = "../tdb-defs" }

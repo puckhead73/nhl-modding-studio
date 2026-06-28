@@ -1,0 +1,112 @@
+# Confirmed enum: Helmet Model (xmja.YUZp on skater equipment rows).
+#
+# Sourced from the operator's equipment-ID catalog CSV
+# (Data/Equipment/helmet.csv). NHLViewNG's field registry labels
+# xmja.YUZp as "Helmet". Crosby anchor: YUZp=23 → "CCM Fitlite".
+#
+# The "(Visor Rendering Broken)" suffixes are the operator's note that
+# those helmet IDs render the visor incorrectly in-game — kept verbatim
+# from the catalog. Duplicate-label groups carry a `(#<id>)`
+# disambiguator (loader rejects duplicate labels):
+#   Bauer ? (Visor Rendering Broken) → 11 / 14 / 17
+#   Bauer 5100                       → 15 / 19
+
+name = "Helmet Model"
+confidence = "Confirmed"
+notes = """
+Skater helmet model asset id on xmja.YUZp (8-bit; 256-slot field). 20
+IDs catalogued below; ID 0 is "No Helmet" and ID 110 is the cage
+helmet. Raws not listed surface as `raw N / uncatalogued` in the
+editor.
+"""
+
+[source]
+kind = "operator-research"
+description = "Equipment ID catalog CSV (NHL Legacy Edition Modding Tools, Data/Equipment/helmet.csv, 2026)"
+
+[[bindings]]
+field_name = "Helmet"
+field_raw_id = "YUZp"
+table_raw_id = "xmja"
+
+# --- Entries (sorted by raw ID) --------------------------------------
+
+[[entries]]
+raw = 0
+label = "No Helmet"
+
+[[entries]]
+raw = 1
+label = "Bauer 4500"
+
+[[entries]]
+raw = 6
+label = "CCM V10"
+
+[[entries]]
+raw = 7
+label = "JOFA"
+
+[[entries]]
+raw = 8
+label = "Retro Round Helmet (No Brand)"
+
+[[entries]]
+raw = 11
+label = "Bauer ? (Visor Rendering Broken) (#11)"
+
+[[entries]]
+raw = 12
+label = "Easton Synergy (Visor Rendering Broken)"
+
+[[entries]]
+raw = 13
+label = "Reebok Fitlite (Visor Rendering Broken)"
+
+[[entries]]
+raw = 14
+label = "Bauer ? (Visor Rendering Broken) (#14)"
+
+[[entries]]
+raw = 15
+label = "Bauer 5100 (#15)"
+
+[[entries]]
+raw = 16
+label = "Warrior ?"
+
+[[entries]]
+raw = 17
+label = "Bauer ? (Visor Rendering Broken) (#17)"
+
+[[entries]]
+raw = 18
+label = "Bauer IMS"
+
+[[entries]]
+raw = 19
+label = "Bauer 5100 (#19)"
+
+[[entries]]
+raw = 20
+label = "CCM Resistance"
+
+[[entries]]
+raw = 21
+label = "Bauer Re-Akt"
+
+[[entries]]
+raw = 23
+label = "CCM Fitlite"
+
+[[entries]]
+raw = 24
+label = "Easton Synergy"
+
+[[entries]]
+raw = 25
+label = "Warrior Krown PX3"
+
+[[entries]]
+raw = 110
+label = "Cage Helmet"

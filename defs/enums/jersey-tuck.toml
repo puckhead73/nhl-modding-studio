@@ -1,0 +1,41 @@
+# Confirmed enum: Jersey Tuck (xmja.Ypqj on skater equipment rows).
+#
+# Task #61 — single-attribute equip.db diff anchors:
+#   - David Backes  default no tuck              → Ypqj=0
+#   - Andre Benoit  changed Left tuck            → Ypqj=1
+#   - Patrik Berglund changed Right tuck         → Ypqj=2
+#   - Robert Bortuzzo changed Full tuck          → Ypqj=3
+#
+# NHLViewNG field registry labels xmja.Ypqj as "Jersey Tuck".
+
+name = "Jersey Tuck"
+confidence = "Confirmed"
+notes = """
+Four-value jersey tuck side on the skater equipment table. Ypqj is a
+2-bit field; the four values above fully fill the field.
+"""
+
+[source]
+kind = "operator-research"
+description = "Task #61 single-attribute equip.db diff (NHL Legacy default.db, 2026)"
+
+[[bindings]]
+field_name = "Jersey Tuck"
+field_raw_id = "Ypqj"
+table_raw_id = "xmja"
+
+[[entries]]
+raw = 0
+label = "None"
+
+[[entries]]
+raw = 1
+label = "Left"
+
+[[entries]]
+raw = 2
+label = "Right"
+
+[[entries]]
+raw = 3
+label = "Full"
