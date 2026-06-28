@@ -23,7 +23,6 @@ type GameDef = {
   label: string;
   file: string;
   platforms: Platform[];
-  recommended?: boolean;
 };
 
 const PS3_XBOX: Platform[] = ["ps3", "xbox"];
@@ -38,13 +37,7 @@ const GAMES: GameDef[] = [
   { id: "nhl14", label: "NHL 14", file: "nhl14.png", platforms: PS3_XBOX },
   { id: "nhl15", label: "NHL 15", file: "nhl15.png", platforms: PS3_XBOX },
   { id: "nhllegacy", label: "NHL Legacy", file: "nhllegacy.png", platforms: PS3_XBOX },
-  {
-    id: "legacyrecomp",
-    label: "NHL Legacy Recompiled",
-    file: "legacyrecomp.png",
-    platforms: ["recomp"],
-    recommended: true,
-  },
+  { id: "legacyrecomp", label: "NHL Legacy Recompiled", file: "legacyrecomp.png", platforms: ["recomp"] },
   { id: "nhl17", label: "NHL 17", file: "nhl17.png", platforms: ["ps4"] },
   { id: "nhl18", label: "NHL 18", file: "nhl18.png", platforms: ["ps4"] },
   { id: "nhl19", label: "NHL 19", file: "nhl19.png", platforms: ["ps4"] },
@@ -131,14 +124,9 @@ export function OpenProject() {
                     src={img(g.file)}
                     alt={g.label}
                     draggable={false}
-                    className="h-24 w-auto max-w-full select-none object-contain transition-transform duration-200 ease-out group-hover:scale-105"
+                    className="h-24 w-auto max-w-full select-none rounded-xl object-contain transition-transform duration-200 ease-out group-hover:scale-105"
                   />
                   <span className="text-center text-xs font-semibold text-slate-100">{g.label}</span>
-                  {g.recommended && (
-                    <span className="rounded-full border border-emerald-600/70 bg-emerald-950/50 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-emerald-300">
-                      Recommended
-                    </span>
-                  )}
                 </button>
               ))}
             </div>
