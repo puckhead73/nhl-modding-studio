@@ -1,0 +1,15 @@
+[package]
+name = "studio-domain"
+description = "NHL Modding Studio — GUI-agnostic edit/session orchestration over the TDB engine."
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+tdb-core = { path = "../tdb-core" }
+tdb-defs = { path = "../tdb-defs" }
+tdb-enums = { path = "../tdb-enums" }
+tdb-relations = { path = "../tdb-relations" }
+tdb-domain-validation = { path = "../tdb-domain-validation" }
+tdb-edit = { path = "../tdb-edit" }
+tdb-savedata = { path = "../tdb-savedata" }

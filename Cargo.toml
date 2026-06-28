@@ -11,6 +11,8 @@ members = [
     "crates/tdb-domain-validation",
     "crates/tdb-savedata",
     "crates/tdb-edit",
+    "crates/studio-domain",
+    "crates/studio-api",
     "src-tauri",
 ]
 

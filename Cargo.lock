@@ -1782,12 +1782,9 @@ checksum = "650eef8c711430f1a879fdd01d4745a7deea475becfb90269c06775983bbf086"
 name = "nhl-studio"
 version = "0.0.0"
 dependencies = [
- "serde",
- "serde_json",
+ "studio-api",
  "tauri",
  "tauri-build",
- "tdb-core",
- "ts-rs",
 ]
 
 [[package]]
@@ -2830,6 +2827,29 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7da8b5736845d9f2fcb837ea5d9e2628564b3b043a70948a3f0b778838c5fb4f"
 
 [[package]]
+name = "studio-api"
+version = "0.0.0"
+dependencies = [
+ "serde",
+ "studio-domain",
+ "tauri",
+ "ts-rs",
+]
+
+[[package]]
+name = "studio-domain"
+version = "0.0.0"
+dependencies = [
+ "tdb-core",
+ "tdb-defs",
+ "tdb-domain-validation",
+ "tdb-edit",
+ "tdb-enums",
+ "tdb-relations",
+ "tdb-savedata",
+]
+
+[[package]]
 name = "swift-rs"
 version = "1.0.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3193,6 +3213,7 @@ dependencies = [
  "tdb-core",
  "tdb-defs",
  "tdb-domain-validation",
+ "tdb-enums",
  "tdb-relations",
 ]
 

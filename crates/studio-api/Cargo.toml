@@ -1,0 +1,12 @@
+[package]
+name = "studio-api"
+description = "NHL Modding Studio — Tauri command surface, session registry, and generated DTOs."
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+tauri = { version = "2", features = [] }
+serde = { version = "1", features = ["derive"] }
+ts-rs = "10"
+studio-domain = { path = "../studio-domain" }
