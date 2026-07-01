@@ -182,6 +182,82 @@ fn generic_field_edit_validates_and_round_trips() {
     assert!(session.undo());
 }
 
+/// PS4 wiring: `nhl_game.db` is the PS4 analogue of `nhlng.db` — a little-endian TDB the existing
+/// engine opens, builds the entity model over, and round-trips byte-identically with no edit.
+#[test]
+fn ps4_nhl_game_db_is_the_nhlng_equivalent() {
+    const PS4_DB: &str = "anchors/ps4/nhl17/databases/nhl_game.db";
+    const PS4_META: &str = "anchors/ps4/nhl17/databases/nhl_game-meta.xml";
+
+    let original = std::fs::read(repo(PS4_DB)).unwrap();
+    let project = Project::load(
+        repo(PS4_DB),
+        Platform::Ps4,
+        ProjectRole::Nhlng,
+        repo(PS4_META),
+        repo(DEFS),
+    )
+    .unwrap();
+    assert!(matches!(project.source(), Source::RawDb));
+
+    let session = EditSession::begin(project);
+    // The little-endian entity model + view layer resolve.
+    let players = session.player_summaries().unwrap();
+    assert!(!players.is_empty(), "PS4 nhl_game.db yields players");
+    let teams = session.team_summaries().unwrap();
+    assert!(!teams.is_empty(), "PS4 nhl_game.db yields teams");
+    assert!(session.player_view(players[0].player_id).unwrap().is_some());
+
+    // Load → save with no edit reproduces the file byte-for-byte (LE codec + CRC round-trip).
+    assert_eq!(session.save().unwrap(), original);
+}
+
+/// PS4 topology: the live roster lives inside the save's `DATA` stream (LZ4 record → little-endian
+/// TDB). The domain opens it as a `Ps4Save` source, the views resolve, and save repacks the roster
+/// back into the stream (round-tripping the inner db). Meta is the title's `nhl_game-meta.xml`.
+#[test]
+fn ps4_save_roster_opens_and_repacks() {
+    const PS4_DATA: &str = "anchors/ps4/nhl19/savefiles/RosterCustom0/DATA";
+    const PS4_META: &str = "anchors/ps4/nhl19/databases/nhl_game-meta.xml";
+
+    let project = Project::load(
+        repo(PS4_DATA),
+        Platform::Ps4,
+        ProjectRole::Roster,
+        repo(PS4_META),
+        repo(DEFS),
+    )
+    .unwrap();
+    assert!(matches!(project.source(), Source::Ps4Save { .. }));
+    let inner = project.db_bytes().to_vec();
+
+    let session = EditSession::begin(project);
+    assert!(!session.is_dirty());
+    // The doc-verified arenas (StEO → NHL cities) resolve through the LE read path.
+    assert!(!session.arena_summaries().unwrap().is_empty());
+
+    // Save repacks the DATA stream; the inner roster survives the LZ4 round-trip.
+    let saved = session.save().unwrap();
+    assert_eq!(tdb_savedata::ps4_extract_roster(&saved).unwrap(), inner);
+}
+
+/// NHL16 is the bridge PS4 title: its save uses the **bare-frame** variant (no `01` codec byte) and a
+/// smaller roster subset. It opens as a `Ps4Save` source through the same path and repacks round-trip.
+#[test]
+fn ps4_nhl16_bare_frame_save_opens_and_repacks() {
+    const DATA: &str = "anchors/ps4/nhl16/savefiles/84f8102f - ROSTER/DATA";
+    const META: &str = "anchors/ps4/nhl16/databases/nhl_game-meta.xml";
+
+    let project = Project::load(repo(DATA), Platform::Ps4, ProjectRole::Roster, repo(META), repo(DEFS)).unwrap();
+    assert!(matches!(project.source(), Source::Ps4Save { .. }));
+    let inner = project.db_bytes().to_vec();
+    assert!(project.db_bytes().len() > 1_000_000, "a substantial inner roster");
+
+    let session = EditSession::begin(project);
+    let saved = session.save().unwrap();
+    assert_eq!(tdb_savedata::ps4_extract_roster(&saved).unwrap(), inner);
+}
+
 /// Loading a big-endian db while declaring a little-endian platform is refused.
 #[test]
 fn platform_endian_mismatch_is_rejected() {

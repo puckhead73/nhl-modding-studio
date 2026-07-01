@@ -30,6 +30,9 @@ macro_rules! command_handler {
         ::tauri::generate_handler![
             $crate::commands::load_project,
             $crate::commands::open_project,
+            $crate::commands::detect_install,
+            $crate::commands::open_workspace,
+            $crate::commands::extract_big_files,
             $crate::commands::close_project,
             $crate::commands::project_summary,
             $crate::commands::validate_project,
@@ -51,6 +54,7 @@ macro_rules! command_handler {
             $crate::commands::undo,
             $crate::commands::redo,
             $crate::commands::save_project,
+            $crate::commands::save_workspace,
         ]
     };
 }
@@ -68,6 +72,7 @@ mod bindings {
             concat!(env!("CARGO_MANIFEST_DIR"), "/../../app/src/bindings"),
         );
         ProjectSummaryDto::export_all().expect("export ProjectSummaryDto + deps");
+        InstallReportDto::export_all().expect("export InstallReportDto + deps");
         IntegrityReportDto::export_all().expect("export IntegrityReportDto + deps");
         CreatePlayerDto::export_all().expect("export CreatePlayerDto + deps");
         OpOutcomeDto::export_all().expect("export OpOutcomeDto");

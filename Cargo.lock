@@ -1675,6 +1675,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0ceec5bc11778974d1bcb055b18002eba7f4b3518b6a0081b3af5f21666da9ad"
 
 [[package]]
+name = "lz4_flex"
+version = "0.11.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "373f5eceeeab7925e0c1098212f2fbc4d416adec9d35051a6ab251e824c1854a"
+dependencies = [
+ "twox-hash",
+]
+
+[[package]]
 name = "markup5ever"
 version = "0.38.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2866,6 +2875,8 @@ dependencies = [
 name = "studio-domain"
 version = "0.0.0"
 dependencies = [
+ "serde",
+ "serde_json",
  "tdb-core",
  "tdb-defs",
  "tdb-domain-validation",
@@ -3326,6 +3337,7 @@ name = "tdb-savedata"
 version = "0.0.0"
 dependencies = [
  "flate2",
+ "lz4_flex",
  "tdb-core",
 ]
 
@@ -3704,6 +3716,12 @@ dependencies = [
  "syn 2.0.118",
  "termcolor",
 ]
+
+[[package]]
+name = "twox-hash"
+version = "2.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9ea3136b675547379c4bd395ca6b938e5ad3c3d20fad76e7fe85f9e0d011419c"
 
 [[package]]
 name = "typeid"

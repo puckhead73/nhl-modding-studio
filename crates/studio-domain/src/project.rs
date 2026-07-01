@@ -71,6 +71,9 @@ pub enum Source {
     /// A save container (PS3/Xbox `SYS-DATA`): the original container bytes are kept so an edited
     /// inner db can be repacked back into the same shape.
     Container { original: Vec<u8> },
+    /// A PS4 save `DATA` stream: the live roster is an LZ4-compressed little-endian TDB inside one
+    /// record. The original stream is kept so the edited roster can be repacked in place.
+    Ps4Save { original: Vec<u8> },
 }
 
 /// A loaded project: the inner TDB bytes plus the metadata / enum / relationship registries, tagged
@@ -169,6 +172,7 @@ impl Project {
                 let container = SaveContainer::parse(original)?;
                 Ok(container.repack(inner_db)?)
             }
+            Source::Ps4Save { original } => Ok(tdb_savedata::ps4_repack_roster(original, inner_db)?),
         }
     }
 }
@@ -182,6 +186,11 @@ fn detect_source(file_bytes: Vec<u8>) -> Result<(Source, Vec<u8>)> {
     if let Ok(container) = SaveContainer::parse(&file_bytes) {
         let inner = container.extract_db()?;
         return Ok((Source::Container { original: file_bytes }, inner));
+    }
+    // A PS4 save `DATA` stream: the live roster is an LZ4 record inside it.
+    if tdb_savedata::is_ps4_save(&file_bytes) {
+        let inner = tdb_savedata::ps4_extract_roster(&file_bytes)?;
+        return Ok((Source::Ps4Save { original: file_bytes }, inner));
     }
     Err(DomainError::NotADatabase)
 }

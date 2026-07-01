@@ -23,10 +23,12 @@ pub mod checksum;
 pub mod extract;
 pub mod header;
 pub mod pack;
+pub mod ps4;
 
 pub use extract::extract_db;
 pub use header::{ContainerVersion, SaveHeader, SaveType};
 pub use pack::repack_db;
+pub use ps4::{extract_roster as ps4_extract_roster, is_ps4_save, repack_roster as ps4_repack_roster};
 
 /// Errors from the save-container codec.
 #[derive(Debug)]
@@ -45,6 +47,10 @@ pub enum SaveError {
     Deflate(String),
     /// The recompressed body no longer fits the original file allocation.
     DeflatedTooLarge { needed: usize, allocated: usize },
+    /// A PS4 `DATA` save stream was malformed (framing / no roster record).
+    Ps4(String),
+    /// LZ4 frame decode/encode failed (PS4 roster payload).
+    Lz4(String),
 }
 
 impl std::fmt::Display for SaveError {
@@ -62,6 +68,8 @@ impl std::fmt::Display for SaveError {
                 f,
                 "recompressed body needs {needed} bytes but only {allocated} are allocated"
             ),
+            SaveError::Ps4(msg) => write!(f, "PS4 save: {msg}"),
+            SaveError::Lz4(msg) => write!(f, "PS4 LZ4 codec: {msg}"),
         }
     }
 }

@@ -2,23 +2,71 @@
 //! `raw_id` string helpers carried over from the prior app.
 
 use studio_domain::{
-    ArenaRef, ArenaSummary, ArenaView, CareerStats, DbOverview, EditSession, FieldRaw, FieldView,
-    Finding, IntegrityReport, LineEntry, LinesView, OpOutcome, PlayerSummary, PlayerView,
-    RosterMembership, Severity, Source, TeamSummary, TeamView,
+    ArenaRef, ArenaSummary, ArenaView, CareerStats, DbOverview, FieldRaw, FieldView, Finding,
+    InstallReport, IntegrityReport, LineEntry, LinesView, OpOutcome, PlayerSummary, PlayerView,
+    RosterMembership, SaveSlot, Severity, Source, TeamSummary, TeamView, Workspace,
 };
 
 use crate::dto::{
     ArenaRefDto, ArenaSummaryDto, ArenaViewDto, CareerStatsDto, CreatePlayerDto, FieldViewDto,
-    FindingDto, IntegrityReportDto, LineEntryDto, LinesViewDto, OpOutcomeDto, PlayerSummaryDto,
-    PlayerViewDto, ProjectSummaryDto, RosterMembershipDto, TableSummaryDto, TeamSummaryDto,
-    TeamViewDto,
+    FindingDto, InstallReportDto, IntegrityReportDto, LineEntryDto, LinesViewDto, OpOutcomeDto,
+    PlayerSummaryDto, PlayerViewDto, ProjectSummaryDto, RosterMembershipDto, SaveSlotDto,
+    TableSummaryDto, TeamSummaryDto, TeamViewDto,
 };
 
-/// Build the project summary DTO for a session (reflects the current working db, incl. any growth).
+/// Map an install report to its DTO, attaching platform-aware display labels to each save slot and
+/// flagging whether a sidecar profile already exists in the install dir.
+pub fn install_report_dto(report: &InstallReport, has_existing_profile: bool) -> InstallReportDto {
+    InstallReportDto {
+        game_id: report.game_id.clone(),
+        platform: report.platform.clone(),
+        picked_root: report.picked_root.clone(),
+        install_dir: report.install_dir.clone(),
+        nhlng_path: report.db_paths.nhlng.clone(),
+        localization_path: report.db_paths.localization.clone(),
+        meta_xml_path: report.db_paths.meta_xml.clone(),
+        saves: report
+            .saves
+            .iter()
+            .map(|s| save_slot_dto(s, &report.platform))
+            .collect(),
+        minimum_met: report.minimum_met,
+        has_existing_profile,
+    }
+}
+
+fn save_slot_dto(slot: &SaveSlot, platform: &str) -> SaveSlotDto {
+    SaveSlotDto {
+        kind: slot.kind.clone(),
+        label: save_label(&slot.kind, platform).to_string(),
+        path: slot.path.clone(),
+        container_version: slot.container_version.clone(),
+        writable: slot.writable,
+    }
+}
+
+/// Display label for a save kind. On Xbox the settings live inside the Profile save (no separate
+/// settings save), so that slot is labelled accordingly.
+fn save_label(kind: &str, platform: &str) -> &'static str {
+    match kind {
+        "settings" if platform == "xbox" => "Profile (incl. settings)",
+        "settings" => "Settings",
+        "roster" => "Roster",
+        "beagm" => "Be A GM",
+        "beapro" => "Be A Pro",
+        "hockeycard" => "Hockey Card",
+        "season" => "Season",
+        _ => "Unknown",
+    }
+}
+
+/// Build the project summary DTO for a workspace (reflects the canonical working db, incl. any
+/// growth, plus the roster-mirror status). `dirty`/`undo_depth`/`redo_depth` are workspace-level.
 pub fn project_summary_dto(
     project_id: u32,
-    session: &EditSession,
+    ws: &Workspace,
 ) -> Result<ProjectSummaryDto, studio_domain::DomainError> {
+    let session = ws.primary();
     let overview = session.overview()?;
     let project = session.project();
     Ok(ProjectSummaryDto {
@@ -31,10 +79,12 @@ pub fn project_summary_dto(
         db_size: overview.db_size,
         header_crc_ok: overview.header_crc_ok,
         size_ok: overview.size_ok,
-        dirty: session.is_dirty(),
-        undo_depth: session.undo_depth(),
-        redo_depth: session.redo_depth(),
+        dirty: ws.is_dirty(),
+        undo_depth: ws.undo_depth(),
+        redo_depth: ws.redo_depth(),
         tables: table_dtos(&overview),
+        roster_attached: ws.roster_attached(),
+        roster_aligned: ws.roster_aligned(),
     })
 }
 
@@ -227,6 +277,7 @@ fn source_str(source: &Source) -> &'static str {
     match source {
         Source::RawDb => "raw_db",
         Source::Container { .. } => "container",
+        Source::Ps4Save { .. } => "ps4_save",
     }
 }
 

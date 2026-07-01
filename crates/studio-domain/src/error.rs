@@ -23,6 +23,9 @@ pub enum DomainError {
     Save(tdb_savedata::SaveError),
     /// An edit operation failed (validation, audit rollback, allocation, …).
     Edit(tdb_edit::EditError),
+    /// A multi-file (roster ↔ nhlng) operation could not keep the two files in sync; both have been
+    /// rolled back to their pre-op state.
+    Sync(String),
 }
 
 impl fmt::Display for DomainError {
@@ -42,6 +45,7 @@ impl fmt::Display for DomainError {
             DomainError::Relations(e) => write!(f, "{e}"),
             DomainError::Save(e) => write!(f, "{e}"),
             DomainError::Edit(e) => write!(f, "{e}"),
+            DomainError::Sync(msg) => write!(f, "{msg}"),
         }
     }
 }

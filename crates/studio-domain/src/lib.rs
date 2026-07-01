@@ -15,16 +15,24 @@
 //! rather than the full command surface — the seams (registry of ops, source-aware save, DTO bridge
 //! in `studio-api`) are what later phases extend.
 
+pub mod discovery;
 mod error;
 mod overview;
+mod profile;
 mod project;
 mod session;
 mod view;
+mod workspace;
 
+pub use discovery::{
+    detect_install, ps4_title_ids, title_ids, DbPaths, InstallReport, SaveSlot, TitleIds,
+};
 pub use error::DomainError;
 pub use overview::{DbOverview, TableOverview};
+pub use profile::ProjectProfile;
 pub use project::{Platform, Project, ProjectRole, Source};
 pub use session::{EditSession, FieldValue};
+pub use workspace::Workspace;
 pub use view::{
     arena_summaries, arena_view, career_stats, entity_fields, lines_view, player_summaries,
     player_view, read_field, team_summaries, team_view, ArenaRef, ArenaSummary, ArenaView,

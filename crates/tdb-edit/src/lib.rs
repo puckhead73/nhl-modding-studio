@@ -51,6 +51,9 @@ pub enum EditError {
     Alloc(String),
     /// A jersey number is already worn by another player on the team (unique-where-required).
     JerseyTaken { team: u64, number: u64 },
+    /// The destination team's roster block has no free slot — relocating into it would need block
+    /// growth (capacity normalization), which is not available yet.
+    TeamRosterFull { team: u64 },
     /// A repairing transaction's post-condition audit failed; the operation was rolled back.
     AuditFailed {
         predicate: &'static str,
@@ -84,6 +87,9 @@ impl fmt::Display for EditError {
             EditError::Alloc(e) => write!(f, "record allocation failed: {e}"),
             EditError::JerseyTaken { team, number } => {
                 write!(f, "jersey {number} already worn on team {team}")
+            }
+            EditError::TeamRosterFull { team } => {
+                write!(f, "team {team} roster block is full (no free slot to relocate into)")
             }
             EditError::AuditFailed {
                 predicate,

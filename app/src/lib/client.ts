@@ -16,6 +16,7 @@ import type { ArenaViewDto } from "../bindings/ArenaViewDto";
 import type { LinesViewDto } from "../bindings/LinesViewDto";
 import type { CareerStatsDto } from "../bindings/CareerStatsDto";
 import type { OpOutcomeDto } from "../bindings/OpOutcomeDto";
+import type { InstallReportDto } from "../bindings/InstallReportDto";
 
 export type Platform = "ps3" | "xbox" | "ps4" | "recomp";
 export type Role = "nhlng" | "roster" | "localization";
@@ -29,6 +30,24 @@ type Commands = {
     args: { dbPath: string; platform: Platform; role: Role };
     ret: ProjectSummaryDto;
   };
+  // Root-folder onboarding (PS3/Xbox): scan a folder for the game's databases + save inventory.
+  detect_install: {
+    args: { gameId: string; platform: Platform; root: string; xeniaRoot?: string | null };
+    ret: InstallReportDto;
+  };
+  // Open the project from a root folder; enforces the modding minimum and writes the profile sidecar.
+  open_workspace: {
+    args: {
+      gameId: string;
+      platform: Platform;
+      root: string;
+      xeniaRoot?: string | null;
+      bigFilesExtracted: boolean;
+    };
+    ret: ProjectSummaryDto;
+  };
+  // Extract a game's big files (currently a stub that rejects with a "not yet implemented" message).
+  extract_big_files: { args: { gameId: string; platform: Platform; root: string }; ret: null };
   project_summary: { args: { projectId: number }; ret: ProjectSummaryDto };
   validate_project: { args: { projectId: number }; ret: IntegrityReportDto };
   list_players: { args: { projectId: number }; ret: PlayerSummaryDto[] };
@@ -53,6 +72,8 @@ type Commands = {
   undo: { args: { projectId: number }; ret: boolean };
   redo: { args: { projectId: number }; ret: boolean };
   save_project: { args: { projectId: number; outPath: string }; ret: number };
+  // In-place dual save: writes nhlng.db and (when attached) the roster save back to their origins.
+  save_workspace: { args: { projectId: number }; ret: number };
 };
 
 export async function call<C extends keyof Commands>(

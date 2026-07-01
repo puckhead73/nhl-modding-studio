@@ -330,9 +330,9 @@ impl EditSession {
         self.run(|tx| tx.delete_player(player))
     }
 
-    /// Move/trade a player to another team.
-    pub fn move_player(&mut self, player: u64, to_team: u64) -> Result<OpOutcome> {
-        self.run(|tx| tx.move_player(player, to_team))
+    /// Move a player's roster membership from `from_team` to another team.
+    pub fn move_player(&mut self, player: u64, from_team: u64, to_team: u64) -> Result<OpOutcome> {
+        self.run(|tx| tx.move_player(player, from_team, to_team))
     }
 
     /// Set a player's jersey number on a team (unique within the team).

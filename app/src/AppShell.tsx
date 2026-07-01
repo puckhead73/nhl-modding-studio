@@ -25,8 +25,12 @@ function Shell({ project, dbPath }: { project: ProjectSummaryDto; dbPath: string
   const navigate = useNavigate();
   const qc = useQueryClient();
 
+  // A workspace with a roster attached saves both files in place; otherwise write the single db back.
   const save = useMutation({
-    mutationFn: () => call("save_project", { projectId: project.project_id, outPath: dbPath }),
+    mutationFn: () =>
+      project.roster_attached
+        ? call("save_workspace", { projectId: project.project_id })
+        : call("save_project", { projectId: project.project_id, outPath: dbPath }),
     onSuccess: async () => {
       update(await call("project_summary", { projectId: project.project_id }));
       qc.invalidateQueries();
@@ -75,10 +79,17 @@ function Shell({ project, dbPath }: { project: ProjectSummaryDto; dbPath: string
           <span className="text-xs text-slate-400">
             {project.platform} · {project.role} · {project.source}
           </span>
+          {project.roster_attached &&
+            (project.roster_aligned ? (
+              <Pill tone="ok">Roster synced</Pill>
+            ) : (
+              <Pill tone="warn">Roster: nhlng-only</Pill>
+            ))}
           <button
             type="button"
             onClick={() => save.mutate()}
             disabled={save.isPending || !project.dirty}
+            title={project.roster_attached ? "Saves nhlng.db and the roster save together" : undefined}
             className="rounded-md border border-sky-500/40 bg-sky-600 px-3 py-1 text-xs font-medium text-white transition-colors hover:bg-sky-500 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {save.isPending ? "Saving…" : "Save"}

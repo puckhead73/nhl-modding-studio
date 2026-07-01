@@ -34,6 +34,42 @@ pub struct ProjectSummaryDto {
     /// Number of reverted operations that can be re-applied.
     pub redo_depth: usize,
     pub tables: Vec<TableSummaryDto>,
+    /// `true` when a roster save is mirrored alongside `nhlng.db` (edits fan out to both).
+    pub roster_attached: bool,
+    /// `true` when the roster mirror is record-index-aligned with `nhlng.db` (so generic field edits
+    /// mirror). `roster_attached && !roster_aligned` means degraded — field edits hit `nhlng` only.
+    pub roster_aligned: bool,
+}
+
+/// One discovered save container, classified by its content.
+#[derive(Serialize, TS)]
+pub struct SaveSlotDto {
+    /// Stable kind tag: `settings` | `roster` | `beagm` | `beapro` | `hockeycard` | `season` | `unknown`.
+    pub kind: String,
+    /// Human label for the UI (platform-aware: Xbox's settings slot is the Profile save).
+    pub label: String,
+    pub path: String,
+    /// Container variant: `v1` (read-only) | `v2` | `v4`.
+    pub container_version: String,
+    pub writable: bool,
+}
+
+/// The result of pointing onboarding at a root folder: the resolved files plus the save inventory.
+#[derive(Serialize, TS)]
+pub struct InstallReportDto {
+    pub game_id: String,
+    pub platform: String,
+    pub picked_root: String,
+    /// The resolved per-game install dir; `null` if the game install wasn't found under the root.
+    pub install_dir: Option<String>,
+    pub nhlng_path: Option<String>,
+    pub localization_path: Option<String>,
+    pub meta_xml_path: Option<String>,
+    pub saves: Vec<SaveSlotDto>,
+    /// The bare minimum to mod: an `nhlng.db` **and** a roster save are both present.
+    pub minimum_met: bool,
+    /// `true` when a `.nhlmodproj` sidecar already exists in the install dir (settings carry over).
+    pub has_existing_profile: bool,
 }
 
 /// One integrity finding from the Layer 4 audit.

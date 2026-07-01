@@ -20,4 +20,13 @@ undo_depth: number,
 /**
  * Number of reverted operations that can be re-applied.
  */
-redo_depth: number, tables: Array<TableSummaryDto>, };
+redo_depth: number, tables: Array<TableSummaryDto>, 
+/**
+ * `true` when a roster save is mirrored alongside `nhlng.db` (edits fan out to both).
+ */
+roster_attached: boolean, 
+/**
+ * `true` when the roster mirror is record-index-aligned with `nhlng.db` (so generic field edits
+ * mirror). `roster_attached && !roster_aligned` means degraded — field edits hit `nhlng` only.
+ */
+roster_aligned: boolean, };

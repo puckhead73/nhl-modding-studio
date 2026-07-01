@@ -9,9 +9,9 @@ use tauri::{Manager, State};
 use studio_domain::FieldValue;
 
 use crate::dto::{
-    ArenaSummaryDto, ArenaViewDto, CareerStatsDto, CreatePlayerDto, IntegrityReportDto,
-    LinesViewDto, OpOutcomeDto, PlayerSummaryDto, PlayerViewDto, ProjectSummaryDto, TeamSummaryDto,
-    TeamViewDto,
+    ArenaSummaryDto, ArenaViewDto, CareerStatsDto, CreatePlayerDto, InstallReportDto,
+    IntegrityReportDto, LinesViewDto, OpOutcomeDto, PlayerSummaryDto, PlayerViewDto,
+    ProjectSummaryDto, TeamSummaryDto, TeamViewDto,
 };
 use crate::registry::{parse_platform, parse_role, Registry};
 
@@ -38,6 +38,61 @@ pub fn close_project(registry: State<'_, Registry>, project_id: u32) -> bool {
     registry.close_project(project_id)
 }
 
+/// Onboarding step 1: point at a root folder (RPCS3 root for PS3, the `default.xex` install dir for
+/// Xbox) and report the resolved databases + save inventory. `xenia_root` optionally overrides the
+/// default Xenia content directory (Xbox only).
+#[tauri::command]
+pub fn detect_install(
+    registry: State<'_, Registry>,
+    game_id: String,
+    platform: String,
+    root: String,
+    xenia_root: Option<String>,
+) -> CmdResult<InstallReportDto> {
+    let platform = parse_platform(&platform).map_err(|e| e.to_string())?;
+    Ok(registry.detect_install(&game_id, platform, &root, xenia_root.as_deref()))
+}
+
+/// Onboarding step 2: open the project from the chosen root — enforces the modding minimum
+/// (`nhlng.db` + a roster save), writes the `.nhlmodproj` profile sidecar, and begins an edit
+/// session over the canonical `nhlng.db`.
+#[tauri::command]
+pub fn open_workspace(
+    app: tauri::AppHandle,
+    registry: State<'_, Registry>,
+    game_id: String,
+    platform: String,
+    root: String,
+    xenia_root: Option<String>,
+    big_files_extracted: bool,
+) -> CmdResult<ProjectSummaryDto> {
+    let platform = parse_platform(&platform).map_err(|e| e.to_string())?;
+    let defs = resolve_defs(&app);
+    registry
+        .open_workspace(
+            &game_id,
+            platform,
+            &root,
+            xenia_root.as_deref(),
+            big_files_extracted,
+            &defs.to_string_lossy(),
+        )
+        .map_err(|e| e.to_string())
+}
+
+/// Extract a game's "big files" for modding, given the install root the user pointed at. **Not yet
+/// implemented** — the EA big-archive codec is a later, separately-verified subsystem; this surfaces
+/// a clear message rather than a silent no-op. Runs at onboarding (before a project is opened), so it
+/// takes the install context rather than a project id.
+#[tauri::command]
+pub fn extract_big_files(
+    _game_id: String,
+    _platform: String,
+    _root: String,
+) -> CmdResult<()> {
+    Err("big-file extraction is not yet implemented".to_string())
+}
+
 /// Resolve the bundled `defs/` directory: a packaged resource in release, falling back to the
 /// in-repo `defs/` during development.
 fn resolve_defs(app: &tauri::AppHandle) -> PathBuf {
@@ -51,8 +106,9 @@ fn resolve_defs(app: &tauri::AppHandle) -> PathBuf {
 }
 
 /// One-step project open for onboarding: the user picks only the database (or save container); the
-/// metadata XML is derived as its sibling `nhlng-meta.xml` and `defs/` is resolved automatically.
-/// Use `load_project` (with explicit meta/defs) for the Advanced override path.
+/// metadata XML is derived as its sibling `{db-stem}-meta.xml` (so `nhlng.db`→`nhlng-meta.xml`,
+/// PS4 `nhl_game.db`→`nhl_game-meta.xml`, `eng_us.db`→`eng_us-meta.xml`) and `defs/` is resolved
+/// automatically. Use `load_project` (with explicit meta/defs) for the Advanced override path.
 #[tauri::command]
 pub fn open_project(
     app: tauri::AppHandle,
@@ -63,13 +119,18 @@ pub fn open_project(
 ) -> CmdResult<ProjectSummaryDto> {
     let platform = parse_platform(&platform).map_err(|e| e.to_string())?;
     let role = parse_role(&role).map_err(|e| e.to_string())?;
-    let meta = Path::new(&db_path)
+    let db = Path::new(&db_path);
+    let stem = db
+        .file_stem()
+        .and_then(|s| s.to_str())
+        .ok_or_else(|| "could not read the database filename".to_string())?;
+    let meta = db
         .parent()
-        .map(|d| d.join("nhlng-meta.xml"))
+        .map(|d| d.join(format!("{stem}-meta.xml")))
         .ok_or_else(|| "could not derive the database folder".to_string())?;
     if !meta.exists() {
         return Err(format!(
-            "no nhlng-meta.xml found beside the database ({}). Use Advanced to pick it manually.",
+            "no {stem}-meta.xml found beside the database ({}). Use Advanced to pick it manually.",
             meta.display()
         ));
     }
@@ -232,10 +293,11 @@ pub fn move_player(
     registry: State<'_, Registry>,
     project_id: u32,
     player: u64,
+    from_team: u64,
     to_team: u64,
 ) -> CmdResult<OpOutcomeDto> {
     registry
-        .move_player(project_id, player, to_team)
+        .move_player(project_id, player, from_team, to_team)
         .map_err(|e| e.to_string())
 }
 
@@ -284,4 +346,11 @@ pub fn save_project(
     registry
         .save(project_id, &out_path)
         .map_err(|e| e.to_string())
+}
+
+/// In-place dual save: write `nhlng.db` and (when attached) the roster save back to the paths the
+/// project was opened from. Returns the number of files written.
+#[tauri::command]
+pub fn save_workspace(registry: State<'_, Registry>, project_id: u32) -> CmdResult<u64> {
+    registry.save_workspace(project_id).map_err(|e| e.to_string())
 }

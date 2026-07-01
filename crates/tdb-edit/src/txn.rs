@@ -519,11 +519,79 @@ impl EditTransaction {
             })
     }
 
-    /// Move/trade a player to another team: rewrite the team affiliation on the bio (`ubPc.dXSB`) and
-    /// every roster slot (`eGlu.dXSB`) the player occupies. Appearance/equipment companions are keyed
-    /// on `wBIz` and carry no team, so they follow the trade automatically. A traded player **loses
-    /// any captaincy** on arrival (a repair that keeps the single-captain invariant by construction).
-    pub fn move_player(&mut self, player_id: u64, to_team: u64) -> Result<OpOutcome, EditError> {
+    /// Read a fixed-bit field on one record, addressed by **studio** `(table, field)` ids.
+    fn read_field(
+        &self,
+        studio_table: &str,
+        record: u32,
+        studio_field: &str,
+    ) -> Result<Option<u64>, EditError> {
+        let view = self.working.clone();
+        let db = TdbFile::parse(&view).map_err(|e| EditError::Parse(e.to_string()))?;
+        let table = db
+            .table_canonical(studio_table)
+            .ok_or_else(|| EditError::UnknownTable(studio_table.to_string()))?;
+        let field = table
+            .fields
+            .iter()
+            .find(|f| f.id.canonical(db.endian) == studio_field)
+            .ok_or_else(|| EditError::UnknownField {
+                table: studio_table.to_string(),
+                field: studio_field.to_string(),
+            })?;
+        Ok(db.read_u64(table, record, field))
+    }
+
+    /// Copy a slot's **occupant** — every `eGlu` field except the slot-identity fields `toWX` (key)
+    /// and `dXSB` (team) — from record `src` to record `dst`. This relocates a player's full slot
+    /// content (the `XSWT` index pointer, jersey, style, captaincy, status, and the line-assignment
+    /// flags) into another slot **without touching either slot's team or key**, so the per-team
+    /// contiguous-block layout is preserved by construction. Returns the number of fields copied.
+    fn transplant_slot(&mut self, src: u32, dst: u32) -> Result<u32, EditError> {
+        let view = self.working.clone();
+        let db = TdbFile::parse(&view).map_err(|e| EditError::Parse(e.to_string()))?;
+        let table = db
+            .table_canonical(ids::ROSTER_LINES)
+            .ok_or_else(|| EditError::UnknownTable(ids::ROSTER_LINES.to_string()))?;
+        let mut copies: Vec<(String, u64)> = Vec::new();
+        for f in &table.fields {
+            let sid = f.id.canonical(db.endian);
+            if sid == ids::SLOT_KEY || sid == ids::SLOT_TEAM {
+                continue; // preserve the destination slot's own identity (team, key)
+            }
+            if let Some(v) = db.read_u64(table, src, f) {
+                copies.push((sid, v));
+            }
+        }
+        drop(db);
+        let n = copies.len() as u32;
+        for (sid, v) in copies {
+            self.set_field(ids::ROSTER_LINES, dst, &sid, v)?;
+        }
+        Ok(n)
+    }
+
+    /// Move a player's **roster membership** from `from_team` to `to_team`. A player can hold several
+    /// memberships at once (e.g. an NHL team *and* an all-star/national team — verified: ~6 % of
+    /// players occupy >1 slot), so the move is keyed by `from_team` to pick the right one.
+    ///
+    /// `eGlu` slots are fixed per-team containers laid out as contiguous, gap-free per-team blocks
+    /// (verified — see `docs/audits/towx-blocks.md`), so a move is **not** a team retag: it relocates
+    /// the player's occupancy into a free slot in the destination team's block (`XSWT` index pointer +
+    /// per-slot fields) and **vacates the source slot** by zeroing its `XSWT` (the game's own
+    /// "empty slot" convention). Neither slot's `dXSB`/`toWX` changes, so the block tiling is preserved.
+    /// The bio's team (`ubPc.dXSB`) follows only when it matched `from_team` (the player's primary
+    /// affiliation); companions key on `wBIz` and follow automatically. A moved membership **loses any
+    /// captaincy** on arrival (single-captain repair).
+    ///
+    /// Errors with [`EditError::TeamRosterFull`] when the destination block has no free slot — growing
+    /// the block (capacity normalization) is a later phase; until then use a two-player trade instead.
+    pub fn move_player(
+        &mut self,
+        player_id: u64,
+        from_team: u64,
+        to_team: u64,
+    ) -> Result<OpOutcome, EditError> {
         {
             let model = self.model()?;
             if model.team(to_team).is_none() {
@@ -539,26 +607,55 @@ impl EditTransaction {
         self.with_repairing_transaction(|tx| {
             let model = tx.model()?;
             let bio_record = model.player(player_id).unwrap().bio_record;
-            let slots: Vec<(u32, Option<u64>)> = model
+
+            // The membership being moved: the player's slot on `from_team`.
+            let source = model
                 .slots
                 .iter()
-                .filter(|s| s.player_id == Some(player_id))
-                .map(|s| (s.record, s.captaincy))
-                .collect();
+                .find(|s| s.team_id == from_team && s.player_id == Some(player_id))
+                .ok_or(EditError::NoSuchSlot {
+                    team_id: from_team,
+                    player_id,
+                })?;
+            let source_record = source.record;
+            let had_captaincy = source.captaincy.is_some_and(|c| c != captaincy::NONE);
+
+            // Already on the destination team → nothing to do (avoids consuming a free slot).
+            if from_team == to_team {
+                return Ok(OpOutcome {
+                    edits: 0,
+                    repairs: vec![format!("player {player_id} already on team {to_team}")],
+                });
+            }
+
+            // A free (unoccupied) slot in the destination team's block.
+            let dest_record = model
+                .slots
+                .iter()
+                .find(|s| s.team_id == to_team && s.player_id.is_none())
+                .map(|s| s.record)
+                .ok_or(EditError::TeamRosterFull { team: to_team })?;
             drop(model);
 
-            let mut edits = 1;
-            let mut repairs = Vec::new();
-            tx.set_field(ids::BIO, bio_record, ids::SLOT_TEAM, to_team)?; // ubPc.dXSB
-            for (record, captaincy) in slots {
-                tx.set_field(ids::ROSTER_LINES, record, ids::SLOT_TEAM, to_team)?;
+            // Relocate occupancy into the free destination slot, then vacate the source slot.
+            let mut edits = tx.transplant_slot(source_record, dest_record)?;
+            tx.set_field(ids::ROSTER_LINES, source_record, ids::SLOT_TO_INDEX, 0)?; // XSWT = empty
+            edits += 1;
+
+            // Update the bio's team only if it was this (primary) membership.
+            if tx.read_field(ids::BIO, bio_record, ids::SLOT_TEAM)? == Some(from_team) {
+                tx.set_field(ids::BIO, bio_record, ids::SLOT_TEAM, to_team)?; // ubPc.dXSB
                 edits += 1;
-                if captaincy.is_some_and(|c| c != captaincy::NONE) {
-                    tx.set_field(ids::ROSTER_LINES, record, ids::SLOT_CAPTAINCY, captaincy::NONE)?;
-                    edits += 1;
-                    repairs.push(format!("cleared captaincy on trade (slot {record})"));
-                }
             }
+
+            // Captaincy does not carry to the new team (single-captain repair).
+            let mut repairs = Vec::new();
+            tx.set_field(ids::ROSTER_LINES, dest_record, ids::SLOT_CAPTAINCY, captaincy::NONE)?;
+            edits += 1;
+            if had_captaincy {
+                repairs.push(format!("cleared captaincy on move to team {to_team}"));
+            }
+
             Ok(OpOutcome { edits, repairs })
         })
     }

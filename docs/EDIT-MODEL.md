@@ -152,13 +152,27 @@ holes such as dup-on-team spread across two commands).
 > **smallest free non-sentinel** value — the 14-bit `wBIz`/`vfEq` spaces are nearly full and their
 > top value is the all-ones "none" sentinel, so `max + 1` would alias it.
 >
-> **`move_player`/`trade`, `set_jersey_number`, `set_roster_status` also ship.** `move_player` retags
-> the bio + slot `dXSB` to the new team (equipment follows by `wBIz`) and clears captaincy on arrival
-> (single-captain repair); `set_jersey_number` (`eGlu.sVRt`) is width- and **uniqueness-within-team**
-> validated (a collision is a structured error — no unambiguous repair); `set_roster_status` writes
-> the bridged `ZBac.RREB` 2-bit code (labels candidate). All verified audit-clean on the anchor.
+> **`move_player`, `set_jersey_number`, `set_roster_status` also ship.** `move_player(player,
+> from_team, to_team)` moves one **roster membership**: `eGlu` is partitioned into contiguous,
+> gap-free per-team blocks (verified — [audits/towx-blocks.md](audits/towx-blocks.md)), so a slot is a
+> fixed *(team, slot#)* container. The op therefore **relocates the occupant** into a free slot in the
+> destination team's block (transplanting `XSWT` + the per-slot fields) and vacates the source slot by
+> zeroing its `XSWT` (the game's own empty-slot convention) — it does **not** retag `dXSB`, which would
+> break block coherence. It errors `TeamRosterFull` when the destination block is full (block growth is
+> a later capacity phase). It is keyed by `from_team` because a player can hold several memberships at
+> once (verified: ~6 % occupy >1 slot, across different teams). Captaincy clears on arrival
+> (single-captain repair); the bio's `dXSB` follows only when it matched `from_team`.
+> `set_jersey_number` (`eGlu.sVRt`) is width- and **uniqueness-within-team** validated (a collision is
+> a structured error — no unambiguous repair); `set_roster_status` writes the bridged `ZBac.RREB`
+> 2-bit code (labels candidate). All verified audit-clean on the anchor.
 > **Still deferred:** `assign_line_slot` — the 71 one-bit line flags are not yet mapped to positions,
-> so wiring it now would be guesswork (verify-don't-guess).
+> so wiring it now would be guesswork (verify-don't-guess); and `trade_slots` (a two-membership swap,
+> the natural op when destination blocks are full).
+>
+> **Note (corrected):** an earlier increment of `move_player` retagged the slot `dXSB` (and moved
+> *every* one of the player's memberships), which silently broke the per-team block invariant. That was
+> fixed once the block layout was verified; the coherence predicate that would have caught it is a
+> pending Layer-4 addition ([ROADMAP Phase 4](ROADMAP.md)).
 
 ---
 

@@ -36,9 +36,12 @@ hash/timestamp — exact role TBD; needed for write-back). Observed records in a
 | 2 | JSON metadata `{"FileCreateDate":…}` |
 | 3 | **the main payload** (the roster) — see below |
 
-## Main payload = `[1-byte codec] [LZ4 frame]` → LE TDB
+## Main payload = `[1-byte codec]? [LZ4 frame]` → LE TDB
 
-The big record's payload is `01` (codec id = LZ4) followed by an **LZ4 Frame** (magic `04 22 4D 18`).
+The big record's payload is an **LZ4 Frame** (magic `04 22 4D 18`), optionally preceded by a `01`
+codec-id byte. **NHL17–19+ use `[01][frame]`; NHL16 uses a bare `[frame]`** (no codec byte) — verified
+against both anchors. The 12-byte record header also varies by title (NHL19 starts `00 70 00…`, NHL16
+`07 00 00…`), so the codec preserves it verbatim and never interprets it.
 Decompressing the frame yields a **little-endian TDB v6** at offset 0:
 
 - nhl19 `RosterCustom0`: LZ4 1,734,365 B → **7,557,036 B** inner TDB, **54 tables** (a roster subset,

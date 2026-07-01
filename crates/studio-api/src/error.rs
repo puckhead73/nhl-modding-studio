@@ -14,6 +14,8 @@ pub enum ApiError {
     BadEnum { what: &'static str, value: String },
     /// Filesystem error while saving a project.
     Io { path: String, source: std::io::Error },
+    /// Onboarding couldn't resolve the files a workspace needs from the chosen root folder.
+    Workspace(String),
 }
 
 impl fmt::Display for ApiError {
@@ -23,6 +25,7 @@ impl fmt::Display for ApiError {
             ApiError::UnknownProject(id) => write!(f, "no project with id {id}"),
             ApiError::BadEnum { what, value } => write!(f, "unknown {what}: {value:?}"),
             ApiError::Io { path, source } => write!(f, "io error on {path:?}: {source}"),
+            ApiError::Workspace(msg) => write!(f, "{msg}"),
         }
     }
 }
