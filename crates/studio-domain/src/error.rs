@@ -26,6 +26,8 @@ pub enum DomainError {
     /// A multi-file (roster ↔ nhlng) operation could not keep the two files in sync; both have been
     /// rolled back to their pre-op state.
     Sync(String),
+    /// Big-archive extraction failed (no archives found, or every archive failed to parse).
+    Extract(String),
 }
 
 impl fmt::Display for DomainError {
@@ -46,6 +48,7 @@ impl fmt::Display for DomainError {
             DomainError::Save(e) => write!(f, "{e}"),
             DomainError::Edit(e) => write!(f, "{e}"),
             DomainError::Sync(msg) => write!(f, "{msg}"),
+            DomainError::Extract(msg) => write!(f, "{msg}"),
         }
     }
 }

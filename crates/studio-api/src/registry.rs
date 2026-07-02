@@ -16,9 +16,9 @@ use studio_domain::{
 
 use crate::convert;
 use crate::dto::{
-    ArenaSummaryDto, ArenaViewDto, CareerStatsDto, CreatePlayerDto, InstallReportDto,
-    IntegrityReportDto, LinesViewDto, OpOutcomeDto, PlayerSummaryDto, PlayerViewDto,
-    ProjectSummaryDto, TeamSummaryDto, TeamViewDto,
+    ArenaSummaryDto, ArenaViewDto, AutocorrectSummaryDto, CareerStatsDto, CreatePlayerDto,
+    ExtractSummaryDto, InstallReportDto, IntegrityReportDto, JerseyCorrectionDto, LinesViewDto,
+    OpOutcomeDto, PlayerSummaryDto, PlayerViewDto, ProjectSummaryDto, TeamSummaryDto, TeamViewDto,
 };
 use crate::error::ApiError;
 
@@ -55,13 +55,13 @@ impl Registry {
         game_id: &str,
         platform: Platform,
         root: &str,
-        xenia_root: Option<&str>,
+        save_path: Option<&str>,
     ) -> InstallReportDto {
         let report = studio_domain::detect_install(
             game_id,
             platform,
             Path::new(root),
-            xenia_root.map(Path::new),
+            save_path.map(Path::new),
         );
         let has_existing_profile = report
             .install_dir
@@ -80,7 +80,7 @@ impl Registry {
         game_id: &str,
         platform: Platform,
         root: &str,
-        xenia_root: Option<&str>,
+        save_path: Option<&str>,
         big_files_extracted: bool,
         defs_root: &str,
     ) -> Result<ProjectSummaryDto, ApiError> {
@@ -88,7 +88,7 @@ impl Registry {
             game_id,
             platform,
             Path::new(root),
-            xenia_root.map(Path::new),
+            save_path.map(Path::new),
         );
         if !report.minimum_met {
             return Err(ApiError::Workspace(format!(
@@ -124,10 +124,11 @@ impl Registry {
         }
 
         // Build the canonical session and, when a writable roster save is present, the mirror.
-        // Only PS3/Xbox mirror: there nhlng.db *is* the roster (record-index aligned). On PS4
-        // nhl_game.db is a template and the live roster is a separate save — never mirror it.
+        // PS3/Xbox/Recomp mirror: there nhlng.db *is* the roster (record-index aligned, big-endian
+        // — Recomp is Xbox-derived). On PS4 nhl_game.db is a template and the live roster is a
+        // separate save — never mirror it.
         let nhlng_session = build_session(&nhlng, platform, ProjectRole::Nhlng, &meta, defs_root)?;
-        let roster_slot = matches!(platform, Platform::Ps3 | Platform::Xbox)
+        let roster_slot = matches!(platform, Platform::Ps3 | Platform::Xbox | Platform::Recomp)
             .then(|| report.saves.iter().find(|s| s.kind == "roster" && s.writable))
             .flatten();
         let ws = match roster_slot {
@@ -139,6 +140,14 @@ impl Registry {
             None => Workspace::single(nhlng_session, nhlng.clone()),
         };
         self.register(ws)
+    }
+
+    /// Extract a game's `.big` archives in place (Xbox / Recomp / PS4 ship the db packed). Runs at
+    /// onboarding, before a project is opened, so it takes the install root rather than a project id.
+    pub fn extract_install(&self, root: &str) -> Result<ExtractSummaryDto, ApiError> {
+        let summary =
+            studio_domain::extract_install(Path::new(root)).map_err(ApiError::Domain)?;
+        Ok(convert::extract_summary_dto(&summary))
     }
 
     /// Drop a workspace, freeing its working bytes. Returns `false` if it was not registered.
@@ -153,9 +162,63 @@ impl Registry {
         })
     }
 
-    /// Run the Layer 4 audit over the current working state.
+    /// Run the Layer 4 audit over the current working state, resolved to human-readable findings.
     pub fn validate(&self, id: u32) -> Result<IntegrityReportDto, ApiError> {
-        self.with_workspace(id, |ws| Ok(convert::report_dto(&ws.primary().validate()?)))
+        self.with_workspace(id, |ws| Ok(convert::report_dto(&ws.primary().audit_report()?)))
+    }
+
+    /// Toggle the acknowledged corruption-override edit mode: when enabled, edits proceed on a DB that
+    /// fails the structural audit (unsupported). Used by the on-load corruption prompt's override.
+    pub fn set_edit_override(&self, id: u32, allow: bool) -> Result<(), ApiError> {
+        self.with_workspace(id, |ws| {
+            ws.set_edit_override(allow);
+            Ok(())
+        })
+    }
+
+    /// Auto-correct duplicate jersey numbers on load (default reassignment logic), returning a
+    /// display-ready summary with team/player names resolved (human-readable-surfaces rule). The
+    /// corrections are staged as a pending, undoable edit — the user reviews/saves them like any other.
+    pub fn autocorrect_jerseys(&self, id: u32) -> Result<AutocorrectSummaryDto, ApiError> {
+        self.with_workspace(id, |ws| {
+            let (_, corrections) =
+                ws.autocorrect_duplicate_jerseys().map_err(ApiError::Domain)?;
+            if corrections.is_empty() {
+                return Ok(AutocorrectSummaryDto { corrections: Vec::new() });
+            }
+            // Resolve names off the (post-correction) working state — identities are unchanged.
+            let teams: std::collections::HashMap<u64, String> = ws
+                .primary()
+                .team_summaries()?
+                .into_iter()
+                .map(|t| (t.team_id, t.name))
+                .collect();
+            let players: std::collections::HashMap<u64, String> = ws
+                .primary()
+                .player_summaries()?
+                .into_iter()
+                .map(|p| (p.player_id, format!("{} {}", p.first_name, p.last_name).trim().to_string()))
+                .collect();
+            let dtos = corrections
+                .iter()
+                .map(|c| JerseyCorrectionDto {
+                    team: teams
+                        .get(&c.team_id)
+                        .filter(|n| !n.is_empty())
+                        .cloned()
+                        .unwrap_or_else(|| format!("Team #{}", c.team_id)),
+                    player: c
+                        .player_id
+                        .and_then(|p| players.get(&p))
+                        .filter(|n| !n.is_empty())
+                        .cloned()
+                        .unwrap_or_else(|| "an unknown player".to_string()),
+                    old_number: c.old,
+                    new_number: c.new,
+                })
+                .collect();
+            Ok(AutocorrectSummaryDto { corrections: dtos })
+        })
     }
 
     /// The player master list (view-models).
@@ -272,6 +335,18 @@ impl Registry {
         })
     }
 
+    pub fn clone_player(
+        &self,
+        id: u32,
+        source_player: u64,
+        to_team: u64,
+    ) -> Result<CreatePlayerDto, ApiError> {
+        self.with_workspace(id, |ws| {
+            let (pid, outcome) = ws.clone_player(source_player, to_team)?;
+            Ok(convert::create_player_dto(pid, outcome))
+        })
+    }
+
     pub fn delete_player(&self, id: u32, player: u64) -> Result<OpOutcomeDto, ApiError> {
         self.with_workspace(id, |ws| Ok(convert::outcome_dto(ws.delete_player(player)?)))
     }
@@ -288,6 +363,33 @@ impl Registry {
         })
     }
 
+    pub fn trade_slots(
+        &self,
+        id: u32,
+        a_team: u64,
+        a_player: u64,
+        b_team: u64,
+        b_player: u64,
+    ) -> Result<OpOutcomeDto, ApiError> {
+        self.with_workspace(id, |ws| {
+            Ok(convert::outcome_dto(
+                ws.trade_slots(a_team, a_player, b_team, b_player)?,
+            ))
+        })
+    }
+
+    pub fn release_to_fa(&self, id: u32, from_team: u64, player: u64) -> Result<OpOutcomeDto, ApiError> {
+        self.with_workspace(id, |ws| {
+            Ok(convert::outcome_dto(ws.release_to_fa(from_team, player)?))
+        })
+    }
+
+    pub fn sign_from_fa(&self, id: u32, player: u64, to_team: u64) -> Result<OpOutcomeDto, ApiError> {
+        self.with_workspace(id, |ws| {
+            Ok(convert::outcome_dto(ws.sign_from_fa(player, to_team)?))
+        })
+    }
+
     pub fn set_jersey_number(
         &self,
         id: u32,
@@ -298,6 +400,14 @@ impl Registry {
         self.with_workspace(id, |ws| {
             Ok(convert::outcome_dto(ws.set_jersey_number(team, player, number)?))
         })
+    }
+
+    pub fn retire_jersey(&self, id: u32, team: u64, number: u64) -> Result<OpOutcomeDto, ApiError> {
+        self.with_workspace(id, |ws| Ok(convert::outcome_dto(ws.retire_jersey(team, number)?)))
+    }
+
+    pub fn unretire_jersey(&self, id: u32, team: u64, number: u64) -> Result<OpOutcomeDto, ApiError> {
+        self.with_workspace(id, |ws| Ok(convert::outcome_dto(ws.unretire_jersey(team, number)?)))
     }
 
     pub fn set_roster_status(

@@ -68,20 +68,73 @@ pub struct InstallReportDto {
     pub saves: Vec<SaveSlotDto>,
     /// The bare minimum to mod: an `nhlng.db` **and** a roster save are both present.
     pub minimum_met: bool,
+    /// `true` when the database isn't loose yet but `.big` archives are present — the install needs
+    /// extraction before it can be opened (Xbox / Recomp / PS4 ship the db packed).
+    pub extract_needed: bool,
     /// `true` when a `.nhlmodproj` sidecar already exists in the install dir (settings carry over).
     pub has_existing_profile: bool,
 }
 
-/// One integrity finding from the Layer 4 audit.
+/// The result of extracting a game's `.big` archives in place.
+#[derive(Serialize, TS)]
+pub struct ExtractSummaryDto {
+    /// `.big` archives that parsed and were processed.
+    pub archives: usize,
+    /// Entries written to disk.
+    pub files_written: usize,
+    /// Total bytes written (decompressed).
+    #[ts(type = "number")]
+    pub bytes_written: u64,
+    /// Entries skipped because they're `chunklzx`-wrapped or failed to decode.
+    pub skipped_unsupported: usize,
+    /// Entries skipped because their name would escape the archive's directory.
+    pub skipped_unsafe: usize,
+    /// `.big` files that failed to parse.
+    pub archives_failed: usize,
+}
+
+/// One integrity finding from the Layer 4 audit, resolved for display (human-readable-surfaces rule).
+/// `title`/`location`/`message` are what the UI shows; `predicate`/`technical`/`table`/`field`/
+/// `record` are the raw internals, surfaced only behind progressive disclosure.
 #[derive(Serialize, TS)]
 pub struct FindingDto {
     /// `"error"` | `"warning"` | `"info"`.
     pub severity: String,
-    pub predicate: String,
+    /// Friendly category, e.g. "Duplicate jersey number".
+    pub title: String,
+    /// Resolved entity context (team / player names), or `null` when nothing resolves.
+    pub location: Option<String>,
+    /// Plain-language description (no raw ids).
     pub message: String,
+    /// Stable predicate id (grouping/telemetry) — not primary text.
+    pub predicate: String,
+    /// The original id-precise message, for the details affordance.
+    pub technical: String,
+    /// Raw studio ids, kept for the details affordance.
     pub table: String,
     pub field: String,
     pub record: Option<u32>,
+}
+
+/// One duplicate-jersey correction the on-load auto-repair applied, with names resolved for display.
+#[derive(Serialize, TS)]
+pub struct JerseyCorrectionDto {
+    /// Resolved team name.
+    pub team: String,
+    /// Resolved player name (the renumbered player).
+    pub player: String,
+    /// The duplicate number the player wore.
+    #[ts(type = "number")]
+    pub old_number: u64,
+    /// The number they were reassigned to.
+    #[ts(type = "number")]
+    pub new_number: u64,
+}
+
+/// Summary of the on-load duplicate-jersey auto-correction (empty when nothing needed fixing).
+#[derive(Serialize, TS)]
+pub struct AutocorrectSummaryDto {
+    pub corrections: Vec<JerseyCorrectionDto>,
 }
 
 /// The result of a whole-DB audit.

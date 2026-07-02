@@ -9,9 +9,9 @@ use tauri::{Manager, State};
 use studio_domain::FieldValue;
 
 use crate::dto::{
-    ArenaSummaryDto, ArenaViewDto, CareerStatsDto, CreatePlayerDto, InstallReportDto,
-    IntegrityReportDto, LinesViewDto, OpOutcomeDto, PlayerSummaryDto, PlayerViewDto,
-    ProjectSummaryDto, TeamSummaryDto, TeamViewDto,
+    ArenaSummaryDto, ArenaViewDto, AutocorrectSummaryDto, CareerStatsDto, CreatePlayerDto,
+    ExtractSummaryDto, InstallReportDto, IntegrityReportDto, LinesViewDto, OpOutcomeDto,
+    PlayerSummaryDto, PlayerViewDto, ProjectSummaryDto, TeamSummaryDto, TeamViewDto,
 };
 use crate::registry::{parse_platform, parse_role, Registry};
 
@@ -38,19 +38,20 @@ pub fn close_project(registry: State<'_, Registry>, project_id: u32) -> bool {
     registry.close_project(project_id)
 }
 
-/// Onboarding step 1: point at a root folder (RPCS3 root for PS3, the `default.xex` install dir for
-/// Xbox) and report the resolved databases + save inventory. `xenia_root` optionally overrides the
-/// default Xenia content directory (Xbox only).
+/// Onboarding step 1: point at a root folder (RPCS3 root for PS3, shadPS4 root for PS4, the
+/// `default.xex` install dir for Xbox, the game folder for Recomp) and report the resolved databases
+/// + save inventory. `save_path` locates the roster/profile saves for platforms whose emulator saves
+/// aren't in a consistent place (Xbox / Recomp); ignored for PS3/PS4.
 #[tauri::command]
 pub fn detect_install(
     registry: State<'_, Registry>,
     game_id: String,
     platform: String,
     root: String,
-    xenia_root: Option<String>,
+    save_path: Option<String>,
 ) -> CmdResult<InstallReportDto> {
     let platform = parse_platform(&platform).map_err(|e| e.to_string())?;
-    Ok(registry.detect_install(&game_id, platform, &root, xenia_root.as_deref()))
+    Ok(registry.detect_install(&game_id, platform, &root, save_path.as_deref()))
 }
 
 /// Onboarding step 2: open the project from the chosen root — enforces the modding minimum
@@ -63,7 +64,7 @@ pub fn open_workspace(
     game_id: String,
     platform: String,
     root: String,
-    xenia_root: Option<String>,
+    save_path: Option<String>,
     big_files_extracted: bool,
 ) -> CmdResult<ProjectSummaryDto> {
     let platform = parse_platform(&platform).map_err(|e| e.to_string())?;
@@ -73,24 +74,26 @@ pub fn open_workspace(
             &game_id,
             platform,
             &root,
-            xenia_root.as_deref(),
+            save_path.as_deref(),
             big_files_extracted,
             &defs.to_string_lossy(),
         )
         .map_err(|e| e.to_string())
 }
 
-/// Extract a game's "big files" for modding, given the install root the user pointed at. **Not yet
-/// implemented** — the EA big-archive codec is a later, separately-verified subsystem; this surfaces
-/// a clear message rather than a silent no-op. Runs at onboarding (before a project is opened), so it
-/// takes the install context rather than a project id.
+/// Extract a game's `.big` archives in place, given the install root the user pointed at. Walks the
+/// root for EA BIGF/BIG4 archives and writes every entry out preserving its internal folder
+/// hierarchy (chunkzip payloads are inflated; chunklzx entries are skipped). Returns a summary of
+/// what was written. Runs at onboarding (before a project is opened), so it takes the install
+/// context rather than a project id.
 #[tauri::command]
 pub fn extract_big_files(
+    registry: State<'_, Registry>,
     _game_id: String,
     _platform: String,
-    _root: String,
-) -> CmdResult<()> {
-    Err("big-file extraction is not yet implemented".to_string())
+    root: String,
+) -> CmdResult<ExtractSummaryDto> {
+    registry.extract_install(&root).map_err(|e| e.to_string())
 }
 
 /// Resolve the bundled `defs/` directory: a packaged resource in release, falling back to the
@@ -160,6 +163,32 @@ pub fn validate_project(
     project_id: u32,
 ) -> CmdResult<IntegrityReportDto> {
     registry.validate(project_id).map_err(|e| e.to_string())
+}
+
+/// Enable/disable the acknowledged corruption-override edit mode for a project. With it on, edits are
+/// permitted on a database that fails the structural audit (unsupported — surfaced by the on-load
+/// corruption prompt after the user acknowledges the risk).
+#[tauri::command]
+pub fn set_edit_override(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    allow: bool,
+) -> CmdResult<()> {
+    registry
+        .set_edit_override(project_id, allow)
+        .map_err(|e| e.to_string())
+}
+
+/// Auto-correct duplicate jersey numbers on load (default reassignment logic); returns a summary of
+/// the corrections applied (empty when none were needed). Corrections are staged as a pending edit.
+#[tauri::command]
+pub fn autocorrect_jerseys(
+    registry: State<'_, Registry>,
+    project_id: u32,
+) -> CmdResult<AutocorrectSummaryDto> {
+    registry
+        .autocorrect_jerseys(project_id)
+        .map_err(|e| e.to_string())
 }
 
 #[tauri::command]
@@ -278,6 +307,18 @@ pub fn create_player(
 }
 
 #[tauri::command]
+pub fn clone_player(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    source_player: u64,
+    to_team: u64,
+) -> CmdResult<CreatePlayerDto> {
+    registry
+        .clone_player(project_id, source_player, to_team)
+        .map_err(|e| e.to_string())
+}
+
+#[tauri::command]
 pub fn delete_player(
     registry: State<'_, Registry>,
     project_id: u32,
@@ -302,6 +343,44 @@ pub fn move_player(
 }
 
 #[tauri::command]
+pub fn trade_slots(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    a_team: u64,
+    a_player: u64,
+    b_team: u64,
+    b_player: u64,
+) -> CmdResult<OpOutcomeDto> {
+    registry
+        .trade_slots(project_id, a_team, a_player, b_team, b_player)
+        .map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub fn release_to_fa(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    from_team: u64,
+    player: u64,
+) -> CmdResult<OpOutcomeDto> {
+    registry
+        .release_to_fa(project_id, from_team, player)
+        .map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub fn sign_from_fa(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    player: u64,
+    to_team: u64,
+) -> CmdResult<OpOutcomeDto> {
+    registry
+        .sign_from_fa(project_id, player, to_team)
+        .map_err(|e| e.to_string())
+}
+
+#[tauri::command]
 pub fn set_jersey_number(
     registry: State<'_, Registry>,
     project_id: u32,
@@ -311,6 +390,30 @@ pub fn set_jersey_number(
 ) -> CmdResult<OpOutcomeDto> {
     registry
         .set_jersey_number(project_id, team, player, number)
+        .map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub fn retire_jersey(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    team: u64,
+    number: u64,
+) -> CmdResult<OpOutcomeDto> {
+    registry
+        .retire_jersey(project_id, team, number)
+        .map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub fn unretire_jersey(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    team: u64,
+    number: u64,
+) -> CmdResult<OpOutcomeDto> {
+    registry
+        .unretire_jersey(project_id, team, number)
         .map_err(|e| e.to_string())
 }
 

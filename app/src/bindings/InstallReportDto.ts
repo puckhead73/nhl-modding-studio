@@ -14,6 +14,11 @@ install_dir: string | null, nhlng_path: string | null, localization_path: string
  */
 minimum_met: boolean, 
 /**
+ * `true` when the database isn't loose yet but `.big` archives are present — the install needs
+ * extraction before it can be opened (Xbox / Recomp / PS4 ship the db packed).
+ */
+extract_needed: boolean, 
+/**
  * `true` when a `.nhlmodproj` sidecar already exists in the install dir (settings carry over).
  */
 has_existing_profile: boolean, };

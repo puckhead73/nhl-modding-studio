@@ -54,6 +54,8 @@ pub enum EditError {
     /// The destination team's roster block has no free slot — relocating into it would need block
     /// growth (capacity normalization), which is not available yet.
     TeamRosterFull { team: u64 },
+    /// The player already occupies a roster slot — they are not a free agent (use move/trade instead).
+    AlreadyRostered { player: u64 },
     /// A repairing transaction's post-condition audit failed; the operation was rolled back.
     AuditFailed {
         predicate: &'static str,
@@ -90,6 +92,9 @@ impl fmt::Display for EditError {
             }
             EditError::TeamRosterFull { team } => {
                 write!(f, "team {team} roster block is full (no free slot to relocate into)")
+            }
+            EditError::AlreadyRostered { player } => {
+                write!(f, "player {player} already occupies a roster slot (not a free agent)")
             }
             EditError::AuditFailed {
                 predicate,

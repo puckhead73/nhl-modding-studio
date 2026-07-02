@@ -2,16 +2,17 @@
 //! `raw_id` string helpers carried over from the prior app.
 
 use studio_domain::{
-    ArenaRef, ArenaSummary, ArenaView, CareerStats, DbOverview, FieldRaw, FieldView, Finding,
-    InstallReport, IntegrityReport, LineEntry, LinesView, OpOutcome, PlayerSummary, PlayerView,
-    RosterMembership, SaveSlot, Severity, Source, TeamSummary, TeamView, Workspace,
+    ArenaRef, ArenaSummary, ArenaView, CareerStats, DbOverview, ExtractSummary, FieldRaw,
+    FieldView, HumanFinding, HumanReport, InstallReport, LineEntry, LinesView, OpOutcome,
+    PlayerSummary, PlayerView, RosterMembership, SaveSlot, Severity, Source, TeamSummary, TeamView,
+    Workspace,
 };
 
 use crate::dto::{
-    ArenaRefDto, ArenaSummaryDto, ArenaViewDto, CareerStatsDto, CreatePlayerDto, FieldViewDto,
-    FindingDto, InstallReportDto, IntegrityReportDto, LineEntryDto, LinesViewDto, OpOutcomeDto,
-    PlayerSummaryDto, PlayerViewDto, ProjectSummaryDto, RosterMembershipDto, SaveSlotDto,
-    TableSummaryDto, TeamSummaryDto, TeamViewDto,
+    ArenaRefDto, ArenaSummaryDto, ArenaViewDto, CareerStatsDto, CreatePlayerDto, ExtractSummaryDto,
+    FieldViewDto, FindingDto, InstallReportDto, IntegrityReportDto, LineEntryDto, LinesViewDto,
+    OpOutcomeDto, PlayerSummaryDto, PlayerViewDto, ProjectSummaryDto, RosterMembershipDto,
+    SaveSlotDto, TableSummaryDto, TeamSummaryDto, TeamViewDto,
 };
 
 /// Map an install report to its DTO, attaching platform-aware display labels to each save slot and
@@ -31,7 +32,20 @@ pub fn install_report_dto(report: &InstallReport, has_existing_profile: bool) ->
             .map(|s| save_slot_dto(s, &report.platform))
             .collect(),
         minimum_met: report.minimum_met,
+        extract_needed: report.extract_needed,
         has_existing_profile,
+    }
+}
+
+/// Map an extraction summary to its DTO.
+pub fn extract_summary_dto(s: &ExtractSummary) -> ExtractSummaryDto {
+    ExtractSummaryDto {
+        archives: s.archives,
+        files_written: s.files_written,
+        bytes_written: s.bytes_written,
+        skipped_unsupported: s.skipped_unsupported,
+        skipped_unsafe: s.skipped_unsafe,
+        archives_failed: s.archives_failed,
     }
 }
 
@@ -100,8 +114,8 @@ fn table_dtos(overview: &DbOverview) -> Vec<TableSummaryDto> {
         .collect()
 }
 
-/// Map a Layer 4 report to its DTO (with per-severity tallies precomputed for the UI).
-pub fn report_dto(report: &IntegrityReport) -> IntegrityReportDto {
+/// Map a humanized Layer 4 report to its DTO (with per-severity tallies precomputed for the UI).
+pub fn report_dto(report: &HumanReport) -> IntegrityReportDto {
     IntegrityReportDto {
         clean: report.is_clean(),
         error_count: report.count(Severity::Error),
@@ -111,13 +125,16 @@ pub fn report_dto(report: &IntegrityReport) -> IntegrityReportDto {
     }
 }
 
-fn finding_dto(f: &Finding) -> FindingDto {
+fn finding_dto(f: &HumanFinding) -> FindingDto {
     FindingDto {
         severity: severity_str(f.severity).to_string(),
-        predicate: f.predicate.to_string(),
+        title: f.title.clone(),
+        location: f.location.clone(),
         message: f.message.clone(),
-        table: f.table.clone(),
-        field: f.field.clone(),
+        predicate: f.predicate.to_string(),
+        technical: f.technical.clone(),
+        table: f.studio_table.clone(),
+        field: f.studio_field.clone(),
         record: f.record,
     }
 }

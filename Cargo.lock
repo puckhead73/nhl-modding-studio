@@ -2877,6 +2877,7 @@ version = "0.0.0"
 dependencies = [
  "serde",
  "serde_json",
+ "tdb-archive-big",
  "tdb-core",
  "tdb-defs",
  "tdb-domain-validation",
@@ -3277,6 +3278,22 @@ dependencies = [
  "dunce",
  "embed-resource",
  "toml 1.1.2+spec-1.1.0",
+]
+
+[[package]]
+name = "tdb-archive-big"
+version = "0.0.0"
+dependencies = [
+ "tdb-archive-codec",
+ "thiserror 1.0.69",
+]
+
+[[package]]
+name = "tdb-archive-codec"
+version = "0.0.0"
+dependencies = [
+ "flate2",
+ "thiserror 1.0.69",
 ]
 
 [[package]]

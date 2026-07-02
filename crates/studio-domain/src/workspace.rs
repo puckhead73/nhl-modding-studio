@@ -12,7 +12,7 @@
 use std::collections::HashSet;
 
 use tdb_core::TdbFile;
-use tdb_edit::txn::OpOutcome;
+use tdb_edit::txn::{JerseyReassignment, OpOutcome};
 
 use crate::error::DomainError;
 use crate::session::{EditSession, FieldValue};
@@ -146,6 +146,16 @@ impl Workspace {
         }
     }
 
+    /// Enter/leave the acknowledged corruption-override edit mode across both files. When on, edits
+    /// are allowed on a DB that fails the structural audit (the user has acknowledged this is
+    /// unsupported and may cause unforeseen in-game issues).
+    pub fn set_edit_override(&mut self, allow: bool) {
+        self.nhlng.set_allow_pre_existing_violations(allow);
+        if let Some(m) = self.roster.as_mut() {
+            m.session.set_allow_pre_existing_violations(allow);
+        }
+    }
+
     // --- Generic field edit (mirrored only for shared, aligned tables) ---
 
     pub fn set_field(
@@ -192,12 +202,103 @@ impl Workspace {
         self.fan_out_entity(move |s| s.move_player(player, from_team, to_team))
     }
 
+    pub fn trade_slots(
+        &mut self,
+        a_team: u64,
+        a_player: u64,
+        b_team: u64,
+        b_player: u64,
+    ) -> Result<OpOutcome> {
+        self.fan_out_entity(move |s| s.trade_slots(a_team, a_player, b_team, b_player))
+    }
+
+    pub fn release_to_fa(&mut self, from_team: u64, player: u64) -> Result<OpOutcome> {
+        self.fan_out_entity(move |s| s.release_to_fa(from_team, player))
+    }
+
+    pub fn sign_from_fa(&mut self, player: u64, to_team: u64) -> Result<OpOutcome> {
+        self.fan_out_entity(move |s| s.sign_from_fa(player, to_team))
+    }
+
     pub fn set_jersey_number(&mut self, team: u64, player: u64, number: u64) -> Result<OpOutcome> {
         self.fan_out_entity(move |s| s.set_jersey_number(team, player, number))
     }
 
     pub fn set_roster_status(&mut self, team: u64, player: u64, status: u64) -> Result<OpOutcome> {
         self.fan_out_entity(move |s| s.set_roster_status(team, player, status))
+    }
+
+    /// Auto-correct duplicate jersey numbers across the DB (the default reassignment logic), mirroring
+    /// into the roster when attached, aligned, and `eGlu` is shared. Returns the corrections applied.
+    /// A no-op leaves both files (and the undo history) untouched.
+    pub fn autocorrect_duplicate_jerseys(&mut self) -> Result<(OpOutcome, Vec<JerseyReassignment>)> {
+        let (outcome, corrections) = self.nhlng.autocorrect_duplicate_jerseys()?;
+        if corrections.is_empty() {
+            return Ok((outcome, corrections)); // nothing changed on nhlng — no mirror, no history entry
+        }
+        // `eGlu` (roster slots) is a shared table; mirror the same reassignments when aligned.
+        let do_mirror = matches!(
+            self.roster.as_ref(),
+            Some(m) if m.aligned && m.shared_tables.contains(tdb_relations::entity::ids::ROSTER_LINES)
+        );
+        let roster_result = if do_mirror {
+            self.roster.as_mut().map(|m| m.session.autocorrect_duplicate_jerseys())
+        } else {
+            None
+        };
+        let mirror = match roster_result {
+            None => false,
+            Some(Ok(_)) => true,
+            Some(Err(e)) => {
+                self.nhlng.undo();
+                return Err(e);
+            }
+        };
+        self.record(mirror);
+        Ok((outcome, corrections))
+    }
+
+    /// Retire a jersey number for a team (add it to the `wcSL` retired-number table).
+    pub fn retire_jersey(&mut self, team: u64, number: u64) -> Result<OpOutcome> {
+        self.fan_out_shared(tdb_edit::txn::retired::TABLE, move |s| s.retire_jersey(team, number))
+    }
+
+    /// Un-retire a jersey number for a team (remove it from `wcSL`).
+    pub fn unretire_jersey(&mut self, team: u64, number: u64) -> Result<OpOutcome> {
+        self.fan_out_shared(tdb_edit::txn::retired::TABLE, move |s| {
+            s.unretire_jersey(team, number)
+        })
+    }
+
+    /// Apply an op that touches a single `studio_table`, mirroring to the roster **only when that table
+    /// is shared and aligned** (otherwise `nhlng`-only) — the degrade-gracefully pattern of
+    /// [`Workspace::set_field`], for structural ops on standalone tables (e.g. `wcSL` retired numbers)
+    /// that may not be present in the roster save. Rolls `nhlng` back on a mirror error.
+    fn fan_out_shared(
+        &mut self,
+        studio_table: &str,
+        op: impl Fn(&mut EditSession) -> Result<OpOutcome>,
+    ) -> Result<OpOutcome> {
+        let outcome = op(&mut self.nhlng)?;
+        let do_mirror = matches!(
+            self.roster.as_ref(),
+            Some(m) if m.aligned && m.shared_tables.contains(studio_table)
+        );
+        let roster_result = if do_mirror {
+            self.roster.as_mut().map(|m| op(&mut m.session))
+        } else {
+            None
+        };
+        let mirror = match roster_result {
+            None => false,
+            Some(Ok(_)) => true,
+            Some(Err(e)) => {
+                self.nhlng.undo();
+                return Err(e);
+            }
+        };
+        self.record(mirror);
+        Ok(outcome)
     }
 
     /// Apply an entity-id op to `nhlng`, then (if attached) the same op to the roster. The op is
@@ -242,6 +343,38 @@ impl Workspace {
                     self.roll_back_both();
                     return Err(DomainError::Sync(format!(
                         "create_player desync: nhlng allocated wBIz {nid}, roster {rid} \
+                         (or record indices diverged); both files rolled back"
+                    )));
+                }
+                self.record(true);
+                Ok((nid, outcome))
+            }
+        }
+    }
+
+    /// Clone a player onto a team (deep-copy cluster). Same structural dual-create + `fully_aligned`
+    /// guard as [`Workspace::create_player`]: both files clone independently and must agree on the new
+    /// `wBIz` and full record alignment, else both roll back.
+    pub fn clone_player(&mut self, source_player: u64, to_team: u64) -> Result<(u64, OpOutcome)> {
+        let (nid, outcome) = self.nhlng.clone_player(source_player, to_team)?;
+        let roster_result = self
+            .roster
+            .as_mut()
+            .map(|m| m.session.clone_player(source_player, to_team));
+        match roster_result {
+            None => {
+                self.record(false);
+                Ok((nid, outcome))
+            }
+            Some(Err(e)) => {
+                self.nhlng.undo();
+                Err(e)
+            }
+            Some(Ok((rid, _))) => {
+                if rid != nid || !self.fully_aligned()? {
+                    self.roll_back_both();
+                    return Err(DomainError::Sync(format!(
+                        "clone_player desync: nhlng allocated wBIz {nid}, roster {rid} \
                          (or record indices diverged); both files rolled back"
                     )));
                 }

@@ -36,6 +36,8 @@ macro_rules! command_handler {
             $crate::commands::close_project,
             $crate::commands::project_summary,
             $crate::commands::validate_project,
+            $crate::commands::set_edit_override,
+            $crate::commands::autocorrect_jerseys,
             $crate::commands::list_players,
             $crate::commands::player_view,
             $crate::commands::career_stats,
@@ -47,9 +49,15 @@ macro_rules! command_handler {
             $crate::commands::set_field,
             $crate::commands::set_captaincy,
             $crate::commands::create_player,
+            $crate::commands::clone_player,
             $crate::commands::delete_player,
             $crate::commands::move_player,
+            $crate::commands::trade_slots,
+            $crate::commands::release_to_fa,
+            $crate::commands::sign_from_fa,
             $crate::commands::set_jersey_number,
+            $crate::commands::retire_jersey,
+            $crate::commands::unretire_jersey,
             $crate::commands::set_roster_status,
             $crate::commands::undo,
             $crate::commands::redo,
@@ -73,7 +81,9 @@ mod bindings {
         );
         ProjectSummaryDto::export_all().expect("export ProjectSummaryDto + deps");
         InstallReportDto::export_all().expect("export InstallReportDto + deps");
+        ExtractSummaryDto::export_all().expect("export ExtractSummaryDto");
         IntegrityReportDto::export_all().expect("export IntegrityReportDto + deps");
+        AutocorrectSummaryDto::export_all().expect("export AutocorrectSummaryDto + deps");
         CreatePlayerDto::export_all().expect("export CreatePlayerDto + deps");
         OpOutcomeDto::export_all().expect("export OpOutcomeDto");
         PlayerViewDto::export_all().expect("export PlayerViewDto + deps");

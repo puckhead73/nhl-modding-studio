@@ -539,6 +539,28 @@ impl TdbFile<'_> {
         true
     }
 
+    /// Copy the entire fixed-width record block from record `src` to record `dst` within `table`
+    /// (both must be `< current_records`) in `buf`. This clones **every** field at once — fixed-bit,
+    /// inline strings, and any other in-record bytes — so callers can deep-copy a record then override
+    /// just the key fields. Does **not** recompute CRCs (call [`TdbFile::recompute_crcs`] after).
+    /// Returns `false` if either index is out of range or the byte range escapes `buf`.
+    pub fn copy_record(&self, buf: &mut [u8], table: &Table, src: u32, dst: u32) -> bool {
+        let cur = table.current_records as u32;
+        if src >= cur || dst >= cur {
+            return false;
+        }
+        let reclen = table.record_len_bytes as usize;
+        let (s, d) = (
+            table.record_block + src as usize * reclen,
+            table.record_block + dst as usize * reclen,
+        );
+        if s + reclen > buf.len() || d + reclen > buf.len() {
+            return false;
+        }
+        buf.copy_within(s..s + reclen, d);
+        true
+    }
+
     /// Append a zeroed record to a table and return the **new file bytes** (CRCs recomputed) plus the
     /// new record's index.
     ///
@@ -644,6 +666,120 @@ impl TdbFile<'_> {
         write_u16(&mut buf, t.block_offset + 0x16, (cur - 1) as u16, self.endian);
         self.recompute_crcs(&mut buf);
         Ok((buf, moved))
+    }
+
+    /// Insert a zeroed record **at `index`**, shifting records `[index, current)` down by one so their
+    /// relative order is preserved, and return the new file bytes (CRCs recomputed). `index` may equal
+    /// `current_records` (then this is exactly [`append_record`], appending at the end).
+    ///
+    /// Order-preserving counterpart to [`append_record`]. Required for tables whose record order is
+    /// load-bearing — notably `eGlu`, which is partitioned into contiguous per-team blocks
+    /// (`docs/audits/towx-blocks.md`): growing a team's roster means inserting a slot *at that team's
+    /// block boundary*, not appending at the table end (which would break block coherence).
+    ///
+    /// Same two paths as [`append_record`]: **slack reuse** when `current < max` (file length
+    /// unchanged), or **table growth** by one record when full. Unlike swap-oriented ops this never
+    /// relocates a far row into the hole — every record keeps its order; indices at/after `index` shift
+    /// up by one, so a caller holding raw indices past `index` must re-resolve.
+    pub fn insert_record(&self, table_raw: &str, index: u32) -> Result<Vec<u8>, AllocError> {
+        let t = self.table(table_raw).ok_or(AllocError::UnknownTable)?;
+        let reclen = t.record_len_bytes as usize;
+        let cur = t.current_records;
+        let max = t.max_records;
+        let block_offset = t.block_offset;
+        let record_block = t.record_block;
+        if index > cur as u32 {
+            return Err(AllocError::IndexOutOfRange);
+        }
+
+        // Secure an allocated slack slot to receive the shifted tail; grow the table if it is full.
+        // `grew` selects the CRC path: a grown file has new offsets, so it must be re-parsed.
+        let mut grew = false;
+        let mut buf = if cur < max {
+            self.bytes.to_vec()
+        } else {
+            if max == u16::MAX {
+                return Err(AllocError::CapacityExhausted);
+            }
+            let insert_at = record_block + max as usize * reclen;
+            if insert_at > self.bytes.len() {
+                return Err(AllocError::OutOfBounds);
+            }
+            let mut b = Vec::with_capacity(self.bytes.len() + reclen);
+            b.extend_from_slice(&self.bytes[..insert_at]);
+            b.extend(std::iter::repeat_n(0u8, reclen));
+            b.extend_from_slice(&self.bytes[insert_at..]);
+            // Shift the directory offset of every table whose block begins at/after the insertion.
+            let dir_end = FILE_HEADER + 8 * self.tables.len();
+            for i in 0..self.tables.len() {
+                let entry = FILE_HEADER + i * 8;
+                let off = u32_at(&b, entry + 4, self.endian) as usize;
+                if dir_end + off >= insert_at {
+                    write_u32(&mut b, entry + 4, (off + reclen) as u32, self.endian);
+                }
+            }
+            // Grow max + db_size now; current is bumped after the shift, below. The new slot is pure
+            // slack (appended at the record region's end) until the shift moves the tail into it.
+            write_u16(&mut b, block_offset + 0x14, max + 1, self.endian);
+            write_u32(&mut b, 0x08, self.db_size + reclen as u32, self.endian);
+            grew = true;
+            b
+        };
+
+        // Open the hole at `index`: shift records [index, cur) up by one slot, then zero the hole.
+        let hole = record_block + index as usize * reclen;
+        let shift_end = record_block + cur as usize * reclen;
+        if shift_end + reclen > buf.len() {
+            return Err(AllocError::OutOfBounds);
+        }
+        buf.copy_within(hole..shift_end, hole + reclen);
+        buf[hole..hole + reclen].fill(0);
+        write_u16(&mut buf, block_offset + 0x16, cur + 1, self.endian);
+
+        if grew {
+            let view = buf.clone();
+            let db = TdbFile::parse(&view).map_err(AllocError::Reparse)?;
+            db.recompute_crcs(&mut buf);
+        } else {
+            self.recompute_crcs(&mut buf);
+        }
+        Ok(buf)
+    }
+
+    /// Remove a record by **ordered shift**: records `(index, current)` slide up by one to close the
+    /// hole, the vacated tail slot is zeroed, and `current_records` is decremented (the freed slot
+    /// stays allocated as reusable slack; file length unchanged). Returns the new file bytes (CRCs
+    /// recomputed).
+    ///
+    /// Order-preserving counterpart to [`remove_record`]'s swap-pop. Use it for tables whose record
+    /// order matters (e.g. `eGlu` per-team blocks): closing the hole shifts later records — and later
+    /// blocks — down by one index while every block stays contiguous and the table still tiles. No far
+    /// tail row is dropped into the hole, so no `dXSB`-style block corruption. Indices past `index`
+    /// shift down by one; a caller holding raw indices must re-resolve.
+    pub fn remove_record_ordered(&self, table_raw: &str, index: u32) -> Result<Vec<u8>, AllocError> {
+        let t = self.table(table_raw).ok_or(AllocError::UnknownTable)?;
+        let cur = t.current_records as u32;
+        if index >= cur {
+            return Err(AllocError::IndexOutOfRange);
+        }
+        let reclen = t.record_len_bytes as usize;
+        let last = cur - 1;
+        let tail = t.record_block + last as usize * reclen;
+        if tail + reclen > self.bytes.len() {
+            return Err(AllocError::OutOfBounds);
+        }
+
+        let mut buf = self.bytes.to_vec();
+        // Slide (index, cur) up into [index, cur-1). When index == last this range is empty (a plain
+        // tail pop); copy_within handles the overlap like memmove.
+        let src_start = t.record_block + (index + 1) as usize * reclen;
+        let src_end = t.record_block + cur as usize * reclen;
+        let dst = t.record_block + index as usize * reclen;
+        buf.copy_within(src_start..src_end, dst);
+        buf[tail..tail + reclen].fill(0);
+        write_u16(&mut buf, t.block_offset + 0x16, last as u16, self.endian);
+        self.recompute_crcs(&mut buf);
+        Ok(buf)
     }
 }
 

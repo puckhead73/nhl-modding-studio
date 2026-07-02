@@ -103,6 +103,7 @@ mod tests {
                 writable: true,
             }],
             minimum_met: true,
+            extract_needed: false,
         }
     }
 

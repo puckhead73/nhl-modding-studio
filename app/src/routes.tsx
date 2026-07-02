@@ -10,6 +10,7 @@ import { ArenaDetail } from "./pages/ArenaDetail";
 import { Dashboard } from "./pages/Dashboard";
 import { LinesPage } from "./pages/Lines";
 import { PendingEdits } from "./pages/PendingEdits";
+import { SettingsPage } from "./pages/Settings";
 
 export const router = createBrowserRouter([
   { path: "/", element: <OpenProject /> },
@@ -36,6 +37,7 @@ export const router = createBrowserRouter([
         children: [{ path: ":id", element: <ArenaDetail /> }],
       },
       { path: "pending", element: <PendingEdits /> },
+      { path: "settings", element: <SettingsPage /> },
     ],
   },
 ]);

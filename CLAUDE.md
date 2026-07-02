@@ -65,6 +65,13 @@ Read [README.md](README.md) and the [docs/](docs/) folder for full context befor
 - Keep documentation in `docs/` current when scope or architecture changes.
 - Conventional-style commit subjects; end commit messages with the required Co-Authored-By line.
 - Branch off `main`; commit/push only when asked.
+- **Human-readable surfaces (rule).** Anything shown to the end user — findings, errors, labels,
+  summaries, tooltips — must use the **localized / resolved reference**, never the internal TDB
+  convention. Resolve studio table/field ids to their metadata `name`, and numeric entity ids to
+  their real names (team → team name, player → player name, etc.) wherever a resolution exists.
+  Keep the raw ids available only behind progressive disclosure (a tooltip / “details” affordance)
+  for power users, never as the primary text. Do the resolution at the layer that has the name
+  data (studio-domain/API), not by string-parsing in the frontend.
 
 ## Useful references
 

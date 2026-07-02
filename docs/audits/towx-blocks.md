@@ -51,8 +51,20 @@ Grouping every slot by its resolved team (`dXSB`) and sorting:
      later blocks) — i.e. it depends on capacity normalization (Spike S3 / Phase 4.4).
    - *release to pool* = clear a slot's `XSWT` (unplace), leaving an empty slot in the block (the one
      empty slot observed is exactly this shape).
-4. **`towx_coherence` predicate (Phase 4.3) is now concrete:** assert each team's slots form a
-   contiguous record + `toWX` run and that blocks tile without overlap/gap.
+4. **`towx_coherence` predicate (Phase 4.3) — IMPLEMENTED** (`tdb-domain-validation`, composed into
+   both the txn audit and save-time `validate_invariants`). It enforces the **record-block** structure
+   only: each team's slots form a contiguous *record* run and the blocks tile without overlap/gap
+   (`Severity::Error`). **`toWX`-key contiguity is deliberately *not* enforced** — a follow-up
+   measurement showed `toWX` is a globally monotonic *unique key with inter-block gaps* (spans
+   `0..=8861` over 5532 records), so its per-team contiguity is a creation-order artifact: an ordinary
+   mid-block delete leaves a key hole and a freshly-minted slot key is not block-adjacent. Enforcing it
+   would cry wolf on every edit and force a risky global renumber. The record-block structure is the
+   invariant the game actually reads a roster by, and the one the old `dXSB`-retag `move_player`
+   (and swap-pop delete / append-at-end create) violated.
+5. **Structural ops are now block-aware** (see [nhlviewng-record-model.md](nhlviewng-record-model.md)):
+   `delete_player` ordered-removes the `eGlu` slot (slide up, no swap-pop), `create_player` places the
+   new slot *inside* the team's block (reuse a vacant in-block slot, else `insert_record` at the block
+   boundary), and `move_player` relocates the occupant — all preserving the tiling by construction.
 
 ## Reproduction
 

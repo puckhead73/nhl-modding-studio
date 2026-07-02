@@ -10,6 +10,8 @@ members = [
     "crates/tdb-relations",
     "crates/tdb-domain-validation",
     "crates/tdb-savedata",
+    "crates/tdb-archive-codec",
+    "crates/tdb-archive-big",
     "crates/tdb-edit",
     "crates/studio-domain",
     "crates/studio-api",

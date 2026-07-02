@@ -15,7 +15,9 @@
 //! rather than the full command surface — the seams (registry of ops, source-aware save, DTO bridge
 //! in `studio-api`) are what later phases extend.
 
+pub mod audit;
 pub mod discovery;
+pub mod extract;
 mod error;
 mod overview;
 mod profile;
@@ -24,9 +26,11 @@ mod session;
 mod view;
 mod workspace;
 
+pub use audit::{humanize, HumanFinding, HumanReport};
 pub use discovery::{
     detect_install, ps4_title_ids, title_ids, DbPaths, InstallReport, SaveSlot, TitleIds,
 };
+pub use extract::{extract_install, find_big_archives, ExtractSummary};
 pub use error::DomainError;
 pub use overview::{DbOverview, TableOverview};
 pub use profile::ProjectProfile;

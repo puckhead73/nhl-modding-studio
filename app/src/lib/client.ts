@@ -17,6 +17,8 @@ import type { LinesViewDto } from "../bindings/LinesViewDto";
 import type { CareerStatsDto } from "../bindings/CareerStatsDto";
 import type { OpOutcomeDto } from "../bindings/OpOutcomeDto";
 import type { InstallReportDto } from "../bindings/InstallReportDto";
+import type { ExtractSummaryDto } from "../bindings/ExtractSummaryDto";
+import type { AutocorrectSummaryDto } from "../bindings/AutocorrectSummaryDto";
 
 export type Platform = "ps3" | "xbox" | "ps4" | "recomp";
 export type Role = "nhlng" | "roster" | "localization";
@@ -30,9 +32,10 @@ type Commands = {
     args: { dbPath: string; platform: Platform; role: Role };
     ret: ProjectSummaryDto;
   };
-  // Root-folder onboarding (PS3/Xbox): scan a folder for the game's databases + save inventory.
+  // Root-folder onboarding: scan a folder for the game's databases + save inventory. `savePath`
+  // locates the roster/profile saves for Xbox/Recomp (whose emulator saves aren't in a fixed place).
   detect_install: {
-    args: { gameId: string; platform: Platform; root: string; xeniaRoot?: string | null };
+    args: { gameId: string; platform: Platform; root: string; savePath?: string | null };
     ret: InstallReportDto;
   };
   // Open the project from a root folder; enforces the modding minimum and writes the profile sidecar.
@@ -41,15 +44,22 @@ type Commands = {
       gameId: string;
       platform: Platform;
       root: string;
-      xeniaRoot?: string | null;
+      savePath?: string | null;
       bigFilesExtracted: boolean;
     };
     ret: ProjectSummaryDto;
   };
-  // Extract a game's big files (currently a stub that rejects with a "not yet implemented" message).
-  extract_big_files: { args: { gameId: string; platform: Platform; root: string }; ret: null };
+  // Extract a game's `.big` archives in place; returns a summary of what was written.
+  extract_big_files: {
+    args: { gameId: string; platform: Platform; root: string };
+    ret: ExtractSummaryDto;
+  };
   project_summary: { args: { projectId: number }; ret: ProjectSummaryDto };
   validate_project: { args: { projectId: number }; ret: IntegrityReportDto };
+  // Acknowledged corruption-override: allow edits on a DB that fails the structural audit (unsupported).
+  set_edit_override: { args: { projectId: number; allow: boolean }; ret: null };
+  // On-load duplicate-jersey auto-correction; returns the corrections applied (staged as a pending edit).
+  autocorrect_jerseys: { args: { projectId: number }; ret: AutocorrectSummaryDto };
   list_players: { args: { projectId: number }; ret: PlayerSummaryDto[] };
   player_view: { args: { projectId: number; playerId: number }; ret: PlayerViewDto | null };
   career_stats: { args: { projectId: number; playerId: number }; ret: CareerStatsDto };

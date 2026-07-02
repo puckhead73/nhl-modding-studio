@@ -1,0 +1,11 @@
+[package]
+name = "tdb-archive-codec"
+description = "EA archive container codecs — chunkzip read (chunklzx detection). Backs the .big extractor."
+version = "0.0.0"
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+thiserror = "1"
+flate2 = "1"

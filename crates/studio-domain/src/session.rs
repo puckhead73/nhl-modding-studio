@@ -11,7 +11,7 @@ use std::path::Path;
 use tdb_core::TdbFile;
 use tdb_defs::ValidationError;
 use tdb_domain_validation::{validate_invariants, IntegrityReport};
-use tdb_edit::txn::{EditTransaction, OpOutcome};
+use tdb_edit::txn::{EditTransaction, JerseyReassignment, OpOutcome};
 use tdb_edit::EditError;
 use tdb_relations::RosterModel;
 
@@ -45,6 +45,9 @@ pub struct EditSession {
     working: Vec<u8>,
     undo: Vec<Vec<u8>>,
     redo: Vec<Vec<u8>>,
+    /// Acknowledged "override" mode — edits proceed even though the DB fails the structural audit
+    /// (see [`EditTransaction::set_allow_pre_existing_violations`]). Off by default.
+    allow_pre_existing_violations: bool,
 }
 
 impl EditSession {
@@ -56,7 +59,14 @@ impl EditSession {
             working,
             undo: Vec::new(),
             redo: Vec::new(),
+            allow_pre_existing_violations: false,
         }
+    }
+
+    /// Enter/leave the acknowledged corruption-override edit mode. When on, the per-op post-condition
+    /// audit no longer blocks edits on a DB that already fails the structural invariants (unsupported).
+    pub fn set_allow_pre_existing_violations(&mut self, allow: bool) {
+        self.allow_pre_existing_violations = allow;
     }
 
     /// The project this session edits.
@@ -194,6 +204,21 @@ impl EditSession {
         ))
     }
 
+    /// Run the Layer 4 audit and resolve its findings into display-ready text (real team/player
+    /// names, metadata field labels) — the human-readable-surfaces rule. Raw ids ride along for
+    /// power-user disclosure. This is what the UI should call; [`Self::validate`] stays the
+    /// engine-facing, id-precise form.
+    pub fn audit_report(&self) -> Result<crate::audit::HumanReport> {
+        let db = TdbFile::parse(&self.working)?;
+        let raw = validate_invariants(&db, self.project.relations(), self.project.enums());
+        Ok(crate::audit::humanize(
+            &db,
+            self.project.meta(),
+            self.project.enums(),
+            raw.findings,
+        ))
+    }
+
     /// Run one Layer 3 operation through the repairing-transaction harness, recording undo history.
     /// On any error the working bytes are left exactly as they were.
     fn run<R>(
@@ -201,6 +226,7 @@ impl EditSession {
         op: impl FnOnce(&mut EditTransaction) -> std::result::Result<R, EditError>,
     ) -> Result<R> {
         let mut tx = EditTransaction::begin(&self.working)?;
+        tx.set_allow_pre_existing_violations(self.allow_pre_existing_violations);
         let result = op(&mut tx)?;
         let new_bytes = tx.commit()?;
         self.undo.push(std::mem::replace(&mut self.working, new_bytes));
@@ -325,6 +351,11 @@ impl EditSession {
         self.run(|tx| tx.create_player(team, position))
     }
 
+    /// Clone an existing player onto a team (deep-copy of bio + companions); returns the new `wBIz`.
+    pub fn clone_player(&mut self, source_player: u64, to_team: u64) -> Result<(u64, OpOutcome)> {
+        self.run(|tx| tx.clone_player(source_player, to_team))
+    }
+
     /// Delete a player and its whole cluster.
     pub fn delete_player(&mut self, player: u64) -> Result<OpOutcome> {
         self.run(|tx| tx.delete_player(player))
@@ -335,9 +366,52 @@ impl EditSession {
         self.run(|tx| tx.move_player(player, from_team, to_team))
     }
 
+    /// Swap two players' roster memberships between teams (the block-full alternative to a move).
+    pub fn trade_slots(
+        &mut self,
+        a_team: u64,
+        a_player: u64,
+        b_team: u64,
+        b_player: u64,
+    ) -> Result<OpOutcome> {
+        self.run(|tx| tx.trade_slots(a_team, a_player, b_team, b_player))
+    }
+
+    /// Release a player from a team to free agency (vacate their roster slot).
+    pub fn release_to_fa(&mut self, from_team: u64, player: u64) -> Result<OpOutcome> {
+        self.run(|tx| tx.release_to_fa(from_team, player))
+    }
+
+    /// Sign an off-roster free agent onto a team's free block slot.
+    pub fn sign_from_fa(&mut self, player: u64, to_team: u64) -> Result<OpOutcome> {
+        self.run(|tx| tx.sign_from_fa(player, to_team))
+    }
+
+    /// Retire a jersey number for a team (add it to the retired-number table).
+    pub fn retire_jersey(&mut self, team: u64, number: u64) -> Result<OpOutcome> {
+        self.run(|tx| tx.retire_jersey(team, number))
+    }
+
+    /// Un-retire a jersey number for a team (remove it from the retired-number table).
+    pub fn unretire_jersey(&mut self, team: u64, number: u64) -> Result<OpOutcome> {
+        self.run(|tx| tx.unretire_jersey(team, number))
+    }
+
     /// Set a player's jersey number on a team (unique within the team).
     pub fn set_jersey_number(&mut self, team: u64, player: u64, number: u64) -> Result<OpOutcome> {
         self.run(|tx| tx.set_jersey_number(team, player, number))
+    }
+
+    /// Auto-correct every duplicate jersey number in the DB (the default reassignment logic), returning
+    /// the corrections applied. A no-op when there are none — and, in that case, it deliberately does
+    /// **not** run a transaction, so it leaves no undo entry and doesn't mark the project dirty.
+    pub fn autocorrect_duplicate_jerseys(&mut self) -> Result<(OpOutcome, Vec<JerseyReassignment>)> {
+        // Peek read-only: nothing to fix → return without touching the working bytes or undo history.
+        let peek = EditTransaction::begin(&self.working)?;
+        if peek.plan_jersey_corrections()?.is_empty() {
+            return Ok((OpOutcome::default(), Vec::new()));
+        }
+        self.run(|tx| tx.autocorrect_duplicate_jerseys())
     }
 
     /// Set a player's roster status (2-bit `ZBac.RREB`).

@@ -99,6 +99,10 @@ pub struct InstallReport {
     pub saves: Vec<SaveSlot>,
     /// The bare minimum to mod: an `nhlng.db` **and** a roster save are both present.
     pub minimum_met: bool,
+    /// The database isn't loose yet but `.big` archives are present — the install
+    /// needs extraction (Xbox / Recomp / PS4 ship the db packed). When `true`,
+    /// the UI offers extraction before enforcing the modding minimum.
+    pub extract_needed: bool,
 }
 
 impl InstallReport {
@@ -114,13 +118,15 @@ impl InstallReport {
     }
 }
 
-/// Walk a root folder for everything a project needs. `xenia_root` overrides the default Xenia
-/// content directory (Xbox only); ignored for PS3.
+/// Walk a root folder for everything a project needs. `save_path` points discovery at the roster/
+/// profile save location for platforms whose emulator saves *aren't* in a consistent place
+/// (Xbox / Recomp); it's ignored for PS3 and PS4, whose saves live under the emulator root. For
+/// Xbox, a `None` `save_path` falls back to scanning the default Xenia content directory.
 pub fn detect_install(
     game_id: &str,
     platform: Platform,
     root: &Path,
-    xenia_root: Option<&Path>,
+    save_path: Option<&Path>,
 ) -> InstallReport {
     let mut report = InstallReport {
         game_id: game_id.to_string(),
@@ -130,6 +136,7 @@ pub fn detect_install(
         db_paths: DbPaths::default(),
         saves: Vec::new(),
         minimum_met: false,
+        extract_needed: false,
     };
 
     match platform {
@@ -140,15 +147,24 @@ pub fn detect_install(
         }
         Platform::Xbox => {
             if let Some(ids) = title_ids(game_id) {
-                detect_xbox(root, &ids, xenia_root, &mut report);
+                detect_xbox(root, &ids, save_path, &mut report);
             }
         }
         Platform::Ps4 => detect_ps4(root, ps4_title_ids(game_id), &mut report),
-        // Recomp keeps the legacy file-pick path; nothing to discover here.
-        Platform::Recomp => {}
+        // Recomp (Xbox-derived): a game folder (packed like Xbox) plus an explicit save path.
+        Platform::Recomp => detect_recomp(root, save_path, &mut report),
     }
 
     report.finish()
+}
+
+/// Set `extract_needed` when the editable db isn't loose yet but `.big` archives are present in
+/// `install_dir` — i.e. the user pointed at a valid but un-extracted install.
+fn note_extract_needed(install_dir: &Path, report: &mut InstallReport) {
+    if report.db_paths.nhlng.is_none() && !crate::extract::find_big_archives(install_dir).is_empty()
+    {
+        report.extract_needed = true;
+    }
 }
 
 fn detect_ps3(root: &Path, ids: &TitleIds, report: &mut InstallReport) {
@@ -188,40 +204,95 @@ fn detect_ps3(root: &Path, ids: &TitleIds, report: &mut InstallReport) {
 fn detect_xbox(
     root: &Path,
     ids: &TitleIds,
-    xenia_root: Option<&Path>,
+    save_path: Option<&Path>,
     report: &mut InstallReport,
 ) {
     // The Xbox install dir *is* the folder the user pointed at (contains default.xex).
     report.install_dir = Some(root.to_string_lossy().to_string());
     report.db_paths = resolve_db_paths(root);
+    note_extract_needed(root, report);
 
-    // Saves: <xenia content>/<USER16HASH>/<TITLEID>/00000001/<SAVE>/<file>.
-    let content_root = xenia_root.map(Path::to_path_buf).or_else(default_xenia_content);
-    let Some(content_root) = content_root else {
-        return;
-    };
-    let Ok(hashes) = std::fs::read_dir(&content_root) else {
-        return;
-    };
-    for hash in hashes.flatten() {
-        let Some(title_dir) = child_ci(&hash.path(), ids.xbox) else {
-            continue;
-        };
-        let user_dir = title_dir.join("00000001");
-        let Ok(saves) = std::fs::read_dir(&user_dir) else {
-            continue;
-        };
-        for save in saves.flatten() {
-            if !save.path().is_dir() {
-                continue;
-            }
-            // Xbox stores the container as a single file inside the save folder; pick the first
-            // file that parses as a save container.
-            if let Some(slot) = first_container_in(&save.path()) {
-                report.saves.push(slot);
+    match save_path {
+        // The user pointed at their save location directly (Xenia's save location isn't
+        // consistent) — scan it for containers.
+        Some(sp) => report.saves = scan_saves(sp),
+        // Fall back to the default Xenia content tree, title-filtered:
+        // <xenia content>/<USER16HASH>/<TITLEID>/00000001/<SAVE>/<file>.
+        None => {
+            let Some(content_root) = default_xenia_content() else {
+                return;
+            };
+            let Ok(hashes) = std::fs::read_dir(&content_root) else {
+                return;
+            };
+            for hash in hashes.flatten() {
+                let Some(title_dir) = child_ci(&hash.path(), ids.xbox) else {
+                    continue;
+                };
+                let user_dir = title_dir.join("00000001");
+                let Ok(saves) = std::fs::read_dir(&user_dir) else {
+                    continue;
+                };
+                for save in saves.flatten() {
+                    if !save.path().is_dir() {
+                        continue;
+                    }
+                    // Xbox stores the container as a single file inside the save folder; pick the
+                    // first file that parses as a save container.
+                    if let Some(slot) = first_container_in(&save.path()) {
+                        report.saves.push(slot);
+                    }
+                }
             }
         }
     }
+}
+
+/// Recomp (the NHL Legacy Recompilation) is Xbox-derived: the game folder is packed the same way
+/// (so the db may need `.big` extraction) and uses the same big-endian TDB + save containers. Its
+/// saves have no consistent emulator location, so the user provides the save path directly.
+fn detect_recomp(root: &Path, save_path: Option<&Path>, report: &mut InstallReport) {
+    report.install_dir = Some(root.to_string_lossy().to_string());
+    report.db_paths = resolve_db_paths(root);
+    note_extract_needed(root, report);
+    if let Some(sp) = save_path {
+        report.saves = scan_saves(sp);
+    }
+}
+
+/// Depth bound for the save-folder scan — save trees are shallow; the cap guards against a user
+/// pointing at an enormous directory.
+const SAVE_WALK_DEPTH: usize = 6;
+
+/// Discover save containers under an explicit save path (Xbox / Recomp). Accepts a single container
+/// file *or* a folder: for a folder, walk it (bounded) and take the first recognised container in
+/// each directory — mirroring the "one container per save folder" layout consoles use. Files that
+/// don't classify to a known save type are ignored.
+fn scan_saves(path: &Path) -> Vec<SaveSlot> {
+    if path.is_file() {
+        return classify_save(path).into_iter().collect();
+    }
+    let mut slots = Vec::new();
+    let mut seen = std::collections::HashSet::new();
+    let mut stack = vec![(path.to_path_buf(), 0usize)];
+    while let Some((dir, depth)) = stack.pop() {
+        if let Some(slot) = first_container_in(&dir) {
+            if seen.insert(slot.path.clone()) {
+                slots.push(slot);
+            }
+        }
+        if depth < SAVE_WALK_DEPTH {
+            if let Ok(entries) = std::fs::read_dir(&dir) {
+                for e in entries.flatten() {
+                    if e.path().is_dir() {
+                        stack.push((e.path(), depth + 1));
+                    }
+                }
+            }
+        }
+    }
+    slots.sort_by(|a, b| a.path.cmp(&b.path));
+    slots
 }
 
 /// shadPS4 layout: game files live under `<root>/Games/<CUSA>/nhl/data/...` (the `nhl_game.db` +
@@ -247,6 +318,7 @@ fn detect_ps4(root: &Path, cusas: &[&str], report: &mut InstallReport) {
         report.db_paths.localization = some_file(game_dir.join("nhl/data/kettle/loc/eng_us.db"))
             .or_else(|| find_file(&game_dir, "eng_us.db", 9))
             .map(path_string);
+        note_extract_needed(&game_dir, report);
     }
 
     // --- Saves: each <SaveDir>/DATA under the title's savedata CUSA folder (first variant found) ---
@@ -572,6 +644,53 @@ mod tests {
         assert!(!r.minimum_met);
         assert!(r.db_paths.nhlng.is_none());
         assert!(r.saves.is_empty());
+    }
+
+    /// Write a minimal `.big` archive containing the given entries.
+    fn write_big(path: &Path, entries: &[(&str, &[u8])]) {
+        let mut b = tdb_archive_big::ArchiveBuilder::new();
+        for (name, body) in entries {
+            b.add_entry(*name, body.to_vec());
+        }
+        fs::create_dir_all(path.parent().unwrap()).unwrap();
+        fs::write(path, b.build().unwrap()).unwrap();
+    }
+
+    #[test]
+    fn xbox_unextracted_install_reports_extract_needed_not_minimum() {
+        // A fresh Xbox install: default.xex + a packed .big, but no loose nhlng.db.
+        let t = TempTree::new("xbox-unextracted");
+        let install = t.0.join("install");
+        fs::create_dir_all(&install).unwrap();
+        fs::write(install.join("default.xex"), b"xex").unwrap();
+        write_big(&install.join("data.big"), &[("db/nhlng.db", b"packed")]);
+
+        let r = detect_install("nhl14", Platform::Xbox, &install, None);
+        assert!(r.extract_needed, "packed .big + no loose db => extraction needed");
+        assert!(!r.minimum_met, "can't mod until the db is extracted");
+        assert!(r.db_paths.nhlng.is_none());
+    }
+
+    #[test]
+    fn recomp_detects_game_db_and_scanned_save() {
+        // Recomp uses the Xbox big-endian db + save containers. Point at a game folder holding a
+        // loose nhlng.db + meta, and a separate save folder with a real roster container.
+        let a = anchors().join("xbox360/nhl14");
+        let t = TempTree::new("recomp");
+        let game = t.0.join("game");
+        copy(a.join("databases/nhlng.db"), game.join("nhlng.db"));
+        copy(a.join("databases/nhlng-meta.xml"), game.join("nhlng-meta.xml"));
+
+        let saves = t.0.join("saves");
+        copy(
+            a.join("savefiles/ROSTER 20260627054746/ROSTER 20260627054746"),
+            saves.join("ROSTER/container"),
+        );
+
+        let r = detect_install("legacyrecomp", Platform::Recomp, &game, Some(&saves));
+        assert!(r.db_paths.nhlng.is_some(), "recomp nhlng.db resolved");
+        assert!(r.saves.iter().any(|s| s.kind == "roster"), "roster save scanned");
+        assert!(r.minimum_met, "nhlng + roster => recomp minimum met");
     }
 
     fn write_dummy(path: &Path) {

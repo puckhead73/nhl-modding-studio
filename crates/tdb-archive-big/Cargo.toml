@@ -1,0 +1,11 @@
+[package]
+name = "tdb-archive-big"
+description = "EA BIGF / BIG4 archive reader + builder, with chunkzip auto-decompression on extract."
+version = "0.0.0"
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+thiserror = "1"
+tdb-archive-codec = { path = "../tdb-archive-codec" }

@@ -98,13 +98,18 @@ The ops that need **no** Spike-S1 result. Each is: a `tdb-edit::txn` method on t
 transaction → a thin `EditSession` delegate (`session.rs` `self.run(|tx| …)`) → a `Workspace`
 wrapper on the correct dual-file path → the `studio-api` triplet.
 
-1. **`clone_player(source_player, to_team)` — backs Transactions "copy".** Structural op. Reuse
-   `create_player`'s cluster allocation (`txn.rs:346`) to mint a fresh `wBIz`, then deep-copy every
-   field of the source's bio + kind-correct companions into the new records (skip the key fields —
-   the clone gets its own minted id), and wire the new `eGlu` slot to `to_team`. **Dual-file:** copy
-   the `Workspace::create_player` dual-create + `fully_aligned` guard (`workspace.rs:228`).
-   *Verify:* clone on the anchor → new cluster present, companion invariant holds, audit-clean,
-   counts increment by exactly one cluster; undo restores baseline.
+1. **`clone_player(source_player, to_team)` — ✅ DONE (2026-07-01).** Backs Transactions "copy".
+   Structural op reusing `create_player`'s cluster allocation, but the bio + kind-correct companion
+   pair are **deep-copied** from the source (new `tdb-core::copy_record` clones the whole record block —
+   ratings, name, appearance, equipment — in one shot), then the identity is overridden: fresh minted
+   `wBIz` (re-keying bio + companions), fresh `ZBac` index (`vfEq` → new `wBIz`), bio team set to
+   `to_team`, and a block-aware `eGlu` slot (reuse/insert). The source's slot state (jersey/captaincy)
+   is **not** copied — the clone gets a clean slot (shared `occupy_slot`, which also cleaned
+   `create_player`/`sign_from_fa`'s reuse path). Source may be rostered or a free agent. **Dual-file:**
+   `Workspace::clone_player` copies the `create_player` dual-create + `fully_aligned` guard. Wired
+   through session/registry/commands (returns `CreatePlayerDto`). *Verified:* new cluster present,
+   every fixed-bit bio field deep-copied except identity/team, companion invariant holds, goalie clone
+   gets the goalie pair, audit-clean, counts +1 cluster; bad-args rejected.
 
 2. **`move_player` re-modeled as occupant relocation — ✅ DONE (2026-06-30).** S2 proved `eGlu` is
    partitioned into full, contiguous per-team blocks, so a slot is a fixed *(team, slot#)* container
@@ -113,19 +118,35 @@ wrapper on the correct dual-file path → the `studio-api` triplet.
    vacates the source by zeroing `XSWT`, never touches `dXSB`; keyed by `from_team` because a player
    holds multiple memberships (~6 %). Errors `TeamRosterFull` when the block is full. Signature change
    propagated through session/workspace/registry/commands; regression test asserts block coherence
-   ([towx-blocks.md](../audits/towx-blocks.md)). **Remaining in 4.1: `trade_slots(a_team, a_player,
-   b_team, b_player)`** — swap two occupants (the general op when both blocks are full); reuse the
-   same transplant/vacate primitives inside one `with_repairing_transaction`, clearing captaincy on
-   each arrival. **Dual-file:** `fan_out_entity`. *Verify:* swap leaves both blocks coherent,
-   one-captain-per-team preserved, audit-clean incl. `towx_coherence`; undo restores both.
+   ([towx-blocks.md](../audits/towx-blocks.md)).
+
+   **`trade_slots(a_team, a_player, b_team, b_player)` — ✅ DONE (2026-07-01).** Swaps two occupants in
+   place (the general op when both blocks are full): each occupant (`XSWT` + per-slot fields) is
+   captured and written into the *other* slot via the shared `capture_occupant`/`apply_occupant`
+   primitives (refactored out of `transplant_slot`), leaving both slots' `dXSB`/`toWX` untouched — so
+   blocks stay coherent and no free slot is consumed. Clears captaincy on both arrivals, follows each
+   bio's team, and clears a jersey that collides on arrival (shared `clear_colliding_jersey`, also now
+   used by `move_player`). Attribute op → `fan_out_entity`. Wired through
+   session/workspace/registry/commands (reuses `OpOutcomeDto`). Tests: in-place swap leaves both blocks
+   coherent + audit-clean, the colliding-jersey repair, and bad-arg rejection.
 
 3. **`hide(player)` / `unhide(player)`.** Attribute op once S1/S4 confirm the backing field (likely a
    `ZBac.RREB` / status code or a pool move). If S1 shows hidden is a pool, fold into the pool op
    (4.2) instead. **Dual-file:** `fan_out_entity`. *Verify:* round-trips; status reads back.
 
-4. **`retire_jersey(team, number)` / `unretire_jersey(team, number)`.** Attribute op on the
-   team's retired-number field set (`kOtt`; confirm the exact fields against the meta before coding —
-   do not assert). **Dual-file:** `fan_out_entity`. *Verify:* set then read; audit-clean.
+4. **`retire_jersey(team, number)` / `unretire_jersey(team, number)` — ✅ DONE (2026-07-01).**
+   Metadata check first (rule 3) **corrected the plan's assumption:** retired numbers are **not** a
+   field set on `kOtt` — they live in a **separate table `wcSL`** ("stockretirednumbertable", verified
+   against the meta *and* anchor bytes: 322 rows, each a `(dXSB team, JFiY number)` pair — e.g.
+   Montreal's eleven retired numbers). So these are **structural** ops (append/remove a `wcSL` row),
+   not attribute ops: `retire_jersey` appends the pair (idempotent — no-op if already retired,
+   range-checks the 7-bit number, requires an existing team); `unretire_jersey` swap-pop-removes the
+   matching row (idempotent). **Dual-file:** *not* `fan_out_entity` — `wcSL` may be absent from the
+   roster save, so a new `Workspace::fan_out_shared` mirrors only when the table is shared+aligned
+   (else `nhlng`-only, the `set_field` degrade pattern). Wired through session/registry/commands
+   (reuses `OpOutcomeDto`). *Verified:* retire then un-retire round-trips the `wcSL` row count,
+   audit-clean; idempotence and bad-args covered. (`JMxx` "leagueretirementtable" — named
+   league-retired players — is a separate concept, out of scope here.)
 
 **Copy-from:** op shape `set_captaincy`/`move_player` (`txn.rs:296,526`); `EditSession` delegate
 (`session.rs:319-346`); `Workspace` attribute vs. structural paths (`workspace.rs:187-279`); the
@@ -139,20 +160,27 @@ smallest-free non-sentinel; no hand-edited DTO TS.
 
 ## Phase 4.2 — Backend: `free_agent` (sign / release)  ⟵ S1 resolved: occupancy model
 
-S1 confirmed off-roster = an indexed player (`ZBac` row) occupying no `eGlu` slot — **no sentinel team,
-no unindexed-bio pool**. So the ops are occupancy changes on the fixed per-team blocks (same primitives
-as the fixed `move_player`), **not** `dXSB` retags:
-- **`release_to_fa(from_team, player)`** = vacate the player's slot on `from_team` (zero `XSWT`);
-  optionally set the pool `ZBac.RREB` code (label still candidate — Spike S4). Attribute op
-  (`fan_out_entity`).
-- **`sign_from_fa(player, to_team)`** = place the player's `ZBac.vfEq` into a free slot in `to_team`'s
-  block (transplant occupancy). Blocks are full, so this generally needs block growth (4.4) — until
-  then it errors `TeamRosterFull`, same as `move_player`.
+**✅ DONE (2026-07-01).** S1 confirmed off-roster = an indexed player (`ZBac` row) occupying no `eGlu`
+slot — **no sentinel team, no unindexed-bio pool** — so the ops are occupancy changes on the fixed
+per-team blocks (same primitives as `move_player`), **not** `dXSB` retags:
+- **`release_to_fa(from_team, player)`** = vacate the player's slot on `from_team` via the shared
+  `vacate_slot` (zero `XSWT` + clear captaincy so no phantom captain lingers). The slot stays in the
+  block (now empty); bio/index rows untouched → the player is off-roster but keeps their identity.
+  Attribute op (`fan_out_entity`). `ZBac.RREB` pool code intentionally **not** written (label still
+  candidate — Spike S4; S1 shows membership is defined by slot presence, so unslotting suffices).
+- **`sign_from_fa(player, to_team)`** = install the free agent's `ZBac.vfEq` into a **free slot in
+  `to_team`'s block** (clean arrival state: captaincy cleared, jersey unassigned; bio team follows).
+  Rejects an already-rostered player (`AlreadyRostered`). Blocks are full, so it errors
+  `TeamRosterFull` when the target block has no free slot — on-demand block growth stays deferred to
+  4.4 to keep sign an attribute op (`fan_out_entity`); the natural flow (release frees a slot, then
+  sign into it) works today.
 
-Validate against capacity (4.4) before signing; never silently overflow. *Verify:* against the anchor,
-release then sign round-trips the player back onto a team, audit-clean incl. `towx_coherence`, counts
-consistent; undo restores. **The FA-vs-hidden sub-label** stays gated on Spike S4 (candidate `RREB`
-codes) — ship release/sign first; label the pool sub-status once confirmed.
+Wired through session/workspace/registry/commands (reuses `OpOutcomeDto`). *Verified:* release then
+sign round-trips a player back onto a team, both blocks coherent, audit-clean incl. `towx_coherence` +
+`dup_on_team`; full-team sign and already-rostered/unknown-team args rejected; undo via the shared
+`run`/`fan_out_entity` path. **The FA-vs-hidden sub-label** stays gated on Spike S4 (candidate `RREB`
+codes). *Also fixed here:* `move_player`'s source-vacate now clears captaincy too (was a latent
+phantom-captain on the emptied slot), via the shared `vacate_slot`.
 
 ---
 
@@ -163,15 +191,25 @@ Add the two predicates the EDIT-MODEL contract requires (EDIT-MODEL.md:166-189) 
 (`txn.rs` `with_repairing_transaction`) and save-time `validate_invariants` (`lib.rs:309`) so
 operation-time and save-time never drift:
 
-1. **`dup_on_team`** — no two slots assign the same player to the same team, and (where required) no
-   duplicate jersey within a team (the existing `set_jersey_number` uniqueness check, promoted to a
-   whole-DB predicate). Severity: **error**.
-2. **`towx_coherence`** (S2 confirmed the block model, so this is concrete): assert each team's slots
-   form a **contiguous record + `toWX` run** and that the per-team blocks **tile `eGlu` with no
-   overlap or gap** (the exact shape verified in [towx-blocks.md](../audits/towx-blocks.md)). Severity:
-   **error** for overlap/gap or a slot whose `dXSB` falls outside its block's team; **warning** for an
-   under-filled block. This is the predicate the re-modeled move/trade (4.1) must satisfy and that the
-   *old* `dXSB`-retag behavior would fail.
+1. **`dup_on_team` — ✅ DONE (2026-07-01).** Composed into both audit paths. Within one team: no
+   player occupies two slots, and no two **occupied** slots share a non-sentinel jersey (jersey `0` =
+   unassigned, exempt — verified: team 107 legitimately carries three `0`-jersey slots). Severity:
+   **error**. Promotes the op-time `set_jersey_number` uniqueness check to a whole-DB invariant and
+   adds the same-player guard. Surfaced (and fixed) a real gap: `move_player` brought the player's
+   jersey into the destination team; it now **clears a colliding jersey to unassigned on arrival**
+   (a repair, like the captaincy clear). `set_jersey_number` itself already blocks the interactive
+   case.
+2. **`towx_coherence` — ✅ DONE (2026-06-30).** Composed into both the txn audit and save-time
+   `validate_invariants`. Enforces the **record-block** structure: each team's `eGlu` slots form a
+   **contiguous record run** and the per-team blocks **tile with no overlap or gap** (Severity:
+   **error**). **`toWX`-key contiguity is *not* enforced** — measurement showed `toWX` is a globally
+   monotonic unique key with inter-block gaps, so per-team contiguity is a creation-order artifact that
+   ordinary edits legitimately break (see [towx-blocks.md](../audits/towx-blocks.md) pt 4). This
+   required making the structural ops block-aware first: **`create_player`/`delete_player` were
+   re-modelled** (new `tdb-core` `insert_record` + `remove_record_ordered`; in-block slot placement;
+   ordered `eGlu` removal) so they satisfy the predicate by construction — the NHLViewNG record model
+   validated this ([nhlviewng-record-model.md](../audits/nhlviewng-record-model.md)). Remaining 4.3
+   work: the **`dup_on_team`** predicate.
 
 Copy the existing predicate shape (`single_captain`, `lib.rs:276`) and extend the `validate_invariants`
 composition (`lib.rs:314-318`) and the txn audit set. *Verify:* synthetic dirty fixtures (dup-on-team,
