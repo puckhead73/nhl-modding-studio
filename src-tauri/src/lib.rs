@@ -8,6 +8,7 @@
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_opener::init())
         .manage(studio_api::Registry::default())
         .invoke_handler(studio_api::command_handler!())
         .run(tauri::generate_context!())

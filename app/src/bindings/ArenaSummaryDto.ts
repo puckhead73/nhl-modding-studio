@@ -3,4 +3,8 @@
 /**
  * A compact arena row for the master list.
  */
-export type ArenaSummaryDto = { arena_id: number, record: number, name: string, city: string, };
+export type ArenaSummaryDto = { arena_id: number, record: number, name: string, city: string, 
+/**
+ * How many teams call this arena home (`kOtt.buDa == arena_id`).
+ */
+team_count: number, };

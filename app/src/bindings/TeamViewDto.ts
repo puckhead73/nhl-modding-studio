@@ -5,4 +5,8 @@ import type { FieldViewDto } from "./FieldViewDto";
 /**
  * The full Team detail: curated identity, resolved arena, roster size, and all `kOtt` fields.
  */
-export type TeamViewDto = { team_id: number, record: number, identity: Array<FieldViewDto>, arena: ArenaRefDto | null, roster_count: number, all_fields: Array<FieldViewDto>, };
+export type TeamViewDto = { team_id: number, record: number, identity: Array<FieldViewDto>, arena: ArenaRefDto | null, roster_count: number, 
+/**
+ * Retired jersey numbers (`wcSL`), sorted ascending.
+ */
+retired_numbers: Array<number>, all_fields: Array<FieldViewDto>, };

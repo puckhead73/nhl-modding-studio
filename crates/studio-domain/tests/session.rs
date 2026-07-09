@@ -39,6 +39,41 @@ fn a_player(session: &EditSession) -> (u64, u64) {
     (slot.team_id, slot.player_id.unwrap())
 }
 
+/// A strategy cell edit (`EeYo`) round-trips through the audited path, and its career-mode
+/// mirror is a silent no-op on stock data (`JUfQ` ships with 0 rows — only a dynasty save
+/// populates it, at which point the same call stages a second edit).
+#[test]
+fn strategy_edit_applies_and_jufq_mirror_noops_on_stock() {
+    let project = load_nhlng();
+    let mut session = EditSession::begin(project);
+
+    let strat = session.team_strategies(0).unwrap().expect("team 0 sheet");
+    let forecheck = strat
+        .tactics
+        .iter()
+        .find(|c| c.field.studio_field == "RBGh")
+        .unwrap();
+    let new_value = if forecheck.field.decoded == Some(0) { 1 } else { 0 };
+
+    let outcome = session
+        .set_field("EeYo", strat.record, "RBGh", FieldValue::Int(new_value))
+        .unwrap();
+    assert_eq!(outcome.edits, 1, "stock JUfQ is empty — the mirror must not fire");
+    assert!(
+        !outcome.repairs.iter().any(|r| r.contains("JUfQ")),
+        "no mirror note on a no-op"
+    );
+
+    let after = session.team_strategies(0).unwrap().unwrap();
+    let cell = after
+        .tactics
+        .iter()
+        .find(|c| c.field.studio_field == "RBGh")
+        .unwrap();
+    assert_eq!(cell.field.decoded, Some(new_value), "the edit round-trips");
+    assert!(cell.field.enum_label.is_some(), "the new value resolves a label");
+}
+
 /// Load → save with no edit reproduces the raw `.db` file byte-for-byte (the round-trip gate).
 #[test]
 fn raw_db_round_trip_is_byte_identical() {
@@ -273,4 +308,74 @@ fn platform_endian_mismatch_is_rejected() {
         "got {:?}",
         result.err()
     );
+}
+
+/// Add-season → edit a stat cell → delete round-trip on the stock career tables: the row appears
+/// with its identity set, the staged cell edit lands, the ordered delete restores the original
+/// row count, and every step audits clean and is undoable.
+#[test]
+fn career_season_add_edit_delete_round_trip() {
+    let project = load_nhlng();
+    let mut session = EditSession::begin(project);
+    let (_, player) = a_player(&session);
+
+    let before = session.career_stats(player).unwrap();
+    let rows_before = |cs: &studio_domain::CareerStats| {
+        cs.sections
+            .iter()
+            .find(|s| s.kind == "skater_season")
+            .map(|s| s.rows.len())
+            .unwrap_or(0)
+    };
+    let n0 = rows_before(&before);
+
+    // Add a 2015-16 AHL season with a team code.
+    let (record, outcome) = session
+        .add_career_season(studio_domain::CAREER_SKATER_SEASON, player, 2016, 1, "PIT")
+        .unwrap();
+    assert!(outcome.edits >= 4);
+
+    let after = session.career_stats(player).unwrap();
+    assert_eq!(rows_before(&after), n0 + 1, "one new season row");
+    let sec = after.sections.iter().find(|s| s.kind == "skater_season").unwrap();
+    let row = sec.rows.iter().find(|r| r.record == record).expect("new row visible");
+    assert_eq!(row.season_label, "2015-16");
+    assert_eq!(row.league_label, "AHL");
+    assert_eq!(row.team, "PIT");
+    // Stat cells start zero.
+    let gp = sec.columns.iter().position(|c| c.label == "GP").unwrap();
+    assert_eq!(row.cells[gp].as_ref().unwrap().decoded, Some(0));
+
+    // Edit a stat cell through the normal validated path (goals = 30).
+    let g = sec.columns.iter().position(|c| c.label == "G").unwrap();
+    let goals_field = sec.columns[g].field.clone();
+    session
+        .set_field(
+            studio_domain::CAREER_SKATER_SEASON,
+            record,
+            &goals_field,
+            FieldValue::Int(30),
+        )
+        .unwrap();
+    let edited = session.career_stats(player).unwrap();
+    let sec = edited.sections.iter().find(|s| s.kind == "skater_season").unwrap();
+    let row = sec.rows.iter().find(|r| r.record == record).unwrap();
+    assert_eq!(row.cells[g].as_ref().unwrap().decoded, Some(30));
+
+    // Ordered delete restores the original count; the audit stays clean throughout.
+    session
+        .delete_career_row(studio_domain::CAREER_SKATER_SEASON, record)
+        .unwrap();
+    let gone = session.career_stats(player).unwrap();
+    assert_eq!(rows_before(&gone), n0, "row removed");
+    let report = session.validate().unwrap();
+    assert!(
+        report.is_clean(),
+        "audit must be clean after the round-trip: {:?}",
+        report.errors().take(3).collect::<Vec<_>>()
+    );
+
+    // Fully undoable: three ops staged → three undos return to the pristine bytes.
+    assert!(session.undo() && session.undo() && session.undo());
+    assert!(!session.is_dirty(), "undo restores the pristine working bytes");
 }

@@ -134,6 +134,24 @@ A central registry resolves **(title ∈ NHL 10–21, platform ∈ Xbox|PS3|PS4|
 scattering conditionals. Endianness and container differences live in the codec layer and never leak
 into `studio-domain` or the UI.
 
+**Capability probing (implemented).** The schema half of this gating is *evidence-based, not
+declared*: at load, `studio_domain::Capabilities::probe` inspects the opened database's own field
+descriptors + metadata for the optional features the curated views depend on (team→arena link,
+draft/junior/UFA bio fields, style enum, ratings-vocabulary coverage). The result ships in
+`ProjectSummaryDto` (`capabilities`, plus the onboarding `game_id`), and the UI hides or hedges the
+surfaces the loaded game doesn't carry (e.g. NHL 10–12 has no `kOtt.buDa` arena link; NHL 10
+predates draft data). Probing the file — never the title id — keeps unproven (title, platform)
+combinations honest by construction. Cross-title presence facts come from the 21-anchor schema diff
+(2026-07-03) and are asserted in `crates/studio-domain/tests/capabilities.rs`.
+
+**Era-spanning ratings (implemented).** Player/goalie ratings are classified by **metadata name**,
+not field id — EA renamed the family at NHL 14 (`p_speed`/`g_gsh` → `c_speed`/`c_gsh`, new ids,
+stable suffixes) — and the value **scale comes from the field's declared range**: PS3/X360 store
+6-bit `0..63` (display/edit `+36` → 36..99; in-game-verified for 14/15/Legacy, provisional for
+10–13), while every PS4 title stores 7-bit `0..99` — the human value directly. See
+`studio_domain::attributes::rating_offset` and `crates/studio-domain/tests/ratings_scale.rs` (the
+regression guard for the id-keyed `+36` that silently corrupted PS4 rating display/edit).
+
 ## Service layer — `studio-api` + `studio-domain`
 
 **`studio-api`** (Tauri-facing, thin):

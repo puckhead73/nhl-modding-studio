@@ -9,9 +9,13 @@ use tauri::{Manager, State};
 use studio_domain::FieldValue;
 
 use crate::dto::{
-    ArenaSummaryDto, ArenaViewDto, AutocorrectSummaryDto, CareerStatsDto, CreatePlayerDto,
-    ExtractSummaryDto, InstallReportDto, IntegrityReportDto, LinesViewDto, OpOutcomeDto,
-    PlayerSummaryDto, PlayerViewDto, ProjectSummaryDto, TeamSummaryDto, TeamViewDto,
+    AddCareerSeasonDto, ArenaSummaryDto, ArenaViewDto, AutocorrectSummaryDto, CareerStatsDto,
+    CreatePlayerDto, EaComputedRatingsDto, ExtractSummaryDto, FormulaCatalogDto, FormulaProfileDto,
+    HistoricalCareerRatingsDto, HistoricalFiltersDto, HistoricalPersonDto, HistoricalPersonSummaryDto,
+    HistoricalTeamDto, HistoricalTeamFiltersDto, HistoricalTeamFranchiseDto,
+    HistoricalTeamIndexEntryDto, HistoricalTeamSummaryDto, InstallReportDto, IntegrityReportDto,
+    LinesViewDto, OpOutcomeDto, PlayerSummaryDto, PlayerViewDto, ProjectSummaryDto, TeamSummaryDto,
+    TeamViewDto,
 };
 use crate::registry::{parse_platform, parse_role, Registry};
 
@@ -219,6 +223,35 @@ pub fn career_stats(
     registry.career_stats(project_id, player_id).map_err(|e| e.to_string())
 }
 
+/// Add a stock career season row (`table` = one of the four career tables); stat cells start zero.
+#[tauri::command]
+pub fn add_career_season(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    table: String,
+    player_id: u64,
+    year_end: u64,
+    league: u64,
+    team: String,
+) -> CmdResult<AddCareerSeasonDto> {
+    registry
+        .add_career_season(project_id, &table, player_id, year_end, league, &team)
+        .map_err(|e| e.to_string())
+}
+
+/// Delete one stock career row by record index (ordered shift).
+#[tauri::command]
+pub fn delete_career_row(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    table: String,
+    record: u32,
+) -> CmdResult<OpOutcomeDto> {
+    registry
+        .delete_career_row(project_id, &table, record)
+        .map_err(|e| e.to_string())
+}
+
 #[tauri::command]
 pub fn list_teams(registry: State<'_, Registry>, project_id: u32) -> CmdResult<Vec<TeamSummaryDto>> {
     registry.list_teams(project_id).map_err(|e| e.to_string())
@@ -240,6 +273,56 @@ pub fn lines_view(
     team_id: u64,
 ) -> CmdResult<Option<LinesViewDto>> {
     registry.lines_view(project_id, team_id).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub fn team_strategies(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    team_id: u64,
+) -> CmdResult<Option<crate::dto::TeamStrategiesDto>> {
+    registry.team_strategies(project_id, team_id).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub fn team_draft_picks(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    team_id: u64,
+) -> CmdResult<Vec<crate::dto::DraftPickDto>> {
+    registry.team_draft_picks(project_id, team_id).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub fn list_team_jerseys(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    team_id: u64,
+) -> CmdResult<Vec<crate::dto::TeamJerseyDto>> {
+    registry.list_team_jerseys(project_id, team_id).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub fn list_team_equipment(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    team_id: u64,
+) -> CmdResult<Vec<crate::dto::TeamEquipmentDto>> {
+    registry.list_team_equipment(project_id, team_id).map_err(|e| e.to_string())
+}
+
+/// Trade a future draft pick (`qHav` row) to another team. The original-owner field is left
+/// untouched so provenance ("via trade from …") stays visible.
+#[tauri::command]
+pub fn trade_draft_pick(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    record: u32,
+    to_team: u64,
+) -> CmdResult<OpOutcomeDto> {
+    registry
+        .trade_draft_pick(project_id, record, to_team)
+        .map_err(|e| e.to_string())
 }
 
 #[tauri::command]
@@ -291,6 +374,22 @@ pub fn set_captaincy(
 ) -> CmdResult<OpOutcomeDto> {
     registry
         .set_captaincy(project_id, team, player, role)
+        .map_err(|e| e.to_string())
+}
+
+/// Activate (`active = true`) or deactivate a trait on a player's ratings record. `table` is the
+/// ratings companion (`dSvy`/`mHuy`), `record` its record index, `value` the trait number.
+#[tauri::command]
+pub fn set_player_trait(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    table: String,
+    record: u32,
+    value: i64,
+    active: bool,
+) -> CmdResult<OpOutcomeDto> {
+    registry
+        .set_player_trait(project_id, &table, record, value, active)
         .map_err(|e| e.to_string())
 }
 
@@ -381,6 +480,30 @@ pub fn sign_from_fa(
 }
 
 #[tauri::command]
+pub fn add_membership(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    player: u64,
+    to_team: u64,
+) -> CmdResult<OpOutcomeDto> {
+    registry
+        .add_membership(project_id, player, to_team)
+        .map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub fn remove_membership(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    from_team: u64,
+    player: u64,
+) -> CmdResult<OpOutcomeDto> {
+    registry
+        .remove_membership(project_id, from_team, player)
+        .map_err(|e| e.to_string())
+}
+
+#[tauri::command]
 pub fn set_jersey_number(
     registry: State<'_, Registry>,
     project_id: u32,
@@ -456,4 +579,199 @@ pub fn save_project(
 #[tauri::command]
 pub fn save_workspace(registry: State<'_, Registry>, project_id: u32) -> CmdResult<u64> {
     registry.save_workspace(project_id).map_err(|e| e.to_string())
+}
+
+// ---- Historical (FHM) corpus ----------------------------------------------
+
+/// Open an FHM historical corpus data pack (read-only). Returns the person count. Call once before
+/// any other historical command; a different path replaces the open corpus.
+#[tauri::command]
+pub fn open_corpus(registry: State<'_, Registry>, path: String) -> CmdResult<u64> {
+    registry.open_corpus(&path).map_err(|e| e.to_string())
+}
+
+/// Whether a historical corpus is currently open.
+#[tauri::command]
+pub fn corpus_open(registry: State<'_, Registry>) -> bool {
+    registry.corpus_open()
+}
+
+/// The season + league filter options for the Historical browse.
+#[tauri::command]
+pub fn historical_filters(registry: State<'_, Registry>) -> CmdResult<HistoricalFiltersDto> {
+    registry.historical_filters().map_err(|e| e.to_string())
+}
+
+/// The Historical Players master list (person-centric). `goalieFilter`: `true` goalies only, `false`
+/// skaters only, `null` all.
+#[tauri::command]
+pub fn list_historical_players(
+    registry: State<'_, Registry>,
+    search: String,
+    goalie_filter: Option<bool>,
+    limit: i64,
+) -> CmdResult<Vec<HistoricalPersonSummaryDto>> {
+    registry
+        .list_historical_players(&search, goalie_filter, limit)
+        .map_err(|e| e.to_string())
+}
+
+/// One historical person's full detail, or `null` if absent.
+#[tauri::command]
+pub fn historical_player(
+    registry: State<'_, Registry>,
+    person_id: i64,
+) -> CmdResult<Option<HistoricalPersonDto>> {
+    registry.historical_player(person_id).map_err(|e| e.to_string())
+}
+
+/// The Historical Teams master list for one season (season-scoped).
+#[tauri::command]
+pub fn list_historical_teams(
+    registry: State<'_, Registry>,
+    season_year: i64,
+    search: String,
+    limit: i64,
+) -> CmdResult<Vec<HistoricalTeamSummaryDto>> {
+    registry
+        .list_historical_teams(season_year, &search, limit)
+        .map_err(|e| e.to_string())
+}
+
+/// One team-season's detail (identity + roster), or `null` if absent.
+#[tauri::command]
+pub fn historical_team(
+    registry: State<'_, Registry>,
+    season_year: i64,
+    src_team_id: i64,
+) -> CmdResult<Option<HistoricalTeamDto>> {
+    registry
+        .historical_team(season_year, src_team_id)
+        .map_err(|e| e.to_string())
+}
+
+/// The league filter options for the franchise-consolidated team browse.
+#[tauri::command]
+pub fn historical_team_filters(
+    registry: State<'_, Registry>,
+) -> CmdResult<HistoricalTeamFiltersDto> {
+    registry.historical_team_filters().map_err(|e| e.to_string())
+}
+
+/// The franchise-consolidated team index (NHL franchises + standalone non-NHL teams). `league` filters
+/// by league abbr (`"NHL"` → the franchises); `null` → everything.
+#[tauri::command]
+pub fn list_historical_franchises(
+    registry: State<'_, Registry>,
+    league: Option<String>,
+    search: String,
+    limit: i64,
+) -> CmdResult<Vec<HistoricalTeamIndexEntryDto>> {
+    registry
+        .list_historical_franchises(league.as_deref(), &search, limit)
+        .map_err(|e| e.to_string())
+}
+
+/// One franchise/standalone-team's detail for a season (`seasonYear` null → newest), or `null` if the
+/// key is unknown. `kind` is `"franchise"` (key = franchise id) or `"team"` (key = `team_key`).
+#[tauri::command]
+pub fn historical_franchise(
+    registry: State<'_, Registry>,
+    kind: String,
+    key: String,
+    season_year: Option<i64>,
+) -> CmdResult<Option<HistoricalTeamFranchiseDto>> {
+    registry
+        .historical_franchise(&kind, &key, season_year)
+        .map_err(|e| e.to_string())
+}
+
+// ---- Formula engine (Stage 2) ---------------------------------------------
+
+/// The packaged default formula profile.
+#[tauri::command]
+pub fn formula_default(registry: State<'_, Registry>) -> FormulaProfileDto {
+    registry.formula_default()
+}
+
+/// The static formula catalog (EA attrs, FHM vocabulary, prebuilts) for the Formulas UI.
+#[tauri::command]
+pub fn formula_catalog(registry: State<'_, Registry>) -> FormulaCatalogDto {
+    registry.formula_catalog()
+}
+
+/// Compute a person-season's EA ratings under the supplied profile; `null` if the person has no
+/// derivable position.
+#[tauri::command]
+pub fn compute_ratings(
+    registry: State<'_, Registry>,
+    person_id: i64,
+    season_year: i64,
+    profile: FormulaProfileDto,
+) -> CmdResult<Option<EaComputedRatingsDto>> {
+    registry
+        .compute_ratings(person_id, season_year, &profile)
+        .map_err(|e| e.to_string())
+}
+
+/// Compute a player's cross-career EA rating compilations (Full Career + Peak 3 + per-season
+/// overalls + best season) under the supplied profile; `null` if the person has no playing seasons.
+#[tauri::command]
+pub fn compute_career_ratings(
+    registry: State<'_, Registry>,
+    person_id: i64,
+    profile: FormulaProfileDto,
+) -> CmdResult<Option<HistoricalCareerRatingsDto>> {
+    registry
+        .compute_career_ratings(person_id, &profile)
+        .map_err(|e| e.to_string())
+}
+
+/// The active (working) formula profile — persisted next to the corpus, falling back to the
+/// packaged default when unset.
+#[tauri::command]
+pub fn get_active_formula(registry: State<'_, Registry>) -> CmdResult<FormulaProfileDto> {
+    registry.get_active_formula().map_err(|e| e.to_string())
+}
+
+/// Persist the active (working) formula profile.
+#[tauri::command]
+pub fn save_active_formula(
+    registry: State<'_, Registry>,
+    profile: FormulaProfileDto,
+) -> CmdResult<()> {
+    registry.save_active_formula(&profile).map_err(|e| e.to_string())
+}
+
+/// Saved formula profile names.
+#[tauri::command]
+pub fn list_formula_profiles(registry: State<'_, Registry>) -> CmdResult<Vec<String>> {
+    registry.list_formula_profiles().map_err(|e| e.to_string())
+}
+
+/// Load a saved formula profile by name.
+#[tauri::command]
+pub fn load_formula_profile(
+    registry: State<'_, Registry>,
+    name: String,
+) -> CmdResult<FormulaProfileDto> {
+    registry.load_formula_profile(&name).map_err(|e| e.to_string())
+}
+
+/// Save a formula profile under `name`.
+#[tauri::command]
+pub fn save_formula_profile(
+    registry: State<'_, Registry>,
+    name: String,
+    profile: FormulaProfileDto,
+) -> CmdResult<()> {
+    registry
+        .save_formula_profile(&name, &profile)
+        .map_err(|e| e.to_string())
+}
+
+/// Delete a saved formula profile.
+#[tauri::command]
+pub fn delete_formula_profile(registry: State<'_, Registry>, name: String) -> CmdResult<()> {
+    registry.delete_formula_profile(&name).map_err(|e| e.to_string())
 }

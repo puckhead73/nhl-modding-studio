@@ -70,6 +70,10 @@ UTF-16 string table (the operator's research corpus), with the EXE's
 kind = "operator-research"
 description = "Task #35/#38/#39 anchor-set audit + nhlviewng_unpacked.exe string table"
 
+# NOT bound to the team table: kOtt.QvxI (meta name `state`) shares the 7-bit shape,
+# but it is dormant on the team side — every kOtt row in the Legacy anchor stores 0
+# (checked 2026-07-04 across all teams), so binding this vocabulary would mislabel
+# every team as the raw-0 entry ("Canada").
 [[bindings]]
 field_name = "Birth State"
 field_raw_id = "QvxI"

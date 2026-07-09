@@ -41,13 +41,21 @@ macro_rules! command_handler {
             $crate::commands::list_players,
             $crate::commands::player_view,
             $crate::commands::career_stats,
+            $crate::commands::add_career_season,
+            $crate::commands::delete_career_row,
             $crate::commands::list_teams,
             $crate::commands::team_view,
             $crate::commands::lines_view,
+            $crate::commands::team_strategies,
+            $crate::commands::team_draft_picks,
+            $crate::commands::trade_draft_pick,
+            $crate::commands::list_team_jerseys,
+            $crate::commands::list_team_equipment,
             $crate::commands::list_arenas,
             $crate::commands::arena_view,
             $crate::commands::set_field,
             $crate::commands::set_captaincy,
+            $crate::commands::set_player_trait,
             $crate::commands::create_player,
             $crate::commands::clone_player,
             $crate::commands::delete_player,
@@ -55,6 +63,8 @@ macro_rules! command_handler {
             $crate::commands::trade_slots,
             $crate::commands::release_to_fa,
             $crate::commands::sign_from_fa,
+            $crate::commands::add_membership,
+            $crate::commands::remove_membership,
             $crate::commands::set_jersey_number,
             $crate::commands::retire_jersey,
             $crate::commands::unretire_jersey,
@@ -63,6 +73,26 @@ macro_rules! command_handler {
             $crate::commands::redo,
             $crate::commands::save_project,
             $crate::commands::save_workspace,
+            $crate::commands::open_corpus,
+            $crate::commands::corpus_open,
+            $crate::commands::historical_filters,
+            $crate::commands::list_historical_players,
+            $crate::commands::historical_player,
+            $crate::commands::list_historical_teams,
+            $crate::commands::historical_team,
+            $crate::commands::historical_team_filters,
+            $crate::commands::list_historical_franchises,
+            $crate::commands::historical_franchise,
+            $crate::commands::formula_default,
+            $crate::commands::formula_catalog,
+            $crate::commands::compute_ratings,
+            $crate::commands::compute_career_ratings,
+            $crate::commands::get_active_formula,
+            $crate::commands::save_active_formula,
+            $crate::commands::list_formula_profiles,
+            $crate::commands::load_formula_profile,
+            $crate::commands::save_formula_profile,
+            $crate::commands::delete_formula_profile,
         ]
     };
 }
@@ -93,6 +123,23 @@ mod bindings {
         ArenaViewDto::export_all().expect("export ArenaViewDto + deps");
         ArenaSummaryDto::export_all().expect("export ArenaSummaryDto");
         LinesViewDto::export_all().expect("export LinesViewDto + deps");
-        CareerStatsDto::export_all().expect("export CareerStatsDto");
+        CareerStatsDto::export_all().expect("export CareerStatsDto + deps");
+        AddCareerSeasonDto::export_all().expect("export AddCareerSeasonDto");
+        TeamStrategiesDto::export_all().expect("export TeamStrategiesDto + deps");
+        DraftPickDto::export_all().expect("export DraftPickDto");
+        TeamJerseyDto::export_all().expect("export TeamJerseyDto");
+        TeamEquipmentDto::export_all().expect("export TeamEquipmentDto + deps");
+        HistoricalFiltersDto::export_all().expect("export HistoricalFiltersDto + deps");
+        HistoricalPersonSummaryDto::export_all().expect("export HistoricalPersonSummaryDto");
+        HistoricalPersonDto::export_all().expect("export HistoricalPersonDto + deps");
+        HistoricalTeamSummaryDto::export_all().expect("export HistoricalTeamSummaryDto");
+        HistoricalTeamDto::export_all().expect("export HistoricalTeamDto + deps");
+        HistoricalTeamFiltersDto::export_all().expect("export HistoricalTeamFiltersDto + deps");
+        HistoricalTeamIndexEntryDto::export_all().expect("export HistoricalTeamIndexEntryDto");
+        HistoricalTeamFranchiseDto::export_all().expect("export HistoricalTeamFranchiseDto + deps");
+        EaComputedRatingsDto::export_all().expect("export EaComputedRatingsDto + deps");
+        HistoricalCareerRatingsDto::export_all().expect("export HistoricalCareerRatingsDto + deps");
+        FormulaProfileDto::export_all().expect("export FormulaProfileDto");
+        FormulaCatalogDto::export_all().expect("export FormulaCatalogDto + deps");
     }
 }

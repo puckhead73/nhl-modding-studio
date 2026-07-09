@@ -3,4 +3,8 @@
 /**
  * A player's roster membership on one team.
  */
-export type RosterMembershipDto = { team_id: number, jersey: number | null, captaincy: number | null, roster_status: number | null, };
+export type RosterMembershipDto = { team_id: number, 
+/**
+ * The team's resolved display name, when it resolves.
+ */
+team_name: string | null, jersey: number | null, captaincy: number | null, roster_status: number | null, };

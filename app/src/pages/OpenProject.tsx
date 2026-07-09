@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { open as openDialog } from "@tauri-apps/plugin-dialog";
 import { call, type Platform } from "../lib/client";
@@ -25,13 +25,28 @@ const inputCls =
   "w-full rounded-md border border-slate-700 bg-slate-950 px-2 py-1.5 text-sm text-slate-100 placeholder-slate-600 focus:border-sky-600 focus:outline-none";
 
 export function OpenProject() {
-  const { open } = useProject();
+  const { open, close } = useProject();
   const navigate = useNavigate();
+  const location = useLocation();
   const { settings, getPathEntry, setDefaultTarget, setPathEntry } = useSettings();
+
+  // Callers can force the picker (skipping startup auto-open) via navigation state — e.g. the
+  // CorruptionGuard's "Back to start", which must not reopen the same corrupted default and loop.
+  const forcePicker = (location.state as { pick?: boolean } | null)?.pick === true;
+
+  // When we were sent here to escape a corrupted project, release that still-open workspace now that
+  // we're safely on the picker route (AppShell is unmounted, so nulling the project can't trigger its
+  // fallback redirect). CorruptionGuard intentionally leaves the close to us to avoid that clobber.
+  useEffect(() => {
+    if (forcePicker) close();
+    // Run once on mount; `close` is a stable action and `forcePicker` is fixed for this navigation.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Resolve the saved default-startup target once, at first render: if a valid game+platform is
   // configured, skip the picker and land on the folder step with its saved paths pre-filled.
   const initial = useMemo(() => {
+    if (forcePicker) return null;
     const g = gameById(settings.defaultGameId);
     const p = settings.defaultPlatform;
     if (g && p && g.platforms.includes(p)) {

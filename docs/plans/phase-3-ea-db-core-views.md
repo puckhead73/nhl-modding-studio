@@ -237,6 +237,17 @@ There are **two id namespaces** for the same 4-char tags, related by character r
 
 ## Phase 3.7 — Career-stats spike (bounded) + read-only display
 
+> **Superseded 2026-07-02 (career-stats parity pass).** The read-only single-table spike below was
+> replaced by the full four-table career feature (skater/goalie × regular season/playoffs), with
+> inline stat editing, add-season, and ordered delete-row. Two correctness findings against the
+> spike: (1) the `wBIz` join is **1-indexed** — career rows store `bio wBIz + 1` (raw `0` = "no
+> player"), so the spike's raw==raw join was off by one (its "player wBIz 6 has 9 season rows"
+> spot-check was in fact player 5's rows); (2) `plusminus` (`Uomt`) is **offset-binary**
+> (`raw = value − range_low`), not two's complement — see the format note in
+> `docs/formats/tdb-v6-format.md`. Both are anchor-verified (Crosby 2006-07 = 79/36/84/120/+10,
+> Price 2014-15 = 44 W/.933/1.96 decode exactly from the NHL Legacy anchor;
+> `studio-domain/tests/view.rs`).
+
 **What to implement**
 1. **Spike — DONE (verified 2026-06-28).** Against the NHL Legacy anchor: `stockcareerseasonplayerstats` (on-disk `ySst`, studio `tsSy`) **is present and populated**, joins by `game_id`(`zIBw`) == `ubPc.wBIz`, and decodes — e.g. player wBIz 6 has 9 season rows × 12 columns (year/teams/GP/G/A/P/+−/PIM/shots/PPG/SHG/GWG). It is **stock reference data → displayed read-only**. League-mode tables (`CtBM` season, `TKKI` career, `NFkQ` playoffs) exist for league saves but are not used for the base `nhlng.db` display. Builder: `studio_domain::view::career_stats` (resolves columns by metadata `name`, so it adapts across titles and skips absent columns).
 2. Backend: `career_stats(project_id, player_id) -> Vec<CareerStatRowDto>` (read-only) joined by `wBIz`.

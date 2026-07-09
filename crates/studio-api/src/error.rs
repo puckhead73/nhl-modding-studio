@@ -16,6 +16,10 @@ pub enum ApiError {
     Io { path: String, source: std::io::Error },
     /// Onboarding couldn't resolve the files a workspace needs from the chosen root folder.
     Workspace(String),
+    /// No FHM historical corpus has been opened (call `open_corpus` first).
+    CorpusNotOpen,
+    /// A read against the FHM corpus failed (query error or schema mismatch).
+    Corpus(studio_domain::FhmError),
 }
 
 impl fmt::Display for ApiError {
@@ -26,11 +30,22 @@ impl fmt::Display for ApiError {
             ApiError::BadEnum { what, value } => write!(f, "unknown {what}: {value:?}"),
             ApiError::Io { path, source } => write!(f, "io error on {path:?}: {source}"),
             ApiError::Workspace(msg) => write!(f, "{msg}"),
+            ApiError::CorpusNotOpen => write!(
+                f,
+                "the historical (FHM) corpus is not open — open a data pack first"
+            ),
+            ApiError::Corpus(e) => write!(f, "{e}"),
         }
     }
 }
 
 impl std::error::Error for ApiError {}
+
+impl From<studio_domain::FhmError> for ApiError {
+    fn from(e: studio_domain::FhmError) -> Self {
+        ApiError::Corpus(e)
+    }
+}
 
 impl From<DomainError> for ApiError {
     fn from(e: DomainError) -> Self {

@@ -75,6 +75,18 @@ pub struct FieldView {
     pub display: String,
     /// The enum label for this value, if the field is enum-bound and the value is a member.
     pub enum_label: Option<String>,
+    /// The full `(raw, label)` vocabulary when the field is enum-bound — powers edit-time dropdowns.
+    /// Empty for non-enum fields.
+    pub enum_options: Vec<(i64, String)>,
+    /// EA-semantic edit offset: the front-facing value is `decoded + edit_offset`, so an editor can
+    /// let the user type the friendly number (2011, 209 lb) and stage `input - edit_offset`. `None`
+    /// for fields edited as-is.
+    pub edit_offset: Option<i64>,
+    /// When true the friendly value (inches = `decoded + edit_offset`) is presented/parsed as `ft'in"`.
+    pub edit_height: bool,
+    /// Fixed-point scale: the front-facing value is `decoded * edit_scale` (SV% ×0.001, GAA ×0.01),
+    /// so an editor accepts the decimal and stages `round(input / edit_scale)`. `None` = plain.
+    pub edit_scale: Option<f64>,
     pub range_low: Option<i64>,
     pub range_high: Option<i64>,
     /// `true` iff the metadata marks the field updatable (the edit-entry guardrail).
@@ -108,6 +120,28 @@ pub fn read_field(
     let range_low = fm.and_then(|m| m.range_low);
     let range_high = fm.and_then(|m| m.range_high);
     let is_string = kind == FieldKind::String;
+    // Full vocabulary for enum-bound fields (empty otherwise) — powers edit-time dropdowns.
+    let mut enum_options: Vec<(i64, String)> = enums
+        .for_field(&studio_table, &studio_field)
+        .map(|d| d.entries.iter().map(|e| (e.raw, e.label.clone())).collect())
+        .unwrap_or_default();
+    // Synthesized vocab for ratings-table derived fields (Potential Range/Accuracy, Active flag) that
+    // have no TOML enum but a known small value set — so they render/edit as labelled dropdowns too.
+    let synthetic = if enum_options.is_empty() {
+        crate::attributes::synthetic_enum(&studio_table, &studio_field)
+    } else {
+        None
+    };
+    if let Some(opts) = &synthetic {
+        enum_options = opts.clone();
+    }
+    // Era-correct rating scale, classified from the field's own metadata (name prefix + declared
+    // range): 6-bit 0..63 storage shows/edits +36 (the 36..99 scale); PS4's 7-bit 0..99 stores the
+    // human value directly (offset 0). See `attributes::rating_offset`.
+    let rating = crate::attributes::rating_offset(&studio_table, &name, range_low, range_high);
+    let (edit_offset, edit_height) = ea_edit_form(&studio_table, &studio_field);
+    let edit_offset = edit_offset.or(rating.filter(|off| *off != 0));
+    let edit_scale = ea_edit_scale(&studio_table, &studio_field);
 
     if is_string {
         let text = db
@@ -123,6 +157,10 @@ pub fn read_field(
             decoded: None,
             display: text,
             enum_label: None,
+            enum_options,
+            edit_offset,
+            edit_height,
+            edit_scale,
             range_low,
             range_high,
             editable,
@@ -133,9 +171,18 @@ pub fn read_field(
         let decoded = fm.map(|m| m.decode_raw(raw_bits)).unwrap_or(raw_bits as i64);
         let enum_label = enums
             .label(&studio_table, &studio_field, decoded)
-            .map(|s| s.to_string());
+            .map(|s| s.to_string())
+            .or_else(|| {
+                synthetic.as_ref().and_then(|opts| {
+                    opts.iter().find(|(r, _)| *r == decoded).map(|(_, l)| l.clone())
+                })
+            });
+        // Precedence: enum label → EA-semantic formatting (height/weight/…) → rating scale → the
+        // plain number.
         let display = enum_label
             .clone()
+            .or_else(|| ea_semantic_display(&studio_table, &studio_field, decoded))
+            .or_else(|| rating.map(|off| (decoded + off).to_string()))
             .unwrap_or_else(|| decoded.to_string());
         FieldView {
             studio_table,
@@ -146,6 +193,10 @@ pub fn read_field(
             decoded: Some(decoded),
             display,
             enum_label,
+            enum_options,
+            edit_offset,
+            edit_height,
+            edit_scale,
             range_low,
             range_high,
             editable,
@@ -195,12 +246,14 @@ const PLAYER_IDENTITY: &[&str] = &[
 #[derive(Clone, Debug)]
 pub struct RosterMembership {
     pub team_id: u64,
+    /// The team's resolved display name (the human-readable surface), when it resolves.
+    pub team_name: Option<String>,
     pub jersey: Option<u64>,
     pub captaincy: Option<u64>,
     pub roster_status: Option<u64>,
 }
 
-/// A compact player row for the master list.
+/// A compact player row for the master list and the team depth chart.
 #[derive(Clone, Debug)]
 pub struct PlayerSummary {
     pub player_id: u64,
@@ -208,6 +261,28 @@ pub struct PlayerSummary {
     pub last_name: String,
     pub position_label: String,
     pub team_id: Option<u64>,
+    /// Bio `jersey` (`sVRt`), raw 0..127.
+    pub jersey_number: Option<i64>,
+    /// Player/Goalie Style (archetype) enum label from the ratings companion's `QgFs`.
+    pub style_label: Option<String>,
+    /// Bio `active` (`kKYN`, 1-bit) — the real active flag (NOT `tEok`/`c_potential`).
+    pub is_active: Option<bool>,
+    /// Derived EA Overall: skaters via the ported regression/weighted-average formula, goalies
+    /// from the stored `overall` rating — both on the display scale (36..99).
+    pub overall: Option<i64>,
+    /// NHL-rights team from bio `proteam` (`dbBW`, 1-indexed; 0/-1 = none), decoded to the
+    /// canonical team id — drives the depth chart's "in the system" bucket.
+    pub rights_team_id: Option<u64>,
+    /// The bio record index — lets list-driven surfaces (jersey grid) edit `ubPc` cells directly.
+    pub bio_record: u32,
+    /// Cap hit in dollars (`kKhd` × $5000; raw 0 = no contract → `None`).
+    pub cap_hit_dollars: Option<u64>,
+    /// Contract term in years (`IhDG`; raw 0 → `None`).
+    pub contract_years: Option<u32>,
+    /// Derived from the cap-hit field, mirroring the Player Data tab's wording.
+    pub contract_status: Option<String>,
+    /// Two-way contract flag (`LoVD`).
+    pub is_two_way: Option<bool>,
 }
 
 /// The full Player detail: curated identity, ratings (the kind-correct companion's fields), roster
@@ -226,6 +301,70 @@ pub struct PlayerView {
     pub ratings_table: &'static str,
     pub memberships: Vec<RosterMembership>,
     pub all_fields: Vec<FieldView>,
+    /// Resolved, display-ready banner values for the Player detail header.
+    pub header: PlayerHeader,
+    /// Resolved contract/draft/rookie/junior fields for the Player Data tab.
+    pub data: PlayerData,
+    /// Labelled, ordered ratings + traits for the Attributes tab.
+    pub attributes: crate::attributes::PlayerAttributes,
+}
+
+/// Resolved, display-ready values for the Player detail banner. Every field is already localized
+/// (enum labels, formatted height/weight/date, resolved team) so the UI renders it verbatim — no
+/// raw ids or arithmetic in the frontend (the human-readable-surfaces rule).
+///
+/// EA bio encodings (studio ids on `ubPc`, sourced from the prior app and to be re-verified against
+/// our own data): height `ypBQ + 54` inches; weight `sNZW + 120` lb (raw 0 = "no weight" sentinel);
+/// birthdate composed from `qFnd + 1900` / `JKLp + 1` / `Kswi + 1`; primary team `dXSB - 1`
+/// (0 = free agent); style/archetype = `QgFs` on the ratings companion (`dSvy`/`mHuy`).
+#[derive(Clone, Debug, Default)]
+pub struct PlayerHeader {
+    pub full_name: String,
+    pub position_label: Option<String>,
+    pub handedness_label: Option<String>,
+    pub nationality_label: Option<String>,
+    /// "City, State/Province/Country" — birth city joined with the resolved birth-state label.
+    pub birthplace: Option<String>,
+    /// Composed `YYYY-MM-DD`.
+    pub birthdate: Option<String>,
+    /// Formatted height, e.g. `6'1"`.
+    pub height: Option<String>,
+    /// Formatted weight, e.g. `190 lb`.
+    pub weight: Option<String>,
+    /// Player/goalie style (archetype) label.
+    pub style_label: Option<String>,
+    pub primary_team_id: Option<u64>,
+    pub primary_team_name: Option<String>,
+    pub jersey_number: Option<i64>,
+}
+
+/// Resolved "Player Data" tab fields beyond the header — contract, draft, rookie flags, and the
+/// junior/pro (rights) team joins. Sourced from the prior app's operator-anchored field map (Tasks
+/// #41–46), to be re-verified against our data. Raw studio ids on `ubPc`: cap hit `kKhd` × $5000,
+/// term `IhDG` yrs, two-way `LoVD`, rights/pro team `dbBW`, junior `ZbNy`, draft team `vgWu`, round
+/// `ccjU`, pick `tTfW`, year `YKzW` + 1900 (255 = undrafted), rookie NHL/AHL/CHL `dCnv`/`ywRO`/`BQVU`,
+/// Year-UFA `GKKz` + 1900. Every 1-indexed team ref decodes `id - 1` (0 = none).
+#[derive(Clone, Debug, Default)]
+pub struct PlayerData {
+    pub year_ufa: Option<u32>,
+    pub pro_team_id: Option<u64>,
+    pub pro_team_name: Option<String>,
+    /// Formatted, e.g. `$5,000,000`.
+    pub cap_hit: Option<String>,
+    pub contract_length_years: Option<u32>,
+    pub contract_status: Option<String>,
+    pub is_two_way: Option<bool>,
+    pub is_multi_year: Option<bool>,
+    pub junior_team_id: Option<u64>,
+    pub junior_team_name: Option<String>,
+    pub draft_team_id: Option<u64>,
+    pub draft_team_name: Option<String>,
+    pub draft_round: Option<u32>,
+    pub draft_position: Option<u32>,
+    pub draft_year: Option<u32>,
+    pub is_rookie_nhl: Option<bool>,
+    pub is_rookie_ahl: Option<bool>,
+    pub is_rookie_chl: Option<bool>,
 }
 
 /// Find the field descriptor of `studio_table` whose metadata `name` matches (handles the id
@@ -242,6 +381,52 @@ fn descriptor_by_name<'a>(
     })
 }
 
+/// Per-companion-table reader for the summary's derived ratings values: the rating descriptors
+/// keyed by their rating-name **suffix** (era-portable) plus each one's display offset, and the
+/// `playerstyle` (`QgFs`) descriptor for the archetype label.
+struct CompanionReader<'a> {
+    table: &'a Table,
+    ratings: HashMap<String, (&'a FieldDescriptor, i64)>,
+    style: Option<&'a FieldDescriptor>,
+}
+
+impl<'a> CompanionReader<'a> {
+    fn build(db: &'a TdbFile, meta: &FieldMetaIndex, studio_table: &str) -> Option<Self> {
+        let table = db.table_canonical(studio_table)?;
+        let mut ratings = HashMap::new();
+        for f in &table.fields {
+            let Some(m) = meta.field(&table.id.raw(), &f.id.raw()) else {
+                continue;
+            };
+            if let Some(off) =
+                crate::attributes::rating_offset(studio_table, &m.name, m.range_low, m.range_high)
+            {
+                if let Some(suffix) = crate::attributes::rating_suffix(&m.name) {
+                    ratings.insert(suffix.to_string(), (f, off));
+                }
+            }
+        }
+        let style = descriptor_by_name(meta, table, "playerstyle");
+        Some(Self { table, ratings, style })
+    }
+
+    /// One rating's display value (raw + era offset) by suffix.
+    fn display_value(&self, db: &TdbFile, rec: u32, suffix: &str) -> Option<f64> {
+        let (f, off) = self.ratings.get(suffix)?;
+        db.read_u64(self.table, rec, f)
+            .map(|raw| (raw as i64 + off) as f64)
+    }
+
+    /// The style/archetype enum label of this record, when the vocabulary knows the value.
+    fn style_label(&self, db: &TdbFile, enums: &EnumRegistry, rec: u32) -> Option<String> {
+        let f = self.style?;
+        let raw = db.read_u64(self.table, rec, f)? as i64;
+        enums
+            .label(&self.table.id.canonical(db.endian), &f.id.canonical(db.endian), raw)
+            .map(|s| s.to_string())
+    }
+}
+
 /// Build the master list of players from the assembled entity model.
 pub fn player_summaries(
     db: &TdbFile,
@@ -252,10 +437,21 @@ pub fn player_summaries(
     let Some(bio) = db.table_canonical(ids::BIO) else {
         return Vec::new();
     };
-    // Resolve the three summary descriptors once, then read each player's bio record.
+    // Resolve the summary descriptors once, then read each player's bio record.
     let first_f = descriptor_by_name(meta, bio, "firstname");
     let last_f = descriptor_by_name(meta, bio, "lastname");
     let pos_f = descriptor_by_name(meta, bio, "position");
+    let jersey_f = descriptor_by_name(meta, bio, "jersey");
+    let active_f = descriptor_by_name(meta, bio, "active");
+    let rights_f = descriptor_by_name(meta, bio, "proteam");
+    // Contract cells (studio ids per the Player Data field map: cap hit `kKhd` × $5000, term
+    // `IhDG`, two-way `LoVD`).
+    let by_studio = |id: &str| bio.fields.iter().find(|f| f.id.canonical(db.endian) == id);
+    let caphit_f = by_studio("kKhd");
+    let term_f = by_studio("IhDG");
+    let twoway_f = by_studio("LoVD");
+    let skater = CompanionReader::build(db, meta, ids::SKATER_AI);
+    let goalie = CompanionReader::build(db, meta, ids::GOALIE_AI);
 
     // First team per player (for the list's team column).
     let mut team_of: HashMap<u64, u64> = HashMap::new();
@@ -270,6 +466,16 @@ pub fn player_summaries(
             .map(|b| String::from_utf8_lossy(b).into_owned())
             .unwrap_or_default()
     };
+    // Sign/sentinel-decoded integer read off the bio row.
+    let read_dec = |f: Option<&FieldDescriptor>, rec: u32| -> Option<i64> {
+        let f = f?;
+        let raw = db.read_u64(bio, rec, f)?;
+        Some(
+            meta.field(&bio.id.raw(), &f.id.raw())
+                .map(|m| m.decode_raw(raw))
+                .unwrap_or(raw as i64),
+        )
+    };
 
     model
         .players
@@ -278,83 +484,285 @@ pub fn player_summaries(
             let position_label = pos_f
                 .map(|f| read_field(db, meta, enums, bio, p.bio_record, f).display)
                 .unwrap_or_default();
+            // Kind-correct companion: style label + derived Overall (skaters via the ported
+            // formula over display values; goalies from the stored `overall` rating).
+            let (companion, companion_rec) = match p.kind {
+                PlayerKind::Skater => (skater.as_ref(), p.skater_ai),
+                PlayerKind::Goalie => (goalie.as_ref(), p.goalie_ai),
+            };
+            let (style_label, overall) = match (companion, companion_rec) {
+                (Some(c), Some(rec)) => (
+                    c.style_label(db, enums, rec),
+                    match p.kind {
+                        PlayerKind::Skater => Some(crate::attributes::skater_overall(
+                            |suffix| c.display_value(db, rec, suffix),
+                            p.position == tdb_relations::Position::Defense,
+                        )),
+                        PlayerKind::Goalie => {
+                            c.display_value(db, rec, "overall").map(|v| v as i64)
+                        }
+                    },
+                ),
+                _ => (None, None),
+            };
+            let caphit = read_dec(caphit_f, p.bio_record);
             PlayerSummary {
                 player_id: p.player_id,
                 first_name: read_str(first_f, p.bio_record),
                 last_name: read_str(last_f, p.bio_record),
                 position_label,
                 team_id: team_of.get(&p.player_id).copied(),
+                jersey_number: read_dec(jersey_f, p.bio_record),
+                style_label,
+                is_active: read_dec(active_f, p.bio_record).map(|v| v != 0),
+                overall,
+                // 1-indexed team ref: 0 (and the -1 the field's range allows) = no rights held.
+                rights_team_id: read_dec(rights_f, p.bio_record)
+                    .filter(|&v| v > 0)
+                    .map(|v| (v - 1) as u64),
+                bio_record: p.bio_record,
+                cap_hit_dollars: caphit.filter(|&r| r > 0).map(|r| r as u64 * 5_000),
+                contract_years: read_dec(term_f, p.bio_record)
+                    .filter(|&r| r > 0)
+                    .map(|r| r as u32),
+                contract_status: caphit.map(|r| {
+                    if r > 0 {
+                        "Signed / Restricted".to_string()
+                    } else {
+                        "Unrestricted".to_string()
+                    }
+                }),
+                is_two_way: read_dec(twoway_f, p.bio_record).map(|r| r != 0),
             }
         })
         .collect()
 }
 
 // ---------------------------------------------------------------------------
-// Career stats (read-only) — stock per-season player stats (ySst), joined by wBIz.
+// Career stats — the four stock per-player stat tables (skater/goalie × regular season/playoffs),
+// joined by the 1-indexed `wBIz` key. Stat cells are full `FieldView`s so the UI can edit them
+// through the normal audited `set_field` path.
 // ---------------------------------------------------------------------------
 
-/// On-disk / studio ids of the stock career-season-stats table (`stockcareerseasonplayerstats`).
-const CAREER_TABLE_RAW: &str = "ySst";
-const CAREER_TABLE_STUDIO: &str = "tsSy";
+/// The studio ids of the four stock career-stats tables.
+pub const CAREER_SKATER_SEASON: &str = "tsSy"; // ySst  stockcareerseasonplayerstats
+pub const CAREER_SKATER_PLAYOFFS: &str = "OAqO"; // OqAO  stockcareerplayoffplayerstats
+pub const CAREER_GOALIE_SEASON: &str = "USfF"; // FfSU  stockcareerseasongoaliestats
+pub const CAREER_GOALIE_PLAYOFFS: &str = "nCDp"; // pDCn  stockcareerplayoffgoaliestats
 
-/// Career-stat columns (metadata `name`s), in display order. Missing columns are skipped.
-const CAREER_COLUMNS: &[&str] = &[
-    "year",
-    "teams",
-    "gamesplayed",
-    "goals",
-    "assists",
-    "points",
-    "plusminus",
-    "penaltyminutes",
-    "shots",
-    "powerplaygoals",
-    "shorthandedgoals",
-    "gamewinninggoals",
+/// Skater stat columns as `(metadata name, header label)`, in display order (the reference layout).
+/// Shoot-out/shooting-%/blocked-shot fields are omitted: all-zero in the shipped stock data.
+const SKATER_COLUMNS: &[(&str, &str)] = &[
+    ("gamesplayed", "GP"),
+    ("goals", "G"),
+    ("assists", "A"),
+    ("points", "PTS"),
+    ("plusminus", "+/-"),
+    ("penaltyminutes", "PIM"),
+    ("shots", "SOG"),
+    ("powerplaygoals", "PPG"),
+    ("shorthandedgoals", "SHG"),
+    ("gamewinninggoals", "GWG"),
+    ("gametyinggoals", "GTG"), // absent from the playoff table → skipped there
 ];
 
-/// A read-only career-stats table for one player (stock data; not editable).
-#[derive(Clone, Debug, Default)]
-pub struct CareerStats {
-    pub columns: Vec<String>,
-    pub rows: Vec<Vec<String>>,
+/// Goalie stat columns (both goalie tables share the shape). Shoot-out GA/SA omitted (all-zero).
+const GOALIE_COLUMNS: &[(&str, &str)] = &[
+    ("gamesplayed", "GP"),
+    ("wins", "W"),
+    ("losses", "L"),
+    ("ties", "T"),
+    ("shutouts", "SO"),
+    ("goalsagainst", "GA"),
+    ("shotsagainst", "SA"),
+    ("savepercent", "SV%"),
+    ("gaa", "GAA"),
+    ("minutes", "MIN"),
+    ("goals", "G"),
+    ("assists", "A"),
+    ("points", "PTS"),
+    ("penaltyminutes", "PIM"),
+];
+
+/// The static shape of one career section: its kind key, title, table, and column plan.
+struct CareerShape {
+    kind: &'static str,
+    title: &'static str,
+    table: &'static str,
+    columns: &'static [(&'static str, &'static str)],
 }
 
-/// Read a player's stock career-season stats (`ySst`), joined by the `game_id`(`zIBw`)==`wBIz` key.
-/// Returns empty columns/rows if the table is absent from this db variant.
+/// The four section shapes, in default display order (skater first; the UI reorders for goalies).
+const CAREER_SECTIONS: &[CareerShape] = &[
+    CareerShape {
+        kind: "skater_season",
+        title: "Skater — Regular Season",
+        table: CAREER_SKATER_SEASON,
+        columns: SKATER_COLUMNS,
+    },
+    CareerShape {
+        kind: "skater_playoffs",
+        title: "Skater — Playoffs",
+        table: CAREER_SKATER_PLAYOFFS,
+        columns: SKATER_COLUMNS,
+    },
+    CareerShape {
+        kind: "goalie_season",
+        title: "Goalie — Regular Season",
+        table: CAREER_GOALIE_SEASON,
+        columns: GOALIE_COLUMNS,
+    },
+    CareerShape {
+        kind: "goalie_playoffs",
+        title: "Goalie — Playoffs",
+        table: CAREER_GOALIE_PLAYOFFS,
+        columns: GOALIE_COLUMNS,
+    },
+];
+
+/// One column of a career-stats section: the studio field id + the header label.
+#[derive(Clone, Debug)]
+pub struct CareerColumn {
+    pub field: String,
+    pub label: String,
+}
+
+/// One season row: the row's identity (season/league/team) resolved for display, plus the stat
+/// cells as editable [`FieldView`]s aligned with the section's columns (`None` = field absent).
+#[derive(Clone, Debug)]
+pub struct CareerRow {
+    /// Record index in the section's table — the edit address for `set_field`.
+    pub record: u32,
+    /// `"2006-07"` (the stored year is the season-END year, raw `+ 1900`).
+    pub season_label: String,
+    /// Resolved league label (`NHL`/`AHL`), or the raw value if uncatalogued.
+    pub league_label: String,
+    /// The stored team code string (e.g. `COL`), as-is.
+    pub team: String,
+    pub cells: Vec<Option<FieldView>>,
+}
+
+/// One career-stats section (one stock table).
+#[derive(Clone, Debug)]
+pub struct CareerSection {
+    /// Stable kind key: `skater_season` | `skater_playoffs` | `goalie_season` | `goalie_playoffs`.
+    pub kind: String,
+    pub title: String,
+    /// Studio table id — the edit/add/delete address.
+    pub table: String,
+    pub columns: Vec<CareerColumn>,
+    pub rows: Vec<CareerRow>,
+}
+
+/// A player's stock career stats: the four sections (absent tables yield empty sections).
+#[derive(Clone, Debug, Default)]
+pub struct CareerStats {
+    pub sections: Vec<CareerSection>,
+}
+
+/// The career tables key rows by `wBIz` stored **1-indexed** (`range_low = -1`, offset storage):
+/// raw `0` is the "no player" sentinel and raw `N` belongs to bio `wBIz = N - 1`. Anchored by the
+/// prior app against real stat lines (e.g. Stastny bio `wBIz=5` → career rows raw `6`).
+fn career_join_raw(player_id: u64) -> u64 {
+    player_id + 1
+}
+
+/// Read a player's stock career stats across all four tables. Tables absent from this title's
+/// schema yield sections with empty columns/rows. Rows sort newest-first (year desc, record asc).
 pub fn career_stats(
     db: &TdbFile,
     meta: &FieldMetaIndex,
     enums: &EnumRegistry,
     player_id: u64,
 ) -> CareerStats {
-    let Some(table) = db
-        .table(CAREER_TABLE_RAW)
-        .or_else(|| db.table_canonical(CAREER_TABLE_STUDIO))
-    else {
-        return CareerStats::default();
+    let sections = CAREER_SECTIONS
+        .iter()
+        .map(|shape| career_section(db, meta, enums, player_id, shape))
+        .collect();
+    CareerStats { sections }
+}
+
+fn career_section(
+    db: &TdbFile,
+    meta: &FieldMetaIndex,
+    enums: &EnumRegistry,
+    player_id: u64,
+    shape: &CareerShape,
+) -> CareerSection {
+    let empty = CareerSection {
+        kind: shape.kind.to_string(),
+        title: shape.title.to_string(),
+        table: shape.table.to_string(),
+        columns: Vec::new(),
+        rows: Vec::new(),
+    };
+    let Some(table) = db.table_canonical(shape.table) else {
+        return empty;
     };
     let Some(join) = descriptor_by_name(meta, table, "game_id") else {
-        return CareerStats::default();
+        return empty;
     };
-    let cols: Vec<(&str, &FieldDescriptor)> = CAREER_COLUMNS
+    // Resolve every descriptor once; columns absent from this table's schema are skipped.
+    let cols: Vec<(&str, &FieldDescriptor)> = shape
+        .columns
         .iter()
-        .filter_map(|n| descriptor_by_name(meta, table, n).map(|f| (*n, f)))
+        .filter_map(|(n, l)| descriptor_by_name(meta, table, n).map(|f| (*l, f)))
         .collect();
+    let year_f = descriptor_by_name(meta, table, "year");
+    let league_f = descriptor_by_name(meta, table, "league");
+    let team_f = descriptor_by_name(meta, table, "teams");
 
-    let rows = (0..table.current_records as u32)
-        .filter(|&i| db.read_u64(table, i, join) == Some(player_id))
+    let wanted = career_join_raw(player_id);
+    let mut rows: Vec<(i64, CareerRow)> = (0..table.current_records as u32)
+        .filter(|&i| db.read_u64(table, i, join) == Some(wanted))
         .map(|i| {
-            cols.iter()
-                .map(|(_, f)| read_field(db, meta, enums, table, i, f).display)
-                .collect()
+            let year_end = year_f
+                .and_then(|f| db.read_u64(table, i, f))
+                .map(|raw| raw as i64 + 1900)
+                .unwrap_or(0);
+            let league_label = league_f
+                .map(|f| read_field(db, meta, enums, table, i, f).display)
+                .unwrap_or_default();
+            let team = team_f
+                .and_then(|f| db.read_inline_str(table, i, f))
+                .map(|b| String::from_utf8_lossy(b).into_owned())
+                .unwrap_or_default();
+            let cells = cols
+                .iter()
+                .map(|(_, f)| Some(read_field(db, meta, enums, table, i, f)))
+                .collect();
+            let row = CareerRow {
+                record: i,
+                season_label: season_label(year_end),
+                league_label,
+                team,
+                cells,
+            };
+            (year_end, row)
         })
         .collect();
+    // Newest season first; equal years keep record order (matches the reference presentation).
+    rows.sort_by(|a, b| b.0.cmp(&a.0).then(a.1.record.cmp(&b.1.record)));
 
-    CareerStats {
-        columns: cols.iter().map(|(n, _)| n.to_string()).collect(),
-        rows,
+    CareerSection {
+        columns: cols
+            .iter()
+            .map(|(l, f)| CareerColumn {
+                field: f.id.canonical(db.endian),
+                label: l.to_string(),
+            })
+            .collect(),
+        rows: rows.into_iter().map(|(_, r)| r).collect(),
+        ..empty
     }
+}
+
+/// `2007` → `"2006-07"` (the stored year is the season-end year).
+fn season_label(year_end: i64) -> String {
+    if !(1901..=2155).contains(&year_end) {
+        return year_end.to_string();
+    }
+    format!("{}-{:02}", year_end - 1, year_end % 100)
 }
 
 // ---------------------------------------------------------------------------
@@ -371,15 +779,30 @@ pub struct LineEntry {
     pub jersey: Option<u64>,
     pub captaincy: Option<u64>,
     pub roster_status: Option<u64>,
-    /// Labels (metadata `name`s) of the 1-bit situational flags that are set on this `eGlu` row
-    /// (e.g. `l1c`, `pp1lw`). **Meta-derived — in-game semantics unverified.**
+    /// Studio field ids of the 1-bit situational flags set on this `eGlu` row (see
+    /// [`LinesView::slot_fields`] for the id → name catalog).
     pub slots: Vec<String>,
+    /// The per-slot archetype cell (`eGlu.QgFs`), when the schema carries it. The binding is
+    /// **provisional** (distinct from the confirmed `dSvy`/`mHuy.QgFs` style enums) — the UI
+    /// borrows the style vocabularies and hedges visibly.
+    pub style: Option<FieldView>,
+}
+
+/// One situational slot field on `eGlu`: the studio id plus its metadata name (`l1c`, `pp1lw`,
+/// `ot_2rd`, `s1`, `x1`, …) — the name encodes group + position, so the UI derives the whole
+/// lines layout from this catalog.
+#[derive(Clone, Debug)]
+pub struct SlotField {
+    pub studio_field: String,
+    pub name: String,
 }
 
 /// A team's depth chart: its roster entries with situational assignments.
 #[derive(Clone, Debug)]
 pub struct LinesView {
     pub team_id: u64,
+    /// Every 1-bit situational slot field on this title's `eGlu`, in schema order.
+    pub slot_fields: Vec<SlotField>,
     pub entries: Vec<LineEntry>,
 }
 
@@ -422,17 +845,29 @@ pub fn lines_view(
     model.team(team_id)?;
     let eglu = db.table_canonical(ids::ROSTER_LINES)?;
 
-    // The 1-bit situational flag descriptors, paired with their human label (metadata name).
+    // The 1-bit situational flag descriptors, paired with their metadata name. `rosterstatus`
+    // (a 1-bit non-slot flag) is excluded — only the named line/unit slots belong here.
     let flags: Vec<(&str, &FieldDescriptor)> = eglu
         .fields
         .iter()
         .filter(|f| f.bit_width == 1)
         .filter_map(|f| {
             meta.field(&eglu.id.raw(), &f.id.raw())
-                .filter(|m| !m.name.is_empty())
+                .filter(|m| !m.name.is_empty() && m.name != "rosterstatus")
                 .map(|m| (m.name.as_str(), f))
         })
         .collect();
+    let slot_fields = flags
+        .iter()
+        .map(|(name, f)| SlotField {
+            studio_field: f.id.canonical(db.endian),
+            name: name.to_string(),
+        })
+        .collect();
+    let style_f = eglu
+        .fields
+        .iter()
+        .find(|f| f.id.canonical(db.endian) == "QgFs");
 
     let entries = model
         .team_roster(team_id)
@@ -441,7 +876,7 @@ pub fn lines_view(
             let set_slots = flags
                 .iter()
                 .filter(|(_, f)| db.read_u64(eglu, slot.record, f) == Some(1))
-                .map(|(name, _)| name.to_string())
+                .map(|(_, f)| f.id.canonical(db.endian))
                 .collect();
             let (name, position_label) = slot
                 .player_id
@@ -456,11 +891,16 @@ pub fn lines_view(
                 captaincy: slot.captaincy,
                 roster_status: slot.roster_status,
                 slots: set_slots,
+                style: style_f.map(|f| read_field(db, meta, enums, eglu, slot.record, f)),
             }
         })
         .collect();
 
-    Some(LinesView { team_id, entries })
+    Some(LinesView {
+        team_id,
+        slot_fields,
+        entries,
+    })
 }
 
 // ---------------------------------------------------------------------------
@@ -494,6 +934,9 @@ pub struct TeamSummary {
     pub record: u32,
     pub name: String,
     pub abbrev: String,
+    /// League code (`kOtt.xMjj`) + its resolved label — powers league-scoped team pickers.
+    pub league: Option<i64>,
+    pub league_label: Option<String>,
 }
 
 /// A resolved arena reference (the team's home rink).
@@ -512,6 +955,8 @@ pub struct TeamView {
     pub identity: Vec<FieldView>,
     pub arena: Option<ArenaRef>,
     pub roster_count: usize,
+    /// This team's retired jersey numbers (`wcSL`), sorted ascending.
+    pub retired_numbers: Vec<u32>,
     pub all_fields: Vec<FieldView>,
 }
 
@@ -522,19 +967,28 @@ pub struct ArenaSummary {
     pub record: u32,
     pub name: String,
     pub city: String,
+    /// How many teams call this arena home (`kOtt.buDa == arena_id`).
+    pub team_count: u32,
 }
 
-/// The full Arena detail: curated identity plus all `StEO` fields.
+/// The full Arena detail: curated identity, the resolved tenants, plus all `StEO` fields.
 #[derive(Clone, Debug)]
 pub struct ArenaView {
     pub arena_id: u64,
     pub record: u32,
     pub identity: Vec<FieldView>,
+    /// Teams whose home arena this is (`kOtt.buDa == arena_id`), resolved to names.
+    pub teams: Vec<TeamSummary>,
     pub all_fields: Vec<FieldView>,
 }
 
 /// Read a fixed-bit field's raw value by studio id from one record of a table.
-fn read_u64_by_studio(db: &TdbFile, table: &Table, index: u32, studio_field: &str) -> Option<u64> {
+pub(crate) fn read_u64_by_studio(
+    db: &TdbFile,
+    table: &Table,
+    index: u32,
+    studio_field: &str,
+) -> Option<u64> {
     let f = table
         .fields
         .iter()
@@ -564,6 +1018,271 @@ fn curate(all_fields: &[FieldView], names: &[&str]) -> Vec<FieldView> {
         .collect()
 }
 
+// --- Player header helpers -------------------------------------------------
+
+/// Find a [`FieldView`] by metadata `name`.
+fn fv_name<'a>(fields: &'a [FieldView], name: &str) -> Option<&'a FieldView> {
+    fields.iter().find(|f| f.name == name)
+}
+
+/// Find a [`FieldView`] by studio (canonical) field id.
+fn fv_id<'a>(fields: &'a [FieldView], studio_field: &str) -> Option<&'a FieldView> {
+    fields.iter().find(|f| f.studio_field == studio_field)
+}
+
+/// A non-empty enum label for the given field, if resolved.
+fn label_of(f: Option<&FieldView>) -> Option<String> {
+    f.and_then(|f| f.enum_label.clone()).filter(|s| !s.is_empty())
+}
+
+// Rating classification (which companion fields are 36..99/0..99 ratings, and their era-correct
+// scale) lives in [`crate::attributes::rating_offset`], driven by the field's own metadata name +
+// declared range — see the attributes module docs. `read_field` applies it below so the display
+// and the Attributes-tab labels classify fields identically and never drift.
+
+/// EA-semantic human formatting for known numeric fields, applied at [`read_field`] so the value
+/// reads correctly everywhere a `FieldView.display` is shown — the Bio all-fields list, the Ratings
+/// tab, career, and the header alike, not just one panel. Sourced from the prior app's field map
+/// (verify against real data). Returns `None` for fields with no special encoding (plain number).
+fn ea_semantic_display(studio_table: &str, studio_field: &str, decoded: i64) -> Option<String> {
+    match (studio_table, studio_field) {
+        ("ubPc", "ypBQ") => format_height(decoded), // height: inches = raw + 54
+        ("ubPc", "sNZW") => format_weight(decoded), // weight: lb = raw + 120 (0 = unset)
+        ("ubPc", "qFnd") => Some((decoded + 1900).to_string()), // birth year
+        ("ubPc", "JKLp") => Some((decoded + 1).to_string()),    // birth month (0-indexed)
+        ("ubPc", "Kswi") => Some((decoded + 1).to_string()),    // birth day (0-indexed)
+        // Year of UFA eligibility = raw + 1900; guard the plausible range, else leave raw.
+        ("ubPc", "GKKz") => (90..=130).contains(&decoded).then(|| (decoded + 1900).to_string()),
+        // Draft year = raw + 1900; 255 is the "undrafted" sentinel.
+        ("ubPc", "YKzW") => (decoded != 255).then(|| (decoded + 1900).to_string()),
+        // Skater/goalie ratings are handled in `read_field` via `attributes::rating_offset`
+        // (metadata-classified, era-correct scale) — not here, which only sees ids.
+        // Career tables: season-end year; signed plus/minus; fixed-point SV% (×0.001) and GAA (×0.01).
+        (t, "qFnd") if is_career_table(t) => Some((decoded + 1900).to_string()),
+        ("tsSy" | "OAqO", "Uomt") => Some(if decoded == 0 {
+            "0".to_string()
+        } else {
+            format!("{decoded:+}")
+        }),
+        ("USfF" | "nCDp", "ZMAR") => Some(format_savepct(decoded)),
+        ("USfF" | "nCDp", "beSh") => Some(format!("{:.2}", decoded as f64 / 100.0)),
+        _ => None,
+    }
+}
+
+/// `true` for the four stock career-stats tables (studio ids).
+fn is_career_table(studio_table: &str) -> bool {
+    matches!(studio_table, "tsSy" | "OAqO" | "USfF" | "nCDp")
+}
+
+/// Save percentage is stored ×1000 (`914` = .914). The reference presentation drops the leading
+/// zero (`.914`); a perfect 1000 renders `1.000`.
+fn format_savepct(decoded: i64) -> String {
+    let s = format!("{:.3}", decoded as f64 / 1000.0);
+    s.strip_prefix('0').map(str::to_string).unwrap_or(s)
+}
+
+/// The friendly-edit transform for a field: `(offset, is_height)`. The front-facing value is
+/// `decoded + offset` (e.g. weight lb, birth year, rating 36..99), so an editor can accept the human
+/// number and stage `input - offset`. Height additionally presents/parses that value as `ft'in"`.
+/// The offsets mirror [`ea_semantic_display`] so read and write stay symmetric in one place.
+fn ea_edit_form(studio_table: &str, studio_field: &str) -> (Option<i64>, bool) {
+    match (studio_table, studio_field) {
+        ("ubPc", "ypBQ") => (Some(54), true),                        // height (inches = raw + 54)
+        ("ubPc", "sNZW") => (Some(120), false),                      // weight lb
+        ("ubPc", "qFnd" | "GKKz" | "YKzW") => (Some(1900), false),   // years
+        ("ubPc", "JKLp" | "Kswi") => (Some(1), false),               // 0-indexed month/day
+        (t, "qFnd") if is_career_table(t) => (Some(1900), false), // career season-end year
+        _ => (None, false),
+    }
+}
+
+/// The fixed-point scale for a field: the front-facing value is `decoded * scale` (`.914`, `2.43`)
+/// and an editor stages `round(input / scale)`. `None` for plain integer fields. Mirrors the
+/// [`ea_semantic_display`] SV%/GAA formatting so read and write stay symmetric.
+fn ea_edit_scale(studio_table: &str, studio_field: &str) -> Option<f64> {
+    match (studio_table, studio_field) {
+        ("USfF" | "nCDp", "ZMAR") => Some(0.001), // save % stored ×1000
+        ("USfF" | "nCDp", "beSh") => Some(0.01),  // GAA stored ×100
+        _ => None,
+    }
+}
+
+/// EA height decode: raw + 54 = inches → `ft'in"`. Sane human range 48..96 else `None`.
+fn format_height(decoded: i64) -> Option<String> {
+    let inches = decoded + 54;
+    if !(48..=96).contains(&inches) {
+        return None;
+    }
+    Some(format!("{}'{}\"", inches / 12, inches % 12))
+}
+
+/// EA weight decode: raw + 120 = pounds; raw <= 0 is the "no weight set" sentinel → `None`.
+fn format_weight(decoded: i64) -> Option<String> {
+    (decoded > 0).then(|| format!("{} lb", decoded + 120))
+}
+
+/// Compose `YYYY-MM-DD` from the EA birthdate fields (year = raw+1900, month/day are 0-indexed).
+fn compose_birthdate(year: Option<i64>, month: Option<i64>, day: Option<i64>) -> Option<String> {
+    let (y, m, d) = (year? + 1900, month? + 1, day? + 1);
+    if !(1900..=2100).contains(&y) || !(1..=12).contains(&m) || !(1..=31).contains(&d) {
+        return None;
+    }
+    Some(format!("{y:04}-{m:02}-{d:02}"))
+}
+
+/// A team's full name by id, via the model's `kOtt` record.
+pub(crate) fn team_name_by_id(
+    db: &TdbFile,
+    meta: &FieldMetaIndex,
+    model: &RosterModel,
+    team_id: u64,
+) -> Option<String> {
+    let team = model.team(team_id)?;
+    let kott = db.table_canonical(ids::TEAM)?;
+    let name = read_str_by_name(db, meta, kott, team.record, "fullname");
+    (!name.is_empty()).then_some(name)
+}
+
+/// Group an integer with thousands separators, e.g. `5000000` → `5,000,000`.
+fn group_thousands(n: u64) -> String {
+    let s = n.to_string();
+    let b = s.as_bytes();
+    let mut out = String::with_capacity(s.len() + s.len() / 3);
+    for (i, ch) in b.iter().enumerate() {
+        if i > 0 && (b.len() - i) % 3 == 0 {
+            out.push(',');
+        }
+        out.push(*ch as char);
+    }
+    out
+}
+
+/// Assemble the resolved "Player Data" tab fields (contract/draft/rookie/junior/pro) from the bio
+/// field views, resolving 1-indexed team refs against the model.
+fn build_player_data(
+    db: &TdbFile,
+    meta: &FieldMetaIndex,
+    model: &RosterModel,
+    all_fields: &[FieldView],
+) -> PlayerData {
+    let dec = |id: &str| fv_id(all_fields, id).and_then(|f| f.decoded);
+    // Resolve a 1-indexed team ref (`id - 1`; 0/None = none) to (id, name).
+    let team = |raw: Option<i64>| -> (Option<u64>, Option<String>) {
+        match raw {
+            Some(v) if v > 0 => {
+                let id = (v - 1) as u64;
+                (Some(id), team_name_by_id(db, meta, model, id))
+            }
+            _ => (None, None),
+        }
+    };
+
+    let (pro_team_id, pro_team_name) = team(dec("dbBW"));
+    let (junior_team_id, junior_team_name) = team(dec("ZbNy"));
+    let (draft_team_id, draft_team_name) = team(dec("vgWu"));
+    let kkhd = dec("kKhd");
+    let ihdg = dec("IhDG");
+
+    PlayerData {
+        year_ufa: dec("GKKz")
+            .filter(|r| (90..=130).contains(r))
+            .map(|r| (r + 1900) as u32),
+        pro_team_id,
+        pro_team_name,
+        cap_hit: kkhd
+            .filter(|&r| r > 0)
+            .map(|r| format!("${}", group_thousands(r as u64 * 5_000))),
+        contract_length_years: ihdg.filter(|&r| r > 0).map(|r| r as u32),
+        // Only meaningful when the cap-hit field is present; derived from whether a cap hit exists.
+        contract_status: kkhd.map(|r| {
+            if r > 0 {
+                "Signed / Restricted".to_string()
+            } else {
+                "Unrestricted".to_string()
+            }
+        }),
+        is_two_way: dec("LoVD").map(|r| r != 0),
+        is_multi_year: ihdg.map(|r| r > 1),
+        junior_team_id,
+        junior_team_name,
+        draft_team_id,
+        draft_team_name,
+        draft_round: dec("ccjU").filter(|&r| r > 0).map(|r| r as u32),
+        draft_position: dec("tTfW").filter(|&r| r > 0).map(|r| r as u32),
+        draft_year: dec("YKzW").filter(|&r| r != 255).map(|r| (r + 1900) as u32),
+        is_rookie_nhl: dec("dCnv").map(|r| r != 0),
+        is_rookie_ahl: dec("ywRO").map(|r| r != 0),
+        is_rookie_chl: dec("BQVU").map(|r| r != 0),
+    }
+}
+
+/// Assemble the resolved Player header from the already-read bio + ratings field views.
+fn build_player_header(
+    db: &TdbFile,
+    meta: &FieldMetaIndex,
+    model: &RosterModel,
+    all_fields: &[FieldView],
+    ratings: &[FieldView],
+    memberships: &[RosterMembership],
+) -> PlayerHeader {
+    let first = fv_name(all_fields, "firstname").map(|f| f.display.trim().to_string());
+    let last = fv_name(all_fields, "lastname").map(|f| f.display.trim().to_string());
+    let full_name = match (first.as_deref().unwrap_or(""), last.as_deref().unwrap_or("")) {
+        ("", l) => l.to_string(),
+        (f, "") => f.to_string(),
+        (f, l) => format!("{f} {l}"),
+    };
+
+    let birth_city = fv_id(all_fields, "MFzJ")
+        .map(|f| f.display.trim().to_string())
+        .filter(|s| !s.is_empty());
+    // The birth-state vocabulary is country-first verbatim ("Canada, Quebec" — it groups the
+    // dropdown by country). For the banner's prose, flip it so the birthplace reads smallest to
+    // largest: "City, Quebec, Canada". Single-word labels (bare countries) pass through.
+    let birth_state = label_of(fv_id(all_fields, "QvxI")).map(|label| {
+        match label.split_once(", ") {
+            Some((country, state)) => format!("{state}, {country}"),
+            None => label,
+        }
+    });
+    let birthplace = match (birth_city, birth_state) {
+        (Some(c), Some(s)) => Some(format!("{c}, {s}")),
+        (Some(c), None) => Some(c),
+        (None, Some(s)) => Some(s),
+        (None, None) => None,
+    };
+
+    // Primary team: canonical `dXSB - 1` (0 = free agent). Falls back to the first eGlu membership
+    // when `dXSB` is absent, so the header still resolves on data that lacks the bio pointer.
+    let dxsb = fv_id(all_fields, "dXSB").and_then(|f| f.decoded);
+    let primary_team_id = match dxsb {
+        Some(0) => None,
+        Some(v) if v > 0 => Some((v - 1) as u64),
+        _ => memberships.first().map(|m| m.team_id),
+    };
+    let primary_team_name = primary_team_id.and_then(|id| team_name_by_id(db, meta, model, id));
+
+    PlayerHeader {
+        full_name,
+        position_label: label_of(fv_name(all_fields, "position")),
+        handedness_label: label_of(fv_name(all_fields, "handedness")),
+        nationality_label: label_of(fv_name(all_fields, "intlcountry")),
+        birthplace,
+        birthdate: compose_birthdate(
+            fv_id(all_fields, "qFnd").and_then(|f| f.decoded),
+            fv_id(all_fields, "JKLp").and_then(|f| f.decoded),
+            fv_id(all_fields, "Kswi").and_then(|f| f.decoded),
+        ),
+        height: fv_name(all_fields, "height").and_then(|f| f.decoded).and_then(format_height),
+        weight: fv_name(all_fields, "weight").and_then(|f| f.decoded).and_then(format_weight),
+        style_label: label_of(fv_id(ratings, "QgFs")),
+        primary_team_id,
+        primary_team_name,
+        jersey_number: fv_name(all_fields, "jersey").and_then(|f| f.decoded),
+    }
+}
+
 /// The `StEO` record index whose `vfEq` equals `arena_id`.
 fn arena_record(db: &TdbFile, arena_id: u64) -> Option<u32> {
     let arena = db.table_canonical(ARENA_TABLE)?;
@@ -586,6 +1305,7 @@ fn arena_ref(db: &TdbFile, meta: &FieldMetaIndex, arena_id: u64) -> Option<Arena
 pub fn team_summaries(
     db: &TdbFile,
     meta: &FieldMetaIndex,
+    enums: &EnumRegistry,
     model: &RosterModel,
 ) -> Vec<TeamSummary> {
     let Some(kott) = db.table_canonical(ids::TEAM) else {
@@ -594,13 +1314,30 @@ pub fn team_summaries(
     model
         .teams
         .iter()
-        .map(|t| TeamSummary {
-            team_id: t.team_id,
-            record: t.record,
-            name: read_str_by_name(db, meta, kott, t.record, "fullname"),
-            abbrev: read_str_by_name(db, meta, kott, t.record, "abbrname"),
-        })
+        .map(|t| team_summary_at(db, meta, enums, kott, t.team_id, t.record))
         .collect()
+}
+
+/// One team summary row (shared by the master list and the arena tenants join).
+fn team_summary_at(
+    db: &TdbFile,
+    meta: &FieldMetaIndex,
+    enums: &EnumRegistry,
+    kott: &Table,
+    team_id: u64,
+    record: u32,
+) -> TeamSummary {
+    let league = read_u64_by_studio(db, kott, record, "xMjj").map(|v| v as i64);
+    TeamSummary {
+        team_id,
+        record,
+        name: read_str_by_name(db, meta, kott, record, "fullname"),
+        abbrev: read_str_by_name(db, meta, kott, record, "abbrname"),
+        league,
+        league_label: league
+            .and_then(|v| enums.label("kOtt", "xMjj", v))
+            .map(|s| s.to_string()),
+    }
 }
 
 /// The full Team detail for one `kOtt.vfEq`.
@@ -622,6 +1359,7 @@ pub fn team_view(
         identity: curate(&all_fields, TEAM_IDENTITY),
         arena,
         roster_count: model.team_roster(team_id).len(),
+        retired_numbers: crate::team_tabs::retired_numbers(db, team_id),
         all_fields,
     })
 }
@@ -631,6 +1369,15 @@ pub fn arena_summaries(db: &TdbFile, meta: &FieldMetaIndex) -> Vec<ArenaSummary>
     let Some(arena) = db.table_canonical(ARENA_TABLE) else {
         return Vec::new();
     };
+    // Tenant counts: how many kOtt rows point at each arena via buDa.
+    let mut tenants: HashMap<u64, u32> = HashMap::new();
+    if let Some(kott) = db.table_canonical(ids::TEAM) {
+        for rec in 0..kott.current_records as u32 {
+            if let Some(aid) = read_u64_by_studio(db, kott, rec, TEAM_ARENA_FK) {
+                *tenants.entry(aid).or_insert(0) += 1;
+            }
+        }
+    }
     (0..arena.current_records as u32)
         .filter_map(|i| {
             let arena_id = read_u64_by_studio(db, arena, i, ARENA_KEY)?;
@@ -639,6 +1386,7 @@ pub fn arena_summaries(db: &TdbFile, meta: &FieldMetaIndex) -> Vec<ArenaSummary>
                 record: i,
                 name: read_str_by_name(db, meta, arena, i, "arenaname"),
                 city: read_str_by_name(db, meta, arena, i, "cityname"),
+                team_count: tenants.get(&arena_id).copied().unwrap_or(0),
             })
         })
         .collect()
@@ -653,10 +1401,24 @@ pub fn arena_view(
 ) -> Option<ArenaView> {
     let rec = arena_record(db, arena_id)?;
     let all_fields = entity_fields(db, meta, enums, ARENA_TABLE, rec);
+    // The tenants: every team whose `kOtt.buDa` points here, resolved to names.
+    let teams = db
+        .table_canonical(ids::TEAM)
+        .map(|kott| {
+            (0..kott.current_records as u32)
+                .filter(|&trec| read_u64_by_studio(db, kott, trec, TEAM_ARENA_FK) == Some(arena_id))
+                .filter_map(|trec| {
+                    let team_id = read_u64_by_studio(db, kott, trec, "vfEq")?;
+                    Some(team_summary_at(db, meta, enums, kott, team_id, trec))
+                })
+                .collect()
+        })
+        .unwrap_or_default();
     Some(ArenaView {
         arena_id,
         record: rec,
         identity: curate(&all_fields, ARENA_IDENTITY),
+        teams,
         all_fields,
     })
 }
@@ -683,21 +1445,30 @@ pub fn player_view(
         PlayerKind::Goalie => (ids::GOALIE_AI, player.goalie_ai),
         PlayerKind::Skater => (ids::SKATER_AI, player.skater_ai),
     };
-    let ratings = companion_record
+    let mut ratings = companion_record
         .map(|rec| entity_fields(db, meta, enums, companion_table, rec))
         .unwrap_or_default();
+    // Player Style is position-split — lock the dropdown to the roles this position may hold.
+    if matches!(player.kind, PlayerKind::Skater) {
+        crate::attributes::restrict_style_options(&mut ratings, player.position);
+    }
 
-    let memberships = model
+    let memberships: Vec<RosterMembership> = model
         .slots
         .iter()
         .filter(|s| s.player_id == Some(player_id))
         .map(|s| RosterMembership {
             team_id: s.team_id,
+            team_name: team_name_by_id(db, meta, model, s.team_id),
             jersey: s.jersey,
             captaincy: s.captaincy,
             roster_status: s.roster_status,
         })
         .collect();
+
+    let header = build_player_header(db, meta, model, &all_fields, &ratings, &memberships);
+    let data = build_player_data(db, meta, model, &all_fields);
+    let attributes = crate::attributes::build_player_attributes(&ratings, companion_table);
 
     Some(PlayerView {
         player_id,
@@ -712,5 +1483,8 @@ pub fn player_view(
         ratings_table: companion_table,
         memberships,
         all_fields,
+        header,
+        data,
+        attributes,
     })
 }

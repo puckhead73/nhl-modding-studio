@@ -1,0 +1,30 @@
+# Anchored enum: Arena Type (ice-surface dimensions on the arena table).
+#
+# `StEO.dxQr` — the metadata names it `arenatype` outright (1-bit). Anchored in the reference
+# app against default.db's exact two-value split: every North-American arena carries 0, every
+# European arena 1 — i.e. NHL ice (200×85 ft) vs international ice (200×100 ft).
+
+name = "Arena Type"
+confidence = "Strong"
+notes = """
+1-bit ice-surface flag. The metadata name (`arenatype`) plus the exact NA/Europe raw-value split
+across the Legacy anchor's 187 populated rows anchor the vocabulary; the physical rink dimensions
+are the conventional NHL/IIHF sizes, not independently measured in-game.
+"""
+
+[source]
+kind = "operator-research"
+description = "Reference-app StEO.dxQr audit over default.db's 187 populated rows (NA=0, Europe=1)"
+
+[[bindings]]
+field_name = "Arena Type"
+field_raw_id = "dxQr"
+table_raw_id = "StEO"
+
+[[entries]]
+raw = 0
+label = "NHL Ice (200×85)"
+
+[[entries]]
+raw = 1
+label = "International Ice (200×100)"

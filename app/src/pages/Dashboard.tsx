@@ -1,7 +1,8 @@
+import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { call } from "../lib/client";
 import { useProject } from "../lib/project";
-import { Card, Stat } from "../components/primitives";
+import { Button, Card, Spinner, Stat } from "../components/primitives";
 import type { FindingDto } from "../bindings/FindingDto";
 
 // Severity → pill styling (badge, not bare text, so the category reads at a glance).
@@ -10,6 +11,10 @@ const SEV_BADGE: Record<string, string> = {
   warning: "border-amber-700 bg-amber-950/50 text-amber-300",
   info: "border-slate-700 bg-slate-800/60 text-slate-400",
 };
+
+// Ordered so the filter chips and grouped sections read worst-first.
+const SEVERITIES = ["error", "warning", "info"] as const;
+type Severity = (typeof SEVERITIES)[number];
 
 export function Dashboard() {
   const { project } = useProject();
@@ -20,6 +25,38 @@ export function Dashboard() {
     queryKey: ["validation", projectId],
     queryFn: () => call("validate_project", { projectId }),
   });
+
+  // Which severities are shown. Off = filtered out; all on by default.
+  const [hidden, setHidden] = useState<Set<Severity>>(new Set());
+  const toggle = (s: Severity) =>
+    setHidden((prev) => {
+      const next = new Set(prev);
+      next.has(s) ? next.delete(s) : next.add(s);
+      return next;
+    });
+
+  const counts: Record<Severity, number> = {
+    error: report.data?.error_count ?? 0,
+    warning: report.data?.warning_count ?? 0,
+    info: report.data?.info_count ?? 0,
+  };
+
+  // Group the visible findings by their friendly category (`title`) so many instances of the same
+  // issue collapse into one scannable section rather than a wall of near-identical rows.
+  const groups = useMemo(() => {
+    const findings = (report.data?.findings ?? []).filter(
+      (f) => !hidden.has(f.severity as Severity),
+    );
+    const byTitle = new Map<string, FindingDto[]>();
+    for (const f of findings) {
+      const arr = byTitle.get(f.title);
+      arr ? arr.push(f) : byTitle.set(f.title, [f]);
+    }
+    // Worst severity first, then largest group.
+    return [...byTitle.entries()]
+      .map(([title, items]) => ({ title, items, worst: worstSeverity(items) }))
+      .sort((a, b) => sevRank(a.worst) - sevRank(b.worst) || b.items.length - a.items.length);
+  }, [report.data, hidden]);
 
   return (
     <div className="max-w-5xl space-y-4">
@@ -35,32 +72,64 @@ export function Dashboard() {
         <Stat label="Unsaved" value={p.dirty ? "yes" : "no"} />
       </div>
 
-      <Card title="Validation">
-        {report.isLoading && <p className="text-xs text-slate-400">Running audit…</p>}
+      <Card
+        title="Validation"
+        actions={
+          <Button
+            variant="secondary"
+            onClick={() => report.refetch()}
+            disabled={report.isFetching}
+          >
+            {report.isFetching ? "Auditing…" : "Re-run audit"}
+          </Button>
+        }
+      >
+        {report.isLoading && <Spinner label="Running audit…" />}
         {report.isError && <p className="text-rose-400">{String(report.error)}</p>}
         {report.data && (
           <>
-            <p className="mb-2 text-sm">
-              <span className={report.data.clean ? "font-semibold text-emerald-400" : "font-semibold text-rose-400"}>
+            <div className="mb-3 flex flex-wrap items-center gap-2">
+              <span
+                className={
+                  report.data.clean
+                    ? "text-sm font-semibold text-emerald-400"
+                    : "text-sm font-semibold text-rose-400"
+                }
+              >
                 {report.data.clean ? "Clean — safe to write" : "Errors present"}
-              </span>{" "}
-              <span className="text-slate-400">
-                · {report.data.error_count} errors · {report.data.warning_count} warnings ·{" "}
-                {report.data.info_count} info
               </span>
-            </p>
-            <div className="max-h-[50vh] space-y-1.5 overflow-auto">
+              {/* Severity chips double as filter toggles. */}
+              {SEVERITIES.map((s) => {
+                const off = hidden.has(s);
+                return (
+                  <button
+                    key={s}
+                    type="button"
+                    onClick={() => toggle(s)}
+                    title={off ? `Show ${s}` : `Hide ${s}`}
+                    className={
+                      "rounded-full border px-2.5 py-0.5 text-[11px] font-medium capitalize transition-colors " +
+                      (SEV_BADGE[s] ?? SEV_BADGE.info) +
+                      (off ? " opacity-40 line-through" : "")
+                    }
+                  >
+                    {counts[s]} {s}
+                    {counts[s] === 1 ? "" : "s"}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="max-h-[55vh] space-y-2 overflow-auto">
               {report.data.findings.length === 0 && (
                 <p className="text-xs text-slate-400">No findings.</p>
               )}
-              {report.data.findings.slice(0, 200).map((f, i) => (
-                <FindingRow key={i} f={f} />
-              ))}
-              {report.data.findings.length > 200 && (
-                <p className="py-1 text-xs text-slate-500">
-                  …and {report.data.findings.length - 200} more.
-                </p>
+              {report.data.findings.length > 0 && groups.length === 0 && (
+                <p className="text-xs text-slate-400">All findings hidden by the severity filter.</p>
               )}
+              {groups.map((g) => (
+                <FindingGroup key={g.title} title={g.title} worst={g.worst} items={g.items} />
+              ))}
             </div>
           </>
         )}
@@ -69,24 +138,51 @@ export function Dashboard() {
   );
 }
 
-/** One integrity finding: human-readable title/location/message up front, raw ids tucked into a
- *  collapsible "Technical details" disclosure (the human-readable-surfaces rule). */
-function FindingRow({ f }: { f: FindingDto }) {
+function sevRank(s: string): number {
+  return s === "error" ? 0 : s === "warning" ? 1 : 2;
+}
+function worstSeverity(items: FindingDto[]): string {
+  return items.reduce((w, f) => (sevRank(f.severity) < sevRank(w) ? f.severity : w), "info");
+}
+
+/** A collapsible category of same-kind findings (e.g. every "Duplicate jersey number"). Collapsed by
+ *  default when large so the audit reads as a summary first, details on demand. */
+function FindingGroup({ title, worst, items }: { title: string; worst: string; items: FindingDto[] }) {
   return (
-    <div className="rounded-md border border-slate-800/60 bg-slate-900/40 px-3 py-2 text-[13px]">
-      <div className="flex items-center gap-2">
+    <details className="group rounded-md border border-slate-800/60 bg-slate-900/40" open={items.length <= 5}>
+      <summary className="flex cursor-pointer list-none items-center gap-2 px-3 py-2">
         <span
           className={
             "inline-flex shrink-0 items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide " +
-            (SEV_BADGE[f.severity] ?? SEV_BADGE.info)
+            (SEV_BADGE[worst] ?? SEV_BADGE.info)
           }
         >
-          {f.severity}
+          {worst}
         </span>
-        <span className="font-medium text-slate-100">{f.title}</span>
-        {f.location && <span className="text-slate-400">· {f.location}</span>}
+        <span className="font-medium text-slate-100">{title}</span>
+        <span className="ml-auto text-xs text-slate-500">
+          {items.length}
+          <span className="ml-2 text-slate-600 group-open:hidden">▸</span>
+          <span className="ml-2 hidden text-slate-600 group-open:inline">▾</span>
+        </span>
+      </summary>
+      <div className="space-y-1.5 border-t border-slate-800/60 px-2 py-2">
+        {items.map((f, i) => (
+          <FindingRow key={i} f={f} />
+        ))}
       </div>
-      <p className="mt-1 text-slate-300">{f.message}</p>
+    </details>
+  );
+}
+
+/** One integrity finding within its category group: resolved location/message up front, raw ids
+ *  tucked into a collapsible "Technical details" disclosure (the human-readable-surfaces rule). The
+ *  severity and category are shown once on the parent group header. */
+function FindingRow({ f }: { f: FindingDto }) {
+  return (
+    <div className="rounded-md border border-slate-800/60 bg-slate-950/40 px-3 py-2 text-[13px]">
+      {f.location && <div className="font-medium text-slate-200">{f.location}</div>}
+      <p className={f.location ? "mt-0.5 text-slate-300" : "text-slate-300"}>{f.message}</p>
       <details className="mt-1 group">
         <summary className="cursor-pointer list-none text-[11px] text-slate-500 hover:text-slate-300">
           <span className="group-open:hidden">Technical details</span>

@@ -97,7 +97,7 @@ pub fn humanize(
     // tables), we still resolve field labels and fall back to generic entity phrasing.
     let (teams, players): (HashMap<u64, String>, HashMap<u64, String>) = match RosterModel::build(db) {
         Ok(model) => (
-            view::team_summaries(db, meta, &model)
+            view::team_summaries(db, meta, enums, &model)
                 .iter()
                 .map(|t| (t.team_id, team_label(t)))
                 .collect(),

@@ -2,7 +2,7 @@
 //! `ts_rs::TS`, so the TypeScript definitions are generated from Rust (no hand-maintained `dto.ts`).
 //! The domain↔DTO mapping lives in [`crate::convert`].
 
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use ts_rs::TS;
 
 /// One table's at-a-glance shape.
@@ -14,10 +14,50 @@ pub struct TableSummaryDto {
     pub records: u32,
 }
 
+/// Which optional schema features the loaded title's database actually carries — probed from the
+/// file's own field descriptors at load (never assumed from the title id), so unproven titles gate
+/// honestly by evidence. Drives the UI's hide/disable decisions for surfaces a game doesn't have,
+/// instead of rendering blanks a user can't tell apart from bugs.
+#[derive(Serialize, TS)]
+pub struct CapabilitiesDto {
+    /// The team→arena link exists (absent in NHL 10–12) — gates the Team detail's Arena card.
+    pub arena_link: bool,
+    /// The player/goalie style (archetype) enum exists (absent in NHL 10–13).
+    pub player_style: bool,
+    /// Year of UFA eligibility (absent in NHL 10).
+    pub year_ufa: bool,
+    /// Junior (rights) team ref (absent in NHL 10).
+    pub junior_team: bool,
+    /// Draft team ref (absent in NHL 10).
+    pub draft_team: bool,
+    /// Draft year (absent in NHL 10).
+    pub draft_year: bool,
+    /// Draft round (absent in NHL 10–11).
+    pub draft_round: bool,
+    /// Draft position/pick (absent in NHL 10).
+    pub draft_pick: bool,
+    /// AHL rookie flag (absent in NHL 10–13).
+    pub rookie_ahl: bool,
+    /// CHL rookie flag (absent in NHL 10–13).
+    pub rookie_chl: bool,
+    /// Skater ratings in this database that carry an operator label; `< skater_ratings_total`
+    /// means the loaded schema has ratings we can't yet name (the Attributes tab hedges visibly).
+    pub skater_ratings_labelled: usize,
+    /// All skater rating fields this database carries (classified from its own metadata).
+    pub skater_ratings_total: usize,
+    /// Labelled goalie ratings (see `skater_ratings_labelled`).
+    pub goalie_ratings_labelled: usize,
+    /// All goalie rating fields this database carries.
+    pub goalie_ratings_total: usize,
+}
+
 /// A loaded project plus a structural summary of its current working database.
 #[derive(Serialize, TS)]
 pub struct ProjectSummaryDto {
     pub project_id: u32,
+    /// Studio game id (`nhl10`…`nhllegacy`) when opened through onboarding; `null` on the legacy
+    /// file-pick path (the user never named a title there).
+    pub game_id: Option<String>,
     pub platform: String,
     pub role: String,
     /// How the file was loaded / will be saved: `"raw_db"` or `"container"`.
@@ -39,6 +79,8 @@ pub struct ProjectSummaryDto {
     /// `true` when the roster mirror is record-index-aligned with `nhlng.db` (so generic field edits
     /// mirror). `roster_attached && !roster_aligned` means degraded — field edits hit `nhlng` only.
     pub roster_aligned: bool,
+    /// The optional schema features this title's database carries (probed at load).
+    pub capabilities: CapabilitiesDto,
 }
 
 /// One discovered save container, classified by its content.
@@ -164,6 +206,14 @@ pub struct CreatePlayerDto {
     pub outcome: OpOutcomeDto,
 }
 
+/// One value of an enum-bound field's vocabulary (for edit-time dropdowns).
+#[derive(Serialize, TS)]
+pub struct EnumOptionDto {
+    #[ts(type = "number")]
+    pub raw: i64,
+    pub label: String,
+}
+
 /// One field of one record, ready to display or edit.
 #[derive(Serialize, TS)]
 pub struct FieldViewDto {
@@ -178,6 +228,16 @@ pub struct FieldViewDto {
     #[ts(type = "number | null")]
     pub decoded: Option<i64>,
     pub enum_label: Option<String>,
+    /// Full `(raw, label)` vocabulary when enum-bound; empty otherwise. Powers edit-time dropdowns.
+    pub enum_options: Vec<EnumOptionDto>,
+    /// Friendly-edit offset: front-facing value is `decoded + edit_offset` (type 2011, stage raw 111).
+    #[ts(type = "number | null")]
+    pub edit_offset: Option<i64>,
+    /// When true the friendly value is presented/parsed as `ft'in"` (height).
+    pub edit_height: bool,
+    /// Fixed-point scale: front-facing value is `decoded * edit_scale` (SV% ×0.001, GAA ×0.01).
+    #[ts(type = "number | null")]
+    pub edit_scale: Option<f64>,
     /// Raw stored bits for integer fields (`null` for strings).
     #[ts(type = "number | null")]
     pub raw_int: Option<u64>,
@@ -191,7 +251,7 @@ pub struct FieldViewDto {
     pub is_string: bool,
 }
 
-/// A compact player row for the master list.
+/// A compact player row for the master list and the team depth chart.
 #[derive(Serialize, TS)]
 pub struct PlayerSummaryDto {
     #[ts(type = "number")]
@@ -201,6 +261,25 @@ pub struct PlayerSummaryDto {
     pub position_label: String,
     #[ts(type = "number | null")]
     pub team_id: Option<u64>,
+    #[ts(type = "number | null")]
+    pub jersey_number: Option<i64>,
+    /// Player/Goalie Style (archetype) label, when the vocabulary knows the value.
+    pub style_label: Option<String>,
+    /// The real bio active flag (`kKYN`).
+    pub is_active: Option<bool>,
+    /// Derived EA Overall on the display scale (36..99).
+    #[ts(type = "number | null")]
+    pub overall: Option<i64>,
+    /// NHL-rights team (bio `proteam`), canonical team id — powers "in the system".
+    #[ts(type = "number | null")]
+    pub rights_team_id: Option<u64>,
+    /// The bio record index (lets list-driven surfaces edit `ubPc` cells directly).
+    pub bio_record: u32,
+    #[ts(type = "number | null")]
+    pub cap_hit_dollars: Option<u64>,
+    pub contract_years: Option<u32>,
+    pub contract_status: Option<String>,
+    pub is_two_way: Option<bool>,
 }
 
 /// A player's roster membership on one team.
@@ -208,6 +287,8 @@ pub struct PlayerSummaryDto {
 pub struct RosterMembershipDto {
     #[ts(type = "number")]
     pub team_id: u64,
+    /// The team's resolved display name, when it resolves.
+    pub team_name: Option<String>,
     #[ts(type = "number | null")]
     pub jersey: Option<u64>,
     #[ts(type = "number | null")]
@@ -216,7 +297,120 @@ pub struct RosterMembershipDto {
     pub roster_status: Option<u64>,
 }
 
-/// The full Player detail: curated identity, ratings, memberships, and the complete bio field list.
+/// Resolved, display-ready banner values for the Player detail header. Every field is already
+/// localized (enum labels, formatted height/weight/date, resolved team) — render verbatim.
+#[derive(Serialize, TS)]
+pub struct PlayerHeaderDto {
+    pub full_name: String,
+    pub position_label: Option<String>,
+    pub handedness_label: Option<String>,
+    pub nationality_label: Option<String>,
+    /// "City, State/Province/Country".
+    pub birthplace: Option<String>,
+    /// Composed `YYYY-MM-DD`.
+    pub birthdate: Option<String>,
+    /// Formatted height, e.g. `6'1"`.
+    pub height: Option<String>,
+    /// Formatted weight, e.g. `190 lb`.
+    pub weight: Option<String>,
+    /// Player/goalie style (archetype) label.
+    pub style_label: Option<String>,
+    #[ts(type = "number | null")]
+    pub primary_team_id: Option<u64>,
+    pub primary_team_name: Option<String>,
+    #[ts(type = "number | null")]
+    pub jersey_number: Option<i64>,
+}
+
+/// Resolved contract/draft/rookie/junior fields for the Player Data tab (display-ready).
+#[derive(Serialize, TS)]
+pub struct PlayerDataDto {
+    #[ts(type = "number | null")]
+    pub year_ufa: Option<u32>,
+    #[ts(type = "number | null")]
+    pub pro_team_id: Option<u64>,
+    pub pro_team_name: Option<String>,
+    /// Formatted, e.g. `$5,000,000`.
+    pub cap_hit: Option<String>,
+    #[ts(type = "number | null")]
+    pub contract_length_years: Option<u32>,
+    pub contract_status: Option<String>,
+    pub is_two_way: Option<bool>,
+    pub is_multi_year: Option<bool>,
+    #[ts(type = "number | null")]
+    pub junior_team_id: Option<u64>,
+    pub junior_team_name: Option<String>,
+    #[ts(type = "number | null")]
+    pub draft_team_id: Option<u64>,
+    pub draft_team_name: Option<String>,
+    #[ts(type = "number | null")]
+    pub draft_round: Option<u32>,
+    #[ts(type = "number | null")]
+    pub draft_position: Option<u32>,
+    #[ts(type = "number | null")]
+    pub draft_year: Option<u32>,
+    pub is_rookie_nhl: Option<bool>,
+    pub is_rookie_ahl: Option<bool>,
+    pub is_rookie_chl: Option<bool>,
+}
+
+/// One labelled attribute cell for the Attributes tab. `field` carries the editable field view
+/// (dropdown vocab / friendly-edit offset already resolved); `null` marks an unmapped placeholder — a
+/// known attribute whose source field hasn't been anchored (e.g. Deflections).
+#[derive(Serialize, TS)]
+pub struct AttributeViewDto {
+    pub label: String,
+    /// True for a 6-bit `+36` rating (drives tier coloring); false for biases/enums/derived.
+    pub is_rating: bool,
+    pub field: Option<FieldViewDto>,
+}
+
+/// One active trait decoded from a `Trait N` slot, with a confidence tag so the UI can hedge weak
+/// labels.
+#[derive(Serialize, TS)]
+pub struct TraitViewDto {
+    pub slot_field: String,
+    pub slot_index: u32,
+    #[ts(type = "number")]
+    pub value: i64,
+    pub label: String,
+    /// `"confirmed"` | `"strong"` | `"weak"` | `"unknown"`.
+    pub confidence: String,
+    pub note: Option<String>,
+}
+
+/// One toggleable entry in the trait checkbox menu.
+#[derive(Serialize, TS)]
+pub struct TraitOptionDto {
+    #[ts(type = "number")]
+    pub value: i64,
+    pub label: String,
+    /// `"confirmed"` | `"strong"` | `"weak"`.
+    pub confidence: String,
+    pub note: Option<String>,
+    /// True when the player currently has this trait (a slot holds it).
+    pub active: bool,
+}
+
+/// The labelled, ordered ratings + traits for the Attributes tab (all resolution done in the domain).
+#[derive(Serialize, TS)]
+pub struct PlayerAttributesDto {
+    /// `"skater"` | `"goalie"` | `null` (no ratings companion).
+    pub kind: Option<String>,
+    pub overall: Option<AttributeViewDto>,
+    pub style: Option<AttributeViewDto>,
+    /// Potential Range (`QoMA` = `growthtier`) — in-game star potential (provisional decode).
+    pub potential_range: Option<AttributeViewDto>,
+    /// Potential Accuracy (`mBef` = `growthletter`) — scouting certainty High/Medium/Low.
+    pub potential_accuracy: Option<AttributeViewDto>,
+    pub flat: Vec<AttributeViewDto>,
+    pub traits: Vec<TraitViewDto>,
+    /// The full trait vocabulary as toggleable options (checkbox menu).
+    pub trait_options: Vec<TraitOptionDto>,
+}
+
+/// The full Player detail: resolved header, curated identity, ratings, memberships, and the complete
+/// bio field list.
 #[derive(Serialize, TS)]
 pub struct PlayerViewDto {
     #[ts(type = "number")]
@@ -224,6 +418,12 @@ pub struct PlayerViewDto {
     pub bio_record: u32,
     /// `"skater"` | `"goalie"`.
     pub kind: String,
+    /// Resolved, display-ready header banner values.
+    pub header: PlayerHeaderDto,
+    /// Resolved contract/draft/rookie/junior fields for the Player Data tab.
+    pub data: PlayerDataDto,
+    /// Labelled, ordered ratings + traits for the Attributes tab.
+    pub attributes: PlayerAttributesDto,
     pub identity: Vec<FieldViewDto>,
     pub ratings: Vec<FieldViewDto>,
     /// The companion record index the ratings belong to (needed to edit them); `null` if absent.
@@ -234,11 +434,52 @@ pub struct PlayerViewDto {
     pub all_fields: Vec<FieldViewDto>,
 }
 
-/// A read-only career-stats table for one player (stock season data).
+/// One column of a career-stats section: the studio field id + the header label (`GP`, `SV%`, …).
+#[derive(Serialize, TS)]
+pub struct CareerColumnDto {
+    pub field: String,
+    pub label: String,
+}
+
+/// One career season row: resolved identity plus stat cells aligned with the section's columns
+/// (`null` = the field is absent from this title's schema).
+#[derive(Serialize, TS)]
+pub struct CareerRowDto {
+    /// Record index in the section's table — the `set_field` / delete address.
+    pub record: u32,
+    /// `"2006-07"` (the stored year is the season-end year).
+    pub season_label: String,
+    /// Resolved league label (`NHL`/`AHL`).
+    pub league_label: String,
+    /// Stored team-code string, as-is.
+    pub team: String,
+    pub cells: Vec<Option<FieldViewDto>>,
+}
+
+/// One career-stats section (one of the four stock tables).
+#[derive(Serialize, TS)]
+pub struct CareerSectionDto {
+    /// `skater_season` | `skater_playoffs` | `goalie_season` | `goalie_playoffs`.
+    pub kind: String,
+    pub title: String,
+    /// Studio table id — the edit/add/delete address.
+    pub table: String,
+    pub columns: Vec<CareerColumnDto>,
+    pub rows: Vec<CareerRowDto>,
+}
+
+/// A player's stock career stats: the four skater/goalie × season/playoffs sections.
 #[derive(Serialize, TS)]
 pub struct CareerStatsDto {
-    pub columns: Vec<String>,
-    pub rows: Vec<Vec<String>>,
+    pub sections: Vec<CareerSectionDto>,
+}
+
+/// The result of adding a stock career season row.
+#[derive(Serialize, TS)]
+pub struct AddCareerSeasonDto {
+    /// The new row's record index in its table.
+    pub record: u32,
+    pub outcome: OpOutcomeDto,
 }
 
 /// One roster entry on a team's depth chart.
@@ -255,8 +496,17 @@ pub struct LineEntryDto {
     pub captaincy: Option<u64>,
     #[ts(type = "number | null")]
     pub roster_status: Option<u64>,
-    /// Labels of the set 1-bit situational flags (meta-derived; in-game semantics unverified).
+    /// Studio field ids of the set 1-bit situational flags (see `LinesViewDto.slot_fields`).
     pub slots: Vec<String>,
+    /// Per-slot archetype cell (`eGlu.QgFs`) — provisional binding; edit through `set_field`.
+    pub style: Option<FieldViewDto>,
+}
+
+/// One situational slot field on `eGlu`: studio id + metadata name (`l1c`, `pp1lw`, `s1`, …).
+#[derive(Serialize, TS)]
+pub struct SlotFieldDto {
+    pub studio_field: String,
+    pub name: String,
 }
 
 /// A team's depth chart.
@@ -264,6 +514,8 @@ pub struct LineEntryDto {
 pub struct LinesViewDto {
     #[ts(type = "number")]
     pub team_id: u64,
+    /// Every situational slot field on this title's `eGlu`, in schema order.
+    pub slot_fields: Vec<SlotFieldDto>,
     pub entries: Vec<LineEntryDto>,
 }
 
@@ -275,6 +527,10 @@ pub struct TeamSummaryDto {
     pub record: u32,
     pub name: String,
     pub abbrev: String,
+    /// League code (`kOtt.xMjj`) + resolved label — powers league-scoped team pickers.
+    #[ts(type = "number | null")]
+    pub league: Option<i64>,
+    pub league_label: Option<String>,
 }
 
 /// A resolved arena reference (a team's home rink).
@@ -295,7 +551,83 @@ pub struct TeamViewDto {
     pub identity: Vec<FieldViewDto>,
     pub arena: Option<ArenaRefDto>,
     pub roster_count: usize,
+    /// Retired jersey numbers (`wcSL`), sorted ascending.
+    pub retired_numbers: Vec<u32>,
     pub all_fields: Vec<FieldViewDto>,
+}
+
+/// One future draft pick owned by a team (`qHav`).
+#[derive(Serialize, TS)]
+pub struct DraftPickDto {
+    /// The `qHav` record index — the handle `trade_draft_pick` takes.
+    pub record: u32,
+    pub year: u32,
+    pub round: u32,
+    pub overall: u32,
+    #[ts(type = "number | null")]
+    pub original_owner_team_id: Option<u64>,
+    pub original_owner_name: Option<String>,
+    pub via_trade: bool,
+}
+
+/// One strategy cell: operator label + the ordinary editable field view.
+#[derive(Serialize, TS)]
+pub struct StrategyCellDto {
+    pub label: String,
+    pub field: FieldViewDto,
+}
+
+/// A team's strategy sheet (`EeYo`), bucketed for the GUI. Cell edits go through `set_field`
+/// on `(EeYo, record, field)` — the backend mirrors each edit onto career-mode `JUfQ`.
+#[derive(Serialize, TS)]
+pub struct TeamStrategiesDto {
+    #[ts(type = "number")]
+    pub team_id: u64,
+    pub record: u32,
+    pub tactics: Vec<StrategyCellDto>,
+    /// 4 lines × 6 biases, line-major.
+    pub forward_biases: Vec<StrategyCellDto>,
+    /// 3 pairs × 6 biases, pair-major.
+    pub defense_biases: Vec<StrategyCellDto>,
+    pub team_biases: Vec<StrategyCellDto>,
+}
+
+/// One `xjgw` jersey row for a team. Cells edit through `set_field` on this record.
+#[derive(Serialize, TS)]
+pub struct TeamJerseyDto {
+    pub record: u32,
+    pub jersey_index: u32,
+    pub style_raw: u32,
+    pub team_art_id: u32,
+    pub variant_raw: u32,
+    pub fe_variant_raw: u32,
+    pub helmet_logo: u32,
+    pub helmet_numbers: u32,
+    pub is_light_color: u32,
+    pub has_tie: u32,
+    pub loc_string_raw: u32,
+    pub is_default: bool,
+    pub is_lockable: bool,
+}
+
+/// One colour zone of a stock-equipment row, decoded to RGB.
+#[derive(Serialize, TS)]
+pub struct EquipmentZoneDto {
+    pub red: u8,
+    pub green: u8,
+    pub blue: u8,
+}
+
+/// One `hHbv` stock-equipment row for a team.
+#[derive(Serialize, TS)]
+pub struct TeamEquipmentDto {
+    pub record: u32,
+    pub equipment_id: u32,
+    pub equipment_type_raw: u32,
+    pub brand_raw: u32,
+    pub era_raw: u32,
+    pub variant_raw: u32,
+    pub zones: Vec<EquipmentZoneDto>,
 }
 
 /// A compact arena row for the master list.
@@ -306,14 +638,452 @@ pub struct ArenaSummaryDto {
     pub record: u32,
     pub name: String,
     pub city: String,
+    /// How many teams call this arena home (`kOtt.buDa == arena_id`).
+    pub team_count: u32,
 }
 
-/// The full Arena detail: curated identity plus all `StEO` fields.
+/// The full Arena detail: curated identity, the resolved tenants, plus all `StEO` fields.
 #[derive(Serialize, TS)]
 pub struct ArenaViewDto {
     #[ts(type = "number")]
     pub arena_id: u64,
     pub record: u32,
     pub identity: Vec<FieldViewDto>,
+    /// Teams whose home arena this is, resolved to names.
+    pub teams: Vec<TeamSummaryDto>,
     pub all_fields: Vec<FieldViewDto>,
+}
+
+// ---- Historical (FHM corpus) ----------------------------------------------
+//
+// The read-only historical source database. Person-centric: `person_id` is a synthesized identity
+// unifying one human across the per-season FHM exports (see the `tdb-fhm` slug rule). These mirror
+// the `studio_domain::historical` model rows; ids are already resolved to names by the store.
+
+/// The season / league filter options for the Historical browse dropdowns.
+#[derive(Serialize, TS)]
+pub struct HistoricalFiltersDto {
+    pub seasons: Vec<HistoricalSeasonOptionDto>,
+    pub leagues: Vec<HistoricalLeagueOptionDto>,
+}
+
+#[derive(Serialize, TS)]
+pub struct HistoricalSeasonOptionDto {
+    #[ts(type = "number")]
+    pub year: i64,
+    /// Display label, e.g. `"1985-1986"`.
+    pub label: String,
+}
+
+#[derive(Serialize, TS)]
+pub struct HistoricalLeagueOptionDto {
+    pub abbr: String,
+    pub name: String,
+}
+
+/// One human in the Historical Players master list (unified across seasons).
+#[derive(Serialize, TS)]
+pub struct HistoricalPersonSummaryDto {
+    #[ts(type = "number")]
+    pub person_id: i64,
+    pub first_name: String,
+    pub last_name: String,
+    /// `YYYY-MM-DD` (or `?` when unknown).
+    pub dob: String,
+    pub nationality: Option<String>,
+    pub is_goalie: bool,
+    /// Primary position label (C/LW/RW/D/G), or null when the person has no ratings row.
+    pub position: Option<String>,
+    #[ts(type = "number | null")]
+    pub first_year: Option<i64>,
+    #[ts(type = "number | null")]
+    pub last_year: Option<i64>,
+    #[ts(type = "number")]
+    pub season_count: i64,
+    pub retired: bool,
+    /// True when the player is still active in the corpus's current season — the list renders the
+    /// span end as "Present".
+    pub active: bool,
+    /// Distinct seasons the player logged games — the list's headline count (replaces the raw span).
+    #[ts(type = "number")]
+    pub seasons_played: i64,
+}
+
+/// The full Historical person detail: canonical bio + season timeline + career + draft + awards.
+#[derive(Serialize, TS)]
+pub struct HistoricalPersonDto {
+    #[ts(type = "number")]
+    pub person_id: i64,
+    pub first_name: String,
+    pub last_name: String,
+    pub nick_name: Option<String>,
+    pub dob: String,
+    #[ts(type = "number | null")]
+    pub height: Option<i64>,
+    #[ts(type = "number | null")]
+    pub weight: Option<i64>,
+    pub hand: Option<String>,
+    pub nationality: Option<String>,
+    pub birthcity: Option<String>,
+    pub birthstate: Option<String>,
+    pub retired: bool,
+    pub is_goalie: bool,
+    pub position: Option<String>,
+    #[ts(type = "number | null")]
+    pub first_year: Option<i64>,
+    /// Final season the player actually logged games (not the raw last appearance). `null` only when
+    /// no played season exists.
+    #[ts(type = "number | null")]
+    pub last_year: Option<i64>,
+    /// True when the player is still active in the corpus's current season — the UI renders the
+    /// career end as "Present" rather than that year.
+    pub active: bool,
+    pub seasons: Vec<HistoricalSeasonRowDto>,
+    pub career: Vec<HistoricalCareerRowDto>,
+    /// Every league draft the person was selected in, NHL/major drafts first (empty if never drafted).
+    pub drafts: Vec<HistoricalDraftDto>,
+    pub contract: Option<HistoricalContractDto>,
+    pub awards: Vec<HistoricalAwardDto>,
+}
+
+#[derive(Serialize, TS)]
+pub struct HistoricalContractDto {
+    pub team_abbr: Option<String>,
+    pub ntc: bool,
+    pub nmc: bool,
+    pub elc: bool,
+    pub ufa: bool,
+    pub scholarship: Option<String>,
+    /// FHM "Average Salary" (thousands).
+    #[ts(type = "number | null")]
+    pub avg_salary: Option<i64>,
+    /// Years remaining on the deal.
+    #[ts(type = "number | null")]
+    pub length: Option<i64>,
+}
+
+/// A person's roster snapshot in one season (team resolved within that season's namespace).
+#[derive(Serialize, TS)]
+pub struct HistoricalSeasonRowDto {
+    #[ts(type = "number")]
+    pub season_year: i64,
+    pub season_label: String,
+    pub team_name: Option<String>,
+    pub team_abbr: Option<String>,
+    pub league_abbr: Option<String>,
+    #[ts(type = "number | null")]
+    pub height: Option<i64>,
+    #[ts(type = "number | null")]
+    pub weight: Option<i64>,
+    pub ability: Option<f64>,
+    pub potential: Option<f64>,
+}
+
+/// One career-stats line, with the stat cells pre-ordered for display.
+#[derive(Serialize, TS)]
+pub struct HistoricalCareerRowDto {
+    /// `"skater"` | `"goalie"`.
+    pub kind: String,
+    /// `"rs"` (regular season) | `"po"` (playoffs).
+    pub phase: String,
+    #[ts(type = "number")]
+    pub year: i64,
+    pub team_abbr: Option<String>,
+    pub league_abbr: Option<String>,
+    pub cells: Vec<HistoricalStatCellDto>,
+}
+
+#[derive(Serialize, TS)]
+pub struct HistoricalStatCellDto {
+    pub label: String,
+    pub value: String,
+}
+
+#[derive(Serialize, TS)]
+pub struct HistoricalDraftDto {
+    #[ts(type = "number | null")]
+    pub year: Option<i64>,
+    #[ts(type = "number | null")]
+    pub round: Option<i64>,
+    #[ts(type = "number | null")]
+    pub pick: Option<i64>,
+    #[ts(type = "number | null")]
+    pub overall: Option<i64>,
+    /// Era-resolved drafting team (historical name where known, else the snapshot abbr).
+    pub team: Option<String>,
+    /// Draft label, e.g. "NHL Entry Draft" / "QMJHL Entry Draft".
+    pub draft_name: Option<String>,
+    /// NHL/major draft — the ones that lead the display.
+    pub is_nhl: bool,
+}
+
+#[derive(Serialize, TS)]
+pub struct HistoricalAwardDto {
+    #[ts(type = "number | null")]
+    pub year: Option<i64>,
+    pub league_abbr: Option<String>,
+    pub name: Option<String>,
+    pub description: Option<String>,
+}
+
+/// A team as it existed in one season — the Historical Teams master list (season-scoped).
+#[derive(Serialize, TS)]
+pub struct HistoricalTeamSummaryDto {
+    #[ts(type = "number")]
+    pub season_year: i64,
+    #[ts(type = "number")]
+    pub src_team_id: i64,
+    pub league_abbr: Option<String>,
+    pub name: Option<String>,
+    pub nickname: Option<String>,
+    pub abbr: Option<String>,
+}
+
+/// Full team-season detail: identity + that season's roster (each entry links back to a person).
+#[derive(Serialize, TS)]
+pub struct HistoricalTeamDto {
+    #[ts(type = "number")]
+    pub season_year: i64,
+    #[ts(type = "number")]
+    pub src_team_id: i64,
+    pub name: Option<String>,
+    pub nickname: Option<String>,
+    pub abbr: Option<String>,
+    pub league_abbr: Option<String>,
+    pub conference_name: Option<String>,
+    pub division_name: Option<String>,
+    pub primary_color: Option<String>,
+    pub secondary_color: Option<String>,
+    pub roster: Vec<HistoricalRosterEntryDto>,
+}
+
+#[derive(Serialize, TS)]
+pub struct HistoricalRosterEntryDto {
+    #[ts(type = "number")]
+    pub person_id: i64,
+    pub first_name: String,
+    pub last_name: String,
+    pub is_goalie: bool,
+    pub ability: Option<f64>,
+    pub potential: Option<f64>,
+}
+
+// ---- Franchise-consolidated team browse (v5) ------------------------------
+// The team browse consolidates NHL relocations/renames into one franchise entry (per the v5
+// `franchise`/`franchise_member` lineage); non-NHL clubs stay standalone. `kind`+`key` identify an
+// entry: a franchise (`key` = franchise id) or a standalone team (`key` = cross-season `team_key`).
+
+/// The league filter options for the team browse (distinct leagues across the cross-season `team`
+/// identity table; `NHL` lists the franchises).
+#[derive(Serialize, TS)]
+pub struct HistoricalTeamFiltersDto {
+    pub leagues: Vec<HistoricalLeagueOptionDto>,
+}
+
+/// One row in the franchise-consolidated team index.
+#[derive(Serialize, TS)]
+pub struct HistoricalTeamIndexEntryDto {
+    /// `"franchise"` | `"team"`.
+    pub kind: String,
+    pub key: String,
+    pub name: String,
+    pub abbr: Option<String>,
+    pub league_abbr: Option<String>,
+    #[ts(type = "number | null")]
+    pub first_year: Option<i64>,
+    #[ts(type = "number | null")]
+    pub last_year: Option<i64>,
+    pub is_defunct: bool,
+}
+
+/// The franchise/team detail for one selected season: a franchise-level header, the seasons it iced a
+/// team (the dropdown), and the constituent club block(s) for the selected season.
+#[derive(Serialize, TS)]
+pub struct HistoricalTeamFranchiseDto {
+    pub kind: String,
+    pub key: String,
+    pub display_name: String,
+    pub abbr: Option<String>,
+    pub league_abbr: Option<String>,
+    pub is_defunct: bool,
+    pub notes: Option<String>,
+    #[ts(type = "number[]")]
+    pub seasons: Vec<i64>,
+    #[ts(type = "number")]
+    pub season_year: i64,
+    pub constituents: Vec<HistoricalTeamBlockDto>,
+}
+
+/// One club as it existed in one season — identity + colours + affiliates + roster + cap sheet.
+#[derive(Serialize, TS)]
+pub struct HistoricalTeamBlockDto {
+    pub team_key: Option<String>,
+    #[ts(type = "number")]
+    pub src_team_id: i64,
+    #[ts(type = "number")]
+    pub season_year: i64,
+    /// Era-appropriate name (a franchise member's era name, or the standalone team's own name).
+    pub name: String,
+    pub nickname: Option<String>,
+    pub abbr: Option<String>,
+    pub league_abbr: Option<String>,
+    pub conference_name: Option<String>,
+    pub division_name: Option<String>,
+    pub primary_color: Option<String>,
+    pub secondary_color: Option<String>,
+    pub text_color: Option<String>,
+    pub affiliates: Vec<HistoricalTeamAffiliateDto>,
+    pub roster: Vec<HistoricalTeamMemberDto>,
+    pub contracts: Vec<HistoricalTeamContractDto>,
+}
+
+#[derive(Serialize, TS)]
+pub struct HistoricalTeamAffiliateDto {
+    /// `"affiliate"` (a farm team under this club) | `"parent"` (the club this reports up to).
+    pub relation: String,
+    #[ts(type = "number")]
+    pub src_team_id: i64,
+    pub name: Option<String>,
+    pub abbr: Option<String>,
+    pub league_abbr: Option<String>,
+}
+
+/// A roster member enriched with position, jersey, captaincy, DOB and nationality.
+#[derive(Serialize, TS)]
+pub struct HistoricalTeamMemberDto {
+    #[ts(type = "number")]
+    pub person_id: i64,
+    pub first_name: String,
+    pub last_name: String,
+    pub is_goalie: bool,
+    pub position: Option<String>,
+    pub dob: String,
+    pub nationality: Option<String>,
+    #[ts(type = "number | null")]
+    pub jersey: Option<i64>,
+    /// `"C"` (captain) | `"A"` (alternate) | null.
+    pub captaincy: Option<String>,
+    pub ability: Option<f64>,
+    pub potential: Option<f64>,
+}
+
+/// One line of a team-season cap sheet (`season_contract`; `avg_salary` in dollars).
+#[derive(Serialize, TS)]
+pub struct HistoricalTeamContractDto {
+    #[ts(type = "number")]
+    pub person_id: i64,
+    pub first_name: String,
+    pub last_name: String,
+    #[ts(type = "number | null")]
+    pub avg_salary: Option<i64>,
+    pub ntc: bool,
+    pub nmc: bool,
+    pub elc: bool,
+    pub ufa: bool,
+}
+
+// ---- Formula engine (Stage 2) ---------------------------------------------
+
+/// One computed EA rating, on its display scale.
+#[derive(Serialize, TS)]
+pub struct EaRatingDto {
+    pub ea_key: String,
+    /// Display value; null when no component contributed.
+    pub value: Option<i32>,
+    pub scale_min: i32,
+    pub scale_max: i32,
+}
+
+/// A person-season's computed EA ratings under a formula profile.
+#[derive(Serialize, TS)]
+pub struct EaComputedRatingsDto {
+    /// `forward` / `defenseman` / `goalie`.
+    pub position: String,
+    pub overall: Option<i32>,
+    /// Archetype/style EA label (e.g. "Sniper") — null for goalies.
+    pub style_label: Option<String>,
+    /// Archetype/style EA raw code — null for goalies.
+    #[ts(type = "number | null")]
+    pub style_raw: Option<u32>,
+    pub ratings: Vec<EaRatingDto>,
+    /// The raw FHM attribute values this was computed from (includes position grades G/LD/RD/LW/C/RW).
+    pub fhm_values: Vec<FhmValueDto>,
+}
+
+/// One raw FHM attribute value.
+#[derive(Serialize, TS)]
+pub struct FhmValueDto {
+    pub key: String,
+    pub value: f64,
+}
+
+/// One playing season's EA Overall, for the Attributes season dropdown (newest first).
+#[derive(Serialize, TS)]
+pub struct CareerSeasonOverallDto {
+    #[ts(type = "number")]
+    pub season_year: i64,
+    pub overall: Option<i32>,
+}
+
+/// Cross-career EA rating compilations for a player: per-season overalls (with the best flagged for
+/// the ★), plus the Full Career and Peak-3 averaged views (same shape as a single season's ratings).
+#[derive(Serialize, TS)]
+pub struct HistoricalCareerRatingsDto {
+    /// `forward` / `defenseman` / `goalie`.
+    pub position: String,
+    pub seasons: Vec<CareerSeasonOverallDto>,
+    /// Highest-Overall season (ties → earliest) — starred in the dropdown. Null for goalies/no data.
+    #[ts(type = "number | null")]
+    pub best_season_year: Option<i64>,
+    /// Average over ALL playing seasons with rating data.
+    pub career_average: Option<EaComputedRatingsDto>,
+    /// Average over the top-3 Overall seasons.
+    pub peak3: Option<EaComputedRatingsDto>,
+}
+
+/// The editable formula profile (shape of `docs/reference/default_ea_formulas.json`). A component is
+/// `[fhm_key, weight]`; `fhm_key` may be a raw FHM attribute or a `prebuilt:<key>` reference.
+#[derive(Serialize, Deserialize, TS)]
+pub struct FormulaProfileDto {
+    #[ts(type = "Record<string, [string, number][]>")]
+    pub forward: std::collections::BTreeMap<String, Vec<(String, f64)>>,
+    #[ts(type = "Record<string, [string, number][]>")]
+    pub defenseman: std::collections::BTreeMap<String, Vec<(String, f64)>>,
+    #[ts(type = "Record<string, [string, number][]>")]
+    pub goalie: std::collections::BTreeMap<String, Vec<(String, f64)>>,
+    /// `"nominal"` | `"position_max"`.
+    pub normalisation_mode: String,
+}
+
+/// Static catalog for the Formulas UI: the EA attribute lists, the FHM vocabulary, and prebuilts.
+#[derive(Serialize, TS)]
+pub struct FormulaCatalogDto {
+    pub skater_ea_attrs: Vec<String>,
+    pub goalie_ea_attrs: Vec<String>,
+    pub fhm_groups: Vec<FhmGroupDto>,
+    pub prebuilts: Vec<PrebuiltDto>,
+}
+
+#[derive(Serialize, TS)]
+pub struct FhmGroupDto {
+    pub group: String,
+    pub attrs: Vec<FhmAttrDto>,
+}
+
+#[derive(Serialize, TS)]
+pub struct FhmAttrDto {
+    /// The `attrs_json` key.
+    pub key: String,
+    pub label: String,
+}
+
+#[derive(Serialize, TS)]
+pub struct PrebuiltDto {
+    /// Stored form, e.g. `"prebuilt:gp_durability"`.
+    pub key: String,
+    pub label: String,
+    #[ts(type = "number")]
+    pub native_max: u32,
+    /// When true the formula outputs on its own scale (bias/tier rows).
+    pub direct_output: bool,
 }

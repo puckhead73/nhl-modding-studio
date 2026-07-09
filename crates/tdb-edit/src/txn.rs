@@ -49,6 +49,35 @@ pub mod retired {
     pub const NUMBER: &str = "JFiY";
 }
 
+/// The future-draft-pick table (`qHav` — "exhibitiondraftpick"). One row per pick; `Uwdb` is the
+/// **current owner** (stored 1-indexed via its `range_low = -1` offset; 0 = unassigned) and
+/// `GFcg` the original owner — the provenance that renders "via trade from …".
+pub mod draft {
+    pub const TABLE: &str = "qHav";
+    pub const OWNER: &str = "Uwdb";
+    pub const ORIGINAL_OWNER: &str = "GFcg";
+}
+
+/// Studio ids of the four stock career-stats tables (skater/goalie × regular season/playoffs).
+/// Their rows key on `wBIz` stored **1-indexed** (raw `0` = "no player"; raw `N` → bio
+/// `wBIz = N - 1` — the offset storage of the field's `range_low = -1`).
+pub const CAREER_TABLES: &[&str] = &["tsSy", "OAqO", "USfF", "nCDp"];
+
+/// Career-row identity fields shared by all four tables (studio ids).
+const CAREER_YEAR: &str = "qFnd"; // season-END year, raw + 1900
+const CAREER_LEAGUE: &str = "xMjj"; // 1-bit league flag: 0 = NHL, 1 = AHL
+const CAREER_TEAMS: &str = "lyxL"; // fixed-width inline team-code string
+
+fn career_table_guard(studio_table: &str) -> Result<(), EditError> {
+    if CAREER_TABLES.contains(&studio_table) {
+        Ok(())
+    } else {
+        Err(EditError::UnknownTable(format!(
+            "{studio_table} is not a stock career-stats table"
+        )))
+    }
+}
+
 /// What an operation did: how many cell edits, and a human description of each auto-repair applied.
 #[derive(Clone, Debug, Default)]
 pub struct OpOutcome {
@@ -691,6 +720,122 @@ impl EditTransaction {
         })
     }
 
+    // -----------------------------------------------------------------------
+    // Stock career-stats rows (the four per-player stat tables)
+    // -----------------------------------------------------------------------
+
+    /// Add one stock career season row for a player. `studio_table` must be one of
+    /// [`CAREER_TABLES`]; the appended record starts zeroed (stat cells are edited afterwards
+    /// through the normal validated field path) with its identity set: the 1-indexed `wBIz` join
+    /// key (raw `0` is the "no player" sentinel — the tables store `bio wBIz + 1`), the season-end
+    /// year (`raw + 1900`), the 1-bit league flag, and the inline team-code string. Returns the new
+    /// record index. Audited + undoable.
+    pub fn add_career_season(
+        &mut self,
+        studio_table: &str,
+        player_id: u64,
+        year_end: u64,
+        league: u64,
+        team: &str,
+    ) -> Result<(u32, OpOutcome), EditError> {
+        career_table_guard(studio_table)?;
+        if self.model()?.player(player_id).is_none() {
+            return Err(EditError::NoSuchPlayer(player_id));
+        }
+        if !(1901..=2155).contains(&year_end) {
+            return Err(EditError::InvalidValue {
+                what: "season-end year (1901..=2155)",
+                value: year_end as i64,
+            });
+        }
+        if league > 1 {
+            return Err(EditError::InvalidValue {
+                what: "league (0 = NHL, 1 = AHL)",
+                value: league as i64,
+            });
+        }
+        // The team-code slot is an inline string of fixed byte width — reject an over-long code
+        // up front rather than let the writer truncate it silently.
+        let width = self.field_byte_width(studio_table, CAREER_TEAMS)?;
+        if team.len() > width {
+            return Err(EditError::InvalidValue {
+                what: "team code length (exceeds the field's byte width)",
+                value: team.len() as i64,
+            });
+        }
+
+        let mut record = 0;
+        let outcome = self.with_repairing_transaction(|tx| {
+            let rec = tx.append(studio_table)?;
+            tx.set_field(studio_table, rec, ids::PLAYER_ID, player_id + 1)?;
+            tx.set_field(studio_table, rec, CAREER_YEAR, year_end - 1900)?;
+            tx.set_field(studio_table, rec, CAREER_LEAGUE, league)?;
+            tx.set_field_str(studio_table, rec, CAREER_TEAMS, team)?;
+            record = rec;
+            Ok(OpOutcome {
+                edits: 4,
+                repairs: vec![format!(
+                    "added {studio_table} season {year_end} for wBIz={player_id}"
+                )],
+            })
+        })?;
+        Ok((record, outcome))
+    }
+
+    /// Delete one stock career row by record index — an **ordered** remove (later rows slide up),
+    /// matching the reference tools' shift semantics so stored row order is preserved. Audited +
+    /// undoable.
+    pub fn delete_career_row(
+        &mut self,
+        studio_table: &str,
+        record: u32,
+    ) -> Result<OpOutcome, EditError> {
+        career_table_guard(studio_table)?;
+        self.with_repairing_transaction(|tx| {
+            tx.remove_at_ordered(studio_table, record)?;
+            Ok(OpOutcome {
+                edits: 1,
+                repairs: vec![format!(
+                    "removed {studio_table} career row {record} (ordered shift)"
+                )],
+            })
+        })
+    }
+
+    /// Remove one record by index with the order-preserving shift.
+    fn remove_at_ordered(&mut self, studio_table: &str, index: u32) -> Result<(), EditError> {
+        let view = self.working.clone();
+        let db = TdbFile::parse(&view).map_err(|e| EditError::Parse(e.to_string()))?;
+        let raw = db
+            .table_canonical(studio_table)
+            .ok_or_else(|| EditError::UnknownTable(studio_table.to_string()))?
+            .id
+            .raw();
+        let new_bytes = db
+            .remove_record_ordered(&raw, index)
+            .map_err(|e| EditError::Alloc(e.to_string()))?;
+        self.working = new_bytes;
+        Ok(())
+    }
+
+    /// The byte width of a fixed-width inline-string field (bit width / 8).
+    fn field_byte_width(&self, studio_table: &str, studio_field: &str) -> Result<usize, EditError> {
+        let view = self.working.clone();
+        let db = TdbFile::parse(&view).map_err(|e| EditError::Parse(e.to_string()))?;
+        let table = db
+            .table_canonical(studio_table)
+            .ok_or_else(|| EditError::UnknownTable(studio_table.to_string()))?;
+        let field = table
+            .fields
+            .iter()
+            .find(|f| f.id.canonical(db.endian) == studio_field)
+            .ok_or_else(|| EditError::UnknownField {
+                table: studio_table.to_string(),
+                field: studio_field.to_string(),
+            })?;
+        Ok((field.bit_width / 8) as usize)
+    }
+
     /// The set of `ZBac.vfEq` index keys whose `ykFq` points at `player_id`.
     fn player_index_keys(&self, player_id: u64) -> Result<HashSet<u64>, EditError> {
         let view = self.working.clone();
@@ -1260,6 +1405,110 @@ impl EditTransaction {
         })
     }
 
+    /// Add an **additional roster membership**: install the player's `ZBac` index key into a free
+    /// slot in `to_team`'s block, leaving every other membership *and* the bio's primary team
+    /// (`ubPc.dXSB`) untouched. This is the additive counterpart to [`Self::sign_from_fa`] for
+    /// players who are already rostered somewhere — national teams, all-star / Winter Classic
+    /// rosters, alternate dynasty rosters — where the main club stays canonical. The arriving slot
+    /// gets the same clean state (captaincy cleared, jersey unassigned).
+    ///
+    /// Errors with [`EditError::InvalidValue`] if the player already holds a slot on `to_team`
+    /// (one membership per team — a duplicate is an integrity violation), or
+    /// [`EditError::TeamRosterFull`] when the destination block has no free slot.
+    pub fn add_membership(&mut self, player_id: u64, to_team: u64) -> Result<OpOutcome, EditError> {
+        let vfeq = {
+            let model = self.model()?;
+            if model.team(to_team).is_none() {
+                return Err(EditError::InvalidValue {
+                    what: "to_team (no such team)",
+                    value: to_team as i64,
+                });
+            }
+            if model.player(player_id).is_none() {
+                return Err(EditError::NoSuchPlayer(player_id));
+            }
+            if model
+                .slots
+                .iter()
+                .any(|s| s.team_id == to_team && s.player_id == Some(player_id))
+            {
+                return Err(EditError::InvalidValue {
+                    what: "to_team (player already on that team)",
+                    value: to_team as i64,
+                });
+            }
+            self.player_index_keys(player_id)?
+                .into_iter()
+                .min()
+                .ok_or(EditError::NoSuchPlayer(player_id))?
+        };
+        self.with_repairing_transaction(|tx| {
+            let model = tx.model()?;
+            let dest_record = model
+                .slots
+                .iter()
+                .find(|s| s.team_id == to_team && s.player_id.is_none())
+                .map(|s| s.record)
+                .ok_or(EditError::TeamRosterFull { team: to_team })?;
+            drop(model);
+
+            let edits = tx.occupy_slot(dest_record, vfeq)?;
+            Ok(OpOutcome {
+                edits,
+                repairs: vec![format!(
+                    "added roster membership for player {player_id} on team {to_team}"
+                )],
+            })
+        })
+    }
+
+    /// Remove one **additional roster membership**: vacate the player's slot on `from_team` (zero
+    /// its `XSWT`, clear captaincy), leaving the bio's primary team and every other membership
+    /// untouched. Mechanically identical to [`Self::release_to_fa`]; the distinct op exists so the
+    /// caller's intent ("drop the extra row", not "make a free agent") reads correctly in the
+    /// outcome. Callers gate which memberships count as additional — the canonical Main Team row
+    /// is not offered for removal here.
+    ///
+    /// Errors with [`EditError::NoSuchSlot`] if the player is not on `from_team`.
+    pub fn remove_membership(
+        &mut self,
+        from_team: u64,
+        player_id: u64,
+    ) -> Result<OpOutcome, EditError> {
+        {
+            let model = self.model()?;
+            if model.team(from_team).is_none() {
+                return Err(EditError::InvalidValue {
+                    what: "from_team (no such team)",
+                    value: from_team as i64,
+                });
+            }
+            if model.player(player_id).is_none() {
+                return Err(EditError::NoSuchPlayer(player_id));
+            }
+        }
+        self.with_repairing_transaction(|tx| {
+            let model = tx.model()?;
+            let record = model
+                .slots
+                .iter()
+                .find(|s| s.team_id == from_team && s.player_id == Some(player_id))
+                .ok_or(EditError::NoSuchSlot {
+                    team_id: from_team,
+                    player_id,
+                })?
+                .record;
+            drop(model);
+            let edits = tx.vacate_slot(record)?;
+            Ok(OpOutcome {
+                edits,
+                repairs: vec![format!(
+                    "removed roster membership for player {player_id} on team {from_team}"
+                )],
+            })
+        })
+    }
+
     /// Set a player's jersey number on a team (`eGlu.sVRt`). Validated against the field width and
     /// **unique within the team**: a number already worn by another player is rejected (a jersey
     /// collision has no unambiguous auto-repair, so it surfaces a structured error).
@@ -1284,10 +1533,12 @@ impl EditTransaction {
                 .find(|s| s.team_id == team_id && s.player_id == Some(player_id))
                 .ok_or(EditError::NoSuchSlot { team_id, player_id })?
                 .record;
-            if model
-                .slots
-                .iter()
-                .any(|s| s.team_id == team_id && s.record != target_record && s.jersey == Some(number))
+            // 0 = "no number" — always assignable (it's how a number is cleared), so it's exempt
+            // from the uniqueness check (matching `plan_jersey_corrections`, which ignores 0s).
+            if number != 0
+                && model.slots.iter().any(|s| {
+                    s.team_id == team_id && s.record != target_record && s.jersey == Some(number)
+                })
             {
                 return Err(EditError::JerseyTaken {
                     team: team_id,
@@ -1429,6 +1680,41 @@ impl EditTransaction {
                     repairs: vec![format!("un-retired jersey #{number} for team {team}")],
                 })
             }
+        })
+    }
+
+    /// Trade a future draft pick to another team: rewrite the pick's current owner
+    /// (`qHav.Uwdb`, stored 1-indexed). The original owner (`GFcg`) is deliberately untouched —
+    /// it's the provenance that renders "via trade from …" on the Draft Picks tab. Errors on an
+    /// unknown team or an out-of-range/unpopulated pick record. Audited + undoable.
+    pub fn trade_draft_pick(&mut self, record: u32, to_team: u64) -> Result<OpOutcome, EditError> {
+        if self.model()?.team(to_team).is_none() {
+            return Err(EditError::InvalidValue {
+                what: "to_team (no such team)",
+                value: to_team as i64,
+            });
+        }
+        {
+            let view = self.working.clone();
+            let db = TdbFile::parse(&view).map_err(|e| EditError::Parse(e.to_string()))?;
+            let t = db
+                .table_canonical(draft::TABLE)
+                .ok_or_else(|| EditError::UnknownTable(draft::TABLE.to_string()))?;
+            if record >= t.current_records as u32 {
+                return Err(EditError::InvalidValue {
+                    what: "draft-pick record (out of range)",
+                    value: record as i64,
+                });
+            }
+        }
+        self.with_repairing_transaction(|tx| {
+            tx.set_field(draft::TABLE, record, draft::OWNER, to_team + 1)?;
+            Ok(OpOutcome {
+                edits: 1,
+                repairs: vec![format!(
+                    "traded draft pick (qHav row {record}) to team {to_team}"
+                )],
+            })
         })
     }
 

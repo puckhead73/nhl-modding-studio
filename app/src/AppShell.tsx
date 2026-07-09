@@ -1,21 +1,14 @@
 import { useEffect, useRef, useState } from "react";
-import { NavLink, Navigate, Outlet, useNavigate } from "react-router-dom";
+import { Link, NavLink, Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useProject } from "./lib/project";
 import { call } from "./lib/client";
 import { Button, Pill } from "./components/primitives";
+import { SECTIONS, activeSection } from "./nav";
+import { BreadcrumbProvider, useBreadcrumbs } from "./lib/breadcrumbs";
 import headerLogo from "./assets/ui/NHL Modding Studio Header.png";
 import type { ProjectSummaryDto } from "./bindings/ProjectSummaryDto";
 import type { AutocorrectSummaryDto } from "./bindings/AutocorrectSummaryDto";
-
-const NAV = [
-  { to: "dashboard", label: "Dashboard" },
-  { to: "players", label: "Players" },
-  { to: "teams", label: "Teams" },
-  { to: "lines", label: "Lines" },
-  { to: "arenas", label: "Arenas" },
-  { to: "settings", label: "Settings" },
-];
 
 export function AppShell() {
   const { project, dbPath } = useProject();
@@ -27,6 +20,8 @@ function Shell({ project, dbPath }: { project: ProjectSummaryDto; dbPath: string
   const { update, close } = useProject();
   const navigate = useNavigate();
   const qc = useQueryClient();
+  const { pathname } = useLocation();
+  const section = activeSection(pathname);
 
   // A workspace with a roster attached saves both files in place; otherwise write the single db back.
   const save = useMutation({
@@ -40,13 +35,14 @@ function Shell({ project, dbPath }: { project: ProjectSummaryDto; dbPath: string
     },
   });
 
-  const navClass = ({ isActive }: { isActive: boolean }) =>
+  const subClass = ({ isActive }: { isActive: boolean }) =>
     "rounded-md px-3 py-1.5 text-sm font-medium transition-colors " +
     (isActive
       ? "bg-sky-900/40 text-sky-100"
       : "text-slate-300 hover:bg-slate-800/60 hover:text-slate-100");
 
   return (
+    <BreadcrumbProvider>
     <div className="flex h-full flex-col bg-slate-950 text-slate-100">
       <CorruptionGuard projectId={project.project_id} />
       <JerseyAutocorrect projectId={project.project_id} />
@@ -57,16 +53,31 @@ function Shell({ project, dbPath }: { project: ProjectSummaryDto; dbPath: string
           draggable={false}
           className="h-7 w-auto shrink-0 select-none object-contain"
         />
+        {/* Primary section bar — active by which section owns the URL, not exact-path match. */}
         <nav className="flex flex-1 items-center gap-1">
-          {NAV.map((n) => (
-            <NavLink key={n.to} to={n.to} className={navClass}>
-              {n.label}
-            </NavLink>
-          ))}
+          {SECTIONS.map((s) => {
+            const active = s.key === section.key;
+            return (
+              <Link
+                key={s.key}
+                to={s.index ?? s.key}
+                className={
+                  "rounded-md px-3 py-1.5 text-sm font-semibold transition-colors " +
+                  (active
+                    ? "bg-slate-800 text-slate-50"
+                    : "text-slate-400 hover:bg-slate-800/60 hover:text-slate-100")
+                }
+              >
+                {s.label}
+              </Link>
+            );
+          })}
+        </nav>
+        <div className="flex items-center gap-2">
           <NavLink
-            to="pending"
+            to="database/pending"
             className={({ isActive }) =>
-              "ml-1 flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-sm font-medium transition-colors " +
+              "flex items-center gap-1.5 rounded-md border px-3 py-1 text-xs font-medium transition-colors " +
               (isActive
                 ? "border-sky-700 bg-sky-900/40 text-sky-100"
                 : project.dirty
@@ -79,8 +90,6 @@ function Shell({ project, dbPath }: { project: ProjectSummaryDto; dbPath: string
               <Pill tone={project.dirty ? "warn" : "neutral"}>{project.undo_depth}</Pill>
             )}
           </NavLink>
-        </nav>
-        <div className="flex items-center gap-2">
           <span className="text-xs text-slate-400">
             {project.platform} · {project.role} · {project.source}
           </span>
@@ -111,6 +120,18 @@ function Shell({ project, dbPath }: { project: ProjectSummaryDto; dbPath: string
           </button>
         </div>
       </header>
+      {/* History trail — the views clicked through, under the primary tabs; click to jump back. */}
+      <Breadcrumbs />
+      {/* Contextual subtab bar — only when the active section has subtabs. */}
+      {section.subtabs.length > 0 && (
+        <nav className="flex shrink-0 items-center gap-1 border-b border-slate-800 bg-slate-950/60 px-4 py-1.5">
+          {section.subtabs.map((sub) => (
+            <NavLink key={sub.to} to={sub.to} className={subClass}>
+              {sub.label}
+            </NavLink>
+          ))}
+        </nav>
+      )}
       <main className="flex min-h-0 flex-1 flex-col overflow-hidden">
         <div className="min-h-0 flex-1 overflow-y-auto px-6 py-6">
           {save.isError && (
@@ -122,6 +143,48 @@ function Shell({ project, dbPath }: { project: ProjectSummaryDto; dbPath: string
         </div>
       </main>
     </div>
+    </BreadcrumbProvider>
+  );
+}
+
+/** The history-trail bar: the distinct views the user has clicked through, oldest → current. Each
+ *  earlier crumb is a button that navigates back to that view (truncating forward history); the
+ *  current view is shown but not clickable. Hidden until there's somewhere to go back to. */
+function Breadcrumbs() {
+  const trail = useBreadcrumbs();
+  const navigate = useNavigate();
+  if (trail.length < 2) return null;
+  return (
+    <nav
+      aria-label="Recent views"
+      className="flex shrink-0 items-center gap-1 overflow-x-auto border-b border-slate-800 bg-slate-950/40 px-4 py-1 text-xs"
+    >
+      <span className="mr-1 shrink-0 text-[10px] font-semibold uppercase tracking-wide text-slate-600">
+        Recent
+      </span>
+      {trail.map((c, i) => {
+        const last = i === trail.length - 1;
+        return (
+          <span key={c.path} className="flex shrink-0 items-center gap-1">
+            {i > 0 && <span className="text-slate-700">›</span>}
+            {last ? (
+              <span className="max-w-[16rem] truncate font-medium text-slate-200" title={c.label}>
+                {c.label}
+              </span>
+            ) : (
+              <button
+                type="button"
+                onClick={() => navigate(c.path)}
+                title={`Back to ${c.label}`}
+                className="max-w-[16rem] truncate rounded px-1 text-slate-400 transition-colors hover:bg-slate-800/60 hover:text-sky-200"
+              >
+                {c.label}
+              </button>
+            )}
+          </span>
+        );
+      })}
+    </nav>
   );
 }
 
@@ -130,7 +193,6 @@ function Shell({ project, dbPath }: { project: ProjectSummaryDto; dbPath: string
  *  "override" path that lifts the edit guard (via `set_edit_override`) after a disclaimer. */
 function CorruptionGuard({ projectId }: { projectId: number }) {
   const navigate = useNavigate();
-  const { close } = useProject();
   const [acknowledged, setAcknowledged] = useState(false);
   const [step, setStep] = useState<"warn" | "confirm">("warn");
 
@@ -151,8 +213,14 @@ function CorruptionGuard({ projectId }: { projectId: number }) {
   if (acknowledged || corrupt.length === 0) return null;
 
   function leave() {
-    close();
-    navigate("/", { replace: true });
+    // Land on the game/platform picker, not the startup auto-open — otherwise the saved default would
+    // reopen this same corrupted database and route straight back here, looping. `pick` disables the
+    // one-shot auto-open for this navigation only (the saved default itself is left untouched).
+    //
+    // Deliberately do NOT close() here: closing sets the project to null, and AppShell's own
+    // `!project` fallback would fire `<Navigate to="/" />` WITHOUT this state, clobbering `pick` and
+    // reviving the loop. OpenProject closes the lingering workspace itself once it's safely on "/".
+    navigate("/", { replace: true, state: { pick: true } });
   }
 
   return (

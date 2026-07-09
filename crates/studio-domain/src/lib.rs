@@ -15,33 +15,56 @@
 //! rather than the full command surface — the seams (registry of ops, source-aware save, DTO bridge
 //! in `studio-api`) are what later phases extend.
 
+pub mod attributes;
 pub mod audit;
+pub mod capabilities;
 pub mod discovery;
 pub mod extract;
+pub mod formula;
+pub mod historical;
 mod error;
 mod overview;
 mod profile;
 mod project;
 mod session;
+mod team_tabs;
 mod view;
 mod workspace;
 
+pub use attributes::{
+    build_player_attributes, AttributeView, PlayerAttributes, TraitOption, TraitView,
+};
 pub use audit::{humanize, HumanFinding, HumanReport};
+pub use capabilities::Capabilities;
 pub use discovery::{
     detect_install, ps4_title_ids, title_ids, DbPaths, InstallReport, SaveSlot, TitleIds,
 };
 pub use extract::{extract_install, find_big_archives, ExtractSummary};
+pub use historical::{FhmCorpus, FhmError};
+pub use formula::{
+    compute_person_career_ratings, compute_person_ratings, default_profile, CareerRatings,
+    CareerSeasonOverall, ComputedRatings,
+};
+pub use tdb_fhm_store::{compute_maxima_at, AttributeMaxima};
 pub use error::DomainError;
+pub use tdb_formula::{EaRating, EaRatingSet, FormulaProfile, NormalizationMode};
 pub use overview::{DbOverview, TableOverview};
 pub use profile::ProjectProfile;
 pub use project::{Platform, Project, ProjectRole, Source};
 pub use session::{EditSession, FieldValue};
 pub use workspace::Workspace;
+pub use team_tabs::{
+    team_draft_picks, team_equipment, team_jerseys, team_strategies, DraftPick, EquipmentZone,
+    StrategyBucket, StrategyCell, TeamEquipment, TeamJersey, TeamStrategies,
+    EQUIPMENT_ZONE_FIELDS, STRATEGY_FIELDS,
+};
 pub use view::{
     arena_summaries, arena_view, career_stats, entity_fields, lines_view, player_summaries,
     player_view, read_field, team_summaries, team_view, ArenaRef, ArenaSummary, ArenaView,
-    CareerStats, FieldKind, FieldRaw, FieldView, LineEntry, LinesView, PlayerSummary, PlayerView,
-    RosterMembership, TeamSummary, TeamView,
+    CareerColumn, CareerRow, CareerSection, CareerStats, FieldKind, FieldRaw, FieldView, LineEntry,
+    LinesView, PlayerData, PlayerHeader, PlayerSummary, PlayerView, RosterMembership, SlotField,
+    TeamSummary, TeamView, CAREER_GOALIE_PLAYOFFS, CAREER_GOALIE_SEASON, CAREER_SKATER_PLAYOFFS,
+    CAREER_SKATER_SEASON,
 };
 
 /// A convenience result alias for the domain layer.

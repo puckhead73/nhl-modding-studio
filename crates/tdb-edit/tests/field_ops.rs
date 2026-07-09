@@ -481,6 +481,72 @@ fn fa_ops_reject_bad_args() {
     ));
 }
 
+/// Adding an extra membership installs the player into a free slot on a second team while their
+/// original slot (and primary team) stays put; removing it vacates only that new slot. The
+/// additive path never touches the canonical membership, and the blocks stay coherent throughout.
+#[test]
+fn add_then_remove_extra_membership_round_trips() {
+    use std::collections::HashMap;
+    let bytes = anchor(DB);
+    let mut tx = EditTransaction::begin(&bytes).unwrap();
+
+    // A player with exactly one membership, and a different team with a free slot.
+    let model = tx.model().unwrap();
+    let mut counts: HashMap<u64, usize> = HashMap::new();
+    for s in &model.slots {
+        if let Some(p) = s.player_id {
+            *counts.entry(p).or_default() += 1;
+        }
+    }
+    let s = model.slots.iter().find(|s| s.player_id.is_some_and(|p| counts[&p] == 1)).unwrap();
+    let (home_team, player, home_rec) = (s.team_id, s.player_id.unwrap(), s.record);
+    let extra_team = model
+        .slots
+        .iter()
+        .find(|s| s.player_id.is_none() && s.team_id != home_team)
+        .unwrap()
+        .team_id;
+    drop(model);
+
+    tx.add_membership(player, extra_team).unwrap();
+    let model = tx.model().unwrap();
+    let home = model.slots.iter().find(|s| s.record == home_rec).unwrap();
+    assert_eq!(home.player_id, Some(player), "original membership untouched by the add");
+    let extra = model
+        .slots
+        .iter()
+        .find(|s| s.team_id == extra_team && s.player_id == Some(player))
+        .expect("player holds a slot on the extra team");
+    assert_eq!(extra.captaincy, Some(captaincy::NONE), "extra membership arrives captainless");
+    drop(model);
+
+    // One membership per team: adding the same team again is rejected.
+    assert!(matches!(
+        tx.add_membership(player, extra_team),
+        Err(EditError::InvalidValue { .. })
+    ));
+
+    tx.remove_membership(extra_team, player).unwrap();
+    let model = tx.model().unwrap();
+    assert!(
+        !model.slots.iter().any(|s| s.team_id == extra_team && s.player_id == Some(player)),
+        "extra membership vacated"
+    );
+    let home = model.slots.iter().find(|s| s.record == home_rec).unwrap();
+    assert_eq!(home.player_id, Some(player), "original membership survives the remove");
+    drop(model);
+    // Removing a membership the player doesn't hold is a structured error.
+    assert!(matches!(
+        tx.remove_membership(extra_team, player),
+        Err(EditError::NoSuchSlot { .. })
+    ));
+
+    let out = tx.commit().unwrap();
+    assert!(TdbFile::parse(&out).unwrap().header_crc_ok());
+    assert_write_clean(&out);
+    assert_blocks_coherent(&out);
+}
+
 /// Total rows in the retired-number table (`wcSL`).
 fn retired_count(db_bytes: &[u8]) -> usize {
     TdbFile::parse(db_bytes).unwrap().table_canonical("wcSL").unwrap().current_records as usize
@@ -521,6 +587,55 @@ fn retire_then_unretire_round_trips() {
     assert!(!is_retired(&out2, team, number), "number is no longer retired");
     assert_eq!(retired_count(&out2), base_count, "row count back to baseline");
     assert_write_clean(&out2);
+}
+
+/// Trading a draft pick rewrites the pick's current owner (`qHav.Uwdb`) while leaving the
+/// original-owner provenance (`GFcg`) untouched, commits audit-clean, and validates its args.
+#[test]
+fn trade_draft_pick_moves_owner_and_keeps_provenance() {
+    let base = anchor(DB);
+    let db = TdbFile::parse(&base).unwrap();
+    let model = RosterModel::build(&db).unwrap();
+    let (team_a, team_b) = (model.teams[0].team_id, model.teams[1].team_id);
+
+    // A pick currently owned by team A (Uwdb stores the team 1-indexed).
+    let qhav = db.table_canonical("qHav").unwrap();
+    let f = |id: &str| qhav.fields.iter().find(|f| f.id.canonical(db.endian) == id).unwrap();
+    let (owner_f, orig_f) = (f("Uwdb"), f("GFcg"));
+    let record = (0..qhav.current_records as u32)
+        .find(|&i| db.read_u64(qhav, i, owner_f) == Some(team_a + 1))
+        .expect("team A owns a pick in the anchor");
+    let orig_before = db.read_u64(qhav, record, orig_f).unwrap();
+
+    let mut tx = EditTransaction::begin(&base).unwrap();
+    let o = tx.trade_draft_pick(record, team_b).unwrap();
+    assert_eq!(o.edits, 1);
+    let out = tx.commit().unwrap();
+    let out_db = TdbFile::parse(&out).unwrap();
+    let out_t = out_db.table_canonical("qHav").unwrap();
+    let of = |id: &str| out_t.fields.iter().find(|f| f.id.canonical(out_db.endian) == id).unwrap();
+    assert_eq!(
+        out_db.read_u64(out_t, record, of("Uwdb")),
+        Some(team_b + 1),
+        "current owner moved to team B"
+    );
+    assert_eq!(
+        out_db.read_u64(out_t, record, of("GFcg")),
+        Some(orig_before),
+        "original-owner provenance untouched"
+    );
+    assert_write_clean(&out);
+
+    // Bad args: unknown team, out-of-range record.
+    let mut tx2 = EditTransaction::begin(&base).unwrap();
+    assert!(matches!(
+        tx2.trade_draft_pick(record, 0xFFFF_FFFF),
+        Err(EditError::InvalidValue { what: "to_team (no such team)", .. })
+    ));
+    assert!(matches!(
+        tx2.trade_draft_pick(0xFFFF_FFFF, team_b),
+        Err(EditError::InvalidValue { what: "draft-pick record (out of range)", .. })
+    ));
 }
 
 /// Retire is idempotent (already-retired → no-op), un-retire is a no-op for a number that wasn't

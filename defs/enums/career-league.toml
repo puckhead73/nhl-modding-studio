@@ -1,0 +1,46 @@
+# Career-stats League flag (stock career tables).
+#
+# A 1-bit league selector on all four stock career-stats tables: raw 0 = NHL,
+# raw 1 = AHL. Mapping sourced from the prior app's career-stats research
+# (its display layer rendered exactly this vocabulary); consistent with the
+# anchor data (NHL rows dominate; AHL rows appear for players with minor-league
+# seasons). Not yet round-tripped in-game — treat as Reported, not Confirmed.
+
+name = "Career League"
+confidence = "Reported"
+notes = """
+1-bit league scope for a stock career-stats row. Regular season vs playoffs is
+encoded by table choice, not by this flag.
+"""
+
+[source]
+kind = "prior-app"
+description = "nhl-database-studio career-stats field bindings (user-authorized port)"
+
+[[bindings]]
+field_name = "League"
+field_raw_id = "xMjj"
+table_raw_id = "tsSy"
+
+[[bindings]]
+field_name = "League"
+field_raw_id = "xMjj"
+table_raw_id = "OAqO"
+
+[[bindings]]
+field_name = "League"
+field_raw_id = "xMjj"
+table_raw_id = "USfF"
+
+[[bindings]]
+field_name = "League"
+field_raw_id = "xMjj"
+table_raw_id = "nCDp"
+
+[[entries]]
+raw = 0
+label = "NHL"
+
+[[entries]]
+raw = 1
+label = "AHL"

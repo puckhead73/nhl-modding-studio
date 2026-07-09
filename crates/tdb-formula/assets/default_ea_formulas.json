@@ -1,0 +1,591 @@
+{
+  "forward": {
+    "Acceleration": [
+      [
+        "Acceleration",
+        1.0
+      ],
+      [
+        "Skating",
+        1.0
+      ]
+    ],
+    "Aggressiveness": [
+      [
+        "Determination",
+        1.0
+      ]
+    ],
+    "Agility": [
+      [
+        "Agility",
+        1.0
+      ],
+      [
+        "Skating",
+        2.0
+      ]
+    ],
+    "Balance": [
+      [
+        "Balance",
+        1.0
+      ]
+    ],
+    "Body Checking": [
+      [
+        "Checking",
+        1.0
+      ],
+      [
+        "Hitting",
+        1.0
+      ]
+    ],
+    "Defense/Offense Bias": [
+      [
+        "prebuilt:def_off_bias",
+        1.0
+      ]
+    ],
+    "Defensive Awareness": [
+      [
+        "Defensive Read",
+        1.0
+      ]
+    ],
+    "Deking": [
+      [
+        "Puck Handling",
+        1.0
+      ]
+    ],
+    "Discipline": [
+      [
+        "Temperament",
+        4.0
+      ],
+      [
+        "Teamplayer",
+        1.0
+      ]
+    ],
+    "Durability": [
+      [
+        "prebuilt:gp_durability",
+        1.0
+      ],
+      [
+        "Stamina",
+        1.0
+      ]
+    ],
+    "Endurance": [
+      [
+        "Stamina",
+        1.0
+      ]
+    ],
+    "Faceoffs": [
+      [
+        "Faceoffs",
+        1.0
+      ]
+    ],
+    "Fighting Skill": [
+      [
+        "Fighting",
+        1.0
+      ]
+    ],
+    "Hand-Eye": [
+      [
+        "Puck Handling",
+        1.0
+      ],
+      [
+        "Screening",
+        1.0
+      ]
+    ],
+    "Offensive Awareness": [
+      [
+        "Offensive Read",
+        1.0
+      ]
+    ],
+    "Pass/Carry Bias": [
+      [
+        "prebuilt:pass_carry_bias",
+        1.0
+      ]
+    ],
+    "Shoot/Pass Bias": [
+      [
+        "prebuilt:pass_shoot_bias",
+        1.0
+      ]
+    ],
+    "Passing": [
+      [
+        "Passing",
+        1.0
+      ]
+    ],
+    "Poise": [
+      [
+        "Temperament",
+        2.0
+      ],
+      [
+        "Leadership",
+        5.0
+      ]
+    ],
+    "Puck Control": [
+      [
+        "Puck Handling",
+        1.0
+      ]
+    ],
+    "Shot Blocking": [
+      [
+        "Shot Blocking",
+        1.0
+      ],
+      [
+        "Bravery",
+        2.0
+      ]
+    ],
+    "Slapshot Accuracy": [
+      [
+        "prebuilt:shooting_pct",
+        1.0
+      ],
+      [
+        "Shooting Accuracy",
+        1.0
+      ]
+    ],
+    "Slapshot Power": [
+      [
+        "Shooting",
+        1.0
+      ]
+    ],
+    "Speed": [
+      [
+        "Speed",
+        1.0
+      ]
+    ],
+    "Stickchecking": [
+      [
+        "Stickchecking",
+        1.0
+      ],
+      [
+        "Positioning",
+        2.0
+      ]
+    ],
+    "Strength": [
+      [
+        "Strength",
+        1.0
+      ]
+    ],
+    "Wristshot Accuracy": [
+      [
+        "prebuilt:shooting_pct",
+        1.0
+      ],
+      [
+        "Shooting Accuracy",
+        1.0
+      ]
+    ],
+    "Wristshot Power": [
+      [
+        "Shooting",
+        1.0
+      ]
+    ]
+  },
+  "defenseman": {
+    "Acceleration": [
+      [
+        "Acceleration",
+        1.0
+      ],
+      [
+        "Skating",
+        1.0
+      ]
+    ],
+    "Aggressiveness": [
+      [
+        "Determination",
+        1.0
+      ]
+    ],
+    "Agility": [
+      [
+        "Agility",
+        1.0
+      ],
+      [
+        "Skating",
+        2.0
+      ]
+    ],
+    "Balance": [
+      [
+        "Balance",
+        1.0
+      ]
+    ],
+    "Body Checking": [
+      [
+        "Checking",
+        1.0
+      ],
+      [
+        "Hitting",
+        1.0
+      ]
+    ],
+    "Defense/Offense Bias": [
+      [
+        "prebuilt:def_off_bias",
+        1.0
+      ]
+    ],
+    "Defensive Awareness": [
+      [
+        "Defensive Read",
+        1.0
+      ]
+    ],
+    "Deking": [
+      [
+        "Puck Handling",
+        1.0
+      ]
+    ],
+    "Discipline": [
+      [
+        "Temperament",
+        4.0
+      ],
+      [
+        "Teamplayer",
+        1.0
+      ]
+    ],
+    "Durability": [
+      [
+        "prebuilt:gp_durability",
+        1.0
+      ],
+      [
+        "Stamina",
+        1.0
+      ]
+    ],
+    "Endurance": [
+      [
+        "Stamina",
+        1.0
+      ]
+    ],
+    "Faceoffs": [
+      [
+        "Faceoffs",
+        1.0
+      ]
+    ],
+    "Fighting Skill": [
+      [
+        "Fighting",
+        1.0
+      ]
+    ],
+    "Hand-Eye": [
+      [
+        "Puck Handling",
+        1.0
+      ],
+      [
+        "Screening",
+        1.0
+      ]
+    ],
+    "Offensive Awareness": [
+      [
+        "Offensive Read",
+        1.0
+      ]
+    ],
+    "Pass/Carry Bias": [
+      [
+        "prebuilt:pass_carry_bias",
+        1.0
+      ]
+    ],
+    "Shoot/Pass Bias": [
+      [
+        "prebuilt:pass_shoot_bias_def",
+        1.0
+      ]
+    ],
+    "Passing": [
+      [
+        "Passing",
+        1.0
+      ]
+    ],
+    "Poise": [
+      [
+        "Temperament",
+        2.0
+      ],
+      [
+        "Leadership",
+        5.0
+      ]
+    ],
+    "Puck Control": [
+      [
+        "Puck Handling",
+        1.0
+      ]
+    ],
+    "Shot Blocking": [
+      [
+        "Shot Blocking",
+        1.0
+      ],
+      [
+        "Bravery",
+        2.0
+      ]
+    ],
+    "Slapshot Accuracy": [
+      [
+        "Shooting Accuracy",
+        1.0
+      ],
+      [
+        "Offensive Read",
+        1.0
+      ]
+    ],
+    "Slapshot Power": [
+      [
+        "Shooting",
+        1.0
+      ],
+      [
+        "Offensive Read",
+        1.0
+      ],
+      [
+        "Shooting Range",
+        1.0
+      ]
+    ],
+    "Speed": [
+      [
+        "Speed",
+        1.0
+      ]
+    ],
+    "Stickchecking": [
+      [
+        "Stickchecking",
+        1.0
+      ],
+      [
+        "Positioning",
+        2.0
+      ]
+    ],
+    "Strength": [
+      [
+        "Strength",
+        1.0
+      ]
+    ],
+    "Wristshot Accuracy": [
+      [
+        "Shooting Accuracy",
+        1.0
+      ],
+      [
+        "Offensive Read",
+        1.0
+      ]
+    ],
+    "Wristshot Power": [
+      [
+        "Shooting",
+        1.0
+      ],
+      [
+        "Offensive Read",
+        1.0
+      ]
+    ]
+  },
+  "goalie": {
+    "Aggressiveness": [
+      [
+        "G Positioning",
+        3.0
+      ],
+      [
+        "Aggression",
+        0.5
+      ]
+    ],
+    "Agility": [
+      [
+        "Reflexes",
+        1.0
+      ]
+    ],
+    "Angles": [
+      [
+        "G Positioning",
+        1.0
+      ]
+    ],
+    "Breakaways": [
+      [
+        "Reflexes",
+        1.0
+      ],
+      [
+        "G Positioning",
+        1.0
+      ]
+    ],
+    "Consistency": [
+      [
+        "prebuilt:vezina_consistency",
+        1.0
+      ]
+    ],
+    "Durability": [
+      [
+        "Goalie Stamina",
+        1.0
+      ],
+      [
+        "Goalie Technique",
+        1.0
+      ]
+    ],
+    "Endurance": [
+      [
+        "Goalie Stamina",
+        1.0
+      ]
+    ],
+    "Glove High": [
+      [
+        "Glove",
+        1.0
+      ]
+    ],
+    "Glove Low": [
+      [
+        "Glove",
+        1.0
+      ],
+      [
+        "Low Shots",
+        0.1
+      ]
+    ],
+    "Passing": [
+      [
+        "G Passing",
+        1.0
+      ],
+      [
+        "G Puckhandling",
+        5.0
+      ]
+    ],
+    "Poise": [
+      [
+        "Mental Toughness",
+        1.0
+      ]
+    ],
+    "Pokechecking": [
+      [
+        "G Pokecheck",
+        1.0
+      ]
+    ],
+    "Puck Playing Frequency": [
+      [
+        "G Puckhandling",
+        1.0
+      ]
+    ],
+    "Rebounds": [
+      [
+        "Rebound",
+        1.0
+      ]
+    ],
+    "Shot Recovery": [
+      [
+        "Recovery",
+        1.0
+      ]
+    ],
+    "Speed": [
+      [
+        "G Skating",
+        1.0
+      ]
+    ],
+    "Stick High": [
+      [
+        "Blocker",
+        1.0
+      ]
+    ],
+    "Stick Low": [
+      [
+        "Blocker",
+        1.0
+      ],
+      [
+        "Low Shots",
+        0.3
+      ]
+    ],
+    "Vision": [
+      [
+        "G Positioning",
+        1.0
+      ],
+      [
+        "Reflexes",
+        1.0
+      ],
+      [
+        "Recovery",
+        1.0
+      ]
+    ]
+  },
+  "normalisation_mode": "nominal"
+}

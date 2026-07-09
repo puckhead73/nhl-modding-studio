@@ -10,7 +10,7 @@ use studio_domain::{
 use tdb_core::TdbFile;
 use tdb_defs::FieldMetaIndex;
 use tdb_enums::EnumRegistry;
-use tdb_relations::RosterModel;
+use tdb_relations::{PlayerKind, Position, RosterModel};
 
 fn repo(rel: &str) -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR")).join("../..").join(rel)
@@ -117,6 +117,139 @@ fn player_summaries_cover_the_model() {
     );
 }
 
+/// The depth-chart summary fields resolve on anchor data: derived Overalls land on the display
+/// scale for essentially everyone, archetype labels resolve, both active states occur, jerseys
+/// read, and the NHL-rights decode stays inside the team id space.
+#[test]
+fn player_summaries_carry_depth_chart_fields() {
+    let (bytes, meta, enums) = fixtures();
+    let db = TdbFile::parse(&bytes).unwrap();
+    let model = RosterModel::build(&db).unwrap();
+
+    let summaries = player_summaries(&db, &meta, &enums, &model);
+    let n = summaries.len();
+
+    // Overall: the formula (skaters) / stored rating (goalies) must produce a plausible EA value
+    // for nearly every player with a companion. Elite players must clear the first-liner tier —
+    // an all-36 or all-zero read would fail this.
+    let overalls: Vec<i64> = summaries.iter().filter_map(|s| s.overall).collect();
+    assert!(overalls.len() > n * 9 / 10, "overalls resolve ({}/{n})", overalls.len());
+    assert!(overalls.iter().all(|&o| (1..=99).contains(&o)), "overalls clamp to 1..99");
+    let elite = overalls.iter().filter(|&&o| o >= 80).count();
+    assert!(elite > 50, "the league has first-liners ({elite} rated 80+)");
+
+    // Goalie Overall is the stored `overall` rating on the display (+36) scale, not the formula.
+    let goalie = model
+        .players
+        .iter()
+        .find(|p| p.kind == PlayerKind::Goalie && p.goalie_ai.is_some())
+        .expect("anchor has goalies");
+    let gs = summaries.iter().find(|s| s.player_id == goalie.player_id).unwrap();
+    let stored = player_view(&db, &meta, &enums, &model, goalie.player_id)
+        .unwrap()
+        .ratings
+        .iter()
+        .find(|f| f.name == "c_overall")
+        .and_then(|f| f.decoded)
+        .unwrap();
+    assert_eq!(gs.overall, Some(stored + 36), "goalie overall = stored eWUF + 36");
+
+    // Archetypes, jerseys, active flag, rights.
+    assert!(
+        summaries.iter().filter(|s| s.style_label.is_some()).count() > n / 2,
+        "style labels resolve for most players"
+    );
+    assert!(
+        summaries.iter().filter(|s| s.jersey_number.is_some()).count() > n * 9 / 10,
+        "jersey numbers read"
+    );
+    assert!(summaries.iter().any(|s| s.is_active == Some(true)), "active players exist");
+    let team_count = model.teams.len() as u64;
+    let rights: Vec<u64> = summaries.iter().filter_map(|s| s.rights_team_id).collect();
+    assert!(!rights.is_empty(), "some players carry NHL rights");
+    assert!(
+        rights.iter().all(|&t| t < team_count),
+        "rights decode into the canonical team id space"
+    );
+}
+
+/// The team-subtab views (Strategies / Draft Picks / Retired Numbers / Jerseys / Equipment) all
+/// resolve on anchor data with the shapes the reference decode predicts.
+#[test]
+fn team_tab_views_resolve_on_anchor() {
+    let (bytes, meta, enums) = fixtures();
+    let db = TdbFile::parse(&bytes).unwrap();
+    let model = RosterModel::build(&db).unwrap();
+    let team_id = 0u64; // Anaheim in the Legacy anchor — a stock NHL franchise.
+
+    // Strategies: 12 tactics + 24 forward biases + 18 defense biases + 6 team biases, with the
+    // tactic vocabularies resolving through the enum registry.
+    let strat = studio_domain::team_strategies(&db, &meta, &enums, team_id)
+        .expect("EeYo row for team 0");
+    assert_eq!(strat.tactics.len(), 12);
+    assert_eq!(strat.forward_biases.len(), 24);
+    assert_eq!(strat.defense_biases.len(), 18);
+    assert_eq!(strat.team_biases.len(), 6);
+    let forecheck = strat
+        .tactics
+        .iter()
+        .find(|c| c.field.studio_field == "RBGh")
+        .unwrap();
+    assert_eq!(forecheck.field.enum_options.len(), 4, "forecheck vocab bound");
+    assert!(forecheck.field.enum_label.is_some(), "stored value is a member");
+
+    // Draft picks: the stock grid is 6 years × 7 rounds per team, minus/plus real trades (the
+    // anchor ships the 2015 trade ledger — team 0 owns 38). Traded picks resolve their origin.
+    let picks = studio_domain::team_draft_picks(&db, &meta, &model, team_id);
+    assert!(
+        (30..=50).contains(&picks.len()),
+        "a stock team owns roughly 6×7 picks ({})",
+        picks.len()
+    );
+    assert!(picks.iter().all(|p| (1..=7).contains(&p.round)));
+    assert!(picks.windows(2).all(|w| (w[0].year, w[0].round) <= (w[1].year, w[1].round)));
+    assert!(
+        picks
+            .iter()
+            .filter(|p| p.via_trade)
+            .all(|p| p.original_owner_name.is_some()),
+        "traded picks resolve the origin team's name"
+    );
+
+    // Retired numbers: #99 is retired league-wide (one wcSL row per franchise).
+    let team = team_view(&db, &meta, &enums, &model, team_id).unwrap();
+    assert!(team.retired_numbers.contains(&99), "Gretzky's 99 is retired");
+
+    // Jerseys: every NHL team registers at least a home + away; zones decode 9-wide.
+    let jerseys = studio_domain::team_jerseys(&db, team_id);
+    assert!(jerseys.len() >= 2, "team 0 has jerseys ({})", jerseys.len());
+    let equipment = studio_domain::team_equipment(&db, team_id);
+    assert!(!equipment.is_empty(), "team 0 has stock equipment");
+    assert!(equipment.iter().all(|e| e.zones.len() == 9));
+
+    // Lines: the slot catalog carries the named situational flags with their studio ids.
+    let lines = lines_view(&db, &meta, &enums, &model, team_id).unwrap();
+    assert!(lines.slot_fields.len() >= 70, "full slot catalog ({})", lines.slot_fields.len());
+    for name in ["l1c", "l4rw", "pp4_2ld", "pk3_1rd", "ot_3c", "s5", "x2", "g1"] {
+        assert!(
+            lines.slot_fields.iter().any(|s| s.name == name),
+            "slot catalog carries {name}"
+        );
+    }
+    assert!(
+        !lines.slot_fields.iter().any(|s| s.name == "rosterstatus"),
+        "the 1-bit rosterstatus flag is not a situational slot"
+    );
+    // Entries' set slots reference catalog studio ids.
+    let ids: std::collections::HashSet<&str> =
+        lines.slot_fields.iter().map(|s| s.studio_field.as_str()).collect();
+    assert!(lines
+        .entries
+        .iter()
+        .flat_map(|e| e.slots.iter())
+        .all(|f| ids.contains(f.as_str())));
+}
+
 /// The Player detail assembles curated identity, the kind-correct ratings companion, memberships,
 /// and the full bio field list.
 #[test]
@@ -144,6 +277,53 @@ fn player_view_assembles_detail() {
     assert!(player_view(&db, &meta, &enums, &model, 0xFFFF_FFFF).is_none());
 }
 
+/// Player Style (`dSvy.QgFs`) locks its vocabulary by position: defensemen see the defenseman
+/// roles (raw 1..=4), forwards the forward roles (raw 5..=10) — never the other sub-range, except
+/// (at most) the player's own stored value.
+#[test]
+fn player_style_options_lock_by_position() {
+    let (bytes, meta, enums) = fixtures();
+    let db = TdbFile::parse(&bytes).unwrap();
+    let model = RosterModel::build(&db).unwrap();
+
+    let mut checked_defense = false;
+    let mut checked_forward = false;
+    for p in &model.players {
+        if matches!(p.kind, PlayerKind::Goalie) {
+            continue;
+        }
+        let defense = p.position == Position::Defense;
+        if if defense { checked_defense } else { checked_forward } {
+            continue;
+        }
+        let view = player_view(&db, &meta, &enums, &model, p.player_id).unwrap();
+        let Some(style) = view.ratings.iter().find(|f| f.studio_field == "QgFs") else {
+            continue; // broken cluster without a dSvy companion
+        };
+        let eligible = if defense { 1..=4 } else { 5..=10 };
+        let raws: Vec<i64> = style.enum_options.iter().map(|(r, _)| *r).collect();
+        for r in eligible.clone() {
+            assert!(raws.contains(&r), "eligible style {r} missing for {}", view.header.full_name);
+        }
+        for r in &raws {
+            assert!(
+                eligible.contains(r) || Some(*r) == style.decoded,
+                "ineligible style option {r} offered to {}",
+                view.header.full_name
+            );
+        }
+        if defense {
+            checked_defense = true;
+        } else {
+            checked_forward = true;
+        }
+        if checked_defense && checked_forward {
+            break;
+        }
+    }
+    assert!(checked_defense && checked_forward, "anchor yields both a defenseman and a forward");
+}
+
 /// Team summaries cover the model with readable names; the detail resolves identity, arena, roster.
 #[test]
 fn team_views_resolve_identity_and_arena() {
@@ -151,10 +331,14 @@ fn team_views_resolve_identity_and_arena() {
     let db = TdbFile::parse(&bytes).unwrap();
     let model = RosterModel::build(&db).unwrap();
 
-    let teams = team_summaries(&db, &meta, &model);
+    let teams = team_summaries(&db, &meta, &enums, &model);
     assert_eq!(teams.len(), model.teams.len());
     assert!(teams.iter().any(|t| !t.name.is_empty()), "teams have names");
     assert!(teams.iter().any(|t| !t.abbrev.is_empty()), "teams have abbreviations");
+    assert!(
+        teams.iter().any(|t| t.league_label.as_deref() == Some("NHL")),
+        "league labels resolve"
+    );
 
     let view = team_view(&db, &meta, &enums, &model, teams[0].team_id).expect("team resolves");
     assert!(view.identity.iter().any(|f| f.name == "fullname"));
@@ -213,26 +397,123 @@ fn lines_view_builds_depth_chart() {
     assert!(lines_view(&db, &meta, &enums, &model, 0xFFFF_FFFF).is_none());
 }
 
-/// Career stats (stock ySst) resolve: the table is present, joins by wBIz, and at least one player
-/// in the anchor has season rows with the expected columns. (Phase 3.7 spike + read path.)
+/// Find a player id by name in the anchor.
+fn player_id_by_name(
+    db: &TdbFile,
+    meta: &FieldMetaIndex,
+    enums: &EnumRegistry,
+    model: &RosterModel,
+    first: &str,
+    last: &str,
+) -> u64 {
+    player_summaries(db, meta, enums, model)
+        .iter()
+        .find(|p| p.first_name == first && p.last_name == last)
+        .unwrap_or_else(|| panic!("{first} {last} not found in the anchor"))
+        .player_id
+}
+
+/// A cell's display string by column label in a career section row.
+fn cell_display(section: &studio_domain::CareerSection, row: &studio_domain::CareerRow, label: &str) -> String {
+    let idx = section
+        .columns
+        .iter()
+        .position(|c| c.label == label)
+        .unwrap_or_else(|| panic!("no {label} column"));
+    row.cells[idx]
+        .as_ref()
+        .map(|f| f.display.clone())
+        .unwrap_or_default()
+}
+
+/// Career stats join by the 1-indexed `wBIz` and decode to a real, known stat line: Sidney
+/// Crosby's 2006-07 season in the NHL Legacy stock data (79 GP, 36 G, 84 A, 120 PTS, +10) —
+/// this pins the `player_id + 1` join, the `year + 1900` season label, and the offset-binary
+/// plus/minus in one check against real data.
 #[test]
-fn career_stats_resolve_for_some_player() {
+fn career_stats_decode_crosby_2006_07() {
+    let (bytes, meta, enums) = fixtures();
+    let db = TdbFile::parse(&bytes).unwrap();
+    let model = RosterModel::build(&db).unwrap();
+    let pid = player_id_by_name(&db, &meta, &enums, &model, "Sidney", "Crosby");
+
+    let cs = career_stats(&db, &meta, &enums, pid);
+    assert_eq!(cs.sections.len(), 4, "four career sections");
+    let season = cs.sections.iter().find(|s| s.kind == "skater_season").unwrap();
+    assert!(!season.columns.is_empty(), "skater season columns resolve");
+    assert!(
+        season.rows.len() >= 8,
+        "Crosby has a career's worth of season rows (got {})",
+        season.rows.len()
+    );
+    // Newest-first ordering.
+    assert!(
+        season.rows.first().unwrap().season_label >= season.rows.last().unwrap().season_label,
+        "rows sort newest-first"
+    );
+
+    let rookie = season
+        .rows
+        .iter()
+        .find(|r| r.season_label == "2006-07")
+        .expect("Crosby's 2006-07 season row");
+    assert_eq!(rookie.league_label, "NHL");
+    assert_eq!(cell_display(season, rookie, "GP"), "79");
+    assert_eq!(cell_display(season, rookie, "G"), "36");
+    assert_eq!(cell_display(season, rookie, "A"), "84");
+    assert_eq!(cell_display(season, rookie, "PTS"), "120");
+    assert_eq!(cell_display(season, rookie, "+/-"), "+10");
+}
+
+/// The goalie sections decode the fixed-point SV% (×0.001) and GAA (×0.01) columns: Carey Price's
+/// 2014-15 season (44 W, .933, 1.96) in the NHL Legacy stock data.
+#[test]
+fn career_stats_decode_price_2014_15() {
+    let (bytes, meta, enums) = fixtures();
+    let db = TdbFile::parse(&bytes).unwrap();
+    let model = RosterModel::build(&db).unwrap();
+    let pid = player_id_by_name(&db, &meta, &enums, &model, "Carey", "Price");
+
+    let cs = career_stats(&db, &meta, &enums, pid);
+    let season = cs.sections.iter().find(|s| s.kind == "goalie_season").unwrap();
+    assert!(!season.rows.is_empty(), "Price has goalie season rows");
+    let y1415 = season
+        .rows
+        .iter()
+        .find(|r| r.season_label == "2014-15")
+        .expect("Price's 2014-15 season row");
+    assert_eq!(cell_display(season, y1415, "W"), "44");
+    assert_eq!(cell_display(season, y1415, "SV%"), ".933");
+    assert_eq!(cell_display(season, y1415, "GAA"), "1.96");
+}
+
+/// Structural sanity across many players: rows are rectangular, the league flag resolves to its
+/// vocabulary, plus/minus decodes within its legal (offset) range, and season labels are sane.
+#[test]
+fn career_stats_shape_across_players() {
     let (bytes, meta, enums) = fixtures();
     let db = TdbFile::parse(&bytes).unwrap();
     let model = RosterModel::build(&db).unwrap();
 
-    // Scan players until we find one with stock career rows (not every player has them).
-    let mut found: Option<(u64, usize, usize)> = None;
+    let mut rows_seen = 0usize;
     for p in model.players.iter().take(2000) {
         let cs = career_stats(&db, &meta, &enums, p.player_id);
-        if !cs.rows.is_empty() {
-            assert!(!cs.columns.is_empty(), "career table has columns");
-            assert!(cs.columns.iter().any(|c| c == "goals"), "has a goals column");
-            assert!(cs.rows.iter().all(|r| r.len() == cs.columns.len()), "rectangular");
-            found = Some((p.player_id, cs.columns.len(), cs.rows.len()));
-            break;
+        for s in &cs.sections {
+            for r in &s.rows {
+                rows_seen += 1;
+                assert_eq!(r.cells.len(), s.columns.len(), "rectangular ({})", s.kind);
+                assert!(
+                    r.league_label == "NHL" || r.league_label == "AHL",
+                    "league resolves (got {:?})",
+                    r.league_label
+                );
+                assert!(!r.team.is_empty(), "team code non-empty");
+                if let Some(idx) = s.columns.iter().position(|c| c.label == "+/-") {
+                    let d = r.cells[idx].as_ref().and_then(|f| f.decoded).unwrap();
+                    assert!((-64..=127).contains(&d), "+/- {d} in legal range");
+                }
+            }
         }
     }
-    let (pid, cols, rows) = found.expect("at least one player in the first 2000 has career stats");
-    eprintln!("career stats: player {pid} -> {rows} season rows x {cols} columns");
+    assert!(rows_seen > 1000, "the anchor carries plenty of career rows ({rows_seen})");
 }

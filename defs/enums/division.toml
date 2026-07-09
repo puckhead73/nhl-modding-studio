@@ -1,0 +1,40 @@
+# Anchored enum: Division (team classification code on the team table).
+#
+# `kOtt.CGMK` (meta name `divisiongroup`, 6-bit). Only the NHL codes are
+# anchored (prior-app research over the 32 NHL rows in NHL 14 Legacy
+# default.db): 3=Pacific, 4=Central, 5=Atlantic, 6=Metropolitan. Codes 1/2
+# appear on All-Stars rows and non-NHL leagues reuse the space — those surface
+# as uncatalogued raw values until anchored separately.
+
+name = "Division"
+confidence = "Strong"
+notes = """
+6-bit division code on the team table. NHL codes anchored against the 32 NHL
+rows of NHL 14 Legacy default.db in the prior app's research; other leagues'
+codes are deliberately not labelled yet.
+"""
+
+[source]
+kind = "operator-research"
+description = "Prior-app kOtt.CGMK audit over the 32 NHL rows (NHL 14 Legacy default.db)"
+
+[[bindings]]
+field_name = "Division"
+field_raw_id = "CGMK"
+table_raw_id = "kOtt"
+
+[[entries]]
+raw = 3
+label = "Pacific"
+
+[[entries]]
+raw = 4
+label = "Central"
+
+[[entries]]
+raw = 5
+label = "Atlantic"
+
+[[entries]]
+raw = 6
+label = "Metropolitan"

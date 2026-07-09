@@ -34,6 +34,9 @@ pub struct Workspace {
     nhlng: EditSession,
     nhlng_path: String,
     roster: Option<Mirror>,
+    /// The studio game id (`nhl10`…`nhllegacy`) this workspace was opened as — set by the onboarding
+    /// path; `None` on the legacy file-pick path (where the user never named a title).
+    game_id: Option<String>,
     /// Per committed op: was it mirrored into the roster? Drives coordinated undo/redo so a
     /// `nhlng`-only edit (career stats) doesn't pop an unrelated roster state.
     history: Vec<bool>,
@@ -47,6 +50,7 @@ impl Workspace {
             nhlng,
             nhlng_path,
             roster: None,
+            game_id: None,
             history: Vec::new(),
             redo: Vec::new(),
         }
@@ -70,12 +74,23 @@ impl Workspace {
                 shared_tables,
                 aligned,
             }),
+            game_id: None,
             history: Vec::new(),
             redo: Vec::new(),
         })
     }
 
+    /// Tag the workspace with the studio game id it was opened as (onboarding path).
+    pub fn set_game_id(&mut self, game_id: impl Into<String>) {
+        self.game_id = Some(game_id.into());
+    }
+
     // --- Status (for the project summary DTO) ---
+
+    /// The studio game id (`nhl10`…`nhllegacy`), when known.
+    pub fn game_id(&self) -> Option<&str> {
+        self.game_id.as_deref()
+    }
 
     /// The canonical session — all reads (views, validation, summaries) go through here.
     pub fn primary(&self) -> &EditSession {
@@ -192,6 +207,53 @@ impl Workspace {
         Ok(outcome)
     }
 
+    /// Activate or deactivate a trait on a player's ratings record (`dSvy`/`mHuy`). Traits live in 32
+    /// `Trait N` slots; activation writes the trait number into the first free slot, deactivation
+    /// zeroes every slot holding it. Both cases apply as a **single** transaction/undo entry. Mirrored
+    /// into the roster save only when the ratings table is shared and aligned (as [`Self::set_field`]).
+    /// Returns an unchanged no-op when the trait is already in the desired state.
+    pub fn set_player_trait(
+        &mut self,
+        studio_table: &str,
+        record: u32,
+        value: i64,
+        active: bool,
+    ) -> Result<OpOutcome> {
+        let slots = self.nhlng.trait_slot_values(studio_table, record)?;
+        let writes = crate::attributes::plan_trait_toggle(&slots, value, active).map_err(|()| {
+            DomainError::Edit(tdb_edit::EditError::InvalidValue {
+                what: "no free trait slot (all 32 occupied)",
+                value,
+            })
+        })?;
+        if writes.is_empty() {
+            return Ok(OpOutcome::default()); // already in the desired state — no edit, no history
+        }
+        let outcome = self.nhlng.set_cells_int(studio_table, record, &writes)?;
+        // Mirror the identical writes when the ratings table is shared + aligned.
+        let do_mirror = matches!(
+            self.roster.as_ref(),
+            Some(m) if m.aligned && m.shared_tables.contains(studio_table)
+        );
+        let roster_result = if do_mirror {
+            self.roster
+                .as_mut()
+                .map(|m| m.session.set_cells_int(studio_table, record, &writes))
+        } else {
+            None
+        };
+        let mirror = match roster_result {
+            None => false,
+            Some(Ok(_)) => true,
+            Some(Err(e)) => {
+                self.nhlng.undo();
+                return Err(e);
+            }
+        };
+        self.record(mirror);
+        Ok(outcome)
+    }
+
     // --- Entity-id attribute ops (mirrored whenever a roster is attached) ---
 
     pub fn set_captaincy(&mut self, team: u64, player: u64, role: u64) -> Result<OpOutcome> {
@@ -218,6 +280,14 @@ impl Workspace {
 
     pub fn sign_from_fa(&mut self, player: u64, to_team: u64) -> Result<OpOutcome> {
         self.fan_out_entity(move |s| s.sign_from_fa(player, to_team))
+    }
+
+    pub fn add_membership(&mut self, player: u64, to_team: u64) -> Result<OpOutcome> {
+        self.fan_out_entity(move |s| s.add_membership(player, to_team))
+    }
+
+    pub fn remove_membership(&mut self, from_team: u64, player: u64) -> Result<OpOutcome> {
+        self.fan_out_entity(move |s| s.remove_membership(from_team, player))
     }
 
     pub fn set_jersey_number(&mut self, team: u64, player: u64, number: u64) -> Result<OpOutcome> {
@@ -268,6 +338,66 @@ impl Workspace {
         self.fan_out_shared(tdb_edit::txn::retired::TABLE, move |s| {
             s.unretire_jersey(team, number)
         })
+    }
+
+    /// Trade a future draft pick to another team; mirrored into the roster save when `qHav`
+    /// is shared and aligned.
+    pub fn trade_draft_pick(&mut self, record: u32, to_team: u64) -> Result<OpOutcome> {
+        self.fan_out_shared(tdb_edit::txn::draft::TABLE, move |s| {
+            s.trade_draft_pick(record, to_team)
+        })
+    }
+
+    /// Add a stock career season row for a player; returns the new record index. Mirrored into the
+    /// roster save when the career table is shared and aligned (both files append at the same
+    /// index by construction); a diverging mirror index rolls both back.
+    pub fn add_career_season(
+        &mut self,
+        studio_table: &str,
+        player: u64,
+        year_end: u64,
+        league: u64,
+        team: &str,
+    ) -> Result<(u32, OpOutcome)> {
+        let (record, outcome) =
+            self.nhlng
+                .add_career_season(studio_table, player, year_end, league, team)?;
+        let do_mirror = matches!(
+            self.roster.as_ref(),
+            Some(m) if m.aligned && m.shared_tables.contains(studio_table)
+        );
+        let roster_result = if do_mirror {
+            self.roster
+                .as_mut()
+                .map(|m| m.session.add_career_season(studio_table, player, year_end, league, team))
+        } else {
+            None
+        };
+        let mirror = match roster_result {
+            None => false,
+            Some(Ok((r, _))) if r == record => true,
+            Some(Ok((r, _))) => {
+                // Divergent append index — the files were not as aligned as advertised; undo both.
+                self.nhlng.undo();
+                if let Some(m) = self.roster.as_mut() {
+                    m.session.undo();
+                }
+                return Err(DomainError::Sync(format!(
+                    "career append diverged: nhlng record {record} vs roster record {r}; both rolled back"
+                )));
+            }
+            Some(Err(e)) => {
+                self.nhlng.undo();
+                return Err(e);
+            }
+        };
+        self.record(mirror);
+        Ok((record, outcome))
+    }
+
+    /// Delete one stock career row (ordered shift), mirrored when the table is shared and aligned.
+    pub fn delete_career_row(&mut self, studio_table: &str, record: u32) -> Result<OpOutcome> {
+        self.fan_out_shared(studio_table, move |s| s.delete_career_row(studio_table, record))
     }
 
     /// Apply an op that touches a single `studio_table`, mirroring to the roster **only when that table

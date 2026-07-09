@@ -15,10 +15,28 @@ import type { ArenaSummaryDto } from "../bindings/ArenaSummaryDto";
 import type { ArenaViewDto } from "../bindings/ArenaViewDto";
 import type { LinesViewDto } from "../bindings/LinesViewDto";
 import type { CareerStatsDto } from "../bindings/CareerStatsDto";
+import type { AddCareerSeasonDto } from "../bindings/AddCareerSeasonDto";
 import type { OpOutcomeDto } from "../bindings/OpOutcomeDto";
 import type { InstallReportDto } from "../bindings/InstallReportDto";
 import type { ExtractSummaryDto } from "../bindings/ExtractSummaryDto";
 import type { AutocorrectSummaryDto } from "../bindings/AutocorrectSummaryDto";
+import type { CreatePlayerDto } from "../bindings/CreatePlayerDto";
+import type { TeamStrategiesDto } from "../bindings/TeamStrategiesDto";
+import type { DraftPickDto } from "../bindings/DraftPickDto";
+import type { TeamJerseyDto } from "../bindings/TeamJerseyDto";
+import type { TeamEquipmentDto } from "../bindings/TeamEquipmentDto";
+import type { HistoricalFiltersDto } from "../bindings/HistoricalFiltersDto";
+import type { HistoricalPersonSummaryDto } from "../bindings/HistoricalPersonSummaryDto";
+import type { HistoricalPersonDto } from "../bindings/HistoricalPersonDto";
+import type { HistoricalTeamSummaryDto } from "../bindings/HistoricalTeamSummaryDto";
+import type { HistoricalTeamDto } from "../bindings/HistoricalTeamDto";
+import type { HistoricalTeamFiltersDto } from "../bindings/HistoricalTeamFiltersDto";
+import type { HistoricalTeamIndexEntryDto } from "../bindings/HistoricalTeamIndexEntryDto";
+import type { HistoricalTeamFranchiseDto } from "../bindings/HistoricalTeamFranchiseDto";
+import type { EaComputedRatingsDto } from "../bindings/EaComputedRatingsDto";
+import type { HistoricalCareerRatingsDto } from "../bindings/HistoricalCareerRatingsDto";
+import type { FormulaProfileDto } from "../bindings/FormulaProfileDto";
+import type { FormulaCatalogDto } from "../bindings/FormulaCatalogDto";
 
 export type Platform = "ps3" | "xbox" | "ps4" | "recomp";
 export type Role = "nhlng" | "roster" | "localization";
@@ -63,11 +81,67 @@ type Commands = {
   list_players: { args: { projectId: number }; ret: PlayerSummaryDto[] };
   player_view: { args: { projectId: number; playerId: number }; ret: PlayerViewDto | null };
   career_stats: { args: { projectId: number; playerId: number }; ret: CareerStatsDto };
+  // Add a stock career season row (table = one of the four career tables); stat cells start zero.
+  add_career_season: {
+    args: {
+      projectId: number;
+      table: string;
+      playerId: number;
+      yearEnd: number;
+      league: number;
+      team: string;
+    };
+    ret: AddCareerSeasonDto;
+  };
+  // Delete one stock career row by record index (ordered shift).
+  delete_career_row: {
+    args: { projectId: number; table: string; record: number };
+    ret: OpOutcomeDto;
+  };
   list_teams: { args: { projectId: number }; ret: TeamSummaryDto[] };
   team_view: { args: { projectId: number; teamId: number }; ret: TeamViewDto | null };
   list_arenas: { args: { projectId: number }; ret: ArenaSummaryDto[] };
   arena_view: { args: { projectId: number; arenaId: number }; ret: ArenaViewDto | null };
   lines_view: { args: { projectId: number; teamId: number }; ret: LinesViewDto | null };
+  team_strategies: { args: { projectId: number; teamId: number }; ret: TeamStrategiesDto | null };
+  team_draft_picks: { args: { projectId: number; teamId: number }; ret: DraftPickDto[] };
+  // Trade a future draft pick (qHav row) to another team; provenance (original owner) is kept.
+  trade_draft_pick: {
+    args: { projectId: number; record: number; toTeam: number };
+    ret: OpOutcomeDto;
+  };
+  // Player transaction ops (the Transactions page's verbs).
+  move_player: {
+    args: { projectId: number; player: number; fromTeam: number; toTeam: number };
+    ret: OpOutcomeDto;
+  };
+  clone_player: {
+    args: { projectId: number; sourcePlayer: number; toTeam: number };
+    ret: CreatePlayerDto;
+  };
+  release_to_fa: { args: { projectId: number; fromTeam: number; player: number }; ret: OpOutcomeDto };
+  sign_from_fa: { args: { projectId: number; player: number; toTeam: number }; ret: OpOutcomeDto };
+  delete_player: { args: { projectId: number; player: number }; ret: OpOutcomeDto };
+  list_team_jerseys: { args: { projectId: number; teamId: number }; ret: TeamJerseyDto[] };
+  list_team_equipment: { args: { projectId: number; teamId: number }; ret: TeamEquipmentDto[] };
+  // Set a player's captaincy on a team's roster (0 = None, 1 = Captain, 2 = Alternate) —
+  // auto-demotes a prior captain; only dressed players may hold a role.
+  set_captaincy: {
+    args: { projectId: number; team: number; player: number; role: number };
+    ret: OpOutcomeDto;
+  };
+  // Per-team slot jersey number (eGlu.sVRt); unique within the team, 0 clears.
+  set_jersey_number: {
+    args: { projectId: number; team: number; player: number; number: number };
+    ret: OpOutcomeDto;
+  };
+  retire_jersey: { args: { projectId: number; team: number; number: number }; ret: OpOutcomeDto };
+  unretire_jersey: { args: { projectId: number; team: number; number: number }; ret: OpOutcomeDto };
+  // Roster status on the bridged index row (ZBac.RREB): 0 Dressed, 1 Scratched, 3 In Minors.
+  set_roster_status: {
+    args: { projectId: number; team: number; player: number; status: number };
+    ret: OpOutcomeDto;
+  };
   set_field: {
     args: {
       projectId: number;
@@ -79,11 +153,86 @@ type Commands = {
     };
     ret: OpOutcomeDto;
   };
+  // Activate/deactivate a trait on a player's ratings record (dSvy/mHuy). One atomic slot edit.
+  set_player_trait: {
+    args: {
+      projectId: number;
+      table: string;
+      record: number;
+      value: number;
+      active: boolean;
+    };
+    ret: OpOutcomeDto;
+  };
+  // Add an extra roster membership (national / all-star / alternate roster); primary team untouched.
+  add_membership: {
+    args: { projectId: number; player: number; toTeam: number };
+    ret: OpOutcomeDto;
+  };
+  // Remove one extra roster membership (vacate the slot); primary team untouched.
+  remove_membership: {
+    args: { projectId: number; fromTeam: number; player: number };
+    ret: OpOutcomeDto;
+  };
   undo: { args: { projectId: number }; ret: boolean };
   redo: { args: { projectId: number }; ret: boolean };
   save_project: { args: { projectId: number; outPath: string }; ret: number };
   // In-place dual save: writes nhlng.db and (when attached) the roster save back to their origins.
   save_workspace: { args: { projectId: number }; ret: number };
+
+  // Historical (FHM) corpus — app-global, read-only; no projectId. Open a data pack once, then query.
+  open_corpus: { args: { path: string }; ret: number };
+  corpus_open: { args: Record<string, never>; ret: boolean };
+  historical_filters: { args: Record<string, never>; ret: HistoricalFiltersDto };
+  // Person-centric player browse. goalieFilter: true = goalies only, false = skaters only, null = all.
+  list_historical_players: {
+    args: { search: string; goalieFilter: boolean | null; limit: number };
+    ret: HistoricalPersonSummaryDto[];
+  };
+  historical_player: { args: { personId: number }; ret: HistoricalPersonDto | null };
+  // Team browse is season-scoped (team ids are per-season).
+  list_historical_teams: {
+    args: { seasonYear: number; search: string; limit: number };
+    ret: HistoricalTeamSummaryDto[];
+  };
+  historical_team: {
+    args: { seasonYear: number; srcTeamId: number };
+    ret: HistoricalTeamDto | null;
+  };
+  // Franchise-consolidated team browse: NHL relocations/renames collapse to one franchise entry;
+  // non-NHL clubs stay standalone. Filtered by league (`"NHL"` → the franchises; null → everything).
+  historical_team_filters: { args: Record<string, never>; ret: HistoricalTeamFiltersDto };
+  list_historical_franchises: {
+    args: { league: string | null; search: string; limit: number };
+    ret: HistoricalTeamIndexEntryDto[];
+  };
+  // One franchise/standalone-team's detail for a season (seasonYear null → newest). kind = "franchise"
+  // (key = franchise id) or "team" (key = team_key). Returns all constituents active that season.
+  historical_franchise: {
+    args: { kind: string; key: string; seasonYear: number | null };
+    ret: HistoricalTeamFranchiseDto | null;
+  };
+
+  // Formula engine (Stage 2) — compute EA ratings from FHM attrs; profiles are corpus-global.
+  formula_default: { args: Record<string, never>; ret: FormulaProfileDto };
+  formula_catalog: { args: Record<string, never>; ret: FormulaCatalogDto };
+  compute_ratings: {
+    args: { personId: number; seasonYear: number; profile: FormulaProfileDto };
+    ret: EaComputedRatingsDto | null;
+  };
+  // Cross-career EA rating compilations (Full Career + Peak 3 + per-season overalls + best season).
+  compute_career_ratings: {
+    args: { personId: number; profile: FormulaProfileDto };
+    ret: HistoricalCareerRatingsDto | null;
+  };
+  // The active (working) formula profile — auto-persisted as the operator edits, and the default
+  // the Attributes preview computes against across the app.
+  get_active_formula: { args: Record<string, never>; ret: FormulaProfileDto };
+  save_active_formula: { args: { profile: FormulaProfileDto }; ret: null };
+  list_formula_profiles: { args: Record<string, never>; ret: string[] };
+  load_formula_profile: { args: { name: string }; ret: FormulaProfileDto };
+  save_formula_profile: { args: { name: string; profile: FormulaProfileDto }; ret: null };
+  delete_formula_profile: { args: { name: string }; ret: null };
 };
 
 export async function call<C extends keyof Commands>(

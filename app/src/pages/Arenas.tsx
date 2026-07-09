@@ -2,7 +2,9 @@ import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { call } from "../lib/client";
 import { useProject } from "../lib/project";
-import { MasterList, type ListItem } from "../components/MasterList";
+import { EntityList, type Column } from "../components/EntityList";
+
+type Row = { id: number; name: string; city: string; teams: number };
 
 export function ArenasPage() {
   const { project } = useProject();
@@ -13,22 +15,66 @@ export function ArenasPage() {
     queryFn: () => call("list_arenas", { projectId }),
   });
 
-  const items: ListItem[] = useMemo(
+  const rows: Row[] = useMemo(
     () =>
       (arenas.data ?? []).map((a) => ({
         id: a.arena_id,
-        primary: a.name || `Arena ${a.arena_id}`,
-        secondary: a.city,
+        name: a.name || `Arena ${a.arena_id}`,
+        city: a.city,
+        teams: a.team_count,
       })),
     [arenas.data],
   );
 
+  const columns: Column<Row>[] = [
+    {
+      key: "id",
+      label: "ID",
+      width: "40px",
+      sort: (r) => r.id,
+      render: (r) => r.id,
+      cellClass: () => "tabular-nums text-slate-500",
+    },
+    {
+      key: "name",
+      label: "Name",
+      width: "1fr",
+      sort: (r) => r.name,
+      render: (r) => r.name,
+      cellClass: () => "font-medium",
+    },
+    {
+      key: "city",
+      label: "City",
+      width: "104px",
+      sort: (r) => r.city,
+      render: (r) => r.city,
+      cellClass: () => "text-slate-400",
+    },
+    {
+      key: "teams",
+      label: "Teams",
+      width: "56px",
+      sort: (r) => r.teams,
+      render: (r) => (r.teams > 0 ? r.teams : "—"),
+      cellClass: (r) => (r.teams > 0 ? "tabular-nums text-slate-300" : "text-slate-600"),
+    },
+  ];
+
   return (
-    <MasterList
-      items={items}
+    <EntityList
+      title="Arenas"
+      rows={rows}
+      getId={(r) => r.id}
+      columns={columns}
+      searchOf={(r) => `${r.name} ${r.city} ${r.id}`}
+      searchPlaceholder="Search name / city / id…"
       isLoading={arenas.isLoading}
       error={arenas.error}
-      placeholder="Filter arenas…"
+      initialSort="id"
+      // Arena names run long ("Scotiabank Saddledome") — a wider panel keeps them un-truncated
+      // next to the City and Teams columns.
+      panelWidth="w-[27rem]"
     />
   );
 }

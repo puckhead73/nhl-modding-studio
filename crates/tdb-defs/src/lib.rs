@@ -30,6 +30,18 @@ impl FieldType {
     }
 }
 
+/// Raw `(table, field)` sites verified to store **offset-binary** values — `raw = value - range_low`
+/// — instead of the default two's-complement interpretation of a negative `range_low`.
+///
+/// Anchored via the prior app's real-data checks (Stastny 2014-15 `+5` stored as raw `69` on the
+/// 8-bit `[-64..127]` season plus/minus; two's complement would read `+69`, impossible in the NHL).
+/// Scoped to the anchored sites only — flipping every `range_low < 0` field would need its own
+/// verification pass (see the format note in `docs/formats/tdb-v6-format.md`).
+const OFFSET_BINARY_SITES: &[(&str, &str)] = &[
+    ("ySst", "tmoU"), // stock career skater season plus/minus (Uomt), 8-bit [-64..127]
+    ("OqAO", "tmoU"), // stock career skater playoffs plus/minus (Uomt), 6-bit [-32..31]
+];
+
 /// Per-field metadata.
 #[derive(Clone, Debug)]
 pub struct FieldMeta {
@@ -43,6 +55,9 @@ pub struct FieldMeta {
     pub key: bool,
     pub updatable: bool,
     pub fk_parent: Option<String>,
+    /// `true` for the [`OFFSET_BINARY_SITES`] — decode/encode as `value = raw + range_low` rather
+    /// than two's complement.
+    pub offset_binary: bool,
 }
 
 impl FieldMeta {
@@ -51,6 +66,9 @@ impl FieldMeta {
     /// is negative but whose `range_high` exceeds the signed max is **not** two's complement; it is
     /// an unsigned field that uses a sentinel (see [`FieldMeta::neg1_sentinel`]).
     pub fn signed(&self) -> bool {
+        if self.offset_binary {
+            return false;
+        }
         match (self.range_low, self.range_high) {
             (Some(lo), Some(hi)) if lo < 0 => {
                 let w = self.bit_depth;
@@ -69,6 +87,9 @@ impl FieldMeta {
     /// Decode raw stored bits into the logical (sign-aware) value.
     pub fn decode_raw(&self, raw_bits: u64) -> i64 {
         let w = self.bit_depth;
+        if self.offset_binary {
+            return (raw_bits as i64) + self.range_low.unwrap_or(0);
+        }
         if self.signed() {
             let sign = 1u64 << (w - 1);
             if raw_bits & sign != 0 {
@@ -82,13 +103,19 @@ impl FieldMeta {
         }
     }
 
-    /// Encode a logical value into raw stored bits (two's complement, masked to `bit_depth`).
+    /// Encode a logical value into raw stored bits (two's complement — or `value - range_low` for
+    /// the offset-binary sites — masked to `bit_depth`).
     pub fn encode(&self, value: i64) -> u64 {
+        let v = if self.offset_binary {
+            value - self.range_low.unwrap_or(0)
+        } else {
+            value
+        };
         let w = self.bit_depth;
         if w >= 64 {
-            return value as u64;
+            return v as u64;
         }
-        (value as u64) & ((1u64 << w) - 1)
+        (v as u64) & ((1u64 << w) - 1)
     }
 
     /// Validate a logical value for an **edit at entry**: rejects non-updatable fields and
@@ -210,6 +237,7 @@ impl FieldMetaIndex {
                     // EA marks read-only fields with update="False"; default is updatable.
                     updatable: field.attribute("update") != Some("False"),
                     fk_parent: field.attribute("fkparenttable").map(|s| s.to_string()),
+                    offset_binary: OFFSET_BINARY_SITES.contains(&(tsn, fsn)),
                 };
                 idx.fields.insert((tsn.to_string(), fsn.to_string()), meta);
             }
@@ -253,6 +281,7 @@ mod tests {
             key: false,
             updatable: true,
             fk_parent: None,
+            offset_binary: false,
         };
         assert!(m.signed());
         assert_eq!(m.decode_raw(246), -10);
@@ -262,6 +291,34 @@ mod tests {
         assert_eq!(m.encode(-50) & 0xFF, 206);
         // Round-trip.
         for v in [-50i64, -1, 0, 1, 50] {
+            assert_eq!(m.decode_raw(m.encode(v)), v);
+        }
+    }
+
+    /// The anchored offset-binary sites: career plus/minus stores `value - range_low` (Stastny
+    /// 2014-15 `+5` = raw `69` on the 8-bit season field), not two's complement (`+69`).
+    #[test]
+    fn decode_encode_offset_binary() {
+        let m = FieldMeta {
+            table: "ySst".into(),
+            field: "tmoU".into(),
+            name: "plusminus".into(),
+            kind: FieldType::Integer,
+            bit_depth: 8,
+            range_low: Some(-64),
+            range_high: Some(127),
+            key: false,
+            updatable: true,
+            fk_parent: None,
+            offset_binary: true,
+        };
+        assert!(!m.signed());
+        assert_eq!(m.decode_raw(69), 5);
+        assert_eq!(m.decode_raw(64), 0);
+        assert_eq!(m.decode_raw(0), -64);
+        assert_eq!(m.encode(5), 69);
+        assert_eq!(m.encode(-64), 0);
+        for v in [-64i64, -5, 0, 5, 63] {
             assert_eq!(m.decode_raw(m.encode(v)), v);
         }
     }
@@ -279,6 +336,7 @@ mod tests {
             key: false,
             updatable: true,
             fk_parent: None,
+            offset_binary: false,
         };
         assert!(m.validate(50).is_ok());
         assert!(matches!(

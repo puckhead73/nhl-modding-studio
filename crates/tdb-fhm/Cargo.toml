@@ -1,0 +1,10 @@
+[package]
+name = "tdb-fhm"
+description = "FHM historical corpus — versioned SQLite schema, person-slug identity, shared row model."
+version = "0.0.0"
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }

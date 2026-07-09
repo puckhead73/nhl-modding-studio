@@ -3,4 +3,8 @@
 /**
  * A compact team row for the master list.
  */
-export type TeamSummaryDto = { team_id: number, record: number, name: string, abbrev: string, };
+export type TeamSummaryDto = { team_id: number, record: number, name: string, abbrev: string, 
+/**
+ * League code (`kOtt.xMjj`) + resolved label — powers league-scoped team pickers.
+ */
+league: number | null, league_label: string | null, };

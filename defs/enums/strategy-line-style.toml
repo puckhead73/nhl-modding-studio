@@ -1,0 +1,64 @@
+# Anchored enum: Line Style (team strategy sheet).
+#
+# Bound on `EeYo` (exhibitionteamstrategies) and its career-mode mirror `JUfQ`
+# (leagueteamstrategies — identical schema). Vocabulary is the in-game strategy UI's,
+# operator-provided in the reference app (2026-05-19); raw value = menu index.
+
+name = "Line Style"
+confidence = "Strong"
+
+[source]
+kind = "operator-research"
+description = "In-game strategy menu order, operator-matched in the reference app (2026-05-19)"
+
+[[bindings]]
+field_name = "Line Style"
+field_raw_id = "eRIF"
+table_raw_id = "EeYo"
+
+[[bindings]]
+field_name = "Line Style"
+field_raw_id = "eRIF"
+table_raw_id = "JUfQ"
+
+[[bindings]]
+field_name = "Line Style"
+field_raw_id = "LIlj"
+table_raw_id = "EeYo"
+
+[[bindings]]
+field_name = "Line Style"
+field_raw_id = "LIlj"
+table_raw_id = "JUfQ"
+
+[[bindings]]
+field_name = "Line Style"
+field_raw_id = "ALBZ"
+table_raw_id = "EeYo"
+
+[[bindings]]
+field_name = "Line Style"
+field_raw_id = "ALBZ"
+table_raw_id = "JUfQ"
+
+[[bindings]]
+field_name = "Line Style"
+field_raw_id = "CPwO"
+table_raw_id = "EeYo"
+
+[[bindings]]
+field_name = "Line Style"
+field_raw_id = "CPwO"
+table_raw_id = "JUfQ"
+
+[[entries]]
+raw = 0
+label = "Overload (rush offense)"
+
+[[entries]]
+raw = 1
+label = "Crash The Net"
+
+[[entries]]
+raw = 2
+label = "Behind The Net"

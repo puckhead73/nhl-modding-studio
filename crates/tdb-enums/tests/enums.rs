@@ -21,7 +21,23 @@ fn anchor_str(rel: &str) -> String {
 #[test]
 fn registry_loads_all_defs() {
     let reg = EnumRegistry::from_dir(defs_dir()).unwrap();
-    assert_eq!(reg.len(), 19, "expected the 19 shipped enum defs");
+    assert_eq!(reg.len(), 32, "expected the 32 shipped enum defs");
+
+    // Arena Type (StEO.dxQr) — the ice-surface flag.
+    assert_eq!(reg.label("StEO", "dxQr", 0), Some("NHL Ice (200×85)"));
+    assert_eq!(reg.label("StEO", "dxQr", 1), Some("International Ice (200×100)"));
+
+    // Team classification (kOtt): league fully anchored; conference/division NHL codes only.
+    assert_eq!(reg.label("kOtt", "xMjj", 0), Some("NHL"));
+    assert_eq!(reg.label("kOtt", "xMjj", 15), Some("EASHL"));
+    assert_eq!(reg.label("kOtt", "OwTu", 2), Some("Eastern"));
+    assert_eq!(reg.label("kOtt", "CGMK", 6), Some("Metropolitan"));
+
+    // Career League (the four stock career tables' xMjj flag) resolves on every binding site.
+    for t in ["tsSy", "OAqO", "USfF", "nCDp"] {
+        assert_eq!(reg.label(t, "xMjj", 0), Some("NHL"));
+        assert_eq!(reg.label(t, "xMjj", 1), Some("AHL"));
+    }
 
     // Position (ubPc.vjla) and Captaincy (eGlu.mCcl) are operator-confirmed anchors.
     assert_eq!(reg.label("ubPc", "vjla", 0), Some("C"));
@@ -35,6 +51,21 @@ fn registry_loads_all_defs() {
     assert_eq!(reg.label("dSvy", "QgFs", 7), Some("Sniper"));
     assert_eq!(reg.label("mHuy", "QgFs", 2), Some("Butterfly"));
     assert!(reg.for_field("dSvy", "QgFs").unwrap().name != reg.for_field("mHuy", "QgFs").unwrap().name);
+
+    // Team strategies (EeYo) — each tactic vocabulary resolves on both the exhibition table and
+    // its career-mode mirror (JUfQ), and the shared Line Style vocab binds all four line fields.
+    assert_eq!(reg.label("EeYo", "RBGh", 0), Some("Weak Side Lock"));
+    assert_eq!(reg.label("JUfQ", "RBGh", 3), Some("1-2-2 Aggressive"));
+    assert_eq!(reg.label("EeYo", "uAeC", 2), Some("1-2-2 Red Line"));
+    assert_eq!(reg.label("EeYo", "rKer", 2), Some("Tight Point"));
+    assert_eq!(reg.label("EeYo", "bame", 1), Some("Overload"));
+    assert_eq!(reg.label("EeYo", "NzPy", 2), Some("Diamond"));
+    assert_eq!(reg.label("EeYo", "TTVS", 4), Some("Full Attack"));
+    assert_eq!(reg.label("EeYo", "xKvv", 0), Some("Protect Net"));
+    for line_style in ["eRIF", "LIlj", "ALBZ", "CPwO"] {
+        assert_eq!(reg.label("EeYo", line_style, 1), Some("Crash The Net"));
+        assert_eq!(reg.label("JUfQ", line_style, 1), Some("Crash The Net"));
+    }
 }
 
 /// Every enum's bound field, reversed into the binary id space, should exist in a real anchor's

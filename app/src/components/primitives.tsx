@@ -140,3 +140,17 @@ export function Spinner({ label }: { label?: string }) {
 export function PageScroll({ children }: { children: ReactNode }) {
   return <div className="min-h-0 flex-1 overflow-y-auto px-6 py-6">{children}</div>;
 }
+
+/** Centered "nothing selected yet" prompt for an empty master-detail right pane. */
+export function SelectPrompt({ what }: { what: string }) {
+  return (
+    <div className="grid h-full place-items-center text-center">
+      <div>
+        <p className="text-sm font-semibold text-slate-200">Select a {what}</p>
+        <p className="mt-1 text-xs text-slate-500">
+          Pick a row from the list on the left to view the full detail.
+        </p>
+      </div>
+    </div>
+  );
+}

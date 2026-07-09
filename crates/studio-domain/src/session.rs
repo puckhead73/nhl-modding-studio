@@ -98,6 +98,14 @@ impl EditSession {
         Ok(crate::DbOverview::of(&db))
     }
 
+    /// Probe which optional schema features this title's database carries (drives the UI's
+    /// hide/disable gating for surfaces the game doesn't have). Evidence-based: read from the
+    /// working file's own descriptors and the title's own metadata, never assumed from the title.
+    pub fn capabilities(&self) -> Result<crate::Capabilities> {
+        let db = TdbFile::parse(&self.working)?;
+        Ok(crate::Capabilities::probe(&db, self.project.meta()))
+    }
+
     /// Assemble the Layer 2 entity model over the current working state.
     pub fn model(&self) -> Result<RosterModel> {
         let db = TdbFile::parse(&self.working)?;
@@ -133,7 +141,12 @@ impl EditSession {
     pub fn team_summaries(&self) -> Result<Vec<crate::TeamSummary>> {
         let db = TdbFile::parse(&self.working)?;
         let model = self.build_model(&db)?;
-        Ok(crate::view::team_summaries(&db, self.project.meta(), &model))
+        Ok(crate::view::team_summaries(
+            &db,
+            self.project.meta(),
+            self.project.enums(),
+            &model,
+        ))
     }
 
     /// The full Team detail for one `kOtt.vfEq`, or `None` if absent.
@@ -175,6 +188,41 @@ impl EditSession {
             self.project.enums(),
             player_id,
         ))
+    }
+
+    /// A team's strategy sheet (`EeYo`), or `None` when the title/database lacks it.
+    pub fn team_strategies(&self, team_id: u64) -> Result<Option<crate::TeamStrategies>> {
+        let db = TdbFile::parse(&self.working)?;
+        Ok(crate::team_tabs::team_strategies(
+            &db,
+            self.project.meta(),
+            self.project.enums(),
+            team_id,
+        ))
+    }
+
+    /// A team's future draft picks (`qHav`), possibly empty.
+    pub fn team_draft_picks(&self, team_id: u64) -> Result<Vec<crate::DraftPick>> {
+        let db = TdbFile::parse(&self.working)?;
+        let model = self.build_model(&db)?;
+        Ok(crate::team_tabs::team_draft_picks(
+            &db,
+            self.project.meta(),
+            &model,
+            team_id,
+        ))
+    }
+
+    /// A team's registered jerseys (`xjgw`), possibly empty.
+    pub fn team_jerseys(&self, team_id: u64) -> Result<Vec<crate::TeamJersey>> {
+        let db = TdbFile::parse(&self.working)?;
+        Ok(crate::team_tabs::team_jerseys(&db, team_id))
+    }
+
+    /// A team's stock equipment rows (`hHbv`), possibly empty.
+    pub fn team_equipment(&self, team_id: u64) -> Result<Vec<crate::TeamEquipment>> {
+        let db = TdbFile::parse(&self.working)?;
+        Ok(crate::team_tabs::team_equipment(&db, team_id))
     }
 
     /// The depth chart (lines) for one team over the current working state.
@@ -260,6 +308,11 @@ impl EditSession {
     /// checked and two's-complement encoded against the metadata; string fields are length-checked.
     /// The write runs through the repairing transaction (audited + undoable). Rejected edits leave
     /// the working bytes untouched and return the reason.
+    ///
+    /// Strategy edits fan out: an `EeYo` (exhibition strategies) cell write is mirrored onto the
+    /// `JUfQ` (career-mode strategies) row with the same `vfEq` in the **same transaction**, so
+    /// changing a team's strategy lands in both game modes. `JUfQ` ships with 0 rows in stock
+    /// data — the mirror silently no-ops until a dynasty save populates it.
     pub fn set_field(
         &mut self,
         studio_table: &str,
@@ -267,11 +320,127 @@ impl EditSession {
         studio_field: &str,
         value: FieldValue,
     ) -> Result<OpOutcome> {
-        let prepared = self.prepare_field_edit(studio_table, record, studio_field, value)?;
-        self.run(|tx| match &prepared.payload {
-            PreparedPayload::Int(v) => tx.set_cell_int(&prepared.table, prepared.record, &prepared.field, *v),
-            PreparedPayload::Text(s) => tx.set_cell_str(&prepared.table, prepared.record, &prepared.field, s),
+        let prepared = self.prepare_field_edit(studio_table, record, studio_field, value.clone())?;
+        let mirror = if studio_table == crate::team_tabs::STRATEGIES_TABLE {
+            self.prepare_strategy_mirror(record, studio_field, value)
+        } else {
+            None
+        };
+        self.run(|tx| {
+            let mut total = match &prepared.payload {
+                PreparedPayload::Int(v) => {
+                    tx.set_cell_int(&prepared.table, prepared.record, &prepared.field, *v)?
+                }
+                PreparedPayload::Text(s) => {
+                    tx.set_cell_str(&prepared.table, prepared.record, &prepared.field, s)?
+                }
+            };
+            if let Some(m) = &mirror {
+                let o = match &m.payload {
+                    PreparedPayload::Int(v) => tx.set_cell_int(&m.table, m.record, &m.field, *v)?,
+                    PreparedPayload::Text(s) => tx.set_cell_str(&m.table, m.record, &m.field, s)?,
+                };
+                total.edits += o.edits;
+                total.repairs.extend(o.repairs);
+                total
+                    .repairs
+                    .push("mirrored the strategy edit to the career-mode table (JUfQ)".into());
+            }
+            Ok(total)
         })
+    }
+
+    /// Prepare the `JUfQ` twin of an `EeYo` cell edit (same studio field, row matched on `vfEq`).
+    /// `None` whenever the mirror can't or shouldn't fire — table absent, no matching row, the
+    /// key field itself, or a validation failure on the mirror side — so the primary edit always
+    /// proceeds alone rather than being blocked by career-mode state.
+    fn prepare_strategy_mirror(
+        &self,
+        record: u32,
+        studio_field: &str,
+        value: FieldValue,
+    ) -> Option<PreparedEdit> {
+        if studio_field == "vfEq" {
+            return None;
+        }
+        let view = self.working.clone();
+        let db = TdbFile::parse(&view).ok()?;
+        let eeyo = db.table_canonical(crate::team_tabs::STRATEGIES_TABLE)?;
+        let team = crate::view::read_u64_by_studio(&db, eeyo, record, "vfEq")?;
+        let jufq = db.table_canonical(crate::team_tabs::STRATEGIES_LEAGUE_TABLE)?;
+        let mirror_rec = (0..jufq.current_records as u32)
+            .find(|&r| crate::view::read_u64_by_studio(&db, jufq, r, "vfEq") == Some(team))?;
+        self.prepare_field_edit(
+            crate::team_tabs::STRATEGIES_LEAGUE_TABLE,
+            mirror_rec,
+            studio_field,
+            value,
+        )
+        .ok()
+    }
+
+    /// Stage several integer cell edits on one record as a **single transaction** (one undo entry).
+    /// Each `(studio_field, value)` is validated + encoded exactly like [`Self::set_field`]. Used for
+    /// set-membership edits such as trait activation, where one logical change touches several slots.
+    /// A rejected edit leaves the working bytes untouched.
+    pub fn set_cells_int(
+        &mut self,
+        studio_table: &str,
+        record: u32,
+        writes: &[(String, i64)],
+    ) -> Result<OpOutcome> {
+        // Prepare (validate + encode) every write before taking `&mut self` for `run`.
+        let prepared: Vec<PreparedEdit> = writes
+            .iter()
+            .map(|(field, value)| {
+                self.prepare_field_edit(studio_table, record, field, FieldValue::Int(*value))
+            })
+            .collect::<Result<_>>()?;
+        self.run(|tx| {
+            let mut total = OpOutcome::default();
+            for p in &prepared {
+                let outcome = match &p.payload {
+                    PreparedPayload::Int(v) => {
+                        tx.set_cell_int(&p.table, p.record, &p.field, *v)?
+                    }
+                    PreparedPayload::Text(s) => {
+                        tx.set_cell_str(&p.table, p.record, &p.field, s)?
+                    }
+                };
+                total.edits += outcome.edits;
+                total.repairs.extend(outcome.repairs);
+            }
+            Ok(total)
+        })
+    }
+
+    /// The current `(slot_field_id, value)` for all 32 `Trait N` slots on a ratings record — the
+    /// input the trait activate/deactivate planner needs. Missing slots (absent from this title's
+    /// schema) are skipped.
+    pub fn trait_slot_values(&self, studio_table: &str, record: u32) -> Result<Vec<(String, i64)>> {
+        let view = self.working.clone();
+        let db = TdbFile::parse(&view)?;
+        let table = db
+            .table_canonical(studio_table)
+            .ok_or_else(|| EditError::UnknownTable(studio_table.to_string()))?;
+        let mut out = Vec::new();
+        for slot_id in crate::attributes::TRAIT_SLOT_ORDER {
+            if let Some(field) = table
+                .fields
+                .iter()
+                .find(|f| f.id.canonical(db.endian) == *slot_id)
+            {
+                let raw = db.read_u64(table, record, field).unwrap_or(0);
+                let value = self
+                    .project
+                    .meta()
+                    .field(&table.id.raw(), &field.id.raw())
+                    .map(|m| m.decode_raw(raw))
+                    .unwrap_or(raw as i64);
+                out.push(((*slot_id).to_string(), value));
+            }
+        }
+        Ok(out)
     }
 
     /// Resolve the field descriptor + metadata and validate `value` at entry, returning an owned
@@ -387,6 +556,37 @@ impl EditSession {
         self.run(|tx| tx.sign_from_fa(player, to_team))
     }
 
+    /// Add an extra roster membership (national / all-star / alternate roster) on `to_team`,
+    /// leaving the player's primary team untouched.
+    pub fn add_membership(&mut self, player: u64, to_team: u64) -> Result<OpOutcome> {
+        self.run(|tx| tx.add_membership(player, to_team))
+    }
+
+    /// Remove one extra roster membership (vacate the player's slot on `from_team`); the primary
+    /// team pointer and all other memberships stay untouched.
+    pub fn remove_membership(&mut self, from_team: u64, player: u64) -> Result<OpOutcome> {
+        self.run(|tx| tx.remove_membership(from_team, player))
+    }
+
+    /// Add a stock career season row (one of the four career tables) for a player; returns the new
+    /// record index. The row's identity (join key, year, league, team code) is set; stat cells start
+    /// zero and are edited through [`Self::set_field`].
+    pub fn add_career_season(
+        &mut self,
+        studio_table: &str,
+        player: u64,
+        year_end: u64,
+        league: u64,
+        team: &str,
+    ) -> Result<(u32, OpOutcome)> {
+        self.run(|tx| tx.add_career_season(studio_table, player, year_end, league, team))
+    }
+
+    /// Delete one stock career row by record index (ordered shift — stored row order preserved).
+    pub fn delete_career_row(&mut self, studio_table: &str, record: u32) -> Result<OpOutcome> {
+        self.run(|tx| tx.delete_career_row(studio_table, record))
+    }
+
     /// Retire a jersey number for a team (add it to the retired-number table).
     pub fn retire_jersey(&mut self, team: u64, number: u64) -> Result<OpOutcome> {
         self.run(|tx| tx.retire_jersey(team, number))
@@ -400,6 +600,11 @@ impl EditSession {
     /// Set a player's jersey number on a team (unique within the team).
     pub fn set_jersey_number(&mut self, team: u64, player: u64, number: u64) -> Result<OpOutcome> {
         self.run(|tx| tx.set_jersey_number(team, player, number))
+    }
+
+    /// Trade a future draft pick (`qHav` row) to another team.
+    pub fn trade_draft_pick(&mut self, record: u32, to_team: u64) -> Result<OpOutcome> {
+        self.run(|tx| tx.trade_draft_pick(record, to_team))
     }
 
     /// Auto-correct every duplicate jersey number in the DB (the default reassignment logic), returning

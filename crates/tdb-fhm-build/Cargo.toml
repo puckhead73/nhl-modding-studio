@@ -1,0 +1,22 @@
+[package]
+name = "tdb-fhm-build"
+description = "Build-time bin: ingest the FHM season-export CSVs into the person-centric SQLite corpus."
+version = "0.0.0"
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[[bin]]
+name = "tdb-fhm-build"
+path = "src/main.rs"
+
+# Converts the prior app's normalized historical.db into our person-centric corpus schema.
+[[bin]]
+name = "tdb-fhm-convert"
+path = "src/bin/convert.rs"
+
+[dependencies]
+tdb-fhm = { path = "../tdb-fhm" }
+rusqlite = { version = "0.31", features = ["bundled"] }
+csv = "1"
+serde_json = "1"

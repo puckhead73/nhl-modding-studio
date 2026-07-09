@@ -40,6 +40,16 @@ order (table `cPbu`, field `BSXd`); the **EA DB Editor XML / TSV audits / EDIT-M
 > was a +8-shifted read that *happened* to capture id+width correctly; the true layout (40-byte header;
 > `kind_code, bit_offset, id, bit_width`) is verified above. Signedness is **not** in `kind_code` — a
 > field is signed iff its meta `range_low < 0` (two's-complement at the meta layer).
+>
+> **Offset-binary exception (verified 2026-07-02):** the stock career plus/minus fields
+> (`ySst.tmoU` 8-bit `[-64..127]`, `OqAO.tmoU` 6-bit `[-32..31]`) store **`raw = value − range_low`**
+> (excess-K), *not* two's complement — anchored against real stat lines (Crosby 2006-07 `+10` reads
+> raw `74`; two's complement would read an impossible `+74`). The same offset rule explains the
+> long-verified "+1, raw 0 = none" convention on `[-1..N]` reference fields (team `dXSB`, the career
+> tables' `wBIz`). Whether **every** `range_low < 0` field is offset-binary is an open question —
+> the two's-complement interpretation elsewhere (`decode_raw`) has no counter-anchor yet, so the
+> offset decode is scoped to an explicit per-field override list (`tdb-defs::OFFSET_BINARY_SITES`)
+> until more sites are anchored.
 
 ### Record decoding
 

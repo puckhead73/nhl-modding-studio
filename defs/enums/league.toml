@@ -1,0 +1,88 @@
+# Confirmed enum: League (team classification code on the team table).
+#
+# `kOtt.xMjj` (meta name `league`, 4-bit → 16 slots). Vocabulary sourced from the
+# prior app's operator research (anchored against NHL 14 Legacy default.db: the
+# per-code team counts match each real-world league's team count). Codes are the
+# same family across the legacy-era DBs; a title that repurposes a slot will
+# surface as an uncatalogued raw value rather than a wrong label.
+
+name = "League"
+confidence = "Confirmed"
+notes = """
+4-bit league code on the team table. Anchored by cardinality against NHL 14
+Legacy default.db in the prior app's research (252 teams grouped by code, each
+group matching the real league's team count).
+"""
+
+[source]
+kind = "operator-research"
+description = "Prior-app kOtt.xMjj cardinality audit (NHL 14 Legacy default.db)"
+
+[[bindings]]
+field_name = "League"
+field_raw_id = "xMjj"
+table_raw_id = "kOtt"
+
+[[entries]]
+raw = 0
+label = "NHL"
+
+[[entries]]
+raw = 1
+label = "AHL"
+
+[[entries]]
+raw = 2
+label = "SHL (Sweden)"
+
+[[entries]]
+raw = 3
+label = "Liiga (Finland)"
+
+[[entries]]
+raw = 4
+label = "DEL (Germany)"
+
+[[entries]]
+raw = 5
+label = "Extraliga (Czech)"
+
+[[entries]]
+raw = 6
+label = "NLA (Switzerland)"
+
+[[entries]]
+raw = 7
+label = "GET-Ligaen (Norway)"
+
+[[entries]]
+raw = 8
+label = "National Teams"
+
+[[entries]]
+raw = 9
+label = "OHL"
+
+[[entries]]
+raw = 10
+label = "QMJHL"
+
+[[entries]]
+raw = 11
+label = "WHL"
+
+[[entries]]
+raw = 12
+label = "Top Prospects"
+
+[[entries]]
+raw = 13
+label = "Custom Teams"
+
+[[entries]]
+raw = 14
+label = "Winter Classic"
+
+[[entries]]
+raw = 15
+label = "EASHL"
