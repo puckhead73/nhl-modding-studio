@@ -7,4 +7,8 @@ export type RosterMembershipDto = { team_id: number,
 /**
  * The team's resolved display name, when it resolves.
  */
-team_name: string | null, jersey: number | null, captaincy: number | null, roster_status: number | null, };
+team_name: string | null, jersey: number | null, captaincy: number | null, 
+/**
+ * Lineup status from `eGlu.hSZj`: `true` dressed, `false` scratched, `null` if absent (Spike S4).
+ */
+dressed: boolean | null, };

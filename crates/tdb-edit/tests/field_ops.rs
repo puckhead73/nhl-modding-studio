@@ -191,9 +191,9 @@ fn set_jersey_validates_uniqueness_and_range() {
     assert_write_clean(&out);
 }
 
-/// Roster status writes the bridged ZBac.RREB code and round-trips through the entity model.
+/// Dressed/scratched writes the per-slot `eGlu.hSZj` boolean and round-trips through the model.
 #[test]
-fn set_roster_status_writes_index_row() {
+fn set_dressed_writes_slot_flag() {
     let bytes = anchor(DB);
     let mut tx = EditTransaction::begin(&bytes).unwrap();
 
@@ -204,16 +204,13 @@ fn set_roster_status_writes_index_row() {
         .find(|s| s.player_id.is_some() && s.index_key.is_some())
         .unwrap();
     let (team, player) = (slot.team_id, slot.player_id.unwrap());
-    let new_status = match slot.roster_status {
-        Some(0) => 1,
-        _ => 0,
-    };
+    let target = !slot.dressed.unwrap_or(true); // flip whatever it is now
     drop(model);
 
-    tx.set_roster_status(team, player, new_status).unwrap();
+    tx.set_dressed(team, player, target).unwrap();
     let model = tx.model().unwrap();
     let slot = model.slots.iter().find(|s| s.team_id == team && s.player_id == Some(player)).unwrap();
-    assert_eq!(slot.roster_status, Some(new_status));
+    assert_eq!(slot.dressed, Some(target));
     drop(model);
 
     let out = tx.commit().unwrap();

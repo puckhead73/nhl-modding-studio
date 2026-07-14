@@ -541,15 +541,15 @@ pub fn unretire_jersey(
 }
 
 #[tauri::command]
-pub fn set_roster_status(
+pub fn set_dressed(
     registry: State<'_, Registry>,
     project_id: u32,
     team: u64,
     player: u64,
-    status: u64,
+    dressed: bool,
 ) -> CmdResult<OpOutcomeDto> {
     registry
-        .set_roster_status(project_id, team, player, status)
+        .set_dressed(project_id, team, player, dressed)
         .map_err(|e| e.to_string())
 }
 

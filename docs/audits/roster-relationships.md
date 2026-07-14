@@ -62,17 +62,28 @@ The non-flag eGlu fields (NHL13+): `XSWT`(14, playerindex), `toWX`(14, key), `dX
 line-assignment activation flags** ("this roster-player occupies slot S"); the slot→hockey-position
 label mapping for all 71 is **not** fully resolved here (needs the NHL14 defs or a controlled-diff).
 
-## Enum-shaped fields (depths CONFIRMED; labels CANDIDATE)
+## Enum-shaped fields (Spike S4 — mostly resolved)
 
-The fields are real and sized as expected, but the **value→label mappings are NOT locked** — they need
-operator confirmation in NHLViewNG (or a controlled diff), per the staging docs:
+The fields are real and sized as expected. Spike S4 (2026-07-13) recovered the authoritative
+vocabularies from the **NHLViewNG EXE Delphi RTTI** (unit `uDatabaseTypes`, per-instance clean-room
+exception) — the same provenance path that locked captaincy. Status of each:
 
-| Field (real) | depth | meta name | Candidate labels (UNCONFIRMED) |
+| Field (real) | depth | meta name | Label status |
 |---|---:|---|---|
-| `eGlu.mCcl` | 2 | captain | `0=None, 1=Captain, 2=Alternate` (rcNone/rcCaptain/rcAlternate) |
-| `ZBac.RREB` | 2 | table | roster status — `Scratched/Dressed/InMinors` + a default; ordering unconfirmed |
-| `eGlu.QgFs` | 4 | playerstyle | TNHLPlayerAiStyle (~10 labels) |
-| `eGlu.hSZj` | 1 | rosterstatus | dressed/active flag |
+| `eGlu.mCcl` | 2 | captain | ✅ **Confirmed** — `TNHLRosterPlayerCaptaincy` `0=None, 1=Captain, 2=Alternate` (shipped [roster-captaincy.toml](../../defs/enums/roster-captaincy.toml)) |
+| `eGlu.QgFs` | 4 | playerstyle | ✅ **Confirmed** — the Phase 5T Player Style mapping, **re-verified 1-based** against the anchor (D=1..4, F=5..10, 0=unset); now bound to `eGlu` + `dSvy` + career mirrors ([player-style.toml](../../defs/enums/player-style.toml)) |
+| `eGlu.hSZj` | 1 | rosterstatus | ✅ **Resolved** — the **real** dressed/scratched flag: 1-bit Delphi `Boolean` (anchor split `{0:1092, 1:4440}`); no enum vocabulary needed |
+| `ZBac.RREB` | 2 | table | ✅ **Resolved (S4 follow-up)** — **player TYPE, not roster status**: `TNHLPlayerType = {Built-In, User-Created, Special, Developer}`, confirmed by EXE RTTI + the field's "table" meta name + a 1:1 correlation with the pointed-to bio `active` flag (shipped [player-type.toml](../../defs/enums/player-type.toml)). See [roster-pools.md](roster-pools.md#zbacrreb-is-player-type-not-roster-status--resolved-spike-s4-follow-up-2026-07-13). |
+
+> The QgFs offset is **field-specific**: the skater code (`dSvy`/`eGlu`) is **1-based** (0=unset,
+> D=1..4/F=5..10), while the sibling goalie code (`mHuy.QgFs`) is **0-based** (0=Standup). The EXE
+> RTTI enum `TNHLPlayerAiStyle` is NHLViewNG's own 0-based editor vocabulary — it corroborates the
+> skater codes at a +1 offset but is not the field codec (it carries an internal `psDangler` the
+> 4-bit field never uses, and disagrees at code 9, where the anchor distribution confirms Two-Way
+> Forward). `TNHLPlayerContractStatus = {csUnrestricted, csSigned, csUnsigned}` and
+> `TNHLRosterPlayerStatus = {Scratched, Dressed, InMinors}` were also recovered from the EXE but have
+> no confirmed field home in `nhlng.db` — the on-disk dressed/scratched signal is the 1-bit
+> `eGlu.hSZj` boolean, and `RREB` turned out to be player type (not status).
 
 ## Confirmed vs still-open
 
@@ -82,5 +93,6 @@ operator confirmation in NHLViewNG (or a controlled diff), per the staging docs:
 - ⏳ **Needs the record decoder (data-level):** value-resolution checks (that every `ZBac.ykFq`/`XSWT`
   actually resolves; the 2 sentinel orphans). The TDB record-layout (descriptor bytes 8:16) isn't
   decoded yet — see [../formats/tdb-v6-format.md](../formats/tdb-v6-format.md#open-items).
-- 🙋 **Needs operator confirmation:** all enum value→label mappings, and the per-slot hockey-position
-  names for the 71 line-assignment flags.
+- ✅ **Confirmed via EXE RTTI + anchor data (Spike S4):** captaincy, player style, goalie style,
+  `hSZj` (boolean), and `ZBac.RREB` (player type). The only enum-ish thing still open is the per-slot
+  hockey-position names for the 71 line-assignment flags.

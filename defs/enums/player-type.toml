@@ -1,0 +1,63 @@
+# Confirmed enum: Player Type / source (the `ZBac.RREB` discriminator).
+#
+# Spike S4 follow-up (2026-07-13) RESOLVED what `ZBac.RREB` actually is.
+# The table `ZBac` (binary `caBZ`) is EA's "exhibitionplayers" INDEX table:
+# it maps a roster player index (`vfEq`) to a `playerid` (`ykFq`) plus a
+# 2-bit `table` field (`RREB`, meta name literally "table"). Prior audits
+# guessed `RREB` was roster status — that was WRONG. Three independent
+# signals show it is the player SOURCE/type discriminator:
+#
+#   1. EXE RTTI (unit uDatabaseTypes) has exactly one 4-value [0..3] enum
+#      that fits the 2-bit field: `TNHLPlayerType {plrBuiltIn,
+#      plrUserCreated, plrSpecial, plrDeveloper}`. (The roster-status enum
+#      `TNHLRosterPlayerStatus` and contract-status enum are 3-valued and
+#      do NOT fit.)
+#   2. The meta field name is "table" — i.e. WHICH player table the index
+#      points into = the player's source.
+#   3. Legacy-anchor distribution + the pointed-to bio `active` flag:
+#      code 0 → 5848 rows, ALL active=1 (built-in players); code 1 → 180
+#      rows, ALL active=0 (inactive created-player pool slots); code 2 →
+#      13 (special); code 3 → 46 (developer). A roster status would never
+#      correlate 1:1 with the bio active flag like this.
+#
+# The REAL roster status (dressed/scratched) is the separate 1-bit boolean
+# `eGlu.hSZj` (meta name "rosterstatus"; anchor split {0:1092, 1:4440}).
+# "In Minors" (the 3rd `TNHLRosterPlayerStatus` value) is not stored on
+# that 1-bit field — it is a structural/editor concept, not `RREB`.
+
+name = "Player Type"
+confidence = "Confirmed"
+notes = """
+Four-value player source/type discriminator on the ZBac player-index
+table (`RREB`, 2-bit, meta name "table"). Vocabulary from the NHLViewNG
+EXE RTTI enum `TNHLPlayerType`; the code→category mapping is corroborated
+by the legacy-anchor distribution and the pointed-to bio `active` flag
+(code 0 = active built-ins; code 1 = inactive created-player slots).
+This field is NOT roster status — that is the 1-bit `eGlu.hSZj` boolean.
+"""
+
+[source]
+kind = "reverse-engineering"
+description = "NHLViewNG EXE Delphi RTTI enum `TNHLPlayerType` (unit uDatabaseTypes), corroborated by legacy-anchor ZBac.RREB distribution vs the ubPc `active` flag (Spike S4 follow-up)"
+
+[[bindings]]
+# ZBac (exhibitionplayers) player-index table; the 2-bit "table" field.
+field_name = "Player Type"
+field_raw_id = "RREB"
+table_raw_id = "ZBac"
+
+[[entries]]
+raw = 0
+label = "Built-In"
+
+[[entries]]
+raw = 1
+label = "User-Created"
+
+[[entries]]
+raw = 2
+label = "Special"
+
+[[entries]]
+raw = 3
+label = "Developer"

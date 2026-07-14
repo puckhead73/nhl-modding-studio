@@ -16,7 +16,7 @@
 //! ## Scope
 //!
 //! Attribute ops (`set_captaincy` with prior-captain auto-demotion, `set_jersey_number`,
-//! `set_roster_status`, `set_field`), the occupant-relocation `move_player`, and the structural
+//! `set_dressed`, `set_field`), the occupant-relocation `move_player`, and the structural
 //! `create_player`/`delete_player` clusters. The structural ops are **block-aware**: `eGlu` is
 //! partitioned into contiguous per-team blocks (`docs/audits/towx-blocks.md`), so `create_player`
 //! places the new slot *inside* the target team's block (reuse a vacant slot, else
@@ -1718,35 +1718,28 @@ impl EditTransaction {
         })
     }
 
-    /// Set a player's roster status on the bridged player-index row (`ZBac.RREB`, 2-bit). The
-    /// label→value mapping (Scratched / Dressed / In-Minors) is **candidate**; this writes the raw
-    /// 2-bit code (`0..=3`).
-    pub fn set_roster_status(
+    /// Set a player's lineup status on their slot in `team_id`'s block — the per-slot `eGlu.hSZj`
+    /// boolean ("rosterstatus": `1` = dressed, `0` = scratched). This is the real dressed/scratched
+    /// signal (Spike S4); it is *not* `ZBac.RREB`, which is the player-type discriminator.
+    ///
+    /// "In minors" is deliberately not a value here — it is a front-end depth-chart identifier
+    /// derived from the player's main team, not a stored lineup status.
+    pub fn set_dressed(
         &mut self,
         team_id: u64,
         player_id: u64,
-        status: u64,
+        dressed: bool,
     ) -> Result<OpOutcome, EditError> {
-        if status > 3 {
-            return Err(EditError::InvalidValue {
-                what: "roster status (2-bit)",
-                value: status as i64,
-            });
-        }
         self.with_repairing_transaction(|tx| {
             let model = tx.model()?;
-            let index_key = model
+            let slot_record = model
                 .slots
                 .iter()
                 .find(|s| s.team_id == team_id && s.player_id == Some(player_id))
                 .ok_or(EditError::NoSuchSlot { team_id, player_id })?
-                .index_key
-                .ok_or(EditError::NoSuchSlot { team_id, player_id })?;
+                .record;
             drop(model);
-            let zbac_record = tx
-                .find_record(ids::INDEX, ids::INDEX_KEY, index_key)?
-                .ok_or_else(|| EditError::Entity(format!("no ZBac row with vfEq {index_key}")))?;
-            tx.set_field(ids::INDEX, zbac_record, ids::INDEX_STATUS, status)?;
+            tx.set_field(ids::ROSTER_LINES, slot_record, ids::SLOT_DRESSED, dressed as u64)?;
             Ok(OpOutcome {
                 edits: 1,
                 repairs: Vec::new(),

@@ -13,6 +13,7 @@ staging file or reference doc without verification.
 | [nhlng-schema.md](nhlng-schema.md) | Verified field-level schema corpus (7 games) overview |
 | [roster-relationships.md](roster-relationships.md) | Verified roster→player bridge chain, companions, eGlu line layout, enum-field depths |
 | [cross-platform-format-audit.md](cross-platform-format-audit.md) | Xbox360 (=PS3 DBs) + PS4 (LE TDB v6) format verification; save containers net-new |
+| [roster-capacity.md](roster-capacity.md) | **Spike S3** — per-(title, platform) roster-save capacity ceilings (`max_records`) from real bytes; gates Phase 4.4 |
 | [anchors-manifest.md](anchors-manifest.md) | Inventory of every anchors file (sha256) |
 | [nhlviewng-internals.md](nhlviewng-internals.md) | Static EXE audit; cross-references the functional report |
 

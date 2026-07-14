@@ -293,8 +293,8 @@ pub struct RosterMembershipDto {
     pub jersey: Option<u64>,
     #[ts(type = "number | null")]
     pub captaincy: Option<u64>,
-    #[ts(type = "number | null")]
-    pub roster_status: Option<u64>,
+    /// Lineup status from `eGlu.hSZj`: `true` dressed, `false` scratched, `null` if absent (Spike S4).
+    pub dressed: Option<bool>,
 }
 
 /// Resolved, display-ready banner values for the Player detail header. Every field is already
@@ -494,11 +494,12 @@ pub struct LineEntryDto {
     pub jersey: Option<u64>,
     #[ts(type = "number | null")]
     pub captaincy: Option<u64>,
-    #[ts(type = "number | null")]
-    pub roster_status: Option<u64>,
+    /// Lineup status from `eGlu.hSZj`: `true` dressed, `false` scratched, `null` if absent (Spike S4).
+    /// ("In minors" is *not* here — it is a depth-chart identifier derived from the player's main team.)
+    pub dressed: Option<bool>,
     /// Studio field ids of the set 1-bit situational flags (see `LinesViewDto.slot_fields`).
     pub slots: Vec<String>,
-    /// Per-slot archetype cell (`eGlu.QgFs`) — provisional binding; edit through `set_field`.
+    /// Per-slot archetype cell (`eGlu.QgFs`) — Player Style enum (S4-confirmed); edit through `set_field`.
     pub style: Option<FieldViewDto>,
 }
 

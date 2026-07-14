@@ -239,7 +239,7 @@ fn membership_dto(m: &RosterMembership) -> RosterMembershipDto {
         team_name: m.team_name.clone(),
         jersey: m.jersey,
         captaincy: m.captaincy,
-        roster_status: m.roster_status,
+        dressed: m.dressed,
     }
 }
 
@@ -383,7 +383,7 @@ fn line_entry_dto(e: &LineEntry) -> LineEntryDto {
         position_label: e.position_label.clone(),
         jersey: e.jersey,
         captaincy: e.captaincy,
-        roster_status: e.roster_status,
+        dressed: e.dressed,
         slots: e.slots.clone(),
         style: e.style.as_ref().map(field_view_dto),
     }

@@ -137,9 +137,10 @@ type Commands = {
   };
   retire_jersey: { args: { projectId: number; team: number; number: number }; ret: OpOutcomeDto };
   unretire_jersey: { args: { projectId: number; team: number; number: number }; ret: OpOutcomeDto };
-  // Roster status on the bridged index row (ZBac.RREB): 0 Dressed, 1 Scratched, 3 In Minors.
-  set_roster_status: {
-    args: { projectId: number; team: number; player: number; status: number };
+  // Lineup status on the player's slot (eGlu.hSZj): dressed vs. scratched. ("In minors" is not a
+  // stored status — it is a depth-chart identifier derived from the player's main team.)
+  set_dressed: {
+    args: { projectId: number; team: number; player: number; dressed: boolean };
     ret: OpOutcomeDto;
   };
   set_field: {

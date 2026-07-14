@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { call } from "../lib/client";
 import { useProject } from "../lib/project";
 import { EmptyState, Spinner } from "./primitives";
-import { isDressedStatus } from "../lib/teamPresentation";
+import { isDressed } from "../lib/teamPresentation";
 import type { LineEntryDto } from "../bindings/LineEntryDto";
 
 // HTML5 drag-and-drop MIME. Custom MIME types aren't reliably carried through Tauri's webview
@@ -90,7 +90,7 @@ export function JerseyCaptaincyTab({
   const assigned = new Set(sorted.map((e) => e.jersey).filter((n): n is number => n != null && n > 0));
   const retired = new Set(retiredNumbers);
   const dressed = new Set(
-    sorted.filter((e) => isDressedStatus(e.roster_status)).map((e) => e.player_id as number),
+    sorted.filter((e) => isDressed(e.dressed)).map((e) => e.player_id as number),
   );
   const captain = sorted.find((e) => e.captaincy === 1)?.player_id ?? null;
   const alternates = sorted.filter((e) => e.captaincy === 2).map((e) => e.player_id as number);

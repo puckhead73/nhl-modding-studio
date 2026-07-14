@@ -578,15 +578,15 @@ impl Registry {
         self.with_workspace(id, |ws| Ok(convert::outcome_dto(ws.unretire_jersey(team, number)?)))
     }
 
-    pub fn set_roster_status(
+    pub fn set_dressed(
         &self,
         id: u32,
         team: u64,
         player: u64,
-        status: u64,
+        dressed: bool,
     ) -> Result<OpOutcomeDto, ApiError> {
         self.with_workspace(id, |ws| {
-            Ok(convert::outcome_dto(ws.set_roster_status(team, player, status)?))
+            Ok(convert::outcome_dto(ws.set_dressed(team, player, dressed)?))
         })
     }
 

@@ -7,12 +7,8 @@ import { EmptyState, Spinner } from "./primitives";
 import { ratingToneClass } from "../lib/ratingColor";
 import {
   GOALIE_STYLE_LABELS,
-  isDressedStatus,
+  isDressed,
   PLAYER_STYLE_LABELS,
-  ROSTER_STATUS_DRESSED,
-  ROSTER_STATUS_IN_MINORS,
-  ROSTER_STATUS_OPTIONS,
-  ROSTER_STATUS_SCRATCHED,
   styleCode,
 } from "../lib/teamPresentation";
 import type { LineEntryDto } from "../bindings/LineEntryDto";
@@ -149,7 +145,6 @@ function buildBuckets(view: LinesViewDto): BucketSpec[] {
 }
 
 const SCRATCHED_TAB = "__scratched__";
-const IN_MINORS_TAB = "__in_minors__";
 
 export function LinesTab({ projectId, teamId }: { projectId: number; teamId: number }) {
   const qc = useQueryClient();
@@ -203,10 +198,10 @@ export function LinesTab({ projectId, teamId }: { projectId: number; teamId: num
   };
 
   const statusMut = useMutation({
-    mutationFn: async (v: { entry: LineEntryDto; status: number }) => {
-      // Any non-dressed status pulls the player off every line slot first — an out-of-lineup
-      // player can't hold a line assignment.
-      if (v.status !== ROSTER_STATUS_DRESSED) {
+    mutationFn: async (v: { entry: LineEntryDto; dressed: boolean }) => {
+      // Scratching pulls the player off every line slot first — an out-of-lineup player can't hold
+      // a line assignment (mirrors the game's own invariant; matches eGlu.hSZj = 0).
+      if (!v.dressed) {
         for (const field of v.entry.slots) {
           await call("set_field", {
             projectId,
@@ -217,11 +212,11 @@ export function LinesTab({ projectId, teamId }: { projectId: number; teamId: num
           });
         }
       }
-      return call("set_roster_status", {
+      return call("set_dressed", {
         projectId,
         team: teamId,
         player: v.entry.player_id as number,
-        status: v.status,
+        dressed: v.dressed,
       });
     },
     onSuccess: refresh,
@@ -252,9 +247,8 @@ export function LinesTab({ projectId, teamId }: { projectId: number; teamId: num
   for (const e of entries) for (const f of e.slots) slotOwner.set(f, e.slot_record);
 
   const buckets = buildBuckets(view);
-  const scratched = entries.filter((e) => e.roster_status === ROSTER_STATUS_SCRATCHED);
-  const inMinors = entries.filter((e) => e.roster_status === ROSTER_STATUS_IN_MINORS);
-  const tabKeys = [...buckets.map((b) => b.key), SCRATCHED_TAB, IN_MINORS_TAB];
+  const scratched = entries.filter((e) => e.dressed === false);
+  const tabKeys = [...buckets.map((b) => b.key), SCRATCHED_TAB];
   const selectedKey = activeBucket && tabKeys.includes(activeBucket) ? activeBucket : tabKeys[0];
 
   const totalSlots = view.slot_fields.length;
@@ -310,12 +304,6 @@ export function LinesTab({ projectId, teamId }: { projectId: number; teamId: num
             active={selectedKey === SCRATCHED_TAB}
             onClick={() => setActiveBucket(SCRATCHED_TAB)}
           />
-          <BucketTab
-            label="In Minors"
-            count={inMinors.length}
-            active={selectedKey === IN_MINORS_TAB}
-            onClick={() => setActiveBucket(IN_MINORS_TAB)}
-          />
         </div>
         <div className="flex items-center gap-2 text-xs text-slate-500">
           <button
@@ -335,18 +323,14 @@ export function LinesTab({ projectId, teamId }: { projectId: number; teamId: num
       {lastError && <p className="text-xs text-rose-400">{lastError}</p>}
       <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_15rem]">
         <div className="min-w-0">
-          {selectedKey === SCRATCHED_TAB || selectedKey === IN_MINORS_TAB ? (
+          {selectedKey === SCRATCHED_TAB ? (
             <ScratchedList
-              title={selectedKey === SCRATCHED_TAB ? "Scratched" : "In Minors"}
-              emptyLabel={
-                selectedKey === SCRATCHED_TAB
-                  ? "No scratched players on this team."
-                  : "No players sent to the minors."
-              }
-              entries={selectedKey === SCRATCHED_TAB ? scratched : inMinors}
+              title="Scratched"
+              emptyLabel="No scratched players on this team."
+              entries={scratched}
               summaryOf={summaryOf}
               busy={statusMut.isPending}
-              onRestore={(entry) => statusMut.mutate({ entry, status: ROSTER_STATUS_DRESSED })}
+              onRestore={(entry) => statusMut.mutate({ entry, dressed: true })}
             />
           ) : (
             <div className="space-y-4">
@@ -373,7 +357,7 @@ export function LinesTab({ projectId, teamId }: { projectId: number; teamId: num
           summaryOf={summaryOf}
           activeRecords={new Set(slotOwner.values())}
           busy={busy || statusMut.isPending || archetypeMut.isPending}
-          onSetStatus={(entry, status) => statusMut.mutate({ entry, status })}
+          onSetStatus={(entry, dressed) => statusMut.mutate({ entry, dressed })}
           onSetArchetype={(record, value) => archetypeMut.mutate({ record, value })}
         />
       </div>
@@ -688,7 +672,7 @@ function RosterRail({
   summaryOf: Map<number, PlayerSummaryDto>;
   activeRecords: Set<number>;
   busy: boolean;
-  onSetStatus: (entry: LineEntryDto, status: number) => void;
+  onSetStatus: (entry: LineEntryDto, dressed: boolean) => void;
   onSetArchetype: (record: number, value: number) => void;
 }) {
   const [filter, setFilter] = useState<"All" | "C" | "LW" | "RW" | "D" | "G">("All");
@@ -790,10 +774,10 @@ function RailRow({
   styleLabels: Record<number, string>;
   onLine: boolean;
   busy: boolean;
-  onSetStatus: (entry: LineEntryDto, status: number) => void;
+  onSetStatus: (entry: LineEntryDto, dressed: boolean) => void;
   onSetArchetype: (record: number, value: number) => void;
 }) {
-  const outOfLineup = !isDressedStatus(entry.roster_status);
+  const outOfLineup = !isDressed(entry.dressed);
   const unassigned = !outOfLineup && !onLine;
   const inactive = summary?.is_active === false;
   const archetypeRaw = entry.style?.decoded ?? null;
@@ -870,18 +854,15 @@ function RailRow({
       </div>
       <div className="mt-1 flex items-center gap-1">
         <select
-          value={outOfLineup ? (entry.roster_status as number) : ROSTER_STATUS_DRESSED}
+          value={outOfLineup ? "scratched" : "dressed"}
           disabled={busy || entry.player_id == null}
-          onChange={(e) => onSetStatus(entry, Number(e.target.value))}
-          aria-label="Roster status"
-          title="Roster status (ZBac.RREB)"
+          onChange={(e) => onSetStatus(entry, e.target.value === "dressed")}
+          aria-label="Lineup status"
+          title="Lineup status (eGlu.hSZj: dressed or scratched)"
           className="min-w-0 flex-1 rounded border border-slate-700 bg-slate-950 px-1 py-0.5 text-[10px] text-slate-300 disabled:opacity-30"
         >
-          {ROSTER_STATUS_OPTIONS.map((o) => (
-            <option key={o.raw} value={o.raw}>
-              {o.label}
-            </option>
-          ))}
+          <option value="dressed">Dressed</option>
+          <option value="scratched">Scratched</option>
         </select>
         <select
           value={archetypeRaw ?? ""}
@@ -914,7 +895,7 @@ function planBestLines(
   slotOwner: Map<string, number>,
 ): Array<{ record: number; field: string; value: 0 | 1 }> {
   const candidates = entries
-    .filter((e) => e.roster_status !== ROSTER_STATUS_SCRATCHED && e.player_id != null)
+    .filter((e) => e.dressed !== false && e.player_id != null)
     .map((e) => ({ entry: e, summary: summaryOf.get(e.player_id as number) }))
     .filter((c): c is { entry: LineEntryDto; summary: PlayerSummaryDto } => c.summary !== undefined)
     .sort((a, b) => {

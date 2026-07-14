@@ -37,12 +37,15 @@ pub mod ids {
     pub const POSITION: &str = "vjla"; // ubPc position code (0..4, 4 = goalie)
     pub const INDEX_KEY: &str = "vfEq"; // ZBac key (XSWT target)
     pub const INDEX_TO_BIO: &str = "ykFq"; // ZBac → ubPc.wBIz
-    pub const INDEX_STATUS: &str = "RREB"; // ZBac roster status (2-bit)
+    // NOTE (Spike S4): `ZBac.RREB` is the PLAYER-TYPE discriminator (TNHLPlayerType), not roster
+    // status, so the model no longer reads it. The real dressed/scratched signal is the per-slot
+    // `eGlu.hSZj` boolean below.
     pub const SLOT_KEY: &str = "toWX"; // eGlu key
     pub const SLOT_TO_INDEX: &str = "XSWT"; // eGlu → ZBac.vfEq
     pub const SLOT_TEAM: &str = "dXSB"; // eGlu → kOtt.vfEq
     pub const SLOT_JERSEY: &str = "sVRt"; // eGlu jersey number (7-bit)
     pub const SLOT_CAPTAINCY: &str = "mCcl"; // eGlu captaincy (2-bit)
+    pub const SLOT_DRESSED: &str = "hSZj"; // eGlu "rosterstatus" dressed flag (1-bit: 1=dressed, 0=scratched)
     pub const TEAM_KEY: &str = "vfEq"; // kOtt key
 }
 
@@ -125,8 +128,10 @@ pub struct RosterSlot {
     pub index_key: Option<u64>,
     /// The player this slot resolves to (XSWT → ZBac.vfEq → ZBac.ykFq → ubPc.wBIz), if it resolves.
     pub player_id: Option<u64>,
-    /// Roster status from the bridged `ZBac.RREB`, if resolved.
-    pub roster_status: Option<u64>,
+    /// Lineup status from the per-slot `eGlu.hSZj` boolean: `Some(true)` = dressed, `Some(false)` =
+    /// scratched (out of the lineup), `None` if the field is absent. ("In minors" is *not* stored
+    /// here — it is a front-end depth-chart identifier derived from the player's main team.)
+    pub dressed: Option<bool>,
     pub jersey: Option<u64>,    // sVRt
     pub captaincy: Option<u64>, // mCcl
 }
@@ -150,11 +155,10 @@ impl std::fmt::Display for EntityError {
 }
 impl std::error::Error for EntityError {}
 
-/// One resolved player-index entry (`ZBac` row): the bio it points at and its roster status.
+/// One resolved player-index entry (`ZBac` row): the bio it points at.
 #[derive(Clone, Copy, Debug)]
 struct IndexEntry {
     player_id: u64, // ykFq
-    status: Option<u64>,
 }
 
 /// The assembled roster graph for one database.
@@ -261,7 +265,6 @@ impl RosterModel {
             .ok_or(EntityError::MissingTable(ids::INDEX))?;
         let idx_key = req_field(db, index_t, ids::INDEX, ids::INDEX_KEY)?;
         let idx_bio = req_field(db, index_t, ids::INDEX, ids::INDEX_TO_BIO)?;
-        let idx_status = field(db, index_t, ids::INDEX_STATUS);
         let mut index: HashMap<u64, IndexEntry> = HashMap::new();
         for i in 0..index_t.current_records as u32 {
             let (Some(vfeq), Some(player_id)) = (
@@ -270,13 +273,7 @@ impl RosterModel {
             ) else {
                 continue;
             };
-            index.insert(
-                vfeq,
-                IndexEntry {
-                    player_id,
-                    status: idx_status.and_then(|f| db.read_u64(index_t, i, f)),
-                },
-            );
+            index.insert(vfeq, IndexEntry { player_id });
         }
 
         // --- Roster slots (eGlu) ---
@@ -288,6 +285,7 @@ impl RosterModel {
         let slot_index = req_field(db, slot_t, ids::ROSTER_LINES, ids::SLOT_TO_INDEX)?;
         let slot_jersey = field(db, slot_t, ids::SLOT_JERSEY);
         let slot_captaincy = field(db, slot_t, ids::SLOT_CAPTAINCY);
+        let slot_dressed = field(db, slot_t, ids::SLOT_DRESSED);
         let slot_sentinel = if slot_index.bit_width >= 64 {
             u64::MAX
         } else {
@@ -311,7 +309,7 @@ impl RosterModel {
                 team_id,
                 index_key,
                 player_id: entry.map(|e| e.player_id),
-                roster_status: entry.and_then(|e| e.status),
+                dressed: slot_dressed.and_then(|f| db.read_u64(slot_t, i, f)).map(|v| v != 0),
                 jersey: slot_jersey.and_then(|f| db.read_u64(slot_t, i, f)),
                 captaincy: slot_captaincy.and_then(|f| db.read_u64(slot_t, i, f)),
             });

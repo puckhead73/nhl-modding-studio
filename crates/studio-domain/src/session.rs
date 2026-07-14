@@ -619,9 +619,10 @@ impl EditSession {
         self.run(|tx| tx.autocorrect_duplicate_jerseys())
     }
 
-    /// Set a player's roster status (2-bit `ZBac.RREB`).
-    pub fn set_roster_status(&mut self, team: u64, player: u64, status: u64) -> Result<OpOutcome> {
-        self.run(|tx| tx.set_roster_status(team, player, status))
+    /// Set a player's lineup status (dressed vs. scratched) on their slot in `team`'s block — the
+    /// per-slot `eGlu.hSZj` boolean (Spike S4). Not `ZBac.RREB` (that is player type).
+    pub fn set_dressed(&mut self, team: u64, player: u64, dressed: bool) -> Result<OpOutcome> {
+        self.run(|tx| tx.set_dressed(team, player, dressed))
     }
 
     // --- Save spine ---

@@ -328,9 +328,10 @@ function ArenaSelect({
 // Depth Chart tab — the reference layout: five position blocks (LW / C / RW on
 // top, D / G centered below). Each block lists the team's primary roster
 // (players whose main team is this team) above a separator, with "in the
-// system" players below it: anyone under this team's NHL rights (`proteam`)
-// currently playing elsewhere, plus the AHL affiliate's roster (`kOtt.CsxT`)
-// as a fallback for AHL-contract players whose rights field is unset.
+// system" players below it: anyone under this team's contract/rights (`proteam`)
+// whose main team (`dXSB`) is elsewhere, plus the AHL affiliate's roster
+// (`kOtt.CsxT`) as a fallback for AHL-contract players whose rights field is unset.
+// This is a front-end identifier only (Spike S4) — it is NOT a stored roster status.
 // ---------------------------------------------------------------------------
 
 const POSITION_BUCKETS = ["LW", "C", "RW", "D", "G"] as const;

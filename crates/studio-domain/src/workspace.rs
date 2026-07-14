@@ -294,8 +294,8 @@ impl Workspace {
         self.fan_out_entity(move |s| s.set_jersey_number(team, player, number))
     }
 
-    pub fn set_roster_status(&mut self, team: u64, player: u64, status: u64) -> Result<OpOutcome> {
-        self.fan_out_entity(move |s| s.set_roster_status(team, player, status))
+    pub fn set_dressed(&mut self, team: u64, player: u64, dressed: bool) -> Result<OpOutcome> {
+        self.fan_out_entity(move |s| s.set_dressed(team, player, dressed))
     }
 
     /// Auto-correct duplicate jersey numbers across the DB (the default reassignment logic), mirroring

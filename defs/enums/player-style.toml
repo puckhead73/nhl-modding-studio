@@ -5,26 +5,64 @@
 # (raw 1..4). Raw 0 is unused; the goalie style code lives in a
 # different field. Sub-range membership is interpreted on the consumer
 # side — this enum simply ships the ten labels with their raw codes.
+#
+# Spike S4 (2026-07-13) re-verified this mapping against the committed
+# legacy anchor and CONFIRMED it (it was NOT the off-by-one it first
+# looked like). Distribution of dSvy.QgFs bucketed by ubPc position:
+# defensemen occupy exactly {1,2,3,4}, forwards exactly {5,6,7,8,9,10},
+# and NO record uses 0 — so the on-disk skater code is 1-based (0 = unset),
+# and the modal forward code 9 (~1300 rows) is Two-Way Forward, exactly as
+# below. The NHLViewNG EXE RTTI enum `TNHLPlayerAiStyle [0..10]` (unit
+# uDatabaseTypes) is NHLViewNG's own 0-based editor vocabulary; it
+# corroborates codes 1..8 and 10 at a +1 offset, but it is NOT the codec
+# for this field — it is 0-based, carries an extra internal style
+# (`psDangler`) the shipped 4-bit field does not use, and disagrees at
+# code 9, where the anchor distribution sides with Two-Way Forward.
+# NOTE the offset is field-specific: the sibling goalie code `mHuy.QgFs`
+# is 0-based on disk (goalie-style.toml), while this skater code is 1-based.
 
 name = "Player Style"
 confidence = "Confirmed"
 notes = """
 Ten-value player style code combining defenseman roles (raw 1..4) and
 forward roles (raw 5..10). Mapping locked in during the operator's Phase
-5T research; the unified table is the one the in-game default-style
-selector renders. Raw 0 is unused. The goalie-style code is a separate
-two-bit field with its own enum (not shipped here yet).
+5T research and re-verified against the legacy anchor in Spike S4 (skater
+QgFs is 1-based; 0 = unset). The unified table is the one the in-game
+default-style selector renders. Bound to every skater `playerstyle`/`QgFs`
+site verified in the anchor — the exhibition roster (`eGlu`) and skater-AI
+(`dSvy`) tables and their career-mode mirrors — all sharing this 1-based
+mapping. The goalie-style code is a separate two-bit 0-based field with its
+own enum (goalie-style.toml).
 """
 
 [source]
 kind = "operator-research"
-description = "Phase 5T unified default-style promotion (NHL Legacy default.db)"
+description = "Phase 5T unified default-style promotion (NHL Legacy default.db); re-verified vs the committed legacy anchor distribution in Spike S4, with NHLViewNG EXE RTTI `TNHLPlayerAiStyle` as (offset) corroboration"
+
+[[bindings]]
+# eGlu (exhibition roster table) — the Spike S4 target field; distribution
+# verified to match dSvy (1-based, D 1..4 / F 5..10).
+field_name = "Player Style"
+field_raw_id = "QgFs"
+table_raw_id = "eGlu"
 
 [[bindings]]
 # Skater AI table; field also known as the 4-bit default-style code.
 field_name = "Player Style"
 field_raw_id = "QgFs"
 table_raw_id = "dSvy"
+
+[[bindings]]
+# YQgr (career-mode league roster table) — same field/vocab, career mirror.
+field_name = "Player Style"
+field_raw_id = "QgFs"
+table_raw_id = "YQgr"
+
+[[bindings]]
+# vLiw (career-mode league skater AI) — same field/vocab, career mirror.
+field_name = "Player Style"
+field_raw_id = "QgFs"
+table_raw_id = "vLiw"
 
 [[entries]]
 raw = 1

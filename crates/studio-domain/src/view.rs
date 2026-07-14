@@ -250,7 +250,8 @@ pub struct RosterMembership {
     pub team_name: Option<String>,
     pub jersey: Option<u64>,
     pub captaincy: Option<u64>,
-    pub roster_status: Option<u64>,
+    /// Lineup status from `eGlu.hSZj`: `Some(true)` dressed, `Some(false)` scratched (Spike S4).
+    pub dressed: Option<bool>,
 }
 
 /// A compact player row for the master list and the team depth chart.
@@ -778,13 +779,14 @@ pub struct LineEntry {
     pub position_label: String,
     pub jersey: Option<u64>,
     pub captaincy: Option<u64>,
-    pub roster_status: Option<u64>,
+    /// Lineup status from `eGlu.hSZj`: `Some(true)` dressed, `Some(false)` scratched (Spike S4).
+    pub dressed: Option<bool>,
     /// Studio field ids of the 1-bit situational flags set on this `eGlu` row (see
     /// [`LinesView::slot_fields`] for the id → name catalog).
     pub slots: Vec<String>,
-    /// The per-slot archetype cell (`eGlu.QgFs`), when the schema carries it. The binding is
-    /// **provisional** (distinct from the confirmed `dSvy`/`mHuy.QgFs` style enums) — the UI
-    /// borrows the style vocabularies and hedges visibly.
+    /// The per-slot archetype cell (`eGlu.QgFs`), when the schema carries it. Spike S4 confirmed
+    /// this binding: the anchor distribution matches the skater `dSvy.QgFs` style enum (1-based),
+    /// so it renders through the shared confirmed Player Style vocabulary.
     pub style: Option<FieldView>,
 }
 
@@ -889,7 +891,7 @@ pub fn lines_view(
                 position_label,
                 jersey: slot.jersey,
                 captaincy: slot.captaincy,
-                roster_status: slot.roster_status,
+                dressed: slot.dressed,
                 slots: set_slots,
                 style: style_f.map(|f| read_field(db, meta, enums, eglu, slot.record, f)),
             }
@@ -1462,7 +1464,7 @@ pub fn player_view(
             team_name: team_name_by_id(db, meta, model, s.team_id),
             jersey: s.jersey,
             captaincy: s.captaincy,
-            roster_status: s.roster_status,
+            dressed: s.dressed,
         })
         .collect();
 

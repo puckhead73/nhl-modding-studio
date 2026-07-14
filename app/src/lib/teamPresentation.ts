@@ -266,20 +266,12 @@ export const GOALIE_STYLE_LABELS: Record<number, string> = {
 };
 
 // ---------------------------------------------------------------------------
-// Roster status (`ZBac.RREB`) — candidate labels held from the reference audit
+// Lineup status (`eGlu.hSZj`) — the real per-slot dressed/scratched flag (Spike S4).
+// "In Minors" is NOT a stored status; it is a Depth-Chart identifier for players under contract to a
+// team whose main team is elsewhere (see the Depth Chart tab).
 // ---------------------------------------------------------------------------
 
-export const ROSTER_STATUS_DRESSED = 0;
-export const ROSTER_STATUS_SCRATCHED = 1;
-export const ROSTER_STATUS_IN_MINORS = 3;
-
-/** The three operator-facing states (raw 2 is reachable but unlabelled in-game). */
-export const ROSTER_STATUS_OPTIONS: ReadonlyArray<{ raw: number; label: string }> = [
-  { raw: ROSTER_STATUS_DRESSED, label: "Dressed" },
-  { raw: ROSTER_STATUS_SCRATCHED, label: "Scratched" },
-  { raw: ROSTER_STATUS_IN_MINORS, label: "In Minors" },
-];
-
-export function isDressedStatus(raw: number | null | undefined): boolean {
-  return raw !== ROSTER_STATUS_SCRATCHED && raw !== ROSTER_STATUS_IN_MINORS;
+/** A slot is dressed unless explicitly scratched (`dressed === false`). `null` (no slot) reads as dressed. */
+export function isDressed(dressed: boolean | null | undefined): boolean {
+  return dressed !== false;
 }

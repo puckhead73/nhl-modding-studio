@@ -2,8 +2,10 @@
 
 > **Status: structure VERIFIED** by decode of `anchors/ps3/nhllegacy/databases/nhlng.db` (PS3 NHL
 > Legacy), 2026-06-30, via `RosterModel::build` + a direct `ZBac` pass. The **pool-membership
-> mechanism is confirmed**; the **free-agent-vs-hidden sub-label is still candidate** (needs operator
-> confirmation — Spike S4 overlap). Resolves the open pool question for Phase 4.2 `free_agent`.
+> mechanism is confirmed** (slot presence, model A). Resolves the open pool question for Phase 4.2
+> `free_agent`. **Update (Spike S4, 2026-07-13):** `ZBac.RREB` — previously read here as a
+> "roster-status" sub-label — is actually the **player-type** discriminator (`TNHLPlayerType`); see
+> the resolved section below. It is unrelated to pool membership.
 
 ## Question
 
@@ -31,41 +33,55 @@ Decoded counts on the anchor:
 referenced by no `eGlu` slot.** Pool membership is structural (slot presence), confirming model A — but
 at the index→slot hop, not bio→slot. There is **no sentinel team and no unindexed-bio pool.**
 
-## Free-agent vs hidden sub-label — CANDIDATE (`ZBac.RREB`), not yet confirmed
+## `ZBac.RREB` is PLAYER TYPE, not roster status — RESOLVED (Spike S4 follow-up, 2026-07-13)
 
-`ZBac.RREB` (2-bit roster-status enum) distribution:
+Earlier revisions of this audit read `ZBac.RREB` as a "roster status" enum. **That was wrong.**
+`ZBac` (binary `caBZ`) is EA's **"exhibitionplayers" index table** — `index` (`vfEq`), `playerid`
+(`ykFq`), and **`table` (`RREB`, 2-bit, meta name literally "table")**. `RREB` is the **player
+source/type** discriminator, confirmed three ways ([player-type.toml](../../defs/enums/player-type.toml)):
 
-| RREB code | placed rows | unplaced rows |
-|---:|---:|---:|
-| 0 | 5487 | 361 |
-| 1 | 0 | 180 |
-| 2 | 0 | 13 |
-| 3 | 44 | 2 |
+| RREB code | placed | unplaced | pointed-to bio `active` | `TNHLPlayerType` |
+|---:|---:|---:|:--|:--|
+| 0 | 5487 | 361 | **all active=1** | `plrBuiltIn` → Built-In |
+| 1 | 0 | 180 | **all active=0** | `plrUserCreated` → User-Created |
+| 2 | 0 | 13 | active=1 | `plrSpecial` → Special |
+| 3 | 44 | 2 | active=1 | `plrDeveloper` → Developer |
 
-Reading:
-- Among **placed** players RREB is **only 0 or 3** → `0` = active/dressed, `3` = a bench/scratch/minors
-  status (label unconfirmed).
-- Codes **1 and 2 appear only on unplaced players** (180 and 13) → the strongest **candidate** that
-  the off-roster pool is itself sub-divided by RREB (e.g. `1` = free agent, `2`/`3` = hidden/other),
-  but the value→label mapping is **NOT confirmed** and must come from operator/NHLViewNG ground truth
-  (Spike S4). Do not assert these labels as in-game-true (CLAUDE.md rule 3).
+1. **EXE RTTI** (unit `uDatabaseTypes`) has exactly one 4-value `[0..3]` enum that fits the 2-bit
+   field: `TNHLPlayerType {plrBuiltIn, plrUserCreated, plrSpecial, plrDeveloper}`. The roster-status
+   (`TNHLRosterPlayerStatus`) and contract-status enums are **3-valued** and cannot fit.
+2. **Meta name "table"** = *which player table the index points into* = the player's source.
+3. **Data:** the code correlates **1:1 with the pointed-to bio `active` flag** (code 0 = all active
+   built-ins; code 1 = all-inactive created-player-pool slots). A roster status would never do that.
+
+The **real roster status** (dressed vs. scratched) is the separate **1-bit boolean `eGlu.hSZj`**
+(meta name "rosterstatus"; anchor split `{0:1092, 1:4440}`). "In Minors" (the 3rd
+`TNHLRosterPlayerStatus` value) is **not** stored on that 1-bit field — it is a structural/editor
+concept. `TNHLPlayerContractStatus {Unrestricted, Signed, Unsigned}` was also recovered from the EXE
+but has no confirmed field home here.
+
+> ✅ **Cross-stack mislabeling bug this uncovered — FIXED.** The `set_roster_status` op (which wrote
+> `ZBac.RREB`) and the `LinesTab`/`JerseyCaptaincyTab` "dressed/scratched/in-minors" UI were rebuilt:
+> lineup status is now the **`set_dressed`** op on the real per-slot boolean **`eGlu.hSZj`**
+> (`1`=dressed, `0`=scratched), the entity/DTO field is `dressed: Option<bool>`, and the "in the
+> minors" concept is now a **Depth-Chart-only front-end identifier** — the "In the system" section
+> (players under this team's contract/rights whose main team `dXSB` is elsewhere). `ZBac.RREB` is
+> exposed only as the Player Type enum. See the Phase 4 plan's Spike S4 section.
 
 ## Implications for Phase 4.2 (`free_agent`) and 4.1 (`hide`/`unhide`)
 
 - **`free_agent` is fundamentally a slot occupancy change, not a field flag** (consistent with the
   [`toWX`-block finding](towx-blocks.md)):
-  - *release to pool* = clear the player's slot `XSWT` (the slot becomes the empty kind we observe),
-    optionally set the pool `RREB` code.
+  - *release to pool* = clear the player's slot `XSWT` (the slot becomes the empty kind we observe).
+    (Do **not** touch `RREB` — it is player type, unrelated to pool membership.)
   - *sign from pool* = place the player's `ZBac.vfEq` into a free slot in the target team's block —
     blocks are full, so this generally needs block growth (capacity normalization, Spike S3 / 4.4).
-- **`hide`/`unhide`** is most likely the same unplace/place mechanism distinguished by the (candidate)
-  `RREB` code rather than a separate field — fold into the pool ops once the RREB labels are confirmed,
-  rather than scoping a distinct field op.
-- The on-team `set_roster_status` op already writes `ZBac.RREB`; the same field carries the pool
-  sub-status — so the plumbing exists, only the label semantics are open.
+- **`hide`/`unhide`** is the unplace/place mechanism (slot presence, per S1) — **not** an `RREB`
+  sub-status. The earlier "fold into RREB" idea is dropped now that RREB is player type.
 
 ## Reproduction
 
 `RosterModel::build` over the anchor for slots; a direct `ZBac` pass reading `vfEq`/`ykFq`/`RREB`;
-partition `ZBac` rows by whether their `vfEq` ∈ {slot `index_key`}; histogram `RREB` on each side.
-(Spike example removed after capture.)
+partition rows by whether `vfEq` ∈ {slot `index_key`} and histogram `RREB` on each side; join
+`ykFq` → `ubPc.wBIz` and read the bio `active` flag per `RREB` code (the 1:1 correlation that
+identifies `RREB` as player type). (Spike probes removed after capture.)

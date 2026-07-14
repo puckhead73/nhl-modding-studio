@@ -68,7 +68,7 @@ macro_rules! command_handler {
             $crate::commands::set_jersey_number,
             $crate::commands::retire_jersey,
             $crate::commands::unretire_jersey,
-            $crate::commands::set_roster_status,
+            $crate::commands::set_dressed,
             $crate::commands::undo,
             $crate::commands::redo,
             $crate::commands::save_project,

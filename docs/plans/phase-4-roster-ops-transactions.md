@@ -74,21 +74,54 @@ rewrite the **occupant (`XSWT`)**, not the slot's team (`dXSB`); (b) the old `mo
 `towx_coherence` predicate (4.3) still needs adding so the audit guards against regressions; (c)
 signing into a full block requires block growth (capacity, 4.4).
 
-### Spike S3 — Capacity ceilings  →  gates 4C normalization
-**Question:** what are the per-(title, platform) full-size record counts for the roster-bearing tables
-(`ubPc`, `ZBac`, `dSvy`, `xmja`, `mHuy`, `fMVl`, `eGlu`)? The ceiling is the **vanilla save's** table
-size, against which a game-trimmed roster save is grown.
-**Method:** read `current_records`/`max_records` for those tables from the bundled vanilla saves in
-`anchors/` (e.g. `anchors/ps3/nhllegacy/`, `anchors/ps4/nhl15|nhl16/`); compare to a trimmed roster
-save's counts to confirm growth is actually needed and by how much.
-**Output:** `docs/audits/roster-capacity.md` — a ceiling table sourced from real bytes (no hardcoded
-guesses). Feeds the normalization pass in 4C.
+### Spike S3 — Capacity ceilings  →  ✅ RESOLVED 2026-07-13
+**Result:** [docs/audits/roster-capacity.md](../audits/roster-capacity.md). Ceilings for all seven
+roster-bearing tables (`ZBac`, `ubPc`, `dSvy`, `xmja`, `mHuy`, `fMVl`, `eGlu`) read from real anchor
+bytes across every title/platform (all CRC-clean). **Key finding — the ceiling is `max_records`, and
+where it lives differs by generation:** the **GEN7 main `nhlng.db` is packed** (`max == cur`) and does
+*not* expose it — the ceiling lives in the vanilla **PS3 ROSTER save's `max_records`** (which ships ~2×
+the shipped population as slack); on **PS4 the main `nhl_game.db` already carries the slack**, so its
+`max_records` *is* the ceiling (== vanilla ROSTER `max`). Cross-validated by two exact identities
+(PS3 NHL 15 ROSTER `max` ≡ PS4 NHL 15 main `max`; PS3 Legacy ≡ PS4 NHL 16) — the ceiling is a property
+of the roster-content **year**, platform-independent. **Consequences for 4.4:** (a) PS4 derives the
+ceiling at runtime from the attached main DB (no constants); GEN7 must carry the doc's ceiling table as
+a `title→ceilings` constant (packed main DB can't supply it); (b) normalization grows **`max_records`,
+not `current_records`** (pre-allocate slack, matching the vanilla ROSTER shape); (c) **no committed
+anchor is trimmed below its ceiling**, so within the anchor set the pass is a no-op — 4.4 must verify
+growth against a **synthetically-packed fixture** (pack `max` down to `cur`, normalize back).
 
-### Spike S4 (minor) — Enum labels for status/style
-Confirm `ZBac.RREB` roster-status and `eGlu.QgFs` player-style value→label mappings (currently
-**candidate**, [roster-relationships.md:70-76](../audits/roster-relationships.md)). Ops can write the
-codes regardless; this only governs whether the UI labels are shown as confirmed or
-"meta-derived (unverified)". Non-blocking — can run alongside 4D.
+### Spike S4 (minor) — Enum labels for status/style  →  ⏳ MOSTLY RESOLVED 2026-07-13
+Confirmed via the **NHLViewNG EXE Delphi RTTI** (unit `uDatabaseTypes`, per-instance clean-room
+exception — same path as captaincy):
+- **`eGlu.QgFs` player style — ✅ CONFIRMED.** The Phase 5T Player Style mapping, **re-verified
+  1-based** against the committed legacy anchor: dSvy.QgFs bucketed by position shows D=1..4, F=5..10,
+  no code 0 (0=unset), and code 9 (modal forward) = Two-Way Forward. The EXE RTTI
+  `TNHLPlayerAiStyle [0..10]` is NHLViewNG's own 0-based editor enum — it corroborates codes 1..8/10
+  at a +1 offset but is not the field codec (carries an internal `psDangler` the 4-bit field never
+  uses; disagrees at code 9). The offset is **field-specific**: goalie `mHuy.QgFs` is 0-based. Shipped
+  [player-style.toml](../../defs/enums/player-style.toml) now binds the roster table (`eGlu`, the S4
+  target), skater-AI (`dSvy`), and both career-mode mirrors.
+- **`eGlu.hSZj` — ✅ RESOLVED.** 1-bit ⇒ a Delphi `Boolean` (dressed/active flag); no enum vocab.
+- **`ZBac.RREB` — ✅ RESOLVED (follow-up): it is PLAYER TYPE, not roster status.** `ZBac` is EA's
+  "exhibitionplayers" index table; `RREB` (meta name "table", 2-bit) is the player-source
+  discriminator `TNHLPlayerType {Built-In, User-Created, Special, Developer}` — confirmed by EXE RTTI
+  (the only 4-value enum that fits), the "table" meta name, and a 1:1 correlation with the pointed-to
+  bio `active` flag in the anchor. Shipped [player-type.toml](../../defs/enums/player-type.toml). The
+  **real** dressed/scratched status is the 1-bit `eGlu.hSZj` boolean (anchor split `{0:1092,1:4440}`);
+  "In Minors" is not stored there.
+
+  > ✅ **Bug this uncovered — FIXED (2026-07-13).** `set_roster_status` (which wrote `ZBac.RREB`) was
+  > replaced by **`set_dressed`**, writing the real per-slot boolean **`eGlu.hSZj`** (`1`=dressed,
+  > `0`=scratched — direction verified against the anchor: dressed rows hold line flags, scratched
+  > hold none). The entity/DTO field `roster_status` became **`dressed: Option<bool>`**; `LinesTab`
+  > now shows a Dressed/Scratched toggle (no In-Minors tab). The "in the minors" concept is now
+  > purely a **front-end Depth-Chart identifier** — the Depth Chart's **"In the system"** section:
+  > players under this team's contract/rights whose main team (`dXSB`) is elsewhere. `ZBac.RREB` is exposed only
+  > as the confirmed Player Type enum. Cross-stack (txn/session/workspace/registry/command + DTO +
+  > regenerated TS + `LinesTab`/`JerseyCaptaincyTab`/`teamPresentation`/Depth Chart); tests green.
+
+Ops can write the codes regardless; this only governs whether the UI labels are shown as confirmed or
+"meta-derived (unverified)". Non-blocking — ran alongside 4D.
 
 ---
 
@@ -263,7 +296,10 @@ each command end-to-end on the anchor.
    to inline repair buttons that run the relevant op (e.g. demote-extra-captain via `set_captaincy`,
    companion/dup repairs once their ops exist). Only wire repairs backed by a real op; label the rest
    "manual".
-3. Status/style labels rendered from S4 (confirmed) or badged "meta-derived (unverified)".
+3. **Player style** rendered from the confirmed S4 enum ([player-style.toml](../../defs/enums/player-style.toml));
+   **`ZBac.RREB`** rendered as **Player Type** ([player-type.toml](../../defs/enums/player-type.toml)),
+   not roster status — and the mislabeled dressed/scratched feature repointed to `eGlu.hSZj` (see the
+   S4 bug note above).
 
 *Verify (functional gate):* with an anchor loaded, move/copy/trade/delete between two teams persist,
 flip dirty, keep validation clean, and survive save→reload; an out-of-capacity sign and a dup-jersey
@@ -297,7 +333,13 @@ surface the backend error without corrupting state; `npm run build` + `cargo tes
   any future regression.
 - **`assign_line_slot`** — deferred (71 line flags unmapped). Stays out until an emulator round-trip
   maps slot→position.
-- **Capacity ceilings** — must come from real vanilla-save bytes (S3), never hardcoded; titles beyond
-  the proven Legacy/14/15 set are not in-scope to *verify* here.
-- **Enum labels** — status/style stay "meta-derived" in the UI until S4 confirms; ops write codes
-  regardless.
+- **Capacity ceilings** — ✅ resolved (S3, [roster-capacity.md](../audits/roster-capacity.md)): ceilings
+  read from real bytes. GEN7 ceiling = vanilla PS3 ROSTER `max_records` (main DB is packed); PS4 ceiling
+  = `nhl_game.db` `max_records`, runtime-derivable. Grow `max`, not `cur`. PS4 titles beyond the proven
+  Legacy/14/15 set are real reads but still gated on a round-trip/in-game check before asserted working.
+- **Enum labels (S4)** — all resolved. Player style (re-verified 1-based vs the anchor; bound to `eGlu`
+  + career mirrors), captaincy, goalie style, and **`ZBac.RREB` = player type**
+  ([player-type.toml](../../defs/enums/player-type.toml)) are confirmed; `hSZj` is the boolean dressed/scratched flag. The follow-up also uncovered
+  (and **fixed**) a cross-stack bug — the dressed/scratched feature had been wired to `RREB` (player
+  type); it is now the `set_dressed` op on `eGlu.hSZj`, and the "in the minors" concept is the Depth
+  Chart's "In the system" section (front-end only). No enum labels remain "meta-derived".

@@ -4,12 +4,17 @@ import type { FieldViewDto } from "./FieldViewDto";
 /**
  * One roster entry on a team's depth chart.
  */
-export type LineEntryDto = { slot_record: number, player_id: number | null, name: string, position_label: string, jersey: number | null, captaincy: number | null, roster_status: number | null, 
+export type LineEntryDto = { slot_record: number, player_id: number | null, name: string, position_label: string, jersey: number | null, captaincy: number | null, 
+/**
+ * Lineup status from `eGlu.hSZj`: `true` dressed, `false` scratched, `null` if absent (Spike S4).
+ * ("In minors" is *not* here — it is a depth-chart identifier derived from the player's main team.)
+ */
+dressed: boolean | null, 
 /**
  * Studio field ids of the set 1-bit situational flags (see `LinesViewDto.slot_fields`).
  */
 slots: Array<string>, 
 /**
- * Per-slot archetype cell (`eGlu.QgFs`) — provisional binding; edit through `set_field`.
+ * Per-slot archetype cell (`eGlu.QgFs`) — Player Style enum (S4-confirmed); edit through `set_field`.
  */
 style: FieldViewDto | null, };

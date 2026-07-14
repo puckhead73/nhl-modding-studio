@@ -21,7 +21,7 @@ fn anchor_str(rel: &str) -> String {
 #[test]
 fn registry_loads_all_defs() {
     let reg = EnumRegistry::from_dir(defs_dir()).unwrap();
-    assert_eq!(reg.len(), 32, "expected the 32 shipped enum defs");
+    assert_eq!(reg.len(), 33, "expected the 33 shipped enum defs");
 
     // Arena Type (StEO.dxQr) — the ice-surface flag.
     assert_eq!(reg.label("StEO", "dxQr", 0), Some("NHL Ice (200×85)"));
@@ -46,11 +46,27 @@ fn registry_loads_all_defs() {
     assert_eq!(reg.label("eGlu", "mCcl", 1), Some("Captain"));
     assert_eq!(reg.label("eGlu", "mCcl", 2), Some("Alternate"));
 
-    // Player Style (dSvy.QgFs) and Goalie Style (mHuy.QgFs) share the QgFs field id but are
-    // distinct enums scoped by table — the registry must not collide them.
+    // Player Style (skater, 1-based on disk) and Goalie Style (mHuy.QgFs, 0-based) share the QgFs
+    // field id but are distinct enums scoped by table — the registry must not collide them.
+    // Spike S4 re-verified the skater mapping against the anchor and bound it to every skater `QgFs`
+    // site incl. the roster table (eGlu, the S4 target) and the career-mode mirrors.
     assert_eq!(reg.label("dSvy", "QgFs", 7), Some("Sniper"));
+    assert_eq!(reg.label("dSvy", "QgFs", 9), Some("Two-Way Forward"));
+    assert_eq!(reg.label("eGlu", "QgFs", 7), Some("Sniper"));
+    assert_eq!(reg.label("eGlu", "QgFs", 1), Some("Defensive Defenseman"));
     assert_eq!(reg.label("mHuy", "QgFs", 2), Some("Butterfly"));
     assert!(reg.for_field("dSvy", "QgFs").unwrap().name != reg.for_field("mHuy", "QgFs").unwrap().name);
+    // Same enum instance backs the roster table and the skater-AI table.
+    assert_eq!(
+        reg.for_field("eGlu", "QgFs").unwrap().name,
+        reg.for_field("dSvy", "QgFs").unwrap().name
+    );
+
+    // Player Type (ZBac.RREB) — the S4-follow-up resolution: RREB is the player source
+    // discriminator (TNHLPlayerType), NOT roster status.
+    assert_eq!(reg.label("ZBac", "RREB", 0), Some("Built-In"));
+    assert_eq!(reg.label("ZBac", "RREB", 1), Some("User-Created"));
+    assert_eq!(reg.label("ZBac", "RREB", 3), Some("Developer"));
 
     // Team strategies (EeYo) — each tactic vocabulary resolves on both the exhibition table and
     // its career-mode mirror (JUfQ), and the shared Line Style vocab binds all four line fields.
