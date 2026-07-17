@@ -870,6 +870,41 @@ impl EditTransaction {
         Ok(keys)
     }
 
+    /// The player's smallest `ZBac.vfEq` index key that is **usable as a slot occupant** — i.e. a
+    /// value the model will resolve when written into `eGlu.XSWT`: non-zero and not the slot field's
+    /// all-ones sentinel (both read as a *vacant* slot). Some players carry a spurious `vfEq==0`
+    /// index row; selecting it would write `XSWT=0` and silently unslot the sign/membership. Errors
+    /// [`EditError::NoSuchPlayer`] if the player has no usable key.
+    fn player_slot_index_key(&self, player_id: u64) -> Result<u64, EditError> {
+        // The `XSWT` sentinel = all-ones of the slot-index field width (mirrors `RosterModel::build`).
+        let sentinel = {
+            let view = self.working.clone();
+            let db = TdbFile::parse(&view).map_err(|e| EditError::Parse(e.to_string()))?;
+            let slot_t = db
+                .table_canonical(ids::ROSTER_LINES)
+                .ok_or_else(|| EditError::UnknownTable(ids::ROSTER_LINES.to_string()))?;
+            let w = slot_t
+                .fields
+                .iter()
+                .find(|f| f.id.canonical(db.endian) == ids::SLOT_TO_INDEX)
+                .ok_or_else(|| EditError::UnknownField {
+                    table: ids::ROSTER_LINES.to_string(),
+                    field: ids::SLOT_TO_INDEX.to_string(),
+                })?
+                .bit_width;
+            if w >= 64 {
+                u64::MAX
+            } else {
+                (1u64 << w) - 1
+            }
+        };
+        self.player_index_keys(player_id)?
+            .into_iter()
+            .filter(|&k| k != 0 && k != sentinel)
+            .min()
+            .ok_or(EditError::NoSuchPlayer(player_id))
+    }
+
     /// The index of the first record whose studio field equals `value`, if any.
     fn find_record(
         &self,
@@ -1374,11 +1409,11 @@ impl EditTransaction {
             if model.slots.iter().any(|s| s.player_id == Some(player_id)) {
                 return Err(EditError::AlreadyRostered { player: player_id });
             }
-            // The player's index key (`ZBac.vfEq`); smallest if somehow several, for determinism.
-            self.player_index_keys(player_id)?
-                .into_iter()
-                .min()
-                .ok_or(EditError::NoSuchPlayer(player_id))?
+            // The player's index key (`ZBac.vfEq`) to install as the slot occupant. Must be usable
+            // as an `XSWT` pointer, so exclude `0`/the slot sentinel — those read as a *vacant* slot
+            // (some players carry a spurious `vfEq==0` index row; picking it would silently unslot
+            // the sign). Smallest of the remaining, for determinism.
+            self.player_slot_index_key(player_id)?
         };
         self.with_repairing_transaction(|tx| {
             let model = tx.model()?;
@@ -1437,10 +1472,8 @@ impl EditTransaction {
                     value: to_team as i64,
                 });
             }
-            self.player_index_keys(player_id)?
-                .into_iter()
-                .min()
-                .ok_or(EditError::NoSuchPlayer(player_id))?
+            // Slot-usable index key (non-zero, non-sentinel) — see `sign_from_fa`.
+            self.player_slot_index_key(player_id)?
         };
         self.with_repairing_transaction(|tx| {
             let model = tx.model()?;

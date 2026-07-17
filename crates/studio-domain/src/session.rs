@@ -92,6 +92,30 @@ impl EditSession {
         self.redo.len()
     }
 
+    /// Grow one table's **allocation** (`max_records`) up to `new_max`, leaving its population
+    /// (`current_records`) untouched — the Phase 4.4 capacity-normalization primitive
+    /// (docs/audits/roster-capacity.md). Runs **outside** the undo history: it is a load-time
+    /// repair of a packed file back to the vanilla pre-allocated shape, not a user edit.
+    ///
+    /// Returns `Some((from, to))` when the table grew, `None` when it is absent from this file's
+    /// subset or already at/above `new_max` (idempotent).
+    pub fn grow_table_max(&mut self, canonical_table: &str, new_max: u16) -> Result<Option<(u16, u16)>> {
+        let db = TdbFile::parse(&self.working)?;
+        let Some(t) = db.table_canonical(canonical_table) else {
+            return Ok(None); // not in this file's table subset — nothing to normalize
+        };
+        let from = t.max_records;
+        if from >= new_max {
+            return Ok(None);
+        }
+        let raw = t.id.raw();
+        let grown = db
+            .grow_table_max(&raw, new_max)
+            .map_err(|e| DomainError::Edit(EditError::Alloc(e.to_string())))?;
+        self.working = grown;
+        Ok(Some((from, new_max)))
+    }
+
     /// A structural summary of the current working database (table list, sizes, CRC/size checks).
     pub fn overview(&self) -> Result<crate::DbOverview> {
         let db = TdbFile::parse(&self.working)?;

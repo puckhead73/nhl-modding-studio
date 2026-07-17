@@ -203,6 +203,16 @@ pub fn list_players(
     registry.list_players(project_id).map_err(|e| e.to_string())
 }
 
+/// The free-agent pool (players occupying no roster slot — the S1 occupancy model), in the
+/// master-list row shape.
+#[tauri::command]
+pub fn list_free_agents(
+    registry: State<'_, Registry>,
+    project_id: u32,
+) -> CmdResult<Vec<PlayerSummaryDto>> {
+    registry.list_free_agents(project_id).map_err(|e| e.to_string())
+}
+
 #[tauri::command]
 pub fn player_view(
     registry: State<'_, Registry>,

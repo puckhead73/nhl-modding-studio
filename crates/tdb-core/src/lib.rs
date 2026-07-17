@@ -629,6 +629,55 @@ impl TdbFile<'_> {
         Ok((buf, new_index))
     }
 
+    /// Grow a table's **allocation** to `new_max` records without touching its population:
+    /// `(new_max - max_records)` zeroed slack slots are appended to the table's record region,
+    /// every later table's directory offset is shifted, `db_size` and `max_records` are updated,
+    /// and all CRCs are recomputed — `current_records` is unchanged. This is [`append_record`]'s
+    /// growth path generalized to a bulk pre-allocation (the vanilla ROSTER-save shape:
+    /// `current < max`), used by roster capacity normalization.
+    ///
+    /// Idempotent: `new_max <= max_records` returns the bytes unchanged.
+    ///
+    /// [`append_record`]: TdbFile::append_record
+    pub fn grow_table_max(&self, table_raw: &str, new_max: u16) -> Result<Vec<u8>, AllocError> {
+        let t = self.table(table_raw).ok_or(AllocError::UnknownTable)?;
+        let max = t.max_records;
+        if new_max <= max {
+            return Ok(self.bytes.to_vec());
+        }
+        let reclen = t.record_len_bytes as usize;
+        let added = (new_max - max) as usize * reclen;
+        let insert_at = t.record_block + max as usize * reclen;
+        if insert_at > self.bytes.len() {
+            return Err(AllocError::OutOfBounds);
+        }
+        let block_offset = t.block_offset;
+
+        let mut buf = Vec::with_capacity(self.bytes.len() + added);
+        buf.extend_from_slice(&self.bytes[..insert_at]);
+        buf.extend(std::iter::repeat_n(0u8, added));
+        buf.extend_from_slice(&self.bytes[insert_at..]);
+
+        // Shift the directory offset of every table whose block begins at/after the insertion point.
+        let dir_end = FILE_HEADER + 8 * self.tables.len();
+        for i in 0..self.tables.len() {
+            let entry = FILE_HEADER + i * 8;
+            let off = u32_at(&buf, entry + 4, self.endian) as usize;
+            if dir_end + off >= insert_at {
+                write_u32(&mut buf, entry + 4, (off + added) as u32, self.endian);
+            }
+        }
+        // Grow the table's max (current stays) and the file's db_size.
+        write_u16(&mut buf, block_offset + 0x14, new_max, self.endian);
+        write_u32(&mut buf, 0x08, self.db_size + added as u32, self.endian);
+
+        // Recompute all CRCs over the new structure (re-parse a clone to satisfy the borrow checker).
+        let view = buf.clone();
+        let db = TdbFile::parse(&view).map_err(AllocError::Reparse)?;
+        db.recompute_crcs(&mut buf);
+        Ok(buf)
+    }
+
     /// Remove a record by **swap-pop**: the last record is moved into the removed slot and
     /// `current_records` is decremented (the freed slot stays allocated as reusable slack, so the file
     /// length is unchanged). Returns the **new file bytes** (CRCs recomputed) and, when a relocation

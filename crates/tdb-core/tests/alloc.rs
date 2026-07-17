@@ -88,6 +88,60 @@ fn remove_swap_pop_relocates_tail() {
     );
 }
 
+/// Bulk allocation growth: `grow_table_max` adds zeroed slack (population unchanged), preserves
+/// every record in this and later tables through the directory shift, keeps CRCs self-consistent,
+/// and is idempotent at/below the current allocation.
+#[test]
+fn grow_table_max_preallocates_slack() {
+    let bytes = anchor();
+    let db = TdbFile::parse(&bytes).unwrap();
+    let t = db.table("cPbu").unwrap();
+    let (old_cur, old_max, reclen) = (t.current_records, t.max_records, t.record_len_bytes);
+    assert_eq!(old_cur, old_max, "anchor cPbu expected packed → real growth");
+
+    let cf = num_field(&db, "cPbu");
+    let kf = num_field(&db, "ttOk");
+    let cbefore = db.read_u64(t, 0, &t.fields[cf]).unwrap();
+    let clast = db.read_u64(t, old_cur as u32 - 1, &t.fields[cf]).unwrap();
+    let kott = db.table("ttOk").unwrap();
+    let kbefore = db.read_u64(kott, 0, &kott.fields[kf]).unwrap();
+
+    let target = old_max + 100;
+    let out = db.grow_table_max("cPbu", target).unwrap();
+    assert_eq!(out.len(), bytes.len() + 100 * reclen as usize, "file grew by the added slack");
+
+    let db2 = TdbFile::parse(&out).unwrap();
+    assert!(db2.size_ok(), "db_size updated");
+    assert!(db2.header_crc_ok(), "header CRC valid");
+    assert_eq!(db2.serialize(), out, "all CRC scopes self-consistent");
+
+    let t2 = db2.table("cPbu").unwrap();
+    assert_eq!(t2.max_records, target, "allocation grew to the target");
+    assert_eq!(t2.current_records, old_cur, "population untouched");
+    assert_eq!(db2.read_u64(t2, 0, &t2.fields[cf]).unwrap(), cbefore, "first record preserved");
+    assert_eq!(
+        db2.read_u64(t2, old_cur as u32 - 1, &t2.fields[cf]).unwrap(),
+        clast,
+        "last populated record preserved"
+    );
+
+    let kott2 = db2.table("ttOk").unwrap();
+    assert_eq!(
+        db2.read_u64(kott2, 0, &kott2.fields[kf]).unwrap(),
+        kbefore,
+        "other table's data preserved through the shift"
+    );
+
+    // The slack is consumable: an append now reuses a slot without resizing the file.
+    let (out3, idx) = db2.append_record("cPbu").unwrap();
+    assert_eq!(out3.len(), out.len(), "append into slack does not resize");
+    assert_eq!(idx, old_cur as u32);
+
+    // Idempotence: growing to (or below) the current allocation returns the bytes unchanged.
+    assert_eq!(db2.grow_table_max("cPbu", target).unwrap(), out);
+    assert_eq!(db2.grow_table_max("cPbu", old_max).unwrap(), out);
+}
+
 /// Removing the last record needs no relocation.
 #[test]
 fn remove_last_record_does_not_relocate() {

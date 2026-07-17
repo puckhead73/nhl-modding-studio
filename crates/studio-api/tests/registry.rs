@@ -71,6 +71,72 @@ fn players_listing_view_and_edit_through_registry() {
     let view = reg.player_view(0, pid).unwrap().expect("player resolves");
     assert!(view.identity.iter().any(|f| f.name == "position"));
     assert!(reg.player_view(0, u64::MAX).unwrap().is_none());
+}
+
+/// The Transactions pool reader end-to-end: the FA pool is exactly the `team_id == None` slice of
+/// the master list (S1 occupancy model), and release/sign move a player across the boundary.
+#[test]
+fn free_agent_pool_through_registry() {
+    let reg = Registry::default();
+    reg.load_project(
+        &s(repo(DB)),
+        parse_platform("ps3").unwrap(),
+        parse_role("nhlng").unwrap(),
+        &s(repo(META)),
+        &s(repo(DEFS)),
+    )
+    .unwrap();
+
+    let pool = reg.list_free_agents(0).unwrap();
+    assert!(!pool.is_empty(), "anchor carries unplaced (off-roster) players");
+    assert!(pool.iter().all(|p| p.team_id.is_none()), "pool rows have no team");
+    let expected: Vec<u64> = reg
+        .list_players(0)
+        .unwrap()
+        .iter()
+        .filter(|p| p.team_id.is_none())
+        .map(|p| p.player_id)
+        .collect();
+    assert_eq!(pool.len(), expected.len(), "pool == master list's team-less slice");
+
+    // Release a rostered player → joins the pool; sign them back → leaves it.
+    let rostered = reg
+        .list_players(0)
+        .unwrap()
+        .into_iter()
+        .find(|p| p.team_id.is_some())
+        .unwrap();
+    let team = rostered.team_id.unwrap();
+    reg.release_to_fa(0, team, rostered.player_id).unwrap();
+    assert!(
+        reg.list_free_agents(0).unwrap().iter().any(|p| p.player_id == rostered.player_id),
+        "released player appears in the pool"
+    );
+    reg.sign_from_fa(0, rostered.player_id, team).unwrap();
+    assert!(
+        !reg.list_free_agents(0).unwrap().iter().any(|p| p.player_id == rostered.player_id),
+        "signed player leaves the pool"
+    );
+    // ...and the master list shows them back on their team (the slot resolves — regression guard
+    // for the `vfEq==0` occupancy-key bug).
+    let back = reg.list_players(0).unwrap();
+    let row = back.iter().find(|p| p.player_id == rostered.player_id).unwrap();
+    assert_eq!(row.team_id, Some(team), "signed player resolves back onto the team");
+}
+
+#[test]
+fn field_edit_bounds_through_registry() {
+    let reg = Registry::default();
+    reg.load_project(
+        &s(repo(DB)),
+        parse_platform("ps3").unwrap(),
+        parse_role("nhlng").unwrap(),
+        &s(repo(META)),
+        &s(repo(DEFS)),
+    )
+    .unwrap();
+    let pid = reg.list_players(0).unwrap()[0].player_id;
+    let view = reg.player_view(0, pid).unwrap().expect("player resolves");
 
     // Edit the first editable, ranged integer field to its low bound; it should validate clean.
     let target = view

@@ -171,6 +171,46 @@ impl Workspace {
         }
     }
 
+    // --- Roster capacity normalization (Phase 4.4, docs/audits/roster-capacity.md) ---
+
+    /// Normalize the attached **roster save's** allocation back to the vanilla ceilings: for each
+    /// roster-bearing table whose `max_records` was packed below the ceiling, pre-allocate slack up
+    /// to it (`current_records` untouched), so edits fill slack the way the vanilla file does.
+    /// Run once at workspace open, after [`Workspace::set_game_id`].
+    ///
+    /// Ceiling per table = the larger of the GEN7 constant for this `game_id`
+    /// ([`crate::capacity::gen7_ceilings`], the audited vanilla-ROSTER reads — the packed GEN7 main
+    /// DB cannot supply it) and the attached main DB's own `max_records` (exact on PS4-style mains
+    /// that carry the slack; a safe no-op floor on packed GEN7 mains). Never touches the main DB,
+    /// idempotent, and a no-op on every vanilla-shaped file. Not undoable — it is a load-time
+    /// repair, so it lives outside the op history.
+    pub fn normalize_roster_capacity(&mut self) -> Result<Vec<crate::capacity::CapacityGrowth>> {
+        let Some(m) = self.roster.as_mut() else {
+            return Ok(Vec::new()); // single-file workspace — nothing to normalize
+        };
+        let main = TdbFile::parse(self.nhlng.bytes())?;
+        let consts = self.game_id.as_deref().and_then(crate::capacity::gen7_ceilings);
+        let mut grown = Vec::new();
+        for (i, cid) in crate::capacity::ROSTER_TABLES.iter().enumerate() {
+            let main_max = main.table_canonical(cid).map(|t| t.max_records).unwrap_or(0);
+            let ceiling = consts.map(|c| c[i]).unwrap_or(0).max(main_max);
+            if ceiling == 0 {
+                continue; // no ceiling source for this table — leave it alone
+            }
+            if let Some((from, to)) = m.session.grow_table_max(cid, ceiling)? {
+                grown.push(crate::capacity::CapacityGrowth { table: cid.to_string(), from, to });
+            }
+        }
+        if !grown.is_empty() {
+            // Re-derive the mirror relationship over the grown shape (growth leaves
+            // `current_records` alone, so alignment should be unchanged — but never assume).
+            let (shared_tables, aligned) = analyze(&self.nhlng, &m.session)?;
+            m.shared_tables = shared_tables;
+            m.aligned = aligned;
+        }
+        Ok(grown)
+    }
+
     // --- Generic field edit (mirrored only for shared, aligned tables) ---
 
     pub fn set_field(

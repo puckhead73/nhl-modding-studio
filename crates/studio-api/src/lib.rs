@@ -39,6 +39,7 @@ macro_rules! command_handler {
             $crate::commands::set_edit_override,
             $crate::commands::autocorrect_jerseys,
             $crate::commands::list_players,
+            $crate::commands::list_free_agents,
             $crate::commands::player_view,
             $crate::commands::career_stats,
             $crate::commands::add_career_season,

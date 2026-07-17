@@ -12,21 +12,26 @@ import type { TeamSummaryDto } from "../bindings/TeamSummaryDto";
 // ---------------------------------------------------------------------------
 // Transactions — the reference app's NHLViewNG-style two-team trade panel.
 //
-// Two mirrored columns, each picking a league + team and listing that team's roster (or its
-// future draft picks). The action buttons act on the selection relative to the OTHER column's
-// team, composing the audited roster ops:
+// Two mirrored columns, each picking a league + team and listing that team's roster, the global
+// free-agent pool, or its future draft picks. The action buttons act on the selection relative to
+// the OTHER column's team, composing the audited roster ops:
 //   Move        → move_player(player, thisTeam, otherTeam)   (block-coherent slot move)
 //   Copy        → clone_player(player, otherTeam)            (duplicate cluster, kept here too)
-//   Free Agent  → release_to_fa(thisTeam, player)            (vacate slot, dXSB → 0)
+//   Free Agent  → release_to_fa(thisTeam, player)            (vacate slot → off-roster pool)
+//   Sign        → sign_from_fa(player, otherTeam)            (install FA into the other team's block)
 //   Delete      → delete_player(player)                      (whole-cluster removal)
 //   Trade Pick  → trade_draft_pick(record, otherTeam)        (qHav owner rewrite; provenance kept)
+//   Trade       → trade_slots(aTeam, aPlayer, bTeam, bPlayer)(in-place swap of both columns' picks)
 //
-// Unlike the reference app there is no staging step — every action commits an audited, undoable
-// transaction immediately (undo/redo in the toolbar; nothing touches disk until Save).
+// "Free agent" and "sign" are the Spike-S1 occupancy model (off-roster = an indexed player in no
+// eGlu slot; docs/audits/roster-pools.md). Unlike the reference app there is no staging step —
+// every action commits an audited, undoable transaction immediately (undo/redo in the toolbar;
+// nothing touches disk until Save).
 // ---------------------------------------------------------------------------
 
 type Side = "A" | "B";
-type TxAction = "move" | "copy" | "freeAgent" | "delete" | "tradePick";
+type ColumnMode = "players" | "freeAgents" | "picks";
+type TxAction = "move" | "copy" | "freeAgent" | "sign" | "delete" | "tradePick";
 
 interface PendingConfirm {
   action: "freeAgent" | "delete";
@@ -47,15 +52,24 @@ export function TransactionsPage() {
     queryKey: ["players", projectId],
     queryFn: () => call("list_players", { projectId }),
   });
+  const freeAgents = useQuery({
+    queryKey: ["free-agents", projectId],
+    queryFn: () => call("list_free_agents", { projectId }),
+  });
 
   const [teamA, setTeamA] = useState<number | null>(null);
   const [teamB, setTeamB] = useState<number | null>(null);
+  // Each column reports its currently-selected player up so the parent can offer Trade (a swap
+  // needs both columns' picks). `null` when the column has no player selected (or is on picks).
+  const [selA, setSelA] = useState<PlayerSummaryDto | null>(null);
+  const [selB, setSelB] = useState<PlayerSummaryDto | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState<PendingConfirm | null>(null);
 
   const allTeams = teams.data ?? [];
   const allPlayers = players.data ?? [];
+  const pool = freeAgents.data ?? [];
 
   const leagues = useMemo(() => {
     const seen = new Map<number, string>();
@@ -96,6 +110,10 @@ export function TransactionsPage() {
           if (pid == null || fromTeam === null) return;
           await call("release_to_fa", { projectId, fromTeam, player: pid });
           break;
+        case "sign":
+          if (pid == null || otherTeam === null) return;
+          await call("sign_from_fa", { projectId, player: pid, toTeam: otherTeam });
+          break;
         case "delete":
           if (pid == null) return;
           await call("delete_player", { projectId, player: pid });
@@ -133,6 +151,31 @@ export function TransactionsPage() {
     }
   }
 
+  // Trade = swap the two columns' selected occupants in place (both must be rostered, on different
+  // teams). Acts on both selections at once, so it lives at the parent, not a column.
+  async function runTrade() {
+    if (!selA?.team_id || !selB?.team_id) return;
+    setBusy(true);
+    setError(null);
+    try {
+      await call("trade_slots", {
+        projectId,
+        aTeam: selA.team_id,
+        aPlayer: selA.player_id,
+        bTeam: selB.team_id,
+        bPlayer: selB.player_id,
+      });
+      await refresh();
+    } catch (e) {
+      setError(String(e));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  const canTrade =
+    !!selA?.team_id && !!selB?.team_id && selA.team_id !== selB.team_id && !busy;
+
   if (teams.isLoading || players.isLoading) return <Spinner label="Loading rosters…" />;
   if (teams.isError) return <p className="text-rose-400">{String(teams.error)}</p>;
 
@@ -157,22 +200,43 @@ export function TransactionsPage() {
           leagues={leagues}
           teams={allTeams}
           allPlayers={allPlayers}
+          pool={pool}
+          poolLoading={freeAgents.isLoading}
           selectedTeam={teamA}
           onSelectTeam={setTeamA}
           otherTeam={teamB}
           busy={busy}
+          onSelectPlayer={setSelA}
           onAction={(action, subject) => handleAction("A", action, subject)}
         />
+        <div className="flex flex-col items-center justify-center">
+          <ActionButton
+            label="⇄ Trade"
+            tone="primary"
+            disabled={!canTrade}
+            title={
+              !selA?.team_id || !selB?.team_id
+                ? "Select a rostered player in each column"
+                : selA.team_id === selB.team_id
+                  ? "Pick players on two different teams"
+                  : "Swap these two players' roster slots"
+            }
+            onClick={() => void runTrade()}
+          />
+        </div>
         <TransactionColumn
           label="Team B"
           projectId={projectId}
           leagues={leagues}
           teams={allTeams}
           allPlayers={allPlayers}
+          pool={pool}
+          poolLoading={freeAgents.isLoading}
           selectedTeam={teamB}
           onSelectTeam={setTeamB}
           otherTeam={teamA}
           busy={busy}
+          onSelectPlayer={setSelB}
           onAction={(action, subject) => handleAction("B", action, subject)}
         />
       </div>
@@ -224,10 +288,13 @@ function TransactionColumn({
   leagues,
   teams,
   allPlayers,
+  pool,
+  poolLoading,
   selectedTeam,
   onSelectTeam,
   otherTeam,
   busy,
+  onSelectPlayer,
   onAction,
 }: {
   label: string;
@@ -235,14 +302,17 @@ function TransactionColumn({
   leagues: Array<{ id: number; label: string }>;
   teams: TeamSummaryDto[];
   allPlayers: PlayerSummaryDto[];
+  pool: PlayerSummaryDto[];
+  poolLoading: boolean;
   selectedTeam: number | null;
   onSelectTeam: (teamId: number | null) => void;
   otherTeam: number | null;
   busy: boolean;
+  onSelectPlayer: (player: PlayerSummaryDto | null) => void;
   onAction: (action: TxAction, subject: { player?: PlayerSummaryDto; pick?: DraftPickDto }) => void;
 }) {
   const [league, setLeague] = useState<number | null>(leagues[0]?.id ?? null);
-  const [mode, setMode] = useState<"players" | "picks">("players");
+  const [mode, setMode] = useState<ColumnMode>("players");
   const [selectedPlayerId, setSelectedPlayerId] = useState<number | null>(null);
   const [selectedPickRecord, setSelectedPickRecord] = useState<number | null>(null);
 
@@ -273,6 +343,13 @@ function TransactionColumn({
             ),
     [allPlayers, selectedTeam],
   );
+  // The free-agent pool, sorted by name (no team/jersey to sort on).
+  const freeAgents = useMemo(
+    () => [...pool].sort((a, b) => a.last_name.localeCompare(b.last_name)),
+    [pool],
+  );
+  // The player list the column currently shows (roster or the pool).
+  const shownPlayers = mode === "freeAgents" ? freeAgents : roster;
   const picks = picksQ.data ?? [];
 
   // Drop selections whenever the visible list changes.
@@ -281,9 +358,14 @@ function TransactionColumn({
     setSelectedPickRecord(null);
   }, [selectedTeam, mode]);
 
-  const selectedPlayer = roster.find((p) => p.player_id === selectedPlayerId) ?? null;
+  const selectedPlayer = shownPlayers.find((p) => p.player_id === selectedPlayerId) ?? null;
   const selectedPick = picks.find((p) => p.record === selectedPickRecord) ?? null;
   const hasTarget = otherTeam !== null && otherTeam !== selectedTeam;
+
+  // Keep the parent's Trade-eligibility view in sync with this column's selection.
+  useEffect(() => {
+    onSelectPlayer(selectedPlayer);
+  }, [selectedPlayer, onSelectPlayer]);
 
   return (
     <div className="flex min-w-0 flex-1 flex-col rounded-lg border border-slate-800 bg-slate-900/40">
@@ -291,7 +373,7 @@ function TransactionColumn({
         <div className="flex items-center justify-between gap-2">
           <h2 className="text-sm font-semibold text-slate-100">{label}</h2>
           <div className="flex rounded border border-slate-700 text-[10px]">
-            {(["players", "picks"] as const).map((m) => (
+            {(["players", "freeAgents", "picks"] as const).map((m) => (
               <button
                 key={m}
                 type="button"
@@ -303,7 +385,7 @@ function TransactionColumn({
                     : "text-slate-400 hover:text-slate-200")
                 }
               >
-                {m === "players" ? "Players" : "Draft Picks"}
+                {m === "players" ? "Players" : m === "freeAgents" ? "Free Agents" : "Draft Picks"}
               </button>
             ))}
           </div>
@@ -341,7 +423,19 @@ function TransactionColumn({
       </div>
 
       <div className="min-h-[14rem] flex-1 overflow-auto">
-        {selectedTeam === null ? (
+        {mode === "freeAgents" ? (
+          poolLoading ? (
+            <Spinner label="Loading free agents…" />
+          ) : freeAgents.length === 0 ? (
+            <Hint>No free agents — every indexed player holds a roster slot.</Hint>
+          ) : (
+            <RosterTable
+              roster={freeAgents}
+              selectedId={selectedPlayerId}
+              onSelect={setSelectedPlayerId}
+            />
+          )
+        ) : selectedTeam === null ? (
           <Hint>Pick a league and team to view its {mode === "players" ? "roster" : "picks"}.</Hint>
         ) : mode === "players" ? (
           roster.length === 0 ? (
@@ -367,7 +461,21 @@ function TransactionColumn({
       </div>
 
       <div className="flex flex-wrap gap-2 border-t border-slate-800 px-3 py-2">
-        {mode === "players" ? (
+        {mode === "freeAgents" ? (
+          <ActionButton
+            label="Sign"
+            tone="primary"
+            disabled={busy || !selectedPlayer || otherTeam === null}
+            title={
+              !selectedPlayer
+                ? "Select a free agent"
+                : otherTeam === null
+                  ? "Select a team in the other column to sign them to"
+                  : "Sign this free agent to the other column's team"
+            }
+            onClick={() => selectedPlayer && onAction("sign", { player: selectedPlayer })}
+          />
+        ) : mode === "players" ? (
           <>
             <ActionButton
               label="Move"

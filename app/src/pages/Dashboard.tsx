@@ -1,9 +1,22 @@
 import { useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { call } from "../lib/client";
 import { useProject } from "../lib/project";
 import { Button, Card, Spinner, Stat } from "../components/primitives";
 import type { FindingDto } from "../bindings/FindingDto";
+
+// The raw `eGlu` jersey field id (FindingDto.field) that marks the *duplicate-jersey* flavour of the
+// dup-on-team error — the one the whole-DB `autocorrect_jerseys` op can repair. The other dup-on-team
+// flavour (a player in two slots, field `XSWT`) has no automated op, so it stays a manual fix.
+const SLOT_JERSEY_FIELD = "sVRt";
+
+/** Does this finding group have a real op that repairs it? Returns a repair descriptor or null. */
+function repairFor(items: FindingDto[]): { kind: "jerseys"; label: string } | null {
+  if (items.some((f) => f.predicate === "dup_on_team" && f.field === SLOT_JERSEY_FIELD)) {
+    return { kind: "jerseys", label: "Fix duplicate jerseys" };
+  }
+  return null;
+}
 
 // Severity → pill styling (badge, not bare text, so the category reads at a glance).
 const SEV_BADGE: Record<string, string> = {
@@ -17,7 +30,8 @@ const SEVERITIES = ["error", "warning", "info"] as const;
 type Severity = (typeof SEVERITIES)[number];
 
 export function Dashboard() {
-  const { project } = useProject();
+  const { project, update } = useProject();
+  const qc = useQueryClient();
   const p = project!;
   const projectId = p.project_id;
 
@@ -25,6 +39,20 @@ export function Dashboard() {
     queryKey: ["validation", projectId],
     queryFn: () => call("validate_project", { projectId }),
   });
+
+  // The one automated repair wired here: whole-DB duplicate-jersey autocorrect. Runs as an audited,
+  // undoable edit, then refreshes the audit + project summary (dirty) so the finding clears.
+  const repairJerseys = useMutation({
+    mutationFn: () => call("autocorrect_jerseys", { projectId }),
+    onSuccess: async () => {
+      update(await call("project_summary", { projectId }));
+      await qc.invalidateQueries();
+      report.refetch();
+    },
+  });
+  const runRepair = (kind: "jerseys") => {
+    if (kind === "jerseys") repairJerseys.mutate();
+  };
 
   // Which severities are shown. Off = filtered out; all on by default.
   const [hidden, setHidden] = useState<Set<Severity>>(new Set());
@@ -128,7 +156,14 @@ export function Dashboard() {
                 <p className="text-xs text-slate-400">All findings hidden by the severity filter.</p>
               )}
               {groups.map((g) => (
-                <FindingGroup key={g.title} title={g.title} worst={g.worst} items={g.items} />
+                <FindingGroup
+                  key={g.title}
+                  title={g.title}
+                  worst={g.worst}
+                  items={g.items}
+                  onRepair={runRepair}
+                  repairing={repairJerseys.isPending}
+                />
               ))}
             </div>
           </>
@@ -146,8 +181,23 @@ function worstSeverity(items: FindingDto[]): string {
 }
 
 /** A collapsible category of same-kind findings (e.g. every "Duplicate jersey number"). Collapsed by
- *  default when large so the audit reads as a summary first, details on demand. */
-function FindingGroup({ title, worst, items }: { title: string; worst: string; items: FindingDto[] }) {
+ *  default when large so the audit reads as a summary first, details on demand. When a real op can
+ *  repair the category, a repair button sits on the header; error categories with no automated op are
+ *  tagged "Manual fix" so the absence of a button reads as intentional. */
+function FindingGroup({
+  title,
+  worst,
+  items,
+  onRepair,
+  repairing,
+}: {
+  title: string;
+  worst: string;
+  items: FindingDto[];
+  onRepair: (kind: "jerseys") => void;
+  repairing: boolean;
+}) {
+  const repair = repairFor(items);
   return (
     <details className="group rounded-md border border-slate-800/60 bg-slate-900/40" open={items.length <= 5}>
       <summary className="flex cursor-pointer list-none items-center gap-2 px-3 py-2">
@@ -160,6 +210,25 @@ function FindingGroup({ title, worst, items }: { title: string; worst: string; i
           {worst}
         </span>
         <span className="font-medium text-slate-100">{title}</span>
+        {repair ? (
+          <button
+            type="button"
+            disabled={repairing}
+            onClick={(e) => {
+              e.preventDefault(); // don't toggle the <details>
+              onRepair(repair.kind);
+            }}
+            className="ml-2 rounded border border-sky-700 bg-sky-900/50 px-2 py-0.5 text-[11px] font-medium text-sky-100 hover:bg-sky-800/60 disabled:opacity-40"
+          >
+            {repairing ? "Fixing…" : repair.label}
+          </button>
+        ) : (
+          worst === "error" && (
+            <span className="ml-2 rounded border border-slate-700 px-2 py-0.5 text-[10px] uppercase tracking-wide text-slate-500">
+              Manual fix
+            </span>
+          )
+        )}
         <span className="ml-auto text-xs text-slate-500">
           {items.length}
           <span className="ml-2 text-slate-600 group-open:hidden">▸</span>

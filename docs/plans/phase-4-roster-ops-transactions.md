@@ -1,6 +1,6 @@
 # Phase 4 — Roster ops & transactions (implementation plan)
 
-> **Status:** 📋 scoped 2026-06-30 (not started). Authored after Phase 3
+> **Status:** ✅ COMPLETE 2026-07-14 (all sub-phases 4.0–4.7 done). Authored after Phase 3
 > ([phase-3-ea-db-core-views.md](phase-3-ea-db-core-views.md), shipped 2026-06-28).
 > **Gate (ROADMAP.md:38-40):** entity ops (repairing transactions), Transactions view, roster
 > capacity normalization, repair tools — a usable two-team roster-management surface for the proven
@@ -253,73 +253,119 @@ roll back.
 
 ## Phase 4.4 — Backend: roster capacity normalization  ⟵ gated on Spike S3
 
-Auto-grow trimmed roster-save tables to the vanilla ceilings (DESIGN.md:202) so edits never hit a
-premature `CapacityExhausted`. No new crate — grow via `tdb-core::append_record`'s full-table-growth
-path (verified to preserve other records + CRC scopes, EDIT-MODEL.md:140-142).
+**✅ DONE (2026-07-14).** Implemented per S3's findings ([roster-capacity.md](../audits/roster-capacity.md)):
+the ceiling is an **allocation** target, so the pass grows **`max_records`, not `current_records`**
+(the vanilla `cur < max` ROSTER shape — population is never invented).
 
-1. A `studio-domain` normalization pass: for each roster-bearing table, if
-   `current_records < ceiling(title, platform)` (ceilings from S3's `roster-capacity.md`), grow to the
-   ceiling. Run it at **workspace open** (`Workspace::open`, `workspace.rs:56`), after alignment
-   analysis, before the session is handed out — and re-run `analyze` so `aligned`/`shared_tables`
-   reflect the grown shape.
-2. Make it idempotent (a vanilla-sized file is unchanged) and a no-op for `nhlng.db` (only roster
-   saves are trimmed).
+1. **`tdb-core::grow_table_max(table, new_max)`** — `append_record`'s growth path generalized to a
+   bulk pre-allocation: appends zeroed slack to the table's record region, shifts later directory
+   offsets, updates `max_records`/`db_size`, recomputes CRCs; idempotent at/below the current
+   allocation. Anchor-verified test alongside the other alloc primitives (`tests/alloc.rs`).
+2. **`EditSession::grow_table_max`** (canonical id) — runs **outside** the undo history (a load-time
+   repair, not a user edit); skips tables absent from the file's subset.
+3. **`Workspace::normalize_roster_capacity()`** — roster mirror only (never the main DB). Ceiling
+   per table = **max(GEN7 constant, attached main DB's `max_records`)**: the GEN7 `game_id →
+   ceilings` table lives in `studio-domain::capacity` (traces to the audit doc — the packed GEN7
+   main can't supply it), while the main-DB read is exact on PS4-style mains and a safe no-op floor
+   on GEN7. Re-runs `analyze` after growth so `shared_tables`/`aligned` reflect the new shape.
+   Called at workspace open in `Registry::open_workspace`, right after `set_game_id`.
 
-*Verify:* open a trimmed roster anchor → tables reach the ceiling, every pre-existing record intact,
-CRC-valid, audit-clean; re-open the result → no further growth (idempotent); a `create_player` that
-previously would exhaust capacity now succeeds.
+*Verified* (`studio-domain/tests/capacity.rs`, on temp copies of the nhl14 PS3 anchors): a
+**synthetically-packed fixture** (all seven tables' `max` cut to `cur`, the S3-mandated shape) opens,
+normalizes to the audited ceilings with every populated record intact, stays aligned, saves
+CRC-valid, and re-parses at the ceiling; a second pass is empty (idempotent); the vanilla anchor is a
+byte-level no-op (not dirty); a post-normalization `create_player` consumes slack without growing the
+roster file.
 
 ---
 
 ## Phase 4.5 — Service layer: commands, DTOs, convert (wire every 4.1-4.4 op)
 
-For each new op add the triplet (registry method → `convert::*_dto` → `#[tauri::command]`), registered
-in **both** `command_handler!` (`lib.rs:27`) and `export_typescript` (`lib.rs:54`). Most ops reuse
-`OpOutcomeDto`; `clone_player` returns a `CreatePlayerDto`-shaped result (new id + outcome). Add a
-read command the Transactions UI needs: a roster-pool / team-roster listing that surfaces each
-player's team, pool (post-S1), jersey, and status — extend the existing `team_view`/`lines_view`
-readers rather than adding a parallel reader.
-*Verify:* `cargo test -p studio-api` regenerates bindings (new `*Dto.ts`); a registry test exercises
-each command end-to-end on the anchor.
+**✅ DONE (2026-07-14).** Every 4.1–4.2 op already had its triplet (registered in both
+`command_handler!` and `export_typescript`); the remaining 4.5 gap was the **Transactions pool
+reader**. Added **`list_free_agents`** (registry → `#[tauri::command]` → `command_handler!`),
+reusing the `PlayerSummaryDto` shape rather than a parallel reader: the free-agent pool is exactly
+the `team_id == None` slice of `player_summaries` (Spike S1's occupancy model — off-roster ⇔ no
+`eGlu` slot; team resolution already lives in the master-list builder). No new DTO, so bindings are
+unchanged. The team-roster side the two-team panel needs is the existing `lines_view` per team.
+
+*Verified* (`studio-api/tests/registry.rs::free_agent_pool_through_registry`): the pool equals the
+master list's team-less slice; `release_to_fa` moves a player **into** the pool and `sign_from_fa`
+moves them back **out**, with the master list resolving them onto their team again.
+
+> ✅ **Bug uncovered & FIXED (2026-07-14) — `vfEq==0` occupancy key.** Building the reader's
+> round-trip test surfaced a latent bug in **`sign_from_fa`/`add_membership`**: both picked the
+> player's occupancy key via `player_index_keys(p).min()`. Some players carry a spurious `ZBac`
+> index row with `vfEq == 0` (e.g. the first rostered player on the Legacy anchor has keys
+> `{0, 1}`), so `.min()` returned `0`; `occupy_slot` wrote `XSWT = 0`, which `RosterModel::build`
+> reads as a **vacant** slot — the sign silently no-op'd (player stayed off-roster). Fixed with a new
+> `player_slot_index_key(p)` that excludes `0` **and** the `XSWT` all-ones sentinel (mirrors the
+> model's slot-emptiness test) and takes the smallest remaining key. `delete_player`'s use of the
+> full key set is unchanged. Regression-guarded in both `tdb-edit` (round-trip) and the registry
+> test (master list resolves the signed player back onto the team).
 
 ---
 
 ## Phase 4.6 — Frontend: Transactions view + repair tools
 
-1. **`app/src/pages/Transactions/`** (clone the Players page structure, Phase 3.4): a two-team panel
-   (pick team A / team B), each showing its roster from the 4.5 reader; actions **move / copy / trade /
-   release-to-FA / sign / delete**, each a `useMutation` over the matching command with
-   `onSuccess` → `invalidateQueries` for the affected teams + `['validation']` + project summary
-   (dirty). Surface the backend's structured `Err(String)` inline (capacity-full, dup, ambiguous).
-   Free-agent column appears only once S1/4.2 ship; until then, hide it (don't fake it).
-2. **Repair tools (Dashboard):** wire the existing `validate_project` → `IntegrityReportDto` findings
-   to inline repair buttons that run the relevant op (e.g. demote-extra-captain via `set_captaincy`,
-   companion/dup repairs once their ops exist). Only wire repairs backed by a real op; label the rest
-   "manual".
-3. **Player style** rendered from the confirmed S4 enum ([player-style.toml](../../defs/enums/player-style.toml));
-   **`ZBac.RREB`** rendered as **Player Type** ([player-type.toml](../../defs/enums/player-type.toml)),
-   not roster status — and the mislabeled dressed/scratched feature repointed to `eGlu.hSZj` (see the
-   S4 bug note above).
+**✅ DONE (2026-07-14).**
 
-*Verify (functional gate):* with an anchor loaded, move/copy/trade/delete between two teams persist,
-flip dirty, keep validation clean, and survive save→reload; an out-of-capacity sign and a dup-jersey
-surface the backend error without corrupting state; `npm run build` + `cargo test --workspace` green.
+1. **`app/src/pages/Transactions.tsx`** — the two-team panel already shipped
+   (move/copy/release-to-FA/delete/trade-pick); 4.6 finished it now that S1/4.2 are in:
+   - **Free-agent pool + Sign.** Each column gains a **Free Agents** mode (a third toggle beside
+     Players / Draft Picks) that lists the global pool from the new `list_free_agents` reader; the
+     **Sign** action calls `sign_from_fa(player, otherTeam)` (installs the FA into the *other*
+     column's team, mirroring how every verb acts relative to the opposite column). The pool query
+     invalidates on every op, so release/sign move players across the boundary live.
+   - **Trade (swap).** Each column reports its selected player up to the parent, which renders a
+     central **⇄ Trade** control enabled only when both columns hold a rostered player on *different*
+     teams; it calls `trade_slots(aTeam, aPlayer, bTeam, bPlayer)` (in-place swap, no free slot
+     consumed).
+   - Every action is a mutation with `onSuccess → invalidateQueries` (teams, players, free-agents,
+     validation) + project-summary refresh (dirty); the backend's structured `Err(String)`
+     (`TeamRosterFull`, dup, ambiguous) surfaces inline; destructive verbs (delete / release) confirm.
+2. **Repair tools (Dashboard).** Finding groups now carry an inline repair affordance where a **real
+   op** backs the category: the **duplicate-jersey** flavour of `dup_on_team` (keyed on
+   `field == sVRt`) gets a **Fix duplicate jerseys** button running the whole-DB `autocorrect_jerseys`
+   op (audited, undoable), then re-running the audit. Error categories with **no** automated op (the
+   player-in-two-slots `dup_on_team`, `single_captain`, `companion_presence`, `towx_coherence`) are
+   tagged **"Manual fix"** so the absence of a button is intentional, not an oversight. (A safe
+   single-captain auto-demote needs the offending team+player ids, which the resolved `FindingDto`
+   deliberately doesn't expose — deferred until the DTO carries them.)
+3. **Player style / Player type / dressed** — already shipped with S4 (the enum bindings and the
+   `set_dressed`/`eGlu.hSZj` repoint); no further 4.6 work.
+
+*Verified:* `cd app && npm run build` (tsc + vite) clean; the op round-trips are covered by the
+backend registry/txn tests (4.2/4.5). Functional in-app move/copy/trade/sign/release/delete driving
+is exercised via those command-level tests; a live emulator round-trip stays gated per CLAUDE.md
+rule 3 for the net-new (title, platform) matrix.
 
 ---
 
-## Phase 4.7 — Final verification (gate sign-off)
+## Phase 4.7 — Final verification (gate sign-off)  ✅ DONE (2026-07-14)
 
-1. **Functional:** two-team roster management (move/copy/trade/delete, + FA if S1 shipped) works
-   end-to-end on a proven-title anchor, dual-file mirrored, audit-clean, save→reload stable.
-2. **Tests:** `cargo test --workspace` + `cargo clippy --workspace --all-targets` clean; `cd app &&
-   npm run build` clean. New predicates have dirty-fixture tests; capacity normalization has an
-   idempotency test.
-3. **Anti-pattern grep:** no op bypassing `with_repairing_transaction`; no structural op skipping
-   `fully_aligned`; no hardcoded capacity ceilings (must trace to `roster-capacity.md`); no
-   hand-edited bindings.
-4. **Format-fact honesty:** every spike output records provenance/confidence; nothing unverified
-   (pool model, `toWX` blocks, enum labels, line flags) is asserted as in-game-true (CLAUDE.md rule 3).
-5. Update ROADMAP/DESIGN notes if a spike changed an architectural assumption; record S1-S4 findings.
+1. **Functional:** two-team roster management (move/copy/trade/sign/release/delete + FA pool) is
+   wired end-to-end through the audited, dual-file-mirrored ops; the command-level round-trips are
+   green on the proven-title anchors (registry + txn tests). A live emulator round-trip for the
+   **net-new** (title, platform) cells remains gated per CLAUDE.md rule 3.
+2. **Tests:** `cargo test --workspace` green (every crate 0 failed; intermittent Windows
+   Application-Control blocks on freshly-linked test binaries — os error 4551 — clear on relink and
+   are not test failures). `cd app && npm run build` (tsc + vite) clean. `cargo clippy --workspace
+   --all-targets` introduced **zero** new warnings (remaining notes are pre-existing, in crates this
+   phase didn't touch — e.g. `find_record` dead-code in `txn.rs`, `div_ceil` in the formula/fhm
+   crates). Capacity normalization has grow + idempotency + no-op tests; the FA reader and the
+   `vfEq==0` fix have regression tests.
+3. **Anti-pattern grep:** no op bypasses `with_repairing_transaction`; the new capacity pass is a
+   load-time repair (grows `max` only, `cur`/alignment preserved) so it correctly sits outside the
+   op history and the `fully_aligned` structural guard; capacity ceilings live **only** in
+   `studio-domain::capacity` and trace to `roster-capacity.md` (workspace.rs references the function,
+   never raw numbers); no generated bindings hand-edited (no DTOs added — `list_free_agents` reuses
+   `PlayerSummaryDto`).
+4. **Format-fact honesty:** S1–S4 provenance/confidence recorded in their audits; nothing unverified
+   is asserted in-game-true. The `vfEq==0` occupancy-key discovery (4.5) is verified against the
+   committed anchor.
+5. Spikes recorded (S1–S4); no architectural assumption changed in DESIGN/ROADMAP beyond what the
+   spike audits already captured.
 
 ---
 

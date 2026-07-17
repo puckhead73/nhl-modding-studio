@@ -18,6 +18,7 @@
 pub mod attributes;
 pub mod audit;
 pub mod capabilities;
+pub mod capacity;
 pub mod discovery;
 pub mod extract;
 pub mod formula;
@@ -36,6 +37,7 @@ pub use attributes::{
 };
 pub use audit::{humanize, HumanFinding, HumanReport};
 pub use capabilities::Capabilities;
+pub use capacity::CapacityGrowth;
 pub use discovery::{
     detect_install, ps4_title_ids, title_ids, DbPaths, InstallReport, SaveSlot, TitleIds,
 };

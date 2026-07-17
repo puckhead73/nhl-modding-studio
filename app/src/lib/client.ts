@@ -121,6 +121,13 @@ type Commands = {
   };
   release_to_fa: { args: { projectId: number; fromTeam: number; player: number }; ret: OpOutcomeDto };
   sign_from_fa: { args: { projectId: number; player: number; toTeam: number }; ret: OpOutcomeDto };
+  // Swap two occupants in place (both blocks full) — captaincy cleared, colliding jerseys repaired.
+  trade_slots: {
+    args: { projectId: number; aTeam: number; aPlayer: number; bTeam: number; bPlayer: number };
+    ret: OpOutcomeDto;
+  };
+  // The free-agent pool: indexed players occupying no roster slot (Spike S1 occupancy model).
+  list_free_agents: { args: { projectId: number }; ret: PlayerSummaryDto[] };
   delete_player: { args: { projectId: number; player: number }; ret: OpOutcomeDto };
   list_team_jerseys: { args: { projectId: number; teamId: number }; ret: TeamJerseyDto[] };
   list_team_equipment: { args: { projectId: number; teamId: number }; ret: TeamEquipmentDto[] };

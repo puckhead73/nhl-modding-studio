@@ -167,6 +167,10 @@ impl Registry {
             None => Workspace::single(nhlng_session, nhlng.clone()),
         };
         ws.set_game_id(game_id);
+        // Phase 4.4: pre-allocate a packed roster save back to the vanilla ceilings
+        // (docs/audits/roster-capacity.md) so edits never hit a premature capacity wall.
+        // No-op on vanilla-shaped files; idempotent; never touches the main DB.
+        ws.normalize_roster_capacity().map_err(ApiError::Domain)?;
         self.register(ws)
     }
 
@@ -256,6 +260,22 @@ impl Registry {
                 .primary()
                 .player_summaries()?
                 .iter()
+                .map(convert::player_summary_dto)
+                .collect())
+        })
+    }
+
+    /// The free-agent pool: every indexed player occupying **no** roster slot. Off-roster is
+    /// defined by slot occupancy alone (Spike S1, docs/audits/roster-pools.md — no sentinel team,
+    /// no hidden pool), so `team_id == None` on the master-list row ⇔ free agent. Same row shape
+    /// as `list_players`, pre-filtered for the Transactions pool column.
+    pub fn list_free_agents(&self, id: u32) -> Result<Vec<PlayerSummaryDto>, ApiError> {
+        self.with_workspace(id, |ws| {
+            Ok(ws
+                .primary()
+                .player_summaries()?
+                .iter()
+                .filter(|p| p.team_id.is_none())
                 .map(convert::player_summary_dto)
                 .collect())
         })
