@@ -446,6 +446,36 @@ fn decode_vertex_descriptor(
 
 // ---------- Strip → triangle walker ----------
 
+/// Drop triangle-strip "bridge" slivers — triangles whose longest edge is more than 8× the mesh's
+/// median edge. Such a triangle spans anatomically distant vertices (e.g. lip to eyebrow) and is a
+/// strip-stitch artifact, not a surface triangle. A well-formed mesh's edges are near-uniform, so the
+/// 8× gate never fires on real geometry (verified: NHL 07 heads flag only 3 stitch pairs; the eye and
+/// inner submeshes flag none). Returns the input unchanged for tiny meshes where a median is meaningless.
+fn drop_sliver_bridges(vertices: &[Vertex], triangles: Vec<[u32; 3]>) -> Vec<[u32; 3]> {
+    if triangles.len() < 8 {
+        return triangles;
+    }
+    let edge = |a: u32, b: u32| -> f32 {
+        let (p, q) = (vertices[a as usize].position, vertices[b as usize].position);
+        ((p[0] - q[0]).powi(2) + (p[1] - q[1]).powi(2) + (p[2] - q[2]).powi(2)).sqrt()
+    };
+    let mut lens: Vec<f32> = Vec::with_capacity(triangles.len() * 3);
+    for t in &triangles {
+        lens.push(edge(t[0], t[1]));
+        lens.push(edge(t[1], t[2]));
+        lens.push(edge(t[2], t[0]));
+    }
+    lens.sort_by(|a, b| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal));
+    let median = lens[lens.len() / 2].max(f32::MIN_POSITIVE);
+    let limit = median * 8.0;
+    triangles
+        .into_iter()
+        .filter(|t| {
+            edge(t[0], t[1]).max(edge(t[1], t[2])).max(edge(t[2], t[0])) <= limit
+        })
+        .collect()
+}
+
 fn strips_to_triangles(indices: &[u16]) -> Vec<[u32; 3]> {
     let mut out = Vec::with_capacity(indices.len() / 2);
     let mut strip: Vec<u16> = Vec::new();
@@ -895,6 +925,17 @@ fn parse_mesh_impl(data: &[u8], skin_policy: SkinPolicy) -> Result<PlayerAsset, 
             .get(&mesh_handle_indices[i])
             .cloned()
             .unwrap_or_else(|| format!("mesh_{i}"));
+
+        // NHL 07 head strips occasionally bridge two distant regions of the face with a thin sliver
+        // triangle (a strip-stitch artifact the game hides but a double-sided preview shows as a
+        // stretch, with its dark underside reading as a hole). They are unambiguous — the sliver's
+        // longest edge is an order of magnitude past the mesh's typical edge — so drop them. Gated to
+        // the NHL 07 layout; NHL 08+ meshes carry no such slivers and never trip the threshold.
+        let triangles = if no_data_region {
+            drop_sliver_bridges(&vertices, triangles)
+        } else {
+            triangles
+        };
 
         submeshes.push(Submesh {
             name,
