@@ -61,6 +61,7 @@ pub const MAGIC: &[u8; 7] = b"\x89RW4xb2";
 const HDR_FILE_COUNT_OFF: usize = 0x20;
 const HDR_FILE_TABLE_OFF: usize = 0x30;
 const HDR_HDR_SIZE_OFF: usize = 0x44;
+const HDR_DATA_SIZE_OFF: usize = 0x54;
 
 const ENTRY_STRIDE: usize = 24;
 const ENTRY_INTS: usize = 5;
@@ -749,7 +750,15 @@ pub fn parse(data: &[u8]) -> Result<Texlib, TexlibError> {
 
     let file_count = read_u32_be(data, HDR_FILE_COUNT_OFF) as usize;
     let file_table = read_u32_be(data, HDR_FILE_TABLE_OFF) as usize;
-    let hdr_size = read_u32_be(data, HDR_HDR_SIZE_OFF);
+    let mut hdr_size = read_u32_be(data, HDR_HDR_SIZE_OFF);
+    // NHL 07 single-raster textures pack everything into the header region (`data_size == 0`,
+    // `hdr_size` == file length) with absolute buffer offsets; NHL 08→Legacy keep a separate pixel-data
+    // region biased by `hdr_size`. Drop the bias when there is no data region (mirrors the mesh parser),
+    // else every raster buffer resolves past EOF and the texture silently fails to decode.
+    let no_data_region = read_u32_be(data, HDR_DATA_SIZE_OFF) == 0;
+    if no_data_region {
+        hdr_size = 0;
+    }
 
     let table_bytes = file_count.saturating_mul(ENTRY_STRIDE);
     if file_table + table_bytes > data.len() {
@@ -774,7 +783,11 @@ pub fn parse(data: &[u8]) -> Result<Texlib, TexlibError> {
             *slot = read_u32_be(data, base + j * 4);
         }
         let tag = &data[base + 20..base + 24];
-        if tag == TAG_TEX_DATA {
+        // NHL 07's pixel-data payload carries an untagged `00 00 00 00` tag rather than the
+        // `TAG_TEX_DATA` NHL 08+ use. Only accept it as a data slot in the NHL 07 layout (no data
+        // region) and only when it actually holds bytes, so NHL 08+ padding/zero entries are unaffected.
+        let is_nhl07_data = no_data_region && tag == [0u8, 0, 0, 0] && ints[2] > 0;
+        if tag == TAG_TEX_DATA || is_nhl07_data {
             data_slots.push((i, ints));
         } else if tag == TAG_TEX_DESC {
             desc_slots.push((i, ints));

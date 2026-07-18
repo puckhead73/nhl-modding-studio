@@ -192,24 +192,27 @@ impl AssetRoots {
     /// The head **mesh** container, across the two naming schemes EA used
     /// (verified on real installs):
     ///
-    /// * **NHL 10 → Legacy** — `player_{head_id}.rx2`, one container bundling
+    /// * **NHL 10 → Legacy** — `player/player_{head_id}.rx2`, one container bundling
     ///   every submesh (head, hair, eyes, mouth).
-    /// * **NHL 09 (and 07/08)** — `head_{head_id}.rx2`, the face only; hair is a
+    /// * **NHL 09 (and 08)** — `player/head_{head_id}.rx2`, the face only; hair is a
     ///   *separate* mesh file (see [`AssetRoots::extra_head_mesh_paths`]).
+    /// * **NHL 07** — nested one folder per head: `player/player_{head_id}/head_{head_id}.rx2`,
+    ///   with the eye meshes/textures beside it (verified on a real Xbox 360 install).
     ///
-    /// The two schemes are disjoint (no install carries both for a given head),
-    /// so trying `player_` first then `head_` resolves each title correctly. The
-    /// bare `head_{id}.rx2` never collides with NHL 10's loose `head_{id}_cm.rx2`
+    /// The schemes are disjoint (no install carries a head in more than one form),
+    /// so probing each in turn resolves every title correctly. The bare
+    /// `head_{id}.rx2` never collides with NHL 10's loose `head_{id}_cm.rx2`
     /// textures — those always carry a map suffix.
     pub fn mesh_path(&self, head_id: u64) -> Option<PathBuf> {
         let dir = self.rendering_dir().join("player");
-        for name in [format!("player_{head_id}.rx2"), format!("head_{head_id}.rx2")] {
-            let p = dir.join(name);
-            if p.is_file() {
-                return Some(p);
-            }
-        }
-        None
+        let nested = dir.join(format!("player_{head_id}"));
+        [
+            dir.join(format!("player_{head_id}.rx2")), // NHL 10 → Legacy bundle
+            dir.join(format!("head_{head_id}.rx2")),   // NHL 08/09 loose
+            nested.join(format!("head_{head_id}.rx2")), // NHL 07 nested per-head folder
+        ]
+        .into_iter()
+        .find(|p| p.is_file())
     }
 
     /// Companion meshes that render *with* the head but live in their own files.
@@ -239,38 +242,44 @@ impl AssetRoots {
     ///   container, `head_{head_id}_cm.rx2`, `hair_{head_id}_cm.rx2`, …
     ///
     /// Both decode through `texlib::parse`; only the packaging differs.
+    /// * **NHL 07** — no texlib; the head's rasters live in its own
+    ///   `player/player_{head_id}/` folder (`head_{id}_0_0_0_cm.rx2`, `eyes_{id}_0_cm.rx2`, …).
     pub fn texture_paths(&self, head_id: u64) -> Vec<PathBuf> {
-        let bundled = self
-            .rendering_dir()
-            .join("player")
-            .join(format!("texlib_{head_id}.rx2"));
+        let player_dir = self.rendering_dir().join("player");
+        let bundled = player_dir.join(format!("texlib_{head_id}.rx2"));
         if bundled.is_file() {
             return vec![bundled];
         }
-        let Ok(entries) = std::fs::read_dir(self.rendering_dir().join("player")) else {
-            return Vec::new();
-        };
-        let mut loose: Vec<PathBuf> = entries
-            .flatten()
-            .map(|e| e.path())
+        // Loose rasters live either directly in `player/` (NHL 10) or in the head's own nested
+        // `player_{id}/` folder (NHL 07). Scan whichever exists; `is_loose_raster_for` keys on the id
+        // token so unrelated files are ignored.
+        let nested = player_dir.join(format!("player_{head_id}"));
+        let mut loose: Vec<PathBuf> = [player_dir, nested]
+            .into_iter()
+            .filter_map(|d| std::fs::read_dir(d).ok())
+            .flat_map(|entries| entries.flatten().map(|e| e.path()))
             .filter(|p| is_loose_raster_for(p, head_id))
             .collect();
         loose.sort(); // stable order across runs
         loose
     }
 
-    /// `fe/ion/artassets/{dir}/p{bucket}/p{portrait_id}.big`, if present.
-    /// `dir` is [`PORTRAIT_DIR_LARGE`] or [`PORTRAIT_DIR_SMALL`].
+    /// The portrait `.big` under `fe/ion/artassets/{dir}/`, if present. `dir` is
+    /// [`PORTRAIT_DIR_LARGE`] or [`PORTRAIT_DIR_SMALL`].
+    ///
+    /// * **NHL 08 → Legacy** — bucketed into id-range subfolders, `p{bucket}/p{id}.big`.
+    /// * **NHL 07** — flat, `p{id}.big` directly under the dir (verified on a real install).
+    ///
+    /// Probe flat first, then the bucketed layout; existence-gated, so neither yields a false match.
     pub fn portrait_path(&self, portrait_id: u64, dir: &str) -> Option<PathBuf> {
-        let bucket = portrait_bucket(portrait_id)?;
-        let p = self
-            .fe_dir()
-            .join("ion")
-            .join("artassets")
-            .join(dir)
-            .join(bucket)
-            .join(format!("p{portrait_id}.big"));
-        p.is_file().then_some(p)
+        let base = self.fe_dir().join("ion").join("artassets").join(dir);
+        let file = format!("p{portrait_id}.big");
+        let flat = base.join(&file);
+        if flat.is_file() {
+            return Some(flat);
+        }
+        let bucketed = base.join(portrait_bucket(portrait_id)?).join(&file);
+        bucketed.is_file().then_some(bucketed)
     }
 }
 

@@ -58,6 +58,7 @@ pub const MAGIC: &[u8; 7] = b"\x89RW4xb2";
 const HDR_FILE_COUNT_OFF: usize = 0x20;
 const HDR_FILE_TABLE_OFF: usize = 0x30;
 const HDR_HDR_SIZE_OFF: usize = 0x44;
+const HDR_DATA_SIZE_OFF: usize = 0x54;
 
 const ENTRY_STRIDE: usize = 24;
 
@@ -266,7 +267,16 @@ fn walk_file_table(data: &[u8]) -> Result<(Vec<FileTableEntry>, u32), PlayerMesh
     }
     let file_count = read_u32_be(data, HDR_FILE_COUNT_OFF)? as usize;
     let file_table = read_u32_be(data, HDR_FILE_TABLE_OFF)? as usize;
-    let hdr_size = read_u32_be(data, HDR_HDR_SIZE_OFF)?;
+    let mut hdr_size = read_u32_be(data, HDR_HDR_SIZE_OFF)?;
+    // NHL 07 packs the whole container into the "header" region (`data_size == 0`, `hdr_size` == the
+    // full file length) and stores raw-payload offsets absolutely; NHL 08→Legacy keep a separate data
+    // region (`data_size > 0`) whose payload offsets are biased by `hdr_size`. Drop the bias when there
+    // is no data region, mirroring `parse_mesh` (lib.rs) — otherwise `abs_offset` runs every raw
+    // payload past EOF and the head mesh won't decode.
+    let data_size = read_u32_be(data, HDR_DATA_SIZE_OFF)?;
+    if data_size == 0 {
+        hdr_size = 0;
+    }
 
     let table_bytes = file_count
         .checked_mul(ENTRY_STRIDE)
@@ -609,6 +619,11 @@ fn parse_mesh_impl(data: &[u8], skin_policy: SkinPolicy) -> Result<PlayerAsset, 
         .first()
         .map(|(idx, _)| *idx as i32)
         .unwrap_or(0);
+
+    // NHL 07 head meshes can declare more mesh handles than they carry vertex/index buffers (one
+    // handle has no geometry of its own). Clamp to the submeshes actually backed by a VB+IB pair
+    // rather than indexing past the buffer arrays. NHL 08→Legacy are 1:1, so this is a no-op there.
+    let mesh_count = mesh_count.min(vb_descs.len()).min(ib_descs.len());
 
     // Resolve sub-meshes by name table when possible. Mesh handles are
     // the 5 entries with tag 00 02 00 09 — name-table entry_idx for
