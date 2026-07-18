@@ -423,11 +423,12 @@ pub fn scan_player_assets(
     let f_year = field_by_studio_id(db, bio, F_BIRTH_YEAR).ok();
     let f_month = field_by_studio_id(db, bio, F_BIRTH_MONTH).ok();
     let f_day = field_by_studio_id(db, bio, F_BIRTH_DAY).ok();
-    // `dev_player_key` composes the year as `qFnd + 1900`, but NHL 07 stores the birth year in a 6-bit
-    // field based at 1959 (see `view::birth_year_base`). Bias the raw year by `base - 1900` so the slug
-    // (and its FHM identity match) carries the real calendar year, not e.g. 1924 for a 1983 birth.
+    // `dev_player_key` composes the year as `qFnd + 1900`, but the early Xbox-360 titles pack the birth
+    // year into a sub-8-bit field based at 1959 (NHL 07 = 6-bit, NHL 08 = 7-bit — see
+    // `view::birth_year_base`). Bias the raw year by `base - 1900` so the slug (and its FHM identity
+    // match) carries the real calendar year, not e.g. 1924 for a 1983 birth. Keyed on width, not title.
     let year_bias: u64 = match f_year {
-        Some(f) if f.bit_width <= 6 => 1959 - 1900,
+        Some(f) if f.bit_width < 8 => 1959 - 1900,
         _ => 0,
     };
     // NHL 10 stores month/day already 1-indexed; Legacy stores them 0-indexed.
@@ -610,16 +611,34 @@ impl Raster {
     }
 }
 
+/// Read a player-asset file, transparently unwrapping an outer RefPack layer.
+///
+/// NHL 08 ships its loose head meshes (`head_<id>.rx2`) and portrait archives
+/// (`p<id>.big`) as **whole-file RefPack streams** — the `\x89RW4xb2` / `BIGF`
+/// container only appears after decompression. (NHL 07 and NHL 09→Legacy store
+/// these files uncompressed; the portrait's *inner* DDS entries are RefPacked in
+/// every title, handled separately in `decode_portrait`.) Any file that isn't a
+/// RefPack stream is returned verbatim, so this is safe to call unconditionally.
+pub(crate) fn read_asset_file(path: &Path) -> Result<Vec<u8>> {
+    let bytes = std::fs::read(path).map_err(|e| DomainError::Io {
+        path: path.to_string_lossy().into_owned(),
+        source: e,
+    })?;
+    if tdb_archive_codec::is_refpack(&bytes) {
+        if let Ok(inner) = tdb_archive_codec::refpack_decompress(&bytes) {
+            return Ok(inner);
+        }
+    }
+    Ok(bytes)
+}
+
 /// Decode a portrait `.big` to RGBA.
 ///
 /// Keeps the largest raster by pixel area rather than the first: the archive
 /// also carries Scaleform blobs, empty `sg*` stubs, and small auxiliary rasters
 /// that would win a first-match scan.
 pub fn decode_portrait(path: &Path) -> Result<DecodedImage> {
-    let bytes = std::fs::read(path).map_err(|e| DomainError::Io {
-        path: path.to_string_lossy().into_owned(),
-        source: e,
-    })?;
+    let bytes = read_asset_file(path)?;
     let archive = tdb_archive_big::Archive::parse(bytes)
         .map_err(|e| DomainError::Extract(format!("{}: {e}", path.display())))?;
 
@@ -880,8 +899,7 @@ pub fn export_player_assets(
         }
 
         if let Some(src) = p.mesh_path.as_deref().filter(|_| opts.meshes_glb) {
-            match std::fs::read(src)
-                .map_err(|e| DomainError::Extract(format!("read {src}: {e}")))
+            match read_asset_file(Path::new(src))
                 .and_then(|b| {
                     tdb_rx2::playermesh::parse_player_mesh(&b)
                         .map_err(|e| DomainError::Extract(format!("{src}: {e}")))
@@ -904,8 +922,7 @@ pub fn export_player_assets(
         if opts.textures {
             for src in &p.texture_paths {
                 let src = src.as_str();
-                match std::fs::read(src)
-                    .map_err(|e| DomainError::Extract(format!("read {src}: {e}")))
+                match read_asset_file(Path::new(src))
                     .and_then(|b| {
                         tdb_rx2::texlib::parse(&b)
                             .map_err(|e| DomainError::Extract(format!("{src}: {e}")))

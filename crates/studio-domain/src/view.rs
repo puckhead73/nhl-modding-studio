@@ -1055,14 +1055,19 @@ fn label_of(f: Option<&FieldView>) -> Option<String> {
 
 /// The base year added to a stored `ubPc.qFnd` (birth year), probed from the field's own bit width.
 ///
-/// NHL 09→21 store the birth year in an 8-bit field with base **1900** (raw 0..255 → 1900..2155).
-/// NHL07 compresses it into a **6-bit** field (raw 0..63), which cannot hold a 1900-based modern
-/// birth year, and uses base **1959** instead (verified against six known players — Alfredsson 1972,
-/// Iginla 1977, Sakic 1969, Lidström 1970, Crosby 1987, Jágr 1972 — raw 0..29 → 1959..1988). Keyed on
-/// the field width, not the title id, per the version-aware / evidence-first rule.
+/// NHL 09→21 store the birth year in a **full 8-bit** field with base **1900** (raw 0..255 →
+/// 1900..2155). The two earliest Xbox-360 titles pack it into a **narrower** field and rebase to
+/// **1959** so the reduced range still spans a modern roster:
+/// * **NHL07** — **6-bit** (raw 0..63), verified against six known players (Alfredsson 1972, Iginla
+///   1977, Sakic 1969, Lidström 1970, Crosby 1987, Jágr 1972 → raw 0..29 → 1959..1988).
+/// * **NHL08** — **7-bit** (raw 0..30 across all 2962 bio rows → base 1959 = 1959..1989; base 1900
+///   would give an impossible 1900..1930 for a 2007-08 roster).
+///
+/// So any sub-8-bit `qFnd` uses base 1959; a full byte uses 1900. Keyed on the field width, not the
+/// title id, per the version-aware / evidence-first rule.
 fn birth_year_base(db: &TdbFile, bio: &Table) -> i64 {
     match bio.fields.iter().find(|f| f.id.canonical(db.endian) == "qFnd") {
-        Some(f) if f.bit_width <= 6 => 1959,
+        Some(f) if f.bit_width < 8 => 1959,
         _ => 1900,
     }
 }

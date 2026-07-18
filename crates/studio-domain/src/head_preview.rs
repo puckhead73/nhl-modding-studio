@@ -93,10 +93,7 @@ pub fn decode_head_preview(
     let mut strict_ok = true;
 
     for (i, mesh_path) in mesh_paths.iter().enumerate() {
-        let mesh_bytes = std::fs::read(mesh_path).map_err(|e| DomainError::Io {
-            path: mesh_path.to_string_lossy().into_owned(),
-            source: e,
-        })?;
+        let mesh_bytes = crate::assets::read_asset_file(mesh_path)?;
         // The head mesh (first) drives the clean-rig flag; a companion hair mesh
         // failing strict doesn't change it (its rig isn't what we edit).
         if i == 0 {
@@ -169,7 +166,7 @@ pub fn decode_head_preview(
 fn decode_textures(texture_paths: &[String]) -> Vec<PreviewTexture> {
     let mut out = Vec::new();
     for path in texture_paths {
-        let Ok(bytes) = std::fs::read(path) else {
+        let Ok(bytes) = crate::assets::read_asset_file(std::path::Path::new(path)) else {
             continue;
         };
         let Ok(lib) = tdb_rx2::texlib::parse(&bytes) else {
