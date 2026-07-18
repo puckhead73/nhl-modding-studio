@@ -423,6 +423,13 @@ pub fn scan_player_assets(
     let f_year = field_by_studio_id(db, bio, F_BIRTH_YEAR).ok();
     let f_month = field_by_studio_id(db, bio, F_BIRTH_MONTH).ok();
     let f_day = field_by_studio_id(db, bio, F_BIRTH_DAY).ok();
+    // `dev_player_key` composes the year as `qFnd + 1900`, but NHL 07 stores the birth year in a 6-bit
+    // field based at 1959 (see `view::birth_year_base`). Bias the raw year by `base - 1900` so the slug
+    // (and its FHM identity match) carries the real calendar year, not e.g. 1924 for a 1983 birth.
+    let year_bias: u64 = match f_year {
+        Some(f) if f.bit_width <= 6 => 1959 - 1900,
+        _ => 0,
+    };
     // NHL 10 stores month/day already 1-indexed; Legacy stores them 0-indexed.
     // `dev_player_key` applies Legacy's `+1`, so pre-decrement NHL 10's values
     // to hand it the encoding it expects.
@@ -452,7 +459,7 @@ pub fn scan_player_assets(
         let slug = dev_player_key(
             Some(first.trim()),
             Some(last.trim()),
-            f_year.and_then(|f| db.read_u64(bio, record, f)),
+            f_year.and_then(|f| db.read_u64(bio, record, f)).map(|y| y + year_bias),
             to_zero_indexed(f_month.and_then(|f| db.read_u64(bio, record, f))),
             to_zero_indexed(f_day.and_then(|f| db.read_u64(bio, record, f))),
         );

@@ -879,12 +879,22 @@ pub fn parse(data: &[u8]) -> Result<Texlib, TexlibError> {
             swap16_in_place(&mut base_tiled);
             untile_dxt(&base_tiled, width, height, format.bytes_per_block())
         } else {
-            // Argb8888: stored LINEAR (row-major `[A, R, G, B]`), NOT
-            // Xbox-tiled — verified pixel-identical to the PS3 rpsgl
-            // A8R8G8B8 ground truth for `name_*` nameplates. (The FE
-            // XPR2 32-bit path IS tiled; the rendering-cache texlib path
-            // is not.) So the on-disk bytes are the image as-is.
-            base_tiled
+            // Argb8888 ships two ways. The rendering-cache `name_*` nameplates store it LINEAR
+            // (row-major `[A, R, G, B]`, verified against the PS3 rpsgl ground truth). NHL 07's FE
+            // portraits (`fe/ion/.../playerheads/p*.big` → RX2) instead store it **Xbox-tiled at
+            // 32-aligned dimensions**: the data slot holds the full padded tiled buffer, larger than
+            // `width*height*4`. Detect that by the padded buffer size and untile at the real dims
+            // (`untile` reads through the 32-aligned pitch and crops to width×height); otherwise the
+            // bytes are already the linear image. Verified on a real NHL 07 install (468×248 portrait
+            // stored as a 480×256 tiled buffer).
+            let linear_size = (width as usize) * (height as usize) * 4;
+            let tiled_size = tiled_buffer_size_texels(width, height, 4);
+            if tiled_size > linear_size && (buf_size as usize) >= tiled_size {
+                let full = &data[buf_start..buf_start + tiled_size];
+                untile(full, width, height, 4)
+            } else {
+                base_tiled
+            }
         };
 
         let name = names
