@@ -175,13 +175,27 @@ fn decode_textures(texture_paths: &[String]) -> Vec<PreviewTexture> {
         let Ok(lib) = tdb_rx2::texlib::parse(&bytes) else {
             continue;
         };
+        // The name feeds `pick_submesh_texture`'s part/map matching (`head`/`eye`/`cm`/`am`). A
+        // bundled Legacy `texlib_*` names each raster internally (`head_67_cm.Raster`), but the
+        // single-raster files NHL 07/10 ship one map per file (`head_<id>_0_0_0_cm.rx2`) leave the
+        // internal name generic (`texture_0000`). Fall back to the file stem, which carries the part
+        // and `cm`/`am` map suffix, so the head map isn't mis-assigned to a black alpha map.
+        let file_stem = std::path::Path::new(path)
+            .file_stem()
+            .map(|s| s.to_string_lossy().into_owned())
+            .unwrap_or_default();
         for tex in &lib.textures {
             let Ok(rgba) = linear_to_rgba(tex.format, tex.width, tex.height, &tex.base_mip_linear)
             else {
                 continue;
             };
+            let name = if tex.name.starts_with("texture_") && lib.textures.len() == 1 {
+                file_stem.clone()
+            } else {
+                tex.name.clone()
+            };
             out.push(PreviewTexture {
-                name: tex.name.clone(),
+                name,
                 width: tex.width,
                 height: tex.height,
                 rgba_base64: base64_encode(&rgba),
