@@ -446,6 +446,35 @@ fn decode_vertex_descriptor(
 
 // ---------- Strip → triangle walker ----------
 
+/// Align each triangle's winding to its vertex normals. NHL 07 head strips carry correct per-vertex
+/// normals but inconsistent winding — the strip-parity/degenerate-stitch decode leaves a cluster of
+/// triangles wound backwards. A double-sided renderer keys front/back on winding (`gl_FrontFacing`)
+/// and flips the shading normal for "back" faces, so a back-wound triangle with outward normals gets
+/// its normal flipped inward and renders as a dark patch. Swapping the winding of any triangle whose
+/// geometric normal opposes its vertex normals makes the mesh consistently wound, so the renderer
+/// never wrongly flips. A correctly-wound mesh (NHL 08+) is unaffected — no triangle trips the test.
+fn align_winding_to_normals(vertices: &[Vertex], mut triangles: Vec<[u32; 3]>) -> Vec<[u32; 3]> {
+    for t in &mut triangles {
+        let p = |i: u32| vertices[i as usize].position;
+        let (a, b, c) = (p(t[0]), p(t[1]), p(t[2]));
+        let ab = [b[0] - a[0], b[1] - a[1], b[2] - a[2]];
+        let ac = [c[0] - a[0], c[1] - a[1], c[2] - a[2]];
+        // Geometric normal from winding (right-hand cross product).
+        let g = [
+            ab[1] * ac[2] - ab[2] * ac[1],
+            ab[2] * ac[0] - ab[0] * ac[2],
+            ab[0] * ac[1] - ab[1] * ac[0],
+        ];
+        let n = |i: u32| vertices[i as usize].normal;
+        let (n0, n1, n2) = (n(t[0]), n(t[1]), n(t[2]));
+        let vn = [n0[0] + n1[0] + n2[0], n0[1] + n1[1] + n2[1], n0[2] + n1[2] + n2[2]];
+        if g[0] * vn[0] + g[1] * vn[1] + g[2] * vn[2] < 0.0 {
+            t.swap(1, 2);
+        }
+    }
+    triangles
+}
+
 /// Drop triangle-strip "bridge" slivers — triangles whose longest edge is more than 8× the mesh's
 /// median edge. Such a triangle spans anatomically distant vertices (e.g. lip to eyebrow) and is a
 /// strip-stitch artifact, not a surface triangle. A well-formed mesh's edges are near-uniform, so the
@@ -949,7 +978,8 @@ fn parse_mesh_impl(data: &[u8], skin_policy: SkinPolicy) -> Result<PlayerAsset, 
         // longest edge is an order of magnitude past the mesh's typical edge — so drop them. Gated to
         // the NHL 07 layout; NHL 08+ meshes carry no such slivers and never trip the threshold.
         let triangles = if no_data_region {
-            drop_sliver_bridges(&vertices, triangles)
+            let triangles = drop_sliver_bridges(&vertices, triangles);
+            align_winding_to_normals(&vertices, triangles)
         } else {
             triangles
         };
