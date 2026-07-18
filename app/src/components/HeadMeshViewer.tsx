@@ -21,6 +21,7 @@ import { Spinner, ErrorBanner, Pill } from "./primitives";
 import type { AssetRootsArgsDto } from "../bindings/AssetRootsArgsDto";
 import type { HeadPreviewDto } from "../bindings/HeadPreviewDto";
 import type { PreviewSubmeshDto } from "../bindings/PreviewSubmeshDto";
+import type { PreviewTextureDto } from "../bindings/PreviewTextureDto";
 import rinkBackground from "../assets/rink-background.png";
 
 /** Distinct hues per submesh index for "flat colour" mode — so eyes, mouthbag
@@ -122,6 +123,8 @@ function LoadedViewer({ data }: { data: HeadPreviewDto }) {
         />
       </ViewerFrame>
 
+      <TexturePanel textures={data.textures} />
+
       <div className="rounded-md border border-slate-800 bg-slate-900/50 p-2">
         <div className="mb-1 flex items-center justify-between">
           <span className="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
@@ -189,6 +192,93 @@ function LoadedViewer({ data }: { data: HeadPreviewDto }) {
 /** Strip the rx2 name-table `.Mesh` suffix for display (`head_.Mesh` → `head_`). */
 function cleanName(name: string): string {
   return name.replace(/\.Mesh$/i, "");
+}
+
+/** Flat 2D view of the head's decoded texture maps, shown under the 3D window so
+ *  the operator can inspect the face atlas itself (skin, brows, mouth) without
+ *  hunting for it on the mesh. Same RGBA the 3D material samples — no re-decode.
+ *  Textures carry alpha, so a checkerboard sits behind them to reveal it. */
+function TexturePanel({ textures }: { textures: PreviewTextureDto[] }) {
+  if (textures.length === 0) {
+    return (
+      <div className="rounded-md border border-slate-800 bg-slate-900/50 p-2 text-center text-[10px] text-slate-500">
+        No face textures decoded for this head.
+      </div>
+    );
+  }
+  return (
+    <div className="rounded-md border border-slate-800 bg-slate-900/50 p-2">
+      <div className="mb-1.5 text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+        Face textures — {textures.length}{" "}
+        {textures.length === 1 ? "map" : "maps"}
+      </div>
+      <div className="flex flex-wrap gap-3">
+        {textures.map((t, i) => (
+          <figure key={`${t.name}-${i}`} className="flex flex-col items-center gap-1">
+            <TextureImage texture={t} />
+            <figcaption className="text-center font-mono text-[10px] leading-tight text-slate-400">
+              <div className="text-slate-300">{cleanRasterName(t.name)}</div>
+              <div className="text-slate-500">
+                {t.width}×{t.height}
+              </div>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** Draw a base64 RGBA8 raster onto a canvas at up to 256 px, preserving aspect.
+ *  Row 0 stays at the top (the decoded order the 3D viewer samples with
+ *  `flipY=false`), so the panel matches the model. Nearest-neighbour scaling
+ *  keeps texel edges crisp for inspection. */
+function TextureImage({ texture }: { texture: PreviewTextureDto }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const bin = atob(texture.rgba_base64);
+    const rgba = new Uint8ClampedArray(bin.length);
+    for (let i = 0; i < bin.length; i++) rgba[i] = bin.charCodeAt(i);
+    canvas.width = texture.width;
+    canvas.height = texture.height;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    ctx.putImageData(new ImageData(rgba, texture.width, texture.height), 0, 0);
+  }, [texture]);
+
+  const scale = Math.min(1, 256 / Math.max(texture.width, texture.height));
+  const w = Math.round(texture.width * scale);
+  const h = Math.round(texture.height * scale);
+  return (
+    <div
+      className="overflow-hidden rounded border border-slate-700"
+      style={{
+        // Checkerboard so the texture's alpha reads as transparency.
+        backgroundImage:
+          "linear-gradient(45deg, #334155 25%, transparent 25%), linear-gradient(-45deg, #334155 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #334155 75%), linear-gradient(-45deg, transparent 75%, #334155 75%)",
+        backgroundSize: "12px 12px",
+        backgroundPosition: "0 0, 0 6px, 6px -6px, -6px 0",
+        backgroundColor: "#1e293b",
+      }}
+    >
+      <canvas
+        ref={canvasRef}
+        style={{
+          width: `${w}px`,
+          height: `${h}px`,
+          imageRendering: "pixelated",
+          display: "block",
+        }}
+      />
+    </div>
+  );
+}
+
+/** Tidy a texlib raster name for display (`head_67_cm.Raster` → `head_67_cm`). */
+function cleanRasterName(name: string): string {
+  return name.replace(/\.Raster$/i, "");
 }
 
 function Toggle({
