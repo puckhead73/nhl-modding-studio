@@ -567,6 +567,7 @@ fn parse_mesh_impl(data: &[u8], skin_policy: SkinPolicy) -> Result<PlayerAsset, 
     // FInfo    — IB descriptor file offset.
     let mut vb_payloads: Vec<(u32, u32)> = Vec::new(); // (rel_off, size)
     let mut vb_descs: Vec<u32> = Vec::new();
+    let mut vb_entries: Vec<u32> = Vec::new(); // file-table entry index of each VB descriptor
     let mut ib_payloads: Vec<(u32, u32)> = Vec::new();
     let mut ib_descs: Vec<u32> = Vec::new();
     let mut vertex_descriptors: Vec<(u32, VertexDescriptor)> = Vec::new(); // (FT entry idx, parsed)
@@ -590,6 +591,7 @@ fn parse_mesh_impl(data: &[u8], skin_policy: SkinPolicy) -> Result<PlayerAsset, 
                     vb_payloads.push((prev.raw_offset, prev.size));
                 }
                 vb_descs.push(e.raw_offset);
+                vb_entries.push(i as u32);
             }
             TAG_INDEX_BUFFER => {
                 if i == 0 {
@@ -710,6 +712,21 @@ fn parse_mesh_impl(data: &[u8], skin_policy: SkinPolicy) -> Result<PlayerAsset, 
 
     let mut submeshes = Vec::with_capacity(mesh_count);
     for i in 0..mesh_count {
+        // NHL 07: the mouth-interior mesh (`geo_mouthbagShape`) has no per-head texture in this title,
+        // so its atlas UVs mis-map onto the head skin and it shows as a stray dark patch on the face.
+        // It is interior geometry the face preview doesn't need — skip it. The head itself is one
+        // vertex buffer (its bone skin-splits collapse into a single submesh here), so nothing visible
+        // is lost. Gated on the NHL 07 layout; NHL 08+ ship a mouth map and are unaffected.
+        if no_data_region {
+            let is_mouthbag = name_table
+                .by_entry
+                .get(&vb_entries[i])
+                .map(|n| n.to_ascii_lowercase().contains("mouthbag"))
+                .unwrap_or(false);
+            if is_mouthbag {
+                continue;
+            }
+        }
         // Map sub-mesh i → VertexDescriptor. When fewer descriptors than
         // sub-meshes, read partID from VB-desc + 40 (Noesis line 248).
         let vb_desc_off = vb_descs[i] as usize;
