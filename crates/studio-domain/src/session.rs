@@ -148,6 +148,15 @@ impl EditSession {
         ))
     }
 
+    /// Every player's art (portrait / head mesh / head textures), resolved against `roots`.
+    ///
+    /// Reads the *working* state, so a staged edit to a player's name or head id is reflected in
+    /// the export names before it's ever saved.
+    pub fn player_assets(&self, roots: &crate::AssetRoots) -> Result<Vec<crate::PlayerAssets>> {
+        let db = TdbFile::parse(&self.working)?;
+        crate::assets::scan_player_assets(&db, self.project.meta(), roots)
+    }
+
     /// The full Player detail view for one `wBIz`, or `None` if no such player.
     pub fn player_view(&self, player_id: u64) -> Result<Option<crate::PlayerView>> {
         let db = TdbFile::parse(&self.working)?;

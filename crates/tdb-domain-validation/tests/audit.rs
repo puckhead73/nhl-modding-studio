@@ -87,6 +87,22 @@ fn companion_presence_clean_on_anchor() {
     );
 }
 
+/// NHL07 (gen6 `NHL07NG.db`) ships no equipment companion tables, so `companion_presence` must raise
+/// zero errors on it — an absent-in-the-schema table is not a broken cluster. Before the schema-aware
+/// fix this predicate flagged all 2250 players, flooding the audit and blocking edits.
+#[test]
+fn companion_presence_clean_on_nhl07_without_equipment() {
+    let bytes = anchor("xbox360/nhl07/databases/NHL07NG.db");
+    let db = TdbFile::parse(&bytes).unwrap();
+    let findings = companion_presence(&db);
+    assert!(
+        findings.is_empty(),
+        "NHL07 has no equipment tables; expected zero companion errors, got {}: {:?}",
+        findings.len(),
+        findings.iter().take(5).collect::<Vec<_>>()
+    );
+}
+
 /// The single-captain predicate finds zero violations on the vanilla anchor (EA data carries at most
 /// one captain per team) — so it is safe to compose into the write-clean save-time audit.
 #[test]

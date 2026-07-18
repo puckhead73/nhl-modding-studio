@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { call } from "../lib/client";
 import { useProject } from "../lib/project";
 import { FieldRow } from "../components/FieldRow";
-import { EditableField, ReadonlyField, TeamSelect } from "../components/EditableField";
+import { EditableField, NotInGame, ReadonlyField, TeamSelect } from "../components/EditableField";
 import { DetailTabs, type DetailTab } from "../components/DetailTabs";
 import { PlayerHeader } from "../components/PlayerHeader";
 import { AttributesTab } from "../components/AttributesTab";
@@ -108,13 +108,29 @@ function PlayerDataTab({ projectId, player }: { projectId: number; player: Playe
   const d = player.data;
   const byId = (id: string) => player.all_fields.find((f) => f.studio_field === id);
 
-  // An editable field cell by studio id; renders nothing if this title's schema lacks the field.
+  // An editable field cell by studio id; shows "Not in Selected Game" when this title's schema
+  // lacks the field, so every listed field is accounted for rather than silently missing.
   const F = ({ id, label }: { id: string; label: string }) => {
     const f = byId(id);
-    return f ? <EditableField projectId={projectId} record={rec} field={f} label={label} /> : null;
+    return f ? (
+      <EditableField projectId={projectId} record={rec} field={f} label={label} />
+    ) : (
+      <NotInGame label={label} />
+    );
   };
-  // A team-FK cell by studio id; hidden (not read-only) when this title's schema lacks the field.
-  const Team = ({ id, label, noneLabel }: { id: string; label: string; noneLabel?: string }) => {
+  // A team-FK cell by studio id. `offset` (0 or 1) is how the field encodes the team id — the
+  // resolved `main_team_offset` for `dXSB` (0-indexed on NHL 09/10), 1 for the rest.
+  const Team = ({
+    id,
+    label,
+    noneLabel,
+    offset,
+  }: {
+    id: string;
+    label: string;
+    noneLabel?: string;
+    offset?: number;
+  }) => {
     const f = byId(id);
     return f ? (
       <TeamSelect
@@ -124,26 +140,13 @@ function PlayerDataTab({ projectId, player }: { projectId: number; player: Playe
         teams={teams}
         label={label}
         noneLabel={noneLabel}
+        offset={offset}
       />
-    ) : null;
+    ) : (
+      <NotInGame label={label} />
+    );
   };
   const yesNo = (b: boolean | null) => (b == null ? "" : b ? "Yes" : "No");
-
-  // The whole Draft Data section disappears when this game predates draft data (NHL 10 has none).
-  const hasDraft = caps.draft_team || caps.draft_year || caps.draft_round || caps.draft_pick;
-  // What this game's database doesn't carry — disclosed once at the bottom instead of leaving the
-  // user to wonder whether a blank cell is a bug.
-  const notInThisGame = [
-    !caps.junior_team && "Junior Team",
-    !caps.player_style && "Archetype",
-    !caps.year_ufa && "Year UFA",
-    !caps.rookie_ahl && "AHL Rookie",
-    !caps.rookie_chl && "CHL Rookie",
-    !caps.draft_team && "Draft Team",
-    !caps.draft_year && "Draft Year",
-    !caps.draft_round && "Draft Round",
-    !caps.draft_pick && "Draft Position",
-  ].filter((x): x is string => Boolean(x));
 
   return (
     <div className="space-y-6">
@@ -164,13 +167,15 @@ function PlayerDataTab({ projectId, player }: { projectId: number; player: Playe
 
       <Section title="Roster Data">
         <F id="sVRt" label="Jersey Number" />
-        <Team id="dXSB" label="Main Team" />
+        <Team id="dXSB" label="Main Team" offset={caps.main_team_offset} />
         <Team id="ZbNy" label="Junior Team" />
         {/* Real player active flag: `kKYN` = bio `active` (1-bit) — renders as a checkbox. Distinct
             from `tEok`/`c_potential`, which the prior app mislabelled "Active". */}
         <F id="kKYN" label="Active" />
-        {caps.player_style && (
+        {caps.player_style ? (
           <ReadonlyField label="Archetype">{player.header.style_label ?? ""}</ReadonlyField>
+        ) : (
+          <NotInGame label="Archetype" />
         )}
         <AdditionalTeams projectId={projectId} player={player} teams={teams} />
       </Section>
@@ -191,20 +196,12 @@ function PlayerDataTab({ projectId, player }: { projectId: number; player: Playe
         <F id="BQVU" label="CHL Rookie" />
       </Section>
 
-      {hasDraft && (
-        <Section title="Draft Data">
-          <Team id="vgWu" label="Draft Team" noneLabel="(undrafted)" />
-          <F id="YKzW" label="Draft Year" />
-          <F id="ccjU" label="Draft Round" />
-          <F id="tTfW" label="Draft Position" />
-        </Section>
-      )}
-
-      {notInThisGame.length > 0 && (
-        <p className="text-xs text-slate-500">
-          Not part of this game's database (hidden): {notInThisGame.join(", ")}.
-        </p>
-      )}
+      <Section title="Draft Data">
+        <Team id="vgWu" label="Draft Team" noneLabel="(undrafted)" />
+        <F id="YKzW" label="Draft Year" />
+        <F id="ccjU" label="Draft Round" />
+        <F id="tTfW" label="Draft Position" />
+      </Section>
 
       <details className="rounded-md border border-slate-800 bg-slate-900/40 px-3 py-2">
         <summary className="cursor-pointer text-xs font-semibold text-slate-300">
@@ -256,10 +253,11 @@ function AdditionalTeams({
     onSuccess: refresh,
   });
 
-  // Main Team = ubPc.dXSB − 1 (0 = free agent). Exactly one membership row matching it is the
-  // canonical slot — hide that one; any duplicate beyond it counts as an additional membership.
-  const dxsb = player.all_fields.find((f) => f.studio_field === "dXSB")?.decoded ?? 0;
-  const mainTeamId = dxsb > 0 ? dxsb - 1 : null;
+  // The main team is resolved in the domain (per-title `dXSB` offset, anchored on the roster) and
+  // handed over as `header.primary_team_id` — never recompute it here with a hardcoded offset, or
+  // early titles (NHL 09/10, where `dXSB` is 0-indexed) mis-split main vs. additional. Exactly one
+  // membership row matching it is the canonical slot — hide that one; the rest are additional.
+  const mainTeamId = player.header.primary_team_id;
   let mainRowDropped = false;
   const rows = player.memberships.filter((m) => {
     if (!mainRowDropped && mainTeamId !== null && m.team_id === mainTeamId) {

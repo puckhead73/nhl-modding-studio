@@ -140,9 +140,11 @@ export function EditableField({
 
 type TeamOption = { team_id: number; name: string; abbrev: string };
 
-/// A team dropdown that edits a 1-indexed team FK bio field (`dXSB`/`dbBW`/`ZbNy`/`vgWu`): stored
-/// value is `team_id + 1`, with 0 meaning "none / free agent". Read-only if the field is absent or
-/// not updatable.
+/// A team dropdown that edits a team-FK bio field. Most refs (`dbBW`/`ZbNy`/`vgWu`) are 1-indexed —
+/// stored value is `team_id + 1`, `0` = "none / free agent". The "main team" `dXSB` drifted: it is
+/// 0-indexed on NHL 09/10 (stored value **is** the team id, no free-agent sentinel). Pass `offset`
+/// (0 or 1, default 1) — the caller reads it from `capabilities.main_team_offset` for `dXSB`.
+/// Read-only if the field is absent or not updatable.
 export function TeamSelect({
   projectId,
   record,
@@ -150,6 +152,7 @@ export function TeamSelect({
   teams,
   label,
   noneLabel = "(none — Free Agent)",
+  offset = 1,
 }: {
   projectId: number;
   record: number;
@@ -157,6 +160,7 @@ export function TeamSelect({
   teams: TeamOption[];
   label: string;
   noneLabel?: string;
+  offset?: number;
 }) {
   const qc = useQueryClient();
   const { update } = useProject();
@@ -176,7 +180,10 @@ export function TeamSelect({
   });
 
   const raw = field?.decoded ?? 0;
-  const teamId = raw > 0 ? raw - 1 : -1;
+  // 1-indexed refs reserve raw 0 for "free agent"; 0-indexed `dXSB` (NHL 09/10) has no such
+  // sentinel — every raw value is a real team id.
+  const teamId = offset === 1 ? (raw > 0 ? raw - 1 : -1) : raw;
+  const canBeNone = offset === 1;
 
   if (!field || !field.editable) {
     const t = teams.find((x) => x.team_id === teamId);
@@ -194,9 +201,9 @@ export function TeamSelect({
         <select
           className={CONTROL}
           value={teamId}
-          onChange={(e) => mut.mutate(Number(e.target.value) + 1)}
+          onChange={(e) => mut.mutate(Number(e.target.value) + offset)}
         >
-          <option value={-1}>{noneLabel}</option>
+          {canBeNone && <option value={-1}>{noneLabel}</option>}
           {sorted.map((t) => (
             <option key={t.team_id} value={t.team_id}>
               {t.name}
@@ -205,6 +212,21 @@ export function TeamSelect({
           ))}
         </select>
       </ClickToEdit>
+    </Labeled>
+  );
+}
+
+/** A labelled cell for a field the loaded title's schema doesn't carry — shows an explicit
+ *  "Not in Selected Game" instead of a blank the user can't tell apart from an empty value. */
+export function NotInGame({ label }: { label: string }) {
+  return (
+    <Labeled label={label}>
+      <span
+        className="truncate text-xs italic text-slate-600"
+        title="This field is not part of the selected game's database."
+      >
+        Not in Selected Game
+      </span>
     </Labeled>
   );
 }

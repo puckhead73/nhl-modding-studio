@@ -40,6 +40,11 @@ pub struct CapabilitiesDto {
     pub rookie_ahl: bool,
     /// CHL rookie flag (absent in NHL 10–13).
     pub rookie_chl: bool,
+    /// The separate skater equipment table exists (absent on gen6 titles like NHL07, which ship no
+    /// equipment tables) — gates any per-player equipment surface instead of rendering it blank.
+    pub has_skater_equip: bool,
+    /// The separate goalie equipment table exists (see `has_skater_equip`).
+    pub has_goalie_equip: bool,
     /// Skater ratings in this database that carry an operator label; `< skater_ratings_total`
     /// means the loaded schema has ratings we can't yet name (the Attributes tab hedges visibly).
     pub skater_ratings_labelled: usize,
@@ -49,6 +54,10 @@ pub struct CapabilitiesDto {
     pub goalie_ratings_labelled: usize,
     /// All goalie rating fields this database carries.
     pub goalie_ratings_total: usize,
+    /// How `ubPc.dXSB` (the "main team") encodes the team id: `0` on NHL 09/10 (raw = team id) or
+    /// `1` on Legacy/11→21 (raw = team id + 1, 0 = free agent). The Main-Team picker uses it so it
+    /// reads/writes the right value per title instead of assuming the modern 1-indexed convention.
+    pub main_team_offset: u8,
 }
 
 /// A loaded project plus a structural summary of its current working database.
@@ -1087,4 +1096,119 @@ pub struct PrebuiltDto {
     pub native_max: u32,
     /// When true the formula outputs on its own scale (bias/tier rows).
     pub direct_output: bool,
+}
+
+// ---------------------------------------------------------------- assets
+
+/// Which install's art to work against. Every asset command needs the same trio, so they take
+/// it as one value rather than three positional strings.
+#[derive(Deserialize, TS)]
+pub struct AssetRootsArgsDto {
+    /// The resolved install dir. Art is anchored on the game executable found under it.
+    pub install_dir: String,
+    /// Override the inferred `rendering/` root; `null`/empty keeps the inferred path.
+    pub rendering_override: Option<String>,
+    /// Override the inferred `fe/` root; `null`/empty keeps the inferred path.
+    pub fe_override: Option<String>,
+}
+
+/// Where a title keeps its art, and whether both roots are actually present.
+#[derive(Serialize, TS)]
+pub struct AssetRootsDto {
+    pub rendering: String,
+    pub fe: String,
+    /// Both roots exist on disk. `false` means the install is still packed —
+    /// run extraction before scanning.
+    pub complete: bool,
+}
+
+/// One player's art, resolved against a real install. `full_name` and `slug` are the
+/// human-readable surfaces; `portrait_id` / `head_id` are the raw EA ids, for progressive
+/// disclosure only.
+#[derive(Serialize, TS)]
+pub struct PlayerAssetsDto {
+    pub bio_record: u32,
+    pub full_name: String,
+    /// `lastname_firstname_dd_mm_yyyy` — the export filename stem. `null` when the bio
+    /// lacks a usable name or birthdate, in which case this player can't be exported.
+    pub slug: Option<String>,
+    #[ts(type = "number")]
+    pub portrait_id: u64,
+    #[ts(type = "number")]
+    pub head_id: u64,
+    /// This head model is this player's own (`pPaD == lOnr`) — the only case where naming
+    /// a mesh after them is truthful.
+    pub bespoke_head: bool,
+    /// A shared generic head (id >= 60000) reused across many players.
+    pub pool_head: bool,
+    pub portrait_path: Option<String>,
+    pub mesh_path: Option<String>,
+    /// Every RX2 container holding one of this head's textures: a single bundled texlib on
+    /// Legacy/14/15, or several loose per-raster files on NHL 10. Empty when none ship.
+    pub texture_paths: Vec<String>,
+}
+
+/// What to include in an export run.
+#[derive(Deserialize, TS)]
+pub struct ExportOptionsDto {
+    pub portraits: bool,
+    pub meshes_glb: bool,
+    pub raw_rx2: bool,
+    pub textures: bool,
+    /// Crop portraits to their opaque bounds (EA ships them on a mostly-empty 512x512 canvas).
+    pub crop_portraits: bool,
+}
+
+/// What an export run produced. Partial results are normal — `failures` carries the
+/// already-human-readable reasons.
+#[derive(Serialize, TS)]
+pub struct AssetExportSummaryDto {
+    pub players_considered: usize,
+    pub portraits_written: usize,
+    pub meshes_written: usize,
+    pub textures_written: usize,
+    pub raw_copied: usize,
+    pub skipped_no_slug: usize,
+    pub failures: Vec<String>,
+    #[ts(type = "number")]
+    pub bytes_written: u64,
+}
+
+// ---------------------------------------------------------------- head preview
+
+/// One decoded texlib raster for the head viewer (RGBA8, base64).
+#[derive(Serialize, TS)]
+pub struct PreviewTextureDto {
+    pub name: String,
+    pub width: u32,
+    pub height: u32,
+    pub rgba_base64: String,
+}
+
+/// One submesh of a head, as flat arrays for a three.js `BufferGeometry`, plus
+/// its material binding. `name` is the label the visibility toggle shows.
+#[derive(Serialize, TS)]
+pub struct PreviewSubmeshDto {
+    pub name: String,
+    pub positions: Vec<[f32; 3]>,
+    pub normals: Vec<[f32; 3]>,
+    pub uv1: Vec<[f32; 2]>,
+    pub triangles: Vec<[u32; 3]>,
+    /// Index into `HeadPreviewDto::textures`; `null` renders untextured.
+    pub material_index: Option<u32>,
+    pub transparent: bool,
+    pub render_order: i32,
+}
+
+/// A player head decoded for the 3D viewer: every submesh with its texture, plus
+/// camera framing. `lenient_rig` is `true` for NHL 10 heads whose per-submesh
+/// bone palettes disagree — the geometry rendered but the rig is unresolved.
+#[derive(Serialize, TS)]
+pub struct HeadPreviewDto {
+    pub submeshes: Vec<PreviewSubmeshDto>,
+    pub textures: Vec<PreviewTextureDto>,
+    pub center: [f32; 3],
+    pub span: f32,
+    pub source_path: String,
+    pub lenient_rig: bool,
 }

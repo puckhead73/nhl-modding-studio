@@ -12,6 +12,7 @@ members = [
     "crates/tdb-savedata",
     "crates/tdb-archive-codec",
     "crates/tdb-archive-big",
+    "crates/tdb-rx2",
     "crates/tdb-edit",
     "crates/tdb-fhm",
     "crates/tdb-fhm-build",

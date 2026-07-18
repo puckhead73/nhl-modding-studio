@@ -9,6 +9,7 @@
 //! This crate is the engine read foundation; editing/writing live in higher crates.
 
 pub mod crc;
+pub mod dev_key;
 
 use std::fmt;
 

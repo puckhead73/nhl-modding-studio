@@ -2,6 +2,7 @@
 //! `raw_id` string helpers carried over from the prior app.
 
 use studio_domain::{
+    AssetExportSummary, AssetRoots, ExportOptions, HeadPreview, PlayerAssets,
     ArenaRef, ArenaSummary, ArenaView, AttributeView, Capabilities, CareerStats, DbOverview,
     ExtractSummary, FieldRaw, FieldView, HumanFinding, HumanReport, InstallReport, LineEntry,
     LinesView, OpOutcome, PlayerAttributes, PlayerData, PlayerHeader, PlayerSummary, PlayerView,
@@ -10,6 +11,8 @@ use studio_domain::{
 };
 
 use crate::dto::{
+    AssetExportSummaryDto, AssetRootsDto, ExportOptionsDto, HeadPreviewDto, PlayerAssetsDto,
+    PreviewSubmeshDto, PreviewTextureDto,
     ArenaRefDto, ArenaSummaryDto, ArenaViewDto, AttributeViewDto, CapabilitiesDto, CareerColumnDto,
     CareerRowDto, CareerSectionDto, CareerStatsDto, CreatePlayerDto, DraftPickDto, EnumOptionDto,
     EquipmentZoneDto, ExtractSummaryDto, FieldViewDto, FindingDto, InstallReportDto,
@@ -121,10 +124,13 @@ fn capabilities_dto(c: &Capabilities) -> CapabilitiesDto {
         draft_pick: c.draft_pick,
         rookie_ahl: c.rookie_ahl,
         rookie_chl: c.rookie_chl,
+        has_skater_equip: c.has_skater_equip,
+        has_goalie_equip: c.has_goalie_equip,
         skater_ratings_labelled: c.skater_ratings_labelled,
         skater_ratings_total: c.skater_ratings_total,
         goalie_ratings_labelled: c.goalie_ratings_labelled,
         goalie_ratings_total: c.goalie_ratings_total,
+        main_team_offset: c.main_team_offset,
     }
 }
 
@@ -987,5 +993,84 @@ pub fn formula_catalog_dto() -> FormulaCatalogDto {
                 direct_output: *direct,
             })
             .collect(),
+    }
+}
+
+pub fn asset_roots_dto(r: &AssetRoots) -> AssetRootsDto {
+    AssetRootsDto {
+        rendering: r.rendering.clone(),
+        fe: r.fe.clone(),
+        complete: r.complete(),
+    }
+}
+
+pub fn player_assets_dto(p: &PlayerAssets) -> PlayerAssetsDto {
+    PlayerAssetsDto {
+        bio_record: p.bio_record,
+        full_name: p.full_name.clone(),
+        slug: p.slug.clone(),
+        portrait_id: p.portrait_id,
+        head_id: p.head_id,
+        bespoke_head: p.bespoke_head,
+        pool_head: p.pool_head,
+        portrait_path: p.portrait_path.clone(),
+        mesh_path: p.mesh_path.clone(),
+        texture_paths: p.texture_paths.clone(),
+    }
+}
+
+pub fn export_options(o: &ExportOptionsDto) -> ExportOptions {
+    ExportOptions {
+        portraits: o.portraits,
+        meshes_glb: o.meshes_glb,
+        raw_rx2: o.raw_rx2,
+        textures: o.textures,
+        crop_portraits: o.crop_portraits,
+    }
+}
+
+pub fn asset_export_summary_dto(s: &AssetExportSummary) -> AssetExportSummaryDto {
+    AssetExportSummaryDto {
+        players_considered: s.players_considered,
+        portraits_written: s.portraits_written,
+        meshes_written: s.meshes_written,
+        textures_written: s.textures_written,
+        raw_copied: s.raw_copied,
+        skipped_no_slug: s.skipped_no_slug,
+        failures: s.failures.clone(),
+        bytes_written: s.bytes_written,
+    }
+}
+
+pub fn head_preview_dto(p: &HeadPreview) -> HeadPreviewDto {
+    HeadPreviewDto {
+        submeshes: p
+            .submeshes
+            .iter()
+            .map(|s| PreviewSubmeshDto {
+                name: s.name.clone(),
+                positions: s.positions.clone(),
+                normals: s.normals.clone(),
+                uv1: s.uv1.clone(),
+                triangles: s.triangles.clone(),
+                material_index: s.material_index,
+                transparent: s.transparent,
+                render_order: s.render_order,
+            })
+            .collect(),
+        textures: p
+            .textures
+            .iter()
+            .map(|t| PreviewTextureDto {
+                name: t.name.clone(),
+                width: t.width,
+                height: t.height,
+                rgba_base64: t.rgba_base64.clone(),
+            })
+            .collect(),
+        center: p.center,
+        span: p.span,
+        source_path: p.source_path.clone(),
+        lenient_rig: p.lenient_rig,
     }
 }

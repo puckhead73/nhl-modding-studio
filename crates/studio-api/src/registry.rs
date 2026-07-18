@@ -10,8 +10,11 @@ use std::collections::HashMap;
 use std::path::{Path, PathBuf};
 use std::sync::{Arc, Mutex};
 
+use base64::engine::general_purpose::STANDARD as BASE64;
+use base64::Engine as _;
+
 use studio_domain::{
-    compute_maxima_at, compute_person_career_ratings, compute_person_ratings, default_profile,
+    AssetRoots, compute_maxima_at, compute_person_career_ratings, compute_person_ratings, default_profile,
     AttributeMaxima, EditSession, FhmCorpus, FieldValue, NormalizationMode, Platform, Project,
     ProjectProfile, ProjectRole, Workspace,
 };
@@ -19,6 +22,8 @@ use studio_domain::{
 use crate::convert;
 use crate::dto::{
     AddCareerSeasonDto, ArenaSummaryDto, ArenaViewDto, AutocorrectSummaryDto, CareerStatsDto,
+    AssetExportSummaryDto, AssetRootsArgsDto, AssetRootsDto, ExportOptionsDto, HeadPreviewDto,
+    PlayerAssetsDto,
     CreatePlayerDto, EaComputedRatingsDto, ExtractSummaryDto, FormulaCatalogDto, FormulaProfileDto,
     HistoricalCareerRatingsDto, HistoricalFiltersDto, HistoricalPersonDto, HistoricalPersonSummaryDto,
     HistoricalTeamDto, HistoricalTeamFiltersDto, HistoricalTeamFranchiseDto,
@@ -180,6 +185,108 @@ impl Registry {
         let summary =
             studio_domain::extract_install(Path::new(root)).map_err(ApiError::Domain)?;
         Ok(convert::extract_summary_dto(&summary))
+    }
+
+    // ------------------------------------------------------------ assets
+
+    /// Infer a title's art roots from its install dir, with optional operator overrides.
+    /// Takes no project id — the UI calls this to *report* whether art is available.
+    pub fn asset_roots(&self, args: &AssetRootsArgsDto) -> AssetRootsDto {
+        convert::asset_roots_dto(&resolve_roots(args))
+    }
+
+    /// Every player's art, resolved against the install. One `is_file` probe per candidate path,
+    /// so this is a scan: call it when the page opens or the roots change, then filter in the UI.
+    pub fn list_player_assets(
+        &self,
+        id: u32,
+        args: &AssetRootsArgsDto,
+    ) -> Result<Vec<PlayerAssetsDto>, ApiError> {
+        let roots = resolve_roots(args);
+        self.with_workspace(id, |ws| {
+            Ok(ws
+                .primary()
+                .player_assets(&roots)?
+                .iter()
+                .map(convert::player_assets_dto)
+                .collect())
+        })
+    }
+
+    /// Decode one portrait to a PNG data URL for preview. Takes the resolved path from
+    /// [`Registry::list_player_assets`] rather than an id, so the UI never re-derives EA's
+    /// bucket layout.
+    pub fn portrait_preview(&self, path: &str, crop: bool) -> Result<String, ApiError> {
+        let img = studio_domain::decode_portrait(Path::new(path)).map_err(ApiError::Domain)?;
+        let img = if crop { img.cropped_to_opaque(0) } else { img };
+        let png = img.to_png().map_err(ApiError::Domain)?;
+        Ok(format!(
+            "data:image/png;base64,{}",
+            BASE64.encode(&png)
+        ))
+    }
+
+    /// Export art for the given bio records into `out_dir`, named by player slug.
+    ///
+    /// `bio_records` selects the players (empty = every scanned player), so the UI's filter and
+    /// selection decide the set rather than a flag matrix duplicated down here.
+    pub fn export_assets(
+        &self,
+        id: u32,
+        args: &AssetRootsArgsDto,
+        out_dir: &str,
+        bio_records: Vec<u32>,
+        opts: &ExportOptionsDto,
+    ) -> Result<AssetExportSummaryDto, ApiError> {
+        let roots = resolve_roots(args);
+        let opts = convert::export_options(opts);
+        let out_dir = out_dir.to_string();
+        self.with_workspace(id, |ws| {
+            let all = ws.primary().player_assets(&roots)?;
+            let selected: Vec<_> = if bio_records.is_empty() {
+                all
+            } else {
+                let wanted: std::collections::HashSet<u32> = bio_records.into_iter().collect();
+                all.into_iter()
+                    .filter(|p| wanted.contains(&p.bio_record))
+                    .collect()
+            };
+            let summary =
+                studio_domain::export_player_assets(&selected, Path::new(&out_dir), opts)
+                    .map_err(ApiError::Domain)?;
+            Ok(convert::asset_export_summary_dto(&summary))
+        })
+    }
+
+    /// Decode a head for the 3D viewer, resolved server-side from `head_id`
+    /// (`player_<head_id>.rx2` + its texlib) — no path crosses the boundary.
+    /// Works for any head with a mesh on disk, not just bespoke ones, so a
+    /// generic/pool head can be inspected too. Uses the lenient parse, so NHL
+    /// 10's per-submesh-rig heads render for identification.
+    pub fn head_preview(
+        &self,
+        args: &AssetRootsArgsDto,
+        head_id: u64,
+    ) -> Result<HeadPreviewDto, ApiError> {
+        let roots = resolve_roots(args);
+        let mesh = roots.mesh_path(head_id).ok_or_else(|| {
+            ApiError::Workspace(format!(
+                "no head mesh (player_{head_id}.rx2 or head_{head_id}.rx2) in this install's \
+                 rendering/player folder"
+            ))
+        })?;
+        // Head first, then any companion meshes (NHL 09's separate hair) — merged
+        // into one preview.
+        let mut meshes = vec![mesh];
+        meshes.extend(roots.extra_head_mesh_paths(head_id));
+        let texs: Vec<String> = roots
+            .texture_paths(head_id)
+            .into_iter()
+            .map(|p| p.to_string_lossy().into_owned())
+            .collect();
+        let preview =
+            studio_domain::decode_head_preview(&meshes, &texs).map_err(ApiError::Domain)?;
+        Ok(convert::head_preview_dto(&preview))
     }
 
     /// Drop a workspace, freeing its working bytes. Returns `false` if it was not registered.
@@ -1076,4 +1183,12 @@ pub fn parse_role(s: &str) -> Result<ProjectRole, ApiError> {
             value: s.to_string(),
         }),
     }
+}
+
+/// Infer a title's art roots from the install dir, then apply any operator overrides.
+fn resolve_roots(args: &AssetRootsArgsDto) -> AssetRoots {
+    AssetRoots::resolve(Path::new(&args.install_dir)).with_overrides(
+        args.rendering_override.as_deref(),
+        args.fe_override.as_deref(),
+    )
 }

@@ -15,6 +15,7 @@
 //! rather than the full command surface — the seams (registry of ops, source-aware save, DTO bridge
 //! in `studio-api`) are what later phases extend.
 
+pub mod assets;
 pub mod attributes;
 pub mod audit;
 pub mod capabilities;
@@ -22,6 +23,7 @@ pub mod capacity;
 pub mod discovery;
 pub mod extract;
 pub mod formula;
+pub mod head_preview;
 pub mod historical;
 mod error;
 mod overview;
@@ -32,6 +34,11 @@ mod team_tabs;
 mod view;
 mod workspace;
 
+pub use assets::{
+    decode_portrait, export_player_assets, probe_birthdate_encoding, scan_player_assets,
+    AssetExportSummary, AssetRoots, BirthdateEncoding, DecodedImage, ExportOptions, PlayerAssets,
+};
+pub use head_preview::{decode_head_preview, HeadPreview, PreviewSubmesh, PreviewTexture};
 pub use attributes::{
     build_player_attributes, AttributeView, PlayerAttributes, TraitOption, TraitView,
 };
@@ -64,9 +71,9 @@ pub use view::{
     arena_summaries, arena_view, career_stats, entity_fields, lines_view, player_summaries,
     player_view, read_field, team_summaries, team_view, ArenaRef, ArenaSummary, ArenaView,
     CareerColumn, CareerRow, CareerSection, CareerStats, FieldKind, FieldRaw, FieldView, LineEntry,
-    LinesView, PlayerData, PlayerHeader, PlayerSummary, PlayerView, RosterMembership, SlotField,
-    TeamSummary, TeamView, CAREER_GOALIE_PLAYOFFS, CAREER_GOALIE_SEASON, CAREER_SKATER_PLAYOFFS,
-    CAREER_SKATER_SEASON,
+    probe_main_team_encoding, LinesView, MainTeamEncoding, PlayerData, PlayerHeader, PlayerSummary,
+    PlayerView, RosterMembership, SlotField, TeamSummary, TeamView, CAREER_GOALIE_PLAYOFFS,
+    CAREER_GOALIE_SEASON, CAREER_SKATER_PLAYOFFS, CAREER_SKATER_SEASON,
 };
 
 /// A convenience result alias for the domain layer.

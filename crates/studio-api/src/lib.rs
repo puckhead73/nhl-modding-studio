@@ -94,6 +94,11 @@ macro_rules! command_handler {
             $crate::commands::load_formula_profile,
             $crate::commands::save_formula_profile,
             $crate::commands::delete_formula_profile,
+            $crate::commands::asset_roots,
+            $crate::commands::list_player_assets,
+            $crate::commands::portrait_preview,
+            $crate::commands::head_preview,
+            $crate::commands::export_assets,
         ]
     };
 }
@@ -113,6 +118,12 @@ mod bindings {
         ProjectSummaryDto::export_all().expect("export ProjectSummaryDto + deps");
         InstallReportDto::export_all().expect("export InstallReportDto + deps");
         ExtractSummaryDto::export_all().expect("export ExtractSummaryDto");
+        AssetRootsDto::export_all().expect("export AssetRootsDto");
+        AssetRootsArgsDto::export_all().expect("export AssetRootsArgsDto");
+        PlayerAssetsDto::export_all().expect("export PlayerAssetsDto");
+        ExportOptionsDto::export_all().expect("export ExportOptionsDto");
+        AssetExportSummaryDto::export_all().expect("export AssetExportSummaryDto");
+        HeadPreviewDto::export_all().expect("export HeadPreviewDto + deps");
         IntegrityReportDto::export_all().expect("export IntegrityReportDto + deps");
         AutocorrectSummaryDto::export_all().expect("export AutocorrectSummaryDto + deps");
         CreatePlayerDto::export_all().expect("export CreatePlayerDto + deps");

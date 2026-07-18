@@ -28,10 +28,17 @@ pub struct TitleIds {
     pub xbox: &'static str,
 }
 
-/// Look up the product/title codes for a studio game id (`nhl10` … `nhllegacy`). Returns `None` for
+/// Look up the product/title codes for a studio game id (`nhl07` … `nhllegacy`). Returns `None` for
 /// titles outside the proven PS3/Xbox range (PS4 / Recomp use the legacy file-pick path).
+///
+/// NHL 07–09 are **Xbox 360 only** in this tool (their next-gen release was 360-native), so their PS3
+/// product codes are empty — [`detect_ps3`] guards against that and is never reached for them anyway
+/// (the catalog offers only Xbox). The Xbox title ids are read from each title's `default.xex`.
 pub fn title_ids(game_id: &str) -> Option<TitleIds> {
     let ids = match game_id {
+        "nhl07" => ("", "", "454107F3"),
+        "nhl08" => ("", "", "45410820"),
+        "nhl09" => ("", "", "45410872"),
         "nhl10" => ("BLUS30345", "BLES00567", "454108BA"),
         "nhl11" => ("BLUS30568", "BLES00984", "454108FD"),
         "nhl12" => ("BLUS30791", "BLES01357", "45410964"),
@@ -158,16 +165,25 @@ pub fn detect_install(
     report.finish()
 }
 
-/// Set `extract_needed` when the editable db isn't loose yet but `.big` archives are present in
-/// `install_dir` — i.e. the user pointed at a valid but un-extracted install.
+/// Set `extract_needed` when a required db isn't loose yet but `.big` archives are present in
+/// `install_dir` — i.e. the user pointed at a valid but un-extracted install. This covers two shapes:
+/// the whole db is packed (Xbox nhl10+, Recomp), and — on nhl08/09 — the main `nhlng.db` ships loose
+/// but the localization `nhl_eng_us.db` lives inside a `.big` (`fe/loc/`), so extraction is still
+/// needed to resolve human-readable strings.
 fn note_extract_needed(install_dir: &Path, report: &mut InstallReport) {
-    if report.db_paths.nhlng.is_none() && !crate::extract::find_big_archives(install_dir).is_empty()
-    {
+    let missing_db =
+        report.db_paths.nhlng.is_none() || report.db_paths.localization.is_none();
+    if missing_db && !crate::extract::find_big_archives(install_dir).is_empty() {
         report.extract_needed = true;
     }
 }
 
 fn detect_ps3(root: &Path, ids: &TitleIds, report: &mut InstallReport) {
+    // Xbox-only titles (NHL 07–09) carry empty PS3 codes; nothing to detect and an empty prefix
+    // would match every save folder in the scan below, so bail early.
+    if ids.ps3_us.is_empty() && ids.ps3_eu.is_empty() {
+        return;
+    }
     // Databases: <root>/dev_hdd0/game/<TITLEID>/USRDIR (US then EU).
     let game_dir = root.join("dev_hdd0").join("game");
     let install_dir = [ids.ps3_us, ids.ps3_eu]
@@ -410,11 +426,18 @@ fn some_file(p: PathBuf) -> Option<PathBuf> {
 /// Resolve the three database files within an install dir via a bounded recursive search (the exact
 /// subfolder layout varies, so we match by filename rather than assume a fixed depth).
 fn resolve_db_paths(dir: &Path) -> DbPaths {
+    // The editable main db is `nhlng.db` on nhl08+, but nhl07 ships it as `NHL07NG.db` (with a
+    // matching `NHL07NG-meta.xml`). Try each name in order; no install carries both.
     DbPaths {
-        nhlng: find_file(dir, "nhlng.db", 6).map(path_string),
+        nhlng: find_first_file(dir, &["nhlng.db", "NHL07NG.db"], 6).map(path_string),
         localization: find_file(dir, "nhl_eng_us.db", 6).map(path_string),
-        meta_xml: find_file(dir, "nhlng-meta.xml", 6).map(path_string),
+        meta_xml: find_first_file(dir, &["nhlng-meta.xml", "NHL07NG-meta.xml"], 6).map(path_string),
     }
+}
+
+/// First file under `root` matching any of `names` (case-insensitive), tried in order.
+fn find_first_file(root: &Path, names: &[&str], max_depth: usize) -> Option<PathBuf> {
+    names.iter().find_map(|n| find_file(root, n, max_depth))
 }
 
 /// First file under `root` whose final component equals `name` (case-insensitive), up to `max_depth`.

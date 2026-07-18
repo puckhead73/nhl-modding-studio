@@ -48,6 +48,15 @@ rookie_ahl: boolean,
  */
 rookie_chl: boolean, 
 /**
+ * The separate skater equipment table exists (absent on gen6 titles like NHL07, which ship no
+ * equipment tables) — gates any per-player equipment surface instead of rendering it blank.
+ */
+has_skater_equip: boolean, 
+/**
+ * The separate goalie equipment table exists (see `has_skater_equip`).
+ */
+has_goalie_equip: boolean, 
+/**
  * Skater ratings in this database that carry an operator label; `< skater_ratings_total`
  * means the loaded schema has ratings we can't yet name (the Attributes tab hedges visibly).
  */
@@ -63,4 +72,10 @@ goalie_ratings_labelled: number,
 /**
  * All goalie rating fields this database carries.
  */
-goalie_ratings_total: number, };
+goalie_ratings_total: number, 
+/**
+ * How `ubPc.dXSB` (the "main team") encodes the team id: `0` on NHL 09/10 (raw = team id) or
+ * `1` on Legacy/11→21 (raw = team id + 1, 0 = free agent). The Main-Team picker uses it so it
+ * reads/writes the right value per title instead of assuming the modern 1-indexed convention.
+ */
+main_team_offset: number, };

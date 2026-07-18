@@ -9,6 +9,8 @@ use tauri::{Manager, State};
 use studio_domain::FieldValue;
 
 use crate::dto::{
+    AssetExportSummaryDto, AssetRootsArgsDto, AssetRootsDto, ExportOptionsDto, HeadPreviewDto,
+    PlayerAssetsDto,
     AddCareerSeasonDto, ArenaSummaryDto, ArenaViewDto, AutocorrectSummaryDto, CareerStatsDto,
     CreatePlayerDto, EaComputedRatingsDto, ExtractSummaryDto, FormulaCatalogDto, FormulaProfileDto,
     HistoricalCareerRatingsDto, HistoricalFiltersDto, HistoricalPersonDto, HistoricalPersonSummaryDto,
@@ -784,4 +786,60 @@ pub fn save_formula_profile(
 #[tauri::command]
 pub fn delete_formula_profile(registry: State<'_, Registry>, name: String) -> CmdResult<()> {
     registry.delete_formula_profile(&name).map_err(|e| e.to_string())
+}
+
+// ---------------------------------------------------------------- assets
+
+/// Report a title's art roots (`<install>/rendering`, `<install>/fe`) and whether both are
+/// present. `complete: false` means the install is still packed — extract first.
+#[tauri::command]
+pub fn asset_roots(registry: State<'_, Registry>, roots: AssetRootsArgsDto) -> AssetRootsDto {
+    registry.asset_roots(&roots)
+}
+
+/// Every player's art, resolved against the install.
+#[tauri::command]
+pub fn list_player_assets(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    roots: AssetRootsArgsDto,
+) -> CmdResult<Vec<PlayerAssetsDto>> {
+    registry
+        .list_player_assets(project_id, &roots)
+        .map_err(|e| e.to_string())
+}
+
+/// Decode a player's head mesh (by head id) for the 3D viewer.
+#[tauri::command]
+pub fn head_preview(
+    registry: State<'_, Registry>,
+    roots: AssetRootsArgsDto,
+    head_id: u64,
+) -> CmdResult<HeadPreviewDto> {
+    registry.head_preview(&roots, head_id).map_err(|e| e.to_string())
+}
+
+/// Decode one portrait to a PNG data URL for preview.
+#[tauri::command]
+pub fn portrait_preview(
+    registry: State<'_, Registry>,
+    path: String,
+    crop: bool,
+) -> CmdResult<String> {
+    registry.portrait_preview(&path, crop).map_err(|e| e.to_string())
+}
+
+/// Export art for the selected players (empty `bio_records` = all), named by player slug.
+#[tauri::command]
+pub fn export_assets(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    roots: AssetRootsArgsDto,
+    out_dir: String,
+    bio_records: Vec<u32>,
+    options: ExportOptionsDto,
+) -> CmdResult<AssetExportSummaryDto> {
+    registry
+        .export_assets(project_id, &roots, &out_dir, bio_records, &options)
+        .map_err(|e| e.to_string())
 }

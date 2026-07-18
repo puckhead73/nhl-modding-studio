@@ -22,7 +22,9 @@
 //! * [`companion_presence`] — every `ubPc` player has the companion pair its `vjla` kind requires
 //!   (`dSvy`+`xmja` for skaters, `mHuy`+`fMVl` for goalies, all sharing `wBIz`). A missing companion
 //!   is a structurally-broken cluster, so this is the first [`Severity::Error`] predicate; it reuses
-//!   the Layer 2 [`RosterModel`] invariant directly.
+//!   the Layer 2 [`RosterModel`] invariant directly. The *equipment* half is required only when its
+//!   table exists in this db — gen6 schemas (NHL07) ship no `xmja`/`fMVl` table at all, so their
+//!   absence is a schema shape, not a broken cluster (the AI half `dSvy`/`mHuy` is always required).
 //!
 //! * [`single_captain`] — a team carries at most one Captain (`eGlu.mCcl == 1`). [`Severity::Error`];
 //!   shared with the Layer 3 `set_captaincy` op so its auto-repair and this audit agree.
@@ -281,7 +283,9 @@ pub fn enum_vocabulary(db: &TdbFile, enums: &EnumRegistry) -> Vec<Finding> {
 /// Companion-presence predicate: every player must carry the companion pair its kind requires
 /// (`dSvy`+`xmja` for skaters, `mHuy`+`fMVl` for goalies). A missing companion is a structurally
 /// broken Player cluster — an [`Severity::Error`]. Reuses the Layer 2 [`RosterModel`] invariant so
-/// operation-time and save-time share one definition of "a Player is the whole cluster". Returns no
+/// operation-time and save-time share one definition of "a Player is the whole cluster". The
+/// equipment companion is required only when its table exists in this db (gen6 titles like NHL07
+/// ship none), so this raises no findings on a schema that simply lacks equipment tables. Returns no
 /// findings if the cluster tables are absent from this db variant.
 pub fn companion_presence(db: &TdbFile) -> Vec<Finding> {
     let Ok(model) = RosterModel::build(db) else {

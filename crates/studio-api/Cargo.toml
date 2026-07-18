@@ -10,4 +10,6 @@ tauri = { version = "2", features = [] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 ts-rs = "10"
+# Portrait previews cross the Tauri boundary as PNG data URLs.
+base64 = "0.22"
 studio-domain = { path = "../studio-domain" }

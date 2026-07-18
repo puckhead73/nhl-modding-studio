@@ -177,14 +177,17 @@ export function OpenProject() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // While this selection is the startup default, keep its saved paths in step with what's typed here,
-  // so the next launch pre-fills exactly what the user last used.
+  // Remember the paths for whichever (game, platform) is in the folder step — not just the startup
+  // default — so returning to (or switching back to) any game pre-fills exactly what was last used and
+  // the user never re-browses. Only persist once a real install folder is entered, so merely clicking
+  // through the game grid doesn't write blank entries. Skipped during startup auto-open (its values
+  // came straight from storage — nothing new to save).
   useEffect(() => {
-    if (isDefault && game && platform) {
-      setPathEntry(game.id, platform, { root, savePath });
-    }
+    if (autoOpening || step !== "root" || !game || !platform) return;
+    if (root.trim() === "") return;
+    setPathEntry(game.id, platform, { root, savePath });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isDefault, root, savePath, game, platform]);
+  }, [autoOpening, step, root, savePath, game, platform]);
 
   // Checkbox: make (or clear) this game+platform the Studio's startup default, seeding its saved paths.
   function toggleDefault(checked: boolean) {

@@ -37,6 +37,12 @@ import type { EaComputedRatingsDto } from "../bindings/EaComputedRatingsDto";
 import type { HistoricalCareerRatingsDto } from "../bindings/HistoricalCareerRatingsDto";
 import type { FormulaProfileDto } from "../bindings/FormulaProfileDto";
 import type { FormulaCatalogDto } from "../bindings/FormulaCatalogDto";
+import type { AssetRootsDto } from "../bindings/AssetRootsDto";
+import type { AssetRootsArgsDto } from "../bindings/AssetRootsArgsDto";
+import type { PlayerAssetsDto } from "../bindings/PlayerAssetsDto";
+import type { ExportOptionsDto } from "../bindings/ExportOptionsDto";
+import type { AssetExportSummaryDto } from "../bindings/AssetExportSummaryDto";
+import type { HeadPreviewDto } from "../bindings/HeadPreviewDto";
 
 export type Platform = "ps3" | "xbox" | "ps4" | "recomp";
 export type Role = "nhlng" | "roster" | "localization";
@@ -241,6 +247,32 @@ type Commands = {
   load_formula_profile: { args: { name: string }; ret: FormulaProfileDto };
   save_formula_profile: { args: { name: string; profile: FormulaProfileDto }; ret: null };
   delete_formula_profile: { args: { name: string }; ret: null };
+
+  // ---- Assets: player portraits / head meshes / head textures ----
+  // `roots` is a struct (not flat args), so its fields stay snake_case like the DTO.
+  asset_roots: { args: { roots: AssetRootsArgsDto }; ret: AssetRootsDto };
+  list_player_assets: {
+    args: { projectId: number; roots: AssetRootsArgsDto };
+    ret: PlayerAssetsDto[];
+  };
+  // Returns a `data:image/png;base64,...` URL.
+  portrait_preview: { args: { path: string; crop: boolean }; ret: string };
+  // Decode a player's head mesh (by head id) for the 3D viewer.
+  head_preview: {
+    args: { roots: AssetRootsArgsDto; headId: number };
+    ret: HeadPreviewDto;
+  };
+  // `bioRecords: []` exports every scanned player.
+  export_assets: {
+    args: {
+      projectId: number;
+      roots: AssetRootsArgsDto;
+      outDir: string;
+      bioRecords: number[];
+      options: ExportOptionsDto;
+    };
+    ret: AssetExportSummaryDto;
+  };
 };
 
 export async function call<C extends keyof Commands>(

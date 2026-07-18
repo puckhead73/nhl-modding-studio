@@ -39,7 +39,16 @@ export const SECTIONS: NavSection[] = [
       { to: "historical/formulas", label: "Formulas" },
     ],
   },
-  { key: "assets", label: "Assets", index: "assets", subtabs: [] },
+  {
+    key: "assets",
+    label: "Assets",
+    index: "assets/players",
+    subtabs: [
+      { to: "assets/players", label: "Player Art" },
+      { to: "assets/export", label: "Export" },
+      { to: "assets/textures", label: "Texture Lab" },
+    ],
+  },
   { key: "builds", label: "Builds", index: "builds", subtabs: [] },
   { key: "settings", label: "Settings", index: "settings", subtabs: [] },
 ];
