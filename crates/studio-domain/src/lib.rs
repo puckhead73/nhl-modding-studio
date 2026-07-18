@@ -35,8 +35,9 @@ mod view;
 mod workspace;
 
 pub use assets::{
-    decode_portrait, export_player_assets, probe_birthdate_encoding, scan_player_assets,
-    AssetExportSummary, AssetRoots, BirthdateEncoding, DecodedImage, ExportOptions, PlayerAssets,
+    decode_portrait, export_player_assets, mark_generic_portraits, probe_birthdate_encoding,
+    scan_player_assets, AssetExportSummary, AssetRoots, BirthdateEncoding, DecodedImage,
+    ExportOptions, PlayerAssets,
 };
 pub use head_preview::{decode_head_preview, HeadPreview, PreviewSubmesh, PreviewTexture};
 pub use attributes::{

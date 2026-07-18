@@ -242,7 +242,10 @@ impl Registry {
         let opts = convert::export_options(opts);
         let out_dir = out_dir.to_string();
         self.with_workspace(id, |ws| {
-            let all = ws.primary().player_assets(&roots)?;
+            let mut all = ws.primary().player_assets(&roots)?;
+            // Flag generic placeholder portraits across the whole roster before
+            // filtering — sharing can only be seen with every player in hand.
+            studio_domain::mark_generic_portraits(&mut all);
             let selected: Vec<_> = if bio_records.is_empty() {
                 all
             } else {

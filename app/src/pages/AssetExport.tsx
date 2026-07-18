@@ -160,6 +160,13 @@ function Summary({ summary }: { summary: AssetExportSummaryDto }) {
         <Stat label="Textures" value={summary.textures_written} />
         <Stat label="Source .rx2" value={summary.raw_copied} />
       </div>
+      {summary.portraits_skipped_generic > 0 && (
+        <p className="mt-2 text-xs text-slate-500">
+          {summary.portraits_skipped_generic.toLocaleString()} generic
+          placeholder{summary.portraits_skipped_generic === 1 ? "" : "s"} skipped
+          (shared blank portraits, not a player's own).
+        </p>
+      )}
       {summary.failures.length > 0 ? (
         <details className="mt-3 text-xs">
           <summary className="cursor-pointer select-none text-amber-500">

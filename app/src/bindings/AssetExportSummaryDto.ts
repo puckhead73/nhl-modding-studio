@@ -4,4 +4,9 @@
  * What an export run produced. Partial results are normal — `failures` carries the
  * already-human-readable reasons.
  */
-export type AssetExportSummaryDto = { players_considered: number, portraits_written: number, meshes_written: number, textures_written: number, raw_copied: number, skipped_no_slug: number, failures: Array<string>, bytes_written: number, };
+export type AssetExportSummaryDto = { players_considered: number, portraits_written: number, meshes_written: number, textures_written: number, raw_copied: number, 
+/**
+ * Portraits skipped because they're a generic placeholder shared across many
+ * un-portraited players, not the player's own.
+ */
+portraits_skipped_generic: number, skipped_no_slug: number, failures: Array<string>, bytes_written: number, };

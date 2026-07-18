@@ -1036,6 +1036,7 @@ pub fn asset_export_summary_dto(s: &AssetExportSummary) -> AssetExportSummaryDto
         meshes_written: s.meshes_written,
         textures_written: s.textures_written,
         raw_copied: s.raw_copied,
+        portraits_skipped_generic: s.portraits_skipped_generic,
         skipped_no_slug: s.skipped_no_slug,
         failures: s.failures.clone(),
         bytes_written: s.bytes_written,

@@ -1168,6 +1168,9 @@ pub struct AssetExportSummaryDto {
     pub meshes_written: usize,
     pub textures_written: usize,
     pub raw_copied: usize,
+    /// Portraits skipped because they're a generic placeholder shared across many
+    /// un-portraited players, not the player's own.
+    pub portraits_skipped_generic: usize,
     pub skipped_no_slug: usize,
     pub failures: Vec<String>,
     #[ts(type = "number")]

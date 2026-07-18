@@ -154,11 +154,18 @@ impl AssetRoots {
     /// tree whose art actually extracts to `<root>/game/rendering`. Anchor on
     /// the executable's own directory instead, falling back to the install dir
     /// (PS3, whose `USRDIR` holds the art directly and has no `.xex`).
+    ///
+    /// The **NHL Legacy Recompiled** port nests its art one level deeper still,
+    /// under a `_compiled/` folder beside the `.xex` (`<anchor>/_compiled/rendering`
+    /// rather than `<anchor>/rendering`). So each root prefers `<anchor>/_compiled/<name>`
+    /// whenever that directory actually exists, and otherwise uses `<anchor>/<name>` —
+    /// keyed on filesystem presence, so Xbox / PS3 installs (no `_compiled`) are
+    /// unaffected.
     pub fn resolve(install_dir: &Path) -> AssetRoots {
         let anchor = anchor_dir(install_dir);
         AssetRoots {
-            rendering: anchor.join("rendering").to_string_lossy().into_owned(),
-            fe: anchor.join("fe").to_string_lossy().into_owned(),
+            rendering: art_root(&anchor, "rendering").to_string_lossy().into_owned(),
+            fe: art_root(&anchor, "fe").to_string_lossy().into_owned(),
         }
     }
 
@@ -313,6 +320,22 @@ fn anchor_dir(install_dir: &Path) -> PathBuf {
     install_dir.to_path_buf()
 }
 
+/// Resolve one art root (`rendering` / `fe`) under `anchor`, preferring the
+/// Recompiled port's `_compiled/` nesting when it's present on disk.
+///
+/// `<anchor>/_compiled/<name>` wins **only** when that directory exists, so this
+/// is a no-op for Xbox / PS3 installs (which have no `_compiled/`) and for an
+/// un-extracted Recomp tree — those fall back to `<anchor>/<name>`, which is also
+/// the folder the "not extracted yet" flow should name.
+fn art_root(anchor: &Path, name: &str) -> PathBuf {
+    let compiled = anchor.join("_compiled").join(name);
+    if compiled.is_dir() {
+        compiled
+    } else {
+        anchor.join(name)
+    }
+}
+
 /// Texture-map suffixes a loose raster's filename ends in: colour, normal,
 /// specular, detail, tint, ambient. A `.rx2` that ends in one of these is a
 /// texture; one that doesn't is a mesh. This is what tells NHL 09's hair
@@ -393,12 +416,21 @@ pub struct PlayerAssets {
     /// bundled texlib on Legacy/14/15, or several loose per-raster files on
     /// NHL 10. Empty when none ship.
     pub texture_paths: Vec<String>,
+    /// The resolved `portrait_path` is a **generic placeholder** shared by many
+    /// un-portraited players (EA ships a blank plus a few default-face variants),
+    /// not this player's own portrait. `false` until [`mark_generic_portraits`]
+    /// has run over the full scan — a lone [`scan_player_assets`] can't tell a
+    /// shared portrait from a unique one without seeing every player.
+    pub generic_portrait: bool,
 }
 
 impl PlayerAssets {
-    /// Anything worth exporting for this player.
+    /// Anything worth exporting for this player. A generic placeholder portrait
+    /// doesn't count — see [`mark_generic_portraits`].
     pub fn has_any(&self) -> bool {
-        self.portrait_path.is_some() || self.mesh_path.is_some() || !self.texture_paths.is_empty()
+        (self.portrait_path.is_some() && !self.generic_portrait)
+            || self.mesh_path.is_some()
+            || !self.texture_paths.is_empty()
     }
 }
 
@@ -489,9 +521,72 @@ pub fn scan_player_assets(
             } else {
                 Vec::new()
             },
+            // Filled by `mark_generic_portraits` (needs the whole set); a bare
+            // scan can't know whether a portrait is shared.
+            generic_portrait: false,
         });
     }
     Ok(out)
+}
+
+/// Flag every player whose `portrait_path` is a **generic placeholder** rather
+/// than their own portrait, so the exporter can skip the blanks.
+///
+/// EA gives un-portraited players a shared stand-in — a blank plus a handful of
+/// default-face variants — so hundreds of records point at a portrait file with
+/// **byte-identical** content. A real portrait, by contrast, is unique to one
+/// player. So the rule is exactly that: a portrait shared (same bytes) by more
+/// than one player is generic. This is title-agnostic — a title where every
+/// portrait is unique simply flags nothing — and needs the full player set,
+/// which is why it's a separate pass rather than part of [`scan_player_assets`].
+///
+/// Each distinct portrait file is read once (they're small `.big`s); a file that
+/// can't be read is treated as non-generic (fail open — better a stray blank
+/// than a dropped real portrait).
+pub fn mark_generic_portraits(players: &mut [PlayerAssets]) {
+    use std::collections::hash_map::Entry;
+    // portrait_path -> content fingerprint (len, fnv-1a hash), read once per file.
+    let mut fingerprints: HashMap<String, Option<(usize, u64)>> = HashMap::new();
+    let mut fp_of = |path: &str| -> Option<(usize, u64)> {
+        match fingerprints.entry(path.to_string()) {
+            Entry::Occupied(e) => *e.get(),
+            Entry::Vacant(e) => {
+                let fp = std::fs::read(path).ok().map(|b| (b.len(), fnv1a(&b)));
+                *e.insert(fp)
+            }
+        }
+    };
+
+    // How many players share each portrait content.
+    let mut counts: HashMap<(usize, u64), u32> = HashMap::new();
+    for p in players.iter() {
+        if let Some(path) = p.portrait_path.as_deref() {
+            if let Some(fp) = fp_of(path) {
+                *counts.entry(fp).or_default() += 1;
+            }
+        }
+    }
+
+    for p in players.iter_mut() {
+        p.generic_portrait = p
+            .portrait_path
+            .as_deref()
+            .and_then(&mut fp_of)
+            .map(|fp| counts.get(&fp).copied().unwrap_or(0) > 1)
+            .unwrap_or(false);
+    }
+}
+
+/// FNV-1a 64-bit — a cheap content fingerprint for spotting byte-identical
+/// portrait files. Not cryptographic; collisions here would only mis-skip a
+/// portrait, and the length pairing makes even that vanishingly unlikely.
+fn fnv1a(bytes: &[u8]) -> u64 {
+    let mut h: u64 = 0xcbf2_9ce4_8422_2325;
+    for &b in bytes {
+        h ^= b as u64;
+        h = h.wrapping_mul(0x0000_0100_0000_01b3);
+    }
+    h
 }
 
 fn path_str(p: Option<PathBuf>) -> Option<String> {
@@ -821,6 +916,9 @@ pub struct AssetExportSummary {
     pub meshes_written: usize,
     pub textures_written: usize,
     pub raw_copied: usize,
+    /// Portraits skipped because they're a generic placeholder shared by many
+    /// un-portraited players, not the player's own — see [`mark_generic_portraits`].
+    pub portraits_skipped_generic: usize,
     /// Players skipped because their bio yields no usable slug.
     pub skipped_no_slug: usize,
     /// Per-asset failures, already human-readable (player name + reason).
@@ -870,7 +968,11 @@ pub fn export_player_assets(
         }
 
         if opts.portraits {
-            if let Some(src) = p.portrait_path.as_deref() {
+            // A generic placeholder portrait belongs to no one — skip it rather
+            // than write the same blank under hundreds of player slugs.
+            if p.generic_portrait {
+                summary.portraits_skipped_generic += 1;
+            } else if let Some(src) = p.portrait_path.as_deref() {
                 match decode_portrait(Path::new(src))
                     .map(|img| {
                         if opts.crop_portraits {
@@ -1162,6 +1264,26 @@ mod tests {
         std::fs::remove_dir_all(&tmp).ok();
     }
 
+    /// NHL Legacy Recompiled nests its art under `_compiled/` beside the `.xex`.
+    /// When that folder exists, the roots must point inside it; the plain
+    /// `<anchor>/rendering` would miss the art entirely. Caught on a real recomp
+    /// install whose meshes live in `…\game\_compiled\rendering`.
+    #[test]
+    fn asset_roots_prefer_the_compiled_folder_when_present() {
+        let tmp = std::env::temp_dir().join("nhlms_anchor_test_compiled");
+        let game = tmp.join("game");
+        let compiled = game.join("_compiled");
+        std::fs::create_dir_all(compiled.join("rendering")).unwrap();
+        std::fs::create_dir_all(compiled.join("fe")).unwrap();
+        std::fs::write(game.join("default.xex"), b"stub").unwrap();
+
+        let roots = AssetRoots::resolve(&tmp);
+        assert_eq!(roots.rendering, compiled.join("rendering").to_string_lossy());
+        assert_eq!(roots.fe, compiled.join("fe").to_string_lossy());
+
+        std::fs::remove_dir_all(&tmp).ok();
+    }
+
     /// Xbox: the picked root *is* the executable's folder.
     #[test]
     fn asset_roots_anchor_on_the_root_when_the_exe_is_there() {
@@ -1194,5 +1316,60 @@ mod tests {
         let overridden = roots.with_overrides(Some("   "), Some("/custom/fe"));
         assert_eq!(overridden.rendering, rendering);
         assert_eq!(overridden.fe, "/custom/fe");
+    }
+
+    fn player_with_portrait(record: u32, portrait_path: Option<String>) -> PlayerAssets {
+        PlayerAssets {
+            bio_record: record,
+            full_name: format!("Player {record}"),
+            slug: Some(format!("player_{record}")),
+            portrait_id: record as u64,
+            head_id: 60000,
+            bespoke_head: false,
+            pool_head: true,
+            portrait_path,
+            portrait_small_path: None,
+            mesh_path: None,
+            texture_paths: Vec::new(),
+            generic_portrait: false,
+        }
+    }
+
+    /// A portrait whose exact bytes are shared by several players is a generic
+    /// placeholder; a portrait unique to one player is real. `mark_generic_portraits`
+    /// must flag the shared ones and leave the unique one alone.
+    #[test]
+    fn generic_portraits_are_the_shared_ones() {
+        let tmp = std::env::temp_dir().join("nhlms_generic_portrait_test");
+        std::fs::create_dir_all(&tmp).unwrap();
+        // Two ids with byte-identical "blank" content, one with unique content.
+        let blank_a = tmp.join("p0.big");
+        let blank_b = tmp.join("p3000.big");
+        let real = tmp.join("p42.big");
+        std::fs::write(&blank_a, b"BLANK-CONTENT").unwrap();
+        std::fs::write(&blank_b, b"BLANK-CONTENT").unwrap(); // identical bytes, different file
+        std::fs::write(&real, b"a genuine unique portrait raster").unwrap();
+
+        let path = |p: &Path| Some(p.to_string_lossy().into_owned());
+        let mut players = vec![
+            player_with_portrait(0, path(&blank_a)),
+            player_with_portrait(1, path(&blank_b)),
+            player_with_portrait(2, path(&blank_a)), // third sharer of the blank
+            player_with_portrait(3, path(&real)),
+            player_with_portrait(4, None), // no portrait at all
+        ];
+        mark_generic_portraits(&mut players);
+
+        assert!(players[0].generic_portrait, "blank A is shared → generic");
+        assert!(players[1].generic_portrait, "blank B is byte-identical → generic");
+        assert!(players[2].generic_portrait, "third blank sharer → generic");
+        assert!(!players[3].generic_portrait, "unique portrait → real");
+        assert!(!players[4].generic_portrait, "no portrait → not generic");
+
+        // has_any reflects it: the blank-only players have nothing worth exporting.
+        assert!(!players[0].has_any());
+        assert!(players[3].has_any());
+
+        std::fs::remove_dir_all(&tmp).ok();
     }
 }
