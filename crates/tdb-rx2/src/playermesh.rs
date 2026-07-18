@@ -521,6 +521,12 @@ pub fn parse_equipment_mesh(data: &[u8]) -> Result<PlayerAsset, PlayerMeshError>
 
 fn parse_mesh_impl(data: &[u8], skin_policy: SkinPolicy) -> Result<PlayerAsset, PlayerMeshError> {
     let (entries, hdr_size) = walk_file_table(data)?;
+    // NHL 07 packs the container into the header region (`data_size == 0`). It also stores geometry
+    // payloads NOT as the entry preceding each descriptor (the NHL 08+ layout) but as separate,
+    // untagged (`tag == 0`) trailing entries: each index-buffer descriptor names its payload by
+    // file-table entry index (u16 at descriptor+26), and the vertex-buffer payloads are the remaining
+    // untagged entries in order. Resolved after the tag walk below.
+    let no_data_region = read_u32_be(data, HDR_DATA_SIZE_OFF)? == 0;
 
     // Per-tag collections (Noesis lines 164-203). Order matters:
     // sub-meshes use the i-th VB descriptor with the i-th IB descriptor.
@@ -547,16 +553,22 @@ fn parse_mesh_impl(data: &[u8], skin_policy: SkinPolicy) -> Result<PlayerAsset, 
                 if i == 0 {
                     continue;
                 }
-                let prev = &entries[i - 1];
-                vb_payloads.push((prev.raw_offset, prev.size));
+                // NHL 07 resolves payloads after the walk (see below); NHL 08+ payload is the
+                // preceding entry.
+                if !no_data_region {
+                    let prev = &entries[i - 1];
+                    vb_payloads.push((prev.raw_offset, prev.size));
+                }
                 vb_descs.push(e.raw_offset);
             }
             TAG_INDEX_BUFFER => {
                 if i == 0 {
                     continue;
                 }
-                let prev = &entries[i - 1];
-                ib_payloads.push((prev.raw_offset, prev.size));
+                if !no_data_region {
+                    let prev = &entries[i - 1];
+                    ib_payloads.push((prev.raw_offset, prev.size));
+                }
                 ib_descs.push(e.raw_offset);
             }
             TAG_VERTEX_DESCRIPTOR => {
@@ -605,6 +617,36 @@ fn parse_mesh_impl(data: &[u8], skin_policy: SkinPolicy) -> Result<PlayerAsset, 
             _ => {}
         }
     }
+
+    // NHL 07 payload resolution. Each IB descriptor names its payload by file-table entry index at
+    // descriptor byte +26; the VB payloads are the untagged (`tag == 0`) entries the IBs didn't claim,
+    // taken in file-table order to match the VB descriptors. Verified against a real install: a head's
+    // index buffer (6546 indices) sits in a separate 13104-byte entry the descriptor points at, while
+    // the "preceding entry" the NHL 08+ path would use is an unrelated 36-byte descriptor.
+    if no_data_region {
+        let mut ib_claimed: Vec<bool> = vec![false; entries.len()];
+        for &desc_off in &ib_descs {
+            let idx = read_u16_be(data, desc_off as usize + 26)? as usize;
+            let pe = entries
+                .get(idx)
+                .ok_or(PlayerMeshError::TruncatedFileTable { offset: idx })?;
+            ib_payloads.push((pe.raw_offset, pe.size));
+            ib_claimed[idx] = true;
+        }
+        let vb_pool: Vec<(u32, u32)> = entries
+            .iter()
+            .enumerate()
+            .filter(|(idx, e)| e.tag == 0 && e.size > 0 && !ib_claimed[*idx])
+            .map(|(_, e)| (e.raw_offset, e.size))
+            .collect();
+        for k in 0..vb_descs.len() {
+            match vb_pool.get(k) {
+                Some(&p) => vb_payloads.push(p),
+                None => break,
+            }
+        }
+    }
+
     let skin = match skin {
         Some(s) => s,
         None if skin_policy != SkinPolicy::Optional => {
