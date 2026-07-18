@@ -3,8 +3,8 @@
 use std::path::{Path, PathBuf};
 use tdb_core::TdbFile;
 use tdb_domain_validation::{
-    audit_edge, companion_presence, dup_on_team, single_captain, towx_coherence,
-    validate_invariants, Severity,
+    audit_edge, companion_presence, dup_on_team, referential_integrity, single_captain,
+    towx_coherence, validate_invariants, Severity,
 };
 use tdb_enums::EnumRegistry;
 use tdb_relations::{RelationRegistry, RosterModel};
@@ -301,4 +301,70 @@ fn vanilla_anchor_is_write_clean_and_flags_documented_exceptions() {
         !report.findings.iter().any(|f| f.table == "ZBac" && f.field == "ykFq"),
         "ZBac.ykFq = 16382 is a known null sentinel and must no longer be flagged"
     );
+}
+
+/// NHL07 stores `eGlu` *interleaved* (each team's slots scattered, not in one contiguous run) and
+/// carries no `toWX` slot key, so the block-coherence invariant does not apply. The predicate must
+/// skip it rather than report the (valid) interleave as corruption — this was 2453 false errors.
+#[test]
+fn towx_coherence_skipped_on_nhl07_interleaved_roster() {
+    let bytes = anchor("xbox360/nhl07/databases/NHL07NG.db");
+    let db = TdbFile::parse(&bytes).unwrap();
+    let findings = towx_coherence(&db);
+    assert!(
+        findings.is_empty(),
+        "NHL07 has no toWX-keyed block layout; expected zero, got {}",
+        findings.len()
+    );
+}
+
+/// NHL07's player index (`ZBac`) carries a free list: ~200 pre-allocated rows keyed below the roster's
+/// player-id base, referenced by no roster slot. Their `ykFq` resolves to no bio row, but they are
+/// unallocated capacity, not dangling references. `referential_integrity` must exclude them (roster
+/// reachability), so the player-index edge raises no false "broken reference" warnings — this was 199.
+#[test]
+fn nhl07_free_list_index_rows_are_not_dangling_refs() {
+    let bytes = anchor("xbox360/nhl07/databases/NHL07NG.db");
+    let db = TdbFile::parse(&bytes).unwrap();
+    let relations = RelationRegistry::from_dir(defs("relationships")).unwrap();
+
+    // The raw edge still shows the free-list rows as unresolved...
+    let index_edge = relations
+        .relationships()
+        .iter()
+        .flat_map(|r| &r.bindings)
+        .find(|b| b.source_table == "ZBac" && b.source_field == "ykFq")
+        .expect("player-index-to-bio edge");
+    let raw = audit_edge(&db, index_edge).unwrap();
+    assert!(raw.dangling.len() >= 100, "raw edge sees the free-list rows as unresolved");
+
+    // ...but the predicate recognizes them as unreferenced free-list slots and raises none.
+    let findings = referential_integrity(&db, &relations);
+    assert!(
+        !findings.iter().any(|f| f.table == "ZBac" && f.field == "ykFq"),
+        "free-list index rows must not surface as broken player references; got {}",
+        findings.iter().filter(|f| f.table == "ZBac").count()
+    );
+}
+
+/// End-to-end: the composed audit is write-clean on the NHL07 anchor with zero Error **and** zero
+/// Warning findings — the two false-positive floods (companion presence, roster blocks) and the
+/// free-list "broken references" are all gone. Remaining findings, if any, are `Info` (unlabelled
+/// enum codes), which don't block editing.
+#[test]
+fn nhl07_audit_is_write_clean_without_false_floods() {
+    let bytes = anchor("xbox360/nhl07/databases/NHL07NG.db");
+    let db = TdbFile::parse(&bytes).unwrap();
+    let relations = RelationRegistry::from_dir(defs("relationships")).unwrap();
+    let enums = EnumRegistry::from_dir(defs("enums")).unwrap();
+
+    let report = validate_invariants(&db, &relations, &enums);
+    eprintln!(
+        "NHL07 findings: {} error, {} warning, {} info",
+        report.count(Severity::Error),
+        report.count(Severity::Warning),
+        report.count(Severity::Info),
+    );
+    assert_eq!(report.count(Severity::Error), 0, "no Error findings on NHL07");
+    assert_eq!(report.count(Severity::Warning), 0, "no Warning findings on NHL07");
 }

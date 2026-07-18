@@ -212,13 +212,37 @@ pub fn audit_edge(db: &TdbFile, b: &RelBinding) -> Option<EdgeAudit> {
 /// Referential-integrity predicate: a dangling-FK [`Finding`] per unresolved source value across
 /// every confirmed relationship binding present in this db.
 pub fn referential_integrity(db: &TdbFile, relations: &RelationRegistry) -> Vec<Finding> {
+    // The player-index table (`ZBac`) carries a *free list*: pre-allocated index rows the roster does
+    // not reference (NHL07 ships ~200 such rows, keyed to player ids below the roster's id base). Their
+    // `ykFq` points at no bio row, but they are unallocated capacity, not dangling references — the game
+    // never loads them. Recognize them by roster reachability (an index row whose `vfEq` no roster slot
+    // points at) and exclude them from this edge, the same way the entity model excludes orphan bio
+    // stubs. Built once; empty if the roster can't assemble (then nothing is excluded).
+    let index_tbl = db.table_canonical(tdb_relations::entity::ids::INDEX);
+    let index_key_field = index_tbl
+        .and_then(|t| field_by_studio(db.endian, t, tdb_relations::entity::ids::INDEX_KEY));
+    let referenced_index: HashSet<u64> = RosterModel::build(db)
+        .map(|m| m.slots.iter().filter_map(|s| s.index_key).collect())
+        .unwrap_or_default();
+
     let mut findings = Vec::new();
     for rel in relations.relationships() {
         for b in &rel.bindings {
             let Some(audit) = audit_edge(db, b) else {
                 continue;
             };
+            let is_index_edge = b.source_table == tdb_relations::entity::ids::INDEX;
             for (record, value) in audit.dangling {
+                // Skip free-list index rows: a `ZBac` source row whose `vfEq` no roster slot references.
+                if is_index_edge {
+                    if let (Some(t), Some(kf)) = (index_tbl, index_key_field) {
+                        if let Some(vfeq) = db.read_u64(t, record, kf) {
+                            if !referenced_index.contains(&vfeq) {
+                                continue;
+                            }
+                        }
+                    }
+                }
                 findings.push(Finding {
                     severity: Severity::Warning,
                     predicate: "referential_integrity",
@@ -368,6 +392,22 @@ pub fn single_captain(db: &TdbFile) -> Vec<Finding> {
 /// structure the game actually reads a roster by. (Verified against the anchor: `toWX` spans
 /// `0..=8861` over 5532 records — globally monotonic, with gaps.)
 pub fn towx_coherence(db: &TdbFile) -> Vec<Finding> {
+    // The per-team contiguous-block layout is a property of the `toWX`-keyed roster (NHL 08→21).
+    // Pre-`toWX` schemas (NHL07) store `eGlu` *interleaved* — each team's slots scattered across the
+    // whole table rather than in one contiguous run — which is a valid layout this invariant does not
+    // describe. Without the `toWX` key, skip the predicate rather than report the interleave as
+    // corruption. (Verified: NHL07 `exhibitionrostertable` carries no `toWX` field.)
+    let has_slot_key = db
+        .table_canonical(tdb_relations::entity::ids::ROSTER_LINES)
+        .map(|t| {
+            t.fields
+                .iter()
+                .any(|f| f.id.canonical(db.endian) == tdb_relations::entity::ids::SLOT_KEY)
+        })
+        .unwrap_or(false);
+    if !has_slot_key {
+        return Vec::new();
+    }
     let Ok(model) = RosterModel::build(db) else {
         return Vec::new();
     };
