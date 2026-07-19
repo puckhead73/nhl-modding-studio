@@ -36,6 +36,8 @@
 #![forbid(unsafe_code)]
 #![warn(rust_2018_idioms)]
 
+pub mod eb;
+
 use std::collections::HashMap;
 
 use thiserror::Error;
