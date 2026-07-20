@@ -29,14 +29,14 @@
 //!   Legacy head, 123 on NHL 10. Chunk layout is `{u32 self_offset, u32
 //!   bone_count, 8 bytes pad}` then `bone_count` matrices.
 //!   **Per-title difference:** Legacy/14/15 ship ONE AnimationSkin shared by
-//!   every submesh; NHL 09/10/11 repeat it once per submesh (4–8 copies), all
+//!   every submesh; NHL 09/10/11/12 repeat it once per submesh (4–8 copies), all
 //!   copies of the same rig — NHL 10's are byte-identical apart from each copy's
 //!   own `self_offset`, NHL 09's carry denormal (~1e-37) noise in near-zero
-//!   elements, NHL 11's first copy is sometimes a sub-mm re-quantisation of the
-//!   rest. The read path takes the first and verifies the rest agree within
-//!   tolerance (see [`skin_blocks_agree`]); a genuinely different per-submesh
-//!   rig (cm-scale) is still refused. The patch path refuses multi-skin meshes
-//!   outright (it rewrites one chunk in place).
+//!   elements, NHL 11/12's copies are sometimes a small (<= 3.3 mm) global
+//!   re-quantisation of the rest. The read path takes the first and verifies the
+//!   rest agree within tolerance (see [`skin_blocks_agree`]); a genuinely
+//!   different per-submesh rig (cm-scale) is still refused. The patch path
+//!   refuses multi-skin meshes outright (it rewrites one chunk in place).
 //! - Sub-mesh name resolution via the name-table records (end-pointer
 //!   semantics — see [`decode_name_table`]).
 //! - GLB writer that bundles all of the above so the operator can
@@ -397,14 +397,17 @@ fn decode_animation_skin(
 }
 
 /// Absolute + relative tolerance for [`skin_blocks_agree`], in the metre units
-/// of an inverse-bind matrix. The floor (1 mm) is the boundary between "the
-/// same rig, re-quantised" and "a genuinely different per-submesh rig":
-/// verified per-submesh palette deltas fall into two clean groups two orders of
-/// magnitude apart — precision variants at <= 0.37 mm and genuine divergences
-/// at >= 13 cm, with nothing in between (NHL 09: 480 heads, max delta 1e-37;
-/// NHL 11: 821 heads, one 0.37 mm variant, one 13 cm genuine rig). A genuine
-/// per-submesh rig is authored (cm-scale), never sub-millimetre.
-const SKIN_AGREE_ABS: f32 = 1e-3;
+/// of an inverse-bind matrix. The floor (1 cm) is the boundary between "the
+/// same rig, re-quantised" and "a genuinely different per-submesh rig": across
+/// NHL 09/11/12 the verified per-submesh palette deltas fall into two clean
+/// groups an order of magnitude apart — precision variants at <= 3.3 mm (a
+/// near-uniform global offset on every bone) and a lone genuine divergence at
+/// 13 cm (`player_10057`, one submesh's palette bound ~13 cm away — using
+/// another submesh's palette there would visibly misplace geometry), with
+/// nothing between. (NHL 09: 480 heads, max 1e-37; NHL 11: 821 heads, one
+/// 0.37 mm variant; NHL 12: 799 heads, one 3.3 mm variant; the 13 cm rig recurs
+/// in both.) A genuine per-submesh rig displaces geometry at cm scale.
+const SKIN_AGREE_ABS: f32 = 1e-2;
 const SKIN_AGREE_REL: f32 = 1e-3;
 
 /// Do two AnimationSkin matrix blocks describe the same rig?
@@ -412,10 +415,10 @@ const SKIN_AGREE_REL: f32 = 1e-3;
 /// The per-submesh AnimationSkin copies a head carries are all the same bind
 /// pose. Legacy/14/15 and NHL 10 store byte-identical copies; NHL 09 stores
 /// copies that agree to full meaningful precision but carry denormal (~1e-37)
-/// noise in near-zero elements; NHL 11 occasionally stores the *first* copy as
-/// a sub-millimetre (<= 0.37 mm) re-quantisation of the consensus the other
-/// copies share. A raw byte compare wrongly reports all of these as divergent.
-/// Compare as big-endian f32 with a tolerance ([`SKIN_AGREE_ABS`] /
+/// noise in near-zero elements; NHL 11/12 occasionally store a copy as a small
+/// (<= 3.3 mm, near-uniform on every bone) re-quantisation of the consensus the
+/// other copies share. A raw byte compare wrongly reports all of these as
+/// divergent. Compare as big-endian f32 with a tolerance ([`SKIN_AGREE_ABS`] /
 /// [`SKIN_AGREE_REL`]) that swallows the re-quantisation while still catching a
 /// genuine per-submesh rig (cm-scale — see the constant's note). Each bone
 /// carries exactly one NaN sentinel; a NaN in the same slot on both sides
@@ -1955,18 +1958,18 @@ mod tests {
             "denormal noise must be tolerated"
         );
 
-        // NHL 11-style copy: the first copy is a sub-mm (0.37 mm) re-quantisation
-        // of the same rig — still the same bind pose, must be accepted.
+        // NHL 11/12-style copy: a small (3.3 mm, the verified worst case) global
+        // re-quantisation of the same rig — still the same bind pose, accepted.
         let mut requant = base;
-        requant[12] += 0.00037;
+        requant[12] += 0.0033;
         assert!(
             skin_blocks_agree(&block(&base), &block(&requant)),
-            "a sub-mm re-quantisation of the same rig must be tolerated"
+            "a mm-scale re-quantisation of the same rig must be tolerated"
         );
 
-        // A genuine per-submesh rig: a bind term shifts by 1 cm (cm-scale).
+        // A genuine per-submesh rig: a submesh binds 13 cm away (player_10057).
         let mut moved = base;
-        moved[12] += 0.01;
+        moved[12] += 0.13;
         assert!(
             !skin_blocks_agree(&block(&base), &block(&moved)),
             "a genuine cm-scale per-submesh rig must be rejected"
