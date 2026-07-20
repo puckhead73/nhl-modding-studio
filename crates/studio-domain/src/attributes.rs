@@ -48,7 +48,19 @@
 //! specific label as fact.
 
 use crate::view::FieldView;
+use tdb_core::TdbFile;
 use tdb_relations::Position;
+
+/// `true` when this database uses NHL07's gen6 style schema — the skater `p_style` (`mQoE`) is a
+/// **3-bit** field (0..7). NHL 10→13 carry the same field id but a **4-bit** (0..15) code space with
+/// a larger, still-unverified vocabulary, so the NHL07 style vocabulary and its position split apply
+/// only here; NHL 14+ use `QgFs` instead. Keyed on the field shape, never the title id.
+pub(crate) fn is_gen6_style_schema(db: &TdbFile) -> bool {
+    db.table_canonical("dSvy")
+        .and_then(|t| t.fields.iter().find(|f| f.id.canonical(db.endian) == "mQoE"))
+        .map(|f| f.bit_width == 3)
+        .unwrap_or(false)
+}
 
 /// Lock the Player Style vocabulary (`dSvy.QgFs`) to the player's position: the 4-bit code is
 /// position-split — raw `1..=4` are defenseman roles, `5..=10` forward roles (see
@@ -58,13 +70,124 @@ use tdb_relations::Position;
 /// re-labelled. Goalie style (`mHuy.QgFs`) has its own vocabulary — callers only pass skater
 /// field sets here.
 pub(crate) fn restrict_style_options(ratings: &mut [FieldView], position: Position) {
-    let eligible = if position == Position::Defense { 1..=4 } else { 5..=10 };
-    if let Some(style) = ratings.iter_mut().find(|f| f.studio_field == "QgFs") {
-        let current = style.decoded;
-        style
-            .enum_options
-            .retain(|(raw, _)| eligible.contains(raw) || Some(*raw) == current);
+    let Some(style) = ratings
+        .iter_mut()
+        .find(|f| STYLE_FIELD_IDS.contains(&f.studio_field.as_str()))
+    else {
+        return;
+    };
+    // The position-split code ranges differ by schema: NHL07 gen6 `p_style` (`mQoE`) packs
+    // defenseman roles into 1..=2 (Defensive/Offensive) and forward roles into 3..=7
+    // (Grinder..Dangler); the modern `QgFs` uses 1..=4 / 5..=10. Verified NHL07 against the roster
+    // (DiPenta=1, Campbell=2, Drake=3, Weight=4, Guerin=5, Tkachuk=6, Comrie=7).
+    let gen6 = style.studio_field == "mQoE" && style.range_high == Some(7);
+    let eligible: std::ops::RangeInclusive<i64> = match (gen6, position == Position::Defense) {
+        (true, true) => 1..=2,
+        (true, false) => 3..=7,
+        (false, true) => 1..=4,
+        (false, false) => 5..=10,
+    };
+    let current = style.decoded;
+    style
+        .enum_options
+        .retain(|(raw, _)| eligible.contains(raw) || Some(*raw) == current);
+}
+
+/// NHL07's **birthplace / nationality** country codes (`ubPc.Lelh` nationality and the nation range
+/// of `ubPc.QvxI` "Origin"). It is a *different* enumeration from the modern `nationality.toml` — the
+/// two share the North-American + Nordic low codes but diverge from 73 up (modern labels code 75
+/// "Lithuania", but NHL07 stores Russians there), so the modern vocabulary actively mislabels NHL07's
+/// European players. Anchored to the NHL07 roster: every code below is confirmed in-game by the user
+/// or fixed by a well-known player's documented birthplace (the last four are *birthplaces* whose
+/// players carry other nationalities — Nolan/Regehr are Canadian, Park American, Kölzig German). The
+/// game's Origin dropdown is alphabetical and does NOT follow these stored codes, so codes are pinned
+/// from player data, not list order. Code 78 (Belgium, single player Pellegrims) is inferred.
+const GEN6_COUNTRIES: &[(i64, &str)] = &[
+    (0, "Canada"),           // ✓ Crosby, Sakic
+    (14, "United States"),   // ✓ Amonte
+    (66, "Denmark"),         // Christensen/Christiansen
+    (67, "Finland"),         // ✓ Aalto
+    (68, "Norway"),          // Boye/Brathen
+    (69, "Sweden"),          // ✓ Alfredsson
+    (70, "Belarus"),         // Arkatov/Bulakhov
+    (72, "Kazakhstan"),      // ✓ Antropov
+    (73, "Latvia"),          // ✓ user-confirmed (Apsitis)
+    (74, "Lithuania"),       // ✓ user-confirmed (Kasparaitis, Zubrus)
+    (75, "Russia"),          // ✓ user-confirmed (Afinogenov)
+    (76, "Ukraine"),         // ✓ user-confirmed (Bilik, Bobyk)
+    (77, "Austria"),         // ✓ user-confirmed (Divis)
+    (78, "Belgium"),         // inferred (Pellegrims) — unconfirmed
+    (79, "Czech Republic"),  // ✓ user-confirmed (Barinka)
+    (80, "Great Britain"),   // ✓ user-confirmed (Bentley/Blair)
+    (81, "France"),          // ✓ user-confirmed
+    (82, "Germany"),         // ✓ user-confirmed
+    (84, "Italy"),           // ✓ user-confirmed
+    (85, "Northern Ireland"),// Owen Nolan (born Belfast)
+    (86, "Poland"),          // ✓ user-confirmed
+    (88, "Slovakia"),        // ✓ user-confirmed (Bartecko, Bondra)
+    (89, "Switzerland"),     // ✓ user-confirmed
+    (92, "Brazil"),          // Robyn Regehr (born Recife)
+    (96, "Japan"),           // ✓ user-confirmed
+    (100, "South Africa"),   // Olaf Kölzig (born Johannesburg)
+    (101, "South Korea"),    // Richard Park (born Seoul)
+];
+
+/// NHL07's nationality vocabulary (see [`GEN6_COUNTRIES`]).
+pub(crate) fn gen6_nationality() -> Vec<(i64, String)> {
+    GEN6_COUNTRIES.iter().map(|(r, l)| (*r, l.to_string())).collect()
+}
+
+/// The highest NHL07 birth-state code that is a North-American *state/province* (`ubPc.QvxI`): the
+/// "Origin" list runs Canadian provinces + US states through 65, then switches to *nations* from 66
+/// up. The state range matches the modern vocabulary (verified: Crosby=7 Nova Scotia, Iginla=1
+/// Alberta); only the nation range diverges (see [`GEN6_COUNTRIES`]).
+const GEN6_STATE_MAX: i64 = 65;
+
+/// Apply NHL07's gen6 geography vocabulary to a field's dropdown options, in place. Both nationality
+/// (`Lelh`) and the birth-state "Origin" nation range (`QvxI` ≥ 66) use NHL07's own country table —
+/// the modern vocabulary mislabels them (code 75 is Russia, not "Lithuania"). For `QvxI` the modern
+/// North-American state labels (≤ 65) are kept and only the nation range is replaced. No-op unless
+/// this is the gen6 schema and the field is one of the two.
+pub(crate) fn apply_gen6_geo_vocab(
+    studio_table: &str,
+    studio_field: &str,
+    gen6: bool,
+    options: &mut Vec<(i64, String)>,
+) {
+    if !gen6 || studio_table != "ubPc" {
+        return;
     }
+    match studio_field {
+        "Lelh" => *options = gen6_nationality(),
+        "QvxI" => {
+            // Keep the North-American states; replace the (mislabeled modern) nation range with
+            // NHL07's own country codes. Nations NHL07 uses but we haven't identified yet drop out
+            // and render raw rather than showing a wrong country.
+            options.retain(|(r, _)| *r <= GEN6_STATE_MAX);
+            // NHL07 orders DC before Delaware — the two are swapped vs the modern vocab (user-verified).
+            for (raw, label) in [(22, "USA, District of Columbia"), (23, "USA, Delaware")] {
+                if let Some(e) = options.iter_mut().find(|(r, _)| *r == raw) {
+                    e.1 = label.to_string();
+                }
+            }
+            for (raw, label) in gen6_nationality() {
+                if raw > GEN6_STATE_MAX && !options.iter().any(|(r, _)| *r == raw) {
+                    options.push((raw, label));
+                }
+            }
+            options.sort_by_key(|(r, _)| *r);
+        }
+        _ => {}
+    }
+}
+
+/// The player/goalie **style** (archetype) field id across schema variants: `QgFs` on NHL 11→21, or
+/// the gen6 NHL07 companions `mQoE` (skater `p_style`, 0..7) / `wJus` (goalie `g_style`, 0..3).
+pub(crate) const STYLE_FIELD_IDS: &[&str] = &["QgFs", "mQoE", "wJus"];
+
+/// The style [`FieldView`] on a companion's ratings, whichever id this schema carries.
+pub(crate) fn style_field<'a>(ratings: &'a [FieldView]) -> Option<&'a FieldView> {
+    ratings.iter().find(|f| STYLE_FIELD_IDS.contains(&f.studio_field.as_str()))
 }
 
 /// The rating-name suffix of an AI-table metadata name: strips the era prefix — `p_` (skaters
@@ -184,12 +307,48 @@ pub struct TraitView {
 /// A synthesized `(raw, label)` vocabulary for a ratings-table field with no TOML enum but a known
 /// value→label mapping. Returned to [`crate::view::read_field`] so the field renders (and edits) as a
 /// labelled dropdown. Operator-anchored + data-direction-confirmed (see module docs); provisional.
-pub(crate) fn synthetic_enum(studio_table: &str, studio_field: &str) -> Option<Vec<(i64, String)>> {
+pub(crate) fn synthetic_enum(
+    studio_table: &str,
+    studio_field: &str,
+    gen6_style: bool,
+) -> Option<Vec<(i64, String)>> {
     match (studio_table, studio_field) {
         ("dSvy" | "mHuy", "QoMA") => Some(potential_range_options()),
         ("dSvy" | "mHuy", "mBef") => Some(potential_accuracy_options()),
+        // NHL07 gen6 player types (verified in-game), only on the 3-bit gen6 schema — NHL 10→13
+        // reuse these ids with a wider, unverified code space. Skaters and goalies each have their
+        // own vocabulary; the skater set is position-split by [`restrict_style_options`].
+        ("dSvy", "mQoE") if gen6_style => Some(skater_style_options()),
+        ("mHuy", "wJus") if gen6_style => Some(goalie_style_options()),
         _ => None,
     }
+}
+
+/// NHL07 skater `p_style` (`mQoE`, 0..7): defenseman roles 1..=2, forward roles 3..=7. Verified
+/// against named players (DiPenta=Defensive, B.Campbell=Offensive, Drake=Grinder, Weight=Playmaker,
+/// Guerin=Sniper, Tkachuk=Power Forward, Comrie=Dangler).
+fn skater_style_options() -> Vec<(i64, String)> {
+    [
+        (1, "Defensive"),
+        (2, "Offensive"),
+        (3, "Grinder"),
+        (4, "Playmaker"),
+        (5, "Sniper"),
+        (6, "Power Forward"),
+        (7, "Dangler"),
+    ]
+    .into_iter()
+    .map(|(r, l)| (r, l.to_string()))
+    .collect()
+}
+
+/// NHL07 goalie `g_style` (`wJus`, 0..3). Verified: Bryzgalov=Butterfly (2), Brathwaite=Hybrid (1),
+/// Brodeur/Burke=Stand-Up (0).
+fn goalie_style_options() -> Vec<(i64, String)> {
+    [(0, "Stand-Up"), (1, "Hybrid"), (2, "Butterfly")]
+        .into_iter()
+        .map(|(r, l)| (r, l.to_string()))
+        .collect()
 }
 
 /// Potential Range (`QoMA` = `growthtier`) → star potential. Anchored `raw 1` = 5.0★ (Crosby); the
@@ -254,6 +413,10 @@ const SKATER_LABELS: &[(&str, &str)] = &[
     ("toughness", "Toughness"),
     // PS4 NHL 18+ addition.
     ("backskating", "Backskating"),
+    // NHL07 gen6-only suffixes (verified in-game names).
+    ("injury", "Injury Resist"),
+    ("penalty", "Penalty Resist"),
+    ("herorating", "Intensity"),
 ];
 
 /// One slot of the curated skater order: a rating suffix or a bias id, with an optional label
@@ -326,6 +489,8 @@ const GOALIE_LABELS: &[(&str, &str)] = &[
     ("durability", "Durability"),
     ("fighting", "Fighting Frequency"),
     ("floppiness", "Floppiness"),
+    // NHL07 gen6-only goalie suffix.
+    ("intensity", "Intensity / Clutch"),
 ];
 
 /// Goalie display order (Reflexes → Save Locations → Save Handling → Puck Handling → Mental/Physical),
@@ -516,7 +681,17 @@ pub fn build_player_attributes(ratings: &[FieldView], ratings_table: &str) -> Pl
     // populate from a ratings formula later, not hand-edit. It stays in the raw "all rating fields"
     // list for inspection.
     let overall = None;
-    let style = derived("QgFs", if is_skater { "Player Style" } else { "Goalie Style" });
+    // The style/archetype field id varies by schema (`QgFs`, or NHL07's `mQoE`/`wJus`). NHL07 gen6
+    // (the 3-bit skater `p_style`) also means: no biases exposed (they're internal AI sliders), so
+    // drop them from the list. NHL 10→13 reuse `mQoE` (4-bit) but keep their biases visible.
+    let gen6 = style_field(ratings)
+        .map(|f| f.studio_field == "mQoE" && f.range_high == Some(7))
+        .unwrap_or(false);
+    let style = style_field(ratings).cloned().map(|f| AttributeView {
+        label: if is_skater { "Player Style" } else { "Goalie Style" }.to_string(),
+        is_rating: false,
+        field: Some(f),
+    });
     // In-game potential (EA field names growthtier/growthletter) → stars + scouting certainty, via the
     // synthesized vocabularies above. Operator-anchored + data-confirmed; see module docs.
     let potential_range = derived("QoMA", "Potential Range");
@@ -542,6 +717,10 @@ pub fn build_player_attributes(ratings: &[FieldView], ratings_table: &str) -> Pl
                     }
                 }
                 SkaterSlot::Bias(id, label) => {
+                    // NHL07 keeps the pass/carry/def biases internal — not player-facing sliders.
+                    if gen6 {
+                        continue;
+                    }
                     if let Some(mut f) = find(id) {
                         // Biases are 4-bit sliders — pin the 0..15 scale so the editor bounds
                         // them there regardless of what the metadata range declares.
@@ -578,7 +757,8 @@ pub fn build_player_attributes(ratings: &[FieldView], ratings_table: &str) -> Pl
         let Some(suffix) = rating_suffix(&f.name) else {
             continue;
         };
-        if suffix == "overall" || covered.contains(suffix) || !cell_is_rating(f) {
+        // `prestige` is NHL07's internal star-power slider, not a player-facing attribute.
+        if suffix == "overall" || suffix == "prestige" || covered.contains(suffix) || !cell_is_rating(f) {
             continue;
         }
         covered.insert(suffix.to_string());
@@ -661,6 +841,11 @@ fn active_trait_values(ratings: &[FieldView]) -> std::collections::HashSet<i64> 
 /// The full kind-correct trait dictionary as toggleable options, each flagged active when the record
 /// currently holds it. This is the checkbox menu's data.
 fn build_trait_options(ratings: &[FieldView], is_skater: bool) -> Vec<TraitOption> {
+    // No `Trait N` slots in this schema (NHL07 gen6 has no trait system) → no trait menu at all,
+    // rather than a dictionary of options that can't be stored anywhere.
+    if !TRAIT_SLOT_ORDER.iter().any(|slot| ratings.iter().any(|f| &f.studio_field == slot)) {
+        return Vec::new();
+    }
     let active = active_trait_values(ratings);
     let dict = if is_skater { SKATER_TRAITS } else { GOALIE_TRAITS };
     dict.iter()

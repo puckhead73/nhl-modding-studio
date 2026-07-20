@@ -79,8 +79,12 @@ impl Capabilities {
             .unwrap_or(1);
         Capabilities {
             arena_link: has_field(db, "kOtt", "buDa"),
-            // The style enum arrives on both companions together; either counts.
-            player_style: has_field(db, "dSvy", "QgFs") || has_field(db, "mHuy", "QgFs"),
+            // The style enum arrives on both companions together; either counts (`QgFs` on NHL
+            // 14+). NHL07 gen6 stores it under `mQoE`/`wJus` with a known 3-bit vocabulary; NHL
+            // 10→13 reuse those ids with a wider, unverified code space, so they don't count here.
+            player_style: has_field(db, "dSvy", "QgFs")
+                || has_field(db, "mHuy", "QgFs")
+                || crate::attributes::is_gen6_style_schema(db),
             year_ufa: has_field(db, "ubPc", "GKKz"),
             junior_team: has_field(db, "ubPc", "ZbNy"),
             draft_team: has_field(db, "ubPc", "vgWu"),

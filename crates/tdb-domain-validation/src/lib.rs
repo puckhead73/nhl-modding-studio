@@ -271,8 +271,23 @@ pub fn referential_integrity(db: &TdbFile, relations: &RelationRegistry) -> Vec<
 /// labelled member of its bound enum (reachable-but-unlabelled codes are expected, hence `Info`).
 pub fn enum_vocabulary(db: &TdbFile, enums: &EnumRegistry) -> Vec<Finding> {
     let mut findings = Vec::new();
+    // NHL07 (gen6) uses its own nationality / birth-state / player-style code tables, distinct from
+    // the shipped modern vocabularies (which are resolved for gen6 in the view layer). Skip those
+    // three bindings here so the audit doesn't flag every European player + empty roster slot against
+    // a vocabulary that doesn't apply to this schema. Detected by the 3-bit gen6 `p_style` (`mQoE`).
+    let gen6 = db
+        .table_canonical("dSvy")
+        .and_then(|t| t.fields.iter().find(|f| f.id.canonical(db.endian) == "mQoE"))
+        .map(|f| f.bit_width == 3)
+        .unwrap_or(false);
+    let gen6_geo = |table: &str, field: &str| {
+        gen6 && matches!((table, field), ("ubPc", "Lelh") | ("ubPc", "QvxI") | ("eGlu", "QgFs"))
+    };
     for def in enums.defs() {
         for binding in &def.bindings {
+            if gen6_geo(&binding.table_raw_id, &binding.field_raw_id) {
+                continue;
+            }
             let Some(t) = db.table_canonical(&binding.table_raw_id) else {
                 continue;
             };

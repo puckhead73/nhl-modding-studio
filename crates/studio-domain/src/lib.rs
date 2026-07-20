@@ -22,6 +22,7 @@ pub mod capabilities;
 pub mod capacity;
 pub mod discovery;
 pub mod extract;
+pub mod field_profile;
 pub mod formula;
 pub mod head_preview;
 pub mod historical;
@@ -50,6 +51,7 @@ pub use discovery::{
     detect_install, ps4_title_ids, title_ids, DbPaths, InstallReport, SaveSlot, TitleIds,
 };
 pub use extract::{extract_install, find_big_archives, ExtractSummary};
+pub use field_profile::{CellControl, EntityFieldProfile, ProfileCell, ProfileSection};
 pub use historical::{FhmCorpus, FhmError};
 pub use formula::{
     compute_person_career_ratings, compute_person_ratings, default_profile, CareerRatings,

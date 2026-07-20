@@ -3,11 +3,11 @@
 
 use studio_domain::{
     AssetExportSummary, AssetRoots, ExportOptions, HeadPreview, PlayerAssets,
-    ArenaRef, ArenaSummary, ArenaView, AttributeView, Capabilities, CareerStats, DbOverview,
-    ExtractSummary, FieldRaw, FieldView, HumanFinding, HumanReport, InstallReport, LineEntry,
-    LinesView, OpOutcome, PlayerAttributes, PlayerData, PlayerHeader, PlayerSummary, PlayerView,
-    RosterMembership, SaveSlot, Severity, Source, TeamSummary, TeamView, TraitOption, TraitView,
-    Workspace,
+    ArenaRef, ArenaSummary, ArenaView, AttributeView, Capabilities, CareerStats, CellControl,
+    DbOverview, EntityFieldProfile, ExtractSummary, FieldRaw, FieldView, HumanFinding, HumanReport,
+    InstallReport, LineEntry, LinesView, OpOutcome, PlayerAttributes, PlayerData, PlayerHeader,
+    PlayerSummary, PlayerView, ProfileCell, RosterMembership, SaveSlot, Severity, Source,
+    TeamSummary, TeamView, TraitOption, TraitView, Workspace,
 };
 
 use crate::dto::{
@@ -15,7 +15,8 @@ use crate::dto::{
     PreviewSubmeshDto, PreviewTextureDto,
     ArenaRefDto, ArenaSummaryDto, ArenaViewDto, AttributeViewDto, CapabilitiesDto, CareerColumnDto,
     CareerRowDto, CareerSectionDto, CareerStatsDto, CreatePlayerDto, DraftPickDto, EnumOptionDto,
-    EquipmentZoneDto, ExtractSummaryDto, FieldViewDto, FindingDto, InstallReportDto,
+    EntityFieldProfileDto, EquipmentZoneDto, ExtractSummaryDto, FieldCellDto, FieldSectionDto,
+    FieldViewDto, FindingDto, InstallReportDto,
     IntegrityReportDto, LineEntryDto, LinesViewDto, OpOutcomeDto, PlayerAttributesDto, PlayerDataDto,
     PlayerHeaderDto, PlayerSummaryDto, PlayerViewDto, ProjectSummaryDto, RosterMembershipDto,
     SaveSlotDto, SlotFieldDto, StrategyCellDto, TableSummaryDto, TeamEquipmentDto, TeamJerseyDto,
@@ -219,6 +220,40 @@ pub fn field_view_dto(fv: &FieldView) -> FieldViewDto {
     }
 }
 
+/// Map one curated profile cell to its DTO, flattening the control hint into the wire fields.
+pub fn field_cell_dto(c: &ProfileCell) -> FieldCellDto {
+    let (control, team_offset, none_label) = match &c.control {
+        CellControl::Field => ("field", None, None),
+        CellControl::Team { offset, none_label } => ("team", Some(*offset), none_label.clone()),
+        CellControl::Arena => ("arena", None, None),
+        CellControl::Derived => ("derived", None, None),
+    };
+    FieldCellDto {
+        label: c.label.clone(),
+        control: control.to_string(),
+        field: c.field.as_ref().map(field_view_dto),
+        record: c.record,
+        team_offset,
+        none_label,
+        derived_display: c.derived_display.clone(),
+        unverified: c.unverified.clone(),
+    }
+}
+
+/// Map a whole entity field profile (sections → cells) to its DTO.
+pub fn entity_field_profile_dto(p: &EntityFieldProfile) -> EntityFieldProfileDto {
+    EntityFieldProfileDto {
+        sections: p
+            .sections
+            .iter()
+            .map(|s| FieldSectionDto {
+                title: s.title.clone(),
+                cells: s.cells.iter().map(field_cell_dto).collect(),
+            })
+            .collect(),
+    }
+}
+
 pub fn player_summary_dto(s: &PlayerSummary) -> PlayerSummaryDto {
     PlayerSummaryDto {
         player_id: s.player_id,
@@ -345,6 +380,7 @@ pub fn player_view_dto(v: &PlayerView) -> PlayerViewDto {
         ratings_table: v.ratings_table.to_string(),
         memberships: v.memberships.iter().map(membership_dto).collect(),
         all_fields: v.all_fields.iter().map(field_view_dto).collect(),
+        profile: entity_field_profile_dto(&v.profile),
     }
 }
 
@@ -506,6 +542,7 @@ pub fn team_view_dto(v: &TeamView) -> TeamViewDto {
         roster_count: v.roster_count,
         retired_numbers: v.retired_numbers.clone(),
         all_fields: v.all_fields.iter().map(field_view_dto).collect(),
+        profile: entity_field_profile_dto(&v.profile),
     }
 }
 

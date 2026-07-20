@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { call } from "../lib/client";
 import { useProject } from "../lib/project";
 import { clampRaw, friendlySeed, friendlyToRaw, hasPlainBounds } from "../lib/editForm";
 import type { FieldViewDto } from "../bindings/FieldViewDto";
+import type { TeamViewDto } from "../bindings/TeamViewDto";
 
 /// Click-to-edit shell (the reference app's pattern): the resolved value renders as plain text
 /// until clicked, then the real control mounts focused. Closes on commit (Enter, a dropdown pick,
@@ -213,6 +215,114 @@ export function TeamSelect({
         </select>
       </ClickToEdit>
     </Labeled>
+  );
+}
+
+/// The home-arena picker: `kOtt.buDa` stores the 0-indexed `StEO` id directly (no "none"
+/// sentinel), so options map 1:1 onto the arena directory. The arena name is a link to its entry in
+/// the Arenas tab; editing goes through the small "change" affordance beside it (the text itself
+/// can't be click-to-edit and a navigation link at the same time).
+export function ArenaSelect({
+  projectId,
+  record,
+  field,
+  arena,
+}: {
+  projectId: number;
+  record: number;
+  field: FieldViewDto;
+  arena: TeamViewDto["arena"];
+}) {
+  const qc = useQueryClient();
+  const { update } = useProject();
+  const [editing, setEditing] = useState(false);
+  const arenasQ = useQuery({
+    queryKey: ["arenas", projectId],
+    queryFn: () => call("list_arenas", { projectId }),
+  });
+  const arenas = arenasQ.data ?? [];
+  const mut = useMutation({
+    mutationFn: (arenaId: number) =>
+      call("set_field", {
+        projectId,
+        table: field.studio_table,
+        record,
+        field: field.studio_field,
+        intValue: arenaId,
+      }),
+    onSuccess: async () => {
+      await qc.invalidateQueries();
+      update(await call("project_summary", { projectId }));
+      setEditing(false);
+    },
+  });
+
+  // "Honda Center — Anaheim, CA": StEO's cityname already carries "City, ST".
+  const current = arena
+    ? `${arena.name || `Arena ${arena.arena_id}`}${arena.city ? ` — ${arena.city}` : ""}`
+    : field.decoded != null
+      ? `Arena ${field.decoded}`
+      : "—";
+  const sorted = [...arenas].sort((a, b) => a.name.localeCompare(b.name));
+
+  return (
+    // Spans two grid columns — "Name — City, ST" doesn't fit a single quarter-width cell.
+    <div className="col-span-2 min-w-0">
+      <div className="text-[11px] font-semibold uppercase tracking-wide text-sky-300/80">
+        Arena
+        {mut.isPending && <span className="ml-1 text-slate-500">…</span>}
+      </div>
+      <div className="mt-0.5 flex items-center gap-2">
+        {editing ? (
+          <select
+            autoFocus
+            className="w-full rounded border border-slate-700 bg-slate-950 px-1.5 py-0.5 font-mono text-xs text-slate-100 focus:border-sky-600 focus:outline-none"
+            value={field.decoded ?? 0}
+            disabled={mut.isPending}
+            onChange={(e) => mut.mutate(Number(e.target.value))}
+            onBlur={() => !mut.isPending && setEditing(false)}
+            onKeyDown={(e) => e.key === "Escape" && setEditing(false)}
+          >
+            {field.decoded != null && !arenas.some((a) => a.arena_id === field.decoded) && (
+              <option value={field.decoded}>{`(uncatalogued: ${field.decoded})`}</option>
+            )}
+            {sorted.map((a) => (
+              <option key={a.arena_id} value={a.arena_id}>
+                {a.name || `Arena ${a.arena_id}`}
+                {a.city ? ` — ${a.city}` : ""}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <>
+            {arena ? (
+              <Link
+                to={`/app/database/arenas/${arena.arena_id}`}
+                className="min-w-0 truncate font-mono text-xs text-sky-400 hover:underline"
+                title="Open this arena in the Arenas tab"
+              >
+                {current}
+              </Link>
+            ) : (
+              <span className="min-w-0 truncate font-mono text-xs text-slate-100">{current}</span>
+            )}
+            {field.editable && (
+              <button
+                type="button"
+                onClick={() => setEditing(true)}
+                title="Change home arena"
+                className="shrink-0 rounded border border-slate-700 px-1.5 py-px text-[10px] text-slate-500 hover:border-sky-700 hover:text-sky-300"
+              >
+                change
+              </button>
+            )}
+          </>
+        )}
+      </div>
+      {mut.error != null && (
+        <div className="mt-0.5 text-[10px] text-rose-400">{String(mut.error)}</div>
+      )}
+    </div>
   );
 }
 

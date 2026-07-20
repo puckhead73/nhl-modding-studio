@@ -109,7 +109,9 @@ fn nhl07_is_the_gen6_shape() {
     assert!(!c.has_skater_equip, "NHL07 ships no xmja equipment table");
     assert!(!c.has_goalie_equip, "NHL07 ships no fMVl equipment table");
     assert!(!c.arena_link);
-    assert!(!c.player_style);
+    // NHL07 DOES carry player types — under the gen6 3-bit `p_style`/`g_style` (`mQoE`/`wJus`), not
+    // `QgFs` (verified in-game: skater Playmaker/Sniper/…; goalie Butterfly/Stand-Up/Hybrid).
+    assert!(c.player_style, "NHL07 has gen6 player types (mQoE/wJus)");
     assert!(!c.year_ufa);
     assert!(!c.junior_team);
     assert!(!c.draft_team);
@@ -118,10 +120,12 @@ fn nhl07_is_the_gen6_shape() {
     assert!(!c.draft_pick);
     assert!(!c.rookie_ahl);
     assert!(!c.rookie_chl);
+    // 19 of 20 skater ratings now carry labels (Injury Resist / Penalty Resist / Intensity added);
+    // only the internal `prestige` slider stays unnamed. Goalies: 14 of 15 (Intensity / Clutch added).
     assert_eq!(c.skater_ratings_total, 20);
-    assert_eq!(c.skater_ratings_labelled, 16);
+    assert_eq!(c.skater_ratings_labelled, 19);
     assert_eq!(c.goalie_ratings_total, 15);
-    assert_eq!(c.goalie_ratings_labelled, 13);
+    assert_eq!(c.goalie_ratings_labelled, 14);
     assert_eq!(c.main_team_offset, 0, "raw dXSB = team id (verified against the roster)");
 }
 

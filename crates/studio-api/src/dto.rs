@@ -260,6 +260,41 @@ pub struct FieldViewDto {
     pub is_string: bool,
 }
 
+/// One curated cell of a server-driven field profile — a labelled control the UI renders directly.
+#[derive(Serialize, TS)]
+pub struct FieldCellDto {
+    pub label: String,
+    /// `"field"` | `"team"` | `"arena"` | `"derived"` — how the UI edits the cell.
+    pub control: String,
+    /// The resolved field to read/edit; `null` for derived cells.
+    pub field: Option<FieldViewDto>,
+    /// The record index the cell's edit must target (usually the entity record; for a NHL07 team
+    /// name, the joined stock/custom row that actually holds the name).
+    pub record: u32,
+    /// Team-FK encoding offset (`raw - offset` = team id) for `"team"` cells.
+    pub team_offset: Option<u8>,
+    /// The empty-option label for `"team"` cells (e.g. "(undrafted)").
+    pub none_label: Option<String>,
+    /// Resolved read-only text for `"derived"` cells.
+    pub derived_display: Option<String>,
+    /// When set, this cell's value semantics are not yet confirmed for the loaded title — the UI
+    /// shows the raw value plus this note.
+    pub unverified: Option<String>,
+}
+
+/// One titled section of a field profile.
+#[derive(Serialize, TS)]
+pub struct FieldSectionDto {
+    pub title: String,
+    pub cells: Vec<FieldCellDto>,
+}
+
+/// The full server-driven curated layout for one entity (the sections the UI renders in order).
+#[derive(Serialize, TS)]
+pub struct EntityFieldProfileDto {
+    pub sections: Vec<FieldSectionDto>,
+}
+
 /// A compact player row for the master list and the team depth chart.
 #[derive(Serialize, TS)]
 pub struct PlayerSummaryDto {
@@ -441,6 +476,8 @@ pub struct PlayerViewDto {
     pub ratings_table: String,
     pub memberships: Vec<RosterMembershipDto>,
     pub all_fields: Vec<FieldViewDto>,
+    /// The server-driven curated section layout the UI renders (per-game field profile).
+    pub profile: EntityFieldProfileDto,
 }
 
 /// One column of a career-stats section: the studio field id + the header label (`GP`, `SV%`, …).
@@ -564,6 +601,8 @@ pub struct TeamViewDto {
     /// Retired jersey numbers (`wcSL`), sorted ascending.
     pub retired_numbers: Vec<u32>,
     pub all_fields: Vec<FieldViewDto>,
+    /// The server-driven curated section layout the UI renders (per-game field profile).
+    pub profile: EntityFieldProfileDto,
 }
 
 /// One future draft pick owned by a team (`qHav`).
@@ -1104,8 +1143,14 @@ pub struct PrebuiltDto {
 /// it as one value rather than three positional strings.
 #[derive(Deserialize, TS)]
 pub struct AssetRootsArgsDto {
-    /// The resolved install dir. Art is anchored on the game executable found under it.
+    /// The resolved install dir. Art is anchored on the game executable found under it
+    /// (RenderWare titles) or on the `nhl/data` tree (PS4).
     pub install_dir: String,
+    /// The install's platform (`ps3`/`xbox`/`ps4`/`recomp`). Drives the on-disk art
+    /// layout — RenderWare `rendering/`+`fe/` vs the PS4 kettle tree. Absent decodes
+    /// as Xbox (the pre-PS4 behavior).
+    #[ts(optional)]
+    pub platform: Option<String>,
     /// Override the inferred `rendering/` root; `null`/empty keeps the inferred path.
     pub rendering_override: Option<String>,
     /// Override the inferred `fe/` root; `null`/empty keeps the inferred path.
