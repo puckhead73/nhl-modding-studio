@@ -407,7 +407,7 @@ impl AssetRoots {
 /// finally to `<dir>/nhl/data/kettle/rendering` verbatim so a missing tree still
 /// yields a stable, reportable path (`complete()` then reads `false`).
 fn resolve_ps4(install_dir: &Path) -> AssetRoots {
-    let nhl_data = ps4_nhl_data_root(install_dir);
+    let nhl_data = ps4_art_data_root(install_dir);
     let rendering = nhl_data
         .join("kettle")
         .join("rendering")
@@ -464,6 +464,70 @@ fn ps4_nhl_data_root(dir: &Path) -> PathBuf {
         }
     }
     dir.join("nhl").join("data")
+}
+
+/// Depth bound for the downward search that hunts for the extracted art tree.
+/// From the game root the art sits ~2 levels down (`databigs/Extracted/nhl/data`),
+/// so a small cap keeps this from wandering into the multi-GB asset tree.
+const PS4_ART_SEARCH_DEPTH: usize = 3;
+
+/// Locate the `nhl/data` whose **extracted art** (`kettle/rendering`) is present.
+///
+/// The database and the extracted art can live in *different* `nhl/data` trees: the
+/// db often ships loose under `<game>/nhl/data`, while the art extracts to a sibling
+/// like `<game>/databigs/Extracted/nhl/data` (observed on NHL 19). Anchoring the art
+/// root on the db's ancestor (what [`ps4_nhl_data_root`] does) then names an
+/// art-less `<game>/nhl/data/kettle/rendering`, so `complete()` reads `false` and the
+/// portraits/meshes never resolve. This finds the `nhl/data` that actually holds the
+/// art, falling back to [`ps4_nhl_data_root`] (a stable, reportable path) when nothing
+/// is extracted yet — which is exactly when `complete()` *should* read `false`.
+fn ps4_art_data_root(dir: &Path) -> PathBuf {
+    let has_art = |nhl_data: &Path| nhl_data.join("kettle").join("rendering").is_dir();
+    // 1) Ancestors: an `…/nhl/data` (or `<anc>/nhl/data`) that already holds the art.
+    for anc in dir.ancestors() {
+        if (anc.ends_with("nhl/data") || anc.ends_with("nhl\\data")) && has_art(anc) {
+            return anc.to_path_buf();
+        }
+        let cand = anc.join("nhl").join("data");
+        if has_art(&cand) {
+            return cand;
+        }
+    }
+    // 2) Downward from the game root (the nearest ancestor with an `nhl` child): find
+    //    any `nhl/data` holding the art — this catches `<game>/databigs/Extracted/…`.
+    let game_root = dir.ancestors().find(|a| a.join("nhl").is_dir()).unwrap_or(dir);
+    if let Some(found) = ps4_find_art_data(game_root, has_art) {
+        return found;
+    }
+    // 3) Nothing extracted yet — a stable path (`complete()` then reads false).
+    ps4_nhl_data_root(dir)
+}
+
+/// Bounded, breadth-first search under `root` for an `nhl/data` directory whose art
+/// tree is present (per `has_art`). Directories only, so the multi-GB asset payloads
+/// are never touched; returns as soon as the first match is found.
+fn ps4_find_art_data(root: &Path, has_art: impl Fn(&Path) -> bool) -> Option<PathBuf> {
+    let mut queue = std::collections::VecDeque::from([(root.to_path_buf(), 0usize)]);
+    while let Some((d, depth)) = queue.pop_front() {
+        let cand = d.join("nhl").join("data");
+        if has_art(&cand) {
+            return Some(cand);
+        }
+        if depth < PS4_ART_SEARCH_DEPTH {
+            if let Ok(entries) = std::fs::read_dir(&d) {
+                let mut kids: Vec<PathBuf> = entries
+                    .flatten()
+                    .filter(|e| e.file_type().is_ok_and(|t| t.is_dir()))
+                    .map(|e| e.path())
+                    .collect();
+                kids.sort();
+                for k in kids {
+                    queue.push_back((k, depth + 1));
+                }
+            }
+        }
+    }
+    None
 }
 
 /// PS4 player-name slug for asset filenames: `First Last` → `first_last`. Keeps
@@ -1802,6 +1866,73 @@ mod tests {
         assert_eq!(roots.portrait_path(9999, PORTRAIT_DIR_LARGE), None);
 
         std::fs::remove_dir_all(&tmp).ok();
+    }
+
+    /// Regression (NHL 19, CUSA11126): the loose db lives at `<game>/nhl/data` but the
+    /// art was extracted to a *different* tree, `<game>/databigs/Extracted/nhl/data`.
+    /// Anchoring the art root on the db's ancestor names an art-less path; resolution
+    /// must instead find the `nhl/data` that actually holds `kettle/rendering`.
+    #[test]
+    fn ps4_asset_roots_follow_extracted_art_in_a_separate_tree() {
+        let tmp = std::env::temp_dir().join(format!("nhlms_ps4_split_{}", std::process::id()));
+        let game = tmp.join("Games").join("CUSA11126");
+        // Loose db tree (no art here — kettle has loc but no rendering).
+        let db_dir = game
+            .join("nhl")
+            .join("data")
+            .join("common")
+            .join("gamemodes")
+            .join("database")
+            .join("t3db");
+        std::fs::create_dir_all(&db_dir).unwrap();
+        std::fs::create_dir_all(game.join("nhl").join("data").join("kettle").join("loc")).unwrap();
+        // Extracted art tree, a sibling under databigs/Extracted.
+        let art_data = game
+            .join("databigs")
+            .join("Extracted")
+            .join("nhl")
+            .join("data");
+        let player = art_data
+            .join("kettle")
+            .join("rendering")
+            .join("characters")
+            .join("player");
+        std::fs::create_dir_all(&player).unwrap();
+        std::fs::create_dir_all(art_data.parent().unwrap().join("ui")).unwrap();
+
+        // Resolving from the deep db dir must follow the art into the Extracted tree.
+        let roots = AssetRoots::resolve(&db_dir, Platform::Ps4);
+        assert_eq!(
+            roots.rendering,
+            art_data.join("kettle").join("rendering").to_string_lossy(),
+            "art root anchors on the tree that holds kettle/rendering, not the db's tree"
+        );
+        assert!(roots.complete(), "characters/player under the Extracted tree is found");
+
+        // Resolving from the game root (what discovery's extract-needed check uses) too.
+        let from_root = AssetRoots::resolve(&game, Platform::Ps4);
+        assert!(from_root.complete(), "game-root resolution also finds the extracted art");
+
+        std::fs::remove_dir_all(&tmp).ok();
+    }
+
+    /// Live regression against the operator's real NHL 19 install (CUSA11126),
+    /// whose loose db and extracted art sit in *different* `nhl/data` trees.
+    /// Skipped when the drive isn't mounted. Resolves from the deep loose-db
+    /// folder exactly as discovery hands it to us.
+    #[test]
+    fn ps4_real_nhl19_resolves_extracted_art_in_separate_tree() {
+        let game = Path::new(r"H:\Emulators\ShadPS4\Games\CUSA11126");
+        if !game.join("databigs/Extracted/nhl/data/kettle/rendering").is_dir() {
+            eprintln!("skipping: real NHL19 extracted art not present");
+            return;
+        }
+        let db_dir = game.join(r"nhl\data\common\gamemodes\database\t3db");
+        let roots = AssetRoots::resolve(&db_dir, Platform::Ps4);
+        assert!(
+            roots.complete(),
+            "NHL19 extracted art must resolve despite db/art living in split trees"
+        );
     }
 
     /// A real PS4 portrait PNG decodes through the shared `decode_portrait`
