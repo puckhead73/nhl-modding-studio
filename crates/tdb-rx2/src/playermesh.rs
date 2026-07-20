@@ -29,10 +29,13 @@
 //!   Legacy head, 123 on NHL 10. Chunk layout is `{u32 self_offset, u32
 //!   bone_count, 8 bytes pad}` then `bone_count` matrices.
 //!   **Per-title difference:** Legacy/14/15 ship ONE AnimationSkin shared by
-//!   every submesh; NHL 10 repeats it once per submesh (5 copies on a
-//!   5-submesh head), byte-identical apart from each copy's own `self_offset`.
-//!   The read path takes the first and verifies the rest agree; the patch path
-//!   refuses multi-skin meshes outright (it rewrites one chunk in place).
+//!   every submesh; NHL 09 and NHL 10 repeat it once per submesh (4–5 copies),
+//!   all copies of the same rig — NHL 10's are byte-identical apart from each
+//!   copy's own `self_offset`, NHL 09's agree to full meaningful precision but
+//!   carry denormal (~1e-37) noise in near-zero matrix elements. The read path
+//!   takes the first and verifies the rest agree within tolerance (see
+//!   [`skin_blocks_agree`]); the patch path refuses multi-skin meshes outright
+//!   (it rewrites one chunk in place).
 //! - Sub-mesh name resolution via the name-table records (end-pointer
 //!   semantics — see [`decode_name_table`]).
 //! - GLB writer that bundles all of the above so the operator can
@@ -392,6 +395,38 @@ fn decode_animation_skin(
     Ok(BonePalette { matrices })
 }
 
+/// Do two AnimationSkin matrix blocks describe the same rig?
+///
+/// The per-submesh AnimationSkin copies a head carries are all the same bind
+/// pose. Legacy/14/15 and NHL 10 store byte-identical copies; NHL 09 stores
+/// copies that agree to full meaningful precision but carry **denormal
+/// (~1e-37) noise in near-zero matrix elements**, so a raw byte compare wrongly
+/// reports them as divergent (verified across the entire NHL 09 head set: 480
+/// multi-skin heads, global max element delta 1.26e-37). Compare as big-endian
+/// f32 with an absolute+relative tolerance that swallows that noise while still
+/// catching a genuine per-submesh rig — the smallest meaningful bind difference
+/// (a sub-millimetre pivot move, ≥1e-4 in these metre-scale matrices) is 30+
+/// orders of magnitude above the noise floor. Each bone carries exactly one NaN
+/// sentinel; a NaN in the same slot on both sides compares equal (`NaN != NaN`
+/// is why the byte compare existed in the first place).
+fn skin_blocks_agree(a: &[u8], b: &[u8]) -> bool {
+    if a.len() != b.len() || a.len() % 4 != 0 {
+        return a == b;
+    }
+    for off in (0..a.len()).step_by(4) {
+        let x = f32::from_bits(u32::from_be_bytes(a[off..off + 4].try_into().unwrap()));
+        let y = f32::from_bits(u32::from_be_bytes(b[off..off + 4].try_into().unwrap()));
+        if x.is_nan() && y.is_nan() {
+            continue;
+        }
+        let tol = 1e-4 + 1e-4 * x.abs().max(y.abs());
+        if (x - y).abs() > tol {
+            return false;
+        }
+    }
+    true
+}
+
 // ---------- VertexDescriptor decode (Noesis lines 254-285) ----------
 
 #[derive(Debug, Clone)]
@@ -542,9 +577,10 @@ fn strips_to_triangles(indices: &[u16]) -> Vec<[u32; 3]> {
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum SkinPolicy {
     /// Require a palette, and reject a mesh whose multiple AnimationSkin
-    /// chunks disagree (only byte-identical copies are accepted). The
-    /// contract every *edit* path needs — a mesh with an ambiguous rig must
-    /// not be silently patched.
+    /// chunks describe genuinely different rigs. Copies of one shared rig are
+    /// accepted (byte-identical, or agreeing within tolerance — see
+    /// `skin_blocks_agree`). The contract every *edit* path needs — a mesh with
+    /// an ambiguous per-submesh rig must not be silently patched.
     Strict,
     /// Require a palette, but on multiple chunks keep the FIRST and tolerate
     /// the rest differing. **Preview only** — the chosen rig may be wrong, but
@@ -644,18 +680,17 @@ fn parse_mesh_impl(data: &[u8], skin_policy: SkinPolicy) -> Result<PlayerAsset, 
                     decode_name_table(data, e.abs_offset(hdr_size) as usize, e.size as usize)?;
             }
             // Legacy/14/15 carry ONE AnimationSkin shared by every submesh.
-            // NHL 10 instead repeats the palette once per submesh (5 chunks for
-            // a 5-submesh head). Verified on its whole `rendering/player` set:
-            // the copies are byte-identical apart from each chunk's own
-            // self-referential offset at bytes 0..4, so the first is lossless.
+            // NHL 09 and NHL 10 instead repeat the palette once per submesh
+            // (4–5 chunks for a 4–5-submesh head), all copies of the same rig:
+            // NHL 10's are byte-identical apart from each chunk's own
+            // self-referential offset; NHL 09's agree to full meaningful
+            // precision but carry denormal (~1e-37) noise in near-zero elements
+            // (see `skin_blocks_agree`). Either way the first is lossless.
             // Guard rather than assume — if the palettes ever really diverge,
-            // that's a layout we haven't decoded, and silently taking the first
-            // would bake in a wrong rig.
+            // that's a per-submesh rig we haven't decoded, and silently taking
+            // the first would bake in a wrong rig.
             TAG_ANIMATION_SKIN => {
                 let off = e.abs_offset(hdr_size) as usize;
-                // Compare the raw matrix block, NOT the decoded matrices: every
-                // bone carries exactly one NaN sentinel, and `NaN != NaN` makes
-                // f32 equality report byte-identical palettes as different.
                 let block = data
                     .get(off + SKIN_HEADER_LEN..off + e.size as usize)
                     .ok_or(PlayerMeshError::TruncatedChunk {
@@ -668,7 +703,7 @@ fn parse_mesh_impl(data: &[u8], skin_policy: SkinPolicy) -> Result<PlayerAsset, 
                         skin_block = Some(block);
                         skin = Some(decode_animation_skin(data, off, e.size as usize)?);
                     }
-                    Some(first) if *first == block => {}
+                    Some(first) if skin_blocks_agree(first, block) => {}
                     // The copies genuinely differ. A preview keeps the first
                     // (geometry is unaffected); an edit refuses.
                     Some(_) if skin_policy == SkinPolicy::LenientFirst => {}
@@ -1885,6 +1920,40 @@ mod tests {
         };
         let asset = parse_player_mesh(&data).unwrap();
         assert_eq!(asset.skin.matrices.len(), 122);
+    }
+
+    #[test]
+    fn skin_blocks_agree_swallows_denormal_noise_but_catches_real_rig() {
+        // Build a one-matrix (64-byte) block from BE f32s.
+        fn block(vals: &[f32; 16]) -> Vec<u8> {
+            vals.iter().flat_map(|v| v.to_bits().to_be_bytes()).collect()
+        }
+        let mut base = [0.0f32; 16];
+        base[0] = 1.0;
+        base[5] = 1.0;
+        base[10] = 1.0;
+        base[12] = 0.1234; // a real translation term
+        base[6] = f32::NAN; // the per-bone sentinel
+
+        // NHL 09-style copy: identical except denormal noise in a near-zero slot.
+        let mut noisy = base;
+        noisy[1] = f32::from_bits(0x0000_0001); // smallest positive denormal (~1e-45)
+        noisy[2] = f32::from_bits(0x0012_3456); // still ~1e-37
+        assert!(
+            skin_blocks_agree(&block(&base), &block(&noisy)),
+            "denormal noise must be tolerated"
+        );
+
+        // A genuine per-submesh rig: a real bind term shifts by 1 mm.
+        let mut moved = base;
+        moved[12] += 0.001;
+        assert!(
+            !skin_blocks_agree(&block(&base), &block(&moved)),
+            "a real ≥1e-4 bind difference must be rejected"
+        );
+
+        // NaN sentinel in the same slot on both sides compares equal.
+        assert!(skin_blocks_agree(&block(&base), &block(&base)));
     }
 
     #[test]
