@@ -360,6 +360,18 @@ fn detect_ps4(root: &Path, game_id: &str, known: &[&str], report: &mut InstallRe
             .or_else(|| find_file(&game_dir, "eng_us.db", 9))
             .map(path_string);
         note_extract_needed(&game_dir, report);
+        // PS4 ships its databases *loose* but keeps the art (meshes / textures / portraits)
+        // packed inside the databigs, so a resolved db is **not** proof the install is fully
+        // unpacked — unlike Xbox, where the db and art come out of the same `.big` set. Flag
+        // extraction whenever the kettle art tree is still missing but `.big` archives are
+        // present, so asset editing has files to work with. (Extraction leaves the `.big`
+        // files in place, so `complete()` — not their absence — is the "already unpacked" signal.)
+        if !report.extract_needed
+            && !crate::assets::AssetRoots::resolve(&game_dir, Platform::Ps4).complete()
+            && !crate::extract::find_big_archives(&game_dir).is_empty()
+        {
+            report.extract_needed = true;
+        }
     }
 
     // --- Saves: each <SaveDir>/DATA under the title's savedata CUSA folder (first variant found) ---
@@ -867,6 +879,43 @@ mod tests {
         let roster = r.saves.iter().find(|s| s.kind == "roster").expect("RosterCustom save");
         assert_eq!(roster.container_version, "ps4");
         assert!(roster.writable, "real NHL16 roster DATA is recognised by the PS4 codec");
+    }
+
+    #[test]
+    fn ps4_loose_db_but_packed_art_flags_extract_needed() {
+        // PS4 ships the db loose, so the modding minimum is met immediately — but the art is
+        // still inside a databig and no kettle rendering tree exists. Extraction must still be
+        // offered (the Assets/Export pages have nothing to scan until it runs).
+        let t = TempTree::new("ps4-packed-art");
+        build_shadps4_tree(&t.0);
+        let game = t.0.join("Games").join("CUSA01909");
+        write_big(&game.join("databigs/inxp_00.big"), &[("nhl/data/kettle/x.gnf", b"packed")]);
+
+        let r = detect_install("nhl16", Platform::Ps4, &t.0, None);
+        assert!(r.db_paths.nhlng.is_some(), "loose nhl_game.db still resolves");
+        assert!(r.minimum_met, "PS4 minimum met from the loose db alone");
+        assert!(
+            r.extract_needed,
+            "loose db + packed art (no kettle rendering tree) => extraction still needed"
+        );
+    }
+
+    #[test]
+    fn ps4_extracted_art_does_not_reflag_extract_needed() {
+        // A databig stays on disk after extraction, so its presence alone must NOT re-flag the
+        // install — the extracted kettle player-art tree is the "already unpacked" signal.
+        let t = TempTree::new("ps4-extracted-art");
+        build_shadps4_tree(&t.0);
+        let game = t.0.join("Games").join("CUSA01909");
+        write_big(&game.join("databigs/inxp_00.big"), &[("nhl/data/kettle/x.gnf", b"packed")]);
+        // The extracted player character-art dir `complete()` checks for.
+        fs::create_dir_all(game.join("nhl/data/kettle/rendering/characters/player")).unwrap();
+
+        let r = detect_install("nhl16", Platform::Ps4, &t.0, None);
+        assert!(
+            !r.extract_needed,
+            "art already extracted => no extraction prompt despite the .big still present"
+        );
     }
 
     #[test]

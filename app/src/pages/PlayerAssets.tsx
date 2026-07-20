@@ -91,9 +91,10 @@ export function AssetGate({
         hint={
           <>
             Expected <code className="text-slate-300">{roots.data.rendering}</code> and{" "}
-            <code className="text-slate-300">{roots.data.fe}</code>. Xbox installs ship their art
-            packed inside <code>.big</code> archives — run the extraction step from onboarding
-            first, then come back.
+            <code className="text-slate-300">{roots.data.fe}</code>. Asset editing requires all of
+            this install's <code>.big</code> archives to be fully extracted in place — run the
+            extraction step from onboarding first, then come back. Note: mesh (head model) editing
+            is only supported on Xbox 360.
           </>
         }
       />

@@ -109,8 +109,9 @@ export function OpenProject() {
         platform: platform!,
         root,
         savePath: savePathArg(),
-        // We only reach "Open" once the db is loose (extraction ran or wasn't needed).
-        bigFilesExtracted: true,
+        // Opening only needs the db loose (minimum met); the art may still be packed (extraction is
+        // offered, not required), so record the real state rather than assuming a full extraction.
+        bigFilesExtracted: !report?.extract_needed,
       }),
     onSuccess: (summary) => {
       open(summary, report?.nhlng_path ?? root, report);
@@ -153,12 +154,17 @@ export function OpenProject() {
     (async () => {
       try {
         const report = await call("detect_install", { gameId: g.id, platform: p, root: r, savePath: save });
-        if (report.extract_needed) {
-          bailToPicker(`${g.label}'s big files need extracting first — open it from here.`);
-          return;
-        }
+        // Un-extracted `.big` archives no longer block auto-open: extraction is *offered*, not
+        // required. When the database itself resolved (minimum met) the default opens for database
+        // editing; asset editing stays behind an explicit extract step on the folder screen. We only
+        // fall back to the picker when the db can't be reached at all — which, for a fully packed
+        // install (Xbox / Recomp), is exactly when extraction is required to open at all.
         if (!report.minimum_met) {
-          bailToPicker(`${g.label}'s nhlng.db and a roster save weren't both found.`);
+          bailToPicker(
+            report.extract_needed
+              ? `${g.label}'s game files need extracting before it can open — extract them from here.`
+              : `${g.label}'s nhlng.db and a roster save weren't both found.`,
+          );
           return;
         }
         const summary = await call("open_workspace", {
@@ -166,7 +172,7 @@ export function OpenProject() {
           platform: p,
           root: r,
           savePath: save,
-          bigFilesExtracted: true,
+          bigFilesExtracted: !report.extract_needed,
         });
         open(summary, report.nhlng_path ?? r, report);
         navigate("/app/dashboard");
@@ -448,10 +454,24 @@ export function OpenProject() {
 
             {report?.extract_needed && (
               <div className="mt-4 rounded-md border border-amber-500/30 bg-amber-500/10 p-3">
-                <div className="text-xs font-semibold text-amber-300">Big files need extracting</div>
+                <div className="text-xs font-semibold text-amber-300">
+                  {report.minimum_met
+                    ? "Optional: extract game files for asset editing"
+                    : "Extract game files to open this install"}
+                </div>
                 <p className="mt-1 text-xs text-amber-300/90">
-                  {game.label}'s database is still packed inside its <code>.big</code> archives. Extract them
-                  in place, then we'll re-scan.
+                  {report.minimum_met ? (
+                    <>
+                      {game.label}'s art is still packed inside its <code>.big</code> archives. You can open
+                      now and complete database edits, but asset editing (portraits, meshes, textures) needs
+                      the archives extracted in place first.
+                    </>
+                  ) : (
+                    <>
+                      {game.label}'s game files are still packed inside its <code>.big</code> archives. Extract
+                      them in place to edit this install, then we'll re-scan.
+                    </>
+                  )}
                 </p>
                 <div className="mt-2">
                   <Button
