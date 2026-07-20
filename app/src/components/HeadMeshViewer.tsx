@@ -40,13 +40,30 @@ const SUBMESH_COLORS = [
 export function HeadMeshViewer({
   roots,
   headId,
+  meshPaths,
+  texturePaths,
 }: {
   roots: AssetRootsArgsDto;
   headId: number;
+  /** Already-resolved mesh path(s). When set, the head is decoded from these
+   *  directly (the PS4 bespoke path — name-slug heads a numeric id can't find).
+   *  Falls back to id-based resolution when absent (RenderWare titles, which
+   *  also carry NHL 09's separate hair mesh the id path merges in). */
+  meshPaths?: string[];
+  texturePaths?: string[];
 }) {
+  const byPath = !!meshPaths && meshPaths.length > 0;
   const preview = useQuery({
-    queryKey: ["headPreview", roots.install_dir, headId],
-    queryFn: () => call("head_preview", { roots, headId }),
+    queryKey: byPath
+      ? ["headPreviewPaths", meshPaths]
+      : ["headPreview", roots.install_dir, headId],
+    queryFn: () =>
+      byPath
+        ? call("head_preview_paths", {
+            meshPaths: meshPaths!,
+            texturePaths: texturePaths ?? [],
+          })
+        : call("head_preview", { roots, headId }),
   });
 
   if (preview.isLoading) {

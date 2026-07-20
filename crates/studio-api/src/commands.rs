@@ -88,7 +88,8 @@ pub fn open_workspace(
 }
 
 /// Extract a game's `.big` archives in place, given the install root the user pointed at. Walks the
-/// root for EA BIGF/BIG4 archives and writes every entry out preserving its internal folder
+/// root for EA archives — Xbox/PS3/Recomp `BIGF`/`BIG4` and PS4 `EB\0\3` (the latter streamed, since
+/// PS4 archives can be tens of GB) — and writes every entry out preserving its internal folder
 /// hierarchy (chunkzip payloads are inflated; chunklzx entries are skipped). Returns a summary of
 /// what was written. Runs at onboarding (before a project is opened), so it takes the install
 /// context rather than a project id.
@@ -817,6 +818,20 @@ pub fn head_preview(
     head_id: u64,
 ) -> CmdResult<HeadPreviewDto> {
     registry.head_preview(&roots, head_id).map_err(|e| e.to_string())
+}
+
+/// Decode a head mesh for the 3D viewer from already-resolved paths (the PS4
+/// bespoke path — name-slug heads that a numeric id can't resolve). Works for
+/// any platform; the decode dispatches on `.mcd` vs `.rx2`.
+#[tauri::command]
+pub fn head_preview_paths(
+    registry: State<'_, Registry>,
+    mesh_paths: Vec<String>,
+    texture_paths: Vec<String>,
+) -> CmdResult<HeadPreviewDto> {
+    registry
+        .head_preview_paths(mesh_paths, texture_paths)
+        .map_err(|e| e.to_string())
 }
 
 /// Decode one portrait to a PNG data URL for preview.

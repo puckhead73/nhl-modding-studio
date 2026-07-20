@@ -6,9 +6,16 @@
  */
 export type AssetRootsArgsDto = { 
 /**
- * The resolved install dir. Art is anchored on the game executable found under it.
+ * The resolved install dir. Art is anchored on the game executable found under it
+ * (RenderWare titles) or on the `nhl/data` tree (PS4).
  */
 install_dir: string, 
+/**
+ * The install's platform (`ps3`/`xbox`/`ps4`/`recomp`). Drives the on-disk art
+ * layout — RenderWare `rendering/`+`fe/` vs the PS4 kettle tree. Absent decodes
+ * as Xbox (the pre-PS4 behavior).
+ */
+platform?: string, 
 /**
  * Override the inferred `rendering/` root; `null`/empty keeps the inferred path.
  */

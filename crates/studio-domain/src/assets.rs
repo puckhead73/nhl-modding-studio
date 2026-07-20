@@ -45,7 +45,7 @@ use tdb_core::{FieldDescriptor, Table, TdbFile};
 use tdb_defs::FieldMetaIndex;
 use tdb_relations::entity::ids;
 
-use crate::{DomainError, Result};
+use crate::{DomainError, Platform, Result};
 
 /// Head ids at or above this are shared generic "pool" heads — one model reused
 /// by many players, belonging to none of them. A Legacy-era convention: NHL 10
@@ -131,10 +131,24 @@ const F_BIRTH_DAY: &str = "Kswi";
 /// which is not always the folder the user pointed at — see [`AssetRoots::resolve`].
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct AssetRoots {
-    /// `<anchor>/rendering` — player meshes and texlibs.
+    /// Player meshes and texlibs. On Xbox/PS3/Recomp this is `<anchor>/rendering`
+    /// (RenderWare `.rx2`); on **PS4** it is the "Kettle" tree
+    /// `<game>/nhl/data/kettle/rendering` (EA `.mcd` meshes + `.gnf` textures).
     pub rendering: String,
-    /// `<anchor>/fe` — the front-end tree (portraits, logos, jerseys).
+    /// `<anchor>/fe` — the front-end tree (portraits, logos, jerseys). Empty on
+    /// PS4, whose portraits are plain PNGs under `ui/assets/` (resolved separately).
     pub fe: String,
+    /// The platform whose on-disk layout and naming these roots follow. Drives
+    /// mesh/texture resolution — Xbox is head-id keyed under `player/`, PS4 is
+    /// player-name-slug keyed under `characters/player/`.
+    #[serde(default = "default_platform")]
+    platform: Platform,
+}
+
+/// PS3/Xbox/Recomp share the RenderWare layout, so a missing `platform` (an old
+/// serialized `AssetRoots`) decodes as Xbox — the pre-PS4 behavior.
+fn default_platform() -> Platform {
+    Platform::Xbox
 }
 
 /// Bounded depth for the executable search. Recomp nests the real install one
@@ -161,12 +175,25 @@ impl AssetRoots {
     /// whenever that directory actually exists, and otherwise uses `<anchor>/<name>` —
     /// keyed on filesystem presence, so Xbox / PS3 installs (no `_compiled`) are
     /// unaffected.
-    pub fn resolve(install_dir: &Path) -> AssetRoots {
+    /// On **PS4** there is no executable to anchor on and a different tree: art
+    /// lives under `<game>/nhl/data/kettle/rendering`. [`resolve_ps4`] derives it
+    /// from the picked/discovered dir (which points at the database folder deep
+    /// inside `nhl/data/...`) by walking up to the `nhl/data` ancestor.
+    pub fn resolve(install_dir: &Path, platform: Platform) -> AssetRoots {
+        if platform == Platform::Ps4 {
+            return resolve_ps4(install_dir);
+        }
         let anchor = anchor_dir(install_dir);
         AssetRoots {
             rendering: art_root(&anchor, "rendering").to_string_lossy().into_owned(),
             fe: art_root(&anchor, "fe").to_string_lossy().into_owned(),
+            platform,
         }
+    }
+
+    /// The platform these roots follow.
+    pub fn platform(&self) -> Platform {
+        self.platform
     }
 
     /// Apply optional operator overrides over an inferred pair. An override that
@@ -181,15 +208,33 @@ impl AssetRoots {
         self
     }
 
-    /// Whether both roots are present — i.e. this install has extracted art.
+    /// Whether the art tree is present — i.e. this install has extracted art.
     /// A packed install (`.big` archives, nothing loose) reports `false`, which
     /// is the signal to run extraction first.
+    ///
+    /// PS4 has no separate `fe/` root (portraits are PNGs elsewhere), so it only
+    /// checks the kettle mesh/texture dir exists.
     pub fn complete(&self) -> bool {
+        if self.platform == Platform::Ps4 {
+            return self.ps4_player_dir().is_dir();
+        }
         self.rendering_dir().is_dir() && self.fe_dir().is_dir()
     }
 
     fn rendering_dir(&self) -> PathBuf {
         PathBuf::from(&self.rendering)
+    }
+
+    /// PS4 player character art dir: `<kettle>/rendering/characters/player`.
+    fn ps4_player_dir(&self) -> PathBuf {
+        self.rendering_dir().join("characters").join("player")
+    }
+
+    /// PS4 bespoke head mesh `<player>/{slug}.mcd`, if the slug resolves a file.
+    fn ps4_bespoke_mesh(&self, name_slug: Option<&str>) -> Option<PathBuf> {
+        let slug = name_slug?;
+        let p = self.ps4_player_dir().join(format!("{slug}.mcd"));
+        p.is_file().then_some(p)
     }
 
     fn fe_dir(&self) -> PathBuf {
@@ -210,7 +255,21 @@ impl AssetRoots {
     /// so probing each in turn resolves every title correctly. The bare
     /// `head_{id}.rx2` never collides with NHL 10's loose `head_{id}_cm.rx2`
     /// textures — those always carry a map suffix.
-    pub fn mesh_path(&self, head_id: u64) -> Option<PathBuf> {
+    /// On **PS4** the head is a single EA `.mcd` (RSF) container under
+    /// `characters/player/`, keyed by the player-name slug for bespoke heads
+    /// (`{slug}.mcd`, e.g. `alexander_ovechkin.mcd`) and by the numeric id for
+    /// shared pool heads (`generic_player_{head_id}.mcd`). Bespoke wins when its
+    /// slug file exists; otherwise the generic mesh (so a pool head can still be
+    /// inspected). `name_slug` is ignored on the RenderWare platforms.
+    pub fn mesh_path(&self, head_id: u64, name_slug: Option<&str>) -> Option<PathBuf> {
+        if self.platform == Platform::Ps4 {
+            return self.ps4_bespoke_mesh(name_slug).or_else(|| {
+                let generic = self
+                    .ps4_player_dir()
+                    .join(format!("generic_player_{head_id}.mcd"));
+                generic.is_file().then_some(generic)
+            });
+        }
         let dir = self.rendering_dir().join("player");
         let nested = dir.join(format!("player_{head_id}"));
         [
@@ -228,7 +287,12 @@ impl AssetRoots {
     /// NHL 10 → Legacy carry hair as a `haircap_`/`cards*` submesh inside the one
     /// `player_` container. Empty when none apply, so the caller can always merge
     /// the returned set into the preview unconditionally.
-    pub fn extra_head_mesh_paths(&self, head_id: u64) -> Vec<PathBuf> {
+    pub fn extra_head_mesh_paths(&self, head_id: u64, _name_slug: Option<&str>) -> Vec<PathBuf> {
+        // PS4 heads bundle hair (`geo_haircapShape`/`hair_cardsShape`) as
+        // submeshes inside the one `.mcd`, so there are no companion meshes.
+        if self.platform == Platform::Ps4 {
+            return Vec::new();
+        }
         let hair = self
             .rendering_dir()
             .join("player")
@@ -251,7 +315,24 @@ impl AssetRoots {
     /// Both decode through `texlib::parse`; only the packaging differs.
     /// * **NHL 07** — no texlib; the head's rasters live in its own
     ///   `player/player_{head_id}/` folder (`head_{id}_0_0_0_cm.rx2`, `eyes_{id}_0_cm.rx2`, …).
-    pub fn texture_paths(&self, head_id: u64) -> Vec<PathBuf> {
+    ///
+    /// On **PS4** the head's maps are PS4 GNF textures under `characters/player/`,
+    /// name-slug keyed: `head_{slug}_{map}.gnf`, `hair_{slug}_{map}.gnf`
+    /// (`map` ∈ `cm`/`nm`/`sm`/`am`/`coeff`). (GNF *decode* lands with the texture
+    /// work; this resolves the correct files today.)
+    pub fn texture_paths(&self, head_id: u64, name_slug: Option<&str>) -> Vec<PathBuf> {
+        if self.platform == Platform::Ps4 {
+            let Some(slug) = name_slug else {
+                return Vec::new();
+            };
+            let mut gnf: Vec<PathBuf> = std::fs::read_dir(self.ps4_player_dir())
+                .into_iter()
+                .flat_map(|entries| entries.flatten().map(|e| e.path()))
+                .filter(|p| ps4_is_texture_for(p, slug))
+                .collect();
+            gnf.sort();
+            return gnf;
+        }
         let player_dir = self.rendering_dir().join("player");
         let bundled = player_dir.join(format!("texlib_{head_id}.rx2"));
         if bundled.is_file() {
@@ -278,7 +359,36 @@ impl AssetRoots {
     /// * **NHL 07** — flat, `p{id}.big` directly under the dir (verified on a real install).
     ///
     /// Probe flat first, then the bucketed layout; existence-gated, so neither yields a false match.
+    ///
+    /// On **PS4** portraits are a single size, so only the
+    /// [`PORTRAIT_DIR_LARGE`] request resolves; the HUD-size request returns
+    /// `None` (there is no separate small set). Two title-drifted layouts, both
+    /// under `<nhl>/ui`, probed by existence:
+    ///
+    /// * **NHL 15** — flat PNGs, `assets/portraits/p{id}.png`.
+    /// * **NHL 16+** — tiled BC7 GNFs, `kettle_assets/playerportraits/p{id}.gnf`.
+    ///
+    /// [`decode_portrait`] dispatches on the file's magic, so a mixed guess is safe.
     pub fn portrait_path(&self, portrait_id: u64, dir: &str) -> Option<PathBuf> {
+        if self.platform == Platform::Ps4 {
+            if dir != PORTRAIT_DIR_LARGE {
+                return None;
+            }
+            let png = self
+                .fe_dir()
+                .join("assets")
+                .join("portraits")
+                .join(format!("p{portrait_id}.png"));
+            if png.is_file() {
+                return Some(png);
+            }
+            let gnf = self
+                .fe_dir()
+                .join("kettle_assets")
+                .join("playerportraits")
+                .join(format!("p{portrait_id}.gnf"));
+            return gnf.is_file().then_some(gnf);
+        }
         let base = self.fe_dir().join("ion").join("artassets").join(dir);
         let file = format!("p{portrait_id}.big");
         let flat = base.join(&file);
@@ -289,6 +399,120 @@ impl AssetRoots {
         bucketed.is_file().then_some(bucketed)
     }
 }
+
+/// Derive the PS4 art roots from a discovered/picked dir. Discovery points at
+/// the database folder deep inside `nhl/data/common/gamemodes/database/t3db`, so
+/// we walk up to the `nhl/data` ancestor and hang the kettle tree off it. Falls
+/// back to a bounded downward search (the user pointed at the game root), and
+/// finally to `<dir>/nhl/data/kettle/rendering` verbatim so a missing tree still
+/// yields a stable, reportable path (`complete()` then reads `false`).
+fn resolve_ps4(install_dir: &Path) -> AssetRoots {
+    let nhl_data = ps4_nhl_data_root(install_dir);
+    let rendering = nhl_data
+        .join("kettle")
+        .join("rendering")
+        .to_string_lossy()
+        .into_owned();
+    // Portraits are plain PNGs under `<nhl>/ui/assets/portraits`, a sibling of
+    // `<nhl>/data`. Use the `fe` slot for the `<nhl>/ui` front-end root (the PS4
+    // analogue of the Xbox `fe/` tree).
+    let fe = nhl_data
+        .parent()
+        .map(|nhl| nhl.join("ui").to_string_lossy().into_owned())
+        .unwrap_or_default();
+    AssetRoots {
+        rendering,
+        fe,
+        platform: Platform::Ps4,
+    }
+}
+
+/// Locate the `nhl/data` directory for a PS4 install, given a dir somewhere in
+/// or above it. Checks each ancestor for a `nhl/data` child (the up-walk from a
+/// deep db folder), then the dir itself, then a shallow downward search.
+fn ps4_nhl_data_root(dir: &Path) -> PathBuf {
+    // Up-walk: an ancestor whose path ends `…/nhl/data`, or one that has a
+    // `nhl/data` child.
+    for anc in dir.ancestors() {
+        if anc.ends_with("nhl/data") || anc.ends_with("nhl\\data") {
+            return anc.to_path_buf();
+        }
+        let cand = anc.join("nhl").join("data");
+        if cand.is_dir() {
+            return cand;
+        }
+    }
+    // Downward (user picked the game root): bounded BFS for `nhl/data`.
+    let mut queue = std::collections::VecDeque::from([(dir.to_path_buf(), 0usize)]);
+    while let Some((d, depth)) = queue.pop_front() {
+        let cand = d.join("nhl").join("data");
+        if cand.is_dir() {
+            return cand;
+        }
+        if depth < ANCHOR_SEARCH_DEPTH {
+            if let Ok(entries) = std::fs::read_dir(&d) {
+                let mut kids: Vec<PathBuf> = entries
+                    .flatten()
+                    .filter(|e| e.file_type().is_ok_and(|t| t.is_dir()))
+                    .map(|e| e.path())
+                    .collect();
+                kids.sort();
+                for k in kids {
+                    queue.push_back((k, depth + 1));
+                }
+            }
+        }
+    }
+    dir.join("nhl").join("data")
+}
+
+/// PS4 player-name slug for asset filenames: `First Last` → `first_last`. Keeps
+/// ASCII letters/digits, maps whitespace to `_`, and drops other punctuation
+/// (apostrophes/hyphens/accents are stripped in the shipped filenames). `None`
+/// when nothing usable remains.
+pub fn ps4_name_slug(first: &str, last: &str) -> Option<String> {
+    let joined = format!("{} {}", first.trim(), last.trim());
+    let mut slug = String::with_capacity(joined.len());
+    for ch in joined.chars() {
+        if ch.is_ascii_alphanumeric() {
+            slug.push(ch.to_ascii_lowercase());
+        } else if ch.is_whitespace() {
+            if !slug.ends_with('_') {
+                slug.push('_');
+            }
+        }
+        // else: drop (apostrophes, hyphens, accents, …)
+    }
+    let slug = slug.trim_matches('_').to_string();
+    (!slug.is_empty()).then_some(slug)
+}
+
+/// Is `path` a PS4 GNF texture for the head/hair of `name_slug`? Matches
+/// `head_{slug}_{map}.gnf` / `hair_{slug}_{map}.gnf` — the slug as a whole run of
+/// `_`-tokens (so `ovechkin` never picks up `ovechkinov`) and a known map suffix
+/// last so a non-map `.gnf` isn't mistaken for one.
+fn ps4_is_texture_for(path: &Path, name_slug: &str) -> bool {
+    if path.extension().is_none_or(|e| !e.eq_ignore_ascii_case("gnf")) {
+        return false;
+    }
+    let Some(stem) = path.file_stem().and_then(|s| s.to_str()) else {
+        return false;
+    };
+    let lower = stem.to_ascii_lowercase();
+    for part in ["head_", "hair_"] {
+        if let Some(rest) = lower.strip_prefix(part) {
+            if let Some(map) = rest.strip_prefix(name_slug).and_then(|r| r.strip_prefix('_')) {
+                if PS4_MAP_SUFFIXES.contains(&map) {
+                    return true;
+                }
+            }
+        }
+    }
+    false
+}
+
+/// PS4 head texture map suffixes: colour, normal, specular, ambient, coefficient.
+const PS4_MAP_SUFFIXES: &[&str] = &["cm", "nm", "sm", "am", "coeff"];
 
 /// The directory the game's art hangs off: whichever folder holds `default.xex`,
 /// searched from `install_dir` down to [`ANCHOR_SEARCH_DEPTH`]. Falls back to
@@ -497,7 +721,18 @@ pub fn scan_player_assets(
             to_zero_indexed(f_day.and_then(|f| db.read_u64(bio, record, f))),
         );
 
-        let bespoke_head = head_id == portrait_id;
+        // The PS4 art filename slug (`first_last`) is distinct from the export
+        // slug above (`last_first_dd_mm_yyyy`). Only needed on PS4.
+        let ps4_slug = (roots.platform() == Platform::Ps4)
+            .then(|| ps4_name_slug(first.trim(), last.trim()))
+            .flatten();
+        // "This player's own head": on the RenderWare titles, `pPaD == lOnr`; on
+        // PS4, the existence of a name-slug `{slug}.mcd` (pool heads have only a
+        // numeric `generic_player_*`).
+        let bespoke_head = match roots.platform() {
+            Platform::Ps4 => roots.ps4_bespoke_mesh(ps4_slug.as_deref()).is_some(),
+            _ => head_id == portrait_id,
+        };
         out.push(PlayerAssets {
             bio_record: record,
             full_name,
@@ -511,10 +746,14 @@ pub fn scan_player_assets(
             // Only a bespoke head belongs to this player. A pool head resolves
             // to a real file too, but naming it after this player would be a
             // lie — 5385 players share those models.
-            mesh_path: path_str(bespoke_head.then(|| roots.mesh_path(head_id)).flatten()),
+            mesh_path: path_str(
+                bespoke_head
+                    .then(|| roots.mesh_path(head_id, ps4_slug.as_deref()))
+                    .flatten(),
+            ),
             texture_paths: if bespoke_head {
                 roots
-                    .texture_paths(head_id)
+                    .texture_paths(head_id, ps4_slug.as_deref())
                     .into_iter()
                     .map(|p| p.to_string_lossy().into_owned())
                     .collect()
@@ -727,13 +966,68 @@ pub(crate) fn read_asset_file(path: &Path) -> Result<Vec<u8>> {
     Ok(bytes)
 }
 
-/// Decode a portrait `.big` to RGBA.
+/// Parse a head mesh into the shared [`tdb_rx2::playermesh::PlayerAsset`],
+/// dispatching on the container the path names: PS4 `.mcd` (EA RSF) vs the
+/// Xbox 360 / PS3 `.rx2` (RenderWare RW4). Both decoders emit the same model,
+/// so [`tdb_rx2::playermesh::write_glb`] and the head-preview path are shared.
 ///
-/// Keeps the largest raster by pixel area rather than the first: the archive
-/// also carries Scaleform blobs, empty `sg*` stubs, and small auxiliary rasters
-/// that would win a first-match scan.
+/// `preview` selects the lenient RW4 parse (tolerates NHL 10's per-submesh
+/// multi-skin rig — viewer only). The PS4 rig is external (in the `.skel`), so
+/// `.mcd` has no such ambiguity and ignores the flag.
+pub(crate) fn parse_head_mesh(
+    path: &Path,
+    bytes: &[u8],
+    preview: bool,
+) -> Result<tdb_rx2::playermesh::PlayerAsset> {
+    let err = |e: String| DomainError::Extract(format!("{}: {e}", path.display()));
+    if path.extension().is_some_and(|e| e.eq_ignore_ascii_case("mcd")) {
+        return tdb_rx2::mcd::parse_player_mesh(bytes).map_err(|e| err(e.to_string()));
+    }
+    if preview {
+        tdb_rx2::playermesh::parse_player_mesh_preview(bytes).map_err(|e| err(e.to_string()))
+    } else {
+        tdb_rx2::playermesh::parse_player_mesh(bytes).map_err(|e| err(e.to_string()))
+    }
+}
+
+/// PNG magic — the head of a PS4 portrait (`p{id}.png`).
+const PNG_MAGIC: &[u8; 8] = b"\x89PNG\r\n\x1a\n";
+
+/// Decode PNG bytes to a [`DecodedImage`] (RGBA8).
+fn decode_png(bytes: &[u8], path: &Path) -> Result<DecodedImage> {
+    let img = image::load_from_memory_with_format(bytes, image::ImageFormat::Png)
+        .map_err(|e| DomainError::Extract(format!("{}: png decode failed: {e}", path.display())))?
+        .to_rgba8();
+    Ok(DecodedImage {
+        width: img.width(),
+        height: img.height(),
+        rgba: img.into_raw(),
+    })
+}
+
+/// Decode a portrait to RGBA.
+///
+/// Dispatched by file magic:
+/// * **PS4 / NHL 15** — plain PNG (`assets/portraits/p{id}.png`).
+/// * **PS4 / NHL 16+** — tiled BC7 GNF (`kettle_assets/playerportraits/p{id}.gnf`).
+/// * **Xbox / PS3** — EA `.big` archive: keep the largest raster by pixel area
+///   rather than the first (the archive also carries Scaleform blobs, empty
+///   `sg*` stubs, and small auxiliary rasters that would win a first-match scan).
 pub fn decode_portrait(path: &Path) -> Result<DecodedImage> {
     let bytes = read_asset_file(path)?;
+    if bytes.starts_with(PNG_MAGIC) {
+        return decode_png(&bytes, path);
+    }
+    if bytes.starts_with(tdb_rx2::gnf::MAGIC_GNF) {
+        let tex = tdb_rx2::gnf::parse(&bytes)
+            .map_err(|e| DomainError::Extract(format!("{}: {e}", path.display())))?;
+        let rgba = gnf_to_rgba(&tex)?;
+        return Ok(DecodedImage {
+            width: tex.width,
+            height: tex.height,
+            rgba,
+        });
+    }
     let archive = tdb_archive_big::Archive::parse(bytes)
         .map_err(|e| DomainError::Extract(format!("{}: {e}", path.display())))?;
 
@@ -852,6 +1146,31 @@ pub(crate) fn linear_to_rgba(
                 .map_err(|e| DomainError::Extract(format!("dds decode failed: {e}")))?;
             Ok(decoded.rgba)
         }
+    }
+}
+
+/// Decode a de-tiled PS4 GNF texture to tightly packed RGBA8. BC1/BC2/BC3 reuse
+/// the shared block decoder via [`linear_to_rgba`]; BC4/BC5 decode through the
+/// dedicated single-/dual-channel paths in [`tdb_rx2::gnf`].
+pub(crate) fn gnf_to_rgba(tex: &tdb_rx2::gnf::GnfTexture) -> Result<Vec<u8>> {
+    use tdb_rx2::gnf::BcFormat;
+    use tdb_rx2::texlib::PixelFormat;
+    let (w, h) = (tex.width, tex.height);
+    match tex.format {
+        BcFormat::Bc1 => linear_to_rgba(PixelFormat::Dxt1, w, h, &tex.base_mip_linear),
+        BcFormat::Bc2 => linear_to_rgba(PixelFormat::Dxt3, w, h, &tex.base_mip_linear),
+        BcFormat::Bc3 => linear_to_rgba(PixelFormat::Dxt5, w, h, &tex.base_mip_linear),
+        // BC7 (NHL 16+ player portraits) decodes cleanly through the pure-Rust
+        // block decoder — verified against a real portrait (seamless, no drift).
+        BcFormat::Bc7 => Ok(tdb_rx2::gnf::decode_bc7(&tex.base_mip_linear, w, h)),
+        // BC4/BC5 (single/dual-channel — normal/roughness maps) decode is not yet
+        // correct on real data (the index bits come out scrambled); skipped so a
+        // noisy thumbnail never reaches the UI. The diffuse `cm` (BC1) and hair
+        // (BC3) maps — everything the model actually samples — decode cleanly.
+        BcFormat::Bc4 | BcFormat::Bc5 => Err(DomainError::Extract(format!(
+            "{:?} GNF decode not yet supported",
+            tex.format
+        ))),
     }
 }
 
@@ -1002,10 +1321,7 @@ pub fn export_player_assets(
 
         if let Some(src) = p.mesh_path.as_deref().filter(|_| opts.meshes_glb) {
             match read_asset_file(Path::new(src))
-                .and_then(|b| {
-                    tdb_rx2::playermesh::parse_player_mesh(&b)
-                        .map_err(|e| DomainError::Extract(format!("{src}: {e}")))
-                }) {
+                .and_then(|b| parse_head_mesh(Path::new(src), &b, false)) {
                 Ok(asset) => {
                     let glb = tdb_rx2::playermesh::write_glb(&asset);
                     let dst = out_dir.join("heads").join(format!("{slug}.glb"));
@@ -1024,6 +1340,41 @@ pub fn export_player_assets(
         if opts.textures {
             for src in &p.texture_paths {
                 let src = src.as_str();
+                // PS4 GNF: de-tile + decode + write PNG (a `.gnf` holds one
+                // texture, named by the file stem's map suffix).
+                if Path::new(src)
+                    .extension()
+                    .is_some_and(|e| e.eq_ignore_ascii_case("gnf"))
+                {
+                    let map = Path::new(src)
+                        .file_stem()
+                        .map(|s| s.to_string_lossy().into_owned())
+                        .unwrap_or_default();
+                    match read_asset_file(Path::new(src))
+                        .and_then(|b| {
+                            tdb_rx2::gnf::parse(&b)
+                                .map_err(|e| DomainError::Extract(format!("{src}: {e}")))
+                        })
+                        .and_then(|tex| {
+                            gnf_to_rgba(&tex).map(|rgba| (tex.width, tex.height, rgba))
+                        })
+                        .and_then(|(w, h, rgba)| DecodedImage { width: w, height: h, rgba }.to_png())
+                    {
+                        Ok(png) => {
+                            let dst = out_dir.join("textures").join(format!("{map}.png"));
+                            match write_file(&dst, &png) {
+                                Ok(n) => {
+                                    summary.textures_written += 1;
+                                    summary.bytes_written += n;
+                                }
+                                Err(e) => summary.failures.push(format!("{}: {e}", p.full_name)),
+                            }
+                        }
+                        // BC4/BC5/BC7 maps are skipped (decode pending) — not fatal.
+                        Err(e) => summary.failures.push(format!("{}: {e}", p.full_name)),
+                    }
+                    continue;
+                }
                 match read_asset_file(Path::new(src))
                     .and_then(|b| {
                         tdb_rx2::texlib::parse(&b)
@@ -1257,7 +1608,7 @@ mod tests {
         std::fs::create_dir_all(&game).unwrap();
         std::fs::write(game.join("default.xex"), b"stub").unwrap();
 
-        let roots = AssetRoots::resolve(&tmp);
+        let roots = AssetRoots::resolve(&tmp, Platform::Xbox);
         assert_eq!(roots.rendering, game.join("rendering").to_string_lossy());
         assert_eq!(roots.fe, game.join("fe").to_string_lossy());
 
@@ -1277,7 +1628,7 @@ mod tests {
         std::fs::create_dir_all(compiled.join("fe")).unwrap();
         std::fs::write(game.join("default.xex"), b"stub").unwrap();
 
-        let roots = AssetRoots::resolve(&tmp);
+        let roots = AssetRoots::resolve(&tmp, Platform::Xbox);
         assert_eq!(roots.rendering, compiled.join("rendering").to_string_lossy());
         assert_eq!(roots.fe, compiled.join("fe").to_string_lossy());
 
@@ -1291,7 +1642,7 @@ mod tests {
         std::fs::create_dir_all(&tmp).unwrap();
         std::fs::write(tmp.join("default.xex"), b"stub").unwrap();
 
-        let roots = AssetRoots::resolve(&tmp);
+        let roots = AssetRoots::resolve(&tmp, Platform::Xbox);
         assert_eq!(roots.rendering, tmp.join("rendering").to_string_lossy());
 
         std::fs::remove_dir_all(&tmp).ok();
@@ -1303,15 +1654,173 @@ mod tests {
         let tmp = std::env::temp_dir().join("nhlms_anchor_test_ps3");
         std::fs::create_dir_all(&tmp).unwrap();
 
-        let roots = AssetRoots::resolve(&tmp);
+        let roots = AssetRoots::resolve(&tmp, Platform::Xbox);
         assert_eq!(roots.rendering, tmp.join("rendering").to_string_lossy());
 
         std::fs::remove_dir_all(&tmp).ok();
     }
 
+    /// The GNF de-tile + BC1 decode reconstruct a real head cm map to a
+    /// plausible image (varied, skin-toned, not black/uniform). Guards the
+    /// 1D-micro de-tile against regressions. Skipped when the tree isn't mounted.
+    #[test]
+    fn ps4_gnf_head_cm_decodes_to_a_plausible_image() {
+        let path = r"H:\Emulators\ShadPS4\Games\CUSA00561\databigs\Extracted\nhl\data\kettle\rendering\characters\player\head_alexander_ovechkin_cm.gnf";
+        let Ok(bytes) = std::fs::read(path) else {
+            eprintln!("skipping: {path} not present");
+            return;
+        };
+        let tex = tdb_rx2::gnf::parse(&bytes).expect("gnf parses");
+        let rgba = gnf_to_rgba(&tex).expect("cm decodes");
+        assert_eq!(rgba.len(), (tex.width * tex.height * 4) as usize);
+
+        // Not uniform: a scrambled de-tile would still vary, but a broken decode
+        // tends toward black/constant. Require real spread and some skin tones.
+        let opaque: Vec<&[u8]> = rgba.chunks_exact(4).filter(|p| p[3] > 8).collect();
+        assert!(opaque.len() > 1000, "should have opaque pixels");
+        let mean_r: u32 = opaque.iter().map(|p| p[0] as u32).sum::<u32>() / opaque.len() as u32;
+        let mean_g: u32 = opaque.iter().map(|p| p[1] as u32).sum::<u32>() / opaque.len() as u32;
+        let mean_b: u32 = opaque.iter().map(|p| p[2] as u32).sum::<u32>() / opaque.len() as u32;
+        // Skin-dominated atlas: red channel clearly the strongest.
+        assert!(mean_r > mean_g && mean_g > mean_b, "skin tone: r>g>b, got {mean_r},{mean_g},{mean_b}");
+        assert!(mean_r > 90, "not too dark: mean_r={mean_r}");
+
+        // Seamless de-tile: rows on a 32-texel micro-tile boundary must be no
+        // more discontinuous than interior rows. A wrong within-tile order
+        // (e.g. row-major instead of Z-order) leaves ~2× the gradient at every
+        // boundary, which reads as washboard ripples on the lit 3D head.
+        let (w, h) = (tex.width as usize, tex.height as usize);
+        let luma = |x: usize, y: usize| {
+            let o = (y * w + x) * 4;
+            0.299 * rgba[o] as f64 + 0.587 * rgba[o + 1] as f64 + 0.114 * rgba[o + 2] as f64
+        };
+        let (mut b, mut bn, mut i, mut inn) = (0.0, 0usize, 0.0, 0usize);
+        for y in 1..h {
+            let boundary = y % 32 == 0;
+            for x in 0..w {
+                let d = (luma(x, y) - luma(x, y - 1)).abs();
+                if boundary {
+                    b += d;
+                    bn += 1;
+                } else {
+                    i += d;
+                    inn += 1;
+                }
+            }
+        }
+        let seam_ratio = (b / bn as f64) / (i / inn as f64);
+        assert!(seam_ratio < 1.6, "tile-boundary seam ratio too high: {seam_ratio:.2}");
+    }
+
+    #[test]
+    fn ps4_name_slug_normalizes_names() {
+        assert_eq!(
+            ps4_name_slug("Alexander", "Ovechkin").as_deref(),
+            Some("alexander_ovechkin")
+        );
+        // Punctuation dropped, spaces collapsed.
+        assert_eq!(ps4_name_slug("T.J.", "Oshie").as_deref(), Some("tj_oshie"));
+        assert_eq!(
+            ps4_name_slug("Jean-Gabriel", "Pageau").as_deref(),
+            Some("jeangabriel_pageau")
+        );
+        assert_eq!(ps4_name_slug("  ", "").as_deref(), None);
+    }
+
+    #[test]
+    fn ps4_texture_match_keys_on_the_whole_slug() {
+        let slug = "alexander_ovechkin";
+        assert!(ps4_is_texture_for(
+            Path::new("head_alexander_ovechkin_cm.gnf"),
+            slug
+        ));
+        assert!(ps4_is_texture_for(
+            Path::new("hair_alexander_ovechkin_coeff.gnf"),
+            slug
+        ));
+        // Wrong prefix, wrong extension, unknown map, and a longer slug all miss.
+        assert!(!ps4_is_texture_for(Path::new("body_alexander_ovechkin_cm.gnf"), slug));
+        assert!(!ps4_is_texture_for(Path::new("head_alexander_ovechkin_cm.dds"), slug));
+        assert!(!ps4_is_texture_for(Path::new("head_alexander_ovechkin_xx.gnf"), slug));
+        assert!(!ps4_is_texture_for(Path::new("head_alexander_ovechkinov_cm.gnf"), slug));
+    }
+
+    /// PS4 resolves art off the kettle tree, derived by walking up from the
+    /// (deep) database dir to `nhl/data`; meshes are name-slug keyed under
+    /// `characters/player/`, with a numeric `generic_player_*` fallback.
+    #[test]
+    fn ps4_asset_roots_resolve_kettle_tree_and_bespoke_mesh() {
+        let tmp = std::env::temp_dir().join(format!("nhlms_ps4_roots_{}", std::process::id()));
+        let game = tmp.join("Games").join("CUSA00561");
+        let nhl_data = game.join("nhl").join("data");
+        let player = nhl_data.join("kettle").join("rendering").join("characters").join("player");
+        std::fs::create_dir_all(&player).unwrap();
+        // Portraits live under <nhl>/ui/assets/portraits (sibling of nhl/data).
+        let portraits = game.join("nhl").join("ui").join("assets").join("portraits");
+        std::fs::create_dir_all(&portraits).unwrap();
+        std::fs::write(portraits.join("p4242.png"), b"\x89PNG stub").unwrap();
+        // The dir discovery hands us is deep inside nhl/data.
+        let db_dir = nhl_data.join("common").join("gamemodes").join("database").join("t3db");
+        std::fs::create_dir_all(&db_dir).unwrap();
+        // A bespoke head + its GNF maps, and a shared pool mesh.
+        std::fs::write(player.join("alexander_ovechkin.mcd"), b"RSF\0").unwrap();
+        std::fs::write(player.join("head_alexander_ovechkin_cm.gnf"), b"GNF ").unwrap();
+        std::fs::write(player.join("hair_alexander_ovechkin_cm.gnf"), b"GNF ").unwrap();
+        std::fs::write(player.join("generic_player_60046.mcd"), b"RSF\0").unwrap();
+
+        let roots = AssetRoots::resolve(&db_dir, Platform::Ps4);
+        assert_eq!(
+            roots.rendering,
+            nhl_data.join("kettle").join("rendering").to_string_lossy()
+        );
+        assert_eq!(roots.fe, game.join("nhl").join("ui").to_string_lossy());
+        assert!(roots.complete(), "characters/player exists");
+
+        // Bespoke: slug mesh wins.
+        let slug = Some("alexander_ovechkin");
+        assert_eq!(
+            roots.mesh_path(99, slug),
+            Some(player.join("alexander_ovechkin.mcd"))
+        );
+        // Its two GNF maps resolve.
+        let texs = roots.texture_paths(99, slug);
+        assert_eq!(texs.len(), 2, "head + hair cm maps");
+        // Pool head: no slug mesh → numeric generic.
+        assert_eq!(
+            roots.mesh_path(60046, Some("nobody_here")),
+            Some(player.join("generic_player_60046.mcd"))
+        );
+        // No slug and no generic → None.
+        assert_eq!(roots.mesh_path(12345, None), None);
+
+        // Portrait: flat p{id}.png, large-only (no HUD-size set).
+        assert_eq!(
+            roots.portrait_path(4242, PORTRAIT_DIR_LARGE),
+            Some(portraits.join("p4242.png"))
+        );
+        assert_eq!(roots.portrait_path(4242, PORTRAIT_DIR_SMALL), None);
+        assert_eq!(roots.portrait_path(9999, PORTRAIT_DIR_LARGE), None);
+
+        std::fs::remove_dir_all(&tmp).ok();
+    }
+
+    /// A real PS4 portrait PNG decodes through the shared `decode_portrait`
+    /// entry point. Skipped when the extracted tree isn't mounted.
+    #[test]
+    fn ps4_portrait_png_decodes() {
+        let path = r"H:\Emulators\ShadPS4\Games\CUSA00561\databigs\Extracted\nhl\ui\assets\portraits\p10000.png";
+        if !Path::new(path).is_file() {
+            eprintln!("skipping: {path} not present");
+            return;
+        }
+        let img = decode_portrait(Path::new(path)).expect("ps4 portrait png decodes");
+        assert!(img.width > 0 && img.height > 0);
+        assert_eq!(img.rgba.len(), (img.width * img.height * 4) as usize);
+    }
+
     #[test]
     fn asset_roots_overrides_ignore_empty_strings() {
-        let roots = AssetRoots::resolve(Path::new("/install"));
+        let roots = AssetRoots::resolve(Path::new("/install"), Platform::Xbox);
         let rendering = roots.rendering.clone();
         let overridden = roots.with_overrides(Some("   "), Some("/custom/fe"));
         assert_eq!(overridden.rendering, rendering);

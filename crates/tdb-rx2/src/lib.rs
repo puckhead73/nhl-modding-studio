@@ -16,6 +16,8 @@
 #![warn(rust_2018_idioms)]
 
 pub mod container;
+pub mod gnf;
+pub mod mcd;
 pub mod obj;
 pub mod pack;
 pub mod playermesh;

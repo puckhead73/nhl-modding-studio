@@ -272,23 +272,45 @@ impl Registry {
         head_id: u64,
     ) -> Result<HeadPreviewDto, ApiError> {
         let roots = resolve_roots(args);
-        let mesh = roots.mesh_path(head_id).ok_or_else(|| {
+        // Resolved by numeric id: RenderWare `player_{id}.rx2` or PS4's shared
+        // `generic_player_{id}.mcd`. Bespoke PS4 heads are name-slug keyed and
+        // surface through `list_player_assets` (which knows the player's name).
+        let mesh = roots.mesh_path(head_id, None).ok_or_else(|| {
             ApiError::Workspace(format!(
-                "no head mesh (player_{head_id}.rx2 or head_{head_id}.rx2) in this install's \
-                 rendering/player folder"
+                "no head mesh for id {head_id} in this install's rendering folder"
             ))
         })?;
         // Head first, then any companion meshes (NHL 09's separate hair) — merged
         // into one preview.
         let mut meshes = vec![mesh];
-        meshes.extend(roots.extra_head_mesh_paths(head_id));
+        meshes.extend(roots.extra_head_mesh_paths(head_id, None));
         let texs: Vec<String> = roots
-            .texture_paths(head_id)
+            .texture_paths(head_id, None)
             .into_iter()
             .map(|p| p.to_string_lossy().into_owned())
             .collect();
         let preview =
             studio_domain::decode_head_preview(&meshes, &texs).map_err(ApiError::Domain)?;
+        Ok(convert::head_preview_dto(&preview))
+    }
+
+    /// Decode a head for the 3D viewer from **already-resolved paths**, rather
+    /// than re-deriving them from a numeric id. This is the path PS4 bespoke
+    /// heads take: they're keyed by player-name slug, so `list_player_assets`
+    /// (which knows the name) resolves the `.mcd` + `.gnf`/texlib files, and the
+    /// UI hands them straight here. Works for any platform — the mesh decode
+    /// dispatches on `.mcd` vs `.rx2` by extension.
+    pub fn head_preview_paths(
+        &self,
+        mesh_paths: Vec<String>,
+        texture_paths: Vec<String>,
+    ) -> Result<HeadPreviewDto, ApiError> {
+        if mesh_paths.is_empty() {
+            return Err(ApiError::Workspace("no head mesh path given".into()));
+        }
+        let meshes: Vec<PathBuf> = mesh_paths.iter().map(PathBuf::from).collect();
+        let preview = studio_domain::decode_head_preview(&meshes, &texture_paths)
+            .map_err(ApiError::Domain)?;
         Ok(convert::head_preview_dto(&preview))
     }
 
@@ -1189,8 +1211,17 @@ pub fn parse_role(s: &str) -> Result<ProjectRole, ApiError> {
 }
 
 /// Infer a title's art roots from the install dir, then apply any operator overrides.
+///
+/// The platform drives the on-disk layout (RenderWare `rendering/`+`fe/` vs the
+/// PS4 kettle tree). A missing/unrecognized platform string decodes as Xbox —
+/// the pre-PS4 behavior — so older callers keep working.
 fn resolve_roots(args: &AssetRootsArgsDto) -> AssetRoots {
-    AssetRoots::resolve(Path::new(&args.install_dir)).with_overrides(
+    let platform = args
+        .platform
+        .as_deref()
+        .and_then(|p| parse_platform(p).ok())
+        .unwrap_or(Platform::Xbox);
+    AssetRoots::resolve(Path::new(&args.install_dir), platform).with_overrides(
         args.rendering_override.as_deref(),
         args.fe_override.as_deref(),
     )

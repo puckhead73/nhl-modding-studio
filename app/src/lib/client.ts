@@ -262,6 +262,11 @@ type Commands = {
     args: { roots: AssetRootsArgsDto; headId: number };
     ret: HeadPreviewDto;
   };
+  // Decode a head from already-resolved paths (PS4 bespoke, name-slug keyed).
+  head_preview_paths: {
+    args: { meshPaths: string[]; texturePaths: string[] };
+    ret: HeadPreviewDto;
+  };
   // `bioRecords: []` exports every scanned player.
   export_assets: {
     args: {

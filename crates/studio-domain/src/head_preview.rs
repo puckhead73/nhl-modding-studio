@@ -94,13 +94,17 @@ pub fn decode_head_preview(
 
     for (i, mesh_path) in mesh_paths.iter().enumerate() {
         let mesh_bytes = crate::assets::read_asset_file(mesh_path)?;
+        let is_mcd = mesh_path
+            .extension()
+            .is_some_and(|e| e.eq_ignore_ascii_case("mcd"));
         // The head mesh (first) drives the clean-rig flag; a companion hair mesh
-        // failing strict doesn't change it (its rig isn't what we edit).
+        // failing strict doesn't change it (its rig isn't what we edit). The PS4
+        // `.mcd` rig is external, so there's no multi-skin ambiguity to flag.
         if i == 0 {
-            strict_ok = tdb_rx2::playermesh::parse_player_mesh(&mesh_bytes).is_ok();
+            strict_ok = is_mcd
+                || tdb_rx2::playermesh::parse_player_mesh(&mesh_bytes).is_ok();
         }
-        let asset = tdb_rx2::playermesh::parse_player_mesh_preview(&mesh_bytes)
-            .map_err(|e| DomainError::Extract(format!("{}: {e}", mesh_path.display())))?;
+        let asset = crate::assets::parse_head_mesh(mesh_path, &mesh_bytes, true)?;
 
         for sm in &asset.submeshes {
             let mut positions = Vec::with_capacity(sm.vertices.len());
@@ -166,9 +170,29 @@ pub fn decode_head_preview(
 fn decode_textures(texture_paths: &[String]) -> Vec<PreviewTexture> {
     let mut out = Vec::new();
     for path in texture_paths {
-        let Ok(bytes) = crate::assets::read_asset_file(std::path::Path::new(path)) else {
+        let p = std::path::Path::new(path);
+        let Ok(bytes) = crate::assets::read_asset_file(p) else {
             continue;
         };
+        // PS4 GNF: de-tile + decode to RGBA directly (a single texture per file,
+        // named by the file stem).
+        if p.extension().is_some_and(|e| e.eq_ignore_ascii_case("gnf")) {
+            if let Ok(tex) = tdb_rx2::gnf::parse(&bytes) {
+                if let Ok(rgba) = crate::assets::gnf_to_rgba(&tex) {
+                    let name = p
+                        .file_stem()
+                        .map(|s| s.to_string_lossy().into_owned())
+                        .unwrap_or_default();
+                    out.push(PreviewTexture {
+                        name,
+                        width: tex.width,
+                        height: tex.height,
+                        rgba_base64: base64_encode(&rgba),
+                    });
+                }
+            }
+            continue;
+        }
         let Ok(lib) = tdb_rx2::texlib::parse(&bytes) else {
             continue;
         };
@@ -288,6 +312,35 @@ fn base64_encode(bytes: &[u8]) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// End-to-end viewer path on a real PS4 `.mcd`: the extension dispatch, the
+    /// per-submesh flatten, and the framing all run. Skipped when the extracted
+    /// tree isn't mounted (CI).
+    #[test]
+    fn ps4_mcd_head_decodes_for_preview() {
+        let path = r"H:\Emulators\ShadPS4\Games\CUSA00561\databigs\Extracted\nhl\data\kettle\rendering\characters\player\alexander_ovechkin.mcd";
+        if !std::path::Path::new(path).is_file() {
+            eprintln!("skipping: {path} not present");
+            return;
+        }
+        let preview =
+            decode_head_preview(&[PathBuf::from(path)], &[]).expect("mcd head must preview");
+        assert!(!preview.submeshes.is_empty(), "submeshes present");
+        assert!(preview.span > 0.0, "framing computed");
+        // Named submeshes drive texture binding downstream.
+        assert!(
+            preview.submeshes.iter().any(|s| s.name.contains("head")),
+            "a head submesh is named"
+        );
+        // Every submesh flattened to parallel arrays with in-range indices.
+        for s in &preview.submeshes {
+            assert_eq!(s.positions.len(), s.normals.len());
+            assert_eq!(s.positions.len(), s.uv1.len());
+            for t in &s.triangles {
+                assert!(t.iter().all(|&i| (i as usize) < s.positions.len()));
+            }
+        }
+    }
 
     fn tex(name: &str) -> PreviewTexture {
         PreviewTexture {

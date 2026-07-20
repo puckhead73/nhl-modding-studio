@@ -13,7 +13,7 @@ import type { PlayerAssetsDto } from "../bindings/PlayerAssetsDto";
 
 export function PlayerAssetDetail() {
   const { id } = useParams();
-  const { installDir, assets } = usePlayerAssets();
+  const { installDir, rootArgs, assets } = usePlayerAssets();
   const player = (assets.data ?? []).find((p) => String(p.bio_record) === id);
 
   if (!player) {
@@ -23,15 +23,17 @@ export function PlayerAssetDetail() {
       <EmptyState title="Player not found" hint="This record isn't in the current scan." />
     );
   }
-  return <AssetDetail player={player} installDir={installDir} />;
+  return <AssetDetail player={player} installDir={installDir} rootArgs={rootArgs} />;
 }
 
 function AssetDetail({
   player,
   installDir,
+  rootArgs,
 }: {
   player: PlayerAssetsDto;
   installDir: string | null;
+  rootArgs: ReturnType<typeof usePlayerAssets>["rootArgs"];
 }) {
   const preview = useQuery({
     queryKey: ["portraitPreview", player.portrait_path],
@@ -100,12 +102,18 @@ function AssetDetail({
           subtitle="toggle submeshes to identify each part"
         >
           <HeadMeshViewer
-            roots={{
-              install_dir: installDir,
-              rendering_override: null,
-              fe_override: null,
-            }}
+            roots={{ ...rootArgs, install_dir: installDir }}
             headId={Number(player.head_id)}
+            // PS4 heads are name-slug keyed, so a numeric id can't resolve the
+            // bespoke `.mcd` — hand the viewer the paths already resolved in the
+            // asset scan. RenderWare stays id-based (it merges NHL 09's separate
+            // hair mesh, which isn't in the single `mesh_path`).
+            meshPaths={
+              rootArgs.platform === "ps4" ? [player.mesh_path] : undefined
+            }
+            texturePaths={
+              rootArgs.platform === "ps4" ? player.texture_paths : undefined
+            }
           />
         </Card>
       ) : null}

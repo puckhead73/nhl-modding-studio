@@ -26,7 +26,7 @@ const SCOPES: { key: Scope; label: string; hint: string }[] = [
 ];
 
 export function AssetExportPage() {
-  const { projectId, installDir, roots, assets } = usePlayerAssets();
+  const { projectId, installDir, rootArgs, roots, assets } = usePlayerAssets();
 
   const [scope, setScope] = useState<Scope>("exportable");
   const [portraits, setPortraits] = useState(true);
@@ -54,7 +54,7 @@ export function AssetExportPage() {
       if (typeof outDir !== "string") return null;
       return call("export_assets", {
         projectId,
-        roots: { install_dir: installDir!, rendering_override: null, fe_override: null },
+        roots: rootArgs,
         outDir,
         bioRecords: selected.map((p) => p.bio_record),
         options: {

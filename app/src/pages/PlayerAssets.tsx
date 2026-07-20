@@ -42,7 +42,14 @@ export function usePlayerAssets() {
   const projectId = project!.project_id;
   const installDir = install?.install_dir ?? null;
 
-  const rootArgs = { install_dir: installDir!, rendering_override: null, fe_override: null };
+  // `platform` drives the on-disk art layout server-side (RenderWare vs the PS4
+  // kettle tree), so it must travel with every asset call.
+  const rootArgs = {
+    install_dir: installDir!,
+    platform: install?.platform ?? undefined,
+    rendering_override: null,
+    fe_override: null,
+  };
 
   const roots = useQuery({
     queryKey: ["assetRoots", installDir],
@@ -58,7 +65,7 @@ export function usePlayerAssets() {
     enabled: !!installDir && !!roots.data?.complete,
   });
 
-  return { projectId, installDir, roots, assets };
+  return { projectId, installDir, rootArgs, roots, assets };
 }
 
 /** The "no install" / "not extracted yet" gates both Asset pages share. */

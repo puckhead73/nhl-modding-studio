@@ -98,6 +98,7 @@ macro_rules! command_handler {
             $crate::commands::list_player_assets,
             $crate::commands::portrait_preview,
             $crate::commands::head_preview,
+            $crate::commands::head_preview_paths,
             $crate::commands::export_assets,
         ]
     };

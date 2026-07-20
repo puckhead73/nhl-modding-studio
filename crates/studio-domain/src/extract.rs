@@ -480,6 +480,43 @@ mod tests {
         }
     }
 
+    /// Live check that a real NHL 20 `inxp_00.big` parses and yields
+    /// `nhl_game.db` at the path discovery expects — this is the archive whose
+    /// name records are variable-count / drift-prone. Reads only the front
+    /// tables + the one DB entry (fast), so it runs the real `EbArchive`
+    /// parser and codec on real bytes without a 500 MB full extraction.
+    #[test]
+    fn ps4_nhl20_inxp_yields_nhl_game_db() {
+        let src = Path::new(r"H:\Emulators\ShadPS4\Games\CUSA15439\databigs\inxp_00.big");
+        if !src.is_file() {
+            eprintln!("skipping: real NHL20 inxp_00.big not present");
+            return;
+        }
+        let mut file = std::fs::File::open(src).unwrap();
+        let mut header_buf = vec![0u8; eb::HEADER_LEN];
+        file.read_exact(&mut header_buf).unwrap();
+        let header = EbHeader::parse(&header_buf).unwrap();
+        let mut table_buf = vec![0u8; header.table_end()];
+        file.seek(SeekFrom::Start(0)).unwrap();
+        file.read_exact(&mut table_buf).unwrap();
+        let archive = eb::EbArchive::parse(&table_buf).unwrap();
+
+        let entry = archive
+            .entries
+            .iter()
+            .find(|e| e.path == "nhl/data/common/gamemodes/database/t3db/nhl_game.db")
+            .expect("nhl_game.db must resolve to the t3db path discovery searches");
+
+        // Decode the payload and confirm it's a real (multi-MB) database.
+        let mut raw = vec![0u8; entry.size as usize];
+        file.seek(SeekFrom::Start(entry.offset)).unwrap();
+        file.read_exact(&mut raw).unwrap();
+        let Payload::Data(db) = eb::decode_payload(raw).unwrap() else {
+            panic!("nhl_game.db payload should decode, not be chunklzx");
+        };
+        assert!(db.len() > 1_000_000, "nhl_game.db should be multi-MB, got {}", db.len());
+    }
+
     #[test]
     fn no_archives_is_an_error() {
         let t = TempTree::new("empty");
