@@ -991,6 +991,19 @@ impl DecodedImage {
             .map_err(|e| DomainError::Extract(format!("png encode failed: {e}")))?;
         Ok(out.into_inner())
     }
+
+    /// PNG-encode with fast (low-CPU) settings — `Fast` deflate + a single up-filter instead of the
+    /// default adaptive per-row filter search. Files are a little larger but encoding is several
+    /// times cheaper, which matters when a bulk export writes thousands of 1024² textures at once.
+    pub fn to_png_fast(&self) -> Result<Vec<u8>> {
+        use image::codecs::png::{CompressionType, FilterType, PngEncoder};
+        use image::{ExtendedColorType, ImageEncoder};
+        let mut out = Vec::new();
+        PngEncoder::new_with_quality(&mut out, CompressionType::Fast, FilterType::Up)
+            .write_image(&self.rgba, self.width, self.height, ExtendedColorType::Rgba8)
+            .map_err(|e| DomainError::Extract(format!("png encode failed: {e}")))?;
+        Ok(out)
+    }
 }
 
 /// One raster pulled out of a portrait archive, normalised across the container
@@ -1227,14 +1240,12 @@ pub(crate) fn gnf_to_rgba(tex: &tdb_rx2::gnf::GnfTexture) -> Result<Vec<u8>> {
         // BC7 (NHL 16+ player portraits) decodes cleanly through the pure-Rust
         // block decoder — verified against a real portrait (seamless, no drift).
         BcFormat::Bc7 => Ok(tdb_rx2::gnf::decode_bc7(&tex.base_mip_linear, w, h)),
-        // BC4/BC5 (single/dual-channel — normal/roughness maps) decode is not yet
-        // correct on real data (the index bits come out scrambled); skipped so a
-        // noisy thumbnail never reaches the UI. The diffuse `cm` (BC1) and hair
-        // (BC3) maps — everything the model actually samples — decode cleanly.
-        BcFormat::Bc4 | BcFormat::Bc5 => Err(DomainError::Extract(format!(
-            "{:?} GNF decode not yet supported",
-            tex.format
-        ))),
+        // BC4/BC5 (single/dual-channel — roughness / normal maps). The block decode
+        // is correct; on large 128-bpp surfaces the GNM de-tile still leaves some
+        // artefacts (a known limitation), but the maps are exported rather than
+        // dropped so a bulk "all textures" export is complete.
+        BcFormat::Bc4 => Ok(tdb_rx2::gnf::decode_bc4(&tex.base_mip_linear, w, h)),
+        BcFormat::Bc5 => Ok(tdb_rx2::gnf::decode_bc5(&tex.base_mip_linear, w, h)),
     }
 }
 
@@ -1560,6 +1571,1007 @@ fn write_file(path: &Path, bytes: &[u8]) -> Result<u64> {
         source: e,
     })?;
     Ok(bytes.len() as u64)
+}
+
+// ================================================================ file browser + raw-file export
+//
+// The player-asset export above is *entity-driven*: it walks `ubPc` and resolves each player's art
+// by EA's per-title naming convention. This section is *file-driven*: it lets the UI browse the
+// extracted install tree and export any file (or a whole folder) the user picks, decoding recognized
+// assets to the same glTF/PNG/DDS the player exporter produces. The two share every decoder; only the
+// *selection* differs (a file path vs a bio record). Extraction of `.big` archives is done at
+// onboarding — this operates purely on the already-loose tree rooted at the install dir.
+
+/// The output a source file decodes to — drives the badge in the browser and which export toggle
+/// governs it. `None` (never surfaced here, only as `Option`) means "not a recognized asset".
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum AssetKind {
+    /// A head/body mesh (RenderWare `.rx2` geometry, or PS4 `.mcd`) → glTF `.glb`.
+    Mesh,
+    /// A portrait container (EA `.big`, PS4 `.png`/`.gnf`, or NHL 10's RX2 raster) → `.png`.
+    Portrait,
+    /// A texture bundle or map (`texlib_*.rx2`, loose `*_cm.rx2`, PS4 `.gnf`) → `.dds`/`.png`.
+    Texture,
+}
+
+impl AssetKind {
+    pub fn as_str(self) -> &'static str {
+        match self {
+            AssetKind::Mesh => "mesh",
+            AssetKind::Portrait => "portrait",
+            AssetKind::Texture => "texture",
+        }
+    }
+}
+
+/// The texture-map tokens EA appends to a raster stem (`head_67_cm` → `cm`). Used both to classify a
+/// loose `.rx2` as a texture (not a mesh) and to name a texlib's individual DDS outputs.
+const MAP_TOKENS: &[&str] = &["cm", "nm", "sm", "am", "rm", "mm", "coeff", "spec", "gloss"];
+
+/// True when a file stem ends in one of EA's texture-map tokens (`head_10000_cm` → true). A mesh
+/// stem (`player_10000`, `hair_10000`) has no such tail.
+fn has_map_suffix(stem: &str) -> bool {
+    stem.rsplit('_')
+        .next()
+        .is_some_and(|t| MAP_TOKENS.contains(&t))
+}
+
+/// Best-effort classification of a file *by name only* (no bytes read) — cheap enough to run over a
+/// whole directory listing. The decode path ([`decode_asset_file`]) is content-driven and will still
+/// succeed on an unconventionally-named file; this only drives the browser's badge and the
+/// per-kind export toggles.
+fn classify_asset_kind(path: &Path) -> Option<AssetKind> {
+    let ext = path.extension()?.to_str()?.to_ascii_lowercase();
+    let stem = path
+        .file_stem()
+        .and_then(|s| s.to_str())
+        .unwrap_or("")
+        .to_ascii_lowercase();
+    match ext.as_str() {
+        "mcd" => Some(AssetKind::Mesh),
+        "big" => Some(AssetKind::Portrait),
+        "png" => Some(AssetKind::Portrait),
+        // PS4: `p{id}.gnf` is a portrait; every other GNF is a texture map. Both decode to PNG.
+        "gnf" => {
+            let is_portrait = stem.len() > 1
+                && stem.starts_with('p')
+                && stem[1..].chars().all(|c| c.is_ascii_digit());
+            Some(if is_portrait {
+                AssetKind::Portrait
+            } else {
+                AssetKind::Texture
+            })
+        }
+        // `.rx2` is overloaded: a texlib bundle, a loose raster, or a head mesh. Name first
+        // (texture markers win over the `head`/`player` prefixes they share), else assume a mesh.
+        "rx2" => {
+            if stem.starts_with("texlib") || has_map_suffix(&stem) {
+                Some(AssetKind::Texture)
+            } else {
+                Some(AssetKind::Mesh)
+            }
+        }
+        _ => None,
+    }
+}
+
+/// Join a forward-slash relative path onto `root`, refusing anything that would escape it (absolute
+/// paths, drive prefixes, `..`). Mirrors [`crate::extract`]'s guard but permits an empty `rel` to
+/// mean the root itself (the browser opens there). Returns `None` for an unsafe path.
+fn safe_join_rel(root: &Path, rel: &str) -> Option<PathBuf> {
+    let mut out = root.to_path_buf();
+    for raw in rel.split(['/', '\\']) {
+        if raw.is_empty() || raw == "." {
+            continue;
+        }
+        match Path::new(raw).components().next() {
+            Some(std::path::Component::Normal(c)) if raw != ".." => out.push(c),
+            _ => return None,
+        }
+    }
+    Some(out)
+}
+
+/// One entry in a browsed directory of the extracted install.
+#[derive(Clone, Debug)]
+pub struct BrowseEntry {
+    pub name: String,
+    /// Forward-slash path relative to the browse root.
+    pub rel_path: String,
+    pub is_dir: bool,
+    /// File size in bytes (0 for directories).
+    pub size: u64,
+    /// The output kind this file decodes to; `None` for directories and unrecognized files.
+    pub kind: Option<AssetKind>,
+}
+
+/// A single directory level of the extracted install, for the file browser.
+#[derive(Clone, Debug)]
+pub struct BrowseListing {
+    /// The absolute browse root (the install dir).
+    pub root: String,
+    /// Forward-slash path of the listed directory relative to the root (`""` = the root itself).
+    pub rel_path: String,
+    /// The parent's rel path, or `None` at the root. Drives the "up" affordance.
+    pub parent: Option<String>,
+    pub entries: Vec<BrowseEntry>,
+}
+
+/// List one directory level under `root`, resolving `rel` safely (no escape). Directories first,
+/// then files, each alphabetical. Cheap — classification is by name only, so no file is opened.
+pub fn browse_asset_dir(root: &Path, rel: &str) -> Result<BrowseListing> {
+    let rel = rel.trim_matches(['/', '\\']);
+    let dir = safe_join_rel(root, rel)
+        .ok_or_else(|| DomainError::Extract(format!("unsafe or invalid path: {rel:?}")))?;
+    let read = std::fs::read_dir(&dir).map_err(|e| DomainError::Io {
+        path: dir.to_string_lossy().into_owned(),
+        source: e,
+    })?;
+
+    let mut entries = Vec::new();
+    for ent in read.flatten() {
+        let Ok(meta) = ent.metadata() else { continue };
+        let name = ent.file_name().to_string_lossy().into_owned();
+        let is_dir = meta.is_dir();
+        let rel_path = if rel.is_empty() {
+            name.clone()
+        } else {
+            format!("{rel}/{name}")
+        };
+        let kind = if is_dir {
+            None
+        } else {
+            classify_asset_kind(Path::new(&name))
+        };
+        entries.push(BrowseEntry {
+            name,
+            rel_path,
+            is_dir,
+            size: if is_dir { 0 } else { meta.len() },
+            kind,
+        });
+    }
+    entries.sort_by(|a, b| {
+        b.is_dir
+            .cmp(&a.is_dir)
+            .then_with(|| a.name.to_ascii_lowercase().cmp(&b.name.to_ascii_lowercase()))
+    });
+
+    let parent = (!rel.is_empty()).then(|| {
+        rel.rsplit_once('/')
+            .map(|(p, _)| p.to_string())
+            .unwrap_or_default()
+    });
+    Ok(BrowseListing {
+        root: root.to_string_lossy().into_owned(),
+        rel_path: rel.to_string(),
+        parent,
+        entries,
+    })
+}
+
+/// One decoded output ready to write: the extension to give it, an optional suffix that distinguishes
+/// several outputs from one source (a texlib's rasters), and the bytes.
+struct DecodedOutput {
+    ext: &'static str,
+    suffix: Option<String>,
+    bytes: Vec<u8>,
+}
+
+/// A texture-map token from a raster's name, if it ends in one (`head_67_cm.Raster` → `cm`). Used to
+/// name a texlib's DDS outputs when there's no player slug to key on (the file browser exports by
+/// source name, not by player).
+fn raster_suffix(raster_name: &str) -> Option<String> {
+    let stem = raster_name
+        .split('.')
+        .next()
+        .unwrap_or(raster_name)
+        .to_ascii_lowercase();
+    stem.rsplit('_')
+        .next()
+        .filter(|t| MAP_TOKENS.contains(t))
+        .map(String::from)
+}
+
+fn mesh_output(path: &Path) -> Result<DecodedOutput> {
+    let bytes = read_asset_file(path)?;
+    let asset = parse_head_mesh(path, &bytes, false)?;
+    Ok(DecodedOutput {
+        ext: "glb",
+        suffix: None,
+        bytes: tdb_rx2::playermesh::write_glb(&asset),
+    })
+}
+
+fn portrait_output(path: &Path, crop: bool) -> Result<DecodedOutput> {
+    let img = decode_portrait(path)?;
+    let img = if crop { img.cropped_to_opaque(0) } else { img };
+    Ok(DecodedOutput {
+        ext: "png",
+        suffix: None,
+        bytes: img.to_png()?,
+    })
+}
+
+fn gnf_output(path: &Path) -> Result<DecodedOutput> {
+    let bytes = read_asset_file(path)?;
+    let tex = tdb_rx2::gnf::parse(&bytes)
+        .map_err(|e| DomainError::Extract(format!("{}: {e}", path.display())))?;
+    let rgba = gnf_to_rgba(&tex)?;
+    let png = DecodedImage {
+        width: tex.width,
+        height: tex.height,
+        rgba,
+    }
+    .to_png()?;
+    Ok(DecodedOutput {
+        ext: "png",
+        suffix: None,
+        bytes: png,
+    })
+}
+
+/// Decode a texlib bundle to one **PNG** per raster (decoded, directly viewable). A raster whose
+/// format we can't decode is skipped; the whole file only errors when nothing at all decodes.
+fn texlib_outputs(path: &Path) -> Result<Vec<DecodedOutput>> {
+    let bytes = read_asset_file(path)?;
+    let lib = tdb_rx2::texlib::parse(&bytes)
+        .map_err(|e| DomainError::Extract(format!("{}: {e}", path.display())))?;
+    let mut out = Vec::new();
+    for (i, tex) in lib.textures.iter().enumerate() {
+        let suffix = raster_suffix(&tex.name).unwrap_or_else(|| format!("tex{i}"));
+        if let Ok(rgba) = linear_to_rgba(tex.format, tex.width, tex.height, &tex.base_mip_linear) {
+            if let Ok(png) = (DecodedImage {
+                width: tex.width,
+                height: tex.height,
+                rgba,
+            })
+            .to_png()
+            {
+                out.push(DecodedOutput {
+                    ext: "png",
+                    suffix: Some(suffix),
+                    bytes: png,
+                });
+            }
+        }
+    }
+    if out.is_empty() {
+        return Err(DomainError::Extract(format!(
+            "{}: texlib holds no decodable textures",
+            path.display()
+        )));
+    }
+    Ok(out)
+}
+
+/// Decode an `.rx2`, which may be a mesh, a texlib, or (NHL 10) a portrait raster. Dispatch on the
+/// name convention first, then fall back across the other decoders so an unconventionally-named file
+/// still exports; the *last* attempt surfaces its real error rather than a generic one.
+fn decode_rx2(path: &Path, crop: bool) -> Result<Vec<DecodedOutput>> {
+    let stem = path
+        .file_stem()
+        .and_then(|s| s.to_str())
+        .unwrap_or("")
+        .to_ascii_lowercase();
+    if stem.starts_with("texlib") || has_map_suffix(&stem) {
+        if let Ok(o) = texlib_outputs(path) {
+            return Ok(o);
+        }
+        if let Ok(o) = portrait_output(path, crop) {
+            return Ok(vec![o]);
+        }
+        return texlib_outputs(path);
+    }
+    if let Ok(o) = mesh_output(path) {
+        return Ok(vec![o]);
+    }
+    if let Ok(o) = texlib_outputs(path) {
+        return Ok(o);
+    }
+    if let Ok(o) = portrait_output(path, crop) {
+        return Ok(vec![o]);
+    }
+    mesh_output(path).map(|o| vec![o])
+}
+
+/// Decode one source asset file into its export outputs. Dispatches on extension, then on container
+/// content for the ambiguous `.rx2`. `crop` trims portraits to their opaque bounds.
+fn decode_asset_file(path: &Path, crop: bool) -> Result<Vec<DecodedOutput>> {
+    let ext = path
+        .extension()
+        .and_then(|e| e.to_str())
+        .unwrap_or("")
+        .to_ascii_lowercase();
+    match ext.as_str() {
+        "mcd" => Ok(vec![mesh_output(path)?]),
+        "gnf" => Ok(vec![gnf_output(path)?]),
+        "png" | "big" => Ok(vec![portrait_output(path, crop)?]),
+        "rx2" => decode_rx2(path, crop),
+        other => Err(DomainError::Extract(format!(
+            "{}: .{other} isn't a decodable asset",
+            path.display()
+        ))),
+    }
+}
+
+/// What to include in a file-browser export run, and how to treat files that aren't recognized assets.
+#[derive(Clone, Copy)]
+pub struct FileExportOptions {
+    /// Decode meshes (`.rx2`/`.mcd` geometry) to glTF `.glb`.
+    pub meshes_glb: bool,
+    /// Decode portraits to `.png`.
+    pub portraits_png: bool,
+    /// Decode textures to `.dds` (RenderWare texlibs) / `.png` (PS4 GNF).
+    pub textures: bool,
+    /// Copy files that aren't a recognized decodable asset through unchanged rather than skipping
+    /// them (also the fallback when a recognized file fails to decode).
+    pub copy_unrecognized: bool,
+    /// Crop portraits to their opaque bounds (EA ships them on a mostly-empty canvas).
+    pub crop_portraits: bool,
+}
+
+/// What a file-browser export run produced. Partial results are normal — `failures` carries the
+/// already-human-readable reasons, mirroring [`AssetExportSummary`].
+#[derive(Default, Debug)]
+pub struct FileExportSummary {
+    pub files_considered: usize,
+    pub meshes_written: usize,
+    pub portraits_written: usize,
+    pub textures_written: usize,
+    pub raw_copied: usize,
+    /// Files skipped because they aren't a recognized asset and `copy_unrecognized` was off.
+    pub skipped_unrecognized: usize,
+    /// Selections refused for trying to escape the browse root.
+    pub skipped_unsafe: usize,
+    pub failures: Vec<String>,
+    pub bytes_written: u64,
+}
+
+/// The bounded recursion depth for expanding a selected folder — deep enough for every EA layout,
+/// a backstop against a pathological tree.
+const MAX_EXPORT_DEPTH: usize = 12;
+
+fn collect_files(
+    dir: &Path,
+    rel_dir: &str,
+    depth: usize,
+    out: &mut Vec<String>,
+    seen: &mut std::collections::HashSet<String>,
+) {
+    let Ok(read) = std::fs::read_dir(dir) else {
+        return;
+    };
+    for ent in read.flatten() {
+        let Ok(meta) = ent.metadata() else { continue };
+        let name = ent.file_name().to_string_lossy().into_owned();
+        let rel = if rel_dir.is_empty() {
+            name
+        } else {
+            format!("{rel_dir}/{name}")
+        };
+        if meta.is_dir() {
+            if depth < MAX_EXPORT_DEPTH {
+                collect_files(&ent.path(), &rel, depth + 1, out, seen);
+            }
+        } else if meta.is_file() && seen.insert(rel.clone()) {
+            out.push(rel);
+        }
+    }
+}
+
+/// `rel` without its final extension, keeping the forward-slash directory prefix.
+fn strip_ext(rel: &str) -> &str {
+    match rel.rsplit_once('.') {
+        Some((base, ext)) if !ext.contains('/') && !base.is_empty() => base,
+        _ => rel,
+    }
+}
+
+/// Turn a forward-slash relative path into a native `PathBuf` for joining onto an output dir.
+fn rel_to_native(rel: &str) -> PathBuf {
+    let mut p = PathBuf::new();
+    for c in rel.split('/') {
+        if !c.is_empty() {
+            p.push(c);
+        }
+    }
+    p
+}
+
+fn copy_through(src: &Path, rel: &str, out_dir: &Path, summary: &mut FileExportSummary) {
+    match std::fs::read(src) {
+        Ok(bytes) => {
+            let dst = out_dir.join(rel_to_native(rel));
+            match write_file(&dst, &bytes) {
+                Ok(n) => {
+                    summary.raw_copied += 1;
+                    summary.bytes_written += n;
+                }
+                Err(e) => summary.failures.push(format!("{rel}: {e}")),
+            }
+        }
+        Err(e) => summary.failures.push(format!("{rel}: read failed: {e}")),
+    }
+}
+
+fn export_one_file(
+    src: &Path,
+    rel: &str,
+    out_dir: &Path,
+    opts: FileExportOptions,
+    summary: &mut FileExportSummary,
+) {
+    let kind = classify_asset_kind(src);
+    let wanted = match kind {
+        Some(AssetKind::Mesh) => opts.meshes_glb,
+        Some(AssetKind::Portrait) => opts.portraits_png,
+        Some(AssetKind::Texture) => opts.textures,
+        None => false,
+    };
+    if !wanted {
+        // Unrecognized files copy through (if asked) or are counted as skipped; a recognized file
+        // the user simply didn't tick is skipped silently.
+        if kind.is_none() {
+            if opts.copy_unrecognized {
+                copy_through(src, rel, out_dir, summary);
+            } else {
+                summary.skipped_unrecognized += 1;
+            }
+        }
+        return;
+    }
+
+    match decode_asset_file(src, opts.crop_portraits) {
+        Ok(outputs) => {
+            let base = strip_ext(rel);
+            for o in outputs {
+                let name = match &o.suffix {
+                    Some(s) => format!("{base}_{s}.{}", o.ext),
+                    None => format!("{base}.{}", o.ext),
+                };
+                let dst = out_dir.join(rel_to_native(&name));
+                match write_file(&dst, &o.bytes) {
+                    Ok(n) => {
+                        match kind {
+                            Some(AssetKind::Mesh) => summary.meshes_written += 1,
+                            Some(AssetKind::Portrait) => summary.portraits_written += 1,
+                            Some(AssetKind::Texture) => summary.textures_written += 1,
+                            None => {}
+                        }
+                        summary.bytes_written += n;
+                    }
+                    Err(e) => summary.failures.push(format!("{rel}: {e}")),
+                }
+            }
+        }
+        // A recognized asset that won't decode falls back to a raw copy when allowed, so the user
+        // still gets the source bytes rather than nothing.
+        Err(e) => {
+            if opts.copy_unrecognized {
+                copy_through(src, rel, out_dir, summary);
+            } else {
+                summary.failures.push(format!("{rel}: {e}"));
+            }
+        }
+    }
+}
+
+/// Export a set of selected files/folders from the extracted install `root` into `out_dir`, decoding
+/// recognized assets to glTF/PNG/DDS. Folders are walked recursively (bounded depth). The output
+/// mirrors each source's path relative to the root, so a title's own folder layout is preserved —
+/// the requirement that this "work with each game's unique file structures".
+pub fn export_asset_files(
+    root: &Path,
+    rel_paths: &[String],
+    out_dir: &Path,
+    opts: FileExportOptions,
+) -> Result<FileExportSummary> {
+    let mut summary = FileExportSummary::default();
+
+    // Expand folders to their files, de-duplicated by rel path (a folder and one of its files can
+    // both be selected).
+    let mut files: Vec<String> = Vec::new();
+    let mut seen: std::collections::HashSet<String> = std::collections::HashSet::new();
+    for rel in rel_paths {
+        let rel = rel.trim_matches(['/', '\\']);
+        let Some(abs) = safe_join_rel(root, rel) else {
+            summary.skipped_unsafe += 1;
+            continue;
+        };
+        if abs.is_dir() {
+            collect_files(&abs, rel, 0, &mut files, &mut seen);
+        } else if abs.is_file() {
+            let key = rel.replace('\\', "/");
+            if seen.insert(key.clone()) {
+                files.push(key);
+            }
+        }
+        // A path that no longer exists is ignored — the tree may have changed since the UI listed it.
+    }
+
+    for rel in files {
+        summary.files_considered += 1;
+        let Some(src) = safe_join_rel(root, &rel) else {
+            summary.skipped_unsafe += 1;
+            continue;
+        };
+        export_one_file(&src, &rel, out_dir, opts, &mut summary);
+    }
+    Ok(summary)
+}
+
+// ================================================================ team outfit export
+//
+// A team-centric counterpart to the player-asset export: instead of one player's head art, this
+// walks the RenderWare outfit trees under `rendering/` and writes every team's **jersey, pants and
+// socks** out as PNGs named by the team (e.g. `detroit_red_wings_jersey_0_0_cm.png`). The three
+// pieces live in the `jersey/`, `pant/` and `sock/` folders, keyed by the team id in each file's
+// name. Two on-disk shapes are handled, both by the same code:
+//
+//   * **NHL 09/12/14** — flat texlib bundles: `rendering/jersey/texlib_{set}_{team}_{variant}.rx2`,
+//     each holding several rasters (`jersey_*`, `font_*` / `pant_*`); socks are loose `sock_*_cm.rx2`.
+//   * **NHL 07/08** — loose single-raster files in a per-team subfolder:
+//     `rendering/jersey/jersey_{team}/jersey_{set}_{team}_{variant}_{map}.rx2` (+ `font_*`, `name_*`),
+//     `pant/pant_{team}/pant_*_{map}.rx2`, `sock/sock_{team}/sock_*_{map}.rx2`.
+//
+// So each folder is walked **recursively**, and a file counts as an outfit texture if it's a texlib
+// bundle or a loose raster (its name ends in a map suffix like `_cm`/`_sm`/`_nm`) — which excludes
+// the mesh `.rx2` files that share the folder. The team-id token position varies by title (NHL 09
+// socks are `sock_a_b_team_c_d_cm`, NHL 14's are shorter, NHL 07 jerseys are `jersey_set_team_v_cm`),
+// so it's derived per folder at runtime by [`derive_team_index`].
+
+/// The three outfit folders under `rendering/`, and the summary bucket each feeds.
+const OUTFIT_FOLDERS: &[&str] = &["jersey", "pant", "sock"];
+
+/// Bounded depth for walking a piece folder — NHL 07/08 nest one per-team subfolder deep; a couple of
+/// extra levels is harmless slack.
+const OUTFIT_WALK_DEPTH: usize = 3;
+
+/// The underscore-split token index that holds the team id, inferred from a folder's filenames: the
+/// position whose values cover the most *distinct* known team ids. The real team index spans ~30
+/// clubs, while the style/set indices only ever take one or two values, so it wins decisively — and
+/// this adapts to each title's filename shape instead of hard-coding a position. `None` when no
+/// position covers a meaningful number of teams (this folder isn't team-keyed on this title).
+fn derive_team_index(stems: &[String], by_id: &HashMap<u64, &str>) -> Option<usize> {
+    const MAX_IDX: usize = 8;
+    const MIN_TEAMS: usize = 4;
+    let mut best: Option<(usize, usize)> = None;
+    for idx in 1..MAX_IDX {
+        let mut distinct = std::collections::HashSet::new();
+        for stem in stems {
+            if let Some(id) = team_id_at(stem, idx) {
+                if by_id.contains_key(&id) {
+                    distinct.insert(id);
+                }
+            }
+        }
+        let count = distinct.len();
+        if count >= MIN_TEAMS && best.is_none_or(|(_, c)| count > c) {
+            best = Some((idx, count));
+        }
+    }
+    best.map(|(idx, _)| idx)
+}
+
+/// A team resolved for the outfit export. `slug` is the human-readable name slug (`detroit_red_wings`
+/// — the RenderWare output name and, normalized, the key PS4 filenames are matched against); `abbrev`
+/// is the lowercased team code (`det`, `nyr`), which PS4 uses for a few clubs (the New York teams).
+#[derive(Clone, Debug)]
+pub struct OutfitTeam {
+    pub team_id: u64,
+    pub slug: String,
+    pub abbrev: String,
+}
+
+/// What a team-outfit export produced. Partial results are normal — `failures` carries the
+/// already-human-readable reasons, mirroring [`AssetExportSummary`].
+#[derive(Default, Debug)]
+pub struct OutfitExportSummary {
+    pub teams_considered: usize,
+    pub jerseys_written: usize,
+    pub pants_written: usize,
+    pub socks_written: usize,
+    pub failures: Vec<String>,
+    pub bytes_written: u64,
+    /// The art folder that was scanned for outfit textures — surfaced so a "found nothing" result is
+    /// diagnosable (the UI can show where it looked).
+    pub rendering_root: String,
+}
+
+/// The team id encoded in an underscore-split filename/raster stem at `idx`, if it parses.
+fn team_id_at(stem: &str, idx: usize) -> Option<u64> {
+    stem.split('_').nth(idx).and_then(|t| t.parse::<u64>().ok())
+}
+
+/// Build the exported raster name: the raster's own stem with its team-id token replaced by the
+/// team slug, so `jersey_0_10_0_cm` for Detroit becomes `detroit_red_wings_jersey_0_0_cm`. The slug
+/// leads (it's how the user finds the file); the remaining indices — jersey set and variant — are
+/// kept so a team's several jerseys don't collide.
+fn outfit_output_name(slug: &str, raster_stem: &str, team_idx: usize, team_id: u64) -> String {
+    let mut toks: Vec<&str> = raster_stem.split('_').collect();
+    // Only drop the token at `team_idx` when it really is this team's id — so a title whose raster
+    // names differ from its filenames keeps a correct (if id-bearing) name rather than losing a digit.
+    if toks.get(team_idx).and_then(|t| t.parse::<u64>().ok()) == Some(team_id) {
+        toks.remove(team_idx);
+    }
+    format!("{slug}_{}", toks.join("_"))
+}
+
+impl OutfitExportSummary {
+    fn merge(&mut self, other: OutfitExportSummary) {
+        self.jerseys_written += other.jerseys_written;
+        self.pants_written += other.pants_written;
+        self.socks_written += other.socks_written;
+        self.bytes_written += other.bytes_written;
+        self.failures.extend(other.failures);
+    }
+}
+
+/// One decode-and-write unit: a texlib/rx2 file, the team it belongs to, and which folder it's from.
+struct OutfitWork {
+    path: PathBuf,
+    /// The file's own stem (no extension). For loose rasters this is the descriptive name
+    /// (`jersey_0_10_0_cm`); for a `texlib_*` bundle it's not per-raster, so the raster's own name is
+    /// used instead — see [`process_one_outfit`].
+    file_stem: String,
+    slug: String,
+    team_id: u64,
+    team_idx: usize,
+    folder: &'static str,
+}
+
+/// True when `fname` is an outfit texture `.rx2` — a texlib bundle (NHL 09+) or a loose raster whose
+/// name ends in a map suffix (NHL 07/08). Mesh `.rx2` files (e.g. `pant_0_0_0_0_0_0.rx2`, ending in a
+/// bare index) are excluded.
+fn outfit_texture_file(fname: &str) -> bool {
+    let Some(stem) = fname.strip_suffix(".rx2") else {
+        return false;
+    };
+    stem.starts_with("texlib_") || has_map_suffix(&stem.to_ascii_lowercase())
+}
+
+/// Recursively collect outfit-texture files under `dir` (bounded depth), as `(path, filename-stem)`.
+fn collect_outfit_files(dir: &Path, depth: usize, out: &mut Vec<(PathBuf, String)>) {
+    let Ok(read) = std::fs::read_dir(dir) else {
+        return;
+    };
+    for ent in read.flatten() {
+        let Ok(ft) = ent.file_type() else { continue };
+        if ft.is_dir() {
+            if depth < OUTFIT_WALK_DEPTH {
+                collect_outfit_files(&ent.path(), depth + 1, out);
+            }
+        } else {
+            let fname = ent.file_name().to_string_lossy().into_owned();
+            if outfit_texture_file(&fname) {
+                let stem = fname.trim_end_matches(".rx2").to_string();
+                out.push((ent.path(), stem));
+            }
+        }
+    }
+}
+
+/// Decode one outfit file's rasters to PNGs and write them, accumulating into `summary`.
+fn process_one_outfit(item: &OutfitWork, out_dir: &Path, summary: &mut OutfitExportSummary) {
+    let fname = item.path.file_name().unwrap_or_default().to_string_lossy();
+    let bytes = match read_asset_file(&item.path) {
+        Ok(b) => b,
+        Err(e) => {
+            summary.failures.push(format!("{fname}: {e}"));
+            return;
+        }
+    };
+    // Non-texlib files sharing the prefix (e.g. sock meshes) parse-fail — skip quietly.
+    let Ok(lib) = tdb_rx2::texlib::parse(&bytes) else {
+        return;
+    };
+    // A `texlib_*` bundle names each raster internally (`jersey_0_10_0_cm`) — use that. A loose
+    // raster file carries the descriptive name in the *filename* and only a generic internal name
+    // (`texture_0000`), so use the filename stem instead.
+    let is_bundle = item.file_stem.starts_with("texlib_");
+    for tex in &lib.textures {
+        let raster_name = tex.name.split('.').next().unwrap_or(&tex.name);
+        let raster_stem = if is_bundle { raster_name } else { item.file_stem.as_str() };
+        match linear_to_rgba(tex.format, tex.width, tex.height, &tex.base_mip_linear).and_then(
+            |rgba| {
+                DecodedImage {
+                    width: tex.width,
+                    height: tex.height,
+                    rgba,
+                }
+                .to_png_fast()
+            },
+        ) {
+            Ok(png) => {
+                let name =
+                    outfit_output_name(&item.slug, raster_stem, item.team_idx, item.team_id);
+                let dst = out_dir.join(item.folder).join(format!("{name}.png"));
+                match write_file(&dst, &png) {
+                    Ok(n) => {
+                        match item.folder {
+                            "jersey" => summary.jerseys_written += 1,
+                            "pant" => summary.pants_written += 1,
+                            "sock" => summary.socks_written += 1,
+                            _ => {}
+                        }
+                        summary.bytes_written += n;
+                    }
+                    Err(e) => summary.failures.push(format!("{name}: {e}")),
+                }
+            }
+            Err(e) => summary
+                .failures
+                .push(format!("{fname} [{raster_stem}]: {e}")),
+        }
+    }
+}
+
+/// Export every team's jersey/pants/socks under `rendering_root` into `out_dir` as PNGs named by the
+/// team. `teams` is resolved by the caller (the slug is the human-readable team name, e.g.
+/// `detroit_red_wings`). Dispatches on the on-disk layout:
+///
+///   * **PS4** (kettle tree) — GNF textures under `characters/player`, filenames already team- and
+///     variant-named (`jersey_rbk_detroit_home_cm.gnf`). See [`export_ps4_outfits`].
+///   * **RenderWare** (NHL 07–14 / Legacy, Xbox 360 / PS3) — `jersey/`, `pant/`, `sock/` texlibs
+///     keyed by a numeric team id in the filename.
+///
+/// A run decodes thousands of textures, so after the (cheap) folder scan the work is spread across
+/// the machine's cores — serial decoding took minutes, which read as a hung export.
+pub fn export_team_outfits(
+    teams: &[OutfitTeam],
+    rendering_root: &Path,
+    out_dir: &Path,
+) -> Result<OutfitExportSummary> {
+    // PS4 kettle layout: the outfit textures live under `characters/player`.
+    let ps4_player = rendering_root.join("characters").join("player");
+    if ps4_player.is_dir() {
+        return export_ps4_outfits(&ps4_player, teams, out_dir);
+    }
+
+    let by_id: HashMap<u64, &str> = teams.iter().map(|t| (t.team_id, t.slug.as_str())).collect();
+
+    // 1. Walk each outfit folder (recursively — NHL 07/08 nest a per-team subfolder), collecting the
+    //    texture files. The team-id token position varies by title, so derive it per folder from the
+    //    filenames, then match.
+    let mut work: Vec<OutfitWork> = Vec::new();
+    for &folder in OUTFIT_FOLDERS {
+        let mut files: Vec<(PathBuf, String)> = Vec::new();
+        collect_outfit_files(&rendering_root.join(folder), 0, &mut files);
+        if files.is_empty() {
+            continue; // this title/platform doesn't ship the piece here
+        }
+        let stems: Vec<String> = files.iter().map(|(_, s)| s.clone()).collect();
+        let Some(team_idx) = derive_team_index(&stems, &by_id) else {
+            continue; // no team-keyed position here — don't guess
+        };
+        for (path, stem) in files {
+            let Some(team_id) = team_id_at(&stem, team_idx) else {
+                continue;
+            };
+            // Resolve to the DB team name, or fall back to a generic `team_<id>` so entries the DB
+            // doesn't carry (special/all-star slots, ids beyond the roster) are still exported and
+            // stay distinguishable.
+            let slug = by_id
+                .get(&team_id)
+                .map(|s| s.to_string())
+                .unwrap_or_else(|| format!("team_{team_id}"));
+            work.push(OutfitWork {
+                path,
+                file_stem: stem,
+                slug,
+                team_id,
+                team_idx,
+                folder,
+            });
+        }
+    }
+
+    // 2. Decode + write in parallel across the cores, then merge the per-worker tallies.
+    let mut summary = run_outfit_workers(&work, |item, s| process_one_outfit(item, out_dir, s));
+    summary.teams_considered = teams.len();
+    summary.rendering_root = rendering_root.to_string_lossy().into_owned();
+    Ok(summary)
+}
+
+/// Fan `work` out across the machine's cores, folding each worker's tally into one. `process` decodes
+/// and writes a single item into a thread-local summary; the merge is done once at the end.
+fn run_outfit_workers<T: Sync>(
+    work: &[T],
+    process: impl Fn(&T, &mut OutfitExportSummary) + Sync,
+) -> OutfitExportSummary {
+    if work.is_empty() {
+        return OutfitExportSummary::default();
+    }
+    let threads = std::thread::available_parallelism()
+        .map(|n| n.get())
+        .unwrap_or(4)
+        .min(work.len());
+    let chunk = work.len().div_ceil(threads);
+    let process = &process;
+    let partials: Vec<OutfitExportSummary> = std::thread::scope(|scope| {
+        let handles: Vec<_> = work
+            .chunks(chunk)
+            .map(|items| {
+                scope.spawn(move || {
+                    let mut s = OutfitExportSummary::default();
+                    for it in items {
+                        process(it, &mut s);
+                    }
+                    s
+                })
+            })
+            .collect();
+        handles
+            .into_iter()
+            .map(|h| h.join().unwrap_or_default())
+            .collect()
+    });
+    let mut merged = OutfitExportSummary::default();
+    for p in partials {
+        merged.merge(p);
+    }
+    merged
+}
+
+// ---------------------------------------------------------------- PS4 (kettle) outfits
+
+/// The outfit texture types PS4 keeps under `characters/player`, and the summary bucket each feeds.
+/// Files are `{type}_{era}_{team}_{variant}_{map}.gnf` — jersey/pant/sock plus the number/name
+/// `font` sheet (grouped like the RenderWare export).
+const PS4_OUTFIT_TYPES: &[&str] = &["jersey", "pant", "sock", "font"];
+
+/// Normalize a slug for loose matching: drop every non-alphanumeric and lowercase. `new_jersey` and
+/// PS4's squished `newjersey` both become `newjersey`.
+fn normalize_slug(s: &str) -> String {
+    s.chars()
+        .filter(|c| c.is_ascii_alphanumeric())
+        .map(|c| c.to_ascii_lowercase())
+        .collect()
+}
+
+/// Build the PS4 team resolver: a map from a normalized filename slug to the team's full name slug
+/// (`detroit_red_wings`). Keys are every leading-word prefix of the name (so PS4's city-only
+/// `detroit` / `losangeles` resolve) plus the team abbreviation (so `nyr` / `nyi` resolve). A key
+/// that would point at two different teams is dropped as ambiguous rather than guessing.
+fn build_ps4_team_resolver(teams: &[OutfitTeam]) -> HashMap<String, String> {
+    let mut idx: HashMap<String, Option<String>> = HashMap::new();
+    let mut add = |key: String, full: &str| {
+        if key.is_empty() {
+            return;
+        }
+        idx.entry(key)
+            .and_modify(|e| {
+                if e.as_deref() != Some(full) {
+                    *e = None;
+                }
+            })
+            .or_insert_with(|| Some(full.to_string()));
+    };
+    for t in teams {
+        let words: Vec<&str> = t.slug.split('_').filter(|w| !w.is_empty()).collect();
+        for k in 1..=words.len() {
+            add(normalize_slug(&words[..k].join("_")), &t.slug);
+        }
+        add(normalize_slug(&t.abbrev), &t.slug);
+    }
+    idx.into_iter()
+        .filter_map(|(k, v)| v.map(|full| (k, full)))
+        .collect()
+}
+
+/// One PS4 GNF outfit file staged for decode: its path, the type folder it belongs in, and the output
+/// name to write (team resolved to the DB name where possible, era/variant/map kept intact).
+struct Ps4OutfitWork {
+    path: PathBuf,
+    folder: &'static str,
+    out_stem: String,
+}
+
+/// Rename a PS4 outfit stem to lead with the resolved team, keeping the rest (era, variant, map). The
+/// team token-window is found by testing each short run of tokens against the resolver — so no era or
+/// variant vocabulary is hard-coded, and the *variant name* the caller asked to keep survives
+/// untouched. `jersey_rbk_detroit_home_cm` → `detroit_red_wings_jersey_rbk_home_cm`. Returns `None`
+/// when no window resolves to a team in this DB (a club the loaded database doesn't carry — the file
+/// is then skipped, matching the RenderWare path which only exports the DB's own teams).
+fn ps4_output_stem(stem: &str, resolver: &HashMap<String, String>) -> Option<String> {
+    let toks: Vec<&str> = stem.split('_').collect();
+    // Search token windows (after the type at index 0), preferring the longest that resolves.
+    let mut best: Option<(usize, usize, &String)> = None;
+    for start in 1..toks.len() {
+        for end in (start + 1)..=toks.len().min(start + 3) {
+            if let Some(full) = resolver.get(&normalize_slug(&toks[start..end].join("_"))) {
+                if best.is_none_or(|(s, e, _)| (end - start) > (e - s)) {
+                    best = Some((start, end, full));
+                }
+            }
+        }
+    }
+    best.map(|(start, end, full)| {
+        let rest: Vec<&str> = toks[..start].iter().chain(&toks[end..]).copied().collect();
+        format!("{full}_{}", rest.join("_"))
+    })
+}
+
+/// Export PS4 outfit GNFs from `player_dir`. Files are already team- and variant-named; we decode the
+/// colour maps to PNG and lead each name with the resolved DB team. GNF maps we can't yet decode
+/// correctly (BC4/BC5 normal/coefficient maps) are skipped silently rather than flooding failures.
+fn export_ps4_outfits(
+    player_dir: &Path,
+    teams: &[OutfitTeam],
+    out_dir: &Path,
+) -> Result<OutfitExportSummary> {
+    let resolver = build_ps4_team_resolver(teams);
+
+    let mut work: Vec<Ps4OutfitWork> = Vec::new();
+    if let Ok(read) = std::fs::read_dir(player_dir) {
+        for ent in read.flatten() {
+            let fname = ent.file_name().to_string_lossy().into_owned();
+            if !fname.ends_with(".gnf") {
+                continue;
+            }
+            let stem = fname.trim_end_matches(".gnf");
+            let Some(folder) = PS4_OUTFIT_TYPES
+                .iter()
+                .find(|t| stem.starts_with(&format!("{t}_")))
+                .copied()
+            else {
+                continue; // not a jersey/pant/sock/font texture
+            };
+            // Resolve to the DB team name when we can; otherwise keep the file's native name (a club
+            // this DB doesn't carry — AHL/CHL/European) so it's still exported, just under its own
+            // descriptive slug rather than a resolved team.
+            let out_stem = ps4_output_stem(stem, &resolver).unwrap_or_else(|| stem.to_string());
+            work.push(Ps4OutfitWork {
+                path: ent.path(),
+                folder,
+                out_stem,
+            });
+        }
+    }
+
+    let mut summary = run_outfit_workers(&work, |item, s| {
+        let bytes = match read_asset_file(&item.path) {
+            Ok(b) => b,
+            Err(_) => return,
+        };
+        let Ok(tex) = tdb_rx2::gnf::parse(&bytes) else {
+            return;
+        };
+        // BC4/BC5 (normal / coefficient) decode isn't correct yet — skip quietly.
+        let Ok(rgba) = gnf_to_rgba(&tex) else {
+            return;
+        };
+        let png = match (DecodedImage {
+            width: tex.width,
+            height: tex.height,
+            rgba,
+        })
+        .to_png_fast()
+        {
+            Ok(p) => p,
+            Err(e) => {
+                s.failures.push(format!("{}: {e}", item.out_stem));
+                return;
+            }
+        };
+        let dst = out_dir.join(item.folder).join(format!("{}.png", item.out_stem));
+        match write_file(&dst, &png) {
+            Ok(n) => {
+                match item.folder {
+                    "pant" => s.pants_written += 1,
+                    "sock" => s.socks_written += 1,
+                    // jersey + font are both jersey-side art.
+                    _ => s.jerseys_written += 1,
+                }
+                s.bytes_written += n;
+            }
+            Err(e) => s.failures.push(format!("{}: {e}", item.out_stem)),
+        }
+    });
+    summary.teams_considered = teams.len();
+    summary.rendering_root = player_dir.to_string_lossy().into_owned();
+    Ok(summary)
 }
 
 #[cfg(test)]
@@ -2009,6 +3021,205 @@ mod tests {
         // has_any reflects it: the blank-only players have nothing worth exporting.
         assert!(!players[0].has_any());
         assert!(players[3].has_any());
+
+        std::fs::remove_dir_all(&tmp).ok();
+    }
+
+    #[test]
+    fn outfit_output_name_replaces_team_with_slug() {
+        // Jersey / pant rasters carry the team at index 2; the slug leads and the set+variant stay.
+        assert_eq!(
+            outfit_output_name("detroit_red_wings", "jersey_0_10_0_cm", 2, 10),
+            "detroit_red_wings_jersey_0_0_cm"
+        );
+        assert_eq!(
+            outfit_output_name("detroit_red_wings", "font_0_10_1_sm", 2, 10),
+            "detroit_red_wings_font_0_1_sm"
+        );
+        // Socks carry the team at index 3.
+        assert_eq!(
+            outfit_output_name("detroit_red_wings", "sock_0_0_10_0_0_cm", 3, 10),
+            "detroit_red_wings_sock_0_0_0_0_cm"
+        );
+        // If the token at the index isn't this team's id, the stem is kept intact (id-bearing but
+        // still correct) — guards a title whose raster names don't match its filename layout.
+        assert_eq!(
+            outfit_output_name("detroit_red_wings", "jersey_0_7_0_cm", 2, 10),
+            "detroit_red_wings_jersey_0_7_0_cm"
+        );
+    }
+
+    #[test]
+    fn team_id_at_parses_the_indexed_token() {
+        assert_eq!(team_id_at("texlib_0_10_0", 2), Some(10));
+        assert_eq!(team_id_at("sock_0_0_10_1_0_cm", 3), Some(10));
+        assert_eq!(team_id_at("texlib_0_999", 2), Some(999)); // the special/all-star slot
+        assert_eq!(team_id_at("name_1_130_1_cm", 2), Some(130)); // not a team id — caller filters
+        assert_eq!(team_id_at("texlib_0", 2), None);
+    }
+
+    #[test]
+    fn ps4_outfit_naming_resolves_team_and_keeps_variant() {
+        let teams = vec![
+            OutfitTeam { team_id: 10, slug: "detroit_red_wings".into(), abbrev: "DET".into() },
+            OutfitTeam { team_id: 17, slug: "new_jersey_devils".into(), abbrev: "NJ".into() },
+            OutfitTeam { team_id: 13, slug: "los_angeles_kings".into(), abbrev: "LA".into() },
+            OutfitTeam { team_id: 19, slug: "new_york_rangers".into(), abbrev: "NYR".into() },
+            OutfitTeam { team_id: 18, slug: "new_york_islanders".into(), abbrev: "NYI".into() },
+        ];
+        let r = build_ps4_team_resolver(&teams);
+        let name = |s: &str| ps4_output_stem(s, &r);
+
+        // City slug → full DB name; the era + variant name + map stay in place.
+        assert_eq!(name("jersey_rbk_detroit_home_cm").as_deref(), Some("detroit_red_wings_jersey_rbk_home_cm"));
+        assert_eq!(name("pant_nineties_detroit_away_cm").as_deref(), Some("detroit_red_wings_pant_nineties_away_cm"));
+        // Squished multi-word cities resolve via normalized matching.
+        assert_eq!(name("jersey_nineties_newjersey_third_cm").as_deref(), Some("new_jersey_devils_jersey_nineties_third_cm"));
+        assert_eq!(name("sock_nineties_losangeles_home_cm").as_deref(), Some("los_angeles_kings_sock_nineties_home_cm"));
+        // NY teams key by abbreviation; each stays distinct.
+        assert_eq!(name("jersey_nineties_nyr_home_cm").as_deref(), Some("new_york_rangers_jersey_nineties_home_cm"));
+        assert_eq!(name("jersey_nineties_nyi_away_cm").as_deref(), Some("new_york_islanders_jersey_nineties_away_cm"));
+        // A club not in this DB (European/junior) resolves to nothing → caller keeps the native name.
+        assert_eq!(name("jersey_rbk_adler_mannheim_home_cm"), None);
+        // Alaska Aces isn't in this DB either — still None (exported under its native stem upstream).
+        assert_eq!(name("sock_rbk_alaska_home_cm"), None);
+        // An extra descriptor token (sock left/right) is preserved around the resolved team.
+        assert_eq!(name("sock_nineties_left_detroit_away_cm").as_deref(), Some("detroit_red_wings_sock_nineties_left_away_cm"));
+    }
+
+    #[test]
+    fn outfit_texture_file_accepts_bundles_and_loose_rasters_not_meshes() {
+        // NHL 09+ texlib bundles.
+        assert!(outfit_texture_file("texlib_0_10_0.rx2"));
+        // NHL 07/08 loose rasters (map suffix in the filename).
+        assert!(outfit_texture_file("jersey_0_10_0_cm.rx2"));
+        assert!(outfit_texture_file("jersey_0_10_0_0_nm.rx2"));
+        assert!(outfit_texture_file("pant_0_0_0_cm.rx2"));
+        assert!(outfit_texture_file("sock_0_0_10_0_0_cm.rx2"));
+        assert!(outfit_texture_file("font_0_10_0_sm.rx2"));
+        // Mesh files (bare trailing index, no map suffix) and non-rx2 are rejected.
+        assert!(!outfit_texture_file("pant_0_0_0_0_0_0.rx2"));
+        assert!(!outfit_texture_file("jersey_0_10_2.rx2"));
+        assert!(!outfit_texture_file("player_10057.glb"));
+    }
+
+    #[test]
+    fn derive_team_index_picks_the_widest_spanning_position() {
+        let by_id: HashMap<u64, &str> =
+            (0u64..32).map(|i| (i, "team")).collect();
+        // NHL 09-style jersey filenames: set at index 1 (0/1), team at index 2 (0..31), variant at 3.
+        let jerseys: Vec<String> = (0..32)
+            .flat_map(|team| {
+                [0, 1].into_iter().flat_map(move |set| {
+                    (0..3).map(move |v| format!("texlib_{set}_{team}_{v}"))
+                })
+            })
+            .collect();
+        assert_eq!(derive_team_index(&jerseys, &by_id), Some(2));
+
+        // NHL 09-style sock filenames: team at index 3.
+        let socks: Vec<String> = (0..32)
+            .map(|team| format!("sock_0_0_{team}_0_0_cm"))
+            .collect();
+        assert_eq!(derive_team_index(&socks, &by_id), Some(3));
+
+        // A folder that isn't team-keyed (all ids out of range) yields nothing rather than a guess.
+        let junk: Vec<String> = (0..10).map(|i| format!("texlib_0_{}_0", 900 + i)).collect();
+        assert_eq!(derive_team_index(&junk, &by_id), None);
+    }
+
+    #[test]
+    fn classify_asset_kind_by_name() {
+        let k = |s: &str| classify_asset_kind(Path::new(s));
+        // Meshes.
+        assert_eq!(k("player_10057.rx2"), Some(AssetKind::Mesh));
+        assert_eq!(k("hair_10000.rx2"), Some(AssetKind::Mesh));
+        assert_eq!(k("generic_player_5.mcd"), Some(AssetKind::Mesh));
+        // Textures: the texlib bundle and NHL 10's loose per-map rasters.
+        assert_eq!(k("texlib_67.rx2"), Some(AssetKind::Texture));
+        assert_eq!(k("head_10000_cm.rx2"), Some(AssetKind::Texture));
+        assert_eq!(k("head_10000_0_0_0_nm.rx2"), Some(AssetKind::Texture));
+        assert_eq!(k("head_cm.gnf"), Some(AssetKind::Texture));
+        // Portraits.
+        assert_eq!(k("p1234.big"), Some(AssetKind::Portrait));
+        assert_eq!(k("p1234.png"), Some(AssetKind::Portrait));
+        assert_eq!(k("p1234.gnf"), Some(AssetKind::Portrait));
+        // Unrecognized.
+        assert_eq!(k("nhlng.db"), None);
+        assert_eq!(k("notes.txt"), None);
+    }
+
+    #[test]
+    fn safe_join_rel_refuses_escape_and_allows_root() {
+        let root = Path::new("C:/game/USRDIR");
+        // Empty rel = the root itself (the browser opens there).
+        assert_eq!(safe_join_rel(root, ""), Some(root.to_path_buf()));
+        assert_eq!(
+            safe_join_rel(root, "rendering/player"),
+            Some(root.join("rendering").join("player"))
+        );
+        // Traversal (`..`) and drive-prefixed paths are refused.
+        assert_eq!(safe_join_rel(root, ".."), None);
+        assert_eq!(safe_join_rel(root, "rendering/../../etc"), None);
+        assert_eq!(safe_join_rel(root, "D:/other"), None);
+        // A leading slash just drops to an empty (skipped) component, so it resolves *within* root
+        // rather than escaping — the same containment the extractor's guard relies on.
+        assert_eq!(
+            safe_join_rel(root, "/etc/passwd"),
+            Some(root.join("etc").join("passwd"))
+        );
+    }
+
+    #[test]
+    fn strip_ext_keeps_dir_prefix() {
+        assert_eq!(strip_ext("rendering/player/player_10057.rx2"), "rendering/player/player_10057");
+        assert_eq!(strip_ext("head_10000_cm.rx2"), "head_10000_cm");
+        // No extension → unchanged; a dot only in a directory name is left alone.
+        assert_eq!(strip_ext("some/dir.name/file"), "some/dir.name/file");
+    }
+
+    #[test]
+    fn export_folder_expands_and_mirrors_layout() {
+        let tmp = std::env::temp_dir().join(format!("nms_fx_{}", std::process::id()));
+        let root = tmp.join("install");
+        let sub = root.join("rendering").join("misc");
+        std::fs::create_dir_all(&sub).unwrap();
+        // Two unrecognized files in a nested folder — copy_through preserves the tree.
+        std::fs::write(sub.join("readme.txt"), b"hello").unwrap();
+        std::fs::write(root.join("top.dat"), b"xyz").unwrap();
+
+        let out = tmp.join("out");
+        let opts = FileExportOptions {
+            meshes_glb: true,
+            portraits_png: true,
+            textures: true,
+            copy_unrecognized: true,
+            crop_portraits: false,
+        };
+        let summary = export_asset_files(
+            &root,
+            &["rendering".to_string(), "top.dat".to_string()],
+            &out,
+            opts,
+        )
+        .unwrap();
+
+        assert_eq!(summary.files_considered, 2);
+        assert_eq!(summary.raw_copied, 2);
+        assert!(out.join("rendering").join("misc").join("readme.txt").is_file());
+        assert!(out.join("top.dat").is_file());
+
+        // With copy_unrecognized off, the same selection skips instead of copying.
+        let out2 = tmp.join("out2");
+        let summary2 = export_asset_files(
+            &root,
+            &["rendering".to_string()],
+            &out2,
+            FileExportOptions { copy_unrecognized: false, ..opts },
+        )
+        .unwrap();
+        assert_eq!(summary2.skipped_unrecognized, 1);
+        assert_eq!(summary2.raw_copied, 0);
 
         std::fs::remove_dir_all(&tmp).ok();
     }

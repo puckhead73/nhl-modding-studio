@@ -2,7 +2,8 @@
 //! `raw_id` string helpers carried over from the prior app.
 
 use studio_domain::{
-    AssetExportSummary, AssetRoots, ExportOptions, HeadPreview, PlayerAssets,
+    AssetExportSummary, AssetRoots, BrowseListing, ExportOptions, FileExportOptions,
+    FileExportSummary, HeadPreview, OutfitExportSummary, PlayerAssets,
     ArenaRef, ArenaSummary, ArenaView, AttributeView, Capabilities, CareerStats, CellControl,
     DbOverview, EntityFieldProfile, ExtractSummary, FieldRaw, FieldView, HumanFinding, HumanReport,
     InstallReport, LineEntry, LinesView, OpOutcome, PlayerAttributes, PlayerData, PlayerHeader,
@@ -11,8 +12,9 @@ use studio_domain::{
 };
 
 use crate::dto::{
-    AssetExportSummaryDto, AssetRootsDto, ExportOptionsDto, HeadPreviewDto, PlayerAssetsDto,
-    PreviewSubmeshDto, PreviewTextureDto,
+    AssetExportSummaryDto, AssetRootsDto, BrowseEntryDto, BrowseListingDto, ExportOptionsDto,
+    FileExportOptionsDto, FileExportSummaryDto, HeadPreviewDto, OutfitExportSummaryDto,
+    PlayerAssetsDto, PreviewSubmeshDto, PreviewTextureDto,
     ArenaRefDto, ArenaSummaryDto, ArenaViewDto, AttributeViewDto, CapabilitiesDto, CareerColumnDto,
     CareerRowDto, CareerSectionDto, CareerStatsDto, CreatePlayerDto, DraftPickDto, EnumOptionDto,
     EntityFieldProfileDto, EquipmentZoneDto, ExtractSummaryDto, FieldCellDto, FieldSectionDto,
@@ -82,13 +84,14 @@ fn save_label(kind: &str, platform: &str) -> &'static str {
     }
 }
 
-/// Build the project summary DTO for a workspace (reflects the canonical working db, incl. any
-/// growth, plus the roster-mirror status). `dirty`/`undo_depth`/`redo_depth` are workspace-level.
+/// Build the project summary DTO for a workspace (reflects the *displayed* working db — canonical
+/// `nhlng.db` unless the roster display toggle is on — incl. any growth, plus the roster-mirror
+/// status). `dirty`/`undo_depth`/`redo_depth` are workspace-level.
 pub fn project_summary_dto(
     project_id: u32,
     ws: &Workspace,
 ) -> Result<ProjectSummaryDto, studio_domain::DomainError> {
-    let session = ws.primary();
+    let session = ws.display();
     let overview = session.overview()?;
     let project = session.project();
     let capabilities = capabilities_dto(&session.capabilities()?);
@@ -109,8 +112,26 @@ pub fn project_summary_dto(
         tables: table_dtos(&overview),
         roster_attached: ws.roster_attached(),
         roster_aligned: ws.roster_aligned(),
+        display_roster: ws.display_roster(),
         capabilities,
+        // Experimental if either the canonical session or the (possibly v1) roster mirror writes
+        // through an un-reversed integrity tag.
+        write_experimental: write_experimental(project.source())
+            || ws.roster_source().is_some_and(write_experimental),
     })
+}
+
+/// Whether this project's on-disk write path is only experimentally supported: PS4 roster saves
+/// (repack unverified on console) or v1 containers (un-reversed `tag_1c`). Raw dbs and v2/v4/gen6
+/// containers are fully supported.
+fn write_experimental(source: &Source) -> bool {
+    match source {
+        Source::RawDb => false,
+        Source::Container { original } => tdb_savedata::SaveContainer::parse(original)
+            .map(|c| c.header.version.write_is_experimental())
+            .unwrap_or(false),
+        Source::Ps4Save { .. } => true,
+    }
 }
 
 fn capabilities_dto(c: &Capabilities) -> CapabilitiesDto {
@@ -1080,6 +1101,82 @@ pub fn asset_export_summary_dto(s: &AssetExportSummary) -> AssetExportSummaryDto
     }
 }
 
+pub fn browse_listing_dto(l: &BrowseListing) -> BrowseListingDto {
+    BrowseListingDto {
+        root: l.root.clone(),
+        rel_path: l.rel_path.clone(),
+        parent: l.parent.clone(),
+        entries: l
+            .entries
+            .iter()
+            .map(|e| BrowseEntryDto {
+                name: e.name.clone(),
+                rel_path: e.rel_path.clone(),
+                is_dir: e.is_dir,
+                size: e.size,
+                kind: e.kind.map(|k| k.as_str().to_string()),
+            })
+            .collect(),
+    }
+}
+
+pub fn file_export_options(o: &FileExportOptionsDto) -> FileExportOptions {
+    FileExportOptions {
+        meshes_glb: o.meshes_glb,
+        portraits_png: o.portraits_png,
+        textures: o.textures,
+        copy_unrecognized: o.copy_unrecognized,
+        crop_portraits: o.crop_portraits,
+    }
+}
+
+pub fn file_export_summary_dto(s: &FileExportSummary) -> FileExportSummaryDto {
+    FileExportSummaryDto {
+        files_considered: s.files_considered,
+        meshes_written: s.meshes_written,
+        portraits_written: s.portraits_written,
+        textures_written: s.textures_written,
+        raw_copied: s.raw_copied,
+        skipped_unrecognized: s.skipped_unrecognized,
+        skipped_unsafe: s.skipped_unsafe,
+        failures: s.failures.clone(),
+        bytes_written: s.bytes_written,
+    }
+}
+
+pub fn outfit_export_summary_dto(s: &OutfitExportSummary) -> OutfitExportSummaryDto {
+    OutfitExportSummaryDto {
+        teams_considered: s.teams_considered,
+        jerseys_written: s.jerseys_written,
+        pants_written: s.pants_written,
+        socks_written: s.socks_written,
+        failures: s.failures.clone(),
+        bytes_written: s.bytes_written,
+        rendering_root: s.rendering_root.clone(),
+    }
+}
+
+/// Slugify a resolved team name for a filename: lowercase, every run of non-alphanumerics collapsed
+/// to a single `_`, ends trimmed. "Detroit Red Wings" → `detroit_red_wings`. Empty when the name
+/// has no usable characters (that team is then skipped by the exporter).
+pub fn team_name_slug(name: &str) -> String {
+    let mut out = String::with_capacity(name.len());
+    let mut prev_sep = true; // trims leading separators
+    for ch in name.chars() {
+        if ch.is_ascii_alphanumeric() {
+            out.push(ch.to_ascii_lowercase());
+            prev_sep = false;
+        } else if !prev_sep {
+            out.push('_');
+            prev_sep = true;
+        }
+    }
+    while out.ends_with('_') {
+        out.pop();
+    }
+    out
+}
+
 pub fn head_preview_dto(p: &HeadPreview) -> HeadPreviewDto {
     HeadPreviewDto {
         submeshes: p
@@ -1110,5 +1207,19 @@ pub fn head_preview_dto(p: &HeadPreview) -> HeadPreviewDto {
         span: p.span,
         source_path: p.source_path.clone(),
         lenient_rig: p.lenient_rig,
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::team_name_slug;
+
+    #[test]
+    fn team_name_slug_is_filename_safe() {
+        assert_eq!(team_name_slug("Detroit Red Wings"), "detroit_red_wings");
+        assert_eq!(team_name_slug("Montréal Canadiens"), "montr_al_canadiens"); // non-ascii dropped
+        assert_eq!(team_name_slug("St. Louis Blues"), "st_louis_blues"); // punctuation collapses
+        assert_eq!(team_name_slug("  Anaheim  Ducks  "), "anaheim_ducks"); // trimmed + collapsed
+        assert_eq!(team_name_slug("---"), ""); // no usable chars → empty (team skipped)
     }
 }

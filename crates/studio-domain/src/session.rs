@@ -10,8 +10,8 @@ use std::path::Path;
 
 use tdb_core::TdbFile;
 use tdb_defs::ValidationError;
-use tdb_domain_validation::{validate_invariants, IntegrityReport};
-use tdb_edit::txn::{EditTransaction, JerseyReassignment, OpOutcome};
+use tdb_domain_validation::{towx_coherence, validate_invariants, IntegrityReport};
+use tdb_edit::txn::{BlockRepairSummary, EditTransaction, JerseyReassignment, OpOutcome};
 use tdb_edit::EditError;
 use tdb_relations::RosterModel;
 
@@ -650,6 +650,22 @@ impl EditSession {
             return Ok((OpOutcome::default(), Vec::new()));
         }
         self.run(|tx| tx.autocorrect_duplicate_jerseys())
+    }
+
+    /// Repair a corrupted roster-block layout (`towx_coherence` errors): permute the `eGlu` records
+    /// back into contiguous per-team blocks keyed by the team label each row already carries. An
+    /// order-only structural repair — no field value changes, so no membership can change (see
+    /// [`EditTransaction::repair_roster_blocks`]). A no-op on a coherent layout — and, like the
+    /// jersey autocorrect, the no-op deliberately skips the transaction so it leaves no undo entry
+    /// and doesn't mark the project dirty.
+    pub fn repair_roster_blocks(&mut self) -> Result<(OpOutcome, BlockRepairSummary)> {
+        // Peek read-only: already coherent → return without touching working bytes or history.
+        let db = TdbFile::parse(&self.working)?;
+        if towx_coherence(&db).is_empty() {
+            return Ok((OpOutcome::default(), BlockRepairSummary::default()));
+        }
+        drop(db);
+        self.run(|tx| tx.repair_roster_blocks())
     }
 
     /// Set a player's lineup status (dressed vs. scratched) on their slot in `team`'s block — the

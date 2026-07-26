@@ -88,8 +88,19 @@ pub struct ProjectSummaryDto {
     /// `true` when the roster mirror is record-index-aligned with `nhlng.db` (so generic field edits
     /// mirror). `roster_attached && !roster_aligned` means degraded — field edits hit `nhlng` only.
     pub roster_aligned: bool,
+    /// `true` when read views (and this summary's overview) are served from the roster save instead
+    /// of `nhlng.db` (the display toggle). On an aligned pair edits still fan out to both files;
+    /// with `display_roster && !roster_aligned` the workspace is in roster-only mode — edits apply
+    /// strictly to the roster file, and areas the roster save doesn't carry aren't editable.
+    pub display_roster: bool,
     /// The optional schema features this title's database carries (probed at load).
     pub capabilities: CapabilitiesDto,
+    /// True when saving this project uses an **experimentally-supported** write path: NHL10/11 v1
+    /// containers (the `tag_1c` integrity word is un-reversed, so an edited save carries a stale tag)
+    /// or PS4 roster saves (repack is code-complete but on-console load is unverified). The bytes are
+    /// structurally valid and round-trip, but in-game acceptance isn't confirmed — surface a caveat
+    /// before the user relies on the save.
+    pub write_experimental: bool,
 }
 
 /// One discovered save container, classified by its content.
@@ -186,6 +197,16 @@ pub struct JerseyCorrectionDto {
 #[derive(Serialize, TS)]
 pub struct AutocorrectSummaryDto {
     pub corrections: Vec<JerseyCorrectionDto>,
+}
+
+/// Summary of the roster-block structural repair (an order-only permutation of the roster slot
+/// table back into contiguous per-team blocks — no membership changes).
+#[derive(Serialize, TS)]
+pub struct RepairBlocksSummaryDto {
+    /// How many roster slots changed physical position (0 = the layout was already healthy).
+    pub moved_slots: u32,
+    /// Resolved names of the teams whose blocks the audit had flagged as corrupt.
+    pub teams: Vec<String>,
 }
 
 /// The result of a whole-DB audit.
@@ -1220,6 +1241,81 @@ pub struct AssetExportSummaryDto {
     pub failures: Vec<String>,
     #[ts(type = "number")]
     pub bytes_written: u64,
+}
+
+// ---------------------------------------------------------------- file browser
+
+/// One entry in a browsed directory of the extracted install.
+#[derive(Serialize, TS)]
+pub struct BrowseEntryDto {
+    pub name: String,
+    /// Forward-slash path relative to the browse root — the token passed back to browse into a
+    /// folder or to select it/the file for export.
+    pub rel_path: String,
+    pub is_dir: bool,
+    #[ts(type = "number")]
+    pub size: u64,
+    /// `mesh` / `portrait` / `texture` when this file decodes to an asset; `null` for directories
+    /// and files the exporter doesn't recognize.
+    pub kind: Option<String>,
+}
+
+/// One directory level of the extracted install, for the file browser.
+#[derive(Serialize, TS)]
+pub struct BrowseListingDto {
+    /// The absolute browse root (the install dir).
+    pub root: String,
+    /// Forward-slash path of the listed directory relative to the root (`""` = the root itself).
+    pub rel_path: String,
+    /// The parent's rel path, or `null` at the root. Drives the "up" affordance.
+    pub parent: Option<String>,
+    pub entries: Vec<BrowseEntryDto>,
+}
+
+/// What to include in a file-browser export run.
+#[derive(Deserialize, TS)]
+pub struct FileExportOptionsDto {
+    pub meshes_glb: bool,
+    pub portraits_png: bool,
+    pub textures: bool,
+    /// Copy files the exporter doesn't recognize through unchanged rather than skipping them (also
+    /// the fallback when a recognized file fails to decode).
+    pub copy_unrecognized: bool,
+    pub crop_portraits: bool,
+}
+
+/// What a file-browser export run produced. Partial results are normal — `failures` carries the
+/// already-human-readable reasons.
+#[derive(Serialize, TS)]
+pub struct FileExportSummaryDto {
+    pub files_considered: usize,
+    pub meshes_written: usize,
+    pub portraits_written: usize,
+    pub textures_written: usize,
+    pub raw_copied: usize,
+    pub skipped_unrecognized: usize,
+    pub skipped_unsafe: usize,
+    pub failures: Vec<String>,
+    #[ts(type = "number")]
+    pub bytes_written: u64,
+}
+
+// ---------------------------------------------------------------- team outfits
+
+/// What a team-outfit export produced (jersey / pants / socks per team, as PNGs named by team).
+/// Partial results are normal — `failures` carries the already-human-readable reasons.
+#[derive(Serialize, TS)]
+pub struct OutfitExportSummaryDto {
+    pub teams_considered: usize,
+    pub jerseys_written: usize,
+    pub pants_written: usize,
+    pub socks_written: usize,
+    pub failures: Vec<String>,
+    #[ts(type = "number")]
+    pub bytes_written: u64,
+    /// The art folder scanned for outfit textures — shown when nothing was found so the operator can
+    /// see where the exporter looked.
+    pub rendering_root: String,
 }
 
 // ---------------------------------------------------------------- head preview

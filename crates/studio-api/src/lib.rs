@@ -37,7 +37,9 @@ macro_rules! command_handler {
             $crate::commands::project_summary,
             $crate::commands::validate_project,
             $crate::commands::set_edit_override,
+            $crate::commands::set_display_roster,
             $crate::commands::autocorrect_jerseys,
+            $crate::commands::repair_roster_blocks,
             $crate::commands::list_players,
             $crate::commands::list_free_agents,
             $crate::commands::player_view,
@@ -100,6 +102,9 @@ macro_rules! command_handler {
             $crate::commands::head_preview,
             $crate::commands::head_preview_paths,
             $crate::commands::export_assets,
+            $crate::commands::browse_install_files,
+            $crate::commands::export_install_files,
+            $crate::commands::export_team_outfits,
         ]
     };
 }
@@ -124,9 +129,14 @@ mod bindings {
         PlayerAssetsDto::export_all().expect("export PlayerAssetsDto");
         ExportOptionsDto::export_all().expect("export ExportOptionsDto");
         AssetExportSummaryDto::export_all().expect("export AssetExportSummaryDto");
+        BrowseListingDto::export_all().expect("export BrowseListingDto + deps");
+        FileExportOptionsDto::export_all().expect("export FileExportOptionsDto");
+        FileExportSummaryDto::export_all().expect("export FileExportSummaryDto");
+        OutfitExportSummaryDto::export_all().expect("export OutfitExportSummaryDto");
         HeadPreviewDto::export_all().expect("export HeadPreviewDto + deps");
         IntegrityReportDto::export_all().expect("export IntegrityReportDto + deps");
         AutocorrectSummaryDto::export_all().expect("export AutocorrectSummaryDto + deps");
+        RepairBlocksSummaryDto::export_all().expect("export RepairBlocksSummaryDto");
         CreatePlayerDto::export_all().expect("export CreatePlayerDto + deps");
         OpOutcomeDto::export_all().expect("export OpOutcomeDto");
         PlayerViewDto::export_all().expect("export PlayerViewDto + deps");

@@ -37,6 +37,21 @@ roster_attached: boolean,
  */
 roster_aligned: boolean, 
 /**
+ * `true` when read views (and this summary's overview) are served from the roster save instead
+ * of `nhlng.db` (the display toggle). On an aligned pair edits still fan out to both files;
+ * with `display_roster && !roster_aligned` the workspace is in roster-only mode — edits apply
+ * strictly to the roster file, and areas the roster save doesn't carry aren't editable.
+ */
+display_roster: boolean, 
+/**
  * The optional schema features this title's database carries (probed at load).
  */
-capabilities: CapabilitiesDto, };
+capabilities: CapabilitiesDto, 
+/**
+ * True when saving this project uses an **experimentally-supported** write path: NHL10/11 v1
+ * containers (the `tag_1c` integrity word is un-reversed, so an edited save carries a stale tag)
+ * or PS4 roster saves (repack is code-complete but on-console load is unverified). The bytes are
+ * structurally valid and round-trip, but in-game acceptance isn't confirmed — surface a caveat
+ * before the user relies on the save.
+ */
+write_experimental: boolean, };

@@ -20,6 +20,7 @@ import type { OpOutcomeDto } from "../bindings/OpOutcomeDto";
 import type { InstallReportDto } from "../bindings/InstallReportDto";
 import type { ExtractSummaryDto } from "../bindings/ExtractSummaryDto";
 import type { AutocorrectSummaryDto } from "../bindings/AutocorrectSummaryDto";
+import type { RepairBlocksSummaryDto } from "../bindings/RepairBlocksSummaryDto";
 import type { CreatePlayerDto } from "../bindings/CreatePlayerDto";
 import type { TeamStrategiesDto } from "../bindings/TeamStrategiesDto";
 import type { DraftPickDto } from "../bindings/DraftPickDto";
@@ -43,6 +44,10 @@ import type { PlayerAssetsDto } from "../bindings/PlayerAssetsDto";
 import type { ExportOptionsDto } from "../bindings/ExportOptionsDto";
 import type { AssetExportSummaryDto } from "../bindings/AssetExportSummaryDto";
 import type { HeadPreviewDto } from "../bindings/HeadPreviewDto";
+import type { BrowseListingDto } from "../bindings/BrowseListingDto";
+import type { FileExportOptionsDto } from "../bindings/FileExportOptionsDto";
+import type { FileExportSummaryDto } from "../bindings/FileExportSummaryDto";
+import type { OutfitExportSummaryDto } from "../bindings/OutfitExportSummaryDto";
 
 export type Platform = "ps3" | "xbox" | "ps4" | "recomp";
 export type Role = "nhlng" | "roster" | "localization";
@@ -82,8 +87,13 @@ type Commands = {
   validate_project: { args: { projectId: number }; ret: IntegrityReportDto };
   // Acknowledged corruption-override: allow edits on a DB that fails the structural audit (unsupported).
   set_edit_override: { args: { projectId: number; allow: boolean }; ret: null };
+  // Switch read views between nhlng.db (default) and the mirrored roster save. Aligned pair: writes
+  // still hit both files. Misaligned pair: roster-only mode — edits apply strictly to the roster file.
+  set_display_roster: { args: { projectId: number; on: boolean }; ret: ProjectSummaryDto };
   // On-load duplicate-jersey auto-correction; returns the corrections applied (staged as a pending edit).
   autocorrect_jerseys: { args: { projectId: number }; ret: AutocorrectSummaryDto };
+  // Roster-block structural repair (order-only permutation of eGlu; staged as a pending edit).
+  repair_roster_blocks: { args: { projectId: number }; ret: RepairBlocksSummaryDto };
   list_players: { args: { projectId: number }; ret: PlayerSummaryDto[] };
   player_view: { args: { projectId: number; playerId: number }; ret: PlayerViewDto | null };
   career_stats: { args: { projectId: number; playerId: number }; ret: CareerStatsDto };
@@ -277,6 +287,29 @@ type Commands = {
       options: ExportOptionsDto;
     };
     ret: AssetExportSummaryDto;
+  };
+
+  // ---- Assets: install file browser (decode any picked file/folder) ----
+  // `rel` is a forward-slash path relative to the install root (`""` = the root).
+  browse_install_files: {
+    args: { installDir: string; rel: string };
+    ret: BrowseListingDto;
+  };
+  // Decode the selected files/folders (rel paths) into `outDir`, mirroring the install layout.
+  export_install_files: {
+    args: {
+      installDir: string;
+      relPaths: string[];
+      outDir: string;
+      options: FileExportOptionsDto;
+    };
+    ret: FileExportSummaryDto;
+  };
+
+  // ---- Assets: team outfit export (jersey/pants/socks per team → PNGs named by team) ----
+  export_team_outfits: {
+    args: { projectId: number; roots: AssetRootsArgsDto; outDir: string };
+    ret: OutfitExportSummaryDto;
   };
 };
 

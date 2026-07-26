@@ -9,15 +9,16 @@ use tauri::{Manager, State};
 use studio_domain::FieldValue;
 
 use crate::dto::{
-    AssetExportSummaryDto, AssetRootsArgsDto, AssetRootsDto, ExportOptionsDto, HeadPreviewDto,
+    AssetExportSummaryDto, AssetRootsArgsDto, AssetRootsDto, BrowseListingDto, ExportOptionsDto,
+    FileExportOptionsDto, FileExportSummaryDto, HeadPreviewDto, OutfitExportSummaryDto,
     PlayerAssetsDto,
     AddCareerSeasonDto, ArenaSummaryDto, ArenaViewDto, AutocorrectSummaryDto, CareerStatsDto,
     CreatePlayerDto, EaComputedRatingsDto, ExtractSummaryDto, FormulaCatalogDto, FormulaProfileDto,
     HistoricalCareerRatingsDto, HistoricalFiltersDto, HistoricalPersonDto, HistoricalPersonSummaryDto,
     HistoricalTeamDto, HistoricalTeamFiltersDto, HistoricalTeamFranchiseDto,
     HistoricalTeamIndexEntryDto, HistoricalTeamSummaryDto, InstallReportDto, IntegrityReportDto,
-    LinesViewDto, OpOutcomeDto, PlayerSummaryDto, PlayerViewDto, ProjectSummaryDto, TeamSummaryDto,
-    TeamViewDto,
+    LinesViewDto, OpOutcomeDto, PlayerSummaryDto, PlayerViewDto, ProjectSummaryDto,
+    RepairBlocksSummaryDto, TeamSummaryDto, TeamViewDto,
 };
 use crate::registry::{parse_platform, parse_role, Registry};
 
@@ -186,6 +187,21 @@ pub fn set_edit_override(
         .map_err(|e| e.to_string())
 }
 
+/// Switch which file the project's read views display: `nhlng.db` (default) or the mirrored roster
+/// save. Requires an attached roster mirror. On an aligned pair writes are unaffected (they fan out
+/// to both files); on a misaligned pair the workspace enters roster-only mode and edits apply
+/// strictly to the roster file. Returns the refreshed project summary reflecting the new source.
+#[tauri::command]
+pub fn set_display_roster(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    on: bool,
+) -> CmdResult<ProjectSummaryDto> {
+    registry
+        .set_display_roster(project_id, on)
+        .map_err(|e| e.to_string())
+}
+
 /// Auto-correct duplicate jersey numbers on load (default reassignment logic); returns a summary of
 /// the corrections applied (empty when none were needed). Corrections are staged as a pending edit.
 #[tauri::command]
@@ -195,6 +211,19 @@ pub fn autocorrect_jerseys(
 ) -> CmdResult<AutocorrectSummaryDto> {
     registry
         .autocorrect_jerseys(project_id)
+        .map_err(|e| e.to_string())
+}
+
+/// Repair a corrupted roster-block layout (the "Corrupted roster block" audit errors) — an
+/// order-only permutation of the roster slot table back into contiguous per-team blocks, staged as
+/// a pending, undoable edit. Returns how many slots moved and which teams were affected.
+#[tauri::command]
+pub fn repair_roster_blocks(
+    registry: State<'_, Registry>,
+    project_id: u32,
+) -> CmdResult<RepairBlocksSummaryDto> {
+    registry
+        .repair_roster_blocks(project_id)
         .map_err(|e| e.to_string())
 }
 
@@ -856,5 +885,47 @@ pub fn export_assets(
 ) -> CmdResult<AssetExportSummaryDto> {
     registry
         .export_assets(project_id, &roots, &out_dir, bio_records, &options)
+        .map_err(|e| e.to_string())
+}
+
+/// List one directory level of the extracted install for the file browser, rooted at the install
+/// dir. `rel` is a forward-slash path relative to that root (`""` = the root); resolved safely so
+/// the UI can never walk outside the install.
+#[tauri::command]
+pub fn browse_install_files(
+    registry: State<'_, Registry>,
+    install_dir: String,
+    rel: String,
+) -> CmdResult<BrowseListingDto> {
+    registry
+        .browse_files(&install_dir, &rel)
+        .map_err(|e| e.to_string())
+}
+
+/// Export the selected files/folders from the extracted install into `out_dir`, decoding recognized
+/// assets to glTF/PNG/DDS and mirroring each source's path relative to the install.
+#[tauri::command]
+pub fn export_install_files(
+    registry: State<'_, Registry>,
+    install_dir: String,
+    rel_paths: Vec<String>,
+    out_dir: String,
+    options: FileExportOptionsDto,
+) -> CmdResult<FileExportSummaryDto> {
+    registry
+        .export_files(&install_dir, rel_paths, &out_dir, &options)
+        .map_err(|e| e.to_string())
+}
+
+/// Export every team's jersey/pants/socks as PNGs named by the team, into `out_dir`.
+#[tauri::command]
+pub fn export_team_outfits(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    roots: AssetRootsArgsDto,
+    out_dir: String,
+) -> CmdResult<OutfitExportSummaryDto> {
+    registry
+        .export_team_outfits(project_id, &roots, &out_dir)
         .map_err(|e| e.to_string())
 }

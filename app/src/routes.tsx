@@ -21,6 +21,8 @@ import { FormulasPage } from "./pages/Formulas";
 import { PlayerAssetsPage } from "./pages/PlayerAssets";
 import { PlayerAssetDetail } from "./pages/PlayerAssetDetail";
 import { AssetExportPage } from "./pages/AssetExport";
+import { FileBrowserPage } from "./pages/FileBrowser";
+import { TeamOutfitsPage } from "./pages/TeamOutfits";
 import { SelectPrompt } from "./components/primitives";
 
 export const router = createBrowserRouter([
@@ -114,6 +116,8 @@ export const router = createBrowserRouter([
             ],
           },
           { path: "export", element: <AssetExportPage /> },
+          { path: "outfits", element: <TeamOutfitsPage /> },
+          { path: "files", element: <FileBrowserPage /> },
           {
             path: "textures",
             element: (

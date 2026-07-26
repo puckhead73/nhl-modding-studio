@@ -78,6 +78,17 @@ fn career_table_guard(studio_table: &str) -> Result<(), EditError> {
     }
 }
 
+/// Finding count for each db-only edit-gate invariant, in the order they are reported. Used by the
+/// delta gate in [`EditTransaction::with_repairing_transaction`] to compare pre- vs post-edit state.
+fn predicate_counts(db: &TdbFile) -> [(&'static str, usize); 4] {
+    [
+        ("single_captain", single_captain(db).len()),
+        ("companion_presence", companion_presence(db).len()),
+        ("towx_coherence", towx_coherence(db).len()),
+        ("dup_on_team", dup_on_team(db).len()),
+    ]
+}
+
 /// What an operation did: how many cell edits, and a human description of each auto-repair applied.
 #[derive(Clone, Debug, Default)]
 pub struct OpOutcome {
@@ -97,6 +108,17 @@ pub struct JerseyReassignment {
     pub old: u64,
     /// The lowest free legal number it was reassigned to.
     pub new: u64,
+}
+
+/// What [`EditTransaction::repair_roster_blocks`] did: how many `eGlu` rows changed physical
+/// position, and which teams' blocks the pre-repair audit had flagged (structured so a presentation
+/// layer can resolve the team ids to real names).
+#[derive(Clone, Debug, Default)]
+pub struct BlockRepairSummary {
+    /// Roster-slot rows that moved to a new record index (0 = the layout was already coherent).
+    pub moved_slots: u32,
+    /// The distinct teams the `towx_coherence` findings named before the repair, ascending.
+    pub affected_teams: Vec<u64>,
 }
 
 /// Where `create_player` places its new `eGlu` slot to keep the team's record block contiguous.
@@ -388,38 +410,36 @@ impl EditTransaction {
         let snapshot = self.working.clone();
         let result = op(self).and_then(|outcome| {
             // Override mode: the operator has acknowledged working on a corrupt DB, so skip the
-            // whole-DB gate. The op's own errors still propagate (and roll back) below.
+            // gate entirely. The op's own errors still propagate (and roll back) below.
             if self.allow_pre_existing_violations {
                 return Ok(outcome);
             }
-            let view = self.working.clone();
-            let db = TdbFile::parse(&view).map_err(|e| EditError::Parse(e.to_string()))?;
-            // Share the save-time predicates so operation-time and save-time agree. (Predicates that
-            // need the def registries — referential/enum — are verified at save time; the db-only
-            // invariants run here.)
-            // Run each db-only predicate in turn; the first to find a violation names the failure.
-            let mut violations = single_captain(&db);
-            let mut predicate = "single_captain";
-            if violations.is_empty() {
-                violations = companion_presence(&db);
-                predicate = "companion_presence";
+            // Share the save-time db-only predicates so operation-time and save-time agree.
+            // (Predicates that need the def registries — referential/enum — are verified at save
+            // time.) The gate is **delta-based**: it blocks only violations *this op introduced*, so
+            // a pre-existing violation elsewhere in the DB never rolls back an unrelated edit. EA
+            // vanilla anchors ship with pre-existing findings (phantom data, dup jerseys), and an
+            // absolute gate would make them entirely uneditable.
+            let post_db =
+                TdbFile::parse(&self.working).map_err(|e| EditError::Parse(e.to_string()))?;
+            let post = predicate_counts(&post_db);
+            // Fast path: the working DB is fully clean — nothing to compare.
+            if post.iter().all(|(_, n)| *n == 0) {
+                return Ok(outcome);
             }
-            if violations.is_empty() {
-                violations = towx_coherence(&db);
-                predicate = "towx_coherence";
+            // Some violation is present; only reject if the op *increased* a predicate's count.
+            let pre_db =
+                TdbFile::parse(&snapshot).map_err(|e| EditError::Parse(e.to_string()))?;
+            let pre = predicate_counts(&pre_db);
+            for (i, (predicate, post_n)) in post.iter().enumerate() {
+                if *post_n > pre[i].1 {
+                    return Err(EditError::AuditFailed {
+                        predicate,
+                        violations: *post_n,
+                    });
+                }
             }
-            if violations.is_empty() {
-                violations = dup_on_team(&db);
-                predicate = "dup_on_team";
-            }
-            if violations.is_empty() {
-                Ok(outcome)
-            } else {
-                Err(EditError::AuditFailed {
-                    predicate,
-                    violations: violations.len(),
-                })
-            }
+            Ok(outcome)
         });
         if result.is_err() {
             self.working = snapshot;
@@ -1658,6 +1678,143 @@ impl EditTransaction {
             })
         })?;
         Ok((outcome, plan))
+    }
+
+    /// Repair a corrupted `eGlu` roster-block layout (`towx_coherence` violations) by **permuting
+    /// records only**: rows are regrouped into contiguous per-team blocks keyed by the team label
+    /// (`dXSB`) each row already carries. No field value changes — every `(dXSB, XSWT, toWX,
+    /// jersey, …)` row survives byte-identical at a new record index — so the roster *content* the
+    /// labels describe (who is on which team) is conserved by construction, for every corruption
+    /// shape at once (the old `dXSB`-retag `move_player`, swap-pop deletes, append-at-end creates).
+    /// See `docs/plans/roster-block-repair-spike.md` for why permutation was chosen over
+    /// relabel/relocate classification: a relabel would silently *revert* the membership the old
+    /// buggy op was trying to record, and a relocate needs free destination slots that full blocks
+    /// don't have — the permutation needs neither and cannot move a player between teams.
+    ///
+    /// Within a team, rows keep their current relative order; the blocks are laid out by each
+    /// team's **median** current record index (robust to minority strays sitting far from their
+    /// real block), so the healed tiling tracks the existing physical layout as closely as
+    /// possible.
+    ///
+    /// Runs under its own snapshot/rollback rather than [`Self::with_repairing_transaction`]: the
+    /// whole-DB gate would refuse to operate on exactly the corrupt databases this op exists to
+    /// heal. The targeted post-conditions are still hard requirements — after the permutation
+    /// `towx_coherence` must be **empty** and none of the other db-only predicates may have gained
+    /// findings — otherwise every byte is rolled back and the error surfaces. Idempotent: an
+    /// already-coherent layout returns a zero-edit outcome without touching the bytes.
+    pub fn repair_roster_blocks(&mut self) -> Result<(OpOutcome, BlockRepairSummary), EditError> {
+        let snapshot = self.working.clone();
+        match self.repair_roster_blocks_impl() {
+            Ok(v) => Ok(v),
+            Err(e) => {
+                self.working = snapshot;
+                Err(e)
+            }
+        }
+    }
+
+    fn repair_roster_blocks_impl(&mut self) -> Result<(OpOutcome, BlockRepairSummary), EditError> {
+        let view = self.working.clone();
+        let db = TdbFile::parse(&view).map_err(|e| EditError::Parse(e.to_string()))?;
+
+        // Pre-state: the findings this repair targets, plus the baseline of the other db-only
+        // predicates (a pure permutation is value-blind, so they must not gain findings — checked
+        // after as a bug guard).
+        let before = towx_coherence(&db);
+        if before.is_empty() {
+            return Ok((OpOutcome::default(), BlockRepairSummary::default()));
+        }
+        let captains_before = single_captain(&db).len();
+        let companions_before = companion_presence(&db).len();
+        let dups_before = dup_on_team(&db).len();
+
+        let table = db
+            .table_canonical(ids::ROSTER_LINES)
+            .ok_or_else(|| EditError::UnknownTable(ids::ROSTER_LINES.to_string()))?;
+        let team_field = table
+            .fields
+            .iter()
+            .find(|f| f.id.canonical(db.endian) == ids::SLOT_TEAM)
+            .ok_or_else(|| EditError::UnknownField {
+                table: ids::ROSTER_LINES.to_string(),
+                field: ids::SLOT_TEAM.to_string(),
+            })?;
+
+        // Group every record by the team label it carries. Strict: an unreadable label means we
+        // cannot place the row, so the repair refuses rather than guesses.
+        let n = table.current_records as u32;
+        let mut groups: BTreeMap<u64, Vec<u32>> = BTreeMap::new();
+        for i in 0..n {
+            let team = db
+                .read_u64(table, i, team_field)
+                .ok_or(EditError::OutOfRange {
+                    table: ids::ROSTER_LINES.to_string(),
+                    record: i,
+                })?;
+            groups.entry(team).or_default().push(i);
+        }
+
+        // Block order = each team's median current record index (each group is ascending already).
+        let mut teams: Vec<(u32, u32, u64)> = groups
+            .iter()
+            .map(|(&team, recs)| (recs[recs.len() / 2], recs[0], team))
+            .collect();
+        teams.sort_unstable();
+        let mut order: Vec<u32> = Vec::with_capacity(n as usize);
+        for &(_, _, team) in &teams {
+            order.extend_from_slice(&groups[&team]);
+        }
+
+        let raw = table.id.raw();
+        db.permute_records(&mut self.working, &raw, &order)
+            .map_err(|e| EditError::Alloc(e.to_string()))?;
+
+        // Post-conditions (hard): the coherence findings are gone and no other invariant regressed.
+        let view = self.working.clone();
+        let healed = TdbFile::parse(&view).map_err(|e| EditError::Parse(e.to_string()))?;
+        let after = towx_coherence(&healed);
+        if !after.is_empty() {
+            return Err(EditError::AuditFailed {
+                predicate: "towx_coherence",
+                violations: after.len(),
+            });
+        }
+        for (predicate, before_count, after_count) in [
+            ("single_captain", captains_before, single_captain(&healed).len()),
+            ("companion_presence", companions_before, companion_presence(&healed).len()),
+            ("dup_on_team", dups_before, dup_on_team(&healed).len()),
+        ] {
+            if after_count > before_count {
+                return Err(EditError::AuditFailed {
+                    predicate,
+                    violations: after_count,
+                });
+            }
+        }
+
+        let moved = order
+            .iter()
+            .enumerate()
+            .filter(|&(dst, &src)| dst as u32 != src)
+            .count() as u32;
+        let mut affected: Vec<u64> = before.iter().filter_map(|f| f.team_id).collect();
+        affected.sort_unstable();
+        affected.dedup();
+        let outcome = OpOutcome {
+            edits: moved,
+            repairs: vec![format!(
+                "rebuilt the roster table into contiguous per-team blocks: repositioned {moved} of \
+                 {n} slots ({} teams were flagged corrupt)",
+                affected.len()
+            )],
+        };
+        Ok((
+            outcome,
+            BlockRepairSummary {
+                moved_slots: moved,
+                affected_teams: affected,
+            },
+        ))
     }
 
     /// Retire a jersey `number` for a `team` — add the `(team, number)` pair to the retired-number

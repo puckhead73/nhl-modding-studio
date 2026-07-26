@@ -3,8 +3,9 @@
 //! one-liners). Lives behind a `Mutex` so it can be a single Tauri-managed state.
 //!
 //! Each entry is a [`Workspace`]: a canonical `nhlng.db` edit session plus an optional mirrored
-//! roster-save session. Reads go to the canonical session; writes fan out to both (see
-//! `studio-domain`'s `workspace`).
+//! roster-save session. Reads go to the workspace's display session (canonical by default, the
+//! roster mirror when the user toggles it); writes fan out to both (see `studio-domain`'s
+//! `workspace`).
 
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
@@ -22,14 +23,15 @@ use studio_domain::{
 use crate::convert;
 use crate::dto::{
     AddCareerSeasonDto, ArenaSummaryDto, ArenaViewDto, AutocorrectSummaryDto, CareerStatsDto,
-    AssetExportSummaryDto, AssetRootsArgsDto, AssetRootsDto, ExportOptionsDto, HeadPreviewDto,
+    AssetExportSummaryDto, AssetRootsArgsDto, AssetRootsDto, BrowseListingDto, ExportOptionsDto,
+    FileExportOptionsDto, FileExportSummaryDto, HeadPreviewDto, OutfitExportSummaryDto,
     PlayerAssetsDto,
     CreatePlayerDto, EaComputedRatingsDto, ExtractSummaryDto, FormulaCatalogDto, FormulaProfileDto,
     HistoricalCareerRatingsDto, HistoricalFiltersDto, HistoricalPersonDto, HistoricalPersonSummaryDto,
     HistoricalTeamDto, HistoricalTeamFiltersDto, HistoricalTeamFranchiseDto,
     HistoricalTeamIndexEntryDto, HistoricalTeamSummaryDto, InstallReportDto, IntegrityReportDto,
     JerseyCorrectionDto, LinesViewDto, OpOutcomeDto, PlayerSummaryDto, PlayerViewDto,
-    ProjectSummaryDto, TeamSummaryDto, TeamViewDto,
+    ProjectSummaryDto, RepairBlocksSummaryDto, TeamSummaryDto, TeamViewDto,
 };
 use crate::error::ApiError;
 
@@ -155,10 +157,24 @@ impl Registry {
             let _ = profile.save();
         }
 
+        // PS4: the live roster is a standalone LZ4 save; `nhl_game.db` is only a template (used here
+        // for its metadata). When a writable roster save is present, edit **it** directly as a single
+        // session (no mirror — it is not record-index-aligned with the template). Fall back to the
+        // template db when no roster save is present (browse-only, as before).
+        if platform == Platform::Ps4 {
+            if let Some(slot) = report.saves.iter().find(|s| s.kind == "roster" && s.writable) {
+                let roster_session =
+                    build_session(&slot.path, platform, ProjectRole::Roster, &meta, defs_root)?;
+                let mut ws = Workspace::single(roster_session, slot.path.clone());
+                ws.set_game_id(game_id);
+                ws.normalize_roster_capacity().map_err(ApiError::Domain)?;
+                return self.register(ws);
+            }
+        }
+
         // Build the canonical session and, when a writable roster save is present, the mirror.
         // PS3/Xbox/Recomp mirror: there nhlng.db *is* the roster (record-index aligned, big-endian
-        // — Recomp is Xbox-derived). On PS4 nhl_game.db is a template and the live roster is a
-        // separate save — never mirror it.
+        // — Recomp is Xbox-derived).
         let nhlng_session = build_session(&nhlng, platform, ProjectRole::Nhlng, &meta, defs_root)?;
         let roster_slot = matches!(platform, Platform::Ps3 | Platform::Xbox | Platform::Recomp)
             .then(|| report.saves.iter().find(|s| s.kind == "roster" && s.writable))
@@ -243,7 +259,7 @@ impl Registry {
         let roots = resolve_roots(args);
         self.with_workspace(id, |ws| {
             Ok(ws
-                .primary()
+                .display()
                 .player_assets(&roots)?
                 .iter()
                 .map(convert::player_assets_dto)
@@ -280,7 +296,7 @@ impl Registry {
         let opts = convert::export_options(opts);
         let out_dir = out_dir.to_string();
         self.with_workspace(id, |ws| {
-            let mut all = ws.primary().player_assets(&roots)?;
+            let mut all = ws.display().player_assets(&roots)?;
             // Flag generic placeholder portraits across the whole roster before
             // filtering — sharing can only be seen with every player in hand.
             studio_domain::mark_generic_portraits(&mut all);
@@ -296,6 +312,72 @@ impl Registry {
                 studio_domain::export_player_assets(&selected, Path::new(&out_dir), opts)
                     .map_err(ApiError::Domain)?;
             Ok(convert::asset_export_summary_dto(&summary))
+        })
+    }
+
+    /// List one directory level of the extracted install for the file browser, rooted at the
+    /// install dir (where the game's loose tree lives after onboarding extraction). `rel` is a
+    /// forward-slash path relative to that root (`""` = the root); it's resolved safely so the UI
+    /// can never walk outside the install. Pure filesystem — no project/workspace needed.
+    pub fn browse_files(&self, install_dir: &str, rel: &str) -> Result<BrowseListingDto, ApiError> {
+        let listing =
+            studio_domain::browse_asset_dir(Path::new(install_dir), rel).map_err(ApiError::Domain)?;
+        Ok(convert::browse_listing_dto(&listing))
+    }
+
+    /// Export the selected files/folders (forward-slash rel paths under `install_dir`) into
+    /// `out_dir`, decoding recognized assets to glTF/PNG/DDS. Folders expand recursively; the output
+    /// mirrors each source's path relative to the install so a title's own layout is preserved.
+    pub fn export_files(
+        &self,
+        install_dir: &str,
+        rel_paths: Vec<String>,
+        out_dir: &str,
+        opts: &FileExportOptionsDto,
+    ) -> Result<FileExportSummaryDto, ApiError> {
+        let opts = convert::file_export_options(opts);
+        let summary = studio_domain::export_asset_files(
+            Path::new(install_dir),
+            &rel_paths,
+            Path::new(out_dir),
+            opts,
+        )
+        .map_err(ApiError::Domain)?;
+        Ok(convert::file_export_summary_dto(&summary))
+    }
+
+    /// Export every team's jersey/pants/socks as PNGs named by the team, into `out_dir`. Resolves
+    /// each team's id → human-readable name here (the human-readable-surfaces rule), slugs it for the
+    /// filename, then hands the domain the `(id, slug)` list plus the install's `rendering/` root.
+    pub fn export_team_outfits(
+        &self,
+        id: u32,
+        args: &AssetRootsArgsDto,
+        out_dir: &str,
+    ) -> Result<OutfitExportSummaryDto, ApiError> {
+        let roots = resolve_roots(args);
+        let out_dir = out_dir.to_string();
+        self.with_workspace(id, |ws| {
+            let teams: Vec<studio_domain::OutfitTeam> = ws
+                .display()
+                .team_summaries()?
+                .into_iter()
+                .filter_map(|t| {
+                    let slug = convert::team_name_slug(&t.name);
+                    (!slug.is_empty()).then_some(studio_domain::OutfitTeam {
+                        team_id: t.team_id,
+                        slug,
+                        abbrev: t.abbrev,
+                    })
+                })
+                .collect();
+            let summary = studio_domain::export_team_outfits(
+                &teams,
+                Path::new(&roots.rendering),
+                Path::new(&out_dir),
+            )
+            .map_err(ApiError::Domain)?;
+            Ok(convert::outfit_export_summary_dto(&summary))
         })
     }
 
@@ -366,7 +448,7 @@ impl Registry {
 
     /// Run the Layer 4 audit over the current working state, resolved to human-readable findings.
     pub fn validate(&self, id: u32) -> Result<IntegrityReportDto, ApiError> {
-        self.with_workspace(id, |ws| Ok(convert::report_dto(&ws.primary().audit_report()?)))
+        self.with_workspace(id, |ws| Ok(convert::report_dto(&ws.display().audit_report()?)))
     }
 
     /// Toggle the acknowledged corruption-override edit mode: when enabled, edits proceed on a DB that
@@ -375,6 +457,18 @@ impl Registry {
         self.with_workspace(id, |ws| {
             ws.set_edit_override(allow);
             Ok(())
+        })
+    }
+
+    /// Switch which file the project's read views are served from: the canonical `nhlng.db`
+    /// (default) or the mirrored roster save (for users who only play off the roster save). Errors
+    /// only when no roster mirror is attached; on a misaligned pair the workspace runs in
+    /// roster-only mode (edits hit strictly the roster file). Returns the refreshed summary so the
+    /// UI can re-render off the new source in one round trip.
+    pub fn set_display_roster(&self, id: u32, on: bool) -> Result<ProjectSummaryDto, ApiError> {
+        self.with_workspace(id, |ws| {
+            ws.set_display_roster(on).map_err(ApiError::Domain)?;
+            convert::project_summary_dto(id, ws).map_err(ApiError::Domain)
         })
     }
 
@@ -390,13 +484,13 @@ impl Registry {
             }
             // Resolve names off the (post-correction) working state — identities are unchanged.
             let teams: std::collections::HashMap<u64, String> = ws
-                .primary()
+                .display()
                 .team_summaries()?
                 .into_iter()
                 .map(|t| (t.team_id, t.name))
                 .collect();
             let players: std::collections::HashMap<u64, String> = ws
-                .primary()
+                .display()
                 .player_summaries()?
                 .into_iter()
                 .map(|p| (p.player_id, format!("{} {}", p.first_name, p.last_name).trim().to_string()))
@@ -423,11 +517,43 @@ impl Registry {
         })
     }
 
+    /// Repair a corrupted roster-block layout (the "Corrupted roster block" audit findings):
+    /// permute the roster slot table back into contiguous per-team blocks. Order-only — no
+    /// membership, jersey, or captaincy changes — staged as a pending, undoable edit and mirrored
+    /// into an aligned roster save. Returns a display-ready summary with team names resolved
+    /// (human-readable-surfaces rule); `moved_slots == 0` means the layout was already healthy.
+    pub fn repair_roster_blocks(&self, id: u32) -> Result<RepairBlocksSummaryDto, ApiError> {
+        self.with_workspace(id, |ws| {
+            let (_, summary) = ws.repair_roster_blocks().map_err(ApiError::Domain)?;
+            if summary.moved_slots == 0 {
+                return Ok(RepairBlocksSummaryDto { moved_slots: 0, teams: Vec::new() });
+            }
+            let teams: std::collections::HashMap<u64, String> = ws
+                .display()
+                .team_summaries()?
+                .into_iter()
+                .map(|t| (t.team_id, t.name))
+                .collect();
+            let names = summary
+                .affected_teams
+                .iter()
+                .map(|tid| {
+                    teams
+                        .get(tid)
+                        .filter(|n| !n.is_empty())
+                        .cloned()
+                        .unwrap_or_else(|| format!("Team #{tid}"))
+                })
+                .collect();
+            Ok(RepairBlocksSummaryDto { moved_slots: summary.moved_slots, teams: names })
+        })
+    }
+
     /// The player master list (view-models).
     pub fn list_players(&self, id: u32) -> Result<Vec<PlayerSummaryDto>, ApiError> {
         self.with_workspace(id, |ws| {
             Ok(ws
-                .primary()
+                .display()
                 .player_summaries()?
                 .iter()
                 .map(convert::player_summary_dto)
@@ -442,7 +568,7 @@ impl Registry {
     pub fn list_free_agents(&self, id: u32) -> Result<Vec<PlayerSummaryDto>, ApiError> {
         self.with_workspace(id, |ws| {
             Ok(ws
-                .primary()
+                .display()
                 .player_summaries()?
                 .iter()
                 .filter(|p| p.team_id.is_none())
@@ -455,7 +581,7 @@ impl Registry {
     pub fn player_view(&self, id: u32, player_id: u64) -> Result<Option<PlayerViewDto>, ApiError> {
         self.with_workspace(id, |ws| {
             Ok(ws
-                .primary()
+                .display()
                 .player_view(player_id)?
                 .as_ref()
                 .map(convert::player_view_dto))
@@ -466,7 +592,7 @@ impl Registry {
     pub fn list_teams(&self, id: u32) -> Result<Vec<TeamSummaryDto>, ApiError> {
         self.with_workspace(id, |ws| {
             Ok(ws
-                .primary()
+                .display()
                 .team_summaries()?
                 .iter()
                 .map(convert::team_summary_dto)
@@ -477,7 +603,7 @@ impl Registry {
     /// The full Team detail for one `kOtt.vfEq`, or `None` if absent.
     pub fn team_view(&self, id: u32, team_id: u64) -> Result<Option<TeamViewDto>, ApiError> {
         self.with_workspace(id, |ws| {
-            Ok(ws.primary().team_view(team_id)?.as_ref().map(convert::team_view_dto))
+            Ok(ws.display().team_view(team_id)?.as_ref().map(convert::team_view_dto))
         })
     }
 
@@ -485,7 +611,7 @@ impl Registry {
     pub fn list_arenas(&self, id: u32) -> Result<Vec<ArenaSummaryDto>, ApiError> {
         self.with_workspace(id, |ws| {
             Ok(ws
-                .primary()
+                .display()
                 .arena_summaries()?
                 .iter()
                 .map(convert::arena_summary_dto)
@@ -496,21 +622,21 @@ impl Registry {
     /// The full Arena detail for one `StEO.vfEq`, or `None` if absent.
     pub fn arena_view(&self, id: u32, arena_id: u64) -> Result<Option<ArenaViewDto>, ApiError> {
         self.with_workspace(id, |ws| {
-            Ok(ws.primary().arena_view(arena_id)?.as_ref().map(convert::arena_view_dto))
+            Ok(ws.display().arena_view(arena_id)?.as_ref().map(convert::arena_view_dto))
         })
     }
 
     /// A player's read-only stock career stats.
     pub fn career_stats(&self, id: u32, player_id: u64) -> Result<CareerStatsDto, ApiError> {
         self.with_workspace(id, |ws| {
-            Ok(convert::career_stats_dto(&ws.primary().career_stats(player_id)?))
+            Ok(convert::career_stats_dto(&ws.display().career_stats(player_id)?))
         })
     }
 
     /// The depth chart (lines) for one team, or `None` if the team is absent.
     pub fn lines_view(&self, id: u32, team_id: u64) -> Result<Option<LinesViewDto>, ApiError> {
         self.with_workspace(id, |ws| {
-            Ok(ws.primary().lines_view(team_id)?.as_ref().map(convert::lines_view_dto))
+            Ok(ws.display().lines_view(team_id)?.as_ref().map(convert::lines_view_dto))
         })
     }
 
@@ -522,7 +648,7 @@ impl Registry {
     ) -> Result<Option<crate::dto::TeamStrategiesDto>, ApiError> {
         self.with_workspace(id, |ws| {
             Ok(ws
-                .primary()
+                .display()
                 .team_strategies(team_id)?
                 .as_ref()
                 .map(convert::team_strategies_dto))
@@ -537,7 +663,7 @@ impl Registry {
     ) -> Result<Vec<crate::dto::DraftPickDto>, ApiError> {
         self.with_workspace(id, |ws| {
             Ok(ws
-                .primary()
+                .display()
                 .team_draft_picks(team_id)?
                 .iter()
                 .map(convert::draft_pick_dto)
@@ -553,7 +679,7 @@ impl Registry {
     ) -> Result<Vec<crate::dto::TeamJerseyDto>, ApiError> {
         self.with_workspace(id, |ws| {
             Ok(ws
-                .primary()
+                .display()
                 .team_jerseys(team_id)?
                 .iter()
                 .map(convert::team_jersey_dto)
@@ -581,7 +707,7 @@ impl Registry {
     ) -> Result<Vec<crate::dto::TeamEquipmentDto>, ApiError> {
         self.with_workspace(id, |ws| {
             Ok(ws
-                .primary()
+                .display()
                 .team_equipment(team_id)?
                 .iter()
                 .map(convert::team_equipment_dto)

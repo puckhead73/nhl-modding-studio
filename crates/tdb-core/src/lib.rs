@@ -562,6 +562,47 @@ impl TdbFile<'_> {
         true
     }
 
+    /// Reorder a table's records in place: new record `i` becomes old record `order[i]`. `order`
+    /// must be a **permutation** of `0..current_records` (checked; anything else errors with no
+    /// bytes touched). Whole fixed-width record blocks move — every field at once, like
+    /// [`TdbFile::copy_record`] — so row *content* is conserved exactly; only physical record
+    /// position changes. File length, `max_records`, and every other table are untouched. Use for
+    /// healing block-structured tables (`eGlu`) whose rows sit outside their team's contiguous
+    /// block. Does **not** recompute CRCs (call [`TdbFile::recompute_crcs`] after).
+    pub fn permute_records(
+        &self,
+        buf: &mut [u8],
+        table_raw: &str,
+        order: &[u32],
+    ) -> Result<(), AllocError> {
+        let t = self.table(table_raw).ok_or(AllocError::UnknownTable)?;
+        let cur = t.current_records as usize;
+        if order.len() != cur {
+            return Err(AllocError::IndexOutOfRange);
+        }
+        let mut seen = vec![false; cur];
+        for &src in order {
+            let s = src as usize;
+            if s >= cur || seen[s] {
+                return Err(AllocError::IndexOutOfRange);
+            }
+            seen[s] = true;
+        }
+        let reclen = t.record_len_bytes as usize;
+        let start = t.record_block;
+        let end = start + cur * reclen;
+        if end > buf.len() {
+            return Err(AllocError::OutOfBounds);
+        }
+        let original = buf[start..end].to_vec();
+        for (dst, &src) in order.iter().enumerate() {
+            let s = src as usize * reclen;
+            buf[start + dst * reclen..start + (dst + 1) * reclen]
+                .copy_from_slice(&original[s..s + reclen]);
+        }
+        Ok(())
+    }
+
     /// Append a zeroed record to a table and return the **new file bytes** (CRCs recomputed) plus the
     /// new record's index.
     ///
