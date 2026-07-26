@@ -683,6 +683,7 @@ fn default_xenia_content() -> Option<PathBuf> {
 
 fn version_str(v: ContainerVersion) -> &'static str {
     match v {
+        ContainerVersion::RawV3 => "v3",
         ContainerVersion::RawV1 => "v1",
         ContainerVersion::RawV2 => "v2",
         ContainerVersion::ZlibV4 => "v4",

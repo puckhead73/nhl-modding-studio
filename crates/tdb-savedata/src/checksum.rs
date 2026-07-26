@@ -49,6 +49,14 @@ pub fn recompute(file: &mut [u8]) {
     file[CHECKSUM_A_OFFSET..CHECKSUM_A_OFFSET + 4].copy_from_slice(&a.to_be_bytes());
 }
 
+/// Recompute and store **only** `checksum_a`. For single-checksum containers (gen6 `RawV3` @0x1C and
+/// `RawV1` @0x20) whose headers have no `checksum_b` slot — writing `0x28` (as [`recompute`] does)
+/// would land inside the inner DB body and corrupt it.
+pub fn recompute_a_only(file: &mut [u8]) {
+    let a = checksum_a(file);
+    file[CHECKSUM_A_OFFSET..CHECKSUM_A_OFFSET + 4].copy_from_slice(&a.to_be_bytes());
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

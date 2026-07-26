@@ -9,7 +9,11 @@
 //! * **ZlibV4** — deflate the payload (zlib level 6), preserve the 48-byte header, **zero-pad back to
 //!   the original file allocation**, refresh `uncompressed_size@0x24` + `compressed_size@0x2C` (LE),
 //!   recompute the checksums.
-//! * **RawV1** — refused: its `tag_1c` is un-reversed, so NHL10/11 saves are read-only.
+//! * **RawV3** — gen6 (NHL07-09) ROSTER: preserve the 28-byte header, write the payload tight,
+//!   recompute **only** `checksum_a` (no `checksum_b` slot — `0x28` is inside the body).
+//! * **RawV1** — NHL10/11: preserve the 32-byte header (including the un-reversed `tag_1c` verbatim),
+//!   write the payload tight, recompute **only** `checksum_a`. **Experimental**: `tag_1c` is not
+//!   recomputed, so an edited body carries a stale `tag_1c` — on-console load is unverified.
 
 use crate::checksum;
 use crate::extract::{inner_db_len, payload};
@@ -40,7 +44,17 @@ fn rebuild_payload(original_file: &[u8], new_db: &[u8]) -> Result<Vec<u8>, SaveE
 pub fn repack_db(original_file: &[u8], new_db: &[u8]) -> Result<Vec<u8>, SaveError> {
     let header = SaveHeader::parse(original_file)?;
     match header.version {
-        ContainerVersion::RawV1 => Err(SaveError::UnsupportedV1Write),
+        // Gen6 (RawV3) and NHL10/11 (RawV1) share a single-checksum, tight-body write. RawV1
+        // additionally carries `tag_1c` in its 0x20 header, preserved verbatim by copying the
+        // original header (its algorithm is un-reversed; see the experimental caveat above).
+        ContainerVersion::RawV3 | ContainerVersion::RawV1 => {
+            let payload = rebuild_payload(original_file, new_db)?;
+            let hlen = header.version.header_len();
+            let mut out = original_file[..hlen].to_vec();
+            out.extend_from_slice(&payload);
+            checksum::recompute_a_only(&mut out);
+            Ok(out)
+        }
 
         ContainerVersion::RawV2 => {
             let payload = rebuild_payload(original_file, new_db)?;
