@@ -28,12 +28,19 @@
 The highest-value / lowest-risk workstream and the only one with no mesh dependency, so it ships first.
 
 ### 6.1 spikes
-- **P-S1 — Target portrait/logo format per (title, platform).** X360 chain is ported; confirm each
-  other in-scope target's on-disk container + texture codec + placement (pool id vs bespoke, mip/atlas
-  rules). Output: a per-target format table with confidence. *Gates the converter.*
-- **P-S2 — Portrait slug grammar.** Catalogue the slug conventions across portrait sources (last name,
-  first name, DOB, team, disambiguators) so the matcher can parse them. Output: a slug-field parser +
-  the fields available per source.
+
+Detailed briefs: [phase-6.1-portraits-logos-spikes.md](phase-6.1-portraits-logos-spikes.md). Note the
+read/decode/export side is **already built** (`assets.rs` + `tdb-rx2`); the spikes target the
+encode/replace direction and the matcher, not decoding.
+
+- **P-S1 — Import/replace round-trip per (title, platform).** Prove encode is the exact inverse of the
+  existing decode (X360 re-tile→XPR2→RefPack→BIGF; PS4 flat-PNG; PS4 BC7 GNF), byte-identical on a
+  vanilla raster then in-game load on a modified one. Output: per-target support rows + fallthrough
+  (import-disabled where unproven). *Gates the converter + `portrait_import`/`logo_import`.*
+- **P-S2 — Portrait slug grammar + match key.** Catalogue source-file slug conventions (last, first,
+  DOB, team, disambiguators), reuse `tdb_fhm::slug` folding, and pin the ranked match key
+  (last+DOB → any-fragment → manual browse). Output: slug parser + ambiguity policy. *Gates
+  `portrait_search` + the matcher UX.*
 
 ### 6.1 backend
 - **Portrait/Logo asset DB** (SQLite sidecar): index imported source assets with parsed slug fields.
