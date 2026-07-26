@@ -361,6 +361,12 @@ pub fn single_captain(db: &TdbFile) -> Vec<Finding> {
     };
     let mut by_team: HashMap<u64, Vec<u32>> = HashMap::new();
     for slot in &model.slots {
+        // Only occupied slots can hold a captain. Vacant slots often retain a stale `mCcl == 1`
+        // bit from EA's own data (the edit ops scrub it in `vacate_slot`/`occupy_slot`), and
+        // counting those would flag phantom captains — the same occupancy guard `dup_on_team` uses.
+        if slot.index_key.is_none() {
+            continue;
+        }
         if slot.captaincy == Some(CAPTAIN) {
             by_team.entry(slot.team_id).or_default().push(slot.record);
         }

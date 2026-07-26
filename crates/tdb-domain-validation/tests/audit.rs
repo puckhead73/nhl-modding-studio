@@ -118,6 +118,45 @@ fn single_captain_clean_on_anchor() {
     );
 }
 
+/// A vacant slot that retains a stale `mCcl == 1` bit (EA vanilla data ships these; they are what
+/// blocked *all* edits on the NHL09/10 and Legacy-PS3 rosters) must NOT count as a captain. Vacate a
+/// second occupied slot on a team that already has its legitimate captain and stamp the phantom bit on
+/// it: without the occupancy guard this reports two captains for the team; with the guard it stays
+/// clean.
+#[test]
+fn single_captain_ignores_vacant_slots_with_stale_captaincy() {
+    let bytes = anchor("ps3/nhllegacy/databases/nhlng.db");
+    let db = TdbFile::parse(&bytes).unwrap();
+    let model = RosterModel::build(&db).unwrap();
+
+    // The team that carries its one legitimate (occupied) captain.
+    let cap = model
+        .slots
+        .iter()
+        .find(|s| s.index_key.is_some() && s.captaincy == Some(1))
+        .expect("an occupied captain in the anchor");
+    // Another occupied slot on that same team to turn into a phantom captain.
+    let victim = model
+        .slots
+        .iter()
+        .find(|s| s.team_id == cap.team_id && s.index_key.is_some() && s.record != cap.record)
+        .map(|s| s.record)
+        .expect("a second occupied slot on the captain's team");
+
+    // Vacate the victim (XSWT == 0 reads as an empty slot) and stamp the stale captaincy bit.
+    let buf = patch_eglu(&bytes, victim, "XSWT", 0);
+    let buf = patch_eglu(&buf, victim, "mCcl", 1);
+    let dirty = TdbFile::parse(&buf).unwrap();
+
+    let findings = single_captain(&dirty);
+    assert!(
+        findings.is_empty(),
+        "stale captaincy on a vacant slot must not flag, got {}: {:?}",
+        findings.len(),
+        findings.iter().take(5).collect::<Vec<_>>()
+    );
+}
+
 /// The `toWX`-coherence predicate finds zero violations on the vanilla anchor — every team's `eGlu`
 /// slots form a contiguous record + `toWX` run and the blocks tile the table (Spike S2). This is the
 /// baseline the occupant-relocation move/trade ops must preserve.
