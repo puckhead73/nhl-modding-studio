@@ -29,12 +29,15 @@ production-tool functionality** on the proven engine, with clean layering.
 
 - **Titles:** NHL 10 → NHL 21.
 - **Platforms:** Xbox, PS3, **PS4**, and the NHL Legacy Recompilation (Xbox-derived).
-- **In:** DB editing (players/teams/arenas/jerseys), roster/lines/transactions, parity save+write,
-  FHM historical import, EA rating formulas, and the *shipped* asset tools (portraits, textures,
-  equipment/hockey-shop, localization, music/PA/PBP audio).
-- **Out (deferred to a later/separate roadmap):** ReXGlue recomp, NHL2K10 RE, rig-audit,
-  head-import (see [MESH_IMPORT_EXCLUSIVE_PATH.md](MESH_IMPORT_EXCLUSIVE_PATH.md)), NHL24
-  weight-remap, FMT plugins, EBOOT tunable patcher.
+- **In:** DB editing (players/teams/arenas/jerseys), roster/lines/transactions (incl. historical
+  import **and** manual player-select roster construction), parity save+write, FHM historical import,
+  EA rating formulas, and the asset tools (portraits, logos, textures, appearance, equipment/hockey-shop,
+  **headmesh porting** — game-to-game, NHL24→Legacy first — localization, music/PA/PBP audio). Mesh/UV
+  tools use a bundled headless Blender pipeline.
+- **Out (deferred to a later/separate roadmap):** ReXGlue recomp, NHL2K10 RE, rig-audit, the
+  exclusive-path head-*import* research (see [MESH_IMPORT_EXCLUSIVE_PATH.md](MESH_IMPORT_EXCLUSIVE_PATH.md)
+  — distinct from the Phase 6.5 headmesh *porting* pipeline), NHL24 weight-remap, FMT plugins, EBOOT
+  tunable patcher.
 
 > **Scope delta vs. the reference app.** The reference app proved **Legacy/14/15** on
 > **PS3/Xbox/Recomp**. The RC target adds **PS4** (net-new: little-endian x86 + a different save

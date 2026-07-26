@@ -14,6 +14,7 @@ covers **only the remaining one — the Roster Builder / two-phase import**, the
 | 1 — Corpus + Browse | `tdb-fhm` / `-build` / `-store`, CSV→SQLite (schema v6), Historical Players + Teams | ✅ shipped 2026-07-05 |
 | 2 — Formula engine | `tdb-formula`, computed-ratings tab, Formulas page + profiles | ✅ shipped 2026-07-05 |
 | **3 — Roster Builder / import** | cart → match → `preview_change_set` / `commit_change_set` → instance registry | **📋 this plan** |
+| **3b — Manual roster construction** | player-select slot-fill for teams absent from the FHM corpus (same cart/preview/commit spine, different source) | **📋 §5.5b below** |
 
 **Goal.** Import FHM player-seasons (and whole team-seasons) into the open EA project via a
 cart → preview → commit pipeline, with preview **byte-identical** to commit, respecting every EA-DB
@@ -234,6 +235,33 @@ end-to-end on an anchor.
   behind a details affordance.
 
 *Verify:* `npm run build` clean; the cart survives a reload; preview blockers disable Commit.
+
+## Phase 5.5b — Manual roster construction (added 2026-07-26)
+
+**Motivation.** Many teams have no whole-team-season in the FHM corpus, but the *individual players*
+do exist there (per-season, name+DOB identity). Roster Builder must also let a user **hand-fill named
+roster slots** by picking individual player-seasons — an original, curated roster rather than a corpus
+team-season replay.
+
+**Reuse, don't rebuild.** This is a **second source feeding the same spine**, not a new write path:
+- Source: individual player-season picks (from Historical Players search across all seasons / the
+  person timeline), each dropped onto a chosen **target slot** on a target team.
+- The item lowers through the **identical** `ImportItem` → `lower()` → `preview_change_set` /
+  `commit_change_set` pipeline (§5.2), so it inherits byte-identical preview↔commit, the four audit
+  predicates, capacity projection, `Capabilities` skipping, the bio-team **+1** and birthdate 0-index
+  corrections, and the instance-registry ledger (§5.3) for free.
+
+**New surface (small):**
+- A **slot-target picker** in the cart: choose team → position/line slot (vs. the team-season flow's
+  "whole roster"). Slot occupancy resolves via `eGlu` (respect `vfEq==0` occupancy key — see the
+  `eglu-occupancy-key-vfeq0` note; `XSWT==0` reads vacant).
+- A **cross-season player search** source that emits the same per-item shape as "Send to Builder"
+  (person_id + chosen season_year), with the `compute_person_career_ratings` "which season?" affordance.
+
+*Verify:* a cart mixing a whole team-season **and** hand-picked slot-fills lowers to one coherent
+change set; preview↔commit byte-identical; filling an occupied slot surfaces a diff (update) while an
+empty slot creates; a full block at the ceiling surfaces the S4 storage blocker, never a silent drop.
+**Human-readable surfaces:** slot/target/player lines resolve to real names; raw ids behind details.
 
 ## Phase 5.6 — Final verification (gate sign-off)
 

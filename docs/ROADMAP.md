@@ -41,8 +41,26 @@ roster capacity normalization, repair tools.
 **Phase 5 — Historical (FHM) + import.** FHM corpus build (the 1909→present historical source DB),
 Historical Teams/Players, Formulas, Roster Builder (preview/commit pipeline + instance registry).
 
-**Phase 6 — Production asset tools.** Texture Lab, Portraits/Logos, Equipment/Hockey Shop,
-Appearance Studio, Localization, Music/PA/PBP.
+**Phase 6 — Production asset tools.** Sequenced by dependency; each sub-phase gated by *verified*
+round-trip per (title, platform) (proven-first, never big-bang). Full detail + per-sub-phase
+discovery spikes in [phase-6-asset-tools.md](plans/phase-6-asset-tools.md).
+
+- **6.1 — Portraits & Logos** *(first — 2D, no Blender dependency).* Portrait DB + import with
+  fuzzy last-name+DOB slug matching (high-confidence first → any-fragment → manual browse), on-import
+  **format conversion** to the target game's format (X360 BIGF→refpack→XPR2/DDS already ported in
+  `tdb-rx2`; other targets verify-per-(title,platform)); Logo DB + per-game **icon generator**.
+- **6.2 — Mesh + Blender pipeline foundation** *(shared prerequisite for 6.3–6.5).* Bundle **headless
+  Blender** + a job harness (invoke/marshal/capture/verify) for UV projection, skin transfer, bake;
+  rx2 mesh IO round-trip. Built once, consumed by appearance, hockey shop, and headmesh.
+- **6.3 — Player Appearance.** Hair / facial-hair / eye-color / skin-tone enum editing (RTTI vocab,
+  offsets verified vs anchor) + **premodeled CAP mesh library** import/selection (uses 6.2). In-Studio
+  mesh *editor* deferred — import now, edit later.
+- **6.4 — Hockey Shop / Equipment.** Per-slot scan → 3D preview → store → clone → install, with the
+  Blender UV-projection conversion from 6.2.
+- **6.5 — Headmesh porting.** **NHL24→Legacy first**, then generalize toward any-to-any (uses 6.2);
+  each pair gated independently. (Moved in-scope from the deferred research roadmap — see below.)
+- **6.6 — Audio.** Preview + replace/export parity for menu / in-game / PBP / PA using bundled codecs
+  (EALayer3/Speex, sx.exe/vgmstream). No in-Studio waveform authoring in the RC.
 
 **Phase 7 — Shell polish & onboarding.** Startup/onboarding, Builds, Settings + bulk tools/exports,
 session header UX.
@@ -78,8 +96,17 @@ See [DESIGN.md](DESIGN.md#risks). The roadmap-specific watch items: hidden coupl
 of per-title schema reversing across the full NHL 10–21 range (Phase 10) — treat as discovery work,
 never assume a year's layout matches a neighbor's until verified.
 
+## Scope change (2026-07-26): headmesh porting pulled into the RC
+
+**Headmesh porting** (game-to-game head-mesh conversion) moves from the deferred research roadmap
+**into RC Phase 6.5**, sequencing the proven **NHL24→Legacy** conversion first and generalizing toward
+any-to-any as a follow-on. This adds a **bundled headless-Blender** dependency (Phase 6.2), shared with
+Hockey Shop (6.4) and CAP-mesh appearance work (6.3). The prior-app NHL24→Legacy conversion knowledge
+is referenced only when the user explicitly opens that door per-instance (CLAUDE.md hard rule 1); until
+then it is built from format facts placed in-repo.
+
 ## Out of scope (deferred to a separate `nhl-research` roadmap)
 
-ReXGlue recomp, NHL2K10 RE, rig-audit, head-import
-([MESH_IMPORT_EXCLUSIVE_PATH.md](MESH_IMPORT_EXCLUSIVE_PATH.md)), NHL24 weight-remap, FMT plugins,
-EBOOT tunable patcher.
+ReXGlue recomp, NHL2K10 RE, rig-audit, the exclusive-path head-*import* research
+([MESH_IMPORT_EXCLUSIVE_PATH.md](MESH_IMPORT_EXCLUSIVE_PATH.md) — distinct from the 6.5 headmesh
+*porting* pipeline), NHL24 weight-remap, FMT plugins, EBOOT tunable patcher.
