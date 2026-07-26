@@ -613,11 +613,18 @@ impl Workspace {
 
     /// In-place dual save: write `nhlng.db` and (if attached) the roster save back to their original
     /// paths, repacking the roster's container with recomputed checksums via `Project::package`.
+    /// When the roster save lives inside a recomp/Xenia content tree that indexes saves through
+    /// `Headers/*.header` sidecars, the matching sidecar is created if missing — a save without one
+    /// is invisible to the game's load list (`crate::content_header`).
     pub fn save_in_place(&self) -> Result<u64> {
         self.nhlng.save_to(&self.nhlng_path)?;
+        // A roster save opened *alone* occupies the canonical slot (`Workspace::single`), so the
+        // sidecar check runs on both paths; it is a no-op outside header-indexed content trees.
+        crate::content_header::ensure_content_header(std::path::Path::new(&self.nhlng_path))?;
         let mut files = 1u64;
         if let Some(m) = &self.roster {
             m.session.save_to(&m.path)?;
+            crate::content_header::ensure_content_header(std::path::Path::new(&m.path))?;
             files += 1;
         }
         Ok(files)

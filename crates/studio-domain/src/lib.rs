@@ -20,6 +20,7 @@ pub mod attributes;
 pub mod audit;
 pub mod capabilities;
 pub mod capacity;
+pub mod content_header;
 pub mod discovery;
 pub mod extract;
 pub mod field_profile;
