@@ -75,6 +75,17 @@ const DESC_FORMAT_BYTE_REL: usize = DESC_FIELD_OFF + 2;
 const DESC_HEIGHT_BYTE_REL: usize = DESC_FIELD_OFF + 4;
 const DESC_WIDTH_WORD_REL: usize = DESC_FIELD_OFF + 5;
 const DESC_WIDTH_VALUE_MASK: u16 = 0x1FFF;
+/// The Xenos texture fetch-constant's first word (`GPUTEXTURE_FETCH_CONSTANT` dword 0) sits five
+/// bytes before [`DESC_FIELD_OFF`] — one dword ahead of the format word. Its **top bit** (`0x8000_0000`)
+/// is the `tiled` flag and bits 22–30 hold the `pitch` (in 32-texel blocks). This is the reliable,
+/// cross-title discriminator between an Xbox-tiled `Argb8888` (FE art — portraits, awards, logos) and
+/// a LINEAR one (rendering-cache `name_*` jersey nameplates): at 32-aligned dimensions the two
+/// buffers are the same byte length, and a nearby format-word flag turned out to be title-specific
+/// (set on NHL 07 nameplates, clear on NHL 09's), whereas this `tiled` bit is clear on every linear
+/// nameplate observed and set on every tiled FE texture. Verified: the pitch field also reproduces
+/// each texture's width (award 16×32 = 512, nameplate 8×32 = 256).
+const DESC_FETCH_DW0_REL: usize = DESC_FIELD_OFF - 5;
+const DESC_FETCH_TILED_BIT: u32 = 0x8000_0000;
 
 /// Pixel formats we understand. These map to the Xenos
 /// `GPUTEXTUREFORMAT_*` byte stored at `desc + 35`: the DXT family plus
@@ -836,6 +847,9 @@ pub fn parse(data: &[u8]) -> Result<Texlib, TexlibError> {
         let fmt_byte = data[desc_off + DESC_FORMAT_BYTE_REL];
         let height_byte = data[desc_off + DESC_HEIGHT_BYTE_REL];
         let width_word = read_u16_be(data, desc_off + DESC_WIDTH_WORD_REL);
+        // The Xenos tiled flag (see `DESC_FETCH_TILED_BIT`): set = Xbox-tiled, clear = linear.
+        let fetch_dw0 = read_u32_be(data, desc_off + DESC_FETCH_DW0_REL);
+        let is_tiled = (fetch_dw0 & DESC_FETCH_TILED_BIT) != 0;
         // Skip textures whose GPU format we don't decode (e.g. DXN/BC5
         // normal maps — format 0x71) rather than failing the whole
         // container: a jersey `texlib_*` bundles DXT color maps we DO
@@ -878,23 +892,24 @@ pub fn parse(data: &[u8]) -> Result<Texlib, TexlibError> {
             // DXT: 16-bit-pair swap, then untile by 4×4 block.
             swap16_in_place(&mut base_tiled);
             untile_dxt(&base_tiled, width, height, format.bytes_per_block())
-        } else {
-            // Argb8888 ships two ways. The rendering-cache `name_*` nameplates store it LINEAR
-            // (row-major `[A, R, G, B]`, verified against the PS3 rpsgl ground truth). NHL 07's FE
-            // portraits (`fe/ion/.../playerheads/p*.big` → RX2) instead store it **Xbox-tiled at
-            // 32-aligned dimensions**: the data slot holds the full padded tiled buffer, larger than
-            // `width*height*4`. Detect that by the padded buffer size and untile at the real dims
-            // (`untile` reads through the 32-aligned pitch and crops to width×height); otherwise the
-            // bytes are already the linear image. Verified on a real NHL 07 install (468×248 portrait
-            // stored as a 480×256 tiled buffer).
-            let linear_size = (width as usize) * (height as usize) * 4;
+        } else if is_tiled {
+            // Argb8888 FE art (portraits, awards, logos) is stored **Xbox-tiled**. Untile at the
+            // real dims — `untile` reads through the 32-aligned pitch and crops to width×height, so
+            // it handles both the padded case (e.g. 468×248 stored as a 480×256 buffer) and the
+            // already-aligned case (e.g. a 512×256 award, where the tiled and linear buffers are the
+            // same length and only the descriptor's tiled flag tells them apart). The full tiled
+            // buffer may be larger than `base_size`, so re-slice it here.
             let tiled_size = tiled_buffer_size_texels(width, height, 4);
-            if tiled_size > linear_size && (buf_size as usize) >= tiled_size {
+            if (buf_size as usize) >= tiled_size && buf_start + tiled_size <= data.len() {
                 let full = &data[buf_start..buf_start + tiled_size];
                 untile(full, width, height, 4)
             } else {
                 base_tiled
             }
+        } else {
+            // Argb8888 stored LINEAR (row-major `[A, R, G, B]`) — the rendering-cache `name_*`
+            // nameplates, flagged not-tiled in the descriptor. The bytes are already the image.
+            base_tiled
         };
 
         let name = names
@@ -1255,6 +1270,65 @@ pub fn swap16_in_place(buf: &mut [u8]) {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn nhl07_award_argb8888_is_xbox_tiled() {
+        // Real NHL 07 install (skips when absent, like the other real-file tests here). The award
+        // art is an uncompressed `Argb8888` texlib stored **Xbox-tiled** at 32-aligned dims — the
+        // case the descriptor's tiled flag (`DESC_FETCH_TILED_BIT`) disambiguates from the LINEAR
+        // jersey nameplates, since the two buffers are the same byte length. Regression for the
+        // horizontal-banding corruption when a tiled buffer was mistaken for a linear image.
+        let path = r"X:\Games\Emulation\Roms\XBOX360\NHL 07\NHL 07 (USA)\fe\ion\artassets\awards\a0.big";
+        let Ok(bytes) = std::fs::read(path) else {
+            eprintln!("skipping: {path} not present");
+            return;
+        };
+        // The award `.big` is a BIGF archive; its RW4 texlib entry starts at the RW4 magic. Scan for
+        // it rather than pulling the big-archive crate into this unit test.
+        let pos = bytes.windows(MAGIC.len()).position(|w| w == MAGIC).unwrap();
+        let lib = parse(&bytes[pos..]).expect("award texlib must parse");
+        let t = &lib.textures[0];
+        assert_eq!((t.width, t.height), (512, 256));
+        assert_eq!(t.format, PixelFormat::Argb8888);
+        // Correctly untiled, the trophy body at texel (256, 128) is this metal colour `[A, R, G, B]`.
+        // A still-tiled (banded) decode reads a different texel here.
+        let i = (128 * t.width as usize + 256) * 4;
+        assert_eq!(
+            &t.base_mip_linear[i..i + 4],
+            &[187, 111, 105, 96],
+            "award Argb8888 must be untiled"
+        );
+    }
+
+    #[test]
+    fn nhl09_nameplate_argb8888_is_linear() {
+        // The counterpart to the award: a jersey nameplate whose `Argb8888` is stored **linear**
+        // (tiled flag clear) — untiling it would band it into noise. NHL 09's descriptor clears the
+        // format-word bit an earlier heuristic keyed on, so this pins the fix to the fetch-constant
+        // `tiled` bit instead. The correct image is yellow number/patch regions on a white field:
+        // the top-centre patch is opaque yellow, the empty field around it is opaque white.
+        let path = r"X:\Games\Emulation\Roms\XBOX360\NHL 09\NHL 09 (USA)\rendering\jersey\name_1_130_1_cm.rx2";
+        let Ok(bytes) = std::fs::read(path) else {
+            eprintln!("skipping: {path} not present");
+            return;
+        };
+        let pos = bytes.windows(MAGIC.len()).position(|w| w == MAGIC).unwrap();
+        let lib = parse(&bytes[pos..]).expect("nameplate texlib must parse");
+        let t = &lib.textures[0];
+        assert_eq!((t.width, t.height), (256, 256));
+        assert_eq!(t.format, PixelFormat::Argb8888);
+        let texel = |x: usize, y: usize| {
+            let i = (y * t.width as usize + x) * 4;
+            &t.base_mip_linear[i..i + 4] // [A, R, G, B]
+        };
+        // Top-centre patch: opaque yellow (R,G high, B low). A tiled misread scrambles this.
+        let patch = texel(128, 40);
+        assert_eq!(patch[0], 255, "patch alpha");
+        assert!(patch[1] > 200 && patch[2] > 200 && patch[3] < 80, "patch not yellow: {patch:?}");
+        // Bottom field is the empty white background.
+        let field = texel(128, 230);
+        assert_eq!(field, &[255, 255, 255, 255], "field not white");
+    }
 
     #[test]
     fn tile_then_untile_is_identity_dxt1() {
