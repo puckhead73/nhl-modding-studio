@@ -13,3 +13,12 @@ ts-rs = "10"
 # Portrait previews cross the Tauri boundary as PNG data URLs.
 base64 = "0.22"
 studio-domain = { path = "../studio-domain" }
+# Used by the `edit-qa` headless QA binary to re-parse saved artifacts and verify round-trip/CRC.
+tdb-core = { path = "../tdb-core" }
+tdb-savedata = { path = "../tdb-savedata" }
+
+# Headless edit-QA runner: drives the Registry seam across the anchor matrix, deposits edited
+# artifacts + markdown reports. See src/bin/edit_qa.rs.
+[[bin]]
+name = "edit-qa"
+path = "src/bin/edit_qa.rs"

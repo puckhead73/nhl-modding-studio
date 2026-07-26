@@ -3342,6 +3342,8 @@ dependencies = [
  "serde_json",
  "studio-domain",
  "tauri",
+ "tdb-core",
+ "tdb-savedata",
  "ts-rs",
 ]
 

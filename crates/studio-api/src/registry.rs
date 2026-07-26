@@ -179,6 +179,44 @@ impl Registry {
         self.register(ws)
     }
 
+    /// Open a workspace from **explicit file paths** rather than by walking an install root.
+    ///
+    /// This is the headless / test-harness analogue of [`Registry::open_workspace`]: it skips
+    /// [`studio_domain::detect_install`] (which expects an emulator-root layout) and takes the
+    /// `nhlng.db`/main-db path, an optional aligned roster-save container path, and the metadata
+    /// directly. When `roster_path` is `Some` it builds the mirrored [`Workspace`] (edits fan out to
+    /// both files); otherwise it opens the single main DB. Same normalization and summary as the
+    /// onboarding path, so callers exercise the exact app edit seam.
+    pub fn open_workspace_from_paths(
+        &self,
+        game_id: Option<&str>,
+        platform: Platform,
+        nhlng_path: &str,
+        roster_path: Option<&str>,
+        meta_xml: &str,
+        defs_root: &str,
+    ) -> Result<ProjectSummaryDto, ApiError> {
+        let nhlng_session = build_session(nhlng_path, platform, ProjectRole::Nhlng, meta_xml, defs_root)?;
+        let mut ws = match roster_path {
+            Some(rp) => {
+                let roster_session =
+                    build_session(rp, platform, ProjectRole::Roster, meta_xml, defs_root)?;
+                Workspace::with_roster(
+                    nhlng_session,
+                    nhlng_path.to_string(),
+                    roster_session,
+                    rp.to_string(),
+                )?
+            }
+            None => Workspace::single(nhlng_session, nhlng_path.to_string()),
+        };
+        if let Some(g) = game_id {
+            ws.set_game_id(g);
+        }
+        ws.normalize_roster_capacity().map_err(ApiError::Domain)?;
+        self.register(ws)
+    }
+
     /// Extract a game's `.big` archives in place (Xbox / Recomp / PS4 ship the db packed). Runs at
     /// onboarding, before a project is opened, so it takes the install root rather than a project id.
     pub fn extract_install(&self, root: &str) -> Result<ExtractSummaryDto, ApiError> {
