@@ -98,6 +98,26 @@ is the entry point (not the raw `tdb_formula::compute`). `compute_person_career_
 Each spike lands its finding in `docs/audits/` with provenance + confidence (CLAUDE.md rule 3), and
 names the sub-phase it unblocks.
 
+> **✅ All four spikes resolved 2026-07-26** (proofs in `crates/studio-domain/tests/` + findings in
+> `docs/audits/`):
+> - **S1** → [ratings-write-codec.md](../audits/ratings-write-codec.md) — write is byte-identical
+>   inverse of read using the target field's `FieldView.edit_offset` (36 modern / **50 gen6** / 0 PS4);
+>   a fixed offset (the `EaRating.raw_offset` shape) silently corrupts. No `rating_offset` visibility
+>   change needed. `ratings_write_codec.rs`.
+> - **S2** → [ea-match-key.md](../audits/ea-match-key.md) — DOB is ~universal (≥99.4% every anchor),
+>   so name+DOB is a viable *primary* key, but **not unique** (0.1–6.1% residual, mostly multi-pool
+>   duplicates) → `match_player` returns candidates, per-item Match/Create is first-class.
+>   `ea_match_key.rs` (`#[ignore]`). *Follow-up: `anchors/ps3/nhl10/databases/nhlng-meta.xml` is not
+>   committed — nhl10 (the birthdate 1-index title) was skipped; commit its meta and re-run before 5.1
+>   sign-off.*
+> - **S3** → [import-history-cost.md](../audits/import-history-cost.md) — per-op writes retain N
+>   full-DB snapshots (≈2–8 GB for a mirrored team-season); **one import commit = one transaction/one
+>   undo entry**. New 5.2 seam: an import-scoped batch. `import_history_cost.rs` (`#[ignore]`).
+> - **S4** → [capacity-full-policy.md](../audits/capacity-full-policy.md) — boundary-insert is
+>   mechanically safe (grows a full block + re-parses), but the write path grows **past** the ceiling
+>   with no check → the ceiling gate lives in the 5.2 preview; storage blocker, never silent drop.
+>   Blocker wording pinned. `capacity_boundary_insert.rs`.
+
 ### Spike S1 — Ratings write codec (`raw_offset`) ⟵ **gates 5.2**
 
 **Partly resolved at scoping time (2026-07-17) — the seam is narrower than the prior notes implied.**
