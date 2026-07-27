@@ -27,6 +27,7 @@ pub mod field_profile;
 pub mod formula;
 pub mod head_preview;
 pub mod historical;
+pub mod import;
 mod error;
 mod overview;
 mod profile;
@@ -56,6 +57,7 @@ pub use discovery::{
 pub use extract::{extract_install, find_big_archives, ExtractSummary};
 pub use field_profile::{CellControl, EntityFieldProfile, ProfileCell, ProfileSection};
 pub use historical::{FhmCorpus, FhmError};
+pub use import::{EaSlugIndex, MatchCandidate, MatchConfidence};
 pub use formula::{
     compute_person_career_ratings, compute_person_ratings, default_profile, CareerRatings,
     CareerSeasonOverall, ComputedRatings,

@@ -148,6 +148,20 @@ impl EditSession {
         ))
     }
 
+    /// Build the EA name+DOB match index over the open project (Phase 5.1 — Roster Builder import).
+    /// Reads the *working* state. Caching this across cart items is the service layer's job (5.4);
+    /// this builds it fresh, so callers should not invoke it per lookup.
+    pub fn ea_slug_index(&self) -> Result<crate::import::EaSlugIndex> {
+        let db = TdbFile::parse(&self.working)?;
+        let model = self.build_model(&db)?;
+        Ok(crate::import::EaSlugIndex::build(
+            &db,
+            self.project.meta(),
+            self.project.enums(),
+            &model,
+        ))
+    }
+
     /// Every player's art (portrait / head mesh / head textures), resolved against `roots`.
     ///
     /// Reads the *working* state, so a staged edit to a player's name or head id is reflected in
