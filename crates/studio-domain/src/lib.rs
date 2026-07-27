@@ -91,5 +91,5 @@ pub type Result<T> = std::result::Result<T, DomainError>;
 // `studio-domain` alone rather than reaching past it into individual engine crates.
 pub use tdb_core::Endian;
 pub use tdb_domain_validation::{Finding, IntegrityReport, Severity};
-pub use tdb_edit::txn::OpOutcome;
+pub use tdb_edit::txn::{ImportCell, ImportOp, ImportTarget, ImportWrite, OpOutcome};
 pub use tdb_relations::{Player, RosterModel, RosterSlot, Team};

@@ -567,6 +567,14 @@ impl EditSession {
         self.run(|tx| tx.create_player(team, position))
     }
 
+    /// Apply a whole Roster Builder cart — many creates/updates — as **one** transaction and **one**
+    /// undo entry (Spike S3). The `ops` carry already-encoded cell values; `lower()` (Phase 5.2)
+    /// builds them from the corpus. Preview and commit run the identical `ops`, so they lower to
+    /// byte-identical edits.
+    pub fn apply_import(&mut self, ops: &[tdb_edit::txn::ImportOp]) -> Result<OpOutcome> {
+        self.run(|tx| tx.apply_import(ops))
+    }
+
     /// Clone an existing player onto a team (deep-copy of bio + companions); returns the new `wBIz`.
     pub fn clone_player(&mut self, source_player: u64, to_team: u64) -> Result<(u64, OpOutcome)> {
         self.run(|tx| tx.clone_player(source_player, to_team))

@@ -30,7 +30,7 @@ use std::collections::{BTreeMap, HashSet};
 use tdb_core::TdbFile;
 use tdb_domain_validation::{companion_presence, dup_on_team, single_captain, towx_coherence};
 use tdb_relations::entity::ids;
-use tdb_relations::{RosterModel, RosterSlot};
+use tdb_relations::{PlayerKind, RosterModel, RosterSlot};
 
 /// Captaincy roles — the confirmed `eGlu.mCcl` enum.
 pub mod captaincy {
@@ -127,6 +127,62 @@ enum SlotPlacement {
     Reuse(u32),
     /// Insert a fresh record at this `eGlu` index (the team's block-end boundary).
     Insert(u32),
+}
+
+/// The record indices of a freshly-created player cluster, returned by the unaudited
+/// [`EditTransaction::create_player_inner`] so a batch import can write its bio/companion fields
+/// without re-scanning for the new records.
+#[derive(Clone, Copy, Debug)]
+pub struct CreatedPlayer {
+    /// The minted `ubPc.wBIz` player id.
+    pub wbiz: u64,
+    /// The new `ubPc` bio record index.
+    pub bio: u32,
+    /// The new kind-correct AI companion record index (`dSvy` skater / `mHuy` goalie).
+    pub companion_ai: u32,
+    /// True when the player was created as a goalie (`position == 4`).
+    pub goalie: bool,
+    /// Structural edits performed (bio + companions + index + slot).
+    pub edits: u32,
+}
+
+/// Which record of a player-cluster an import write targets.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum ImportTarget {
+    /// The `ubPc` bio record.
+    Bio,
+    /// The kind-correct AI companion record (`dSvy`/`mHuy`), resolved per player.
+    Companion,
+}
+
+/// One already-validated, **encoded** cell value for an import write. Range/updatable/enum validation
+/// is the caller's job (`studio-domain` does it against the metadata), exactly like [`set_cell_int`].
+///
+/// [`set_cell_int`]: EditTransaction::set_cell_int
+#[derive(Clone, Debug)]
+pub enum ImportCell {
+    /// A fixed-bit field: the raw encoded value.
+    Int(u64),
+    /// An inline-string field.
+    Str(String),
+}
+
+/// One field write within an [`ImportOp`].
+#[derive(Clone, Debug)]
+pub struct ImportWrite {
+    pub target: ImportTarget,
+    /// Studio (canonical) field id on the target table.
+    pub field: String,
+    pub cell: ImportCell,
+}
+
+/// One item of a batch import: create a new player, or update an existing one, then apply its writes.
+#[derive(Clone, Debug)]
+pub enum ImportOp {
+    /// Create a new player cluster on `team` at `position`, then write `writes`.
+    Create { team: u64, position: u64, writes: Vec<ImportWrite> },
+    /// Update the existing player `player_id`'s bio/companion cells with `writes`.
+    Update { player_id: u64, writes: Vec<ImportWrite> },
 }
 
 /// A staged, in-memory edit session over one database snapshot.
@@ -536,17 +592,33 @@ impl EditTransaction {
         team_id: u64,
         position: u64,
     ) -> Result<(u64, OpOutcome), EditError> {
+        let mut created: Option<CreatedPlayer> = None;
+        let outcome = self.with_repairing_transaction(|tx| {
+            let c = tx.create_player_inner(team_id, position)?;
+            created = Some(c);
+            Ok(OpOutcome {
+                edits: c.edits,
+                repairs: vec![format!(
+                    "created {} cluster wBIz={}: bio + companions + index + slot on team {team_id}",
+                    if c.goalie { "goalie" } else { "skater" },
+                    c.wbiz
+                )],
+            })
+        })?;
+        Ok((created.expect("inner sets created on Ok").wbiz, outcome))
+    }
+
+    /// The **unaudited** body of [`Self::create_player`]: mint the cluster (bio + kind-correct
+    /// companions + index + block-coherent slot) and return the new record indices. Callers must run
+    /// it **inside** a [`with_repairing_transaction`](Self::with_repairing_transaction) so the audit
+    /// still fires — `create_player` wraps a single one; a batch import wraps one around the *whole*
+    /// cart so N creates cost one audit and roll back atomically.
+    fn create_player_inner(&mut self, team_id: u64, position: u64) -> Result<CreatedPlayer, EditError> {
         if position > 4 {
-            return Err(EditError::InvalidValue {
-                what: "position",
-                value: position as i64,
-            });
+            return Err(EditError::InvalidValue { what: "position", value: position as i64 });
         }
         if self.model()?.team(team_id).is_none() {
-            return Err(EditError::InvalidValue {
-                what: "team_id (no such team)",
-                value: team_id as i64,
-            });
+            return Err(EditError::InvalidValue { what: "team_id (no such team)", value: team_id as i64 });
         }
         let new_pid = self.mint_id(ids::BIO, ids::PLAYER_ID)?;
         let new_vfeq = self.mint_id(ids::INDEX, ids::INDEX_KEY)?;
@@ -554,56 +626,109 @@ impl EditTransaction {
         let goalie = position == 4;
         let placement = self.eglu_placement(team_id)?;
 
-        let outcome = self.with_repairing_transaction(|tx| {
-            // Bio (ubPc): identity + position + team affiliation.
-            let bio = tx.append(ids::BIO)?;
-            tx.set_field(ids::BIO, bio, ids::PLAYER_ID, new_pid)?;
-            tx.set_field(ids::BIO, bio, ids::POSITION, position)?;
-            tx.set_field(ids::BIO, bio, ids::SLOT_TEAM, team_id)?; // ubPc.dXSB
+        // Bio (ubPc): identity + position + team affiliation.
+        let bio = self.append(ids::BIO)?;
+        self.set_field(ids::BIO, bio, ids::PLAYER_ID, new_pid)?;
+        self.set_field(ids::BIO, bio, ids::POSITION, position)?;
+        self.set_field(ids::BIO, bio, ids::SLOT_TEAM, team_id)?; // ubPc.dXSB
 
-            // Kind-correct companion pair, keyed on the new wBIz.
-            let (ai, equip) = if goalie {
-                (ids::GOALIE_AI, ids::GOALIE_EQUIP)
-            } else {
-                (ids::SKATER_AI, ids::SKATER_EQUIP)
-            };
-            let ai_rec = tx.append(ai)?;
-            tx.set_field(ai, ai_rec, ids::PLAYER_ID, new_pid)?;
-            let eq_rec = tx.append(equip)?;
-            tx.set_field(equip, eq_rec, ids::PLAYER_ID, new_pid)?;
+        // Kind-correct companion pair, keyed on the new wBIz.
+        let (ai, equip) = if goalie {
+            (ids::GOALIE_AI, ids::GOALIE_EQUIP)
+        } else {
+            (ids::SKATER_AI, ids::SKATER_EQUIP)
+        };
+        let ai_rec = self.append(ai)?;
+        self.set_field(ai, ai_rec, ids::PLAYER_ID, new_pid)?;
+        let eq_rec = self.append(equip)?;
+        self.set_field(equip, eq_rec, ids::PLAYER_ID, new_pid)?;
 
-            // Player index (ZBac): bridge the bio.
-            let zb = tx.append(ids::INDEX)?;
-            tx.set_field(ids::INDEX, zb, ids::INDEX_KEY, new_vfeq)?;
-            tx.set_field(ids::INDEX, zb, ids::INDEX_TO_BIO, new_pid)?;
+        // Player index (ZBac): bridge the bio.
+        let zb = self.append(ids::INDEX)?;
+        self.set_field(ids::INDEX, zb, ids::INDEX_KEY, new_vfeq)?;
+        self.set_field(ids::INDEX, zb, ids::INDEX_TO_BIO, new_pid)?;
 
-            // Roster slot (eGlu): install the occupant *inside the team's block* (block-coherent).
-            let (_slot, slot_edits) = match placement {
-                // Reuse a vacant in-block slot: it already carries this team's `dXSB` and an in-block
-                // `toWX`, so only the (clean) occupant is installed — no key mint, no shift.
-                SlotPlacement::Reuse(rec) => {
-                    let n = tx.occupy_slot(rec, new_vfeq)?;
-                    (rec, n)
+        // Roster slot (eGlu): install the occupant *inside the team's block* (block-coherent).
+        let slot_edits = match placement {
+            // Reuse a vacant in-block slot: it already carries this team's `dXSB` and an in-block
+            // `toWX`, so only the (clean) occupant is installed — no key mint, no shift.
+            SlotPlacement::Reuse(rec) => self.occupy_slot(rec, new_vfeq)?,
+            // Grow the block: insert a fresh record at the boundary, then wire key + occupant + team.
+            SlotPlacement::Insert(at) => {
+                self.insert_at(ids::ROSTER_LINES, at)?;
+                self.set_field(ids::ROSTER_LINES, at, ids::SLOT_KEY, new_slot_key)?;
+                self.set_field(ids::ROSTER_LINES, at, ids::SLOT_TO_INDEX, new_vfeq)?;
+                self.set_field(ids::ROSTER_LINES, at, ids::SLOT_TEAM, team_id)?;
+                3
+            }
+        };
+
+        Ok(CreatedPlayer { wbiz: new_pid, bio, companion_ai: ai_rec, goalie, edits: 7 + slot_edits })
+    }
+
+    /// Apply a batch import — many creates and/or updates — as **one** audited transaction and **one**
+    /// undo entry (Spike S3: per-op editing retains a full-DB snapshot per op, ~GB for a team-season;
+    /// batching keeps it to one). Every op's writes land inside a single
+    /// [`with_repairing_transaction`](Self::with_repairing_transaction), so the delta audit runs once
+    /// over the whole cart and the cart rolls back atomically on any violation. Cell values are
+    /// already validated + encoded by the caller (`studio-domain`), mirroring [`Self::set_cell_int`].
+    pub fn apply_import(&mut self, ops: &[ImportOp]) -> Result<OpOutcome, EditError> {
+        self.with_repairing_transaction(|tx| {
+            let mut total = OpOutcome::default();
+            for op in ops {
+                match op {
+                    ImportOp::Create { team, position, writes } => {
+                        let c = tx.create_player_inner(*team, *position)?;
+                        total.edits += c.edits;
+                        let companion = if c.goalie { ids::GOALIE_AI } else { ids::SKATER_AI };
+                        for w in writes {
+                            tx.apply_import_write(c.bio, c.companion_ai, companion, w)?;
+                            total.edits += 1;
+                        }
+                        total.repairs.push(format!("imported new player wBIz={}", c.wbiz));
+                    }
+                    ImportOp::Update { player_id, writes } => {
+                        let (bio, companion_rec, companion) = tx.locate_player_records(*player_id)?;
+                        for w in writes {
+                            tx.apply_import_write(bio, companion_rec, companion, w)?;
+                            total.edits += 1;
+                        }
+                        total.repairs.push(format!("updated player wBIz={player_id}"));
+                    }
                 }
-                // Grow the block: insert a fresh record at the boundary, then wire key + occupant + team.
-                SlotPlacement::Insert(at) => {
-                    tx.insert_at(ids::ROSTER_LINES, at)?;
-                    tx.set_field(ids::ROSTER_LINES, at, ids::SLOT_KEY, new_slot_key)?;
-                    tx.set_field(ids::ROSTER_LINES, at, ids::SLOT_TO_INDEX, new_vfeq)?;
-                    tx.set_field(ids::ROSTER_LINES, at, ids::SLOT_TEAM, team_id)?;
-                    (at, 3)
-                }
-            };
+            }
+            Ok(total)
+        })
+    }
 
-            Ok(OpOutcome {
-                edits: 7 + slot_edits,
-                repairs: vec![format!(
-                    "created {} cluster wBIz={new_pid}: bio + {ai}/{equip} + index + slot on team {team_id}",
-                    if goalie { "goalie" } else { "skater" }
-                )],
-            })
-        })?;
-        Ok((new_pid, outcome))
+    /// Resolve a player's `(bio_record, companion_record, companion_table)` from the current model.
+    fn locate_player_records(&self, player_id: u64) -> Result<(u32, u32, &'static str), EditError> {
+        let model = self.model()?;
+        let p = model.player(player_id).ok_or(EditError::NoSuchPlayer(player_id))?;
+        let (rec, table) = match p.kind {
+            PlayerKind::Skater => (p.skater_ai, ids::SKATER_AI),
+            PlayerKind::Goalie => (p.goalie_ai, ids::GOALIE_AI),
+        };
+        let companion = rec.ok_or(EditError::NoSuchPlayer(player_id))?;
+        Ok((p.bio_record, companion, table))
+    }
+
+    /// Route one [`ImportWrite`] to the bio or companion record and write the (pre-encoded) cell.
+    fn apply_import_write(
+        &mut self,
+        bio: u32,
+        companion_rec: u32,
+        companion_table: &str,
+        w: &ImportWrite,
+    ) -> Result<(), EditError> {
+        let (table, record) = match w.target {
+            ImportTarget::Bio => (ids::BIO, bio),
+            ImportTarget::Companion => (companion_table, companion_rec),
+        };
+        match &w.cell {
+            ImportCell::Int(v) => self.set_field(table, record, &w.field, *v),
+            ImportCell::Str(s) => self.set_field_str(table, record, &w.field, s),
+        }
     }
 
     /// Clone an existing player onto `to_team` — a full duplicate cluster with a fresh identity. Backs
