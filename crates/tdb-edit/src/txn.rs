@@ -925,30 +925,6 @@ impl EditTransaction {
             .ok_or(EditError::NoSuchPlayer(player_id))
     }
 
-    /// The index of the first record whose studio field equals `value`, if any.
-    fn find_record(
-        &self,
-        studio_table: &str,
-        studio_field: &str,
-        value: u64,
-    ) -> Result<Option<u32>, EditError> {
-        let view = self.working.clone();
-        let db = TdbFile::parse(&view).map_err(|e| EditError::Parse(e.to_string()))?;
-        let table = db
-            .table_canonical(studio_table)
-            .ok_or_else(|| EditError::UnknownTable(studio_table.to_string()))?;
-        let field = table
-            .fields
-            .iter()
-            .find(|f| f.id.canonical(db.endian) == studio_field)
-            .ok_or_else(|| EditError::UnknownField {
-                table: studio_table.to_string(),
-                field: studio_field.to_string(),
-            })?;
-        Ok((0..table.current_records as u32)
-            .find(|&i| db.read_u64(table, i, field) == Some(value)))
-    }
-
     /// The storage bit-width of a studio field.
     fn field_width(&self, studio_table: &str, studio_field: &str) -> Result<u32, EditError> {
         let view = self.working.clone();
