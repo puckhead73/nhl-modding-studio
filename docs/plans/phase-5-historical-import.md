@@ -174,7 +174,12 @@ preview-blocker wording.
 
 ---
 
-## Phase 5.1 — Backend: `EaSlugIndex` / `match_player` ⟵ gated on S2
+## Phase 5.1 — Backend: `EaSlugIndex` / `match_player` ⟵ gated on S2 — ✅ shipped 2026-07-27
+
+> Implemented in `crates/studio-domain/src/import.rs` (`EaSlugIndex` + `match_player`), exposed via
+> `EditSession::ea_slug_index()`; tests in `tests/ea_slug_index.rs`. Returns ambiguity-aware
+> `MatchCandidate`s (name+DOB high-confidence → name-only review), human-readable name + team. Index
+> **caching** is deferred to 5.4 (the accessor builds fresh today).
 
 A lazy index over the **open EA project's** players keyed by normalized name + DOB, reusing
 `tdb_fhm::slug::{normalize_name, normalize_dob}` so both sides fold identically. Composes EA DOB from
@@ -186,6 +191,16 @@ bio degrades to a name-only candidate flagged ambiguous; a corpus person absent 
 returns no candidate. Index build is lazy + cached (do not rebuild per cart item).
 
 ## Phase 5.2 — Backend: `studio-domain::import` — the two-phase pipeline ⟵ gated on S1/S3/S4
+
+> **Progress:** **5.2a — the batch seam is ✅ shipped 2026-07-27** (`EditTransaction::apply_import` +
+> `EditSession::apply_import`; `create_player` split into an unaudited `create_player_inner` + audited
+> wrapper so a whole cart is one audited transaction / one undo entry — Spike S3). `ImportOp` /
+> `ImportWrite` / `ImportTarget` / `ImportCell` are the lowered edit form; tests in
+> `tests/import_batch.rs` prove one-undo-entry, byte-identical lowering, and atomic rollback.
+> **Remaining (5.2b):** `ImportChangeSet`/`ImportItem`, `lower()` (corpus person-season → the encoded
+> `ImportOp`s: bio identity + height/weight + birthdate 0-index + bio-team **+1** + ratings via the S1
+> `edit_offset` + style/jersey), `preview_change_set` (diffs, the four audit predicates, capacity
+> projection + S4 blockers, 5.1 match candidates), and `commit_change_set` (ledger to 5.3).
 
 **There is no dry-run/preview anywhere in the stack today** — `commit()`
 ([txn.rs:1784](../../crates/tdb-edit/src/txn.rs#L1784)) is a CRC finalizer, not a two-phase gate.
