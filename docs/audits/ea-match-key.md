@@ -36,7 +36,7 @@ For each anchor, enumerate every bio (`player_summaries`), read the composed `he
 | nhl07/ps3 | 2250 | 100.0 | 0 | 1.2 | 1.0 |
 | nhl08/ps3 | 2962 | 100.0 | 0 | 6.3 | 6.1 |
 | nhl09/ps3 | 3968 | 99.7 | 10 | 5.1 | 4.8 |
-| nhl10/ps3 | — | — | — | — | — (SKIPPED — no committed `nhlng-meta.xml`) |
+| nhl10/ps3 | — | — | — | — | — (skipped at run time; meta since restored — see caveats) |
 | nhl11/ps3 | 5310 | 100.0 | 0 | 3.9 | 3.4 |
 | nhl12/ps3 | 5395 | 100.0 | 1 | 4.0 | 3.3 |
 | nhl13/ps3 | 5412 | 100.0 | 0 | 4.0 | 3.3 |
@@ -90,11 +90,14 @@ For each anchor, enumerate every bio (`player_summaries`), read the composed `he
 
 ## Caveats / follow-ups
 
-- **nhl10/ps3 not measured** — `anchors/ps3/nhl10/databases/nhlng-meta.xml` is **not committed** (the
-  `nhlng.db` is). nhl10 is the birthdate month/day **1-index** title, so it is exactly the anchor we'd
-  want covered. *Follow-up: commit the nhl10 meta and re-run before 5.1 sign-off.* Not an S2 blocker —
-  the probe already handles the 1-index (validated on nhl11+), and coverage/ambiguity are unlikely to
-  differ in kind.
+- **nhl10/ps3 meta restored (2026-07-26).** At measurement time
+  `anchors/ps3/nhl10/databases/nhlng-meta.xml` was missing, so nhl10 (the birthdate month/day
+  **1-index** title) was skipped. It has since been restored from EA's committed **Xbox360** nhl10
+  meta — the t3db meta is platform-invariant (PS3 ≡ Xbox360 metas are byte-identical for every title
+  that has both: nhl09/11/14/legacy verified) — and the match is confirmed by `nhl10_meta_smoke.rs`
+  (loads, enumerates a plausible roster, composes birthdates, probes 1-indexed). The full S2 table row
+  for nhl10 can be filled on the next `--ignored` sweep; coverage/ambiguity are not expected to differ
+  in kind from nhl09/nhl11.
 - The harness is `#[ignore]` (a full sweep runs >1h because `player_view` rebuilds the entity model
   per call). It is a spike/reproduction tool, not a suite gate. If it becomes a recurring check,
   switch the DOB read to a raw `qFnd`/`JKLp`/`Kswi` read to drop the per-player rebuild.

@@ -107,9 +107,9 @@ names the sub-phase it unblocks.
 > - **S2** → [ea-match-key.md](../audits/ea-match-key.md) — DOB is ~universal (≥99.4% every anchor),
 >   so name+DOB is a viable *primary* key, but **not unique** (0.1–6.1% residual, mostly multi-pool
 >   duplicates) → `match_player` returns candidates, per-item Match/Create is first-class.
->   `ea_match_key.rs` (`#[ignore]`). *Follow-up: `anchors/ps3/nhl10/databases/nhlng-meta.xml` is not
->   committed — nhl10 (the birthdate 1-index title) was skipped; commit its meta and re-run before 5.1
->   sign-off.*
+>   `ea_match_key.rs` (`#[ignore]`). *nhl10/ps3 meta restored 2026-07-26 (platform-invariant, from the
+>   committed Xbox360 nhl10 meta; verified by `nhl10_meta_smoke.rs`) — its S2 row fills on the next
+>   `--ignored` sweep.*
 > - **S3** → [import-history-cost.md](../audits/import-history-cost.md) — per-op writes retain N
 >   full-DB snapshots (≈2–8 GB for a mirrored team-season); **one import commit = one transaction/one
 >   undo entry**. New 5.2 seam: an import-scoped batch. `import_history_cost.rs` (`#[ignore]`).
