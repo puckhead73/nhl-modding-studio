@@ -18,6 +18,7 @@ use std::collections::{HashMap, HashSet};
 
 use tdb_core::{FieldDescriptor, Table, TdbFile};
 use tdb_defs::FieldMetaIndex;
+use tdb_edit::txn::{ImportCell, ImportOp, ImportTarget, ImportWrite};
 use tdb_enums::EnumRegistry;
 use tdb_fhm::slug::{normalize_name, person_slug};
 use tdb_relations::entity::ids;
@@ -243,4 +244,132 @@ impl EaSlugIndex {
             ambiguous: false, // set by match_player once the full set is known
         }
     }
+}
+
+// ---------------------------------------------------------------------------
+// Lowering: corpus person-season → encoded ImportOp (Phase 5.2b)
+// ---------------------------------------------------------------------------
+
+/// The bio + ratings for one corpus person-season, resolved into EA-ready **human** values. This is
+/// the seam between the corpus read (the adapter that fills it) and [`lower_create`], which encodes it
+/// against the target project — so lowering is testable with synthetic input, no corpus required.
+#[derive(Clone, Debug, Default)]
+pub struct PersonSeason {
+    pub first_name: String,
+    pub last_name: String,
+    /// EA position code 0..4 (4 = goalie). Written by the cluster create, not as a field write.
+    pub position: u64,
+    pub height_inches: Option<i64>,
+    pub weight_lb: Option<i64>,
+    /// Absolute `(year, month, day)`.
+    pub birthdate: Option<(i64, i64, i64)>,
+    pub jersey: Option<i64>,
+    /// `(companion studio field id, human rating on the display scale)`. The rating name→field
+    /// resolution is the corpus adapter's job (`compute_person_ratings` + the rating vocabulary).
+    pub ratings: Vec<(String, i64)>,
+}
+
+/// A field `lower_create` could not write, and why — surfaced in preview so a dropped value is never
+/// silent (S1 skip-and-report; `Capabilities`-style title gaps).
+#[derive(Clone, Debug)]
+pub struct SkippedField {
+    pub field: String,
+    pub reason: String,
+}
+
+/// Encode one human value on `table.field` as `human − edit_offset` and push it, or record why it was
+/// skipped. `edit_offset` is the field's own **probed** semantic offset (height +54, weight base,
+/// birthdate 0/1-index, rating +36/+50/0) read off record 0 — record-independent — so the write is the
+/// exact inverse of the display path (Spike S1). Out-of-range → skip-and-report, never a guessed write.
+#[allow(clippy::too_many_arguments)]
+fn push_semantic_int(
+    db: &TdbFile,
+    meta: &FieldMetaIndex,
+    enums: &EnumRegistry,
+    table: &Table,
+    target: ImportTarget,
+    writes: &mut Vec<ImportWrite>,
+    skipped: &mut Vec<SkippedField>,
+    field_id: &str,
+    human: i64,
+) {
+    let Some(f) = table.fields.iter().find(|f| f.id.canonical(db.endian) == field_id) else {
+        skipped.push(SkippedField { field: field_id.to_string(), reason: "field absent on this title".into() });
+        return;
+    };
+    let offset = read_field(db, meta, enums, table, 0, f).edit_offset.unwrap_or(0);
+    let decoded = human - offset;
+    match meta.field(&table.id.raw(), &f.id.raw()) {
+        Some(m) if m.validate(decoded).is_ok() => {
+            writes.push(ImportWrite {
+                target,
+                field: field_id.to_string(),
+                cell: ImportCell::Int(m.encode(decoded)),
+            });
+        }
+        _ => skipped.push(SkippedField {
+            field: field_id.to_string(),
+            reason: format!("human value {human} out of range (or field lacks metadata) on this title"),
+        }),
+    }
+}
+
+/// Lower one **CreateNew** person-season into an encoded [`ImportOp::Create`] against the open project.
+/// Position is written by the cluster create; identity strings, physicals, birthdate, jersey, and
+/// ratings become field writes with each target field's own probed offset. **Not yet mapped**
+/// (TODO 5.2b-next): enum-coded identity (nationality / handedness / birthplace) and player style, and
+/// the `Match(existing)` update path. Returns the op + a skip report.
+pub fn lower_create(
+    db: &TdbFile,
+    meta: &FieldMetaIndex,
+    enums: &EnumRegistry,
+    person: &PersonSeason,
+    target_team: u64,
+) -> Option<(ImportOp, Vec<SkippedField>)> {
+    let bio = db.table_canonical(ids::BIO)?;
+    let mut writes: Vec<ImportWrite> = Vec::new();
+    let mut skipped: Vec<SkippedField> = Vec::new();
+
+    // Identity strings (inline, no offset).
+    for (name, text) in [("firstname", &person.first_name), ("lastname", &person.last_name)] {
+        match descriptor_by_name(meta, bio, name) {
+            Some(f) => writes.push(ImportWrite {
+                target: ImportTarget::Bio,
+                field: f.id.canonical(db.endian),
+                cell: ImportCell::Str(text.clone()),
+            }),
+            None => skipped.push(SkippedField {
+                field: name.to_string(),
+                reason: "field absent on this title".into(),
+            }),
+        }
+    }
+
+    // Physicals + jersey (each via its own probed edit_offset).
+    if let Some(h) = person.height_inches {
+        push_semantic_int(db, meta, enums, bio, ImportTarget::Bio, &mut writes, &mut skipped, "ypBQ", h);
+    }
+    if let Some(w) = person.weight_lb {
+        push_semantic_int(db, meta, enums, bio, ImportTarget::Bio, &mut writes, &mut skipped, "sNZW", w);
+    }
+    if let Some(j) = person.jersey {
+        push_semantic_int(db, meta, enums, bio, ImportTarget::Bio, &mut writes, &mut skipped, "sVRt", j);
+    }
+
+    // Birthdate — each component decodes with the probed year base / month-day 0-or-1 index.
+    if let Some((y, m, d)) = person.birthdate {
+        push_semantic_int(db, meta, enums, bio, ImportTarget::Bio, &mut writes, &mut skipped, "qFnd", y);
+        push_semantic_int(db, meta, enums, bio, ImportTarget::Bio, &mut writes, &mut skipped, "JKLp", m);
+        push_semantic_int(db, meta, enums, bio, ImportTarget::Bio, &mut writes, &mut skipped, "Kswi", d);
+    }
+
+    // Ratings on the kind-correct companion (Spike S1 rating edit_offset).
+    let companion_id = if person.position == 4 { ids::GOALIE_AI } else { ids::SKATER_AI };
+    if let Some(comp) = db.table_canonical(companion_id) {
+        for (fid, human) in &person.ratings {
+            push_semantic_int(db, meta, enums, comp, ImportTarget::Companion, &mut writes, &mut skipped, fid, *human);
+        }
+    }
+
+    Some((ImportOp::Create { team: target_team, position: person.position, writes }, skipped))
 }
