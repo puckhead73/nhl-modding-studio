@@ -207,13 +207,18 @@ returns no candidate. Index build is lazy + cached (do not rebuild per cart item
 >   audit over the previewed state, skip report, exact commit bytes) + `commit_import`.
 >   `tests/import_preview.rs`: preview doesn't mutate, and **commit is byte-identical to preview** on a
 >   mixed Create+Match cart.
-> - **Remaining (5.2b-next):** enum-coded identity (nationality / handedness / birthplace) + player
->   style; `ImportItem`/`ImportChangeSet` orchestration + the **corpus adapter** filling `PersonSeason`
->   (corpus DB not present locally — lowering is synthetic-tested by design); a **full per-table
->   capacity projection + S4 blockers** and per-item **diffs** in the preview; 5.1 match candidates in
->   the preview; ledger to 5.3 on commit. **Verify (open):** the bio-team **+1** (Correction 3) — the
->   round-trip test confirms roster membership via `eGlu`; confirm `ubPc.dXSB` reads back to the target
->   team on a 1-indexed title before relying on it.
+> - **5.2b corpus adapter ✅** — `person_season_from_corpus` (person_detail bio + season height/weight
+>   + dob + EA position code + ratings via `compute_person_ratings`). The formula's `ea_key` display
+>   names are bridged to on-disk field suffixes by an **explicit, verified `ea_key→suffix` table**
+>   (25 skater + 18 goalie; the 3 AI biases + goalie "Angles" deferred, not guessed). **Proven
+>   end-to-end** against the real `corpus/historical.db` (`tests/import_corpus_e2e.rs`, `#[ignore]`): a
+>   corpus person lowers into nhl14 with bio + physicals + 25 ratings, 0 skips, on the roster.
+> - **Remaining (5.2b-next):** `ImportItem`/`ImportChangeSet` orchestration (map a cart of items → ops
+>   via the adapter + `lower_create`/`lower_update`) driving cart-level preview/commit; enum-coded
+>   identity (nationality / handedness / birthplace) + style + the AI biases; **full per-table capacity
+>   projection + S4 blockers** and per-item **diffs** + 5.1 match candidates in the preview; ledger to
+>   5.3 on commit. **Verify (open):** the bio-team **+1** (Correction 3) — roster membership is
+>   confirmed via `eGlu`; confirm `ubPc.dXSB` reads back to the target team before relying on it.
 
 **There is no dry-run/preview anywhere in the stack today** — `commit()`
 ([txn.rs:1784](../../crates/tdb-edit/src/txn.rs#L1784)) is a CRC finalizer, not a two-phase gate.
