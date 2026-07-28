@@ -429,3 +429,142 @@ pub fn lower_update(
         person_writes(db, meta, enums, bio, db.table_canonical(companion_id), person);
     Some((ImportOp::Update { player_id: ea_player_id, writes }, skipped))
 }
+
+// ---------------------------------------------------------------------------
+// Corpus adapter: (person_id, season_year) → PersonSeason (Phase 5.2b)
+// ---------------------------------------------------------------------------
+
+/// EA player-position code (`ubPc.vjla`) for a corpus `C/LW/RW/D/G` label — mirrors
+/// `tdb_relations::Position::from_raw` (0 Center, 1 LW, 2 RW, 3 Defense, 4 Goalie).
+fn ea_position_code(label: &str) -> u64 {
+    match label {
+        "LW" => 1,
+        "RW" => 2,
+        "D" | "LD" | "RD" => 3,
+        "G" => 4,
+        _ => 0, // "C" and anything unexpected → Center
+    }
+}
+
+/// Parse a corpus `dob` (`YYYY-MM-DD`, or `?`/blank) into absolute `(year, month, day)`.
+fn parse_dob(dob: &str) -> Option<(i64, i64, i64)> {
+    let mut it = dob.trim().split('-');
+    match (it.next(), it.next(), it.next()) {
+        (Some(y), Some(m), Some(d)) => Some((
+            y.trim().parse().ok()?,
+            m.trim().parse().ok()?,
+            d.trim().parse().ok()?,
+        )),
+        _ => None,
+    }
+}
+
+/// Bridge the formula's EA-attribute **display name** (`EaRating.ea_key`) to the on-disk rating-field
+/// **suffix** (`rating_suffix(name)`). The two vocabularies mostly agree but diverge on a handful of
+/// spellings (`Aggressiveness`→`aggression`, `Fighting Skill`→`fightingskill`), so the mapping is
+/// explicit and verified against `attributes::{SKATER,GOALIE}_LABELS`. The three AI **biases** (0..15,
+/// id-keyed) and goalie **Angles** (no unambiguous field) are intentionally absent → skip, not guess.
+const SKATER_EA_TO_SUFFIX: &[(&str, &str)] = &[
+    ("Speed", "speed"), ("Body Checking", "bodychecking"), ("Endurance", "endurance"),
+    ("Puck Control", "puckcontrol"), ("Passing", "passing"), ("Slapshot Power", "slapshotpower"),
+    ("Slapshot Accuracy", "slapaccuracy"), ("Wristshot Power", "wristshotpower"),
+    ("Wristshot Accuracy", "wristaccuracy"), ("Agility", "agility"), ("Strength", "strength"),
+    ("Acceleration", "acceleration"), ("Balance", "balance"), ("Faceoffs", "faceoffs"),
+    ("Durability", "durability"), ("Deking", "deking"), ("Aggressiveness", "aggression"),
+    ("Poise", "poise"), ("Hand-Eye", "handeye"), ("Shot Blocking", "shotblocking"),
+    ("Offensive Awareness", "offawareness"), ("Defensive Awareness", "defawareness"),
+    ("Discipline", "discipline"), ("Fighting Skill", "fightingskill"), ("Stickchecking", "stickchecking"),
+];
+const GOALIE_EA_TO_SUFFIX: &[(&str, &str)] = &[
+    ("Glove Low", "gsl"), ("Glove High", "gsh"), ("Stick Low", "ssl"), ("Stick High", "ssh"),
+    ("Speed", "speed"), ("Agility", "agility"), ("Consistency", "consistency"),
+    ("Pokechecking", "pokecheck"), ("Endurance", "endurance"), ("Breakaways", "breakaway"),
+    ("Rebounds", "reboundcontrol"), ("Shot Recovery", "shotrecover"), ("Poise", "poise"),
+    ("Passing", "passing"), ("Puck Playing Frequency", "puckplayfrequency"),
+    ("Aggressiveness", "aggression"), ("Durability", "durability"), ("Vision", "vision"),
+];
+
+/// Map a computed EA rating set onto the **target** companion table's field ids, via the explicit
+/// `ea_key → suffix` bridge, then `suffix → field` per the loaded title. Only standard 0..99 ratings
+/// are mapped; biases and unmapped attrs are dropped (deferred, not guessed). Returns
+/// `(field_id, human_value)` pairs ready for `PersonSeason.ratings`.
+fn resolve_ratings(
+    set: &tdb_formula::EaRatingSet,
+    db: &TdbFile,
+    meta: &FieldMetaIndex,
+    goalie: bool,
+) -> Vec<(String, i64)> {
+    let table_id = if goalie { ids::GOALIE_AI } else { ids::SKATER_AI };
+    let Some(comp) = db.table_canonical(table_id) else {
+        return Vec::new();
+    };
+    let bridge = if goalie { GOALIE_EA_TO_SUFFIX } else { SKATER_EA_TO_SUFFIX };
+
+    // suffix → this title's field id, for the companion's rating fields.
+    let mut field_of: HashMap<&str, String> = HashMap::new();
+    for f in &comp.fields {
+        if let Some(m) = meta.field(&comp.id.raw(), &f.id.raw()) {
+            if let Some(suffix) = crate::attributes::rating_suffix(&m.name) {
+                field_of.insert(suffix, f.id.canonical(db.endian));
+            }
+        }
+    }
+
+    let mut out = Vec::new();
+    for r in &set.ratings {
+        let Some(v) = r.value else { continue };
+        let Some((_, suffix)) = bridge.iter().find(|(k, _)| *k == r.ea_key) else { continue };
+        if let Some(fid) = field_of.get(suffix) {
+            out.push((fid.clone(), v as i64));
+        }
+    }
+    out
+}
+
+/// Build a [`PersonSeason`] for `(person_id, season_year)` from the corpus, with ratings resolved to
+/// the **target** project's companion fields (the corpus→EA bridge — the first read that touches both
+/// databases). Height/weight come from the season row when present, else the person's latest bio;
+/// ratings are computed via [`crate::formula::compute_person_ratings`] under `profile`/`maxima` and
+/// mapped by rating key. Jersey is left to the cart (`ImportItem`). Enum-coded identity
+/// (nationality/handedness/birthplace) + style are **not yet** mapped. Returns `None` if the person is
+/// absent from the corpus.
+#[allow(clippy::too_many_arguments)]
+pub fn person_season_from_corpus(
+    corpus: &crate::historical::FhmCorpus,
+    person_id: i64,
+    season_year: i64,
+    profile: &tdb_formula::FormulaProfile,
+    maxima: &tdb_fhm_store::AttributeMaxima,
+    db: &TdbFile,
+    meta: &FieldMetaIndex,
+) -> Result<Option<PersonSeason>, crate::FhmError> {
+    let Some(detail) = corpus.person_detail(person_id)? else {
+        return Ok(None);
+    };
+
+    let position = if detail.is_goalie {
+        4
+    } else {
+        detail.position.as_deref().map(ea_position_code).unwrap_or(0)
+    };
+    let season = detail.seasons.iter().find(|s| s.season_year == season_year);
+    let height_inches = season.and_then(|s| s.height).or(detail.height);
+    let weight_lb = season.and_then(|s| s.weight).or(detail.weight);
+    let birthdate = parse_dob(&detail.dob);
+
+    let ratings = match crate::formula::compute_person_ratings(corpus, person_id, season_year, profile, maxima)? {
+        Some(cr) => resolve_ratings(&cr.set, db, meta, detail.is_goalie),
+        None => Vec::new(),
+    };
+
+    Ok(Some(PersonSeason {
+        first_name: detail.first_name,
+        last_name: detail.last_name,
+        position,
+        height_inches,
+        weight_lb,
+        birthdate,
+        jersey: None,
+        ratings,
+    }))
+}

@@ -58,8 +58,8 @@ pub use extract::{extract_install, find_big_archives, ExtractSummary};
 pub use field_profile::{CellControl, EntityFieldProfile, ProfileCell, ProfileSection};
 pub use historical::{FhmCorpus, FhmError};
 pub use import::{
-    lower_create, lower_update, EaSlugIndex, ImportPreview, MatchCandidate, MatchConfidence,
-    PersonSeason, SkippedField,
+    lower_create, lower_update, person_season_from_corpus, EaSlugIndex, ImportPreview,
+    MatchCandidate, MatchConfidence, PersonSeason, SkippedField,
 };
 pub use formula::{
     compute_person_career_ratings, compute_person_ratings, default_profile, CareerRatings,
