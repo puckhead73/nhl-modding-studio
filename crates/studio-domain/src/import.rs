@@ -277,6 +277,23 @@ pub struct SkippedField {
     pub reason: String,
 }
 
+/// The dry-run result of a change set: what commit *would* do, computed without mutating the session
+/// (Phase 5.2 two-phase pipeline). Because commit re-runs the identical lowered ops from the same
+/// state, `previewed` is byte-for-byte what commit writes — the pipeline's headline invariant.
+#[derive(Clone, Debug)]
+pub struct ImportPreview {
+    /// Player count before / after (the capacity signal; a fuller per-table projection is 5.2b-next).
+    pub players_before: usize,
+    pub players_after: usize,
+    /// The four db-only audit predicates over the *previewed* state, resolved to human-readable text.
+    pub audit: crate::audit::HumanReport,
+    /// Fields that could not be written (out of range / absent on this title).
+    pub skipped: Vec<SkippedField>,
+    /// The exact bytes commit would produce (CRCs finalized) — proves preview == commit and lets a
+    /// caller hash the outcome.
+    pub previewed: Vec<u8>,
+}
+
 /// Encode one human value on `table.field` as `human − edit_offset` and push it, or record why it was
 /// skipped. `edit_offset` is the field's own **probed** semantic offset (height +54, weight base,
 /// birthdate 0/1-index, rating +36/+50/0) read off record 0 — record-independent — so the write is the
@@ -314,23 +331,21 @@ fn push_semantic_int(
     }
 }
 
-/// Lower one **CreateNew** person-season into an encoded [`ImportOp::Create`] against the open project.
-/// Position is written by the cluster create; identity strings, physicals, birthdate, jersey, and
-/// ratings become field writes with each target field's own probed offset. **Not yet mapped**
-/// (TODO 5.2b-next): enum-coded identity (nationality / handedness / birthplace) and player style, and
-/// the `Match(existing)` update path. Returns the op + a skip report.
-pub fn lower_create(
+/// Build the encoded field writes for a person-season against `bio` + the kind-correct `companion`
+/// table — shared by the Create and Match lowerings. Each field uses its own probed `edit_offset`;
+/// out-of-range or absent fields are skip-and-reported, never guessed.
+fn person_writes(
     db: &TdbFile,
     meta: &FieldMetaIndex,
     enums: &EnumRegistry,
+    bio: &Table,
+    companion: Option<&Table>,
     person: &PersonSeason,
-    target_team: u64,
-) -> Option<(ImportOp, Vec<SkippedField>)> {
-    let bio = db.table_canonical(ids::BIO)?;
+) -> (Vec<ImportWrite>, Vec<SkippedField>) {
     let mut writes: Vec<ImportWrite> = Vec::new();
     let mut skipped: Vec<SkippedField> = Vec::new();
 
-    // Identity strings (inline, no offset).
+    // Identity strings (no offset).
     for (name, text) in [("firstname", &person.first_name), ("lastname", &person.last_name)] {
         match descriptor_by_name(meta, bio, name) {
             Some(f) => writes.push(ImportWrite {
@@ -364,12 +379,53 @@ pub fn lower_create(
     }
 
     // Ratings on the kind-correct companion (Spike S1 rating edit_offset).
-    let companion_id = if person.position == 4 { ids::GOALIE_AI } else { ids::SKATER_AI };
-    if let Some(comp) = db.table_canonical(companion_id) {
+    if let Some(comp) = companion {
         for (fid, human) in &person.ratings {
             push_semantic_int(db, meta, enums, comp, ImportTarget::Companion, &mut writes, &mut skipped, fid, *human);
         }
     }
 
+    (writes, skipped)
+}
+
+/// Lower one **CreateNew** person-season into an encoded [`ImportOp::Create`] against the open project.
+/// Position is written by the cluster create; identity strings, physicals, birthdate, jersey, and
+/// ratings become field writes with each target field's own probed offset. **Not yet mapped**
+/// (TODO 5.2b-next): enum-coded identity (nationality / handedness / birthplace) and player style.
+/// Returns the op + a skip report.
+pub fn lower_create(
+    db: &TdbFile,
+    meta: &FieldMetaIndex,
+    enums: &EnumRegistry,
+    person: &PersonSeason,
+    target_team: u64,
+) -> Option<(ImportOp, Vec<SkippedField>)> {
+    let bio = db.table_canonical(ids::BIO)?;
+    let companion_id = if person.position == 4 { ids::GOALIE_AI } else { ids::SKATER_AI };
+    let (writes, skipped) =
+        person_writes(db, meta, enums, bio, db.table_canonical(companion_id), person);
     Some((ImportOp::Create { team: target_team, position: person.position, writes }, skipped))
+}
+
+/// Lower one **Match(existing)** person-season into an encoded [`ImportOp::Update`] over the matched
+/// EA player's own records — no allocation. The companion table follows the **existing** player's kind
+/// (a matched player keeps its cluster shape); position itself is not rewritten. Returns `None` if the
+/// player id is unknown.
+pub fn lower_update(
+    db: &TdbFile,
+    meta: &FieldMetaIndex,
+    enums: &EnumRegistry,
+    person: &PersonSeason,
+    ea_player_id: u64,
+) -> Option<(ImportOp, Vec<SkippedField>)> {
+    let bio = db.table_canonical(ids::BIO)?;
+    let model = RosterModel::build(db).ok()?;
+    let player = model.player(ea_player_id)?;
+    let companion_id = match player.kind {
+        tdb_relations::PlayerKind::Skater => ids::SKATER_AI,
+        tdb_relations::PlayerKind::Goalie => ids::GOALIE_AI,
+    };
+    let (writes, skipped) =
+        person_writes(db, meta, enums, bio, db.table_canonical(companion_id), person);
+    Some((ImportOp::Update { player_id: ea_player_id, writes }, skipped))
 }

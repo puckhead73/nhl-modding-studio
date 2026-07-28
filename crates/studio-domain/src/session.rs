@@ -575,6 +575,36 @@ impl EditSession {
         self.run(|tx| tx.apply_import(ops))
     }
 
+    /// **Dry-run** a cart: lower + apply the ops against a throwaway transaction and report what commit
+    /// *would* do — player-count delta, the audit over the resulting state, the skip report, and the
+    /// exact bytes commit would write — **without** mutating this session (Phase 5.2 preview). Because
+    /// [`commit_import`](Self::commit_import) re-runs the same ops from the same state, `previewed` is
+    /// byte-identical to the committed db.
+    pub fn preview_import(
+        &self,
+        ops: &[tdb_edit::txn::ImportOp],
+        skipped: Vec<crate::import::SkippedField>,
+    ) -> Result<crate::import::ImportPreview> {
+        let players_before = self.build_model(&TdbFile::parse(&self.working)?)?.players.len();
+
+        let mut tx = EditTransaction::begin(&self.working)?;
+        tx.set_allow_pre_existing_violations(self.allow_pre_existing_violations);
+        tx.apply_import(ops)?;
+        let previewed = tx.commit()?; // finalize CRCs → exactly what commit writes
+
+        let db = TdbFile::parse(&previewed)?;
+        let players_after = self.build_model(&db)?.players.len();
+        let raw = validate_invariants(&db, self.project.relations(), self.project.enums());
+        let audit = crate::audit::humanize(&db, self.project.meta(), self.project.enums(), raw.findings);
+        Ok(crate::import::ImportPreview { players_before, players_after, audit, skipped, previewed })
+    }
+
+    /// Commit a previewed cart for real — the same ops, one transaction, one undo entry. Alias of
+    /// [`apply_import`](Self::apply_import), named for the two-phase pipeline.
+    pub fn commit_import(&mut self, ops: &[tdb_edit::txn::ImportOp]) -> Result<OpOutcome> {
+        self.apply_import(ops)
+    }
+
     /// Clone an existing player onto a team (deep-copy of bio + companions); returns the new `wBIz`.
     pub fn clone_player(&mut self, source_player: u64, to_team: u64) -> Result<(u64, OpOutcome)> {
         self.run(|tx| tx.clone_player(source_player, to_team))
