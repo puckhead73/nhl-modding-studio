@@ -192,15 +192,28 @@ returns no candidate. Index build is lazy + cached (do not rebuild per cart item
 
 ## Phase 5.2 — Backend: `studio-domain::import` — the two-phase pipeline ⟵ gated on S1/S3/S4
 
-> **Progress:** **5.2a — the batch seam is ✅ shipped 2026-07-27** (`EditTransaction::apply_import` +
-> `EditSession::apply_import`; `create_player` split into an unaudited `create_player_inner` + audited
-> wrapper so a whole cart is one audited transaction / one undo entry — Spike S3). `ImportOp` /
-> `ImportWrite` / `ImportTarget` / `ImportCell` are the lowered edit form; tests in
-> `tests/import_batch.rs` prove one-undo-entry, byte-identical lowering, and atomic rollback.
-> **Remaining (5.2b):** `ImportChangeSet`/`ImportItem`, `lower()` (corpus person-season → the encoded
-> `ImportOp`s: bio identity + height/weight + birthdate 0-index + bio-team **+1** + ratings via the S1
-> `edit_offset` + style/jersey), `preview_change_set` (diffs, the four audit predicates, capacity
-> projection + S4 blockers, 5.1 match candidates), and `commit_change_set` (ledger to 5.3).
+> **Progress (2026-07-27):**
+> - **5.2a — batch seam ✅** (`EditTransaction::apply_import` + `EditSession::apply_import`;
+>   `create_player` split into unaudited `create_player_inner` + audited wrapper → a whole cart is one
+>   audited transaction / one undo entry, Spike S3). `ImportOp`/`ImportWrite`/`ImportTarget`/`ImportCell`
+>   are the lowered edit form. `tests/import_batch.rs`: one-undo-entry, byte-identical lowering, atomic
+>   rollback.
+> - **5.2b lowering core ✅** — `PersonSeason` (corpus-extracted seam) + `lower_create` (CreateNew) +
+>   `lower_update` (Match, no allocation), sharing `person_writes`. Bio identity + height (+54) + weight
+>   (base) + birthdate (probed 0/1-index) + jersey + ratings (S1 `edit_offset`), skip-and-report on
+>   out-of-range. `tests/import_lower.rs` round-trips every field on nhl14 **and nhl10** (the 1-index
+>   drift).
+> - **5.2 two-phase pipeline ✅** — `EditSession::preview_import` (non-mutating dry-run: player-delta,
+>   audit over the previewed state, skip report, exact commit bytes) + `commit_import`.
+>   `tests/import_preview.rs`: preview doesn't mutate, and **commit is byte-identical to preview** on a
+>   mixed Create+Match cart.
+> - **Remaining (5.2b-next):** enum-coded identity (nationality / handedness / birthplace) + player
+>   style; `ImportItem`/`ImportChangeSet` orchestration + the **corpus adapter** filling `PersonSeason`
+>   (corpus DB not present locally — lowering is synthetic-tested by design); a **full per-table
+>   capacity projection + S4 blockers** and per-item **diffs** in the preview; 5.1 match candidates in
+>   the preview; ledger to 5.3 on commit. **Verify (open):** the bio-team **+1** (Correction 3) — the
+>   round-trip test confirms roster membership via `eGlu`; confirm `ubPc.dXSB` reads back to the target
+>   team on a 1-indexed title before relying on it.
 
 **There is no dry-run/preview anywhere in the stack today** — `commit()`
 ([txn.rs:1784](../../crates/tdb-edit/src/txn.rs#L1784)) is a CRC finalizer, not a two-phase gate.
