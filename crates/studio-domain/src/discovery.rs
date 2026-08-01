@@ -28,10 +28,17 @@ pub struct TitleIds {
     pub xbox: &'static str,
 }
 
-/// Look up the product/title codes for a studio game id (`nhl10` … `nhllegacy`). Returns `None` for
+/// Look up the product/title codes for a studio game id (`nhl07` … `nhllegacy`). Returns `None` for
 /// titles outside the proven PS3/Xbox range (PS4 / Recomp use the legacy file-pick path).
+///
+/// NHL 07–09 are **Xbox 360 only** in this tool (their next-gen release was 360-native), so their PS3
+/// product codes are empty — [`detect_ps3`] guards against that and is never reached for them anyway
+/// (the catalog offers only Xbox). The Xbox title ids are read from each title's `default.xex`.
 pub fn title_ids(game_id: &str) -> Option<TitleIds> {
     let ids = match game_id {
+        "nhl07" => ("", "", "454107F3"),
+        "nhl08" => ("", "", "45410820"),
+        "nhl09" => ("", "", "45410872"),
         "nhl10" => ("BLUS30345", "BLES00567", "454108BA"),
         "nhl11" => ("BLUS30568", "BLES00984", "454108FD"),
         "nhl12" => ("BLUS30791", "BLES01357", "45410964"),
@@ -48,21 +55,30 @@ pub fn title_ids(game_id: &str) -> Option<TitleIds> {
     })
 }
 
-/// The PS4 content ids (`CUSA…`) for a studio game id, used to locate a title's data/saves on PS4.
-/// A title can have several (regional variants, like PS3's BLUS/BLES); discovery tries each. Empty
-/// slice for titles with no recorded id.
+/// The PS4 content ids (`CUSA…`) for a studio game id, used as a **fast path** to
+/// locate a title's data/saves on PS4. Content ids are region-specific, so this
+/// list can never be exhaustive — discovery also resolves the real id from each
+/// install's `param.sfo` TITLE (see [`ps4_scan_cusa_by_year`]), which is
+/// authoritative. A title can have several known variants; discovery tries each.
 pub fn ps4_title_ids(game_id: &str) -> &'static [&'static str] {
-    // Each title's known content ids: US first, then EU (regional variants), as the user provided.
+    // Verified against real installs first, then other known regional variants.
     match game_id {
         "nhl15" => &["CUSA00561", "CUSA50061"],
         "nhl16" => &["CUSA01909"],
-        "nhl17" => &["CUSA04330"],
-        "nhl18" => &["CUSA07580"],
+        "nhl17" => &["CUSA04326", "CUSA04330"],
+        "nhl18" => &["CUSA07569", "CUSA07580"],
         "nhl19" => &["CUSA11116"],
-        "nhl20" => &["CUSA15447"],
+        "nhl20" => &["CUSA15439", "CUSA15447"],
         "nhl21" => &["CUSA18182"],
         _ => &[],
     }
+}
+
+/// The NHL title year for a studio PS4 game id (`nhl17` → 17). Used to identify a
+/// title's install folder by its `param.sfo` TITLE when the region-specific
+/// content id isn't in the known list above.
+fn ps4_title_year(game_id: &str) -> Option<u32> {
+    game_id.strip_prefix("nhl").and_then(|y| y.parse().ok())
 }
 
 /// One discovered save container, classified by its content.
@@ -150,7 +166,7 @@ pub fn detect_install(
                 detect_xbox(root, &ids, save_path, &mut report);
             }
         }
-        Platform::Ps4 => detect_ps4(root, ps4_title_ids(game_id), &mut report),
+        Platform::Ps4 => detect_ps4(root, game_id, ps4_title_ids(game_id), &mut report),
         // Recomp (Xbox-derived): a game folder (packed like Xbox) plus an explicit save path.
         Platform::Recomp => detect_recomp(root, save_path, &mut report),
     }
@@ -158,16 +174,25 @@ pub fn detect_install(
     report.finish()
 }
 
-/// Set `extract_needed` when the editable db isn't loose yet but `.big` archives are present in
-/// `install_dir` — i.e. the user pointed at a valid but un-extracted install.
+/// Set `extract_needed` when a required db isn't loose yet but `.big` archives are present in
+/// `install_dir` — i.e. the user pointed at a valid but un-extracted install. This covers two shapes:
+/// the whole db is packed (Xbox nhl10+, Recomp), and — on nhl08/09 — the main `nhlng.db` ships loose
+/// but the localization `nhl_eng_us.db` lives inside a `.big` (`fe/loc/`), so extraction is still
+/// needed to resolve human-readable strings.
 fn note_extract_needed(install_dir: &Path, report: &mut InstallReport) {
-    if report.db_paths.nhlng.is_none() && !crate::extract::find_big_archives(install_dir).is_empty()
-    {
+    let missing_db =
+        report.db_paths.nhlng.is_none() || report.db_paths.localization.is_none();
+    if missing_db && !crate::extract::find_big_archives(install_dir).is_empty() {
         report.extract_needed = true;
     }
 }
 
 fn detect_ps3(root: &Path, ids: &TitleIds, report: &mut InstallReport) {
+    // Xbox-only titles (NHL 07–09) carry empty PS3 codes; nothing to detect and an empty prefix
+    // would match every save folder in the scan below, so bail early.
+    if ids.ps3_us.is_empty() && ids.ps3_eu.is_empty() {
+        return;
+    }
     // Databases: <root>/dev_hdd0/game/<TITLEID>/USRDIR (US then EU).
     let game_dir = root.join("dev_hdd0").join("game");
     let install_dir = [ids.ps3_us, ids.ps3_eu]
@@ -299,7 +324,23 @@ fn scan_saves(path: &Path) -> Vec<SaveSlot> {
 /// metadata + localization, once the big files are extracted) and saves under
 /// `<root>/user/savedata/<user>/<CUSA>/<SaveDir>/DATA`. The user points at the shadPS4 folder (or the
 /// savedata folder); we resolve both trees by the title's `CUSA…` content id.
-fn detect_ps4(root: &Path, cusas: &[&str], report: &mut InstallReport) {
+///
+/// Content ids are region-specific, so the hardcoded `known` list is only a fast
+/// path. We also scan `<root>/Games/*` for the CUSA whose `param.sfo` TITLE year
+/// matches this title (authoritative), and fold that into the candidate set —
+/// this is what lets NHL 17+ resolve on installs whose real id differs from the
+/// recorded one. The id discovered from the game tree is reused for savedata.
+fn detect_ps4(root: &Path, game_id: &str, known: &[&str], report: &mut InstallReport) {
+    let mut candidates: Vec<String> = known.iter().map(|s| s.to_string()).collect();
+    if let Some(year) = ps4_title_year(game_id) {
+        for cusa in ps4_scan_cusa_by_year(root, year) {
+            if !candidates.iter().any(|c| c.eq_ignore_ascii_case(&cusa)) {
+                candidates.push(cusa);
+            }
+        }
+    }
+    let cusas: Vec<&str> = candidates.iter().map(|s| s.as_str()).collect();
+
     // --- Game files (need the big files extracted) — first CUSA variant that resolves a game dir ---
     if let Some(game_dir) = cusas.iter().find_map(|c| ps4_game_dir(root, c)) {
         // Fast path: the standard t3db / loc locations; fall back to a bounded recursive search.
@@ -319,6 +360,18 @@ fn detect_ps4(root: &Path, cusas: &[&str], report: &mut InstallReport) {
             .or_else(|| find_file(&game_dir, "eng_us.db", 9))
             .map(path_string);
         note_extract_needed(&game_dir, report);
+        // PS4 ships its databases *loose* but keeps the art (meshes / textures / portraits)
+        // packed inside the databigs, so a resolved db is **not** proof the install is fully
+        // unpacked — unlike Xbox, where the db and art come out of the same `.big` set. Flag
+        // extraction whenever the kettle art tree is still missing but `.big` archives are
+        // present, so asset editing has files to work with. (Extraction leaves the `.big`
+        // files in place, so `complete()` — not their absence — is the "already unpacked" signal.)
+        if !report.extract_needed
+            && !crate::assets::AssetRoots::resolve(&game_dir, Platform::Ps4).complete()
+            && !crate::extract::find_big_archives(&game_dir).is_empty()
+        {
+            report.extract_needed = true;
+        }
     }
 
     // --- Saves: each <SaveDir>/DATA under the title's savedata CUSA folder (first variant found) ---
@@ -356,6 +409,97 @@ fn ps4_game_dir(root: &Path, cusa: &str) -> Option<PathBuf> {
     child_ci(root, "Games")
         .and_then(|g| child_ci(&g, cusa))
         .or_else(|| child_ci(root, cusa).filter(|c| c.join("nhl").is_dir()))
+}
+
+/// Scan `<root>/Games/*` (and `<root>/*`, for a directly-picked Games folder) for
+/// `CUSA…` install dirs whose `param.sfo` TITLE year matches `year`, returning
+/// their content-id folder names. This is the authoritative title→id resolution:
+/// content ids are region-specific and can't be exhaustively hardcoded, but every
+/// install carries its title in `sce_sys/param.sfo`.
+fn ps4_scan_cusa_by_year(root: &Path, year: u32) -> Vec<String> {
+    let mut out: Vec<String> = Vec::new();
+    let mut bases: Vec<PathBuf> = Vec::new();
+    if let Some(games) = child_ci(root, "Games") {
+        bases.push(games);
+    }
+    bases.push(root.to_path_buf());
+    for base in bases {
+        let Ok(entries) = std::fs::read_dir(&base) else {
+            continue;
+        };
+        for entry in entries.flatten() {
+            let path = entry.path();
+            if !path.is_dir() {
+                continue;
+            }
+            let name = entry.file_name().to_string_lossy().into_owned();
+            if !name.to_ascii_uppercase().starts_with("CUSA") {
+                continue;
+            }
+            if ps4_param_sfo_year(&path) == Some(year)
+                && !out.iter().any(|c| c.eq_ignore_ascii_case(&name))
+            {
+                out.push(name);
+            }
+        }
+    }
+    out
+}
+
+/// Read the NHL title year from a PS4 install's `sce_sys/param.sfo` TITLE
+/// (e.g. `"NHL® 17"` → `17`). Returns `None` if the file/field is absent or has
+/// no trailing number.
+fn ps4_param_sfo_year(cusa_dir: &Path) -> Option<u32> {
+    let sfo = child_ci(cusa_dir, "sce_sys")?.join("param.sfo");
+    let data = std::fs::read(sfo).ok()?;
+    let title = sfo_string_value(&data, "TITLE")?;
+    // The title reads "NHL® 15".."NHL® 24" (the ® is mojibake in some regions);
+    // take the last run of digits as the year.
+    let mut year: Option<u32> = None;
+    let mut cur = String::new();
+    for ch in title.chars().chain(std::iter::once(' ')) {
+        if ch.is_ascii_digit() {
+            cur.push(ch);
+        } else if !cur.is_empty() {
+            year = cur.parse().ok();
+            cur.clear();
+        }
+    }
+    year
+}
+
+/// Extract a string value for `key` from a Sony `param.sfo` (the PSF key/value
+/// blob). Minimal reader: enough to pull `TITLE`/`TITLE_ID`. Returns `None` on
+/// any malformation rather than panicking on untrusted input.
+fn sfo_string_value(data: &[u8], key: &str) -> Option<String> {
+    if data.len() < 20 || &data[0..4] != b"\x00PSF" {
+        return None;
+    }
+    let u32_at = |o: usize| -> Option<usize> {
+        data.get(o..o + 4)
+            .map(|b| u32::from_le_bytes([b[0], b[1], b[2], b[3]]) as usize)
+    };
+    let key_table = u32_at(0x08)?;
+    let data_table = u32_at(0x0C)?;
+    let count = u32_at(0x10)?;
+    for i in 0..count {
+        let e = 0x14 + i * 0x10;
+        let key_off = data.get(e..e + 2).map(|b| u16::from_le_bytes([b[0], b[1]]) as usize)?;
+        let len = u32_at(e + 4)?;
+        let data_off = u32_at(e + 0x0C)?;
+        // Key: NUL-terminated at key_table + key_off.
+        let kstart = key_table + key_off;
+        let kend = data[kstart..].iter().position(|&b| b == 0).map(|p| kstart + p)?;
+        let k = std::str::from_utf8(&data[kstart..kend]).ok()?;
+        if k != key {
+            continue;
+        }
+        let vstart = data_table + data_off;
+        let vslice = data.get(vstart..vstart + len)?;
+        let vend = vslice.iter().position(|&b| b == 0).unwrap_or(vslice.len());
+        return Some(String::from_utf8_lossy(&vslice[..vend]).into_owned());
+    }
+    None
 }
 
 /// The title's savedata dir holding its save folders: handles the user pointing at the shadPS4 root
@@ -410,11 +554,18 @@ fn some_file(p: PathBuf) -> Option<PathBuf> {
 /// Resolve the three database files within an install dir via a bounded recursive search (the exact
 /// subfolder layout varies, so we match by filename rather than assume a fixed depth).
 fn resolve_db_paths(dir: &Path) -> DbPaths {
+    // The editable main db is `nhlng.db` on nhl08+, but nhl07 ships it as `NHL07NG.db` (with a
+    // matching `NHL07NG-meta.xml`). Try each name in order; no install carries both.
     DbPaths {
-        nhlng: find_file(dir, "nhlng.db", 6).map(path_string),
+        nhlng: find_first_file(dir, &["nhlng.db", "NHL07NG.db"], 6).map(path_string),
         localization: find_file(dir, "nhl_eng_us.db", 6).map(path_string),
-        meta_xml: find_file(dir, "nhlng-meta.xml", 6).map(path_string),
+        meta_xml: find_first_file(dir, &["nhlng-meta.xml", "NHL07NG-meta.xml"], 6).map(path_string),
     }
+}
+
+/// First file under `root` matching any of `names` (case-insensitive), tried in order.
+fn find_first_file(root: &Path, names: &[&str], max_depth: usize) -> Option<PathBuf> {
+    names.iter().find_map(|n| find_file(root, n, max_depth))
 }
 
 /// First file under `root` whose final component equals `name` (case-insensitive), up to `max_depth`.
@@ -532,6 +683,7 @@ fn default_xenia_content() -> Option<PathBuf> {
 
 fn version_str(v: ContainerVersion) -> &'static str {
     match v {
+        ContainerVersion::RawV3 => "v3",
         ContainerVersion::RawV1 => "v1",
         ContainerVersion::RawV2 => "v2",
         ContainerVersion::ZlibV4 => "v4",
@@ -731,6 +883,43 @@ mod tests {
     }
 
     #[test]
+    fn ps4_loose_db_but_packed_art_flags_extract_needed() {
+        // PS4 ships the db loose, so the modding minimum is met immediately — but the art is
+        // still inside a databig and no kettle rendering tree exists. Extraction must still be
+        // offered (the Assets/Export pages have nothing to scan until it runs).
+        let t = TempTree::new("ps4-packed-art");
+        build_shadps4_tree(&t.0);
+        let game = t.0.join("Games").join("CUSA01909");
+        write_big(&game.join("databigs/inxp_00.big"), &[("nhl/data/kettle/x.gnf", b"packed")]);
+
+        let r = detect_install("nhl16", Platform::Ps4, &t.0, None);
+        assert!(r.db_paths.nhlng.is_some(), "loose nhl_game.db still resolves");
+        assert!(r.minimum_met, "PS4 minimum met from the loose db alone");
+        assert!(
+            r.extract_needed,
+            "loose db + packed art (no kettle rendering tree) => extraction still needed"
+        );
+    }
+
+    #[test]
+    fn ps4_extracted_art_does_not_reflag_extract_needed() {
+        // A databig stays on disk after extraction, so its presence alone must NOT re-flag the
+        // install — the extracted kettle player-art tree is the "already unpacked" signal.
+        let t = TempTree::new("ps4-extracted-art");
+        build_shadps4_tree(&t.0);
+        let game = t.0.join("Games").join("CUSA01909");
+        write_big(&game.join("databigs/inxp_00.big"), &[("nhl/data/kettle/x.gnf", b"packed")]);
+        // The extracted player character-art dir `complete()` checks for.
+        fs::create_dir_all(game.join("nhl/data/kettle/rendering/characters/player")).unwrap();
+
+        let r = detect_install("nhl16", Platform::Ps4, &t.0, None);
+        assert!(
+            !r.extract_needed,
+            "art already extracted => no extraction prompt despite the .big still present"
+        );
+    }
+
+    #[test]
     fn ps4_pointing_at_savedata_only_finds_saves_but_not_minimum() {
         let t = TempTree::new("ps4save");
         build_shadps4_tree(&t.0);
@@ -740,5 +929,106 @@ mod tests {
         assert!(r.saves.iter().any(|s| s.kind == "roster"), "save still found");
         assert!(r.db_paths.nhlng.is_none(), "no game db reachable from savedata alone");
         assert!(!r.minimum_met, "without nhl_game.db + meta, PS4 minimum is unmet");
+    }
+
+    /// Build a minimal Sony `param.sfo` blob carrying a single `TITLE` value.
+    fn build_sfo(title: &str) -> Vec<u8> {
+        let key = b"TITLE\0";
+        let val = {
+            let mut v = title.as_bytes().to_vec();
+            v.push(0);
+            v
+        };
+        let index_end = 0x14 + 0x10; // header + one 16-byte index entry
+        let key_table = index_end;
+        let data_table = key_table + key.len();
+        let mut d = Vec::new();
+        d.extend_from_slice(b"\x00PSF");
+        d.extend_from_slice(&0x0101_0000u32.to_le_bytes()); // version
+        d.extend_from_slice(&(key_table as u32).to_le_bytes());
+        d.extend_from_slice(&(data_table as u32).to_le_bytes());
+        d.extend_from_slice(&1u32.to_le_bytes()); // one entry
+        // index entry: key_offset, fmt(utf8=0x0204), len, max_len, data_offset
+        d.extend_from_slice(&0u16.to_le_bytes());
+        d.extend_from_slice(&0x0204u16.to_le_bytes());
+        d.extend_from_slice(&(val.len() as u32).to_le_bytes());
+        d.extend_from_slice(&(val.len() as u32).to_le_bytes());
+        d.extend_from_slice(&0u32.to_le_bytes());
+        d.extend_from_slice(key);
+        d.extend_from_slice(&val);
+        d
+    }
+
+    #[test]
+    fn sfo_year_extraction() {
+        // Real installs: NHL 15/16/21 mojibake the ®, NHL 17/18/24 keep it.
+        assert_eq!(ps4_title_year("nhl17"), Some(17));
+        for (title, year) in [
+            ("NHL\u{fffd}\u{84}\u{fffd} 15", 15),
+            ("NHL® 17", 17),
+            ("NHL® 24", 24),
+        ] {
+            let sfo = build_sfo(title);
+            assert_eq!(
+                sfo_string_value(&sfo, "TITLE").as_deref(),
+                Some(title),
+                "TITLE round-trips"
+            );
+        }
+    }
+
+    /// The regression for "games post NHL 17 not detected": the install's real
+    /// content id differs from every hardcoded id, so resolution must fall back to
+    /// the `param.sfo` TITLE. Here NHL 17 lives under a CUSA id that is *not* in
+    /// `ps4_title_ids("nhl17")`, and detection must still find it.
+    #[test]
+    fn ps4_resolves_unknown_cusa_by_param_sfo() {
+        let t = TempTree::new("ps4sfo");
+        let cusa = "CUSA99999"; // deliberately not in the known list
+        assert!(!ps4_title_ids("nhl17").contains(&cusa));
+        let game = t.0.join("Games").join(cusa);
+        // Identify the title only via param.sfo.
+        write_dummy(&game.join("sce_sys/param.sfo"));
+        fs::write(game.join("sce_sys/param.sfo"), build_sfo("NHL® 17")).unwrap();
+        let t3db = game.join("nhl/data/common/gamemodes/database/t3db");
+        write_dummy(&t3db.join("nhl_game.db"));
+        write_dummy(&t3db.join("nhl_game-meta.xml"));
+
+        let r = detect_install("nhl17", Platform::Ps4, &t.0, None);
+        assert!(
+            r.db_paths.nhlng.is_some(),
+            "NHL17 game db resolved via param.sfo despite unknown CUSA id"
+        );
+        assert!(r.db_paths.meta_xml.is_some(), "meta resolved");
+        assert!(r.minimum_met, "PS4 minimum met for the param.sfo-resolved install");
+
+        // A different title must NOT claim this install.
+        let other = detect_install("nhl18", Platform::Ps4, &t.0, None);
+        assert!(other.db_paths.nhlng.is_none(), "NHL18 does not match an NHL17 param.sfo");
+    }
+
+    /// Live check against the operator's real shadPS4 install. Skipped when the
+    /// drive isn't mounted. Every in-scope title present must at least resolve its
+    /// game folder (install found), even if the big files aren't extracted yet.
+    #[test]
+    fn ps4_real_shadps4_detects_all_installed_titles() {
+        let root = Path::new(r"H:\Emulators\ShadPS4");
+        if !root.join("Games").is_dir() {
+            eprintln!("skipping: {} not present", root.display());
+            return;
+        }
+        // (game_id, present-on-this-machine). NHL19 isn't installed here.
+        for gid in ["nhl15", "nhl16", "nhl17", "nhl18", "nhl20", "nhl21"] {
+            let r = detect_install(gid, Platform::Ps4, root, None);
+            // Either the loose db resolved, or the game dir was found and flagged
+            // for extraction — both mean the install was detected.
+            let detected = r.db_paths.nhlng.is_some() || r.extract_needed;
+            assert!(detected, "{gid}: install not detected (regression)");
+            eprintln!(
+                "{gid}: nhlng={} extract_needed={}",
+                r.db_paths.nhlng.is_some(),
+                r.extract_needed
+            );
+        }
     }
 }

@@ -9,7 +9,11 @@ pub const MAGIC_LEN: usize = 16;
 /// The container variant — decides header length, body codec, and writeability.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum ContainerVersion {
-    /// 32-byte header, raw TDB body. NHL10/11. **Read-only** (`tag_1c` un-reversed).
+    /// 28-byte header, single `checksum_a`, raw big-endian TDB body. NHL07/08/09 gen6 ROSTER
+    /// (`Rosters`/`RosterFile`, version word 3). No `tag_1c`, no `checksum_b`.
+    RawV3,
+    /// 32-byte header, raw TDB body. NHL10/11. Writeable but `tag_1c` (@0x1C) is un-reversed, so an
+    /// edited body carries a stale `tag_1c` — **experimental** pending in-game confirmation.
     RawV1,
     /// 44-byte header, raw TDB body written tight. NHL12/13.
     RawV2,
@@ -21,15 +25,29 @@ impl ContainerVersion {
     /// Byte offset where the body begins.
     pub fn header_len(self) -> usize {
         match self {
+            ContainerVersion::RawV3 => 0x1C,
             ContainerVersion::RawV1 => 0x20,
             ContainerVersion::RawV2 => 0x2C,
             ContainerVersion::ZlibV4 => 0x30,
         }
     }
 
-    /// Whether the write path supports this variant (v1 is read-only).
+    /// Whether the write path supports this variant. All variants are now writeable; note RawV1's
+    /// write is **experimental** (see the variant doc — stale `tag_1c`).
     pub fn writeable(self) -> bool {
-        matches!(self, ContainerVersion::RawV2 | ContainerVersion::ZlibV4)
+        matches!(
+            self,
+            ContainerVersion::RawV3
+                | ContainerVersion::RawV1
+                | ContainerVersion::RawV2
+                | ContainerVersion::ZlibV4
+        )
+    }
+
+    /// Whether writing this variant is only experimentally supported (produces a save whose integrity
+    /// tags aren't fully reversed, so on-console load is unverified). Only RawV1 (`tag_1c`) today.
+    pub fn write_is_experimental(self) -> bool {
+        matches!(self, ContainerVersion::RawV1)
     }
 }
 
@@ -58,6 +76,9 @@ impl SaveType {
             "BeAProFile" => SaveType::BeAPro,
             "HockeyCardFile" => SaveType::HockeyCard,
             "SeasonFile" => SaveType::Season,
+            // Gen6 (NHL07-09) magics: the roster save is `Rosters`, dynasty is `Dynasties`.
+            "Rosters" => SaveType::Roster,
+            "Dynasties" => SaveType::BeAGm,
             _ => SaveType::Unknown,
         }
     }
@@ -104,6 +125,7 @@ impl SaveHeader {
         let zlib_at_30 = file.get(0x30) == Some(&0x78);
         let db_at_2c = file.get(0x2C..0x2E) == Some(b"DB");
         let version = match version_word {
+            3 => ContainerVersion::RawV3,
             1 => ContainerVersion::RawV1,
             0 => ContainerVersion::RawV2,
             4 => ContainerVersion::ZlibV4,
@@ -114,6 +136,8 @@ impl SaveHeader {
         };
 
         let (checksum_b, uncompressed_size, compressed_size, field_20) = match version {
+            // Gen6: single checksum, no sizes, body (raw TDB) starts right after the 0x1C header.
+            ContainerVersion::RawV3 => (None, None, None, None),
             ContainerVersion::RawV1 => (None, None, None, None),
             ContainerVersion::RawV2 => (
                 Some(be32(file, 0x28)),

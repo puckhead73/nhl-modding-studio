@@ -14,8 +14,17 @@ tdb-domain-validation = { path = "../tdb-domain-validation" }
 tdb-edit = { path = "../tdb-edit" }
 tdb-savedata = { path = "../tdb-savedata" }
 tdb-archive-big = { path = "../tdb-archive-big" }
+tdb-archive-codec = { path = "../tdb-archive-codec" }
+tdb-rx2 = { path = "../tdb-rx2" }
 tdb-fhm = { path = "../tdb-fhm" }
 tdb-fhm-store = { path = "../tdb-fhm-store" }
 tdb-formula = { path = "../tdb-formula" }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
+# Portrait/texture export only needs PNG encoding — the DDS side is ours.
+image = { version = "0.25", default-features = false, features = ["png"] }
+
+[dev-dependencies]
+# Synthetic in-memory FHM corpus for the Roster Builder orchestration tests (bundled SQLite is
+# already compiled for `tdb-fhm-store`, so this adds no new native build).
+rusqlite = { version = "0.31", features = ["bundled"] }

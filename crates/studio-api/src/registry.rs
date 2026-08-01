@@ -3,28 +3,37 @@
 //! one-liners). Lives behind a `Mutex` so it can be a single Tauri-managed state.
 //!
 //! Each entry is a [`Workspace`]: a canonical `nhlng.db` edit session plus an optional mirrored
-//! roster-save session. Reads go to the canonical session; writes fan out to both (see
-//! `studio-domain`'s `workspace`).
+//! roster-save session. Reads go to the workspace's display session (canonical by default, the
+//! roster mirror when the user toggles it); writes fan out to both (see `studio-domain`'s
+//! `workspace`).
 
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
 use std::sync::{Arc, Mutex};
 
+use base64::engine::general_purpose::STANDARD as BASE64;
+use base64::Engine as _;
+
 use studio_domain::{
-    compute_maxima_at, compute_person_career_ratings, compute_person_ratings, default_profile,
-    AttributeMaxima, EditSession, FhmCorpus, FieldValue, NormalizationMode, Platform, Project,
-    ProjectProfile, ProjectRole, Workspace,
+    AssetRoots, compute_maxima_at, compute_person_career_ratings, compute_person_ratings, default_profile,
+    AttributeMaxima, EditSession, FhmCorpus, FieldValue, ImportItem, NormalizationMode, Platform,
+    Project, ProjectProfile, ProjectRole, Workspace,
 };
+use tdb_instance_registry::{InstanceRegistry, LedgerEntry};
 
 use crate::convert;
 use crate::dto::{
     AddCareerSeasonDto, ArenaSummaryDto, ArenaViewDto, AutocorrectSummaryDto, CareerStatsDto,
+    AssetExportSummaryDto, AssetRootsArgsDto, AssetRootsDto, BrowseListingDto, ExportOptionsDto,
+    FileExportOptionsDto, FileExportSummaryDto, HeadPreviewDto, OutfitExportSummaryDto,
+    PlayerAssetsDto,
     CreatePlayerDto, EaComputedRatingsDto, ExtractSummaryDto, FormulaCatalogDto, FormulaProfileDto,
     HistoricalCareerRatingsDto, HistoricalFiltersDto, HistoricalPersonDto, HistoricalPersonSummaryDto,
     HistoricalTeamDto, HistoricalTeamFiltersDto, HistoricalTeamFranchiseDto,
     HistoricalTeamIndexEntryDto, HistoricalTeamSummaryDto, InstallReportDto, IntegrityReportDto,
     JerseyCorrectionDto, LinesViewDto, OpOutcomeDto, PlayerSummaryDto, PlayerViewDto,
-    ProjectSummaryDto, TeamSummaryDto, TeamViewDto,
+    ProjectSummaryDto, RepairBlocksSummaryDto, TeamSummaryDto, TeamViewDto,
+    ChangeSetPreviewDto, ImportItemDto, ImportResultDto, MatchCandidateDto,
 };
 use crate::error::ApiError;
 
@@ -52,6 +61,9 @@ pub struct Registry {
     /// The open corpus's person count — a cheap fingerprint that invalidates a stale maxima sidecar
     /// if the data pack is rebuilt in place.
     corpus_person_count: Mutex<Option<u64>>,
+    /// The non-blocking Roster Builder import ledger (`ea_import_ledger.db` beside the corpus). Opened
+    /// when a corpus opens; `None`/disabled degrades to "no dedup warnings", never blocking an import.
+    ledger: Mutex<Option<InstanceRegistry>>,
 }
 
 /// The on-disk maxima sidecar: the maxima plus the corpus fingerprint it was computed from.
@@ -150,10 +162,24 @@ impl Registry {
             let _ = profile.save();
         }
 
+        // PS4: the live roster is a standalone LZ4 save; `nhl_game.db` is only a template (used here
+        // for its metadata). When a writable roster save is present, edit **it** directly as a single
+        // session (no mirror — it is not record-index-aligned with the template). Fall back to the
+        // template db when no roster save is present (browse-only, as before).
+        if platform == Platform::Ps4 {
+            if let Some(slot) = report.saves.iter().find(|s| s.kind == "roster" && s.writable) {
+                let roster_session =
+                    build_session(&slot.path, platform, ProjectRole::Roster, &meta, defs_root)?;
+                let mut ws = Workspace::single(roster_session, slot.path.clone());
+                ws.set_game_id(game_id);
+                ws.normalize_roster_capacity().map_err(ApiError::Domain)?;
+                return self.register(ws);
+            }
+        }
+
         // Build the canonical session and, when a writable roster save is present, the mirror.
         // PS3/Xbox/Recomp mirror: there nhlng.db *is* the roster (record-index aligned, big-endian
-        // — Recomp is Xbox-derived). On PS4 nhl_game.db is a template and the live roster is a
-        // separate save — never mirror it.
+        // — Recomp is Xbox-derived).
         let nhlng_session = build_session(&nhlng, platform, ProjectRole::Nhlng, &meta, defs_root)?;
         let roster_slot = matches!(platform, Platform::Ps3 | Platform::Xbox | Platform::Recomp)
             .then(|| report.saves.iter().find(|s| s.kind == "roster" && s.writable))
@@ -174,12 +200,243 @@ impl Registry {
         self.register(ws)
     }
 
+    /// Open a workspace from **explicit file paths** rather than by walking an install root.
+    ///
+    /// This is the headless / test-harness analogue of [`Registry::open_workspace`]: it skips
+    /// [`studio_domain::detect_install`] (which expects an emulator-root layout) and takes the
+    /// `nhlng.db`/main-db path, an optional aligned roster-save container path, and the metadata
+    /// directly. When `roster_path` is `Some` it builds the mirrored [`Workspace`] (edits fan out to
+    /// both files); otherwise it opens the single main DB. Same normalization and summary as the
+    /// onboarding path, so callers exercise the exact app edit seam.
+    pub fn open_workspace_from_paths(
+        &self,
+        game_id: Option<&str>,
+        platform: Platform,
+        nhlng_path: &str,
+        roster_path: Option<&str>,
+        meta_xml: &str,
+        defs_root: &str,
+    ) -> Result<ProjectSummaryDto, ApiError> {
+        let nhlng_session = build_session(nhlng_path, platform, ProjectRole::Nhlng, meta_xml, defs_root)?;
+        let mut ws = match roster_path {
+            Some(rp) => {
+                let roster_session =
+                    build_session(rp, platform, ProjectRole::Roster, meta_xml, defs_root)?;
+                Workspace::with_roster(
+                    nhlng_session,
+                    nhlng_path.to_string(),
+                    roster_session,
+                    rp.to_string(),
+                )?
+            }
+            None => Workspace::single(nhlng_session, nhlng_path.to_string()),
+        };
+        if let Some(g) = game_id {
+            ws.set_game_id(g);
+        }
+        ws.normalize_roster_capacity().map_err(ApiError::Domain)?;
+        self.register(ws)
+    }
+
     /// Extract a game's `.big` archives in place (Xbox / Recomp / PS4 ship the db packed). Runs at
     /// onboarding, before a project is opened, so it takes the install root rather than a project id.
     pub fn extract_install(&self, root: &str) -> Result<ExtractSummaryDto, ApiError> {
         let summary =
             studio_domain::extract_install(Path::new(root)).map_err(ApiError::Domain)?;
         Ok(convert::extract_summary_dto(&summary))
+    }
+
+    // ------------------------------------------------------------ assets
+
+    /// Infer a title's art roots from its install dir, with optional operator overrides.
+    /// Takes no project id — the UI calls this to *report* whether art is available.
+    pub fn asset_roots(&self, args: &AssetRootsArgsDto) -> AssetRootsDto {
+        convert::asset_roots_dto(&resolve_roots(args))
+    }
+
+    /// Every player's art, resolved against the install. One `is_file` probe per candidate path,
+    /// so this is a scan: call it when the page opens or the roots change, then filter in the UI.
+    pub fn list_player_assets(
+        &self,
+        id: u32,
+        args: &AssetRootsArgsDto,
+    ) -> Result<Vec<PlayerAssetsDto>, ApiError> {
+        let roots = resolve_roots(args);
+        self.with_workspace(id, |ws| {
+            Ok(ws
+                .display()
+                .player_assets(&roots)?
+                .iter()
+                .map(convert::player_assets_dto)
+                .collect())
+        })
+    }
+
+    /// Decode one portrait to a PNG data URL for preview. Takes the resolved path from
+    /// [`Registry::list_player_assets`] rather than an id, so the UI never re-derives EA's
+    /// bucket layout.
+    pub fn portrait_preview(&self, path: &str, crop: bool) -> Result<String, ApiError> {
+        let img = studio_domain::decode_portrait(Path::new(path)).map_err(ApiError::Domain)?;
+        let img = if crop { img.cropped_to_opaque(0) } else { img };
+        let png = img.to_png().map_err(ApiError::Domain)?;
+        Ok(format!(
+            "data:image/png;base64,{}",
+            BASE64.encode(&png)
+        ))
+    }
+
+    /// Export art for the given bio records into `out_dir`, named by player slug.
+    ///
+    /// `bio_records` selects the players (empty = every scanned player), so the UI's filter and
+    /// selection decide the set rather than a flag matrix duplicated down here.
+    pub fn export_assets(
+        &self,
+        id: u32,
+        args: &AssetRootsArgsDto,
+        out_dir: &str,
+        bio_records: Vec<u32>,
+        opts: &ExportOptionsDto,
+    ) -> Result<AssetExportSummaryDto, ApiError> {
+        let roots = resolve_roots(args);
+        let opts = convert::export_options(opts);
+        let out_dir = out_dir.to_string();
+        self.with_workspace(id, |ws| {
+            let mut all = ws.display().player_assets(&roots)?;
+            // Flag generic placeholder portraits across the whole roster before
+            // filtering — sharing can only be seen with every player in hand.
+            studio_domain::mark_generic_portraits(&mut all);
+            let selected: Vec<_> = if bio_records.is_empty() {
+                all
+            } else {
+                let wanted: std::collections::HashSet<u32> = bio_records.into_iter().collect();
+                all.into_iter()
+                    .filter(|p| wanted.contains(&p.bio_record))
+                    .collect()
+            };
+            let summary =
+                studio_domain::export_player_assets(&selected, Path::new(&out_dir), opts)
+                    .map_err(ApiError::Domain)?;
+            Ok(convert::asset_export_summary_dto(&summary))
+        })
+    }
+
+    /// List one directory level of the extracted install for the file browser, rooted at the
+    /// install dir (where the game's loose tree lives after onboarding extraction). `rel` is a
+    /// forward-slash path relative to that root (`""` = the root); it's resolved safely so the UI
+    /// can never walk outside the install. Pure filesystem — no project/workspace needed.
+    pub fn browse_files(&self, install_dir: &str, rel: &str) -> Result<BrowseListingDto, ApiError> {
+        let listing =
+            studio_domain::browse_asset_dir(Path::new(install_dir), rel).map_err(ApiError::Domain)?;
+        Ok(convert::browse_listing_dto(&listing))
+    }
+
+    /// Export the selected files/folders (forward-slash rel paths under `install_dir`) into
+    /// `out_dir`, decoding recognized assets to glTF/PNG/DDS. Folders expand recursively; the output
+    /// mirrors each source's path relative to the install so a title's own layout is preserved.
+    pub fn export_files(
+        &self,
+        install_dir: &str,
+        rel_paths: Vec<String>,
+        out_dir: &str,
+        opts: &FileExportOptionsDto,
+    ) -> Result<FileExportSummaryDto, ApiError> {
+        let opts = convert::file_export_options(opts);
+        let summary = studio_domain::export_asset_files(
+            Path::new(install_dir),
+            &rel_paths,
+            Path::new(out_dir),
+            opts,
+        )
+        .map_err(ApiError::Domain)?;
+        Ok(convert::file_export_summary_dto(&summary))
+    }
+
+    /// Export every team's jersey/pants/socks as PNGs named by the team, into `out_dir`. Resolves
+    /// each team's id → human-readable name here (the human-readable-surfaces rule), slugs it for the
+    /// filename, then hands the domain the `(id, slug)` list plus the install's `rendering/` root.
+    pub fn export_team_outfits(
+        &self,
+        id: u32,
+        args: &AssetRootsArgsDto,
+        out_dir: &str,
+    ) -> Result<OutfitExportSummaryDto, ApiError> {
+        let roots = resolve_roots(args);
+        let out_dir = out_dir.to_string();
+        self.with_workspace(id, |ws| {
+            let teams: Vec<studio_domain::OutfitTeam> = ws
+                .display()
+                .team_summaries()?
+                .into_iter()
+                .filter_map(|t| {
+                    let slug = convert::team_name_slug(&t.name);
+                    (!slug.is_empty()).then_some(studio_domain::OutfitTeam {
+                        team_id: t.team_id,
+                        slug,
+                        abbrev: t.abbrev,
+                    })
+                })
+                .collect();
+            let summary = studio_domain::export_team_outfits(
+                &teams,
+                Path::new(&roots.rendering),
+                Path::new(&out_dir),
+            )
+            .map_err(ApiError::Domain)?;
+            Ok(convert::outfit_export_summary_dto(&summary))
+        })
+    }
+
+    /// Decode a head for the 3D viewer, resolved server-side from `head_id`
+    /// (`player_<head_id>.rx2` + its texlib) — no path crosses the boundary.
+    /// Works for any head with a mesh on disk, not just bespoke ones, so a
+    /// generic/pool head can be inspected too. Uses the lenient parse, so NHL
+    /// 10's per-submesh-rig heads render for identification.
+    pub fn head_preview(
+        &self,
+        args: &AssetRootsArgsDto,
+        head_id: u64,
+    ) -> Result<HeadPreviewDto, ApiError> {
+        let roots = resolve_roots(args);
+        // Resolved by numeric id: RenderWare `player_{id}.rx2` or PS4's shared
+        // `generic_player_{id}.mcd`. Bespoke PS4 heads are name-slug keyed and
+        // surface through `list_player_assets` (which knows the player's name).
+        let mesh = roots.mesh_path(head_id, None).ok_or_else(|| {
+            ApiError::Workspace(format!(
+                "no head mesh for id {head_id} in this install's rendering folder"
+            ))
+        })?;
+        // Head first, then any companion meshes (NHL 09's separate hair) — merged
+        // into one preview.
+        let mut meshes = vec![mesh];
+        meshes.extend(roots.extra_head_mesh_paths(head_id, None));
+        let texs: Vec<String> = roots
+            .texture_paths(head_id, None)
+            .into_iter()
+            .map(|p| p.to_string_lossy().into_owned())
+            .collect();
+        let preview =
+            studio_domain::decode_head_preview(&meshes, &texs).map_err(ApiError::Domain)?;
+        Ok(convert::head_preview_dto(&preview))
+    }
+
+    /// Decode a head for the 3D viewer from **already-resolved paths**, rather
+    /// than re-deriving them from a numeric id. This is the path PS4 bespoke
+    /// heads take: they're keyed by player-name slug, so `list_player_assets`
+    /// (which knows the name) resolves the `.mcd` + `.gnf`/texlib files, and the
+    /// UI hands them straight here. Works for any platform — the mesh decode
+    /// dispatches on `.mcd` vs `.rx2` by extension.
+    pub fn head_preview_paths(
+        &self,
+        mesh_paths: Vec<String>,
+        texture_paths: Vec<String>,
+    ) -> Result<HeadPreviewDto, ApiError> {
+        if mesh_paths.is_empty() {
+            return Err(ApiError::Workspace("no head mesh path given".into()));
+        }
+        let meshes: Vec<PathBuf> = mesh_paths.iter().map(PathBuf::from).collect();
+        let preview = studio_domain::decode_head_preview(&meshes, &texture_paths)
+            .map_err(ApiError::Domain)?;
+        Ok(convert::head_preview_dto(&preview))
     }
 
     /// Drop a workspace, freeing its working bytes. Returns `false` if it was not registered.
@@ -196,7 +453,7 @@ impl Registry {
 
     /// Run the Layer 4 audit over the current working state, resolved to human-readable findings.
     pub fn validate(&self, id: u32) -> Result<IntegrityReportDto, ApiError> {
-        self.with_workspace(id, |ws| Ok(convert::report_dto(&ws.primary().audit_report()?)))
+        self.with_workspace(id, |ws| Ok(convert::report_dto(&ws.display().audit_report()?)))
     }
 
     /// Toggle the acknowledged corruption-override edit mode: when enabled, edits proceed on a DB that
@@ -205,6 +462,18 @@ impl Registry {
         self.with_workspace(id, |ws| {
             ws.set_edit_override(allow);
             Ok(())
+        })
+    }
+
+    /// Switch which file the project's read views are served from: the canonical `nhlng.db`
+    /// (default) or the mirrored roster save (for users who only play off the roster save). Errors
+    /// only when no roster mirror is attached; on a misaligned pair the workspace runs in
+    /// roster-only mode (edits hit strictly the roster file). Returns the refreshed summary so the
+    /// UI can re-render off the new source in one round trip.
+    pub fn set_display_roster(&self, id: u32, on: bool) -> Result<ProjectSummaryDto, ApiError> {
+        self.with_workspace(id, |ws| {
+            ws.set_display_roster(on).map_err(ApiError::Domain)?;
+            convert::project_summary_dto(id, ws).map_err(ApiError::Domain)
         })
     }
 
@@ -220,13 +489,13 @@ impl Registry {
             }
             // Resolve names off the (post-correction) working state — identities are unchanged.
             let teams: std::collections::HashMap<u64, String> = ws
-                .primary()
+                .display()
                 .team_summaries()?
                 .into_iter()
                 .map(|t| (t.team_id, t.name))
                 .collect();
             let players: std::collections::HashMap<u64, String> = ws
-                .primary()
+                .display()
                 .player_summaries()?
                 .into_iter()
                 .map(|p| (p.player_id, format!("{} {}", p.first_name, p.last_name).trim().to_string()))
@@ -253,11 +522,43 @@ impl Registry {
         })
     }
 
+    /// Repair a corrupted roster-block layout (the "Corrupted roster block" audit findings):
+    /// permute the roster slot table back into contiguous per-team blocks. Order-only — no
+    /// membership, jersey, or captaincy changes — staged as a pending, undoable edit and mirrored
+    /// into an aligned roster save. Returns a display-ready summary with team names resolved
+    /// (human-readable-surfaces rule); `moved_slots == 0` means the layout was already healthy.
+    pub fn repair_roster_blocks(&self, id: u32) -> Result<RepairBlocksSummaryDto, ApiError> {
+        self.with_workspace(id, |ws| {
+            let (_, summary) = ws.repair_roster_blocks().map_err(ApiError::Domain)?;
+            if summary.moved_slots == 0 {
+                return Ok(RepairBlocksSummaryDto { moved_slots: 0, teams: Vec::new() });
+            }
+            let teams: std::collections::HashMap<u64, String> = ws
+                .display()
+                .team_summaries()?
+                .into_iter()
+                .map(|t| (t.team_id, t.name))
+                .collect();
+            let names = summary
+                .affected_teams
+                .iter()
+                .map(|tid| {
+                    teams
+                        .get(tid)
+                        .filter(|n| !n.is_empty())
+                        .cloned()
+                        .unwrap_or_else(|| format!("Team #{tid}"))
+                })
+                .collect();
+            Ok(RepairBlocksSummaryDto { moved_slots: summary.moved_slots, teams: names })
+        })
+    }
+
     /// The player master list (view-models).
     pub fn list_players(&self, id: u32) -> Result<Vec<PlayerSummaryDto>, ApiError> {
         self.with_workspace(id, |ws| {
             Ok(ws
-                .primary()
+                .display()
                 .player_summaries()?
                 .iter()
                 .map(convert::player_summary_dto)
@@ -272,7 +573,7 @@ impl Registry {
     pub fn list_free_agents(&self, id: u32) -> Result<Vec<PlayerSummaryDto>, ApiError> {
         self.with_workspace(id, |ws| {
             Ok(ws
-                .primary()
+                .display()
                 .player_summaries()?
                 .iter()
                 .filter(|p| p.team_id.is_none())
@@ -285,7 +586,7 @@ impl Registry {
     pub fn player_view(&self, id: u32, player_id: u64) -> Result<Option<PlayerViewDto>, ApiError> {
         self.with_workspace(id, |ws| {
             Ok(ws
-                .primary()
+                .display()
                 .player_view(player_id)?
                 .as_ref()
                 .map(convert::player_view_dto))
@@ -296,7 +597,7 @@ impl Registry {
     pub fn list_teams(&self, id: u32) -> Result<Vec<TeamSummaryDto>, ApiError> {
         self.with_workspace(id, |ws| {
             Ok(ws
-                .primary()
+                .display()
                 .team_summaries()?
                 .iter()
                 .map(convert::team_summary_dto)
@@ -307,7 +608,7 @@ impl Registry {
     /// The full Team detail for one `kOtt.vfEq`, or `None` if absent.
     pub fn team_view(&self, id: u32, team_id: u64) -> Result<Option<TeamViewDto>, ApiError> {
         self.with_workspace(id, |ws| {
-            Ok(ws.primary().team_view(team_id)?.as_ref().map(convert::team_view_dto))
+            Ok(ws.display().team_view(team_id)?.as_ref().map(convert::team_view_dto))
         })
     }
 
@@ -315,7 +616,7 @@ impl Registry {
     pub fn list_arenas(&self, id: u32) -> Result<Vec<ArenaSummaryDto>, ApiError> {
         self.with_workspace(id, |ws| {
             Ok(ws
-                .primary()
+                .display()
                 .arena_summaries()?
                 .iter()
                 .map(convert::arena_summary_dto)
@@ -326,21 +627,21 @@ impl Registry {
     /// The full Arena detail for one `StEO.vfEq`, or `None` if absent.
     pub fn arena_view(&self, id: u32, arena_id: u64) -> Result<Option<ArenaViewDto>, ApiError> {
         self.with_workspace(id, |ws| {
-            Ok(ws.primary().arena_view(arena_id)?.as_ref().map(convert::arena_view_dto))
+            Ok(ws.display().arena_view(arena_id)?.as_ref().map(convert::arena_view_dto))
         })
     }
 
     /// A player's read-only stock career stats.
     pub fn career_stats(&self, id: u32, player_id: u64) -> Result<CareerStatsDto, ApiError> {
         self.with_workspace(id, |ws| {
-            Ok(convert::career_stats_dto(&ws.primary().career_stats(player_id)?))
+            Ok(convert::career_stats_dto(&ws.display().career_stats(player_id)?))
         })
     }
 
     /// The depth chart (lines) for one team, or `None` if the team is absent.
     pub fn lines_view(&self, id: u32, team_id: u64) -> Result<Option<LinesViewDto>, ApiError> {
         self.with_workspace(id, |ws| {
-            Ok(ws.primary().lines_view(team_id)?.as_ref().map(convert::lines_view_dto))
+            Ok(ws.display().lines_view(team_id)?.as_ref().map(convert::lines_view_dto))
         })
     }
 
@@ -352,7 +653,7 @@ impl Registry {
     ) -> Result<Option<crate::dto::TeamStrategiesDto>, ApiError> {
         self.with_workspace(id, |ws| {
             Ok(ws
-                .primary()
+                .display()
                 .team_strategies(team_id)?
                 .as_ref()
                 .map(convert::team_strategies_dto))
@@ -367,7 +668,7 @@ impl Registry {
     ) -> Result<Vec<crate::dto::DraftPickDto>, ApiError> {
         self.with_workspace(id, |ws| {
             Ok(ws
-                .primary()
+                .display()
                 .team_draft_picks(team_id)?
                 .iter()
                 .map(convert::draft_pick_dto)
@@ -383,7 +684,7 @@ impl Registry {
     ) -> Result<Vec<crate::dto::TeamJerseyDto>, ApiError> {
         self.with_workspace(id, |ws| {
             Ok(ws
-                .primary()
+                .display()
                 .team_jerseys(team_id)?
                 .iter()
                 .map(convert::team_jersey_dto)
@@ -411,7 +712,7 @@ impl Registry {
     ) -> Result<Vec<crate::dto::TeamEquipmentDto>, ApiError> {
         self.with_workspace(id, |ws| {
             Ok(ws
-                .primary()
+                .display()
                 .team_equipment(team_id)?
                 .iter()
                 .map(convert::team_equipment_dto)
@@ -641,8 +942,11 @@ impl Registry {
             .meta("person_count")?
             .and_then(|v| v.parse().ok())
             .unwrap_or(0);
-        *self.corpus_dir.lock().unwrap() =
-            Path::new(path).parent().map(|p| p.to_path_buf());
+        let dir = Path::new(path).parent().map(|p| p.to_path_buf());
+        // Open the import ledger beside the corpus (created if absent; disabled if unwritable/corrupt).
+        *self.ledger.lock().unwrap() =
+            dir.as_ref().map(|d| InstanceRegistry::open(d.join("ea_import_ledger.db")));
+        *self.corpus_dir.lock().unwrap() = dir;
         *self.corpus_db_path.lock().unwrap() = Some(PathBuf::from(path));
         // A new corpus invalidates any previously-cached maxima.
         *self.maxima.lock().unwrap() = None;
@@ -654,6 +958,175 @@ impl Registry {
     /// Whether a corpus is currently open.
     pub fn corpus_open(&self) -> bool {
         self.corpus.lock().unwrap().is_some()
+    }
+
+    // ---- Roster Builder import (Phase 5.4) — the first commands to bridge both databases ----
+
+    /// Auto-detect EA identity matches for a corpus person against project `id` (the cart's
+    /// Match/Create toggle). Needs both an open corpus and the target project.
+    pub fn match_ea_player(
+        &self,
+        id: u32,
+        person_id: i64,
+    ) -> Result<Vec<MatchCandidateDto>, ApiError> {
+        self.with_corpus(|corpus| {
+            self.with_workspace(id, |ws| {
+                Ok(ws
+                    .match_ea_player(corpus, person_id)?
+                    .iter()
+                    .map(convert::match_candidate_dto)
+                    .collect())
+            })
+        })
+    }
+
+    /// Dry-run a Roster Builder cart against project `id`: lower every item through the corpus adapter
+    /// and report what commit would do — per-item outcomes, the player-count delta, the audit over the
+    /// previewed state, blockers, and the ledger dedup flag — **without** mutating the session.
+    pub fn import_preview(
+        &self,
+        id: u32,
+        items: &[ImportItemDto],
+    ) -> Result<ChangeSetPreviewDto, ApiError> {
+        // Resolve the active profile + maxima *first* — both briefly lock the corpus/maxima, which must
+        // be released before we hold the corpus lock across the bridge below.
+        let profile = convert::formula_profile_from_dto(&self.get_active_formula()?);
+        let maxima = self.maxima_for(&profile)?;
+        let items: Vec<ImportItem> = items.iter().map(convert::import_item_from_dto).collect();
+
+        self.with_corpus(|corpus| {
+            self.with_workspace(id, |ws| {
+                let lowered = ws.lower_change_set(corpus, &items, &profile, &maxima)?;
+                let preview = ws.preview_import(&lowered.ops, lowered.skipped.clone())?;
+                let target = ws.primary_path().to_string();
+
+                let ledger = self.ledger.lock().unwrap();
+                let rows: Vec<_> = lowered
+                    .items
+                    .iter()
+                    .map(|it| {
+                        let already = it.lowered() && self.was_imported(&ledger, it.person_id, it.season_year, &target);
+                        convert::lowered_item_result_dto(it, already)
+                    })
+                    .collect();
+                let blocked = lowered.items.iter().filter(|i| !i.lowered()).count();
+
+                // S4 ceiling gate: project each roster table's fill after the cart's creates.
+                let capacity = ws.roster_capacity(studio_domain::count_creates(&lowered.ops))?;
+                let capacity_blocked = capacity.iter().any(|c| c.over);
+
+                Ok(ChangeSetPreviewDto {
+                    items: rows,
+                    players_before: preview.players_before,
+                    players_after: preview.players_after,
+                    blocked,
+                    capacity: capacity.iter().map(convert::table_capacity_dto).collect(),
+                    capacity_blocked,
+                    audit: convert::report_dto(&preview.audit),
+                    skipped_fields: preview.skipped.iter().map(|s| s.field.clone()).collect(),
+                })
+            })
+        })
+    }
+
+    /// Commit a Roster Builder cart against project `id` — the same lowering as preview, applied for
+    /// real as one transaction / one undo entry (roster-mirror aware). On success, each created/matched
+    /// item is recorded to the import ledger (best-effort; a ledger failure never fails the commit).
+    pub fn import_commit(
+        &self,
+        id: u32,
+        items: &[ImportItemDto],
+    ) -> Result<ImportResultDto, ApiError> {
+        let profile = convert::formula_profile_from_dto(&self.get_active_formula()?);
+        let maxima = self.maxima_for(&profile)?;
+        let items: Vec<ImportItem> = items.iter().map(convert::import_item_from_dto).collect();
+        let now = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .map(|d| d.as_secs() as i64)
+            .unwrap_or(0);
+
+        self.with_corpus(|corpus| {
+            self.with_workspace(id, |ws| {
+                let lowered = ws.lower_change_set(corpus, &items, &profile, &maxima)?;
+                let target = ws.primary_path().to_string();
+
+                // Refuse an over-capacity write — the game rejects a save past the vanilla ceiling, and
+                // the write path would grow past it silently (S4). Preview surfaces this first.
+                let capacity = ws.roster_capacity(studio_domain::count_creates(&lowered.ops))?;
+                if let Some(full) = capacity.iter().find(|c| c.over) {
+                    return Err(ApiError::Workspace(format!(
+                        "roster capacity exceeded: {} would reach {} of {} — free space or split the import",
+                        full.label,
+                        full.current + full.adding,
+                        full.ceiling
+                    )));
+                }
+                let applied = ws.commit_import(&lowered.ops)?;
+                // Created `wBIz`s come back in Create-op order — the same order the Created items appear.
+                let mut created = applied.created.iter().copied();
+
+                // Ledger each lowered item with its effective EA id (the new wBIz for a create, the
+                // matched id for an update), and echo that id back in the result. Best-effort ledger.
+                let ledger = self.ledger.lock().unwrap();
+                let mut ledgered = 0usize;
+                let mut items = Vec::with_capacity(lowered.items.len());
+                for it in &lowered.items {
+                    let ea = match it.outcome {
+                        studio_domain::ItemOutcome::Created => created.next(),
+                        studio_domain::ItemOutcome::Matched(pid) => Some(pid),
+                        _ => None,
+                    };
+                    if it.lowered() {
+                        if let Some(reg) = ledger.as_ref() {
+                            let ok = reg
+                                .record(&LedgerEntry {
+                                    person_id: it.person_id,
+                                    season_year: it.season_year,
+                                    target: target.clone(),
+                                    ea_player_id: ea.unwrap_or(0) as i64,
+                                    imported_at: now,
+                                })
+                                .is_ok();
+                            if ok {
+                                ledgered += 1;
+                            }
+                        }
+                    }
+                    let mut dto = convert::lowered_item_result_dto(it, false);
+                    dto.ea_player_id = ea; // the real created id for a create
+                    items.push(dto);
+                }
+                drop(ledger);
+
+                Ok(ImportResultDto {
+                    items,
+                    outcome: convert::outcome_dto(applied.outcome),
+                    ledgered,
+                })
+            })
+        })
+    }
+
+    /// The maxima a profile needs: the corpus PositionMax scan, or an empty set for Nominal.
+    fn maxima_for(&self, profile: &studio_domain::FormulaProfile) -> Result<Arc<AttributeMaxima>, ApiError> {
+        match profile.normalisation_mode {
+            NormalizationMode::PositionMax => self.attribute_maxima(),
+            NormalizationMode::Nominal => Ok(Arc::new(AttributeMaxima::default())),
+        }
+    }
+
+    /// Ledger dedup probe (advisory): has this `(person, season)` already been imported to `target`?
+    fn was_imported(
+        &self,
+        ledger: &Option<InstanceRegistry>,
+        person_id: i64,
+        season_year: i64,
+        target: &str,
+    ) -> bool {
+        ledger
+            .as_ref()
+            .and_then(|l| l.lookup(person_id, season_year, target).ok().flatten())
+            .is_some()
     }
 
     /// The season + league filter options for the Historical browse dropdowns.
@@ -1076,4 +1549,21 @@ pub fn parse_role(s: &str) -> Result<ProjectRole, ApiError> {
             value: s.to_string(),
         }),
     }
+}
+
+/// Infer a title's art roots from the install dir, then apply any operator overrides.
+///
+/// The platform drives the on-disk layout (RenderWare `rendering/`+`fe/` vs the
+/// PS4 kettle tree). A missing/unrecognized platform string decodes as Xbox —
+/// the pre-PS4 behavior — so older callers keep working.
+fn resolve_roots(args: &AssetRootsArgsDto) -> AssetRoots {
+    let platform = args
+        .platform
+        .as_deref()
+        .and_then(|p| parse_platform(p).ok())
+        .unwrap_or(Platform::Xbox);
+    AssetRoots::resolve(Path::new(&args.install_dir), platform).with_overrides(
+        args.rendering_override.as_deref(),
+        args.fe_override.as_deref(),
+    )
 }

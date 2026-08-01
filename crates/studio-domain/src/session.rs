@@ -10,8 +10,8 @@ use std::path::Path;
 
 use tdb_core::TdbFile;
 use tdb_defs::ValidationError;
-use tdb_domain_validation::{validate_invariants, IntegrityReport};
-use tdb_edit::txn::{EditTransaction, JerseyReassignment, OpOutcome};
+use tdb_domain_validation::{towx_coherence, validate_invariants, IntegrityReport};
+use tdb_edit::txn::{BlockRepairSummary, EditTransaction, JerseyReassignment, OpOutcome};
 use tdb_edit::EditError;
 use tdb_relations::RosterModel;
 
@@ -146,6 +146,29 @@ impl EditSession {
             self.project.enums(),
             &model,
         ))
+    }
+
+    /// Build the EA name+DOB match index over the open project (Phase 5.1 — Roster Builder import).
+    /// Reads the *working* state. Caching this across cart items is the service layer's job (5.4);
+    /// this builds it fresh, so callers should not invoke it per lookup.
+    pub fn ea_slug_index(&self) -> Result<crate::import::EaSlugIndex> {
+        let db = TdbFile::parse(&self.working)?;
+        let model = self.build_model(&db)?;
+        Ok(crate::import::EaSlugIndex::build(
+            &db,
+            self.project.meta(),
+            self.project.enums(),
+            &model,
+        ))
+    }
+
+    /// Every player's art (portrait / head mesh / head textures), resolved against `roots`.
+    ///
+    /// Reads the *working* state, so a staged edit to a player's name or head id is reflected in
+    /// the export names before it's ever saved.
+    pub fn player_assets(&self, roots: &crate::AssetRoots) -> Result<Vec<crate::PlayerAssets>> {
+        let db = TdbFile::parse(&self.working)?;
+        crate::assets::scan_player_assets(&db, self.project.meta(), roots)
     }
 
     /// The full Player detail view for one `wBIz`, or `None` if no such player.
@@ -544,6 +567,88 @@ impl EditSession {
         self.run(|tx| tx.create_player(team, position))
     }
 
+    /// Apply a whole Roster Builder cart — many creates/updates — as **one** transaction and **one**
+    /// undo entry (Spike S3). The `ops` carry already-encoded cell values; `lower()` (Phase 5.2)
+    /// builds them from the corpus. Preview and commit run the identical `ops`, so they lower to
+    /// byte-identical edits.
+    pub fn apply_import(&mut self, ops: &[tdb_edit::txn::ImportOp]) -> Result<tdb_edit::txn::ImportApplied> {
+        self.run(|tx| tx.apply_import(ops))
+    }
+
+    /// **Dry-run** a cart: lower + apply the ops against a throwaway transaction and report what commit
+    /// *would* do — player-count delta, the audit over the resulting state, the skip report, and the
+    /// exact bytes commit would write — **without** mutating this session (Phase 5.2 preview). Because
+    /// [`commit_import`](Self::commit_import) re-runs the same ops from the same state, `previewed` is
+    /// byte-identical to the committed db.
+    pub fn preview_import(
+        &self,
+        ops: &[tdb_edit::txn::ImportOp],
+        skipped: Vec<crate::import::SkippedField>,
+    ) -> Result<crate::import::ImportPreview> {
+        let players_before = self.build_model(&TdbFile::parse(&self.working)?)?.players.len();
+
+        let mut tx = EditTransaction::begin(&self.working)?;
+        tx.set_allow_pre_existing_violations(self.allow_pre_existing_violations);
+        tx.apply_import(ops)?;
+        let previewed = tx.commit()?; // finalize CRCs → exactly what commit writes
+
+        let db = TdbFile::parse(&previewed)?;
+        let players_after = self.build_model(&db)?.players.len();
+        let raw = validate_invariants(&db, self.project.relations(), self.project.enums());
+        let audit = crate::audit::humanize(&db, self.project.meta(), self.project.enums(), raw.findings);
+        Ok(crate::import::ImportPreview { players_before, players_after, audit, skipped, previewed })
+    }
+
+    /// Commit a previewed cart for real — the same ops, one transaction, one undo entry. Alias of
+    /// [`apply_import`](Self::apply_import), named for the two-phase pipeline. Returns the op outcome
+    /// plus every newly-created `wBIz` (for the ledger + the UI result).
+    pub fn commit_import(&mut self, ops: &[tdb_edit::txn::ImportOp]) -> Result<tdb_edit::txn::ImportApplied> {
+        self.apply_import(ops)
+    }
+
+    /// Auto-detect EA identity matches for a corpus person — the Roster Builder's Match/Create toggle,
+    /// and the first read that bridges the corpus and the open project. Reads the person's bio from the
+    /// corpus, folds it with the **same** slug normalization the [`EaSlugIndex`](crate::import::EaSlugIndex)
+    /// uses, and returns ranked candidates (name+DOB high-confidence first, then same-name review
+    /// candidates). Empty ⇒ no match ⇒ the cart should Create. Identity is season-independent (name +
+    /// DOB), so no season year is needed. Builds the index fresh; caching it across a cart is 5.4's job.
+    pub fn match_ea_player(
+        &self,
+        corpus: &crate::historical::FhmCorpus,
+        person_id: i64,
+    ) -> Result<Vec<crate::import::MatchCandidate>> {
+        let Some(detail) = corpus.person_detail(person_id)? else {
+            return Ok(Vec::new());
+        };
+        let index = self.ea_slug_index()?;
+        Ok(index.match_player(&detail.last_name, &detail.first_name, Some(&detail.dob)))
+    }
+
+    /// Lower a whole Roster Builder **cart** against the working state — the corpus→EA orchestration
+    /// (Phase 5.2b). Resolves each [`ImportItem`](crate::import::ImportItem) through the corpus adapter
+    /// and lowers it to an encoded op; returns the [`LoweredChangeSet`](crate::import::LoweredChangeSet)
+    /// whose `ops` feed [`preview_import`](Self::preview_import) then [`commit_import`](Self::commit_import).
+    /// Lowering **once** and passing the same `ops` to both keeps preview and commit byte-identical.
+    /// This is the first read that bridges the EA project and the FHM corpus.
+    pub fn lower_change_set(
+        &self,
+        corpus: &crate::historical::FhmCorpus,
+        items: &[crate::import::ImportItem],
+        profile: &tdb_formula::FormulaProfile,
+        maxima: &tdb_fhm_store::AttributeMaxima,
+    ) -> Result<crate::import::LoweredChangeSet> {
+        let db = TdbFile::parse(&self.working)?;
+        Ok(crate::import::lower_change_set(
+            corpus,
+            items,
+            profile,
+            maxima,
+            &db,
+            self.project.meta(),
+            self.project.enums(),
+        )?)
+    }
+
     /// Clone an existing player onto a team (deep-copy of bio + companions); returns the new `wBIz`.
     pub fn clone_player(&mut self, source_player: u64, to_team: u64) -> Result<(u64, OpOutcome)> {
         self.run(|tx| tx.clone_player(source_player, to_team))
@@ -641,6 +746,22 @@ impl EditSession {
             return Ok((OpOutcome::default(), Vec::new()));
         }
         self.run(|tx| tx.autocorrect_duplicate_jerseys())
+    }
+
+    /// Repair a corrupted roster-block layout (`towx_coherence` errors): permute the `eGlu` records
+    /// back into contiguous per-team blocks keyed by the team label each row already carries. An
+    /// order-only structural repair — no field value changes, so no membership can change (see
+    /// [`EditTransaction::repair_roster_blocks`]). A no-op on a coherent layout — and, like the
+    /// jersey autocorrect, the no-op deliberately skips the transaction so it leaves no undo entry
+    /// and doesn't mark the project dirty.
+    pub fn repair_roster_blocks(&mut self) -> Result<(OpOutcome, BlockRepairSummary)> {
+        // Peek read-only: already coherent → return without touching working bytes or history.
+        let db = TdbFile::parse(&self.working)?;
+        if towx_coherence(&db).is_empty() {
+            return Ok((OpOutcome::default(), BlockRepairSummary::default()));
+        }
+        drop(db);
+        self.run(|tx| tx.repair_roster_blocks())
     }
 
     /// Set a player's lineup status (dressed vs. scratched) on their slot in `team`'s block — the

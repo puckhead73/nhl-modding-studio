@@ -40,6 +40,11 @@ pub struct CapabilitiesDto {
     pub rookie_ahl: bool,
     /// CHL rookie flag (absent in NHL 10–13).
     pub rookie_chl: bool,
+    /// The separate skater equipment table exists (absent on gen6 titles like NHL07, which ship no
+    /// equipment tables) — gates any per-player equipment surface instead of rendering it blank.
+    pub has_skater_equip: bool,
+    /// The separate goalie equipment table exists (see `has_skater_equip`).
+    pub has_goalie_equip: bool,
     /// Skater ratings in this database that carry an operator label; `< skater_ratings_total`
     /// means the loaded schema has ratings we can't yet name (the Attributes tab hedges visibly).
     pub skater_ratings_labelled: usize,
@@ -49,6 +54,10 @@ pub struct CapabilitiesDto {
     pub goalie_ratings_labelled: usize,
     /// All goalie rating fields this database carries.
     pub goalie_ratings_total: usize,
+    /// How `ubPc.dXSB` (the "main team") encodes the team id: `0` on NHL 09/10 (raw = team id) or
+    /// `1` on Legacy/11→21 (raw = team id + 1, 0 = free agent). The Main-Team picker uses it so it
+    /// reads/writes the right value per title instead of assuming the modern 1-indexed convention.
+    pub main_team_offset: u8,
 }
 
 /// A loaded project plus a structural summary of its current working database.
@@ -79,8 +88,19 @@ pub struct ProjectSummaryDto {
     /// `true` when the roster mirror is record-index-aligned with `nhlng.db` (so generic field edits
     /// mirror). `roster_attached && !roster_aligned` means degraded — field edits hit `nhlng` only.
     pub roster_aligned: bool,
+    /// `true` when read views (and this summary's overview) are served from the roster save instead
+    /// of `nhlng.db` (the display toggle). On an aligned pair edits still fan out to both files;
+    /// with `display_roster && !roster_aligned` the workspace is in roster-only mode — edits apply
+    /// strictly to the roster file, and areas the roster save doesn't carry aren't editable.
+    pub display_roster: bool,
     /// The optional schema features this title's database carries (probed at load).
     pub capabilities: CapabilitiesDto,
+    /// True when saving this project uses an **experimentally-supported** write path: NHL10/11 v1
+    /// containers (the `tag_1c` integrity word is un-reversed, so an edited save carries a stale tag)
+    /// or PS4 roster saves (repack is code-complete but on-console load is unverified). The bytes are
+    /// structurally valid and round-trip, but in-game acceptance isn't confirmed — surface a caveat
+    /// before the user relies on the save.
+    pub write_experimental: bool,
 }
 
 /// One discovered save container, classified by its content.
@@ -179,6 +199,16 @@ pub struct AutocorrectSummaryDto {
     pub corrections: Vec<JerseyCorrectionDto>,
 }
 
+/// Summary of the roster-block structural repair (an order-only permutation of the roster slot
+/// table back into contiguous per-team blocks — no membership changes).
+#[derive(Serialize, TS)]
+pub struct RepairBlocksSummaryDto {
+    /// How many roster slots changed physical position (0 = the layout was already healthy).
+    pub moved_slots: u32,
+    /// Resolved names of the teams whose blocks the audit had flagged as corrupt.
+    pub teams: Vec<String>,
+}
+
 /// The result of a whole-DB audit.
 #[derive(Serialize, TS)]
 pub struct IntegrityReportDto {
@@ -249,6 +279,41 @@ pub struct FieldViewDto {
     pub range_high: Option<i64>,
     pub editable: bool,
     pub is_string: bool,
+}
+
+/// One curated cell of a server-driven field profile — a labelled control the UI renders directly.
+#[derive(Serialize, TS)]
+pub struct FieldCellDto {
+    pub label: String,
+    /// `"field"` | `"team"` | `"arena"` | `"derived"` — how the UI edits the cell.
+    pub control: String,
+    /// The resolved field to read/edit; `null` for derived cells.
+    pub field: Option<FieldViewDto>,
+    /// The record index the cell's edit must target (usually the entity record; for a NHL07 team
+    /// name, the joined stock/custom row that actually holds the name).
+    pub record: u32,
+    /// Team-FK encoding offset (`raw - offset` = team id) for `"team"` cells.
+    pub team_offset: Option<u8>,
+    /// The empty-option label for `"team"` cells (e.g. "(undrafted)").
+    pub none_label: Option<String>,
+    /// Resolved read-only text for `"derived"` cells.
+    pub derived_display: Option<String>,
+    /// When set, this cell's value semantics are not yet confirmed for the loaded title — the UI
+    /// shows the raw value plus this note.
+    pub unverified: Option<String>,
+}
+
+/// One titled section of a field profile.
+#[derive(Serialize, TS)]
+pub struct FieldSectionDto {
+    pub title: String,
+    pub cells: Vec<FieldCellDto>,
+}
+
+/// The full server-driven curated layout for one entity (the sections the UI renders in order).
+#[derive(Serialize, TS)]
+pub struct EntityFieldProfileDto {
+    pub sections: Vec<FieldSectionDto>,
 }
 
 /// A compact player row for the master list and the team depth chart.
@@ -432,6 +497,8 @@ pub struct PlayerViewDto {
     pub ratings_table: String,
     pub memberships: Vec<RosterMembershipDto>,
     pub all_fields: Vec<FieldViewDto>,
+    /// The server-driven curated section layout the UI renders (per-game field profile).
+    pub profile: EntityFieldProfileDto,
 }
 
 /// One column of a career-stats section: the studio field id + the header label (`GP`, `SV%`, …).
@@ -555,6 +622,8 @@ pub struct TeamViewDto {
     /// Retired jersey numbers (`wcSL`), sorted ascending.
     pub retired_numbers: Vec<u32>,
     pub all_fields: Vec<FieldViewDto>,
+    /// The server-driven curated section layout the UI renders (per-game field profile).
+    pub profile: EntityFieldProfileDto,
 }
 
 /// One future draft pick owned by a team (`qHav`).
@@ -1087,4 +1156,313 @@ pub struct PrebuiltDto {
     pub native_max: u32,
     /// When true the formula outputs on its own scale (bias/tier rows).
     pub direct_output: bool,
+}
+
+// ---------------------------------------------------------------- assets
+
+/// Which install's art to work against. Every asset command needs the same trio, so they take
+/// it as one value rather than three positional strings.
+#[derive(Deserialize, TS)]
+pub struct AssetRootsArgsDto {
+    /// The resolved install dir. Art is anchored on the game executable found under it
+    /// (RenderWare titles) or on the `nhl/data` tree (PS4).
+    pub install_dir: String,
+    /// The install's platform (`ps3`/`xbox`/`ps4`/`recomp`). Drives the on-disk art
+    /// layout — RenderWare `rendering/`+`fe/` vs the PS4 kettle tree. Absent decodes
+    /// as Xbox (the pre-PS4 behavior).
+    #[ts(optional)]
+    pub platform: Option<String>,
+    /// Override the inferred `rendering/` root; `null`/empty keeps the inferred path.
+    pub rendering_override: Option<String>,
+    /// Override the inferred `fe/` root; `null`/empty keeps the inferred path.
+    pub fe_override: Option<String>,
+}
+
+/// Where a title keeps its art, and whether both roots are actually present.
+#[derive(Serialize, TS)]
+pub struct AssetRootsDto {
+    pub rendering: String,
+    pub fe: String,
+    /// Both roots exist on disk. `false` means the install is still packed —
+    /// run extraction before scanning.
+    pub complete: bool,
+}
+
+/// One player's art, resolved against a real install. `full_name` and `slug` are the
+/// human-readable surfaces; `portrait_id` / `head_id` are the raw EA ids, for progressive
+/// disclosure only.
+#[derive(Serialize, TS)]
+pub struct PlayerAssetsDto {
+    pub bio_record: u32,
+    pub full_name: String,
+    /// `lastname_firstname_dd_mm_yyyy` — the export filename stem. `null` when the bio
+    /// lacks a usable name or birthdate, in which case this player can't be exported.
+    pub slug: Option<String>,
+    #[ts(type = "number")]
+    pub portrait_id: u64,
+    #[ts(type = "number")]
+    pub head_id: u64,
+    /// This head model is this player's own (`pPaD == lOnr`) — the only case where naming
+    /// a mesh after them is truthful.
+    pub bespoke_head: bool,
+    /// A shared generic head (id >= 60000) reused across many players.
+    pub pool_head: bool,
+    pub portrait_path: Option<String>,
+    pub mesh_path: Option<String>,
+    /// Every RX2 container holding one of this head's textures: a single bundled texlib on
+    /// Legacy/14/15, or several loose per-raster files on NHL 10. Empty when none ship.
+    pub texture_paths: Vec<String>,
+}
+
+/// What to include in an export run.
+#[derive(Deserialize, TS)]
+pub struct ExportOptionsDto {
+    pub portraits: bool,
+    pub meshes_glb: bool,
+    pub raw_rx2: bool,
+    pub textures: bool,
+    /// Crop portraits to their opaque bounds (EA ships them on a mostly-empty 512x512 canvas).
+    pub crop_portraits: bool,
+}
+
+/// What an export run produced. Partial results are normal — `failures` carries the
+/// already-human-readable reasons.
+#[derive(Serialize, TS)]
+pub struct AssetExportSummaryDto {
+    pub players_considered: usize,
+    pub portraits_written: usize,
+    pub meshes_written: usize,
+    pub textures_written: usize,
+    pub raw_copied: usize,
+    /// Portraits skipped because they're a generic placeholder shared across many
+    /// un-portraited players, not the player's own.
+    pub portraits_skipped_generic: usize,
+    pub skipped_no_slug: usize,
+    pub failures: Vec<String>,
+    #[ts(type = "number")]
+    pub bytes_written: u64,
+}
+
+// ---------------------------------------------------------------- file browser
+
+/// One entry in a browsed directory of the extracted install.
+#[derive(Serialize, TS)]
+pub struct BrowseEntryDto {
+    pub name: String,
+    /// Forward-slash path relative to the browse root — the token passed back to browse into a
+    /// folder or to select it/the file for export.
+    pub rel_path: String,
+    pub is_dir: bool,
+    #[ts(type = "number")]
+    pub size: u64,
+    /// `mesh` / `portrait` / `texture` when this file decodes to an asset; `null` for directories
+    /// and files the exporter doesn't recognize.
+    pub kind: Option<String>,
+}
+
+/// One directory level of the extracted install, for the file browser.
+#[derive(Serialize, TS)]
+pub struct BrowseListingDto {
+    /// The absolute browse root (the install dir).
+    pub root: String,
+    /// Forward-slash path of the listed directory relative to the root (`""` = the root itself).
+    pub rel_path: String,
+    /// The parent's rel path, or `null` at the root. Drives the "up" affordance.
+    pub parent: Option<String>,
+    pub entries: Vec<BrowseEntryDto>,
+}
+
+/// What to include in a file-browser export run.
+#[derive(Deserialize, TS)]
+pub struct FileExportOptionsDto {
+    pub meshes_glb: bool,
+    pub portraits_png: bool,
+    pub textures: bool,
+    /// Copy files the exporter doesn't recognize through unchanged rather than skipping them (also
+    /// the fallback when a recognized file fails to decode).
+    pub copy_unrecognized: bool,
+    pub crop_portraits: bool,
+}
+
+/// What a file-browser export run produced. Partial results are normal — `failures` carries the
+/// already-human-readable reasons.
+#[derive(Serialize, TS)]
+pub struct FileExportSummaryDto {
+    pub files_considered: usize,
+    pub meshes_written: usize,
+    pub portraits_written: usize,
+    pub textures_written: usize,
+    pub raw_copied: usize,
+    pub skipped_unrecognized: usize,
+    pub skipped_unsafe: usize,
+    pub failures: Vec<String>,
+    #[ts(type = "number")]
+    pub bytes_written: u64,
+}
+
+// ---------------------------------------------------------------- team outfits
+
+/// What a team-outfit export produced (jersey / pants / socks per team, as PNGs named by team).
+/// Partial results are normal — `failures` carries the already-human-readable reasons.
+#[derive(Serialize, TS)]
+pub struct OutfitExportSummaryDto {
+    pub teams_considered: usize,
+    pub jerseys_written: usize,
+    pub pants_written: usize,
+    pub socks_written: usize,
+    pub failures: Vec<String>,
+    #[ts(type = "number")]
+    pub bytes_written: u64,
+    /// The art folder scanned for outfit textures — shown when nothing was found so the operator can
+    /// see where the exporter looked.
+    pub rendering_root: String,
+}
+
+// ---------------------------------------------------------------- head preview
+
+/// One decoded texlib raster for the head viewer (RGBA8, base64).
+#[derive(Serialize, TS)]
+pub struct PreviewTextureDto {
+    pub name: String,
+    pub width: u32,
+    pub height: u32,
+    pub rgba_base64: String,
+}
+
+/// One submesh of a head, as flat arrays for a three.js `BufferGeometry`, plus
+/// its material binding. `name` is the label the visibility toggle shows.
+#[derive(Serialize, TS)]
+pub struct PreviewSubmeshDto {
+    pub name: String,
+    pub positions: Vec<[f32; 3]>,
+    pub normals: Vec<[f32; 3]>,
+    pub uv1: Vec<[f32; 2]>,
+    pub triangles: Vec<[u32; 3]>,
+    /// Index into `HeadPreviewDto::textures`; `null` renders untextured.
+    pub material_index: Option<u32>,
+    pub transparent: bool,
+    pub render_order: i32,
+}
+
+/// A player head decoded for the 3D viewer: every submesh with its texture, plus
+/// camera framing. `lenient_rig` is `true` for NHL 10 heads whose per-submesh
+/// bone palettes disagree — the geometry rendered but the rig is unresolved.
+#[derive(Serialize, TS)]
+pub struct HeadPreviewDto {
+    pub submeshes: Vec<PreviewSubmeshDto>,
+    pub textures: Vec<PreviewTextureDto>,
+    pub center: [f32; 3],
+    pub span: f32,
+    pub source_path: String,
+    pub lenient_rig: bool,
+}
+
+// ---------------------------------------------------------------- roster builder (Phase 5.4)
+
+/// One Roster Builder cart line (FE → BE): a corpus person-season aimed at an EA team, with the
+/// create-vs-match decision (`match_ea_player_id`: `null` ⇒ create a new player; a `wBIz` ⇒ update
+/// that existing one) and an optional jersey override.
+#[derive(Deserialize, TS)]
+pub struct ImportItemDto {
+    #[ts(type = "number")]
+    pub person_id: i64,
+    #[ts(type = "number")]
+    pub season_year: i64,
+    #[ts(type = "number")]
+    pub target_team_id: u64,
+    /// `null` ⇒ CreateNew; a `wBIz` ⇒ Match(id) (update the existing player, no allocation).
+    #[ts(type = "number | null")]
+    pub match_ea_player_id: Option<u64>,
+    #[ts(type = "number | null")]
+    pub jersey: Option<i64>,
+}
+
+/// An EA identity-match candidate for a corpus person — the cart's Match/Create toggle. Human-readable
+/// surfaces (`full_name`/`team_name`); the raw `ea_player_id` (`wBIz`) is for progressive disclosure.
+#[derive(Serialize, TS)]
+pub struct MatchCandidateDto {
+    #[ts(type = "number")]
+    pub ea_player_id: u64,
+    pub full_name: String,
+    /// Composed `YYYY-MM-DD`, or `null` when the EA bio carries no usable DOB.
+    pub dob: Option<String>,
+    pub team_name: Option<String>,
+    /// `"name_and_dob"` (high confidence) | `"name_only"` (review candidate).
+    pub confidence: String,
+    /// `true` when more than one candidate was returned — the cart must disambiguate.
+    pub ambiguous: bool,
+}
+
+/// One cart item's outcome in a preview/commit, resolved for display.
+#[derive(Serialize, TS)]
+pub struct ImportItemResultDto {
+    #[ts(type = "number")]
+    pub person_id: i64,
+    #[ts(type = "number")]
+    pub season_year: i64,
+    #[ts(type = "number")]
+    pub target_team_id: u64,
+    pub full_name: String,
+    /// `"created"` | `"matched"` | `"person_missing"` | `"no_such_player"` | `"no_bio_table"`.
+    pub outcome: String,
+    /// The matched player's `wBIz` (for `"matched"`/`"no_such_player"`); `null` otherwise. A create's
+    /// new id is not known until commit, so it stays `null` in preview.
+    #[ts(type = "number | null")]
+    pub ea_player_id: Option<u64>,
+    /// Fields this item could not write (out of range / absent on this title) — resolved field names.
+    pub skipped_fields: Vec<String>,
+    /// `true` when this `(person, season)` was already imported to this target (the dedup warning —
+    /// advisory only, never blocks).
+    pub already_imported: bool,
+    /// `true` when this item lowered to an op (i.e. it will appear in the commit).
+    pub lowered: bool,
+}
+
+/// One roster table's projected fill vs its vanilla ceiling after the cart's creates (the S4 storage
+/// gate). `label` is the human surface; `table` is the raw canonical id for progressive disclosure.
+#[derive(Serialize, TS)]
+pub struct TableCapacityDto {
+    pub table: String,
+    pub label: String,
+    pub current: u32,
+    pub ceiling: u32,
+    pub adding: u32,
+    /// `current + adding > ceiling` — this table would overflow (a storage blocker).
+    pub over: bool,
+    /// Whether the ceiling is reliable enough to block on (false ⇒ shown, never blocks).
+    pub enforced: bool,
+}
+
+/// The dry-run result of a whole cart (preview): per-item rows, the player-count delta, the audit over
+/// the previewed state, the capacity projection, and the blocker count. Commit re-runs the identical
+/// lowered ops, so what preview shows is what commit writes.
+#[derive(Serialize, TS)]
+pub struct ChangeSetPreviewDto {
+    pub items: Vec<ImportItemResultDto>,
+    #[ts(type = "number")]
+    pub players_before: usize,
+    #[ts(type = "number")]
+    pub players_after: usize,
+    /// Cart items that could not lower — a blocker; the FE disables Commit while `> 0`.
+    #[ts(type = "number")]
+    pub blocked: usize,
+    /// Per-table roster capacity after the cart's creates (the S4 ceiling gate).
+    pub capacity: Vec<TableCapacityDto>,
+    /// `true` when any enforced table would overflow — Commit is disabled.
+    pub capacity_blocked: bool,
+    /// The four db-only audit predicates over the previewed state, resolved to human text.
+    pub audit: IntegrityReportDto,
+    /// Every field dropped across the cart (out of range / absent on this title).
+    pub skipped_fields: Vec<String>,
+}
+
+/// The result of committing a cart: the same per-item trail (creates now carry their new `wBIz`), the
+/// op outcome, and how many rows were written to the import ledger.
+#[derive(Serialize, TS)]
+pub struct ImportResultDto {
+    pub items: Vec<ImportItemResultDto>,
+    pub outcome: OpOutcomeDto,
+    /// How many `(person, season, target)` rows were recorded in the ledger (0 when it is disabled).
+    #[ts(type = "number")]
+    pub ledgered: usize,
 }

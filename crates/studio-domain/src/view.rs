@@ -19,6 +19,8 @@ use tdb_enums::EnumRegistry;
 use tdb_relations::entity::ids;
 use tdb_relations::{PlayerKind, RosterModel};
 
+use crate::assets::{probe_birthdate_encoding, BirthdateEncoding};
+
 /// The value class of a field (mirrors [`tdb_defs::FieldType`] without its `Other(String)` payload).
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum FieldKind {
@@ -120,26 +122,44 @@ pub fn read_field(
     let range_low = fm.and_then(|m| m.range_low);
     let range_high = fm.and_then(|m| m.range_high);
     let is_string = kind == FieldKind::String;
+    let is_gen6 = crate::attributes::is_gen6_style_schema(db);
     // Full vocabulary for enum-bound fields (empty otherwise) — powers edit-time dropdowns.
     let mut enum_options: Vec<(i64, String)> = enums
         .for_field(&studio_table, &studio_field)
         .map(|d| d.entries.iter().map(|e| (e.raw, e.label.clone())).collect())
         .unwrap_or_default();
-    // Synthesized vocab for ratings-table derived fields (Potential Range/Accuracy, Active flag) that
-    // have no TOML enum but a known small value set — so they render/edit as labelled dropdowns too.
-    let synthetic = if enum_options.is_empty() {
-        crate::attributes::synthetic_enum(&studio_table, &studio_field)
-    } else {
-        None
-    };
-    if let Some(opts) = &synthetic {
-        enum_options = opts.clone();
+    // Synthesized vocab for fields with no TOML enum (Potential Range/Accuracy, gen6 player styles).
+    if enum_options.is_empty() {
+        if let Some(opts) = crate::attributes::synthetic_enum(&studio_table, &studio_field, is_gen6) {
+            enum_options = opts;
+        }
     }
+    // NHL07 gen6 uses a different country / birth-state code table than the modern TOML — override
+    // nationality (whose European codes the modern vocab mislabels) and fill the birth-state gaps.
+    crate::attributes::apply_gen6_geo_vocab(&studio_table, &studio_field, is_gen6, &mut enum_options);
     // Era-correct rating scale, classified from the field's own metadata (name prefix + declared
     // range): 6-bit 0..63 storage shows/edits +36 (the 36..99 scale); PS4's 7-bit 0..99 stores the
     // human value directly (offset 0). See `attributes::rating_offset`.
-    let rating = crate::attributes::rating_offset(&studio_table, &name, range_low, range_high);
-    let (edit_offset, edit_height) = ea_edit_form(&studio_table, &studio_field);
+    // Era-correct rating scale. The 6-bit case's offset is data-probed: NHL 10→Legacy show +36
+    // (36..99), NHL07 gen6 shows +50 (50..99). `rating_offset` returns the +36 sentinel for any
+    // 6-bit rating; swap in the probed value (the scan runs only for a real 6-bit rating field).
+    let rating = crate::attributes::rating_offset(&studio_table, &name, range_low, range_high)
+        .map(|off| if off == 36 { sixbit_rating_offset(db) } else { off });
+    // `table` IS `ubPc` whenever the birthdate fields are being read, so the probe needs no
+    // extra plumbing. Lazy: it only runs for `JKLp`/`Kswi`, and returns on the first record
+    // that settles the convention.
+    let birthdate = || probe_birthdate_encoding(db, table);
+    // `table` IS `ubPc` when the birth-year field is read, so the base probe needs no extra plumbing;
+    // it only actually runs for the `ubPc.qFnd` arm below.
+    let year_base = || birth_year_base(db, table);
+    // Draft-year base is schema-probed (modern `draftyear` = 1900; NHL07 gen6 `yeardrafted` = 1959).
+    let draft_base = || draft_year_base(db, meta);
+    // Weight base: +120 lb on NHL 10→Legacy, +150 on NHL07 gen6 (raw 0..125 → 150..275, verified);
+    // gated by the same data-probed gen6 signal as the rating scale. Only evaluated for the weight
+    // field itself.
+    let weight_base = || if sixbit_rating_offset(db) == 50 { 150 } else { 120 };
+    let (edit_offset, edit_height) =
+        ea_edit_form(&studio_table, &studio_field, birthdate, year_base, draft_base, weight_base);
     let edit_offset = edit_offset.or(rating.filter(|off| *off != 0));
     let edit_scale = ea_edit_scale(&studio_table, &studio_field);
 
@@ -169,19 +189,18 @@ pub fn read_field(
     } else {
         let raw_bits = db.read_u64(table, index, field).unwrap_or(0);
         let decoded = fm.map(|m| m.decode_raw(raw_bits)).unwrap_or(raw_bits as i64);
-        let enum_label = enums
-            .label(&studio_table, &studio_field, decoded)
-            .map(|s| s.to_string())
-            .or_else(|| {
-                synthetic.as_ref().and_then(|opts| {
-                    opts.iter().find(|(r, _)| *r == decoded).map(|(_, l)| l.clone())
-                })
-            });
+        // Label from the resolved vocabulary (TOML + synthetic + gen6 overrides all flow through
+        // `enum_options`, so the label and the dropdown never disagree).
+        let enum_label = enum_options.iter().find(|(r, _)| *r == decoded).map(|(_, l)| l.clone());
         // Precedence: enum label → EA-semantic formatting (height/weight/…) → rating scale → the
         // plain number.
         let display = enum_label
             .clone()
-            .or_else(|| ea_semantic_display(&studio_table, &studio_field, decoded))
+            .or_else(|| {
+                ea_semantic_display(
+                    &studio_table, &studio_field, decoded, birthdate, year_base, draft_base, weight_base,
+                )
+            })
             .or_else(|| rating.map(|off| (decoded + off).to_string()))
             .unwrap_or_else(|| decoded.to_string());
         FieldView {
@@ -308,6 +327,8 @@ pub struct PlayerView {
     pub data: PlayerData,
     /// Labelled, ordered ratings + traits for the Attributes tab.
     pub attributes: crate::attributes::PlayerAttributes,
+    /// The server-driven curated section layout the UI renders (evidence-first per-game profile).
+    pub profile: crate::field_profile::EntityFieldProfile,
 }
 
 /// Resolved, display-ready values for the Player detail banner. Every field is already localized
@@ -316,7 +337,9 @@ pub struct PlayerView {
 ///
 /// EA bio encodings (studio ids on `ubPc`, sourced from the prior app and to be re-verified against
 /// our own data): height `ypBQ + 54` inches; weight `sNZW + 120` lb (raw 0 = "no weight" sentinel);
-/// birthdate composed from `qFnd + 1900` / `JKLp + 1` / `Kswi + 1`; primary team `dXSB - 1`
+/// birthdate composed from `qFnd + 1900` plus a **probed** month/day offset (`JKLp`/`Kswi` are
+/// 0-indexed on NHL 11→21 but already 1-indexed on NHL 10 — see `probe_birthdate_encoding`);
+/// primary team `dXSB - 1`
 /// (0 = free agent); style/archetype = `QgFs` on the ratings companion (`dSvy`/`mHuy`).
 #[derive(Clone, Debug, Default)]
 pub struct PlayerHeader {
@@ -407,7 +430,10 @@ impl<'a> CompanionReader<'a> {
                 }
             }
         }
-        let style = descriptor_by_name(meta, table, "playerstyle");
+        // Modern `playerstyle` (`QgFs`) or NHL07 gen6 `p_style`/`g_style` (`mQoE`/`wJus`).
+        let style = descriptor_by_name(meta, table, "playerstyle")
+            .or_else(|| descriptor_by_name(meta, table, "p_style"))
+            .or_else(|| descriptor_by_name(meta, table, "g_style"));
         Some(Self { table, ratings, style })
     }
 
@@ -422,9 +448,13 @@ impl<'a> CompanionReader<'a> {
     fn style_label(&self, db: &TdbFile, enums: &EnumRegistry, rec: u32) -> Option<String> {
         let f = self.style?;
         let raw = db.read_u64(self.table, rec, f)? as i64;
-        enums
-            .label(&self.table.id.canonical(db.endian), &f.id.canonical(db.endian), raw)
-            .map(|s| s.to_string())
+        let stbl = self.table.id.canonical(db.endian);
+        let sfld = f.id.canonical(db.endian);
+        // TOML enum (modern) or the synthesized NHL07 style vocabulary (`mQoE`/`wJus`).
+        enums.label(&stbl, &sfld, raw).map(|s| s.to_string()).or_else(|| {
+            crate::attributes::synthetic_enum(&stbl, &sfld, crate::attributes::is_gen6_style_schema(db))
+                .and_then(|opts| opts.into_iter().find(|(r, _)| *r == raw).map(|(_, l)| l))
+        })
     }
 }
 
@@ -522,7 +552,10 @@ pub fn player_summaries(
                     .filter(|&v| v > 0)
                     .map(|v| (v - 1) as u64),
                 bio_record: p.bio_record,
-                cap_hit_dollars: caphit.filter(|&r| r > 0).map(|r| r as u64 * 5_000),
+                // Dollars only when the salary scale is confirmed for this title (see
+                // `cap_hit_scale`); left `None` on titles whose encoding is unverified.
+                cap_hit_dollars: cap_hit_scale(db, meta)
+                    .and_then(|mult| caphit.filter(|&r| r > 0).map(|r| r as u64 * mult)),
                 contract_years: read_dec(term_f, p.bio_record)
                     .filter(|&r| r > 0)
                     .map(|r| r as u32),
@@ -960,6 +993,8 @@ pub struct TeamView {
     /// This team's retired jersey numbers (`wcSL`), sorted ascending.
     pub retired_numbers: Vec<u32>,
     pub all_fields: Vec<FieldView>,
+    /// The server-driven curated section layout the UI renders (evidence-first per-game profile).
+    pub profile: crate::field_profile::EntityFieldProfile,
 }
 
 /// A compact arena row for the master list.
@@ -1042,21 +1077,80 @@ fn label_of(f: Option<&FieldView>) -> Option<String> {
 // declared range — see the attributes module docs. `read_field` applies it below so the display
 // and the Attributes-tab labels classify fields identically and never drift.
 
+/// The base year added to a stored `ubPc.qFnd` (birth year), probed from the field's own bit width.
+///
+/// NHL 09→21 store the birth year in a **full 8-bit** field with base **1900** (raw 0..255 →
+/// 1900..2155). The two earliest Xbox-360 titles pack it into a **narrower** field and rebase to
+/// **1959** so the reduced range still spans a modern roster:
+/// * **NHL07** — **6-bit** (raw 0..63), verified against six known players (Alfredsson 1972, Iginla
+///   1977, Sakic 1969, Lidström 1970, Crosby 1987, Jágr 1972 → raw 0..29 → 1959..1988).
+/// * **NHL08** — **7-bit** (raw 0..30 across all 2962 bio rows → base 1959 = 1959..1989; base 1900
+///   would give an impossible 1900..1930 for a 2007-08 roster).
+///
+/// So any sub-8-bit `qFnd` uses base 1959; a full byte uses 1900. Keyed on the field width, not the
+/// title id, per the version-aware / evidence-first rule.
+fn birth_year_base(db: &TdbFile, bio: &Table) -> i64 {
+    match bio.fields.iter().find(|f| f.id.canonical(db.endian) == "qFnd") {
+        Some(f) if f.bit_width < 8 => 1959,
+        _ => 1900,
+    }
+}
+
+/// The display/edit offset for 6-bit (`0..63`) skater/goalie ratings, **probed from the companion
+/// data** — the same evidence-first rule as the birthdate/main-team probes:
+/// * **NHL 10 → Legacy** store ratings `14..63` shown on the **36..99** scale (offset **+36**).
+/// * **NHL07 (gen6)** stores them `0..49` shown on the **50..99** scale (offset **+50**) — verified
+///   in-game (our tool was 14 low vs the game) and by the anchor: every rating maxes at 49.
+///
+/// The two scales' stored ranges are disjoint, so a single question settles it: does *any* 6-bit
+/// rating exceed 49? If so it's the modern +36 scale; if none do, it's gen6 +50. Early-exits on the
+/// first >49 value, so modern DBs (a 63-rated star appears immediately) resolve in a few reads. PS4's
+/// 7-bit `0..99` ratings never reach this path (they carry no offset).
+fn sixbit_rating_offset(db: &TdbFile) -> i64 {
+    for tbl in [ids::SKATER_AI, ids::GOALIE_AI] {
+        let Some(t) = db.table_canonical(tbl) else { continue };
+        for f in t.fields.iter().filter(|f| f.bit_width == 6) {
+            for rec in 0..t.current_records as u32 {
+                if db.read_u64(t, rec, f).unwrap_or(0) > 49 {
+                    return 36; // a rating in 50..63 exists → the modern scale
+                }
+            }
+        }
+    }
+    50 // no 6-bit rating exceeds 49 → the gen6 (NHL07) 50..99 scale
+}
+
 /// EA-semantic human formatting for known numeric fields, applied at [`read_field`] so the value
 /// reads correctly everywhere a `FieldView.display` is shown — the Bio all-fields list, the Ratings
 /// tab, career, and the header alike, not just one panel. Sourced from the prior app's field map
 /// (verify against real data). Returns `None` for fields with no special encoding (plain number).
-fn ea_semantic_display(studio_table: &str, studio_field: &str, decoded: i64) -> Option<String> {
+fn ea_semantic_display(
+    studio_table: &str,
+    studio_field: &str,
+    decoded: i64,
+    birthdate: impl Fn() -> BirthdateEncoding,
+    birth_year_base: impl Fn() -> i64,
+    draft_year_base: impl Fn() -> Option<i64>,
+    weight_base: impl Fn() -> i64,
+) -> Option<String> {
     match (studio_table, studio_field) {
         ("ubPc", "ypBQ") => format_height(decoded), // height: inches = raw + 54
-        ("ubPc", "sNZW") => format_weight(decoded), // weight: lb = raw + 120 (0 = unset)
-        ("ubPc", "qFnd") => Some((decoded + 1900).to_string()), // birth year
-        ("ubPc", "JKLp") => Some((decoded + 1).to_string()),    // birth month (0-indexed)
-        ("ubPc", "Kswi") => Some((decoded + 1).to_string()),    // birth day (0-indexed)
+        ("ubPc", "sNZW") => format_weight(decoded, weight_base()), // weight: lb = raw + base (0 = unset)
+        ("ubPc", "qFnd") => Some((decoded + birth_year_base()).to_string()), // birth year (base probed)
+        // Month/day indexing drifts across titles — NHL 10 stores them already
+        // 1-indexed while NHL 11→21 store them 0-indexed, and the metadata is
+        // identical in both. `birthdate` is a closure so the probe only runs for
+        // these two fields, never for the rest of the match.
+        ("ubPc", "JKLp" | "Kswi") => Some((decoded + birthdate().offset()).to_string()),
         // Year of UFA eligibility = raw + 1900; guard the plausible range, else leave raw.
         ("ubPc", "GKKz") => (90..=130).contains(&decoded).then(|| (decoded + 1900).to_string()),
-        // Draft year = raw + 1900; 255 is the "undrafted" sentinel.
-        ("ubPc", "YKzW") => (decoded != 255).then(|| (decoded + 1900).to_string()),
+        // Draft year: modern `draftyear` (`YKzW`, base 1900, 255 = undrafted) or NHL07 gen6
+        // `yeardrafted` (`ygQP`, base 1959, raw 0..46 = 1959..2005; anything above is "unavailable").
+        // The base is schema-probed; when unconfirmed the value stays raw.
+        ("ubPc", "YKzW" | "ygQP") => draft_year_base().and_then(|base| {
+            let undrafted = decoded == 255 || (base == 1959 && !(0..=46).contains(&decoded));
+            (!undrafted).then(|| (decoded + base).to_string())
+        }),
         // Skater/goalie ratings are handled in `read_field` via `attributes::rating_offset`
         // (metadata-classified, era-correct scale) — not here, which only sees ids.
         // Career tables: season-end year; signed plus/minus; fixed-point SV% (×0.001) and GAA (×0.01).
@@ -1088,12 +1182,24 @@ fn format_savepct(decoded: i64) -> String {
 /// `decoded + offset` (e.g. weight lb, birth year, rating 36..99), so an editor can accept the human
 /// number and stage `input - offset`. Height additionally presents/parses that value as `ft'in"`.
 /// The offsets mirror [`ea_semantic_display`] so read and write stay symmetric in one place.
-fn ea_edit_form(studio_table: &str, studio_field: &str) -> (Option<i64>, bool) {
+fn ea_edit_form(
+    studio_table: &str,
+    studio_field: &str,
+    birthdate: impl Fn() -> BirthdateEncoding,
+    birth_year_base: impl Fn() -> i64,
+    draft_year_base: impl Fn() -> Option<i64>,
+    weight_base: impl Fn() -> i64,
+) -> (Option<i64>, bool) {
     match (studio_table, studio_field) {
         ("ubPc", "ypBQ") => (Some(54), true),                        // height (inches = raw + 54)
-        ("ubPc", "sNZW") => (Some(120), false),                      // weight lb
-        ("ubPc", "qFnd" | "GKKz" | "YKzW") => (Some(1900), false),   // years
-        ("ubPc", "JKLp" | "Kswi") => (Some(1), false),               // 0-indexed month/day
+        ("ubPc", "sNZW") => (Some(weight_base()), false),            // weight lb (base probed)
+        ("ubPc", "qFnd") => (Some(birth_year_base()), false),        // birth year (base probed)
+        ("ubPc", "GKKz") => (Some(1900), false),                     // UFA year
+        ("ubPc", "YKzW" | "ygQP") => (draft_year_base(), false),     // draft year (base probed)
+        // Per-title indexing — see `ea_semantic_display`. Staging `input - offset`
+        // with the wrong offset would write a date a month and a day off, so this
+        // must use the same probe the display does.
+        ("ubPc", "JKLp" | "Kswi") => (Some(birthdate().offset()), false),
         (t, "qFnd") if is_career_table(t) => (Some(1900), false), // career season-end year
         _ => (None, false),
     }
@@ -1119,21 +1225,137 @@ fn format_height(decoded: i64) -> Option<String> {
     Some(format!("{}'{}\"", inches / 12, inches % 12))
 }
 
-/// EA weight decode: raw + 120 = pounds; raw <= 0 is the "no weight set" sentinel → `None`.
-fn format_weight(decoded: i64) -> Option<String> {
-    (decoded > 0).then(|| format!("{} lb", decoded + 120))
+/// EA weight decode: raw + `base` = pounds (base +120 modern, +150 NHL07 gen6); raw <= 0 is the
+/// "no weight set" sentinel → `None`.
+fn format_weight(decoded: i64, base: i64) -> Option<String> {
+    (decoded > 0).then(|| format!("{} lb", decoded + base))
 }
 
 /// Compose `YYYY-MM-DD` from the EA birthdate fields (year = raw+1900, month/day are 0-indexed).
-fn compose_birthdate(year: Option<i64>, month: Option<i64>, day: Option<i64>) -> Option<String> {
-    let (y, m, d) = (year? + 1900, month? + 1, day? + 1);
+fn compose_birthdate(
+    year: Option<i64>,
+    month: Option<i64>,
+    day: Option<i64>,
+    birthdate: BirthdateEncoding,
+    year_base: i64,
+) -> Option<String> {
+    let off = birthdate.offset();
+    let (y, m, d) = (year? + year_base, month? + off, day? + off);
     if !(1900..=2100).contains(&y) || !(1..=12).contains(&m) || !(1..=31).contains(&d) {
         return None;
     }
     Some(format!("{y:04}-{m:02}-{d:02}"))
 }
 
-/// A team's full name by id, via the model's `kOtt` record.
+/// How `ubPc.dXSB` (the player's current / "main" team pointer) encodes the `kOtt.vfEq` team id.
+/// The convention drifted across the title range and is **probed from data**, never assumed — the
+/// same evidence-first rule as [`crate::probe_birthdate_encoding`]:
+///
+/// | Titles                    | `dXSB` raw | Free agent |
+/// | ------------------------- | ---------- | ---------- |
+/// | NHL 09 / 10 (early Xbox360)| team id (0-indexed)        | (unrostered) |
+/// | NHL Legacy / 11→21        | team id + 1 (1-indexed)    | raw `0` |
+///
+/// The `eGlu` roster is authoritative for where a player actually plays, so the offset is recovered
+/// by asking — across rostered players — whether `dXSB` or `dXSB − 1` lands on a team the player is
+/// truly a member of. Verified: NHL 09 & NHL 10 agree at offset 0 for every rostered player (0 at
+/// offset 1); NHL Legacy agrees at offset 1 for all 5110 (0 at offset 0). Note the "pro team" ref
+/// `dbBW` stays 1-indexed on every title — only `dXSB` drifted, so only `dXSB` is probed.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum MainTeamEncoding {
+    /// `dXSB` raw is the team id directly — NHL 09 / 10.
+    ZeroIndexed,
+    /// `dXSB` raw is `team id + 1`, `0` = free agent — NHL Legacy / 11→21.
+    OneIndexed,
+}
+
+impl MainTeamEncoding {
+    /// What to subtract from the raw `dXSB` to get the `kOtt.vfEq` team id.
+    pub fn offset(self) -> u64 {
+        match self {
+            MainTeamEncoding::ZeroIndexed => 0,
+            MainTeamEncoding::OneIndexed => 1,
+        }
+    }
+}
+
+/// Probe the `dXSB` main-team encoding from roster ground truth (see [`MainTeamEncoding`]). Falls
+/// back to `OneIndexed` (the Legacy/modern convention) when the db carries no rostered players to
+/// decide from.
+pub fn probe_main_team_encoding(db: &TdbFile, model: &RosterModel) -> MainTeamEncoding {
+    let Some(bio) = db.table_canonical(ids::BIO) else {
+        return MainTeamEncoding::OneIndexed;
+    };
+    let Some(dxsb) = bio.fields.iter().find(|f| f.id.canonical(db.endian) == "dXSB") else {
+        return MainTeamEncoding::OneIndexed;
+    };
+    // Membership set per player (the teams whose roster the player actually fills).
+    let mut memb: HashMap<u64, std::collections::HashSet<u64>> = HashMap::new();
+    for s in &model.slots {
+        if let Some(pid) = s.player_id {
+            memb.entry(pid).or_default().insert(s.team_id);
+        }
+    }
+    let (mut off0, mut off1) = (0u32, 0u32);
+    for p in &model.players {
+        let Some(set) = memb.get(&p.player_id) else { continue };
+        let Some(raw) = db.read_u64(bio, p.bio_record, dxsb) else { continue };
+        if set.contains(&raw) {
+            off0 += 1;
+        }
+        if raw > 0 && set.contains(&(raw - 1)) {
+            off1 += 1;
+        }
+        if off0 + off1 >= 128 {
+            break; // a decisive sample — the two conventions never tie in practice
+        }
+    }
+    if off0 > off1 {
+        MainTeamEncoding::ZeroIndexed
+    } else {
+        MainTeamEncoding::OneIndexed
+    }
+}
+
+/// Where a team's display-name fields (`fullname`/`abbrname`/`shortname`) actually live.
+///
+/// NHL 09→21 carry them inline on `kOtt` (`exhibitionteams` is the fat team table). NHL07's `kOtt`
+/// is a *thin* index whose `teamid` + `table` discriminator point into the stock/custom team tables,
+/// which hold the names (verified: `table` is a 1-bit field, `0` = `stockteamtable`, `1` =
+/// `customteamtable`; vanilla ships all 93 rows on stock). Returns the table + its studio id + the
+/// record to read the name fields from; falls back to `kOtt` itself if the join can't be followed
+/// (yields the same empty-name behavior as before, never an error).
+struct TeamNameSource<'a> {
+    table: &'a Table,
+    studio_id: &'static str,
+    record: u32,
+}
+
+fn team_name_source<'a>(
+    db: &'a TdbFile,
+    meta: &FieldMetaIndex,
+    kott: &'a Table,
+    kott_record: u32,
+) -> TeamNameSource<'a> {
+    let fat = TeamNameSource { table: kott, studio_id: ids::TEAM, record: kott_record };
+    // Fat shape: the name fields are on kOtt itself.
+    if descriptor_by_name(meta, kott, "fullname").is_some() {
+        return fat;
+    }
+    // Thin shape (NHL07): follow (table discriminator, teamid) into the name-bearing table.
+    let resolved = (|| {
+        let teamid = read_u64_by_studio(db, kott, kott_record, ids::TEAM_NAME_ID)?;
+        let disc = read_u64_by_studio(db, kott, kott_record, ids::TEAM_NAME_TABLE_DISC).unwrap_or(0);
+        let studio_id = if disc == 1 { ids::CUSTOM_TEAM } else { ids::STOCK_TEAM };
+        let table = db.table_canonical(studio_id)?;
+        let key = descriptor_by_name(meta, table, "index")?;
+        let record = (0..table.current_records as u32).find(|&i| db.read_u64(table, i, key) == Some(teamid))?;
+        Some(TeamNameSource { table, studio_id, record })
+    })();
+    resolved.unwrap_or(fat)
+}
+
+/// A team's full name by id, via the model's `kOtt` record (following the NHL07 thin-index join).
 pub(crate) fn team_name_by_id(
     db: &TdbFile,
     meta: &FieldMetaIndex,
@@ -1142,7 +1364,8 @@ pub(crate) fn team_name_by_id(
 ) -> Option<String> {
     let team = model.team(team_id)?;
     let kott = db.table_canonical(ids::TEAM)?;
-    let name = read_str_by_name(db, meta, kott, team.record, "fullname");
+    let src = team_name_source(db, meta, kott, team.record);
+    let name = read_str_by_name(db, meta, src.table, src.record, "fullname");
     (!name.is_empty()).then_some(name)
 }
 
@@ -1158,6 +1381,59 @@ fn group_thousands(n: u64) -> String {
         out.push(*ch as char);
     }
     out
+}
+
+/// The multiplier that turns the stored `contractdollars` value into real dollars, or `None` when
+/// the scale is **not confirmed** for the loaded title (the caller then shows the raw number and
+/// flags it). Evidence-first, keyed on the field's bit width — never the title id:
+///
+/// `contractdollars` widens across the range (NHL07 9-bit → max 511, NHL10 10-bit, NHL14/Legacy
+/// 13-bit → max 8191). The `× $5000` scale only spans a realistic salary ceiling on the 13-bit
+/// field ($40.9M); on the narrow gen6/early fields it caps out at ~$2.5M, far below period cap
+/// hits, so the multiplier there is different and unrecovered — we decline to fabricate a dollar
+/// figure and mark the cell unverified instead.
+fn cap_hit_scale(db: &TdbFile, meta: &FieldMetaIndex) -> Option<u64> {
+    let bio = db.table_canonical(ids::BIO)?;
+    let f = descriptor_by_name(meta, bio, "contractdollars")?;
+    match f.bit_width {
+        // Modern 13-bit `contractdollars` (NHL 14/15/Legacy): ×$5000 (max $40.9M).
+        w if w >= 13 => Some(5000),
+        // NHL07 gen6 9-bit `contractdollars`: ×$25,000, $25k increments (verified in-game — Bryzgalov
+        // raw 40 = $1M, Giguère raw 160 = $4M; max 511 = $12.775M).
+        9 => Some(25_000),
+        _ => None,
+    }
+}
+
+/// The base year added to the stored draft year, or `None` when it is **not confirmed** for the
+/// loaded title. Only the modern `draftyear` field (8-bit, `+1900`, `255` = undrafted) is verified;
+/// the legacy `yeardrafted` field (NHL07 6-bit, NHL10 8-bit) has an unconfirmed base, so its cell
+/// shows the raw stored value and is flagged rather than mislabelled as a calendar year.
+fn draft_year_base(db: &TdbFile, meta: &FieldMetaIndex) -> Option<i64> {
+    let bio = db.table_canonical(ids::BIO)?;
+    // Modern `draftyear` (8-bit) → +1900.
+    if descriptor_by_name(meta, bio, "draftyear").is_some() {
+        return Some(1900);
+    }
+    // NHL07 gen6 `yeardrafted` is a 6-bit field based at 1959 (verified in-game: Bryzgalov raw 41 =
+    // 2000, Giguère raw 36 = 1995, Guerin raw 30 = 1989 — raw 0..46 → 1959..2005, plus an
+    // "unavailable" sentinel). The wider (8-bit) `yeardrafted` on NHL10 keeps an unconfirmed base.
+    let f = descriptor_by_name(meta, bio, "yeardrafted")?;
+    (f.bit_width <= 6).then_some(1959)
+}
+
+/// The Stage-4 "unverified" verdicts, resolved per curated cell label. Kept as a free function so
+/// tests can exercise the same rules the profile renders by.
+fn unverified_note(db: &TdbFile, meta: &FieldMetaIndex, label: &str) -> Option<String> {
+    match label {
+        "Cap Hit" => cap_hit_scale(db, meta).is_none().then(|| {
+            "salary scale unconfirmed for this game — showing the raw contract value".to_string()
+        }),
+        "Draft Year" => draft_year_base(db, meta).is_none().then(|| {
+            "draft-year base unconfirmed for this game — showing the raw stored value".to_string()
+        }),
+        _ => None,
+    }
 }
 
 /// Assemble the resolved "Player Data" tab fields (contract/draft/rookie/junior/pro) from the bio
@@ -1192,9 +1468,12 @@ fn build_player_data(
             .map(|r| (r + 1900) as u32),
         pro_team_id,
         pro_team_name,
-        cap_hit: kkhd
-            .filter(|&r| r > 0)
-            .map(|r| format!("${}", group_thousands(r as u64 * 5_000))),
+        // Dollars only when the salary scale is confirmed for this title; otherwise the raw stored
+        // value (the profile flags the cell unverified). Keyed on the field, not the title id.
+        cap_hit: kkhd.filter(|&r| r > 0).map(|r| match cap_hit_scale(db, meta) {
+            Some(mult) => format!("${}", group_thousands(r as u64 * mult)),
+            None => r.to_string(),
+        }),
         contract_length_years: ihdg.filter(|&r| r > 0).map(|r| r as u32),
         // Only meaningful when the cap-hit field is present; derived from whether a cap hit exists.
         contract_status: kkhd.map(|r| {
@@ -1255,13 +1534,30 @@ fn build_player_header(
         (None, None) => None,
     };
 
-    // Primary team: canonical `dXSB - 1` (0 = free agent). Falls back to the first eGlu membership
-    // when `dXSB` is absent, so the header still resolves on data that lacks the bio pointer.
+    // Primary ("main") team from `ubPc.dXSB`, decoded with the **probed** per-title offset (NHL
+    // 09/10 store it 0-indexed; Legacy/11→21 1-indexed with 0 = free agent — see
+    // `MainTeamEncoding`). The `eGlu` roster is the ground truth for where a player plays, so the
+    // resolved id is anchored on it: prefer the team `dXSB` points at when the player is actually a
+    // member of it, else the first membership, else free agent. This keeps the banner, the
+    // "Additional Teams" split, and the audit all agreeing on one main team across the title range.
+    let encoding = probe_main_team_encoding(db, model);
     let dxsb = fv_id(all_fields, "dXSB").and_then(|f| f.decoded);
-    let primary_team_id = match dxsb {
-        Some(0) => None,
-        Some(v) if v > 0 => Some((v - 1) as u64),
-        _ => memberships.first().map(|m| m.team_id),
+    let member_ids: Vec<u64> = memberships.iter().map(|m| m.team_id).collect();
+    let dxsb_team = match (encoding, dxsb) {
+        // 1-indexed FA sentinel.
+        (MainTeamEncoding::OneIndexed, Some(0)) => None,
+        (MainTeamEncoding::OneIndexed, Some(v)) if v > 0 => Some((v - 1) as u64),
+        (MainTeamEncoding::ZeroIndexed, Some(v)) => Some(v as u64),
+        _ => None,
+    };
+    let primary_team_id = match dxsb_team {
+        // Trust `dXSB` when it names a team the player actually fills a slot on.
+        Some(id) if member_ids.contains(&id) => Some(id),
+        // `dXSB` resolved but the player isn't on that roster (edited/edge data): fall back to the
+        // real membership so the banner never shows a team the player doesn't play for.
+        Some(id) if member_ids.is_empty() => Some(id),
+        Some(_) => member_ids.first().copied(),
+        None => member_ids.first().copied(),
     };
     let primary_team_name = primary_team_id.and_then(|id| team_name_by_id(db, meta, model, id));
 
@@ -1275,10 +1571,16 @@ fn build_player_header(
             fv_id(all_fields, "qFnd").and_then(|f| f.decoded),
             fv_id(all_fields, "JKLp").and_then(|f| f.decoded),
             fv_id(all_fields, "Kswi").and_then(|f| f.decoded),
+            db.table_canonical(ids::BIO)
+                .map(|bio| probe_birthdate_encoding(db, bio))
+                .unwrap_or(BirthdateEncoding::ZeroIndexed),
+            db.table_canonical(ids::BIO).map(|bio| birth_year_base(db, bio)).unwrap_or(1900),
         ),
         height: fv_name(all_fields, "height").and_then(|f| f.decoded).and_then(format_height),
-        weight: fv_name(all_fields, "weight").and_then(|f| f.decoded).and_then(format_weight),
-        style_label: label_of(fv_id(ratings, "QgFs")),
+        weight: fv_name(all_fields, "weight")
+            .and_then(|f| f.decoded)
+            .and_then(|d| format_weight(d, if sixbit_rating_offset(db) == 50 { 150 } else { 120 })),
+        style_label: label_of(crate::attributes::style_field(ratings)),
         primary_team_id,
         primary_team_name,
         jersey_number: fv_name(all_fields, "jersey").and_then(|f| f.decoded),
@@ -1330,11 +1632,13 @@ fn team_summary_at(
     record: u32,
 ) -> TeamSummary {
     let league = read_u64_by_studio(db, kott, record, "xMjj").map(|v| v as i64);
+    // Names may live on kOtt (fat schema) or on a joined stock/custom table (NHL07 thin index).
+    let src = team_name_source(db, meta, kott, record);
     TeamSummary {
         team_id,
         record,
-        name: read_str_by_name(db, meta, kott, record, "fullname"),
-        abbrev: read_str_by_name(db, meta, kott, record, "abbrname"),
+        name: read_str_by_name(db, meta, src.table, src.record, "fullname"),
+        abbrev: read_str_by_name(db, meta, src.table, src.record, "abbrname"),
         league,
         league_label: league
             .and_then(|v| enums.label("kOtt", "xMjj", v))
@@ -1355,14 +1659,34 @@ pub fn team_view(
     let all_fields = entity_fields(db, meta, enums, ids::TEAM, team.record);
     let arena = read_u64_by_studio(db, kott, team.record, TEAM_ARENA_FK)
         .and_then(|aid| arena_ref(db, meta, aid));
+    // Identity (name/abbrev/…) comes from wherever the names live — kOtt for fat schemas, the joined
+    // stock/custom table for NHL07's thin index. `all_fields` stays the raw kOtt row (power-user view).
+    let src = team_name_source(db, meta, kott, team.record);
+    let identity_fields = if src.studio_id == ids::TEAM {
+        all_fields.clone()
+    } else {
+        entity_fields(db, meta, enums, src.studio_id, src.record)
+    };
+    // Curated per-game layout: name/classification cells route through the identity source (so
+    // NHL07's stock/custom-table names are editable), structural + fat-schema relations stay on
+    // kOtt. Venue shows only when the team→arena link exists in this schema.
+    let has_arena = all_fields.iter().any(|f| f.name == "arenaid");
+    let profile = crate::field_profile::team_field_profile(&crate::field_profile::TeamProfileCtx {
+        identity_fields: &identity_fields,
+        identity_record: src.record,
+        kott_fields: &all_fields,
+        kott_record: team.record,
+        has_arena,
+    });
     Some(TeamView {
         team_id,
         record: team.record,
-        identity: curate(&all_fields, TEAM_IDENTITY),
+        identity: curate(&identity_fields, TEAM_IDENTITY),
         arena,
         roster_count: model.team_roster(team_id).len(),
         retired_numbers: crate::team_tabs::retired_numbers(db, team_id),
         all_fields,
+        profile,
     })
 }
 
@@ -1472,6 +1796,24 @@ pub fn player_view(
     let data = build_player_data(db, meta, model, &all_fields);
     let attributes = crate::attributes::build_player_attributes(&ratings, companion_table);
 
+    // Curated per-game layout, built from the loaded bio fields (evidence-first: absent fields
+    // never emit a cell). The `dXSB` main-team offset is the probed encoding; the archetype cell
+    // shows only when the ratings companion carries the style enum.
+    let main_team_offset = probe_main_team_encoding(db, model).offset() as u8;
+    let has_style = crate::attributes::style_field(&ratings).is_some();
+    let unverified = |label: &str| unverified_note(db, meta, label);
+    let profile = crate::field_profile::player_field_profile(
+        &all_fields,
+        &crate::field_profile::PlayerProfileCtx {
+            bio_record: player.bio_record,
+            main_team_offset,
+            has_style,
+            style_label: header.style_label.as_deref(),
+            data: &data,
+            unverified: &unverified,
+        },
+    );
+
     Some(PlayerView {
         player_id,
         bio_record: player.bio_record,
@@ -1488,5 +1830,6 @@ pub fn player_view(
         header,
         data,
         attributes,
+        profile,
     })
 }

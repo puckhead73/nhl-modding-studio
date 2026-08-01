@@ -2,22 +2,33 @@
 //! archives) into the loose game files discovery expects (`nhlng.db`, its
 //! metadata, textures, …).
 //!
-//! Xbox / Recomp installs ship the databases *packed inside* `.big` archives, so
-//! a fresh install has no loose `nhlng.db` for [`crate::discovery`] to find. This
-//! module walks the install root, parses every `.big`, and writes each entry out
-//! **in place, preserving the archive's internal folder hierarchy** — an entry
-//! named `db/nhlng.db` lands at `<archive-dir>/db/nhlng.db`. Re-running discovery
-//! then resolves the modding minimum.
+//! Xbox / Recomp / PS4 installs ship the databases *packed inside* `.big`
+//! archives, so a fresh install has no loose `nhlng.db` / `nhl_game.db` for
+//! [`crate::discovery`] to find. This module walks the install root, parses
+//! every `.big`, and writes each entry out **in place, preserving the archive's
+//! internal folder hierarchy** — an entry named `db/nhlng.db` lands at
+//! `<archive-dir>/db/nhlng.db`. Re-running discovery then resolves the modding
+//! minimum.
+//!
+//! Two container families are handled by the same walk:
+//!
+//! * **Xbox / PS3 / Recomp** — EA `BIGF`/`BIG4` (`tdb_archive_big::Archive`).
+//!   The whole archive is read into memory and sliced; these are small.
+//! * **PS4** — EA `EB\0\3` (`tdb_archive_big::eb`). Parsed and extracted by
+//!   **streaming** (front tables, then seek + read per entry), because a single
+//!   PS4 archive (`game_90.big`) can be 17 GB — far too large to buffer.
 //!
 //! `chunkzip`-wrapped entries are transparently inflated; `chunklzx` (LZX) entries
 //! are counted and skipped (the codec is not yet implemented) rather than failing
 //! the whole run. Entry names that would escape the archive's directory (absolute
 //! paths, `..`) are refused — a `.big` never dictates writes outside its own tree.
 
+use std::io::{Read, Seek, SeekFrom};
 use std::path::{Component, Path, PathBuf};
 
 use serde::{Deserialize, Serialize};
 
+use tdb_archive_big::eb::{self, EbHeader, Payload};
 use tdb_archive_big::Archive;
 
 use crate::{DomainError, Result};
@@ -111,16 +122,37 @@ pub fn extract_install(root: &Path) -> Result<ExtractSummary> {
     Ok(summary)
 }
 
-/// Parse one `.big` and write its entries under `base`. Returns `Err` if the
+/// Parse one `.big` and write its entries under `base`. Dispatches on the 4-byte
+/// magic: PS4 `EB\0\3` archives stream ([`extract_eb`]); Xbox/PS3/Recomp
+/// `BIGF`/`BIG4` archives are buffered ([`extract_bigf`]). Returns `Err` if the
 /// archive itself can't be read/parsed; per-entry problems are folded into
 /// `summary` and don't abort the archive.
 fn extract_one(archive_path: &Path, base: &Path, summary: &mut ExtractSummary) -> Result<()> {
+    let mut file = std::fs::File::open(archive_path).map_err(|source| DomainError::Io {
+        path: archive_path.to_string_lossy().to_string(),
+        source,
+    })?;
+    let mut magic = [0u8; 4];
+    file.read_exact(&mut magic).map_err(|source| DomainError::Io {
+        path: archive_path.to_string_lossy().to_string(),
+        source,
+    })?;
+
+    if &magic == eb::MAGIC_EB {
+        extract_eb(archive_path, &mut file, base, summary)
+    } else {
+        extract_bigf(archive_path, base, summary)
+    }
+}
+
+/// Xbox/PS3/Recomp path: read the whole `BIGF`/`BIG4` into memory and slice it.
+/// These archives are small enough to buffer.
+fn extract_bigf(archive_path: &Path, base: &Path, summary: &mut ExtractSummary) -> Result<()> {
     let bytes = std::fs::read(archive_path).map_err(|source| DomainError::Io {
         path: archive_path.to_string_lossy().to_string(),
         source,
     })?;
-    let archive =
-        Archive::parse(bytes).map_err(|e| DomainError::Extract(format!("{e}")))?;
+    let archive = Archive::parse(bytes).map_err(|e| DomainError::Extract(format!("{e}")))?;
 
     for idx in 0..archive.entries.len() {
         let name = archive.entries[idx].name.clone();
@@ -137,19 +169,75 @@ fn extract_one(archive_path: &Path, base: &Path, summary: &mut ExtractSummary) -
                 continue;
             }
         };
-        if let Some(parent) = dest.parent() {
-            std::fs::create_dir_all(parent).map_err(|source| DomainError::Io {
-                path: parent.to_string_lossy().to_string(),
-                source,
-            })?;
+        write_entry(&dest, &data, summary)?;
+    }
+    Ok(())
+}
+
+/// PS4 path: parse the `EB\0\3` front tables, then seek + read each entry's
+/// payload on demand. Never buffers the whole archive — `game_90.big` is 17 GB.
+fn extract_eb(
+    archive_path: &Path,
+    file: &mut std::fs::File,
+    base: &Path,
+    summary: &mut ExtractSummary,
+) -> Result<()> {
+    let io_err = |source| DomainError::Io {
+        path: archive_path.to_string_lossy().to_string(),
+        source,
+    };
+    let parse_err = |e| DomainError::Extract(format!("{e}"));
+
+    // Read the fixed header, then exactly the bytes the table parse needs.
+    let mut header_buf = vec![0u8; eb::HEADER_LEN];
+    file.seek(SeekFrom::Start(0)).map_err(io_err)?;
+    file.read_exact(&mut header_buf).map_err(io_err)?;
+    let header = EbHeader::parse(&header_buf).map_err(parse_err)?;
+
+    let mut table_buf = vec![0u8; header.table_end()];
+    file.seek(SeekFrom::Start(0)).map_err(io_err)?;
+    file.read_exact(&mut table_buf).map_err(io_err)?;
+    let archive = eb::EbArchive::parse(&table_buf).map_err(parse_err)?;
+    drop(table_buf);
+
+    for entry in &archive.entries {
+        let Some(dest) = safe_join(base, &entry.path) else {
+            summary.skipped_unsafe += 1;
+            continue;
+        };
+        // Stream just this entry's stored bytes.
+        let mut raw = vec![0u8; entry.size as usize];
+        if file.seek(SeekFrom::Start(entry.offset)).is_err() || file.read_exact(&mut raw).is_err() {
+            // A truncated/unreadable entry is skipped, not fatal for the archive.
+            summary.skipped_unsupported += 1;
+            continue;
         }
-        std::fs::write(&dest, &data).map_err(|source| DomainError::Io {
-            path: dest.to_string_lossy().to_string(),
+        let data = match eb::decode_payload(raw) {
+            Ok(Payload::Data(d)) => d,
+            Ok(Payload::UnsupportedLzx) | Err(_) => {
+                summary.skipped_unsupported += 1;
+                continue;
+            }
+        };
+        write_entry(&dest, &data, summary)?;
+    }
+    Ok(())
+}
+
+/// Create parent dirs and write one extracted entry, tallying it into `summary`.
+fn write_entry(dest: &Path, data: &[u8], summary: &mut ExtractSummary) -> Result<()> {
+    if let Some(parent) = dest.parent() {
+        std::fs::create_dir_all(parent).map_err(|source| DomainError::Io {
+            path: parent.to_string_lossy().to_string(),
             source,
         })?;
-        summary.files_written += 1;
-        summary.bytes_written += data.len() as u64;
     }
+    std::fs::write(dest, data).map_err(|source| DomainError::Io {
+        path: dest.to_string_lossy().to_string(),
+        source,
+    })?;
+    summary.files_written += 1;
+    summary.bytes_written += data.len() as u64;
     Ok(())
 }
 
@@ -210,6 +298,107 @@ mod tests {
         fs::write(path, b.build().unwrap()).unwrap();
     }
 
+    /// Write a synthetic PS4 `EB\0\3` `.big` (raw payloads) at `path`. `files`
+    /// are `(dir_index, basename, body)`; `dirs` are the directory paths.
+    /// Mirrors the real layout (0x30 file table, 20-byte entries with 16-byte
+    /// block offsets, `dir_index`-prefixed fixed name slots, 16-byte-aligned
+    /// dir table + data) so `extract_eb` exercises the same parse it does on a
+    /// real archive.
+    fn write_eb_big(path: &Path, dirs: &[&str], files: &[(u16, &str, &[u8])]) {
+        const HDR: usize = 0x30;
+        let align16 = |n: usize| (n + 15) & !15;
+        let name_slot = files.iter().map(|(_, n, _)| n.len() + 3).max().unwrap();
+        let dir_slot = dirs.iter().map(|d| d.len() + 1).max().unwrap();
+        let name_off = HDR + files.len() * 20;
+        let dir_start = align16(name_off + files.len() * name_slot);
+        let data_start = align16(dir_start + dirs.len() * dir_slot);
+
+        let mut blocks = Vec::new();
+        let mut cur = data_start;
+        for (_, _, body) in files {
+            blocks.push((cur >> 4, body.len()));
+            cur = align16(cur + body.len());
+        }
+        let mut out = vec![0u8; data_start];
+        out[0..4].copy_from_slice(b"EB\x00\x03");
+        out[0x04..0x08].copy_from_slice(&(files.len() as u32).to_be_bytes());
+        out[0x08..0x0C].copy_from_slice(&0x0011_0400u32.to_be_bytes());
+        out[0x0C..0x10].copy_from_slice(&(name_off as u32).to_be_bytes());
+        out[0x14] = name_slot as u8;
+        out[0x15] = dir_slot as u8;
+        out[0x16..0x18].copy_from_slice(&(dirs.len() as u16).to_be_bytes());
+        out[0x18..0x20].copy_from_slice(&(cur as u64).to_be_bytes());
+        for (i, (block, size)) in blocks.iter().enumerate() {
+            let e = HDR + i * 20;
+            out[e..e + 4].copy_from_slice(&(*block as u32).to_be_bytes());
+            out[e + 8..e + 12].copy_from_slice(&(*size as u32).to_be_bytes());
+        }
+        for (i, (di, name, _)) in files.iter().enumerate() {
+            let n = name_off + i * name_slot;
+            out[n..n + 2].copy_from_slice(&di.to_be_bytes());
+            out[n + 2..n + 2 + name.len()].copy_from_slice(name.as_bytes());
+        }
+        for (i, d) in dirs.iter().enumerate() {
+            let o = dir_start + i * dir_slot;
+            out[o..o + d.len()].copy_from_slice(d.as_bytes());
+        }
+        for ((_, _, body), (block, _)) in files.iter().zip(blocks.iter()) {
+            let o = block << 4;
+            out.resize(out.len().max(o + body.len()), 0);
+            out[o..o + body.len()].copy_from_slice(body);
+        }
+        out.resize(cur, 0);
+        fs::create_dir_all(path.parent().unwrap()).unwrap();
+        fs::write(path, out).unwrap();
+    }
+
+    #[test]
+    fn extracts_ps4_eb_archive_by_streaming() {
+        let t = TempTree::new("eb");
+        let root = &t.0;
+        // Two dirs; entries reference them by index. Mirrors a PS4 install:
+        // the DB lives deep under nhl/data, textures under nhl/ui.
+        write_eb_big(
+            &root.join("inxp_00.big"),
+            &["nhl/data/common/gamemodes/database/t3db", "nhl/ui/overlays"],
+            &[
+                (0, "nhl_game.db", b"PS4-MAIN-DB"),
+                (0, "initial_experience.db", b"IXP-SNAPSHOT"),
+                (1, "scoreclock.gfx", b"CFX%-raw-scaleform"),
+            ],
+        );
+
+        let summary = extract_install(root).unwrap();
+        assert_eq!(summary.archives, 1);
+        assert_eq!(summary.files_written, 3);
+        assert_eq!(
+            fs::read(root.join("nhl/data/common/gamemodes/database/t3db/nhl_game.db")).unwrap(),
+            b"PS4-MAIN-DB"
+        );
+        assert_eq!(
+            fs::read(root.join("nhl/data/common/gamemodes/database/t3db/initial_experience.db"))
+                .unwrap(),
+            b"IXP-SNAPSHOT"
+        );
+        assert_eq!(
+            fs::read(root.join("nhl/ui/overlays/scoreclock.gfx")).unwrap(),
+            b"CFX%-raw-scaleform"
+        );
+    }
+
+    #[test]
+    fn eb_and_bigf_archives_extract_in_the_same_walk() {
+        let t = TempTree::new("mixed");
+        let root = &t.0;
+        write_big(&root.join("xbox.big"), &[("db/nhlng.db", b"XBOX")]);
+        write_eb_big(&root.join("ps4.big"), &["db"], &[(0, "nhl_game.db", b"PS4")]);
+
+        let summary = extract_install(root).unwrap();
+        assert_eq!(summary.archives, 2);
+        assert_eq!(fs::read(root.join("db/nhlng.db")).unwrap(), b"XBOX");
+        assert_eq!(fs::read(root.join("db/nhl_game.db")).unwrap(), b"PS4");
+    }
+
     #[test]
     fn extracts_entries_preserving_internal_hierarchy() {
         let t = TempTree::new("hier");
@@ -257,6 +446,75 @@ mod tests {
         assert_eq!(summary.files_written, 1);
         assert!(root.join("ok.txt").is_file());
         assert!(!root.parent().unwrap().join("escape.txt").exists());
+    }
+
+    /// Live check against a real PS4 `EB\0\3` archive on the operator's drive.
+    /// Skipped when the drive isn't mounted. Extracts a small real archive and
+    /// byte-compares against the reference `Extracted/` tree — exercising the
+    /// actual streaming reader, chunkzip inflation, and path reconstruction on
+    /// real bytes (not just synthetic fixtures).
+    #[test]
+    fn ps4_real_eb_archive_extracts_matching_reference() {
+        let src = Path::new(r"H:\Emulators\ShadPS4\Games\CUSA18182\databigs\overlays_20.big");
+        let reference = Path::new(r"H:\Emulators\ShadPS4\Games\CUSA18182\databigs\Extracted");
+        if !src.is_file() || !reference.is_dir() {
+            eprintln!("skipping: real PS4 databigs not present");
+            return;
+        }
+        let t = TempTree::new("eb-real");
+        fs::copy(src, t.0.join("overlays_20.big")).unwrap();
+
+        let summary = extract_install(&t.0).unwrap();
+        assert_eq!(summary.archives, 1);
+        assert!(summary.files_written >= 6, "expected the 6 overlay entries");
+
+        // A raw `.gfx` and a chunkzip-wrapped `.gnf` must both round-trip to the
+        // reference bytes.
+        for rel in [
+            "nhl/ui/swfassets/kettle/overlays/energygain/energygainprogressbar.gfx",
+            "nhl/ui/swfassets/kettle/overlays/energygain/energygainprogressbar_i1.gnf",
+        ] {
+            let got = fs::read(t.0.join(rel)).unwrap();
+            let want = fs::read(reference.join(rel)).unwrap();
+            assert_eq!(got, want, "{rel} did not match the reference extraction");
+        }
+    }
+
+    /// Live check that a real NHL 20 `inxp_00.big` parses and yields
+    /// `nhl_game.db` at the path discovery expects — this is the archive whose
+    /// name records are variable-count / drift-prone. Reads only the front
+    /// tables + the one DB entry (fast), so it runs the real `EbArchive`
+    /// parser and codec on real bytes without a 500 MB full extraction.
+    #[test]
+    fn ps4_nhl20_inxp_yields_nhl_game_db() {
+        let src = Path::new(r"H:\Emulators\ShadPS4\Games\CUSA15439\databigs\inxp_00.big");
+        if !src.is_file() {
+            eprintln!("skipping: real NHL20 inxp_00.big not present");
+            return;
+        }
+        let mut file = std::fs::File::open(src).unwrap();
+        let mut header_buf = vec![0u8; eb::HEADER_LEN];
+        file.read_exact(&mut header_buf).unwrap();
+        let header = EbHeader::parse(&header_buf).unwrap();
+        let mut table_buf = vec![0u8; header.table_end()];
+        file.seek(SeekFrom::Start(0)).unwrap();
+        file.read_exact(&mut table_buf).unwrap();
+        let archive = eb::EbArchive::parse(&table_buf).unwrap();
+
+        let entry = archive
+            .entries
+            .iter()
+            .find(|e| e.path == "nhl/data/common/gamemodes/database/t3db/nhl_game.db")
+            .expect("nhl_game.db must resolve to the t3db path discovery searches");
+
+        // Decode the payload and confirm it's a real (multi-MB) database.
+        let mut raw = vec![0u8; entry.size as usize];
+        file.seek(SeekFrom::Start(entry.offset)).unwrap();
+        file.read_exact(&mut raw).unwrap();
+        let Payload::Data(db) = eb::decode_payload(raw).unwrap() else {
+            panic!("nhl_game.db payload should decode, not be chunklzx");
+        };
+        assert!(db.len() > 1_000_000, "nhl_game.db should be multi-MB, got {}", db.len());
     }
 
     #[test]

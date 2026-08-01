@@ -39,7 +39,7 @@ pub(crate) fn inner_db_len(payload: &[u8]) -> Result<usize, SaveError> {
 pub(crate) fn payload(file: &[u8]) -> Result<Vec<u8>, SaveError> {
     let header = SaveHeader::parse(file)?;
     match header.version {
-        ContainerVersion::RawV1 | ContainerVersion::RawV2 => {
+        ContainerVersion::RawV3 | ContainerVersion::RawV1 | ContainerVersion::RawV2 => {
             Ok(file[header.version.header_len()..].to_vec())
         }
         ContainerVersion::ZlibV4 => {

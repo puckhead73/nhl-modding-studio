@@ -1,10 +1,37 @@
 # Spike + design — retroactive roster-block repair
 
-> **Status: SPIKE / NOT YET IMPLEMENTED.** This captures the design and the go/no-go verification
-> protocol for an operation that *repairs* an already-corrupted `eGlu` roster-block layout. Prevention
-> of new corruption already exists (block-aware move/trade/create/delete). This is about healing DBs
-> that were corrupted by the old `dXSB`-retag `move_player` (or hand edits) **before** the fix.
-> No structural-mutation code ships until the verification below passes against the anchor.
+> **Status: IMPLEMENTED (2026-07-22), with a design change from the shapes below.** The shipped
+> repair is `EditTransaction::repair_roster_blocks` (`tdb-edit`), exposed as the
+> `repair_roster_blocks` command and a "Repair roster blocks" action on the Dashboard's
+> "Corrupted roster block" finding group. Verification protocol passed against the PS3 NHL Legacy
+> anchor (`crates/tdb-edit/tests/block_repair.rs`): retag shape, dense 40-team retag shape,
+> physically-swapped-rows shape, full-audit write-clean after repair, exact row-multiset
+> conservation, in-block relative order preserved, idempotence/no-op gates, CRC round-trip.
+>
+> **Design change — order-only permutation, not relabel/relocate classification.** Neither shape
+> (A) nor (B) below shipped. Instead the repair **permutes whole `eGlu` records** into contiguous
+> per-team blocks keyed by the `dXSB` label each row already carries (block order = each team's
+> median current record index; in-team order preserved; rows move byte-identically via
+> `TdbFile::permute_records`). Rationale:
+> * It treats `dXSB` as the *intent*: the old retag bug wrote the destination team's id as part of
+>   a user-requested move, so relabel (A) would silently **revert** that move, and the ambiguity
+>   the spike worried about (which of A/B matches) never has to be guessed.
+> * It conserves the labeled roster content **by construction** — no field value changes, so no
+>   membership/jersey/captaincy can change; the failure mode "a repair that shuffles players"
+>   is structurally impossible.
+> * It needs no free destination slots (shape (B)'s `TeamRosterFull` dead-end) and heals every
+>   corruption shape (retag, swap-pop displacement, append-at-end) in one uniform pass.
+> * `toWX` as a source of truth is unnecessary — and unreliable anyway after legitimate edits
+>   (mid-block deletes leave key holes; fresh slots mint non-adjacent keys).
+>
+> The op runs under its own snapshot/rollback (the whole-DB gate would refuse the very corrupt DBs
+> it exists to heal) with hard post-conditions: `towx_coherence` empty and no other db-only
+> predicate regressed, else full rollback. Content-level issues the corruption also carried
+> (duplicate jerseys, double captains) are deliberately left for their own repairs/audit — the
+> block repair fixes structure only. Mirrored into an aligned roster save (identical `eGlu` ⇒
+> identical permutation), staged as a pending undoable edit.
+>
+> The original spike text is kept below for the record.
 
 ## Problem
 

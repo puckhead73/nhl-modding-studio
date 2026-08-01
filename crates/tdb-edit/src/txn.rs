@@ -30,7 +30,7 @@ use std::collections::{BTreeMap, HashSet};
 use tdb_core::TdbFile;
 use tdb_domain_validation::{companion_presence, dup_on_team, single_captain, towx_coherence};
 use tdb_relations::entity::ids;
-use tdb_relations::{RosterModel, RosterSlot};
+use tdb_relations::{PlayerKind, RosterModel, RosterSlot};
 
 /// Captaincy roles — the confirmed `eGlu.mCcl` enum.
 pub mod captaincy {
@@ -78,6 +78,17 @@ fn career_table_guard(studio_table: &str) -> Result<(), EditError> {
     }
 }
 
+/// Finding count for each db-only edit-gate invariant, in the order they are reported. Used by the
+/// delta gate in [`EditTransaction::with_repairing_transaction`] to compare pre- vs post-edit state.
+fn predicate_counts(db: &TdbFile) -> [(&'static str, usize); 4] {
+    [
+        ("single_captain", single_captain(db).len()),
+        ("companion_presence", companion_presence(db).len()),
+        ("towx_coherence", towx_coherence(db).len()),
+        ("dup_on_team", dup_on_team(db).len()),
+    ]
+}
+
 /// What an operation did: how many cell edits, and a human description of each auto-repair applied.
 #[derive(Clone, Debug, Default)]
 pub struct OpOutcome {
@@ -99,12 +110,88 @@ pub struct JerseyReassignment {
     pub new: u64,
 }
 
+/// What [`EditTransaction::repair_roster_blocks`] did: how many `eGlu` rows changed physical
+/// position, and which teams' blocks the pre-repair audit had flagged (structured so a presentation
+/// layer can resolve the team ids to real names).
+#[derive(Clone, Debug, Default)]
+pub struct BlockRepairSummary {
+    /// Roster-slot rows that moved to a new record index (0 = the layout was already coherent).
+    pub moved_slots: u32,
+    /// The distinct teams the `towx_coherence` findings named before the repair, ascending.
+    pub affected_teams: Vec<u64>,
+}
+
 /// Where `create_player` places its new `eGlu` slot to keep the team's record block contiguous.
 enum SlotPlacement {
     /// Reuse an existing vacant slot already inside the team's block (record index).
     Reuse(u32),
     /// Insert a fresh record at this `eGlu` index (the team's block-end boundary).
     Insert(u32),
+}
+
+/// The record indices of a freshly-created player cluster, returned by the unaudited
+/// [`EditTransaction::create_player_inner`] so a batch import can write its bio/companion fields
+/// without re-scanning for the new records.
+#[derive(Clone, Copy, Debug)]
+pub struct CreatedPlayer {
+    /// The minted `ubPc.wBIz` player id.
+    pub wbiz: u64,
+    /// The new `ubPc` bio record index.
+    pub bio: u32,
+    /// The new kind-correct AI companion record index (`dSvy` skater / `mHuy` goalie).
+    pub companion_ai: u32,
+    /// True when the player was created as a goalie (`position == 4`).
+    pub goalie: bool,
+    /// Structural edits performed (bio + companions + index + slot).
+    pub edits: u32,
+}
+
+/// Which record of a player-cluster an import write targets.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum ImportTarget {
+    /// The `ubPc` bio record.
+    Bio,
+    /// The kind-correct AI companion record (`dSvy`/`mHuy`), resolved per player.
+    Companion,
+}
+
+/// One already-validated, **encoded** cell value for an import write. Range/updatable/enum validation
+/// is the caller's job (`studio-domain` does it against the metadata), exactly like [`set_cell_int`].
+///
+/// [`set_cell_int`]: EditTransaction::set_cell_int
+#[derive(Clone, Debug)]
+pub enum ImportCell {
+    /// A fixed-bit field: the raw encoded value.
+    Int(u64),
+    /// An inline-string field.
+    Str(String),
+}
+
+/// One field write within an [`ImportOp`].
+#[derive(Clone, Debug)]
+pub struct ImportWrite {
+    pub target: ImportTarget,
+    /// Studio (canonical) field id on the target table.
+    pub field: String,
+    pub cell: ImportCell,
+}
+
+/// One item of a batch import: create a new player, or update an existing one, then apply its writes.
+#[derive(Clone, Debug)]
+pub enum ImportOp {
+    /// Create a new player cluster on `team` at `position`, then write `writes`.
+    Create { team: u64, position: u64, writes: Vec<ImportWrite> },
+    /// Update the existing player `player_id`'s bio/companion cells with `writes`.
+    Update { player_id: u64, writes: Vec<ImportWrite> },
+}
+
+/// The result of applying an import cart: the aggregate op outcome plus every newly-created `wBIz`
+/// (one per [`ImportOp::Create`], in op order — empty for an all-update cart). The created ids let the
+/// caller ledger the real player id and echo it back to the UI.
+#[derive(Clone, Debug, Default)]
+pub struct ImportApplied {
+    pub outcome: OpOutcome,
+    pub created: Vec<u64>,
 }
 
 /// A staged, in-memory edit session over one database snapshot.
@@ -388,38 +475,36 @@ impl EditTransaction {
         let snapshot = self.working.clone();
         let result = op(self).and_then(|outcome| {
             // Override mode: the operator has acknowledged working on a corrupt DB, so skip the
-            // whole-DB gate. The op's own errors still propagate (and roll back) below.
+            // gate entirely. The op's own errors still propagate (and roll back) below.
             if self.allow_pre_existing_violations {
                 return Ok(outcome);
             }
-            let view = self.working.clone();
-            let db = TdbFile::parse(&view).map_err(|e| EditError::Parse(e.to_string()))?;
-            // Share the save-time predicates so operation-time and save-time agree. (Predicates that
-            // need the def registries — referential/enum — are verified at save time; the db-only
-            // invariants run here.)
-            // Run each db-only predicate in turn; the first to find a violation names the failure.
-            let mut violations = single_captain(&db);
-            let mut predicate = "single_captain";
-            if violations.is_empty() {
-                violations = companion_presence(&db);
-                predicate = "companion_presence";
+            // Share the save-time db-only predicates so operation-time and save-time agree.
+            // (Predicates that need the def registries — referential/enum — are verified at save
+            // time.) The gate is **delta-based**: it blocks only violations *this op introduced*, so
+            // a pre-existing violation elsewhere in the DB never rolls back an unrelated edit. EA
+            // vanilla anchors ship with pre-existing findings (phantom data, dup jerseys), and an
+            // absolute gate would make them entirely uneditable.
+            let post_db =
+                TdbFile::parse(&self.working).map_err(|e| EditError::Parse(e.to_string()))?;
+            let post = predicate_counts(&post_db);
+            // Fast path: the working DB is fully clean — nothing to compare.
+            if post.iter().all(|(_, n)| *n == 0) {
+                return Ok(outcome);
             }
-            if violations.is_empty() {
-                violations = towx_coherence(&db);
-                predicate = "towx_coherence";
+            // Some violation is present; only reject if the op *increased* a predicate's count.
+            let pre_db =
+                TdbFile::parse(&snapshot).map_err(|e| EditError::Parse(e.to_string()))?;
+            let pre = predicate_counts(&pre_db);
+            for (i, (predicate, post_n)) in post.iter().enumerate() {
+                if *post_n > pre[i].1 {
+                    return Err(EditError::AuditFailed {
+                        predicate,
+                        violations: *post_n,
+                    });
+                }
             }
-            if violations.is_empty() {
-                violations = dup_on_team(&db);
-                predicate = "dup_on_team";
-            }
-            if violations.is_empty() {
-                Ok(outcome)
-            } else {
-                Err(EditError::AuditFailed {
-                    predicate,
-                    violations: violations.len(),
-                })
-            }
+            Ok(outcome)
         });
         if result.is_err() {
             self.working = snapshot;
@@ -516,17 +601,33 @@ impl EditTransaction {
         team_id: u64,
         position: u64,
     ) -> Result<(u64, OpOutcome), EditError> {
+        let mut created: Option<CreatedPlayer> = None;
+        let outcome = self.with_repairing_transaction(|tx| {
+            let c = tx.create_player_inner(team_id, position)?;
+            created = Some(c);
+            Ok(OpOutcome {
+                edits: c.edits,
+                repairs: vec![format!(
+                    "created {} cluster wBIz={}: bio + companions + index + slot on team {team_id}",
+                    if c.goalie { "goalie" } else { "skater" },
+                    c.wbiz
+                )],
+            })
+        })?;
+        Ok((created.expect("inner sets created on Ok").wbiz, outcome))
+    }
+
+    /// The **unaudited** body of [`Self::create_player`]: mint the cluster (bio + kind-correct
+    /// companions + index + block-coherent slot) and return the new record indices. Callers must run
+    /// it **inside** a [`with_repairing_transaction`](Self::with_repairing_transaction) so the audit
+    /// still fires — `create_player` wraps a single one; a batch import wraps one around the *whole*
+    /// cart so N creates cost one audit and roll back atomically.
+    fn create_player_inner(&mut self, team_id: u64, position: u64) -> Result<CreatedPlayer, EditError> {
         if position > 4 {
-            return Err(EditError::InvalidValue {
-                what: "position",
-                value: position as i64,
-            });
+            return Err(EditError::InvalidValue { what: "position", value: position as i64 });
         }
         if self.model()?.team(team_id).is_none() {
-            return Err(EditError::InvalidValue {
-                what: "team_id (no such team)",
-                value: team_id as i64,
-            });
+            return Err(EditError::InvalidValue { what: "team_id (no such team)", value: team_id as i64 });
         }
         let new_pid = self.mint_id(ids::BIO, ids::PLAYER_ID)?;
         let new_vfeq = self.mint_id(ids::INDEX, ids::INDEX_KEY)?;
@@ -534,56 +635,114 @@ impl EditTransaction {
         let goalie = position == 4;
         let placement = self.eglu_placement(team_id)?;
 
+        // Bio (ubPc): identity + position + team affiliation.
+        let bio = self.append(ids::BIO)?;
+        self.set_field(ids::BIO, bio, ids::PLAYER_ID, new_pid)?;
+        self.set_field(ids::BIO, bio, ids::POSITION, position)?;
+        self.set_field(ids::BIO, bio, ids::SLOT_TEAM, team_id)?; // ubPc.dXSB
+
+        // Kind-correct companion pair, keyed on the new wBIz.
+        let (ai, equip) = if goalie {
+            (ids::GOALIE_AI, ids::GOALIE_EQUIP)
+        } else {
+            (ids::SKATER_AI, ids::SKATER_EQUIP)
+        };
+        let ai_rec = self.append(ai)?;
+        self.set_field(ai, ai_rec, ids::PLAYER_ID, new_pid)?;
+        let eq_rec = self.append(equip)?;
+        self.set_field(equip, eq_rec, ids::PLAYER_ID, new_pid)?;
+
+        // Player index (ZBac): bridge the bio.
+        let zb = self.append(ids::INDEX)?;
+        self.set_field(ids::INDEX, zb, ids::INDEX_KEY, new_vfeq)?;
+        self.set_field(ids::INDEX, zb, ids::INDEX_TO_BIO, new_pid)?;
+
+        // Roster slot (eGlu): install the occupant *inside the team's block* (block-coherent).
+        let slot_edits = match placement {
+            // Reuse a vacant in-block slot: it already carries this team's `dXSB` and an in-block
+            // `toWX`, so only the (clean) occupant is installed — no key mint, no shift.
+            SlotPlacement::Reuse(rec) => self.occupy_slot(rec, new_vfeq)?,
+            // Grow the block: insert a fresh record at the boundary, then wire key + occupant + team.
+            SlotPlacement::Insert(at) => {
+                self.insert_at(ids::ROSTER_LINES, at)?;
+                self.set_field(ids::ROSTER_LINES, at, ids::SLOT_KEY, new_slot_key)?;
+                self.set_field(ids::ROSTER_LINES, at, ids::SLOT_TO_INDEX, new_vfeq)?;
+                self.set_field(ids::ROSTER_LINES, at, ids::SLOT_TEAM, team_id)?;
+                3
+            }
+        };
+
+        Ok(CreatedPlayer { wbiz: new_pid, bio, companion_ai: ai_rec, goalie, edits: 7 + slot_edits })
+    }
+
+    /// Apply a batch import — many creates and/or updates — as **one** audited transaction and **one**
+    /// undo entry (Spike S3: per-op editing retains a full-DB snapshot per op, ~GB for a team-season;
+    /// batching keeps it to one). Every op's writes land inside a single
+    /// [`with_repairing_transaction`](Self::with_repairing_transaction), so the delta audit runs once
+    /// over the whole cart and the cart rolls back atomically on any violation. Cell values are
+    /// already validated + encoded by the caller (`studio-domain`), mirroring [`Self::set_cell_int`].
+    pub fn apply_import(&mut self, ops: &[ImportOp]) -> Result<ImportApplied, EditError> {
+        // Created `wBIz`s are collected via a captured side-channel (the repairing-transaction harness
+        // is fixed to an `OpOutcome` return): one per Create op, in op order.
+        let mut created: Vec<u64> = Vec::new();
         let outcome = self.with_repairing_transaction(|tx| {
-            // Bio (ubPc): identity + position + team affiliation.
-            let bio = tx.append(ids::BIO)?;
-            tx.set_field(ids::BIO, bio, ids::PLAYER_ID, new_pid)?;
-            tx.set_field(ids::BIO, bio, ids::POSITION, position)?;
-            tx.set_field(ids::BIO, bio, ids::SLOT_TEAM, team_id)?; // ubPc.dXSB
-
-            // Kind-correct companion pair, keyed on the new wBIz.
-            let (ai, equip) = if goalie {
-                (ids::GOALIE_AI, ids::GOALIE_EQUIP)
-            } else {
-                (ids::SKATER_AI, ids::SKATER_EQUIP)
-            };
-            let ai_rec = tx.append(ai)?;
-            tx.set_field(ai, ai_rec, ids::PLAYER_ID, new_pid)?;
-            let eq_rec = tx.append(equip)?;
-            tx.set_field(equip, eq_rec, ids::PLAYER_ID, new_pid)?;
-
-            // Player index (ZBac): bridge the bio.
-            let zb = tx.append(ids::INDEX)?;
-            tx.set_field(ids::INDEX, zb, ids::INDEX_KEY, new_vfeq)?;
-            tx.set_field(ids::INDEX, zb, ids::INDEX_TO_BIO, new_pid)?;
-
-            // Roster slot (eGlu): install the occupant *inside the team's block* (block-coherent).
-            let (_slot, slot_edits) = match placement {
-                // Reuse a vacant in-block slot: it already carries this team's `dXSB` and an in-block
-                // `toWX`, so only the (clean) occupant is installed — no key mint, no shift.
-                SlotPlacement::Reuse(rec) => {
-                    let n = tx.occupy_slot(rec, new_vfeq)?;
-                    (rec, n)
+            let mut total = OpOutcome::default();
+            for op in ops {
+                match op {
+                    ImportOp::Create { team, position, writes } => {
+                        let c = tx.create_player_inner(*team, *position)?;
+                        created.push(c.wbiz);
+                        total.edits += c.edits;
+                        let companion = if c.goalie { ids::GOALIE_AI } else { ids::SKATER_AI };
+                        for w in writes {
+                            tx.apply_import_write(c.bio, c.companion_ai, companion, w)?;
+                            total.edits += 1;
+                        }
+                        total.repairs.push(format!("imported new player wBIz={}", c.wbiz));
+                    }
+                    ImportOp::Update { player_id, writes } => {
+                        let (bio, companion_rec, companion) = tx.locate_player_records(*player_id)?;
+                        for w in writes {
+                            tx.apply_import_write(bio, companion_rec, companion, w)?;
+                            total.edits += 1;
+                        }
+                        total.repairs.push(format!("updated player wBIz={player_id}"));
+                    }
                 }
-                // Grow the block: insert a fresh record at the boundary, then wire key + occupant + team.
-                SlotPlacement::Insert(at) => {
-                    tx.insert_at(ids::ROSTER_LINES, at)?;
-                    tx.set_field(ids::ROSTER_LINES, at, ids::SLOT_KEY, new_slot_key)?;
-                    tx.set_field(ids::ROSTER_LINES, at, ids::SLOT_TO_INDEX, new_vfeq)?;
-                    tx.set_field(ids::ROSTER_LINES, at, ids::SLOT_TEAM, team_id)?;
-                    (at, 3)
-                }
-            };
-
-            Ok(OpOutcome {
-                edits: 7 + slot_edits,
-                repairs: vec![format!(
-                    "created {} cluster wBIz={new_pid}: bio + {ai}/{equip} + index + slot on team {team_id}",
-                    if goalie { "goalie" } else { "skater" }
-                )],
-            })
+            }
+            Ok(total)
         })?;
-        Ok((new_pid, outcome))
+        Ok(ImportApplied { outcome, created })
+    }
+
+    /// Resolve a player's `(bio_record, companion_record, companion_table)` from the current model.
+    fn locate_player_records(&self, player_id: u64) -> Result<(u32, u32, &'static str), EditError> {
+        let model = self.model()?;
+        let p = model.player(player_id).ok_or(EditError::NoSuchPlayer(player_id))?;
+        let (rec, table) = match p.kind {
+            PlayerKind::Skater => (p.skater_ai, ids::SKATER_AI),
+            PlayerKind::Goalie => (p.goalie_ai, ids::GOALIE_AI),
+        };
+        let companion = rec.ok_or(EditError::NoSuchPlayer(player_id))?;
+        Ok((p.bio_record, companion, table))
+    }
+
+    /// Route one [`ImportWrite`] to the bio or companion record and write the (pre-encoded) cell.
+    fn apply_import_write(
+        &mut self,
+        bio: u32,
+        companion_rec: u32,
+        companion_table: &str,
+        w: &ImportWrite,
+    ) -> Result<(), EditError> {
+        let (table, record) = match w.target {
+            ImportTarget::Bio => (ids::BIO, bio),
+            ImportTarget::Companion => (companion_table, companion_rec),
+        };
+        match &w.cell {
+            ImportCell::Int(v) => self.set_field(table, record, &w.field, *v),
+            ImportCell::Str(s) => self.set_field_str(table, record, &w.field, s),
+        }
     }
 
     /// Clone an existing player onto `to_team` — a full duplicate cluster with a fresh identity. Backs
@@ -903,30 +1062,6 @@ impl EditTransaction {
             .filter(|&k| k != 0 && k != sentinel)
             .min()
             .ok_or(EditError::NoSuchPlayer(player_id))
-    }
-
-    /// The index of the first record whose studio field equals `value`, if any.
-    fn find_record(
-        &self,
-        studio_table: &str,
-        studio_field: &str,
-        value: u64,
-    ) -> Result<Option<u32>, EditError> {
-        let view = self.working.clone();
-        let db = TdbFile::parse(&view).map_err(|e| EditError::Parse(e.to_string()))?;
-        let table = db
-            .table_canonical(studio_table)
-            .ok_or_else(|| EditError::UnknownTable(studio_table.to_string()))?;
-        let field = table
-            .fields
-            .iter()
-            .find(|f| f.id.canonical(db.endian) == studio_field)
-            .ok_or_else(|| EditError::UnknownField {
-                table: studio_table.to_string(),
-                field: studio_field.to_string(),
-            })?;
-        Ok((0..table.current_records as u32)
-            .find(|&i| db.read_u64(table, i, field) == Some(value)))
     }
 
     /// The storage bit-width of a studio field.
@@ -1658,6 +1793,143 @@ impl EditTransaction {
             })
         })?;
         Ok((outcome, plan))
+    }
+
+    /// Repair a corrupted `eGlu` roster-block layout (`towx_coherence` violations) by **permuting
+    /// records only**: rows are regrouped into contiguous per-team blocks keyed by the team label
+    /// (`dXSB`) each row already carries. No field value changes — every `(dXSB, XSWT, toWX,
+    /// jersey, …)` row survives byte-identical at a new record index — so the roster *content* the
+    /// labels describe (who is on which team) is conserved by construction, for every corruption
+    /// shape at once (the old `dXSB`-retag `move_player`, swap-pop deletes, append-at-end creates).
+    /// See `docs/plans/roster-block-repair-spike.md` for why permutation was chosen over
+    /// relabel/relocate classification: a relabel would silently *revert* the membership the old
+    /// buggy op was trying to record, and a relocate needs free destination slots that full blocks
+    /// don't have — the permutation needs neither and cannot move a player between teams.
+    ///
+    /// Within a team, rows keep their current relative order; the blocks are laid out by each
+    /// team's **median** current record index (robust to minority strays sitting far from their
+    /// real block), so the healed tiling tracks the existing physical layout as closely as
+    /// possible.
+    ///
+    /// Runs under its own snapshot/rollback rather than [`Self::with_repairing_transaction`]: the
+    /// whole-DB gate would refuse to operate on exactly the corrupt databases this op exists to
+    /// heal. The targeted post-conditions are still hard requirements — after the permutation
+    /// `towx_coherence` must be **empty** and none of the other db-only predicates may have gained
+    /// findings — otherwise every byte is rolled back and the error surfaces. Idempotent: an
+    /// already-coherent layout returns a zero-edit outcome without touching the bytes.
+    pub fn repair_roster_blocks(&mut self) -> Result<(OpOutcome, BlockRepairSummary), EditError> {
+        let snapshot = self.working.clone();
+        match self.repair_roster_blocks_impl() {
+            Ok(v) => Ok(v),
+            Err(e) => {
+                self.working = snapshot;
+                Err(e)
+            }
+        }
+    }
+
+    fn repair_roster_blocks_impl(&mut self) -> Result<(OpOutcome, BlockRepairSummary), EditError> {
+        let view = self.working.clone();
+        let db = TdbFile::parse(&view).map_err(|e| EditError::Parse(e.to_string()))?;
+
+        // Pre-state: the findings this repair targets, plus the baseline of the other db-only
+        // predicates (a pure permutation is value-blind, so they must not gain findings — checked
+        // after as a bug guard).
+        let before = towx_coherence(&db);
+        if before.is_empty() {
+            return Ok((OpOutcome::default(), BlockRepairSummary::default()));
+        }
+        let captains_before = single_captain(&db).len();
+        let companions_before = companion_presence(&db).len();
+        let dups_before = dup_on_team(&db).len();
+
+        let table = db
+            .table_canonical(ids::ROSTER_LINES)
+            .ok_or_else(|| EditError::UnknownTable(ids::ROSTER_LINES.to_string()))?;
+        let team_field = table
+            .fields
+            .iter()
+            .find(|f| f.id.canonical(db.endian) == ids::SLOT_TEAM)
+            .ok_or_else(|| EditError::UnknownField {
+                table: ids::ROSTER_LINES.to_string(),
+                field: ids::SLOT_TEAM.to_string(),
+            })?;
+
+        // Group every record by the team label it carries. Strict: an unreadable label means we
+        // cannot place the row, so the repair refuses rather than guesses.
+        let n = table.current_records as u32;
+        let mut groups: BTreeMap<u64, Vec<u32>> = BTreeMap::new();
+        for i in 0..n {
+            let team = db
+                .read_u64(table, i, team_field)
+                .ok_or(EditError::OutOfRange {
+                    table: ids::ROSTER_LINES.to_string(),
+                    record: i,
+                })?;
+            groups.entry(team).or_default().push(i);
+        }
+
+        // Block order = each team's median current record index (each group is ascending already).
+        let mut teams: Vec<(u32, u32, u64)> = groups
+            .iter()
+            .map(|(&team, recs)| (recs[recs.len() / 2], recs[0], team))
+            .collect();
+        teams.sort_unstable();
+        let mut order: Vec<u32> = Vec::with_capacity(n as usize);
+        for &(_, _, team) in &teams {
+            order.extend_from_slice(&groups[&team]);
+        }
+
+        let raw = table.id.raw();
+        db.permute_records(&mut self.working, &raw, &order)
+            .map_err(|e| EditError::Alloc(e.to_string()))?;
+
+        // Post-conditions (hard): the coherence findings are gone and no other invariant regressed.
+        let view = self.working.clone();
+        let healed = TdbFile::parse(&view).map_err(|e| EditError::Parse(e.to_string()))?;
+        let after = towx_coherence(&healed);
+        if !after.is_empty() {
+            return Err(EditError::AuditFailed {
+                predicate: "towx_coherence",
+                violations: after.len(),
+            });
+        }
+        for (predicate, before_count, after_count) in [
+            ("single_captain", captains_before, single_captain(&healed).len()),
+            ("companion_presence", companions_before, companion_presence(&healed).len()),
+            ("dup_on_team", dups_before, dup_on_team(&healed).len()),
+        ] {
+            if after_count > before_count {
+                return Err(EditError::AuditFailed {
+                    predicate,
+                    violations: after_count,
+                });
+            }
+        }
+
+        let moved = order
+            .iter()
+            .enumerate()
+            .filter(|&(dst, &src)| dst as u32 != src)
+            .count() as u32;
+        let mut affected: Vec<u64> = before.iter().filter_map(|f| f.team_id).collect();
+        affected.sort_unstable();
+        affected.dedup();
+        let outcome = OpOutcome {
+            edits: moved,
+            repairs: vec![format!(
+                "rebuilt the roster table into contiguous per-team blocks: repositioned {moved} of \
+                 {n} slots ({} teams were flagged corrupt)",
+                affected.len()
+            )],
+        };
+        Ok((
+            outcome,
+            BlockRepairSummary {
+                moved_slots: moved,
+                affected_teams: affected,
+            },
+        ))
     }
 
     /// Retire a jersey `number` for a `team` — add the `(team, number)` pair to the retired-number

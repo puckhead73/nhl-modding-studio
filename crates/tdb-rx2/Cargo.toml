@@ -1,0 +1,13 @@
+[package]
+name = "tdb-rx2"
+description = "EA RX2 (Xbox 360 RW4xb2) container reader/writer — player meshes, texlib textures, XPR2 front-end rasters."
+version = "0.0.0"
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+thiserror = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+texture2ddecoder = "0.1.2"

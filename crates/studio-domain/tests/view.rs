@@ -5,7 +5,7 @@ use std::path::{Path, PathBuf};
 
 use studio_domain::{
     arena_summaries, arena_view, career_stats, entity_fields, lines_view, player_summaries,
-    player_view, team_summaries, team_view, FieldKind,
+    player_view, probe_main_team_encoding, team_summaries, team_view, FieldKind, MainTeamEncoding,
 };
 use tdb_core::TdbFile;
 use tdb_defs::FieldMetaIndex;
@@ -516,4 +516,102 @@ fn career_stats_shape_across_players() {
         }
     }
     assert!(rows_seen > 1000, "the anchor carries plenty of career rows ({rows_seen})");
+}
+
+/// The `dXSB` "main team" pointer is 1-indexed on the PS3 NHL Legacy anchor (raw = team id + 1,
+/// 0 = free agent) — the probe recovers that from the roster ground truth. Guards the offset used
+/// by the Player banner and the Main-Team picker; NHL 09/10 (0-indexed) are verified against their
+/// external installs (not committed anchors). Every rostered player's resolved main team is also a
+/// team they actually fill a slot on — the header never points at a team the player doesn't play for.
+#[test]
+fn main_team_encoding_is_one_indexed_on_legacy_anchor() {
+    let (bytes, meta, enums) = fixtures();
+    let db = TdbFile::parse(&bytes).unwrap();
+    let model = RosterModel::build(&db).unwrap();
+    assert_eq!(
+        probe_main_team_encoding(&db, &model),
+        MainTeamEncoding::OneIndexed,
+        "Legacy stores dXSB as team_id + 1"
+    );
+
+    // Spot-check the resolved header against roster ground truth for the first 500 rostered players.
+    let mut checked = 0usize;
+    for p in model.players.iter() {
+        let memberships: Vec<u64> = model
+            .slots
+            .iter()
+            .filter(|s| s.player_id == Some(p.player_id))
+            .map(|s| s.team_id)
+            .collect();
+        if memberships.is_empty() {
+            continue;
+        }
+        let pv = player_view(&db, &meta, &enums, &model, p.player_id).unwrap();
+        if let Some(primary) = pv.header.primary_team_id {
+            assert!(
+                memberships.contains(&primary),
+                "player {} main team {primary} must be a real membership {memberships:?}",
+                p.player_id
+            );
+        }
+        checked += 1;
+        if checked >= 500 {
+            break;
+        }
+    }
+    assert!(checked >= 400, "exercised a healthy sample of rostered players ({checked})");
+}
+
+const NHL07_DB: &str = "anchors/xbox360/nhl07/databases/NHL07NG.db";
+const NHL07_META: &str = "anchors/xbox360/nhl07/databases/NHL07NG-meta.xml";
+
+fn nhl07_fixtures() -> (Vec<u8>, FieldMetaIndex, EnumRegistry) {
+    let bytes = std::fs::read(repo(NHL07_DB)).unwrap();
+    let meta = FieldMetaIndex::from_xml(&std::fs::read_to_string(repo(NHL07_META)).unwrap()).unwrap();
+    let enums = EnumRegistry::from_dir(repo(DEFS).join("enums")).unwrap();
+    (bytes, meta, enums)
+}
+
+/// NHL07's `kOtt` (`exhibitionteams`) is a thin index that carries no name fields; team names live in
+/// `stockteamtable`, reached via the `(table, teamid)` join. `team_summaries` must follow that join
+/// so every team resolves to a real, human-readable name — not the empty string the fat-schema reader
+/// produced. Verified team ids from the vanilla anchor (raw dXSB = team id, offset 0).
+#[test]
+fn nhl07_team_names_resolve_via_thin_index_join() {
+    let (bytes, meta, enums) = nhl07_fixtures();
+    let db = TdbFile::parse(&bytes).unwrap();
+    let model = RosterModel::build(&db).unwrap();
+
+    let teams = team_summaries(&db, &meta, &enums, &model);
+    assert_eq!(teams.len(), 93);
+    assert!(
+        teams.iter().all(|t| !t.name.trim().is_empty()),
+        "every NHL07 team must resolve a name via the stock/custom join"
+    );
+    let by_id = |id: u64| teams.iter().find(|t| t.team_id == id).map(|t| t.name.as_str());
+    assert_eq!(by_id(0), Some("Anaheim Ducks\u{2122}"));
+    assert_eq!(by_id(9), Some("Dallas Stars\u{2122}"));
+
+    // Team detail identity is sourced from the same join (not the thin kOtt row).
+    let view = team_view(&db, &meta, &enums, &model, 2).unwrap();
+    assert!(
+        view.identity.iter().any(|f| f.display.contains("Boston")),
+        "team_view identity should carry the resolved full name: {:?}",
+        view.identity.iter().map(|f| &f.display).collect::<Vec<_>>()
+    );
+}
+
+/// NHL07 stores the birth year in a 6-bit field with base 1959 (not the 8-bit, base-1900 encoding of
+/// NHL 09→21) and month/day already 1-indexed. The width-aware base + the birthdate probe must
+/// compose the correct calendar date through the real player-view path. Daniel Alfredsson (wBIz=232)
+/// was born 1972-12-11.
+#[test]
+fn nhl07_birthdate_uses_probed_base_and_offset() {
+    let (bytes, meta, enums) = nhl07_fixtures();
+    let db = TdbFile::parse(&bytes).unwrap();
+    let model = RosterModel::build(&db).unwrap();
+
+    let pv = player_view(&db, &meta, &enums, &model, 232).unwrap();
+    assert_eq!(pv.header.full_name.trim(), "Daniel Alfredsson");
+    assert_eq!(pv.header.birthdate.as_deref(), Some("1972-12-11"));
 }

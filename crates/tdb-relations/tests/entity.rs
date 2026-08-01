@@ -58,6 +58,36 @@ fn companion_invariant_holds() {
     assert!(goalie.skater_ai.is_none() && goalie.skater_equip.is_none());
 }
 
+/// NHL07 (gen6 `NHL07NG.db`) ships no separate equipment tables (`xmja`/`fMVl`), so its players
+/// carry the AI companion (`dSvy`/`mHuy`) but no equipment row. The schema-aware companion invariant
+/// must treat that as clean — not flag every player — since the equipment table its title never had
+/// cannot be "missing". Regression guard for the audit-unblock: this was 2250 false errors before.
+#[test]
+fn nhl07_cluster_clean_without_equipment_tables() {
+    let bytes = anchor("xbox360/nhl07/databases/NHL07NG.db");
+    let db = TdbFile::parse(&bytes).unwrap();
+    let model = RosterModel::build(&db).unwrap();
+
+    assert_eq!(model.teams.len(), 93, "kOtt (exhibitionteams) rows");
+    assert_eq!(model.players.len(), 2250, "ubPc players");
+
+    let violations = model.companion_violations();
+    assert!(
+        violations.is_empty(),
+        "NHL07 has no equipment tables, so no player is a companion violation; got {} (first: {:?})",
+        violations.len(),
+        violations.first()
+    );
+
+    // The AI companion is still present and still required; the equipment half simply doesn't exist.
+    let skater = model.players.iter().find(|p| p.kind == PlayerKind::Skater).unwrap();
+    assert!(skater.skater_ai.is_some(), "skater keeps its AI companion (dSvy)");
+    assert!(skater.skater_equip.is_none(), "NHL07 has no skater equipment table");
+    let goalie = model.players.iter().find(|p| p.kind == PlayerKind::Goalie).unwrap();
+    assert!(goalie.goalie_ai.is_some(), "goalie keeps its AI companion (mHuy)");
+    assert!(goalie.goalie_equip.is_none(), "NHL07 has no goalie equipment table");
+}
+
 /// The roster→player two-hop bridge resolves for the overwhelming majority of slots, and each
 /// resolved slot also resolves to a real team — the typed graph is connected by construction.
 #[test]

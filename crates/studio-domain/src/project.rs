@@ -14,7 +14,7 @@ use crate::Result;
 
 /// The console/runtime a database targets. Selects byte order in the codec layer; PS3/Xbox/Recomp
 /// are all big-endian, PS4 is little-endian (Phase 9).
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub enum Platform {
     Ps3,
     Xbox,

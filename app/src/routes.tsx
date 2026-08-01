@@ -17,7 +17,13 @@ import { HistoricalPlayersPage } from "./pages/HistoricalPlayers";
 import { HistoricalPlayerDetail } from "./pages/HistoricalPlayerDetail";
 import { HistoricalTeamsPage } from "./pages/HistoricalTeams";
 import { HistoricalTeamDetail } from "./pages/HistoricalTeamDetail";
+import { RosterBuilderPage } from "./pages/RosterBuilder";
 import { FormulasPage } from "./pages/Formulas";
+import { PlayerAssetsPage } from "./pages/PlayerAssets";
+import { PlayerAssetDetail } from "./pages/PlayerAssetDetail";
+import { AssetExportPage } from "./pages/AssetExport";
+import { FileBrowserPage } from "./pages/FileBrowser";
+import { TeamOutfitsPage } from "./pages/TeamOutfits";
 import { SelectPrompt } from "./components/primitives";
 
 export const router = createBrowserRouter([
@@ -92,19 +98,38 @@ export const router = createBrowserRouter([
               { path: ":id", element: <HistoricalTeamDetail /> },
             ],
           },
+          { path: "builder", element: <RosterBuilderPage /> },
           { path: "formulas", element: <FormulasPage /> },
         ],
       },
 
-      // Sections built out in later phases — honest placeholders for now.
+      // Assets section — the shipped art tools. Player portraits/heads land first (asset prep);
+      // textures, logos, equipment and audio follow in Phase 6.
       {
         path: "assets",
-        element: (
-          <ComingSoon
-            title="Production Asset Tools"
-            hint="Edit textures, portraits/logos, equipment, appearance, localization strings, and audio. Arriving in a later phase."
-          />
-        ),
+        children: [
+          { index: true, element: <Navigate to="players" replace /> },
+          {
+            path: "players",
+            element: <PlayerAssetsPage />,
+            children: [
+              { index: true, element: <SelectPrompt what="player" /> },
+              { path: ":id", element: <PlayerAssetDetail /> },
+            ],
+          },
+          { path: "export", element: <AssetExportPage /> },
+          { path: "outfits", element: <TeamOutfitsPage /> },
+          { path: "files", element: <FileBrowserPage /> },
+          {
+            path: "textures",
+            element: (
+              <ComingSoon
+                title="Texture Lab"
+                hint="Browse, preview and replace the install's textures, plus team logos, equipment and audio. Arriving in a later phase."
+              />
+            ),
+          },
+        ],
       },
       {
         path: "builds",

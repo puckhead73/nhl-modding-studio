@@ -2,9 +2,11 @@ import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { call } from "../lib/client";
-import { Spinner } from "../components/primitives";
+import { Button, Spinner } from "../components/primitives";
 import { DetailTabs, type DetailTab } from "../components/DetailTabs";
 import { useCrumbLabel } from "../lib/breadcrumbs";
+import { useProject } from "../lib/project";
+import { useRosterCart } from "../lib/rosterCart";
 import type { HistoricalTeamBlockDto } from "../bindings/HistoricalTeamBlockDto";
 import type { HistoricalTeamMemberDto } from "../bindings/HistoricalTeamMemberDto";
 import type { HistoricalTeamAffiliateDto } from "../bindings/HistoricalTeamAffiliateDto";
@@ -102,6 +104,47 @@ export function HistoricalTeamDetail() {
 
 /// The page/card title for a club. Franchise era names are already complete ("Minnesota North
 /// Stars"); a standalone team's name is just the city, so its nickname is appended.
+/** Bulk "Send to Builder" for a whole team-season: queue every roster member (that season) into the
+ *  Roster Builder cart. Dedups by (person, season), so members already queued are skipped. Gated on an
+ *  open EA project. */
+function SendTeamSeason({ block }: { block: HistoricalTeamBlockDto }) {
+  const { project } = useProject();
+  const cart = useRosterCart();
+  const [added, setAdded] = useState<number | null>(null);
+  if (!project) return null;
+
+  // How many members aren't already in the cart for this season.
+  const remaining = block.roster.filter((m) => !cart.has(m.person_id, block.season_year)).length;
+
+  const send = () => {
+    let n = 0;
+    for (const m of block.roster) {
+      const ok = cart.add({
+        personId: m.person_id,
+        seasonYear: block.season_year,
+        personName: `${m.first_name} ${m.last_name}`.trim(),
+        seasonLabel: `${block.season_year - 1}-${block.season_year}`,
+        position: m.position ?? (m.is_goalie ? "G" : null),
+      });
+      if (ok) n += 1;
+    }
+    setAdded(n);
+  };
+
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <Button variant="secondary" onClick={send} disabled={remaining === 0}>
+        {remaining === 0 ? "All queued" : `Send team-season to Builder (${remaining})`}
+      </Button>
+      {added != null && (
+        <span className="text-xs text-slate-400">
+          {added > 0 ? `Added ${added} player${added === 1 ? "" : "s"} to the cart.` : "Already in the cart."}
+        </span>
+      )}
+    </div>
+  );
+}
+
 function blockTitle(kind: string, block: HistoricalTeamBlockDto): string {
   if (kind === "franchise") return block.name;
   return block.nickname ? `${block.name} ${block.nickname}` : block.name;
@@ -131,6 +174,7 @@ function ConstituentCard({
       badge: block.roster.length,
       content: (
         <div className="space-y-4">
+          {block.roster.length > 0 && <SendTeamSeason block={block} />}
           <RosterTable title={`Skaters (${skaters.length})`} rows={skaters} season={block.season_year} />
           <RosterTable title={`Goalies (${goalies.length})`} rows={goalies} season={block.season_year} />
           {block.roster.length === 0 && (

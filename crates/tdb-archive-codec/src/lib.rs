@@ -1,14 +1,18 @@
 //! EA archive container codecs.
 //!
-//! Provides the compression container wrapping EA NHL Legacy assets: `chunkzip`
-//! (chunked zlib, two header variants) and `chunklzx` (chunked LZX — detection
-//! only). This is the read half the `.big` extractor needs; the DDS/refpack
-//! texture codecs and the chunkzip *write* path are later asset-tool work and
-//! are intentionally left out of this port.
+//! Provides the compression containers wrapping EA NHL assets:
+//!
+//! - `chunkzip` (chunked zlib, two header variants) and `chunklzx` (chunked LZX
+//!   — detection only) — the read half the `.big` extractor needs.
+//! - [`refpack`] — EA's LZ77 variant. Wraps the FE-tree portrait/logo payloads
+//!   inside `fe/ion/artassets/**/*.big`.
+//! - [`dds`] — DDS encode/decode, the interchange format the texture tools emit.
+//!
+//! The chunkzip *write* path remains unimplemented (nothing needs it yet).
 //!
 //! ## Format summary
 //!
-//! Every payload starts with an 8-byte ASCII magic:
+//! Every chunk-compressed payload starts with an 8-byte ASCII magic:
 //!
 //! | Magic       | Meaning                                  |
 //! | ----------- | ---------------------------------------- |
@@ -34,6 +38,15 @@
 
 #![forbid(unsafe_code)]
 #![warn(rust_2018_idioms)]
+
+pub mod dds;
+pub mod refpack;
+
+pub use dds::{decode_dds_to_rgba, encode_dds, is_dds, DdsDecodeError, DdsFormat, DecodedDds};
+pub use refpack::{
+    is_refpack, parse_refpack_header, refpack_compress, refpack_decompress, RefpackError,
+    RefpackHeader,
+};
 
 use std::io::Read;
 

@@ -37,7 +37,9 @@ macro_rules! command_handler {
             $crate::commands::project_summary,
             $crate::commands::validate_project,
             $crate::commands::set_edit_override,
+            $crate::commands::set_display_roster,
             $crate::commands::autocorrect_jerseys,
+            $crate::commands::repair_roster_blocks,
             $crate::commands::list_players,
             $crate::commands::list_free_agents,
             $crate::commands::player_view,
@@ -84,6 +86,9 @@ macro_rules! command_handler {
             $crate::commands::historical_team_filters,
             $crate::commands::list_historical_franchises,
             $crate::commands::historical_franchise,
+            $crate::commands::match_ea_player,
+            $crate::commands::import_preview,
+            $crate::commands::import_commit,
             $crate::commands::formula_default,
             $crate::commands::formula_catalog,
             $crate::commands::compute_ratings,
@@ -94,6 +99,15 @@ macro_rules! command_handler {
             $crate::commands::load_formula_profile,
             $crate::commands::save_formula_profile,
             $crate::commands::delete_formula_profile,
+            $crate::commands::asset_roots,
+            $crate::commands::list_player_assets,
+            $crate::commands::portrait_preview,
+            $crate::commands::head_preview,
+            $crate::commands::head_preview_paths,
+            $crate::commands::export_assets,
+            $crate::commands::browse_install_files,
+            $crate::commands::export_install_files,
+            $crate::commands::export_team_outfits,
         ]
     };
 }
@@ -113,8 +127,19 @@ mod bindings {
         ProjectSummaryDto::export_all().expect("export ProjectSummaryDto + deps");
         InstallReportDto::export_all().expect("export InstallReportDto + deps");
         ExtractSummaryDto::export_all().expect("export ExtractSummaryDto");
+        AssetRootsDto::export_all().expect("export AssetRootsDto");
+        AssetRootsArgsDto::export_all().expect("export AssetRootsArgsDto");
+        PlayerAssetsDto::export_all().expect("export PlayerAssetsDto");
+        ExportOptionsDto::export_all().expect("export ExportOptionsDto");
+        AssetExportSummaryDto::export_all().expect("export AssetExportSummaryDto");
+        BrowseListingDto::export_all().expect("export BrowseListingDto + deps");
+        FileExportOptionsDto::export_all().expect("export FileExportOptionsDto");
+        FileExportSummaryDto::export_all().expect("export FileExportSummaryDto");
+        OutfitExportSummaryDto::export_all().expect("export OutfitExportSummaryDto");
+        HeadPreviewDto::export_all().expect("export HeadPreviewDto + deps");
         IntegrityReportDto::export_all().expect("export IntegrityReportDto + deps");
         AutocorrectSummaryDto::export_all().expect("export AutocorrectSummaryDto + deps");
+        RepairBlocksSummaryDto::export_all().expect("export RepairBlocksSummaryDto");
         CreatePlayerDto::export_all().expect("export CreatePlayerDto + deps");
         OpOutcomeDto::export_all().expect("export OpOutcomeDto");
         PlayerViewDto::export_all().expect("export PlayerViewDto + deps");
@@ -142,5 +167,10 @@ mod bindings {
         HistoricalCareerRatingsDto::export_all().expect("export HistoricalCareerRatingsDto + deps");
         FormulaProfileDto::export_all().expect("export FormulaProfileDto");
         FormulaCatalogDto::export_all().expect("export FormulaCatalogDto + deps");
+        MatchCandidateDto::export_all().expect("export MatchCandidateDto");
+        ImportItemDto::export_all().expect("export ImportItemDto");
+        ChangeSetPreviewDto::export_all().expect("export ChangeSetPreviewDto + deps");
+        TableCapacityDto::export_all().expect("export TableCapacityDto");
+        ImportResultDto::export_all().expect("export ImportResultDto + deps");
     }
 }

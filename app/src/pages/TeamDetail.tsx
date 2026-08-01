@@ -1,10 +1,9 @@
-import { useState, type ReactNode } from "react";
 import { Link, useParams } from "react-router-dom";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { call } from "../lib/client";
 import { useProject } from "../lib/project";
 import { FieldRow } from "../components/FieldRow";
-import { EditableField, TeamSelect } from "../components/EditableField";
+import { ProfileSections } from "../components/FieldProfile";
 import { DetailTabs, type DetailTab } from "../components/DetailTabs";
 import { TeamHeader } from "../components/TeamHeader";
 import { LinesTab } from "../components/LinesTab";
@@ -19,7 +18,6 @@ import { useCrumbLabel } from "../lib/breadcrumbs";
 import { POS_BADGE } from "../lib/position";
 import { ratingToneClass } from "../lib/ratingColor";
 import type { TeamViewDto } from "../bindings/TeamViewDto";
-import type { FieldViewDto } from "../bindings/FieldViewDto";
 import type { PlayerSummaryDto } from "../bindings/PlayerSummaryDto";
 
 /// The Team detail page — banner + the reference app's tab set. Team Data, Depth Chart, and Lines
@@ -36,9 +34,11 @@ export function TeamDetail() {
     queryFn: () => call("team_view", { projectId, teamId }),
     enabled: Number.isFinite(teamId),
   });
+  // Breadcrumb from the resolved identity (domain-joined name source) — on NHL07's thin index the
+  // name lives off the raw `kOtt` row, so read the curated `identity`, not `all_fields`.
   useCrumbLabel(
-    view.data?.all_fields.find((f) => f.studio_field === "YmkJ")?.display.trim() ||
-      view.data?.all_fields.find((f) => f.studio_field === "QNTI")?.display.trim(),
+    view.data?.identity.find((f) => f.name === "fullname")?.display.trim() ||
+      view.data?.identity.find((f) => f.name === "abbrname")?.display.trim(),
   );
 
   if (view.isLoading) return <Spinner label="Loading…" />;
@@ -108,99 +108,24 @@ export function TeamDetail() {
   );
 }
 
-/** A titled block whose cells flow in a 4-column grid (same structure as the Player Data tab). */
-function Section({ title, children }: { title: string; children: ReactNode }) {
-  return (
-    <section>
-      <h3 className="mb-3 border-b border-slate-800 pb-1 text-[11px] font-bold uppercase tracking-wider text-slate-400">
-        {title}
-      </h3>
-      <div className="grid grid-cols-2 items-start gap-x-8 gap-y-3 sm:grid-cols-3 lg:grid-cols-4">
-        {children}
-      </div>
-    </section>
-  );
-}
-
 /// The Team Data tab — the reference app's Identity / Classification / Venue / Relations form in
 /// the Player Data tab's sectioned 4-column layout, inline-editable. League/Conference/Division
 /// resolve through their enum vocabularies (dropdowns); the relation FKs use the team picker
 /// (1-indexed, 0 = none); the arena picker writes the 0-indexed StEO id directly. The Venue
 /// section disappears on titles without the team→arena link (NHL 10–12).
 function TeamDataTab({ projectId, team }: { projectId: number; team: TeamViewDto }) {
-  const { project } = useProject();
-  const caps = project!.capabilities;
   const teamsQ = useQuery({
     queryKey: ["teams", projectId],
     queryFn: () => call("list_teams", { projectId }),
   });
   const teams = teamsQ.data ?? [];
-  const rec = team.record;
-  const byId = (id: string) => team.all_fields.find((f) => f.studio_field === id);
 
-  // An editable field cell by studio id; renders nothing if this title's schema lacks the field.
-  const F = ({ id, label }: { id: string; label: string }) => {
-    const f = byId(id);
-    return f ? <EditableField projectId={projectId} record={rec} field={f} label={label} /> : null;
-  };
-  // A team-FK cell (1-indexed, 0 = none) — hidden when the schema lacks the field.
-  const Team = ({ id, label }: { id: string; label: string }) => {
-    const f = byId(id);
-    return f ? (
-      <TeamSelect
-        projectId={projectId}
-        record={rec}
-        field={f}
-        teams={teams}
-        label={label}
-        noneLabel="(none)"
-      />
-    ) : null;
-  };
-
-  const arenaField = byId("buDa");
-
+  // The curated sections come from the domain's per-game field profile. On NHL07's thin team index
+  // the name/classification cells route through the joined stock/custom row (so names are editable),
+  // and the Venue section is emitted only when the team→arena link exists in this schema.
   return (
     <div className="space-y-6">
-      <Section title="Identity">
-        <F id="YmkJ" label="Full Name" />
-        <F id="QNTI" label="Short Name" />
-        <F id="rbPR" label="Abbreviation" />
-        {/* kOtt.QvxI shares the 7-bit shape with the player Birth State enum, but the field is
-            dormant on the team side (all-zero across the Legacy anchor, checked 2026-07-04) — it
-            stays a raw number on purpose. */}
-        <F id="QvxI" label="State / Region" />
-        <F id="ATUU" label="Coach ID" />
-        <F id="lOnr" label="Art ID" />
-        <F id="oazN" label="Audio ID" />
-        <F id="MSly" label="Audio ID 2" />
-      </Section>
-
-      <Section title="Classification">
-        <F id="xMjj" label="League" />
-        <F id="OwTu" label="Conference" />
-        <F id="CGMK" label="Division" />
-        <F id="iIBl" label="League Group" />
-        <F id="kKYN" label="Active" />
-      </Section>
-
-      {caps.arena_link && arenaField && (
-        <Section title="Venue">
-          <ArenaSelect projectId={projectId} record={rec} field={arenaField} arena={team.arena} />
-        </Section>
-      )}
-
-      <Section title="Relations">
-        <Team id="CsxT" label="AHL Affiliate" />
-        <Team id="erSL" label="Rival Team 1" />
-        <Team id="SqVn" label="Rival Team 2" />
-      </Section>
-
-      {!caps.arena_link && (
-        <p className="text-xs text-slate-500">
-          Not part of this game's database (hidden): Arena.
-        </p>
-      )}
+      <ProfileSections projectId={projectId} profile={team.profile} teams={teams} arena={team.arena} />
 
       <details className="rounded-md border border-slate-800 bg-slate-900/40 px-3 py-2">
         <summary className="cursor-pointer text-xs font-semibold text-slate-300">
@@ -208,118 +133,10 @@ function TeamDataTab({ projectId, team }: { projectId: number; team: TeamViewDto
         </summary>
         <div className="mt-2 sm:grid sm:grid-cols-2 sm:gap-x-6">
           {team.all_fields.map((f) => (
-            <FieldRow key={f.studio_field} projectId={projectId} record={rec} field={f} />
+            <FieldRow key={f.studio_field} projectId={projectId} record={team.record} field={f} />
           ))}
         </div>
       </details>
-    </div>
-  );
-}
-
-/// The home-arena picker: `kOtt.buDa` stores the 0-indexed `StEO` id directly (no "none"
-/// sentinel), so options map 1:1 onto the arena directory. The arena name is a link to its
-/// entry in the Arenas tab; editing goes through the small "change" affordance beside it
-/// (the text itself can't be click-to-edit and a navigation link at the same time).
-function ArenaSelect({
-  projectId,
-  record,
-  field,
-  arena,
-}: {
-  projectId: number;
-  record: number;
-  field: FieldViewDto;
-  arena: TeamViewDto["arena"];
-}) {
-  const qc = useQueryClient();
-  const { update } = useProject();
-  const [editing, setEditing] = useState(false);
-  const arenasQ = useQuery({
-    queryKey: ["arenas", projectId],
-    queryFn: () => call("list_arenas", { projectId }),
-  });
-  const arenas = arenasQ.data ?? [];
-  const mut = useMutation({
-    mutationFn: (arenaId: number) =>
-      call("set_field", {
-        projectId,
-        table: field.studio_table,
-        record,
-        field: field.studio_field,
-        intValue: arenaId,
-      }),
-    onSuccess: async () => {
-      await qc.invalidateQueries();
-      update(await call("project_summary", { projectId }));
-      setEditing(false);
-    },
-  });
-
-  // "Honda Center — Anaheim, CA": StEO's cityname already carries "City, ST".
-  const current = arena
-    ? `${arena.name || `Arena ${arena.arena_id}`}${arena.city ? ` — ${arena.city}` : ""}`
-    : field.decoded != null
-      ? `Arena ${field.decoded}`
-      : "—";
-  const sorted = [...arenas].sort((a, b) => a.name.localeCompare(b.name));
-
-  return (
-    // Spans two grid columns — "Name — City, ST" doesn't fit a single quarter-width cell.
-    <div className="col-span-2 min-w-0">
-      <div className="text-[11px] font-semibold uppercase tracking-wide text-sky-300/80">
-        Arena
-        {mut.isPending && <span className="ml-1 text-slate-500">…</span>}
-      </div>
-      <div className="mt-0.5 flex items-center gap-2">
-        {editing ? (
-          <select
-            autoFocus
-            className="w-full rounded border border-slate-700 bg-slate-950 px-1.5 py-0.5 font-mono text-xs text-slate-100 focus:border-sky-600 focus:outline-none"
-            value={field.decoded ?? 0}
-            disabled={mut.isPending}
-            onChange={(e) => mut.mutate(Number(e.target.value))}
-            onBlur={() => !mut.isPending && setEditing(false)}
-            onKeyDown={(e) => e.key === "Escape" && setEditing(false)}
-          >
-            {field.decoded != null && !arenas.some((a) => a.arena_id === field.decoded) && (
-              <option value={field.decoded}>{`(uncatalogued: ${field.decoded})`}</option>
-            )}
-            {sorted.map((a) => (
-              <option key={a.arena_id} value={a.arena_id}>
-                {a.name || `Arena ${a.arena_id}`}
-                {a.city ? ` — ${a.city}` : ""}
-              </option>
-            ))}
-          </select>
-        ) : (
-          <>
-            {arena ? (
-              <Link
-                to={`/app/database/arenas/${arena.arena_id}`}
-                className="min-w-0 truncate font-mono text-xs text-sky-400 hover:underline"
-                title="Open this arena in the Arenas tab"
-              >
-                {current}
-              </Link>
-            ) : (
-              <span className="min-w-0 truncate font-mono text-xs text-slate-100">{current}</span>
-            )}
-            {field.editable && (
-              <button
-                type="button"
-                onClick={() => setEditing(true)}
-                title="Change home arena"
-                className="shrink-0 rounded border border-slate-700 px-1.5 py-px text-[10px] text-slate-500 hover:border-sky-700 hover:text-sky-300"
-              >
-                change
-              </button>
-            )}
-          </>
-        )}
-      </div>
-      {mut.error != null && (
-        <div className="mt-0.5 text-[10px] text-rose-400">{String(mut.error)}</div>
-      )}
     </div>
   );
 }

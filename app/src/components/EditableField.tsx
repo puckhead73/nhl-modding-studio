@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { call } from "../lib/client";
 import { useProject } from "../lib/project";
 import { clampRaw, friendlySeed, friendlyToRaw, hasPlainBounds } from "../lib/editForm";
 import type { FieldViewDto } from "../bindings/FieldViewDto";
+import type { TeamViewDto } from "../bindings/TeamViewDto";
 
 /// Click-to-edit shell (the reference app's pattern): the resolved value renders as plain text
 /// until clicked, then the real control mounts focused. Closes on commit (Enter, a dropdown pick,
@@ -140,9 +142,11 @@ export function EditableField({
 
 type TeamOption = { team_id: number; name: string; abbrev: string };
 
-/// A team dropdown that edits a 1-indexed team FK bio field (`dXSB`/`dbBW`/`ZbNy`/`vgWu`): stored
-/// value is `team_id + 1`, with 0 meaning "none / free agent". Read-only if the field is absent or
-/// not updatable.
+/// A team dropdown that edits a team-FK bio field. Most refs (`dbBW`/`ZbNy`/`vgWu`) are 1-indexed —
+/// stored value is `team_id + 1`, `0` = "none / free agent". The "main team" `dXSB` drifted: it is
+/// 0-indexed on NHL 09/10 (stored value **is** the team id, no free-agent sentinel). Pass `offset`
+/// (0 or 1, default 1) — the caller reads it from `capabilities.main_team_offset` for `dXSB`.
+/// Read-only if the field is absent or not updatable.
 export function TeamSelect({
   projectId,
   record,
@@ -150,6 +154,7 @@ export function TeamSelect({
   teams,
   label,
   noneLabel = "(none — Free Agent)",
+  offset = 1,
 }: {
   projectId: number;
   record: number;
@@ -157,6 +162,7 @@ export function TeamSelect({
   teams: TeamOption[];
   label: string;
   noneLabel?: string;
+  offset?: number;
 }) {
   const qc = useQueryClient();
   const { update } = useProject();
@@ -176,7 +182,10 @@ export function TeamSelect({
   });
 
   const raw = field?.decoded ?? 0;
-  const teamId = raw > 0 ? raw - 1 : -1;
+  // 1-indexed refs reserve raw 0 for "free agent"; 0-indexed `dXSB` (NHL 09/10) has no such
+  // sentinel — every raw value is a real team id.
+  const teamId = offset === 1 ? (raw > 0 ? raw - 1 : -1) : raw;
+  const canBeNone = offset === 1;
 
   if (!field || !field.editable) {
     const t = teams.find((x) => x.team_id === teamId);
@@ -194,9 +203,9 @@ export function TeamSelect({
         <select
           className={CONTROL}
           value={teamId}
-          onChange={(e) => mut.mutate(Number(e.target.value) + 1)}
+          onChange={(e) => mut.mutate(Number(e.target.value) + offset)}
         >
-          <option value={-1}>{noneLabel}</option>
+          {canBeNone && <option value={-1}>{noneLabel}</option>}
           {sorted.map((t) => (
             <option key={t.team_id} value={t.team_id}>
               {t.name}
@@ -205,6 +214,129 @@ export function TeamSelect({
           ))}
         </select>
       </ClickToEdit>
+    </Labeled>
+  );
+}
+
+/// The home-arena picker: `kOtt.buDa` stores the 0-indexed `StEO` id directly (no "none"
+/// sentinel), so options map 1:1 onto the arena directory. The arena name is a link to its entry in
+/// the Arenas tab; editing goes through the small "change" affordance beside it (the text itself
+/// can't be click-to-edit and a navigation link at the same time).
+export function ArenaSelect({
+  projectId,
+  record,
+  field,
+  arena,
+}: {
+  projectId: number;
+  record: number;
+  field: FieldViewDto;
+  arena: TeamViewDto["arena"];
+}) {
+  const qc = useQueryClient();
+  const { update } = useProject();
+  const [editing, setEditing] = useState(false);
+  const arenasQ = useQuery({
+    queryKey: ["arenas", projectId],
+    queryFn: () => call("list_arenas", { projectId }),
+  });
+  const arenas = arenasQ.data ?? [];
+  const mut = useMutation({
+    mutationFn: (arenaId: number) =>
+      call("set_field", {
+        projectId,
+        table: field.studio_table,
+        record,
+        field: field.studio_field,
+        intValue: arenaId,
+      }),
+    onSuccess: async () => {
+      await qc.invalidateQueries();
+      update(await call("project_summary", { projectId }));
+      setEditing(false);
+    },
+  });
+
+  // "Honda Center — Anaheim, CA": StEO's cityname already carries "City, ST".
+  const current = arena
+    ? `${arena.name || `Arena ${arena.arena_id}`}${arena.city ? ` — ${arena.city}` : ""}`
+    : field.decoded != null
+      ? `Arena ${field.decoded}`
+      : "—";
+  const sorted = [...arenas].sort((a, b) => a.name.localeCompare(b.name));
+
+  return (
+    // Spans two grid columns — "Name — City, ST" doesn't fit a single quarter-width cell.
+    <div className="col-span-2 min-w-0">
+      <div className="text-[11px] font-semibold uppercase tracking-wide text-sky-300/80">
+        Arena
+        {mut.isPending && <span className="ml-1 text-slate-500">…</span>}
+      </div>
+      <div className="mt-0.5 flex items-center gap-2">
+        {editing ? (
+          <select
+            autoFocus
+            className="w-full rounded border border-slate-700 bg-slate-950 px-1.5 py-0.5 font-mono text-xs text-slate-100 focus:border-sky-600 focus:outline-none"
+            value={field.decoded ?? 0}
+            disabled={mut.isPending}
+            onChange={(e) => mut.mutate(Number(e.target.value))}
+            onBlur={() => !mut.isPending && setEditing(false)}
+            onKeyDown={(e) => e.key === "Escape" && setEditing(false)}
+          >
+            {field.decoded != null && !arenas.some((a) => a.arena_id === field.decoded) && (
+              <option value={field.decoded}>{`(uncatalogued: ${field.decoded})`}</option>
+            )}
+            {sorted.map((a) => (
+              <option key={a.arena_id} value={a.arena_id}>
+                {a.name || `Arena ${a.arena_id}`}
+                {a.city ? ` — ${a.city}` : ""}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <>
+            {arena ? (
+              <Link
+                to={`/app/database/arenas/${arena.arena_id}`}
+                className="min-w-0 truncate font-mono text-xs text-sky-400 hover:underline"
+                title="Open this arena in the Arenas tab"
+              >
+                {current}
+              </Link>
+            ) : (
+              <span className="min-w-0 truncate font-mono text-xs text-slate-100">{current}</span>
+            )}
+            {field.editable && (
+              <button
+                type="button"
+                onClick={() => setEditing(true)}
+                title="Change home arena"
+                className="shrink-0 rounded border border-slate-700 px-1.5 py-px text-[10px] text-slate-500 hover:border-sky-700 hover:text-sky-300"
+              >
+                change
+              </button>
+            )}
+          </>
+        )}
+      </div>
+      {mut.error != null && (
+        <div className="mt-0.5 text-[10px] text-rose-400">{String(mut.error)}</div>
+      )}
+    </div>
+  );
+}
+
+/** A labelled cell for a field the loaded title's schema doesn't carry — shows an explicit
+ *  "Not in Selected Game" instead of a blank the user can't tell apart from an empty value. */
+export function NotInGame({ label }: { label: string }) {
+  return (
+    <Labeled label={label}>
+      <span
+        className="truncate text-xs italic text-slate-600"
+        title="This field is not part of the selected game's database."
+      >
+        Not in Selected Game
+      </span>
     </Labeled>
   );
 }

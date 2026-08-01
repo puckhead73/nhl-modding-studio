@@ -20,6 +20,7 @@ import type { OpOutcomeDto } from "../bindings/OpOutcomeDto";
 import type { InstallReportDto } from "../bindings/InstallReportDto";
 import type { ExtractSummaryDto } from "../bindings/ExtractSummaryDto";
 import type { AutocorrectSummaryDto } from "../bindings/AutocorrectSummaryDto";
+import type { RepairBlocksSummaryDto } from "../bindings/RepairBlocksSummaryDto";
 import type { CreatePlayerDto } from "../bindings/CreatePlayerDto";
 import type { TeamStrategiesDto } from "../bindings/TeamStrategiesDto";
 import type { DraftPickDto } from "../bindings/DraftPickDto";
@@ -37,6 +38,20 @@ import type { EaComputedRatingsDto } from "../bindings/EaComputedRatingsDto";
 import type { HistoricalCareerRatingsDto } from "../bindings/HistoricalCareerRatingsDto";
 import type { FormulaProfileDto } from "../bindings/FormulaProfileDto";
 import type { FormulaCatalogDto } from "../bindings/FormulaCatalogDto";
+import type { AssetRootsDto } from "../bindings/AssetRootsDto";
+import type { AssetRootsArgsDto } from "../bindings/AssetRootsArgsDto";
+import type { PlayerAssetsDto } from "../bindings/PlayerAssetsDto";
+import type { ExportOptionsDto } from "../bindings/ExportOptionsDto";
+import type { AssetExportSummaryDto } from "../bindings/AssetExportSummaryDto";
+import type { HeadPreviewDto } from "../bindings/HeadPreviewDto";
+import type { BrowseListingDto } from "../bindings/BrowseListingDto";
+import type { FileExportOptionsDto } from "../bindings/FileExportOptionsDto";
+import type { FileExportSummaryDto } from "../bindings/FileExportSummaryDto";
+import type { OutfitExportSummaryDto } from "../bindings/OutfitExportSummaryDto";
+import type { MatchCandidateDto } from "../bindings/MatchCandidateDto";
+import type { ImportItemDto } from "../bindings/ImportItemDto";
+import type { ChangeSetPreviewDto } from "../bindings/ChangeSetPreviewDto";
+import type { ImportResultDto } from "../bindings/ImportResultDto";
 
 export type Platform = "ps3" | "xbox" | "ps4" | "recomp";
 export type Role = "nhlng" | "roster" | "localization";
@@ -76,8 +91,13 @@ type Commands = {
   validate_project: { args: { projectId: number }; ret: IntegrityReportDto };
   // Acknowledged corruption-override: allow edits on a DB that fails the structural audit (unsupported).
   set_edit_override: { args: { projectId: number; allow: boolean }; ret: null };
+  // Switch read views between nhlng.db (default) and the mirrored roster save. Aligned pair: writes
+  // still hit both files. Misaligned pair: roster-only mode — edits apply strictly to the roster file.
+  set_display_roster: { args: { projectId: number; on: boolean }; ret: ProjectSummaryDto };
   // On-load duplicate-jersey auto-correction; returns the corrections applied (staged as a pending edit).
   autocorrect_jerseys: { args: { projectId: number }; ret: AutocorrectSummaryDto };
+  // Roster-block structural repair (order-only permutation of eGlu; staged as a pending edit).
+  repair_roster_blocks: { args: { projectId: number }; ret: RepairBlocksSummaryDto };
   list_players: { args: { projectId: number }; ret: PlayerSummaryDto[] };
   player_view: { args: { projectId: number; playerId: number }; ret: PlayerViewDto | null };
   career_stats: { args: { projectId: number; playerId: number }; ret: CareerStatsDto };
@@ -221,6 +241,24 @@ type Commands = {
     ret: HistoricalTeamFranchiseDto | null;
   };
 
+  // Roster Builder (Stage 3) — bridge the corpus and an open EA project. Each needs both an open
+  // corpus AND `projectId`.
+  // Auto-detect EA identity matches for a corpus person (the cart's Match/Create toggle).
+  match_ea_player: {
+    args: { projectId: number; personId: number };
+    ret: MatchCandidateDto[];
+  };
+  // Dry-run a cart: per-item outcomes, player-count delta, audit, blockers, ledger dedup flag.
+  import_preview: {
+    args: { projectId: number; items: ImportItemDto[] };
+    ret: ChangeSetPreviewDto;
+  };
+  // Commit a cart: the same lowering applied for real as one transaction / one undo entry, then ledgered.
+  import_commit: {
+    args: { projectId: number; items: ImportItemDto[] };
+    ret: ImportResultDto;
+  };
+
   // Formula engine (Stage 2) — compute EA ratings from FHM attrs; profiles are corpus-global.
   formula_default: { args: Record<string, never>; ret: FormulaProfileDto };
   formula_catalog: { args: Record<string, never>; ret: FormulaCatalogDto };
@@ -241,6 +279,60 @@ type Commands = {
   load_formula_profile: { args: { name: string }; ret: FormulaProfileDto };
   save_formula_profile: { args: { name: string; profile: FormulaProfileDto }; ret: null };
   delete_formula_profile: { args: { name: string }; ret: null };
+
+  // ---- Assets: player portraits / head meshes / head textures ----
+  // `roots` is a struct (not flat args), so its fields stay snake_case like the DTO.
+  asset_roots: { args: { roots: AssetRootsArgsDto }; ret: AssetRootsDto };
+  list_player_assets: {
+    args: { projectId: number; roots: AssetRootsArgsDto };
+    ret: PlayerAssetsDto[];
+  };
+  // Returns a `data:image/png;base64,...` URL.
+  portrait_preview: { args: { path: string; crop: boolean }; ret: string };
+  // Decode a player's head mesh (by head id) for the 3D viewer.
+  head_preview: {
+    args: { roots: AssetRootsArgsDto; headId: number };
+    ret: HeadPreviewDto;
+  };
+  // Decode a head from already-resolved paths (PS4 bespoke, name-slug keyed).
+  head_preview_paths: {
+    args: { meshPaths: string[]; texturePaths: string[] };
+    ret: HeadPreviewDto;
+  };
+  // `bioRecords: []` exports every scanned player.
+  export_assets: {
+    args: {
+      projectId: number;
+      roots: AssetRootsArgsDto;
+      outDir: string;
+      bioRecords: number[];
+      options: ExportOptionsDto;
+    };
+    ret: AssetExportSummaryDto;
+  };
+
+  // ---- Assets: install file browser (decode any picked file/folder) ----
+  // `rel` is a forward-slash path relative to the install root (`""` = the root).
+  browse_install_files: {
+    args: { installDir: string; rel: string };
+    ret: BrowseListingDto;
+  };
+  // Decode the selected files/folders (rel paths) into `outDir`, mirroring the install layout.
+  export_install_files: {
+    args: {
+      installDir: string;
+      relPaths: string[];
+      outDir: string;
+      options: FileExportOptionsDto;
+    };
+    ret: FileExportSummaryDto;
+  };
+
+  // ---- Assets: team outfit export (jersey/pants/socks per team → PNGs named by team) ----
+  export_team_outfits: {
+    args: { projectId: number; roots: AssetRootsArgsDto; outDir: string };
+    ret: OutfitExportSummaryDto;
+  };
 };
 
 export async function call<C extends keyof Commands>(

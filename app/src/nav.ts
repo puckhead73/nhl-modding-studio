@@ -36,10 +36,22 @@ export const SECTIONS: NavSection[] = [
     subtabs: [
       { to: "historical/players", label: "Players" },
       { to: "historical/teams", label: "Teams" },
+      { to: "historical/builder", label: "Roster Builder" },
       { to: "historical/formulas", label: "Formulas" },
     ],
   },
-  { key: "assets", label: "Assets", index: "assets", subtabs: [] },
+  {
+    key: "assets",
+    label: "Assets",
+    index: "assets/players",
+    subtabs: [
+      { to: "assets/players", label: "Player Art" },
+      { to: "assets/export", label: "Export" },
+      { to: "assets/outfits", label: "Team Outfits" },
+      { to: "assets/files", label: "File Browser" },
+      { to: "assets/textures", label: "Texture Lab" },
+    ],
+  },
   { key: "builds", label: "Builds", index: "builds", subtabs: [] },
   { key: "settings", label: "Settings", index: "settings", subtabs: [] },
 ];

@@ -95,6 +95,40 @@ fn nhl12_is_the_in_between_shape() {
     assert_eq!(c.goalie_ratings_labelled, c.goalie_ratings_total);
 }
 
+/// NHL07 (gen6 schema, `NHL07NG.db`): the oldest supported title. It carries no separate equipment
+/// tables (`xmja`/`fMVl` absent), no arena link, and none of the draft/junior/UFA/rookie bio fields —
+/// so every optional flag gates off. Its ratings still classify from the `p_*`/`g_*` metadata (16 of
+/// 20 skater and 13 of 15 goalie carry labels; the rest classify but aren't yet named, so the
+/// Attributes tab hedges). `dXSB` main-team is 0-indexed (raw = team id).
+#[test]
+fn nhl07_is_the_gen6_shape() {
+    let c = probe(
+        "anchors/xbox360/nhl07/databases/NHL07NG.db",
+        "anchors/xbox360/nhl07/databases/NHL07NG-meta.xml",
+    );
+    assert!(!c.has_skater_equip, "NHL07 ships no xmja equipment table");
+    assert!(!c.has_goalie_equip, "NHL07 ships no fMVl equipment table");
+    assert!(!c.arena_link);
+    // NHL07 DOES carry player types — under the gen6 3-bit `p_style`/`g_style` (`mQoE`/`wJus`), not
+    // `QgFs` (verified in-game: skater Playmaker/Sniper/…; goalie Butterfly/Stand-Up/Hybrid).
+    assert!(c.player_style, "NHL07 has gen6 player types (mQoE/wJus)");
+    assert!(!c.year_ufa);
+    assert!(!c.junior_team);
+    assert!(!c.draft_team);
+    assert!(!c.draft_year);
+    assert!(!c.draft_round);
+    assert!(!c.draft_pick);
+    assert!(!c.rookie_ahl);
+    assert!(!c.rookie_chl);
+    // 19 of 20 skater ratings now carry labels (Injury Resist / Penalty Resist / Intensity added);
+    // only the internal `prestige` slider stays unnamed. Goalies: 14 of 15 (Intensity / Clutch added).
+    assert_eq!(c.skater_ratings_total, 20);
+    assert_eq!(c.skater_ratings_labelled, 19);
+    assert_eq!(c.goalie_ratings_total, 15);
+    assert_eq!(c.goalie_ratings_labelled, 14);
+    assert_eq!(c.main_team_offset, 0, "raw dXSB = team id (verified against the roster)");
+}
+
 /// PS4 NHL 21 (little-endian): the full optional set probes present; the `c_*` ratings (7-bit
 /// 0..99 storage, incl. 18+'s Backskating) all classify and label — the canonical-id and metadata
 /// lookups are endian-correct on LE files too.

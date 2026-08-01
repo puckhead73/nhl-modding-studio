@@ -665,8 +665,8 @@ fn retire_is_idempotent_and_validates() {
 }
 
 /// Reproduce structural block corruption (the old `dXSB`-retag bug's fingerprint), then confirm the
-/// edit guard blocks *any* edit by default — and that the acknowledged override lifts the guard so an
-/// edit commits on the corrupt DB (the on-load "Override" path).
+/// **delta gate** lets an *unrelated* edit commit by default (it introduces no new violation), and
+/// that the acknowledged override also lifts the guard entirely (the on-load "Override" path).
 #[test]
 fn edit_override_allows_edits_on_a_structurally_corrupt_db() {
     use std::collections::HashMap;
@@ -699,15 +699,18 @@ fn edit_override_allows_edits_on_a_structurally_corrupt_db() {
     db.recompute_crcs(&mut buf);
     drop(db);
 
-    // Default: the pre-existing block corruption trips the whole-DB audit, rolling back the edit.
+    // Default (delta gate): the unrelated edit introduces no new violation, so it commits even though
+    // the DB carries a pre-existing block-coherence corruption elsewhere. (Before the delta gate this
+    // was rolled back by the whole-DB audit.)
     let mut tx = EditTransaction::begin(&buf).unwrap();
-    let blocked = tx.set_captaincy(t_team, t_player, captaincy::CAPTAIN);
+    let allowed_by_default = tx.set_captaincy(t_team, t_player, captaincy::CAPTAIN);
     assert!(
-        matches!(blocked, Err(EditError::AuditFailed { predicate: "towx_coherence", .. })),
-        "expected the structural audit to block the edit, got {blocked:?}"
+        allowed_by_default.is_ok(),
+        "the delta gate must allow an unrelated edit on a pre-existing-corrupt DB, got {allowed_by_default:?}"
     );
+    assert!(TdbFile::parse(&tx.commit().unwrap()).is_ok(), "committed bytes still parse");
 
-    // Override: the same edit now commits (unsupported, acknowledged).
+    // Override: also commits (unsupported, acknowledged) — the explicit escape hatch still works.
     let mut tx = EditTransaction::begin(&buf).unwrap();
     tx.set_allow_pre_existing_violations(true);
     let allowed = tx.set_captaincy(t_team, t_player, captaincy::CAPTAIN);

@@ -2,21 +2,30 @@
 //! `raw_id` string helpers carried over from the prior app.
 
 use studio_domain::{
-    ArenaRef, ArenaSummary, ArenaView, AttributeView, Capabilities, CareerStats, DbOverview,
-    ExtractSummary, FieldRaw, FieldView, HumanFinding, HumanReport, InstallReport, LineEntry,
-    LinesView, OpOutcome, PlayerAttributes, PlayerData, PlayerHeader, PlayerSummary, PlayerView,
-    RosterMembership, SaveSlot, Severity, Source, TeamSummary, TeamView, TraitOption, TraitView,
-    Workspace,
+    AssetExportSummary, AssetRoots, BrowseListing, ExportOptions, FileExportOptions,
+    FileExportSummary, HeadPreview, OutfitExportSummary, PlayerAssets,
+    ArenaRef, ArenaSummary, ArenaView, AttributeView, Capabilities, CareerStats, CellControl,
+    DbOverview, EntityFieldProfile, ExtractSummary, FieldRaw, FieldView, HumanFinding, HumanReport,
+    ImportIdentity, ImportItem, ItemOutcome, LoweredItem, MatchCandidate, MatchConfidence,
+    TableCapacity,
+    InstallReport, LineEntry, LinesView, OpOutcome, PlayerAttributes, PlayerData, PlayerHeader,
+    PlayerSummary, PlayerView, ProfileCell, RosterMembership, SaveSlot, Severity, Source,
+    TeamSummary, TeamView, TraitOption, TraitView, Workspace,
 };
 
 use crate::dto::{
+    AssetExportSummaryDto, AssetRootsDto, BrowseEntryDto, BrowseListingDto, ExportOptionsDto,
+    FileExportOptionsDto, FileExportSummaryDto, HeadPreviewDto, OutfitExportSummaryDto,
+    PlayerAssetsDto, PreviewSubmeshDto, PreviewTextureDto,
     ArenaRefDto, ArenaSummaryDto, ArenaViewDto, AttributeViewDto, CapabilitiesDto, CareerColumnDto,
     CareerRowDto, CareerSectionDto, CareerStatsDto, CreatePlayerDto, DraftPickDto, EnumOptionDto,
-    EquipmentZoneDto, ExtractSummaryDto, FieldViewDto, FindingDto, InstallReportDto,
+    EntityFieldProfileDto, EquipmentZoneDto, ExtractSummaryDto, FieldCellDto, FieldSectionDto,
+    FieldViewDto, FindingDto, InstallReportDto,
     IntegrityReportDto, LineEntryDto, LinesViewDto, OpOutcomeDto, PlayerAttributesDto, PlayerDataDto,
     PlayerHeaderDto, PlayerSummaryDto, PlayerViewDto, ProjectSummaryDto, RosterMembershipDto,
     SaveSlotDto, SlotFieldDto, StrategyCellDto, TableSummaryDto, TeamEquipmentDto, TeamJerseyDto,
     TeamStrategiesDto, TeamSummaryDto, TeamViewDto, TraitOptionDto, TraitViewDto,
+    ImportItemResultDto, MatchCandidateDto, TableCapacityDto,
 };
 
 /// Map an install report to its DTO, attaching platform-aware display labels to each save slot and
@@ -78,13 +87,14 @@ fn save_label(kind: &str, platform: &str) -> &'static str {
     }
 }
 
-/// Build the project summary DTO for a workspace (reflects the canonical working db, incl. any
-/// growth, plus the roster-mirror status). `dirty`/`undo_depth`/`redo_depth` are workspace-level.
+/// Build the project summary DTO for a workspace (reflects the *displayed* working db — canonical
+/// `nhlng.db` unless the roster display toggle is on — incl. any growth, plus the roster-mirror
+/// status). `dirty`/`undo_depth`/`redo_depth` are workspace-level.
 pub fn project_summary_dto(
     project_id: u32,
     ws: &Workspace,
 ) -> Result<ProjectSummaryDto, studio_domain::DomainError> {
-    let session = ws.primary();
+    let session = ws.display();
     let overview = session.overview()?;
     let project = session.project();
     let capabilities = capabilities_dto(&session.capabilities()?);
@@ -105,8 +115,26 @@ pub fn project_summary_dto(
         tables: table_dtos(&overview),
         roster_attached: ws.roster_attached(),
         roster_aligned: ws.roster_aligned(),
+        display_roster: ws.display_roster(),
         capabilities,
+        // Experimental if either the canonical session or the (possibly v1) roster mirror writes
+        // through an un-reversed integrity tag.
+        write_experimental: write_experimental(project.source())
+            || ws.roster_source().is_some_and(write_experimental),
     })
+}
+
+/// Whether this project's on-disk write path is only experimentally supported: PS4 roster saves
+/// (repack unverified on console) or v1 containers (un-reversed `tag_1c`). Raw dbs and v2/v4/gen6
+/// containers are fully supported.
+fn write_experimental(source: &Source) -> bool {
+    match source {
+        Source::RawDb => false,
+        Source::Container { original } => tdb_savedata::SaveContainer::parse(original)
+            .map(|c| c.header.version.write_is_experimental())
+            .unwrap_or(false),
+        Source::Ps4Save { .. } => true,
+    }
 }
 
 fn capabilities_dto(c: &Capabilities) -> CapabilitiesDto {
@@ -121,10 +149,13 @@ fn capabilities_dto(c: &Capabilities) -> CapabilitiesDto {
         draft_pick: c.draft_pick,
         rookie_ahl: c.rookie_ahl,
         rookie_chl: c.rookie_chl,
+        has_skater_equip: c.has_skater_equip,
+        has_goalie_equip: c.has_goalie_equip,
         skater_ratings_labelled: c.skater_ratings_labelled,
         skater_ratings_total: c.skater_ratings_total,
         goalie_ratings_labelled: c.goalie_ratings_labelled,
         goalie_ratings_total: c.goalie_ratings_total,
+        main_team_offset: c.main_team_offset,
     }
 }
 
@@ -162,6 +193,74 @@ fn finding_dto(f: &HumanFinding) -> FindingDto {
         table: f.studio_table.clone(),
         field: f.studio_field.clone(),
         record: f.record,
+    }
+}
+
+// ---- Roster Builder import (Phase 5.4) --------------------------------------
+
+/// Map a FE cart line to the domain [`ImportItem`]: a `null` match id ⇒ CreateNew, else Match(id).
+pub fn import_item_from_dto(dto: &crate::dto::ImportItemDto) -> ImportItem {
+    ImportItem {
+        person_id: dto.person_id,
+        season_year: dto.season_year,
+        target_team_id: dto.target_team_id,
+        identity: match dto.match_ea_player_id {
+            Some(id) => ImportIdentity::Match(id),
+            None => ImportIdentity::CreateNew,
+        },
+        jersey: dto.jersey,
+    }
+}
+
+/// An EA match candidate → DTO (confidence lowered to a stable wire string).
+pub fn match_candidate_dto(c: &MatchCandidate) -> MatchCandidateDto {
+    MatchCandidateDto {
+        ea_player_id: c.ea_player_id,
+        full_name: c.full_name.clone(),
+        dob: c.dob.clone(),
+        team_name: c.team_name.clone(),
+        confidence: match c.confidence {
+            MatchConfidence::NameAndDob => "name_and_dob",
+            MatchConfidence::NameOnly => "name_only",
+        }
+        .to_string(),
+        ambiguous: c.ambiguous,
+    }
+}
+
+/// A projected roster-table capacity → DTO.
+pub fn table_capacity_dto(c: &TableCapacity) -> TableCapacityDto {
+    TableCapacityDto {
+        table: c.table.clone(),
+        label: c.label.clone(),
+        current: c.current,
+        ceiling: c.ceiling,
+        adding: c.adding,
+        over: c.over,
+        enforced: c.enforced,
+    }
+}
+
+/// A lowered cart item → its result row. `already_imported` is the ledger dedup flag, supplied by the
+/// caller (the registry, which owns the ledger).
+pub fn lowered_item_result_dto(item: &LoweredItem, already_imported: bool) -> ImportItemResultDto {
+    let (outcome, ea_player_id) = match item.outcome {
+        ItemOutcome::Created => ("created", None),
+        ItemOutcome::Matched(id) => ("matched", Some(id)),
+        ItemOutcome::PersonMissing => ("person_missing", None),
+        ItemOutcome::NoSuchPlayer(id) => ("no_such_player", Some(id)),
+        ItemOutcome::NoBioTable => ("no_bio_table", None),
+    };
+    ImportItemResultDto {
+        person_id: item.person_id,
+        season_year: item.season_year,
+        target_team_id: item.target_team_id,
+        full_name: item.full_name.clone(),
+        outcome: outcome.to_string(),
+        ea_player_id,
+        skipped_fields: item.skipped.iter().map(|s| s.field.clone()).collect(),
+        already_imported,
+        lowered: item.lowered(),
     }
 }
 
@@ -210,6 +309,40 @@ pub fn field_view_dto(fv: &FieldView) -> FieldViewDto {
         range_high: fv.range_high,
         editable: fv.editable,
         is_string: fv.is_string,
+    }
+}
+
+/// Map one curated profile cell to its DTO, flattening the control hint into the wire fields.
+pub fn field_cell_dto(c: &ProfileCell) -> FieldCellDto {
+    let (control, team_offset, none_label) = match &c.control {
+        CellControl::Field => ("field", None, None),
+        CellControl::Team { offset, none_label } => ("team", Some(*offset), none_label.clone()),
+        CellControl::Arena => ("arena", None, None),
+        CellControl::Derived => ("derived", None, None),
+    };
+    FieldCellDto {
+        label: c.label.clone(),
+        control: control.to_string(),
+        field: c.field.as_ref().map(field_view_dto),
+        record: c.record,
+        team_offset,
+        none_label,
+        derived_display: c.derived_display.clone(),
+        unverified: c.unverified.clone(),
+    }
+}
+
+/// Map a whole entity field profile (sections → cells) to its DTO.
+pub fn entity_field_profile_dto(p: &EntityFieldProfile) -> EntityFieldProfileDto {
+    EntityFieldProfileDto {
+        sections: p
+            .sections
+            .iter()
+            .map(|s| FieldSectionDto {
+                title: s.title.clone(),
+                cells: s.cells.iter().map(field_cell_dto).collect(),
+            })
+            .collect(),
     }
 }
 
@@ -339,6 +472,7 @@ pub fn player_view_dto(v: &PlayerView) -> PlayerViewDto {
         ratings_table: v.ratings_table.to_string(),
         memberships: v.memberships.iter().map(membership_dto).collect(),
         all_fields: v.all_fields.iter().map(field_view_dto).collect(),
+        profile: entity_field_profile_dto(&v.profile),
     }
 }
 
@@ -500,6 +634,7 @@ pub fn team_view_dto(v: &TeamView) -> TeamViewDto {
         roster_count: v.roster_count,
         retired_numbers: v.retired_numbers.clone(),
         all_fields: v.all_fields.iter().map(field_view_dto).collect(),
+        profile: entity_field_profile_dto(&v.profile),
     }
 }
 
@@ -987,5 +1122,175 @@ pub fn formula_catalog_dto() -> FormulaCatalogDto {
                 direct_output: *direct,
             })
             .collect(),
+    }
+}
+
+pub fn asset_roots_dto(r: &AssetRoots) -> AssetRootsDto {
+    AssetRootsDto {
+        rendering: r.rendering.clone(),
+        fe: r.fe.clone(),
+        complete: r.complete(),
+    }
+}
+
+pub fn player_assets_dto(p: &PlayerAssets) -> PlayerAssetsDto {
+    PlayerAssetsDto {
+        bio_record: p.bio_record,
+        full_name: p.full_name.clone(),
+        slug: p.slug.clone(),
+        portrait_id: p.portrait_id,
+        head_id: p.head_id,
+        bespoke_head: p.bespoke_head,
+        pool_head: p.pool_head,
+        portrait_path: p.portrait_path.clone(),
+        mesh_path: p.mesh_path.clone(),
+        texture_paths: p.texture_paths.clone(),
+    }
+}
+
+pub fn export_options(o: &ExportOptionsDto) -> ExportOptions {
+    ExportOptions {
+        portraits: o.portraits,
+        meshes_glb: o.meshes_glb,
+        raw_rx2: o.raw_rx2,
+        textures: o.textures,
+        crop_portraits: o.crop_portraits,
+    }
+}
+
+pub fn asset_export_summary_dto(s: &AssetExportSummary) -> AssetExportSummaryDto {
+    AssetExportSummaryDto {
+        players_considered: s.players_considered,
+        portraits_written: s.portraits_written,
+        meshes_written: s.meshes_written,
+        textures_written: s.textures_written,
+        raw_copied: s.raw_copied,
+        portraits_skipped_generic: s.portraits_skipped_generic,
+        skipped_no_slug: s.skipped_no_slug,
+        failures: s.failures.clone(),
+        bytes_written: s.bytes_written,
+    }
+}
+
+pub fn browse_listing_dto(l: &BrowseListing) -> BrowseListingDto {
+    BrowseListingDto {
+        root: l.root.clone(),
+        rel_path: l.rel_path.clone(),
+        parent: l.parent.clone(),
+        entries: l
+            .entries
+            .iter()
+            .map(|e| BrowseEntryDto {
+                name: e.name.clone(),
+                rel_path: e.rel_path.clone(),
+                is_dir: e.is_dir,
+                size: e.size,
+                kind: e.kind.map(|k| k.as_str().to_string()),
+            })
+            .collect(),
+    }
+}
+
+pub fn file_export_options(o: &FileExportOptionsDto) -> FileExportOptions {
+    FileExportOptions {
+        meshes_glb: o.meshes_glb,
+        portraits_png: o.portraits_png,
+        textures: o.textures,
+        copy_unrecognized: o.copy_unrecognized,
+        crop_portraits: o.crop_portraits,
+    }
+}
+
+pub fn file_export_summary_dto(s: &FileExportSummary) -> FileExportSummaryDto {
+    FileExportSummaryDto {
+        files_considered: s.files_considered,
+        meshes_written: s.meshes_written,
+        portraits_written: s.portraits_written,
+        textures_written: s.textures_written,
+        raw_copied: s.raw_copied,
+        skipped_unrecognized: s.skipped_unrecognized,
+        skipped_unsafe: s.skipped_unsafe,
+        failures: s.failures.clone(),
+        bytes_written: s.bytes_written,
+    }
+}
+
+pub fn outfit_export_summary_dto(s: &OutfitExportSummary) -> OutfitExportSummaryDto {
+    OutfitExportSummaryDto {
+        teams_considered: s.teams_considered,
+        jerseys_written: s.jerseys_written,
+        pants_written: s.pants_written,
+        socks_written: s.socks_written,
+        failures: s.failures.clone(),
+        bytes_written: s.bytes_written,
+        rendering_root: s.rendering_root.clone(),
+    }
+}
+
+/// Slugify a resolved team name for a filename: lowercase, every run of non-alphanumerics collapsed
+/// to a single `_`, ends trimmed. "Detroit Red Wings" → `detroit_red_wings`. Empty when the name
+/// has no usable characters (that team is then skipped by the exporter).
+pub fn team_name_slug(name: &str) -> String {
+    let mut out = String::with_capacity(name.len());
+    let mut prev_sep = true; // trims leading separators
+    for ch in name.chars() {
+        if ch.is_ascii_alphanumeric() {
+            out.push(ch.to_ascii_lowercase());
+            prev_sep = false;
+        } else if !prev_sep {
+            out.push('_');
+            prev_sep = true;
+        }
+    }
+    while out.ends_with('_') {
+        out.pop();
+    }
+    out
+}
+
+pub fn head_preview_dto(p: &HeadPreview) -> HeadPreviewDto {
+    HeadPreviewDto {
+        submeshes: p
+            .submeshes
+            .iter()
+            .map(|s| PreviewSubmeshDto {
+                name: s.name.clone(),
+                positions: s.positions.clone(),
+                normals: s.normals.clone(),
+                uv1: s.uv1.clone(),
+                triangles: s.triangles.clone(),
+                material_index: s.material_index,
+                transparent: s.transparent,
+                render_order: s.render_order,
+            })
+            .collect(),
+        textures: p
+            .textures
+            .iter()
+            .map(|t| PreviewTextureDto {
+                name: t.name.clone(),
+                width: t.width,
+                height: t.height,
+                rgba_base64: t.rgba_base64.clone(),
+            })
+            .collect(),
+        center: p.center,
+        span: p.span,
+        source_path: p.source_path.clone(),
+        lenient_rig: p.lenient_rig,
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::team_name_slug;
+
+    #[test]
+    fn team_name_slug_is_filename_safe() {
+        assert_eq!(team_name_slug("Detroit Red Wings"), "detroit_red_wings");
+        assert_eq!(team_name_slug("Montréal Canadiens"), "montr_al_canadiens"); // non-ascii dropped
+        assert_eq!(team_name_slug("St. Louis Blues"), "st_louis_blues"); // punctuation collapses
+        assert_eq!(team_name_slug("  Anaheim  Ducks  "), "anaheim_ducks"); // trimmed + collapsed
+        assert_eq!(team_name_slug("---"), ""); // no usable chars → empty (team skipped)
     }
 }

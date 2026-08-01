@@ -1,7 +1,16 @@
 //! [`Workspace`] — the multi-file edit spine: a canonical `nhlng.db` [`EditSession`] plus an optional
-//! mirrored roster-save session. Reads come from the canonical session; every **write fans out** to
-//! the roster too so the two files never desync (the user's rule — some player data, e.g. career
-//! stats, lives only in `nhlng.db`, so editing one file without the other corrupts the pairing).
+//! mirrored roster-save session. Reads come from the display session ([`Workspace::display`] —
+//! canonical by default, switchable to the roster mirror for users who only care about the roster
+//! save); every **write fans out** to the roster too so the two files never desync (the user's rule
+//! — some player data, e.g. career stats, lives only in `nhlng.db`, so editing one file without the
+//! other corrupts the pairing).
+//!
+//! When the displayed roster is **not** record-index-aligned with `nhlng.db`, the pairing is already
+//! desynced and record indices don't map across files — so the workspace enters *roster-only* mode
+//! ([`Workspace::roster_only`]): every edit applies strictly to the roster session and `nhlng.db` is
+//! left untouched (surfaced to the user as "not all areas are editable without an aligned
+//! nhlng.db"). Undo/redo tracks which file(s) each op touched so history stays coherent across mode
+//! switches.
 //!
 //! The roster save's inner TDB is a verified record-index-aligned **subset** of `nhlng.db` (memory
 //! `roster-save-mirrors-nhlng`): for the shared tables a `(table, record, field)` cell edit applies
@@ -12,7 +21,7 @@
 use std::collections::HashSet;
 
 use tdb_core::TdbFile;
-use tdb_edit::txn::{JerseyReassignment, OpOutcome};
+use tdb_edit::txn::{BlockRepairSummary, JerseyReassignment, OpOutcome};
 
 use crate::error::DomainError;
 use crate::session::{EditSession, FieldValue};
@@ -37,10 +46,27 @@ pub struct Workspace {
     /// The studio game id (`nhl10`…`nhllegacy`) this workspace was opened as — set by the onboarding
     /// path; `None` on the legacy file-pick path (where the user never named a title).
     game_id: Option<String>,
-    /// Per committed op: was it mirrored into the roster? Drives coordinated undo/redo so a
-    /// `nhlng`-only edit (career stats) doesn't pop an unrelated roster state.
-    history: Vec<bool>,
-    redo: Vec<bool>,
+    /// Per committed op: which file(s) it touched. Drives coordinated undo/redo so a `nhlng`-only
+    /// edit (career stats) or a roster-only edit (misaligned display mode) doesn't pop an unrelated
+    /// state on the other file.
+    history: Vec<OpTarget>,
+    redo: Vec<OpTarget>,
+    /// When `true`, reads are served from the roster mirror instead of `nhlng.db` (for users whose
+    /// game only loads the roster save). On an **aligned** pair the write path is unchanged (writes
+    /// fan out from `nhlng` so the pairing stays in sync); on a misaligned pair this flag puts the
+    /// workspace in roster-only mode instead ([`Workspace::roster_only`]).
+    display_roster: bool,
+}
+
+/// Which file(s) a committed op landed in (the undo/redo unit).
+#[derive(Clone, Copy)]
+enum OpTarget {
+    /// `nhlng.db` only (e.g. a table the roster save doesn't carry).
+    Canonical,
+    /// Mirrored into both files.
+    Both,
+    /// The roster save only (roster-only mode on a misaligned pair).
+    Roster,
 }
 
 impl Workspace {
@@ -53,6 +79,7 @@ impl Workspace {
             game_id: None,
             history: Vec::new(),
             redo: Vec::new(),
+            display_roster: false,
         }
     }
 
@@ -77,6 +104,7 @@ impl Workspace {
             game_id: None,
             history: Vec::new(),
             redo: Vec::new(),
+            display_roster: false,
         })
     }
 
@@ -92,9 +120,58 @@ impl Workspace {
         self.game_id.as_deref()
     }
 
-    /// The canonical session — all reads (views, validation, summaries) go through here.
+    /// The canonical `nhlng.db` session (the write spine and save source — not necessarily what the
+    /// user is looking at; reads go through [`Workspace::display`]).
     pub fn primary(&self) -> &EditSession {
         &self.nhlng
+    }
+
+    /// The session reads (views, validation, summaries) are served from: the roster mirror when the
+    /// display toggle is on, else the canonical `nhlng.db`.
+    pub fn display(&self) -> &EditSession {
+        match &self.roster {
+            Some(m) if self.display_roster => &m.session,
+            _ => &self.nhlng,
+        }
+    }
+
+    /// The on-disk write source of the attached roster mirror, if any — lets callers flag an
+    /// experimental write path (e.g. a v1 container) that lives in the mirror rather than the
+    /// canonical `nhlng.db`.
+    pub fn roster_source(&self) -> Option<&crate::Source> {
+        self.roster.as_ref().map(|m| m.session.project().source())
+    }
+
+    /// Whether reads are currently served from the roster mirror (`false` when no mirror is
+    /// attached, even if the toggle was set).
+    pub fn display_roster(&self) -> bool {
+        self.display_roster && self.roster.is_some()
+    }
+
+    /// `true` when the workspace is in roster-only mode: the roster mirror is displayed but is
+    /// **not** record-index-aligned with `nhlng.db`, so record indices don't map across files and
+    /// every edit applies strictly to the roster session (`nhlng.db` untouched).
+    pub fn roster_only(&self) -> bool {
+        self.display_roster && matches!(&self.roster, Some(m) if !m.aligned)
+    }
+
+    /// Switch reads between the canonical `nhlng.db` and the roster mirror. Turning the roster view
+    /// on only requires an attached mirror; if the pair is misaligned the workspace runs in
+    /// roster-only mode ([`Workspace::roster_only`]) rather than refusing.
+    pub fn set_display_roster(&mut self, on: bool) -> Result<()> {
+        if on && self.roster.is_none() {
+            return Err(DomainError::Sync(
+                "no roster save is attached to this workspace".into(),
+            ));
+        }
+        self.display_roster = on;
+        Ok(())
+    }
+
+    /// The roster session as the sole edit target (roster-only mode). Panics if called without an
+    /// attached mirror — gate on [`Workspace::roster_only`] first.
+    fn roster_mut(&mut self) -> &mut EditSession {
+        &mut self.roster.as_mut().expect("roster_only implies an attached mirror").session
     }
 
     pub fn roster_attached(&self) -> bool {
@@ -122,39 +199,58 @@ impl Workspace {
 
     // --- Coordinated history ---
 
-    fn record(&mut self, mirrored: bool) {
-        self.history.push(mirrored);
+    fn record(&mut self, target: OpTarget) {
+        self.history.push(target);
         self.redo.clear();
     }
 
-    /// Revert the last committed op across both files (the roster too iff that op was mirrored).
+    /// Record a canonical-first op: `Both` when it was mirrored into the roster, else `Canonical`.
+    fn record_mirrored(&mut self, mirrored: bool) {
+        self.record(if mirrored { OpTarget::Both } else { OpTarget::Canonical });
+    }
+
+    /// Revert the last committed op on exactly the file(s) it touched.
     pub fn undo(&mut self) -> bool {
         match self.history.pop() {
-            Some(mirrored) => {
-                let did = self.nhlng.undo();
-                if mirrored {
-                    if let Some(m) = self.roster.as_mut() {
-                        m.session.undo();
+            Some(target) => {
+                let did = match target {
+                    OpTarget::Canonical => self.nhlng.undo(),
+                    OpTarget::Both => {
+                        let did = self.nhlng.undo();
+                        if let Some(m) = self.roster.as_mut() {
+                            m.session.undo();
+                        }
+                        did
                     }
-                }
-                self.redo.push(mirrored);
+                    OpTarget::Roster => {
+                        self.roster.as_mut().map(|m| m.session.undo()).unwrap_or(false)
+                    }
+                };
+                self.redo.push(target);
                 did
             }
             None => false,
         }
     }
 
-    /// Re-apply the last undone op across both files.
+    /// Re-apply the last undone op on exactly the file(s) it touched.
     pub fn redo(&mut self) -> bool {
         match self.redo.pop() {
-            Some(mirrored) => {
-                let did = self.nhlng.redo();
-                if mirrored {
-                    if let Some(m) = self.roster.as_mut() {
-                        m.session.redo();
+            Some(target) => {
+                let did = match target {
+                    OpTarget::Canonical => self.nhlng.redo(),
+                    OpTarget::Both => {
+                        let did = self.nhlng.redo();
+                        if let Some(m) = self.roster.as_mut() {
+                            m.session.redo();
+                        }
+                        did
                     }
-                }
-                self.history.push(mirrored);
+                    OpTarget::Roster => {
+                        self.roster.as_mut().map(|m| m.session.redo()).unwrap_or(false)
+                    }
+                };
+                self.history.push(target);
                 did
             }
             None => false,
@@ -220,6 +316,13 @@ impl Workspace {
         studio_field: &str,
         value: FieldValue,
     ) -> Result<OpOutcome> {
+        if self.roster_only() {
+            // Misaligned display mode: the record index came from a roster view and only maps
+            // there — apply strictly to the roster file.
+            let outcome = self.roster_mut().set_field(studio_table, record, studio_field, value)?;
+            self.record(OpTarget::Roster);
+            return Ok(outcome);
+        }
         let outcome = self
             .nhlng
             .set_field(studio_table, record, studio_field, value.clone())?;
@@ -243,7 +346,7 @@ impl Workspace {
                 return Err(e);
             }
         };
-        self.record(mirror);
+        self.record_mirrored(mirror);
         Ok(outcome)
     }
 
@@ -259,6 +362,23 @@ impl Workspace {
         value: i64,
         active: bool,
     ) -> Result<OpOutcome> {
+        if self.roster_only() {
+            // Plan against the roster's own slot state — the record index only maps there.
+            let m = self.roster_mut();
+            let slots = m.trait_slot_values(studio_table, record)?;
+            let writes = crate::attributes::plan_trait_toggle(&slots, value, active).map_err(|()| {
+                DomainError::Edit(tdb_edit::EditError::InvalidValue {
+                    what: "no free trait slot (all 32 occupied)",
+                    value,
+                })
+            })?;
+            if writes.is_empty() {
+                return Ok(OpOutcome::default());
+            }
+            let outcome = self.roster_mut().set_cells_int(studio_table, record, &writes)?;
+            self.record(OpTarget::Roster);
+            return Ok(outcome);
+        }
         let slots = self.nhlng.trait_slot_values(studio_table, record)?;
         let writes = crate::attributes::plan_trait_toggle(&slots, value, active).map_err(|()| {
             DomainError::Edit(tdb_edit::EditError::InvalidValue {
@@ -290,7 +410,7 @@ impl Workspace {
                 return Err(e);
             }
         };
-        self.record(mirror);
+        self.record_mirrored(mirror);
         Ok(outcome)
     }
 
@@ -342,6 +462,13 @@ impl Workspace {
     /// into the roster when attached, aligned, and `eGlu` is shared. Returns the corrections applied.
     /// A no-op leaves both files (and the undo history) untouched.
     pub fn autocorrect_duplicate_jerseys(&mut self) -> Result<(OpOutcome, Vec<JerseyReassignment>)> {
+        if self.roster_only() {
+            let (outcome, corrections) = self.roster_mut().autocorrect_duplicate_jerseys()?;
+            if !corrections.is_empty() {
+                self.record(OpTarget::Roster);
+            }
+            return Ok((outcome, corrections));
+        }
         let (outcome, corrections) = self.nhlng.autocorrect_duplicate_jerseys()?;
         if corrections.is_empty() {
             return Ok((outcome, corrections)); // nothing changed on nhlng — no mirror, no history entry
@@ -364,8 +491,58 @@ impl Workspace {
                 return Err(e);
             }
         };
-        self.record(mirror);
+        self.record_mirrored(mirror);
         Ok((outcome, corrections))
+    }
+
+    /// Repair a corrupted roster-block layout (`towx_coherence` errors) by permuting `eGlu` back
+    /// into contiguous per-team blocks — an order-only structural repair that cannot change any
+    /// membership (see `EditTransaction::repair_roster_blocks`). **Both files are checked and
+    /// repaired independently**: each carries its own `eGlu` copy and either can be the corrupt
+    /// one, and each repair is computed from that file's own bytes (an aligned identical pair
+    /// yields the identical permutation, so alignment is preserved). A fully clean pair leaves
+    /// both files (and the undo history) untouched.
+    pub fn repair_roster_blocks(&mut self) -> Result<(OpOutcome, BlockRepairSummary)> {
+        if self.roster_only() {
+            let (outcome, summary) = self.roster_mut().repair_roster_blocks()?;
+            if summary.moved_slots > 0 {
+                self.record(OpTarget::Roster);
+            }
+            return Ok((outcome, summary));
+        }
+        let (outcome, summary) = self.nhlng.repair_roster_blocks()?;
+        // The roster save is repaired from its own bytes even when the main DB was clean — the
+        // corruption can live in either file. A clean roster is a no-op (no session undo entry).
+        let roster_repair = match self.roster.as_mut().map(|m| m.session.repair_roster_blocks()) {
+            None => None,
+            Some(Ok(r)) => Some(r),
+            Some(Err(e)) => {
+                if summary.moved_slots > 0 {
+                    self.nhlng.undo(); // keep the pair consistent
+                }
+                return Err(e);
+            }
+        };
+        let roster_moved = roster_repair.as_ref().map(|(_, rs)| rs.moved_slots).unwrap_or(0);
+        match (summary.moved_slots > 0, roster_moved > 0) {
+            (false, false) => return Ok((outcome, summary)), // both coherent — no history entry
+            (true, mirrored) => self.record_mirrored(mirrored),
+            (false, true) => self.record(OpTarget::Roster),
+        }
+        // Merge for display: per-file permutations of the same corruption move the same rows, so
+        // report the larger count (not the sum) and the union of flagged teams. When only the
+        // roster moved, its outcome is the meaningful one.
+        let (mut outcome, mut merged) = (outcome, summary);
+        if let Some((ro, rs)) = roster_repair {
+            if merged.moved_slots == 0 {
+                outcome = ro;
+            }
+            merged.moved_slots = merged.moved_slots.max(rs.moved_slots);
+            merged.affected_teams.extend(rs.affected_teams);
+            merged.affected_teams.sort_unstable();
+            merged.affected_teams.dedup();
+        }
+        Ok((outcome, merged))
     }
 
     /// Retire a jersey number for a team (add it to the `wcSL` retired-number table).
@@ -399,6 +576,14 @@ impl Workspace {
         league: u64,
         team: &str,
     ) -> Result<(u32, OpOutcome)> {
+        if self.roster_only() {
+            // Roster saves usually lack the career tables — the op then fails naturally, which is
+            // the honest "not editable without an aligned nhlng.db" surface.
+            let (record, outcome) =
+                self.roster_mut().add_career_season(studio_table, player, year_end, league, team)?;
+            self.record(OpTarget::Roster);
+            return Ok((record, outcome));
+        }
         let (record, outcome) =
             self.nhlng
                 .add_career_season(studio_table, player, year_end, league, team)?;
@@ -431,7 +616,7 @@ impl Workspace {
                 return Err(e);
             }
         };
-        self.record(mirror);
+        self.record_mirrored(mirror);
         Ok((record, outcome))
     }
 
@@ -449,6 +634,11 @@ impl Workspace {
         studio_table: &str,
         op: impl Fn(&mut EditSession) -> Result<OpOutcome>,
     ) -> Result<OpOutcome> {
+        if self.roster_only() {
+            let outcome = op(self.roster_mut())?;
+            self.record(OpTarget::Roster);
+            return Ok(outcome);
+        }
         let outcome = op(&mut self.nhlng)?;
         let do_mirror = matches!(
             self.roster.as_ref(),
@@ -467,7 +657,7 @@ impl Workspace {
                 return Err(e);
             }
         };
-        self.record(mirror);
+        self.record_mirrored(mirror);
         Ok(outcome)
     }
 
@@ -478,6 +668,13 @@ impl Workspace {
         &mut self,
         op: impl Fn(&mut EditSession) -> Result<OpOutcome>,
     ) -> Result<OpOutcome> {
+        if self.roster_only() {
+            // Entity-id keyed, so it *could* apply to both — but on a misaligned pair the files
+            // already disagree, so honour the mode's contract: touch the roster file only.
+            let outcome = op(self.roster_mut())?;
+            self.record(OpTarget::Roster);
+            return Ok(outcome);
+        }
         let outcome = op(&mut self.nhlng)?;
         let roster_result = self.roster.as_mut().map(|m| op(&mut m.session));
         let mirror = match roster_result {
@@ -488,7 +685,7 @@ impl Workspace {
                 return Err(e);
             }
         };
-        self.record(mirror);
+        self.record_mirrored(mirror);
         Ok(outcome)
     }
 
@@ -497,11 +694,17 @@ impl Workspace {
     /// Create a player cluster on a team. With a roster attached, creates in both and **verifies the
     /// new `wBIz` and full record alignment match** across files; any divergence rolls both back.
     pub fn create_player(&mut self, team: u64, position: u64) -> Result<(u64, OpOutcome)> {
+        if self.roster_only() {
+            // Single-file create in the roster save — no cross-file guard, nothing to diverge from.
+            let (rid, outcome) = self.roster_mut().create_player(team, position)?;
+            self.record(OpTarget::Roster);
+            return Ok((rid, outcome));
+        }
         let (nid, outcome) = self.nhlng.create_player(team, position)?;
         let roster_result = self.roster.as_mut().map(|m| m.session.create_player(team, position));
         match roster_result {
             None => {
-                self.record(false);
+                self.record_mirrored(false);
                 Ok((nid, outcome))
             }
             Some(Err(e)) => {
@@ -516,7 +719,7 @@ impl Workspace {
                          (or record indices diverged); both files rolled back"
                     )));
                 }
-                self.record(true);
+                self.record_mirrored(true);
                 Ok((nid, outcome))
             }
         }
@@ -526,6 +729,11 @@ impl Workspace {
     /// guard as [`Workspace::create_player`]: both files clone independently and must agree on the new
     /// `wBIz` and full record alignment, else both roll back.
     pub fn clone_player(&mut self, source_player: u64, to_team: u64) -> Result<(u64, OpOutcome)> {
+        if self.roster_only() {
+            let (rid, outcome) = self.roster_mut().clone_player(source_player, to_team)?;
+            self.record(OpTarget::Roster);
+            return Ok((rid, outcome));
+        }
         let (nid, outcome) = self.nhlng.clone_player(source_player, to_team)?;
         let roster_result = self
             .roster
@@ -533,7 +741,7 @@ impl Workspace {
             .map(|m| m.session.clone_player(source_player, to_team));
         match roster_result {
             None => {
-                self.record(false);
+                self.record_mirrored(false);
                 Ok((nid, outcome))
             }
             Some(Err(e)) => {
@@ -548,7 +756,7 @@ impl Workspace {
                          (or record indices diverged); both files rolled back"
                     )));
                 }
-                self.record(true);
+                self.record_mirrored(true);
                 Ok((nid, outcome))
             }
         }
@@ -557,11 +765,16 @@ impl Workspace {
     /// Delete a player and its cluster. With a roster attached, deletes from both and **re-verifies
     /// full record alignment**; any divergence rolls both back.
     pub fn delete_player(&mut self, player: u64) -> Result<OpOutcome> {
+        if self.roster_only() {
+            let outcome = self.roster_mut().delete_player(player)?;
+            self.record(OpTarget::Roster);
+            return Ok(outcome);
+        }
         let outcome = self.nhlng.delete_player(player)?;
         let roster_result = self.roster.as_mut().map(|m| m.session.delete_player(player));
         match roster_result {
             None => {
-                self.record(false);
+                self.record_mirrored(false);
                 Ok(outcome)
             }
             Some(Err(e)) => {
@@ -575,8 +788,93 @@ impl Workspace {
                         "delete_player desynced the two files; both rolled back".into(),
                     ));
                 }
-                self.record(true);
+                self.record_mirrored(true);
                 Ok(outcome)
+            }
+        }
+    }
+
+    // --- Roster Builder import (Phase 5.4) ---
+    //
+    // Reads (match/lower/preview) run against the **canonical** `nhlng.db` — the write spine a commit
+    // targets — so a preview reflects exactly what commit will do.
+
+    /// The canonical `nhlng.db`'s on-disk path — a stable identity for the EA target (the import
+    /// ledger keys on it).
+    pub fn primary_path(&self) -> &str {
+        &self.nhlng_path
+    }
+
+    /// Auto-detect EA identity matches for a corpus person (the cart's Match/Create toggle).
+    pub fn match_ea_player(
+        &self,
+        corpus: &crate::historical::FhmCorpus,
+        person_id: i64,
+    ) -> Result<Vec<crate::import::MatchCandidate>> {
+        self.nhlng.match_ea_player(corpus, person_id)
+    }
+
+    /// Lower a whole cart against the canonical db (the ops a preview/commit consume).
+    pub fn lower_change_set(
+        &self,
+        corpus: &crate::historical::FhmCorpus,
+        items: &[crate::import::ImportItem],
+        profile: &tdb_formula::FormulaProfile,
+        maxima: &tdb_fhm_store::AttributeMaxima,
+    ) -> Result<crate::import::LoweredChangeSet> {
+        self.nhlng.lower_change_set(corpus, items, profile, maxima)
+    }
+
+    /// Dry-run a lowered cart against the canonical db — non-mutating (see
+    /// [`EditSession::preview_import`]).
+    pub fn preview_import(
+        &self,
+        ops: &[tdb_edit::txn::ImportOp],
+        skipped: Vec<crate::import::SkippedField>,
+    ) -> Result<crate::import::ImportPreview> {
+        self.nhlng.preview_import(ops, skipped)
+    }
+
+    /// Project the roster tables' fill after `creates` against the canonical db + this workspace's
+    /// title (the S4 ceiling gate the preview shows). See [`crate::capacity::project_capacity`].
+    pub fn roster_capacity(
+        &self,
+        creates: crate::capacity::PendingCreates,
+    ) -> Result<Vec<crate::capacity::TableCapacity>> {
+        let db = TdbFile::parse(self.nhlng.bytes())?;
+        Ok(crate::capacity::project_capacity(&db, self.game_id.as_deref(), creates))
+    }
+
+    /// Commit a lowered cart for real — one transaction, one undo entry. With a roster attached, the
+    /// identical ops apply to the mirror too and **full record alignment is re-verified**; any
+    /// divergence rolls both files back (the [`Workspace::create_player`] guard, for a whole cart).
+    pub fn commit_import(&mut self, ops: &[tdb_edit::txn::ImportOp]) -> Result<tdb_edit::txn::ImportApplied> {
+        if self.roster_only() {
+            let applied = self.roster_mut().commit_import(ops)?;
+            self.record(OpTarget::Roster);
+            return Ok(applied);
+        }
+        // The canonical db is the authority for the created ids (an aligned mirror mints the same).
+        let applied = self.nhlng.commit_import(ops)?;
+        let roster_result = self.roster.as_mut().map(|m| m.session.commit_import(ops));
+        match roster_result {
+            None => {
+                self.record_mirrored(false);
+                Ok(applied)
+            }
+            Some(Err(e)) => {
+                self.nhlng.undo();
+                Err(e)
+            }
+            Some(Ok(_)) => {
+                if !self.fully_aligned()? {
+                    self.roll_back_both();
+                    return Err(DomainError::Sync(
+                        "import cart desynced the two files; both rolled back".into(),
+                    ));
+                }
+                self.record_mirrored(true);
+                Ok(applied)
             }
         }
     }
@@ -613,11 +911,18 @@ impl Workspace {
 
     /// In-place dual save: write `nhlng.db` and (if attached) the roster save back to their original
     /// paths, repacking the roster's container with recomputed checksums via `Project::package`.
+    /// When the roster save lives inside a recomp/Xenia content tree that indexes saves through
+    /// `Headers/*.header` sidecars, the matching sidecar is created if missing — a save without one
+    /// is invisible to the game's load list (`crate::content_header`).
     pub fn save_in_place(&self) -> Result<u64> {
         self.nhlng.save_to(&self.nhlng_path)?;
+        // A roster save opened *alone* occupies the canonical slot (`Workspace::single`), so the
+        // sidecar check runs on both paths; it is a no-op outside header-indexed content trees.
+        crate::content_header::ensure_content_header(std::path::Path::new(&self.nhlng_path))?;
         let mut files = 1u64;
         if let Some(m) = &self.roster {
             m.session.save_to(&m.path)?;
+            crate::content_header::ensure_content_header(std::path::Path::new(&m.path))?;
             files += 1;
         }
         Ok(files)

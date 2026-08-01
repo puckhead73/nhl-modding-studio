@@ -10,10 +10,16 @@ import type { FindingDto } from "../bindings/FindingDto";
 // flavour (a player in two slots, field `XSWT`) has no automated op, so it stays a manual fix.
 const SLOT_JERSEY_FIELD = "sVRt";
 
+type RepairKind = "jerseys" | "blocks";
+
 /** Does this finding group have a real op that repairs it? Returns a repair descriptor or null. */
-function repairFor(items: FindingDto[]): { kind: "jerseys"; label: string } | null {
+function repairFor(items: FindingDto[]): { kind: RepairKind; label: string } | null {
   if (items.some((f) => f.predicate === "dup_on_team" && f.field === SLOT_JERSEY_FIELD)) {
     return { kind: "jerseys", label: "Fix duplicate jerseys" };
+  }
+  // Corrupted roster blocks: repaired by the order-only eGlu permutation (no membership changes).
+  if (items.some((f) => f.predicate === "towx_coherence")) {
+    return { kind: "blocks", label: "Repair roster blocks" };
   }
   return null;
 }
@@ -50,9 +56,21 @@ export function Dashboard() {
       report.refetch();
     },
   });
-  const runRepair = (kind: "jerseys") => {
+  // Roster-block structural repair: an order-only permutation of the roster table back into
+  // contiguous per-team blocks (no memberships change). Staged as a pending, undoable edit.
+  const repairBlocks = useMutation({
+    mutationFn: () => call("repair_roster_blocks", { projectId }),
+    onSuccess: async () => {
+      update(await call("project_summary", { projectId }));
+      await qc.invalidateQueries();
+      report.refetch();
+    },
+  });
+  const runRepair = (kind: RepairKind) => {
     if (kind === "jerseys") repairJerseys.mutate();
+    if (kind === "blocks") repairBlocks.mutate();
   };
+  const repairing = repairJerseys.isPending || repairBlocks.isPending;
 
   // Which severities are shown. Off = filtered out; all on by default.
   const [hidden, setHidden] = useState<Set<Severity>>(new Set());
@@ -148,6 +166,21 @@ export function Dashboard() {
               })}
             </div>
 
+            {repairBlocks.data && repairBlocks.data.moved_slots > 0 && (
+              <p className="mb-2 text-xs text-emerald-400">
+                Rebuilt the roster layout: {repairBlocks.data.moved_slots.toLocaleString()} slots
+                moved back into place
+                {repairBlocks.data.teams.length > 0 &&
+                  ` (${repairBlocks.data.teams.length} teams were affected)`}
+                . The fix is staged as a pending edit — save to keep it, or undo.
+              </p>
+            )}
+            {repairBlocks.isError && (
+              <p className="mb-2 text-xs text-rose-400">
+                Could not repair the roster layout: {String(repairBlocks.error)}
+              </p>
+            )}
+
             <div className="max-h-[55vh] space-y-2 overflow-auto">
               {report.data.findings.length === 0 && (
                 <p className="text-xs text-slate-400">No findings.</p>
@@ -162,7 +195,7 @@ export function Dashboard() {
                   worst={g.worst}
                   items={g.items}
                   onRepair={runRepair}
-                  repairing={repairJerseys.isPending}
+                  repairing={repairing}
                 />
               ))}
             </div>
@@ -194,7 +227,7 @@ function FindingGroup({
   title: string;
   worst: string;
   items: FindingDto[];
-  onRepair: (kind: "jerseys") => void;
+  onRepair: (kind: RepairKind) => void;
   repairing: boolean;
 }) {
   const repair = repairFor(items);

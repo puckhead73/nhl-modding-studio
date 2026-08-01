@@ -15,14 +15,19 @@
 //! rather than the full command surface — the seams (registry of ops, source-aware save, DTO bridge
 //! in `studio-api`) are what later phases extend.
 
+pub mod assets;
 pub mod attributes;
 pub mod audit;
 pub mod capabilities;
 pub mod capacity;
+pub mod content_header;
 pub mod discovery;
 pub mod extract;
+pub mod field_profile;
 pub mod formula;
+pub mod head_preview;
 pub mod historical;
+pub mod import;
 mod error;
 mod overview;
 mod profile;
@@ -32,17 +37,31 @@ mod team_tabs;
 mod view;
 mod workspace;
 
+pub use assets::{
+    browse_asset_dir, decode_portrait, export_asset_files, export_player_assets,
+    export_team_outfits, mark_generic_portraits, probe_birthdate_encoding, scan_player_assets,
+    AssetExportSummary, AssetKind, AssetRoots, BirthdateEncoding, BrowseEntry, BrowseListing,
+    DecodedImage, ExportOptions, FileExportOptions, FileExportSummary, OutfitExportSummary,
+    OutfitTeam, PlayerAssets,
+};
+pub use head_preview::{decode_head_preview, HeadPreview, PreviewSubmesh, PreviewTexture};
 pub use attributes::{
     build_player_attributes, AttributeView, PlayerAttributes, TraitOption, TraitView,
 };
 pub use audit::{humanize, HumanFinding, HumanReport};
 pub use capabilities::Capabilities;
-pub use capacity::CapacityGrowth;
+pub use capacity::{project_capacity, CapacityGrowth, PendingCreates, TableCapacity};
 pub use discovery::{
     detect_install, ps4_title_ids, title_ids, DbPaths, InstallReport, SaveSlot, TitleIds,
 };
 pub use extract::{extract_install, find_big_archives, ExtractSummary};
+pub use field_profile::{CellControl, EntityFieldProfile, ProfileCell, ProfileSection};
 pub use historical::{FhmCorpus, FhmError};
+pub use import::{
+    count_creates, lower_change_set, lower_create, lower_update, person_season_from_corpus,
+    EaSlugIndex, ImportIdentity, ImportItem, ImportPreview, ItemOutcome, LoweredChangeSet,
+    LoweredItem, MatchCandidate, MatchConfidence, PersonSeason, SkippedField,
+};
 pub use formula::{
     compute_person_career_ratings, compute_person_ratings, default_profile, CareerRatings,
     CareerSeasonOverall, ComputedRatings,
@@ -64,9 +83,9 @@ pub use view::{
     arena_summaries, arena_view, career_stats, entity_fields, lines_view, player_summaries,
     player_view, read_field, team_summaries, team_view, ArenaRef, ArenaSummary, ArenaView,
     CareerColumn, CareerRow, CareerSection, CareerStats, FieldKind, FieldRaw, FieldView, LineEntry,
-    LinesView, PlayerData, PlayerHeader, PlayerSummary, PlayerView, RosterMembership, SlotField,
-    TeamSummary, TeamView, CAREER_GOALIE_PLAYOFFS, CAREER_GOALIE_SEASON, CAREER_SKATER_PLAYOFFS,
-    CAREER_SKATER_SEASON,
+    probe_main_team_encoding, LinesView, MainTeamEncoding, PlayerData, PlayerHeader, PlayerSummary,
+    PlayerView, RosterMembership, SlotField, TeamSummary, TeamView, CAREER_GOALIE_PLAYOFFS,
+    CAREER_GOALIE_SEASON, CAREER_SKATER_PLAYOFFS, CAREER_SKATER_SEASON,
 };
 
 /// A convenience result alias for the domain layer.
@@ -76,5 +95,5 @@ pub type Result<T> = std::result::Result<T, DomainError>;
 // `studio-domain` alone rather than reaching past it into individual engine crates.
 pub use tdb_core::Endian;
 pub use tdb_domain_validation::{Finding, IntegrityReport, Severity};
-pub use tdb_edit::txn::OpOutcome;
+pub use tdb_edit::txn::{ImportApplied, ImportCell, ImportOp, ImportTarget, ImportWrite, OpOutcome};
 pub use tdb_relations::{Player, RosterModel, RosterSlot, Team};

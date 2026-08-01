@@ -1,10 +1,10 @@
-import { useState, type ReactNode } from "react";
+import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { call } from "../lib/client";
 import { useProject } from "../lib/project";
 import { FieldRow } from "../components/FieldRow";
-import { EditableField, ReadonlyField, TeamSelect } from "../components/EditableField";
+import { ProfileSections } from "../components/FieldProfile";
 import { DetailTabs, type DetailTab } from "../components/DetailTabs";
 import { PlayerHeader } from "../components/PlayerHeader";
 import { AttributesTab } from "../components/AttributesTab";
@@ -78,133 +78,28 @@ export function PlayerDetail() {
   );
 }
 
-/** A titled block whose cells flow in a 4-column grid (matching the reference Player Data layout). */
-function Section({ title, children }: { title: string; children: ReactNode }) {
-  return (
-    <section>
-      <h3 className="mb-3 border-b border-slate-800 pb-1 text-[11px] font-bold uppercase tracking-wider text-slate-400">
-        {title}
-      </h3>
-      <div className="grid grid-cols-2 items-start gap-x-8 gap-y-3 sm:grid-cols-3 lg:grid-cols-4">
-        {children}
-      </div>
-    </section>
-  );
-}
-
 /** The Player Data tab — resolved bio/roster/contract/draft/rookie values in the reference's
  *  sectioned, 4-column layout, inline-editable: enum fields render dropdowns, team FKs render team
  *  pickers, 1-bit flags render checkboxes, and derived fields (cap hit, status) stay read-only. Field
  *  values/labels/vocabularies are all resolved in studio-domain (`header`/`data`/`enum_options`). */
 function PlayerDataTab({ projectId, player }: { projectId: number; player: PlayerViewDto }) {
-  const { project } = useProject();
-  const caps = project!.capabilities;
   const teamsQ = useQuery({
     queryKey: ["teams", projectId],
     queryFn: () => call("list_teams", { projectId }),
   });
   const teams = teamsQ.data ?? [];
-  const rec = player.bio_record;
-  const d = player.data;
-  const byId = (id: string) => player.all_fields.find((f) => f.studio_field === id);
 
-  // An editable field cell by studio id; renders nothing if this title's schema lacks the field.
-  const F = ({ id, label }: { id: string; label: string }) => {
-    const f = byId(id);
-    return f ? <EditableField projectId={projectId} record={rec} field={f} label={label} /> : null;
-  };
-  // A team-FK cell by studio id; hidden (not read-only) when this title's schema lacks the field.
-  const Team = ({ id, label, noneLabel }: { id: string; label: string; noneLabel?: string }) => {
-    const f = byId(id);
-    return f ? (
-      <TeamSelect
-        projectId={projectId}
-        record={rec}
-        field={f}
-        teams={teams}
-        label={label}
-        noneLabel={noneLabel}
-      />
-    ) : null;
-  };
-  const yesNo = (b: boolean | null) => (b == null ? "" : b ? "Yes" : "No");
-
-  // The whole Draft Data section disappears when this game predates draft data (NHL 10 has none).
-  const hasDraft = caps.draft_team || caps.draft_year || caps.draft_round || caps.draft_pick;
-  // What this game's database doesn't carry — disclosed once at the bottom instead of leaving the
-  // user to wonder whether a blank cell is a bug.
-  const notInThisGame = [
-    !caps.junior_team && "Junior Team",
-    !caps.player_style && "Archetype",
-    !caps.year_ufa && "Year UFA",
-    !caps.rookie_ahl && "AHL Rookie",
-    !caps.rookie_chl && "CHL Rookie",
-    !caps.draft_team && "Draft Team",
-    !caps.draft_year && "Draft Year",
-    !caps.draft_round && "Draft Round",
-    !caps.draft_pick && "Draft Position",
-  ].filter((x): x is string => Boolean(x));
-
+  // The curated sections come from the domain's per-game field profile: it emits exactly the fields
+  // this title's schema carries (no "not in this game" placeholders) with correct labels/scales.
+  // "Additional Teams" is a frontend-only membership editor that belongs in the Roster Data grid.
   return (
     <div className="space-y-6">
-      <Section title="Biographical Data">
-        <F id="HdeP" label="First Name" />
-        <F id="QbMR" label="Last Name" />
-        <F id="ypBQ" label="Height" />
-        <F id="sNZW" label="Weight" />
-        <F id="qFnd" label="Birth Year" />
-        <F id="JKLp" label="Birth Month" />
-        <F id="Kswi" label="Birth Day" />
-        <F id="MFzJ" label="Birthplace" />
-        <F id="QvxI" label="Birth State" />
-        <F id="Lelh" label="Nationality" />
-        <F id="vjla" label="Position" />
-        <F id="GRkp" label="Handedness" />
-      </Section>
-
-      <Section title="Roster Data">
-        <F id="sVRt" label="Jersey Number" />
-        <Team id="dXSB" label="Main Team" />
-        <Team id="ZbNy" label="Junior Team" />
-        {/* Real player active flag: `kKYN` = bio `active` (1-bit) — renders as a checkbox. Distinct
-            from `tEok`/`c_potential`, which the prior app mislabelled "Active". */}
-        <F id="kKYN" label="Active" />
-        {caps.player_style && (
-          <ReadonlyField label="Archetype">{player.header.style_label ?? ""}</ReadonlyField>
-        )}
-        <AdditionalTeams projectId={projectId} player={player} teams={teams} />
-      </Section>
-
-      <Section title="Contract Data">
-        <Team id="dbBW" label="Pro Team" noneLabel="(none — No NHL Rights)" />
-        <ReadonlyField label="Cap Hit">{d.cap_hit ?? ""}</ReadonlyField>
-        <F id="IhDG" label="Length Of Contract" />
-        <ReadonlyField label="Contract Status">{d.contract_status ?? ""}</ReadonlyField>
-        <F id="GKKz" label="Year UFA" />
-        <F id="LoVD" label="Two-Way" />
-        <ReadonlyField label="Multi-Year">{yesNo(d.is_multi_year)}</ReadonlyField>
-      </Section>
-
-      <Section title="Rookie Status">
-        <F id="dCnv" label="NHL Rookie" />
-        <F id="ywRO" label="AHL Rookie" />
-        <F id="BQVU" label="CHL Rookie" />
-      </Section>
-
-      {hasDraft && (
-        <Section title="Draft Data">
-          <Team id="vgWu" label="Draft Team" noneLabel="(undrafted)" />
-          <F id="YKzW" label="Draft Year" />
-          <F id="ccjU" label="Draft Round" />
-          <F id="tTfW" label="Draft Position" />
-        </Section>
-      )}
-
-      {notInThisGame.length > 0 && (
-        <p className="text-xs text-slate-500">
-          Not part of this game's database (hidden): {notInThisGame.join(", ")}.
-        </p>
-      )}
+      <ProfileSections
+        projectId={projectId}
+        profile={player.profile}
+        teams={teams}
+        extras={{ "Roster Data": <AdditionalTeams projectId={projectId} player={player} teams={teams} /> }}
+      />
 
       <details className="rounded-md border border-slate-800 bg-slate-900/40 px-3 py-2">
         <summary className="cursor-pointer text-xs font-semibold text-slate-300">
@@ -256,10 +151,11 @@ function AdditionalTeams({
     onSuccess: refresh,
   });
 
-  // Main Team = ubPc.dXSB − 1 (0 = free agent). Exactly one membership row matching it is the
-  // canonical slot — hide that one; any duplicate beyond it counts as an additional membership.
-  const dxsb = player.all_fields.find((f) => f.studio_field === "dXSB")?.decoded ?? 0;
-  const mainTeamId = dxsb > 0 ? dxsb - 1 : null;
+  // The main team is resolved in the domain (per-title `dXSB` offset, anchored on the roster) and
+  // handed over as `header.primary_team_id` — never recompute it here with a hardcoded offset, or
+  // early titles (NHL 09/10, where `dXSB` is 0-indexed) mis-split main vs. additional. Exactly one
+  // membership row matching it is the canonical slot — hide that one; the rest are additional.
+  const mainTeamId = player.header.primary_team_id;
   let mainRowDropped = false;
   const rows = player.memberships.filter((m) => {
     if (!mainRowDropped && mainTeamId !== null && m.team_id === mainTeamId) {

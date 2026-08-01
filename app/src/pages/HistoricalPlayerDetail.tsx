@@ -7,6 +7,8 @@ import { EmptyState, Spinner } from "../components/primitives";
 import { ComputedRatings } from "../components/ComputedRatings";
 import { useCrumbLabel } from "../lib/breadcrumbs";
 import { POS_BADGE, POS_FULL } from "../lib/position";
+import { useRosterCart } from "../lib/rosterCart";
+import { useProject } from "../lib/project";
 import type { HistoricalPersonDto } from "../bindings/HistoricalPersonDto";
 import type { HistoricalCareerRowDto } from "../bindings/HistoricalCareerRowDto";
 
@@ -222,6 +224,9 @@ function DraftData({ drafts }: { drafts: HistoricalPersonDto["drafts"] }) {
 }
 
 function SeasonTimeline({ p }: { p: HistoricalPersonDto }) {
+  const cart = useRosterCart();
+  const { project } = useProject();
+  const canImport = project != null;
   return (
     <section>
       <h3 className="mb-2 border-b border-slate-800 pb-1 text-[11px] font-bold uppercase tracking-wider text-slate-400">
@@ -238,24 +243,48 @@ function SeasonTimeline({ p }: { p: HistoricalPersonDto }) {
               <th className="px-2 py-1 text-right">Pot</th>
               <th className="px-2 py-1 text-right">Ht</th>
               <th className="px-2 py-1 text-right">Wt</th>
+              {canImport && <th className="px-2 py-1"></th>}
             </tr>
           </thead>
           <tbody>
-            {p.seasons.map((s) => (
-              <tr key={s.season_year} className="border-t border-slate-800/60">
-                <td className="px-2 py-1 tabular-nums text-slate-300">{s.season_label}</td>
-                <td className="px-2 py-1 text-slate-200">{s.team_name ?? s.team_abbr ?? "—"}</td>
-                <td className="px-2 py-1 text-slate-400">{s.league_abbr ?? "—"}</td>
-                <td className="px-2 py-1 text-right tabular-nums text-slate-300">
-                  {s.ability != null ? s.ability.toFixed(1) : "—"}
-                </td>
-                <td className="px-2 py-1 text-right tabular-nums text-slate-300">
-                  {s.potential != null ? s.potential.toFixed(1) : "—"}
-                </td>
-                <td className="px-2 py-1 text-right tabular-nums text-slate-500">{s.height ?? "—"}</td>
-                <td className="px-2 py-1 text-right tabular-nums text-slate-500">{s.weight ?? "—"}</td>
-              </tr>
-            ))}
+            {p.seasons.map((s) => {
+              const queued = cart.has(p.person_id, s.season_year);
+              return (
+                <tr key={s.season_year} className="border-t border-slate-800/60">
+                  <td className="px-2 py-1 tabular-nums text-slate-300">{s.season_label}</td>
+                  <td className="px-2 py-1 text-slate-200">{s.team_name ?? s.team_abbr ?? "—"}</td>
+                  <td className="px-2 py-1 text-slate-400">{s.league_abbr ?? "—"}</td>
+                  <td className="px-2 py-1 text-right tabular-nums text-slate-300">
+                    {s.ability != null ? s.ability.toFixed(1) : "—"}
+                  </td>
+                  <td className="px-2 py-1 text-right tabular-nums text-slate-300">
+                    {s.potential != null ? s.potential.toFixed(1) : "—"}
+                  </td>
+                  <td className="px-2 py-1 text-right tabular-nums text-slate-500">{s.height ?? "—"}</td>
+                  <td className="px-2 py-1 text-right tabular-nums text-slate-500">{s.weight ?? "—"}</td>
+                  {canImport && (
+                    <td className="px-2 py-1 text-right">
+                      <button
+                        disabled={queued}
+                        onClick={() =>
+                          cart.add({
+                            personId: p.person_id,
+                            seasonYear: s.season_year,
+                            personName: `${p.first_name} ${p.last_name}`.trim(),
+                            seasonLabel: s.season_label,
+                            position: p.position ?? null,
+                          })
+                        }
+                        className="rounded border border-slate-700 px-1.5 py-0.5 text-[11px] text-slate-300 hover:border-sky-600 hover:text-sky-300 disabled:cursor-default disabled:border-slate-800 disabled:text-slate-600"
+                        title={queued ? "Already in the Roster Builder cart" : "Send this season to the Roster Builder"}
+                      >
+                        {queued ? "Queued" : "Send to Builder"}
+                      </button>
+                    </td>
+                  )}
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

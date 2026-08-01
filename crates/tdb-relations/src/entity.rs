@@ -32,6 +32,15 @@ pub mod ids {
     pub const ROSTER_LINES: &str = "eGlu";
     pub const TEAM: &str = "kOtt";
 
+    // NHL07-only team-name join. In NHL 09→21 `kOtt` (`exhibitionteams`) carries the name fields
+    // inline; in NHL07 it is a thin index whose `TEAM_NAME_TABLE_DISC` (`table`) selects one of the
+    // name-bearing tables below and `TEAM_NAME_ID` (`teamid`) is the row's key within it. See the
+    // studio-domain team-name resolver.
+    pub const STOCK_TEAM: &str = "HqzU"; // stockteamtable
+    pub const CUSTOM_TEAM: &str = "fLEY"; // customteamtable
+    pub const TEAM_NAME_ID: &str = "mCXg"; // exhibitionteams.teamid → name table key
+    pub const TEAM_NAME_TABLE_DISC: &str = "RREB"; // exhibitionteams.table (0=stock, 1=custom)
+
     // Fields.
     pub const PLAYER_ID: &str = "wBIz"; // ubPc key + companion join
     pub const POSITION: &str = "vjla"; // ubPc position code (0..4, 4 = goalie)
@@ -100,8 +109,10 @@ pub struct Player {
 }
 
 impl Player {
-    /// True iff the companion pair required by this player's `kind` is fully present — the Layer 2
-    /// "a Player is the whole cluster" invariant (a future Layer 4 predicate reuses this).
+    /// True iff *both* companions this player's `kind` uses in the modern (fat) schema are present —
+    /// AI + equipment. This is the unconditional cluster check; whole-DB integrity uses the
+    /// schema-aware [`RosterModel::companion_violations`] instead, which drops the equipment
+    /// requirement on gen6 titles (NHL07) that ship no equipment table.
     pub fn companions_complete(&self) -> bool {
         match self.kind {
             PlayerKind::Skater => self.skater_ai.is_some() && self.skater_equip.is_some(),
@@ -169,6 +180,18 @@ pub struct RosterModel {
     pub slots: Vec<RosterSlot>,
     team_by_id: HashMap<u64, usize>,
     player_by_id: HashMap<u64, usize>,
+    /// `wBIz`s that appear in the `ZBac` player index — the players the game actually loads. A
+    /// `ubPc` bio row with *no* `ZBac` entry (and no roster slot) is an orphan stub the game never
+    /// references; it must not be treated as a live player (e.g. by integrity predicates). Verified
+    /// on the NHL 09 anchor: 4 vanilla `ubPc` rows carry no `ZBac` entry, no companions, no slot.
+    referenced: std::collections::HashSet<u64>,
+    /// Whether the skater/goalie *equipment* companion tables exist in this db's schema. Gen6 titles
+    /// (NHL07) split ratings onto the AI tables (`dSvy`/`mHuy`) but ship no separate equipment tables
+    /// (`xmja`/`fMVl`), so their absence is a schema shape, not a broken cluster — the companion
+    /// invariant requires the equip row only when its table is present. Probed from table presence,
+    /// never from an empty companion map (which is ambiguous: absent vs. present-but-unpopulated).
+    has_skater_equip: bool,
+    has_goalie_equip: bool,
 }
 
 /// Resolve a field on `table` by its studio id (handling the BE reversal).
@@ -235,6 +258,9 @@ impl RosterModel {
         let skater_equip = companion_map(db, ids::SKATER_EQUIP);
         let goalie_ai = companion_map(db, ids::GOALIE_AI);
         let goalie_equip = companion_map(db, ids::GOALIE_EQUIP);
+        // Table presence (not map emptiness): a gen6 db lacks these tables entirely.
+        model.has_skater_equip = db.table_canonical(ids::SKATER_EQUIP).is_some();
+        model.has_goalie_equip = db.table_canonical(ids::GOALIE_EQUIP).is_some();
 
         for i in 0..bio_t.current_records as u32 {
             let Some(player_id) = db.read_u64(bio_t, i, bio_key) else {
@@ -274,13 +300,19 @@ impl RosterModel {
                 continue;
             };
             index.insert(vfeq, IndexEntry { player_id });
+            model.referenced.insert(player_id);
         }
 
         // --- Roster slots (eGlu) ---
         let slot_t = db
             .table_canonical(ids::ROSTER_LINES)
             .ok_or(EntityError::MissingTable(ids::ROSTER_LINES))?;
-        let slot_key = req_field(db, slot_t, ids::ROSTER_LINES, ids::SLOT_KEY)?;
+        // The eGlu key (`toWX`) is the row's own identity, minted by structural edits. Pre-nhl08
+        // schemas (NHL 07) don't carry it — its absence only affects structural roster editing, not
+        // reading, so we make it optional here and fall back to the record index as the slot identity.
+        // Reads never consume `slot_key`; the edit path looks the field up independently and errors
+        // cleanly if it's missing.
+        let slot_key = field(db, slot_t, ids::SLOT_KEY);
         let slot_team = req_field(db, slot_t, ids::ROSTER_LINES, ids::SLOT_TEAM)?;
         let slot_index = req_field(db, slot_t, ids::ROSTER_LINES, ids::SLOT_TO_INDEX)?;
         let slot_jersey = field(db, slot_t, ids::SLOT_JERSEY);
@@ -293,8 +325,14 @@ impl RosterModel {
         };
 
         for i in 0..slot_t.current_records as u32 {
-            let Some(key) = db.read_u64(slot_t, i, slot_key) else {
-                continue;
+            // With a key field, skip rows whose key can't be read (malformed); without one
+            // (older schemas), the record index is a stable stand-in identity for reads.
+            let key = match slot_key {
+                Some(f) => match db.read_u64(slot_t, i, f) {
+                    Some(k) => k,
+                    None => continue,
+                },
+                None => i as u64,
             };
             let team_id = db.read_u64(slot_t, i, slot_team).unwrap_or(0);
             let raw_index = db.read_u64(slot_t, i, slot_index);
@@ -303,6 +341,9 @@ impl RosterModel {
                 _ => None,
             };
             let entry = index_key.and_then(|k| index.get(&k));
+            if let Some(e) = entry {
+                model.referenced.insert(e.player_id);
+            }
             model.slots.push(RosterSlot {
                 record: i,
                 slot_key: key,
@@ -343,13 +384,42 @@ impl RosterModel {
         self.slots.iter().filter(|s| s.team_id == team_id).collect()
     }
 
+    /// Whether this `wBIz` is referenced by the game — it has a `ZBac` index entry or fills a
+    /// roster slot. Orphan `ubPc` bio stubs (no index, no slot) return `false`; the game never
+    /// loads them, so integrity checks should not treat them as live players.
+    pub fn is_referenced(&self, player_id: u64) -> bool {
+        self.referenced.contains(&player_id)
+    }
+
     /// Players whose companion pair does not match their kind — the Layer 2 cluster invariant
     /// violated. Empty on clean data; the shared predicate Layer 4 will reuse this.
+    ///
+    /// Unreferenced orphan bio stubs are excluded: a `ubPc` row the game never loads (no `ZBac`
+    /// entry, no roster slot) missing its companions is dead vanilla data, not a structural fault
+    /// that can affect the game. Verified on the NHL 09 anchor (4 such rows ship in the retail db).
+    ///
+    /// The *equipment* companion (`xmja`/`fMVl`) is required only when its table exists in this db:
+    /// gen6 schemas (NHL07) carry no equipment tables at all, so a skater/goalie is not "incomplete"
+    /// for lacking a row in a table its title never had. The AI companion (`dSvy`/`mHuy`) is always
+    /// required — those tables exist across the supported range.
     pub fn companion_violations(&self) -> Vec<&Player> {
         self.players
             .iter()
-            .filter(|p| !p.companions_complete())
+            .filter(|p| self.is_referenced(p.player_id) && !self.player_cluster_complete(p))
             .collect()
+    }
+
+    /// Whether a player's required companions are present, accounting for which companion tables this
+    /// db's schema actually carries (see [`RosterModel::companion_violations`]).
+    fn player_cluster_complete(&self, p: &Player) -> bool {
+        match p.kind {
+            PlayerKind::Skater => {
+                p.skater_ai.is_some() && (!self.has_skater_equip || p.skater_equip.is_some())
+            }
+            PlayerKind::Goalie => {
+                p.goalie_ai.is_some() && (!self.has_goalie_equip || p.goalie_equip.is_some())
+            }
+        }
     }
 
     pub fn skater_count(&self) -> usize {

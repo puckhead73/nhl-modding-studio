@@ -7,10 +7,12 @@
 //!
 //! ## Scope (this increment)
 //!
-//! * **Read:** v1 (NHL10/11), v2 (NHL12/13), v4 (NHL14/15/Legacy) headers; save-type taxonomy;
-//!   inner-DB extraction (raw for v1/v2, zlib-inflate for v4).
-//! * **Write:** v2 (raw, tight) and v4 (zlib + zero-pad) repack with checksum recompute. **v1 is
-//!   read-only** (its `tag_1c` is un-reversed).
+//! * **Read:** v3 (gen6 NHL07-09 ROSTER), v1 (NHL10/11), v2 (NHL12/13), v4 (NHL14/15/Legacy)
+//!   headers; save-type taxonomy; inner-DB extraction (raw for v3/v1/v2, zlib-inflate for v4).
+//! * **Write:** v3 (gen6, tight, single `checksum_a`), v2 (raw, tight) and v4 (zlib + zero-pad)
+//!   repack with checksum recompute. **v1 (NHL10/11) is writeable but experimental** — its `tag_1c`
+//!   integrity word is un-reversed, so an edited body carries a stale tag (preserved verbatim);
+//!   `checksum_a` is recomputed and a no-op repack is byte-identical, but in-game load is unverified.
 //!
 //! ## Not implemented (deferred / out of scope, marked here so callers don't assume otherwise)
 //!

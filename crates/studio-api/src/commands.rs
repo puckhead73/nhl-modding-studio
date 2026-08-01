@@ -9,13 +9,17 @@ use tauri::{Manager, State};
 use studio_domain::FieldValue;
 
 use crate::dto::{
+    AssetExportSummaryDto, AssetRootsArgsDto, AssetRootsDto, BrowseListingDto, ExportOptionsDto,
+    FileExportOptionsDto, FileExportSummaryDto, HeadPreviewDto, OutfitExportSummaryDto,
+    PlayerAssetsDto,
     AddCareerSeasonDto, ArenaSummaryDto, ArenaViewDto, AutocorrectSummaryDto, CareerStatsDto,
     CreatePlayerDto, EaComputedRatingsDto, ExtractSummaryDto, FormulaCatalogDto, FormulaProfileDto,
     HistoricalCareerRatingsDto, HistoricalFiltersDto, HistoricalPersonDto, HistoricalPersonSummaryDto,
     HistoricalTeamDto, HistoricalTeamFiltersDto, HistoricalTeamFranchiseDto,
     HistoricalTeamIndexEntryDto, HistoricalTeamSummaryDto, InstallReportDto, IntegrityReportDto,
-    LinesViewDto, OpOutcomeDto, PlayerSummaryDto, PlayerViewDto, ProjectSummaryDto, TeamSummaryDto,
-    TeamViewDto,
+    LinesViewDto, OpOutcomeDto, PlayerSummaryDto, PlayerViewDto, ProjectSummaryDto,
+    RepairBlocksSummaryDto, TeamSummaryDto, TeamViewDto,
+    ChangeSetPreviewDto, ImportItemDto, ImportResultDto, MatchCandidateDto,
 };
 use crate::registry::{parse_platform, parse_role, Registry};
 
@@ -86,7 +90,8 @@ pub fn open_workspace(
 }
 
 /// Extract a game's `.big` archives in place, given the install root the user pointed at. Walks the
-/// root for EA BIGF/BIG4 archives and writes every entry out preserving its internal folder
+/// root for EA archives — Xbox/PS3/Recomp `BIGF`/`BIG4` and PS4 `EB\0\3` (the latter streamed, since
+/// PS4 archives can be tens of GB) — and writes every entry out preserving its internal folder
 /// hierarchy (chunkzip payloads are inflated; chunklzx entries are skipped). Returns a summary of
 /// what was written. Runs at onboarding (before a project is opened), so it takes the install
 /// context rather than a project id.
@@ -183,6 +188,21 @@ pub fn set_edit_override(
         .map_err(|e| e.to_string())
 }
 
+/// Switch which file the project's read views display: `nhlng.db` (default) or the mirrored roster
+/// save. Requires an attached roster mirror. On an aligned pair writes are unaffected (they fan out
+/// to both files); on a misaligned pair the workspace enters roster-only mode and edits apply
+/// strictly to the roster file. Returns the refreshed project summary reflecting the new source.
+#[tauri::command]
+pub fn set_display_roster(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    on: bool,
+) -> CmdResult<ProjectSummaryDto> {
+    registry
+        .set_display_roster(project_id, on)
+        .map_err(|e| e.to_string())
+}
+
 /// Auto-correct duplicate jersey numbers on load (default reassignment logic); returns a summary of
 /// the corrections applied (empty when none were needed). Corrections are staged as a pending edit.
 #[tauri::command]
@@ -192,6 +212,19 @@ pub fn autocorrect_jerseys(
 ) -> CmdResult<AutocorrectSummaryDto> {
     registry
         .autocorrect_jerseys(project_id)
+        .map_err(|e| e.to_string())
+}
+
+/// Repair a corrupted roster-block layout (the "Corrupted roster block" audit errors) — an
+/// order-only permutation of the roster slot table back into contiguous per-team blocks, staged as
+/// a pending, undoable edit. Returns how many slots moved and which teams were affected.
+#[tauri::command]
+pub fn repair_roster_blocks(
+    registry: State<'_, Registry>,
+    project_id: u32,
+) -> CmdResult<RepairBlocksSummaryDto> {
+    registry
+        .repair_roster_blocks(project_id)
         .map_err(|e| e.to_string())
 }
 
@@ -784,4 +817,157 @@ pub fn save_formula_profile(
 #[tauri::command]
 pub fn delete_formula_profile(registry: State<'_, Registry>, name: String) -> CmdResult<()> {
     registry.delete_formula_profile(&name).map_err(|e| e.to_string())
+}
+
+// ---------------------------------------------------------------- assets
+
+/// Report a title's art roots (`<install>/rendering`, `<install>/fe`) and whether both are
+/// present. `complete: false` means the install is still packed — extract first.
+#[tauri::command]
+pub fn asset_roots(registry: State<'_, Registry>, roots: AssetRootsArgsDto) -> AssetRootsDto {
+    registry.asset_roots(&roots)
+}
+
+/// Every player's art, resolved against the install.
+#[tauri::command]
+pub fn list_player_assets(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    roots: AssetRootsArgsDto,
+) -> CmdResult<Vec<PlayerAssetsDto>> {
+    registry
+        .list_player_assets(project_id, &roots)
+        .map_err(|e| e.to_string())
+}
+
+/// Decode a player's head mesh (by head id) for the 3D viewer.
+#[tauri::command]
+pub fn head_preview(
+    registry: State<'_, Registry>,
+    roots: AssetRootsArgsDto,
+    head_id: u64,
+) -> CmdResult<HeadPreviewDto> {
+    registry.head_preview(&roots, head_id).map_err(|e| e.to_string())
+}
+
+/// Decode a head mesh for the 3D viewer from already-resolved paths (the PS4
+/// bespoke path — name-slug heads that a numeric id can't resolve). Works for
+/// any platform; the decode dispatches on `.mcd` vs `.rx2`.
+#[tauri::command]
+pub fn head_preview_paths(
+    registry: State<'_, Registry>,
+    mesh_paths: Vec<String>,
+    texture_paths: Vec<String>,
+) -> CmdResult<HeadPreviewDto> {
+    registry
+        .head_preview_paths(mesh_paths, texture_paths)
+        .map_err(|e| e.to_string())
+}
+
+/// Decode one portrait to a PNG data URL for preview.
+#[tauri::command]
+pub fn portrait_preview(
+    registry: State<'_, Registry>,
+    path: String,
+    crop: bool,
+) -> CmdResult<String> {
+    registry.portrait_preview(&path, crop).map_err(|e| e.to_string())
+}
+
+/// Export art for the selected players (empty `bio_records` = all), named by player slug.
+#[tauri::command]
+pub fn export_assets(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    roots: AssetRootsArgsDto,
+    out_dir: String,
+    bio_records: Vec<u32>,
+    options: ExportOptionsDto,
+) -> CmdResult<AssetExportSummaryDto> {
+    registry
+        .export_assets(project_id, &roots, &out_dir, bio_records, &options)
+        .map_err(|e| e.to_string())
+}
+
+/// List one directory level of the extracted install for the file browser, rooted at the install
+/// dir. `rel` is a forward-slash path relative to that root (`""` = the root); resolved safely so
+/// the UI can never walk outside the install.
+#[tauri::command]
+pub fn browse_install_files(
+    registry: State<'_, Registry>,
+    install_dir: String,
+    rel: String,
+) -> CmdResult<BrowseListingDto> {
+    registry
+        .browse_files(&install_dir, &rel)
+        .map_err(|e| e.to_string())
+}
+
+/// Export the selected files/folders from the extracted install into `out_dir`, decoding recognized
+/// assets to glTF/PNG/DDS and mirroring each source's path relative to the install.
+#[tauri::command]
+pub fn export_install_files(
+    registry: State<'_, Registry>,
+    install_dir: String,
+    rel_paths: Vec<String>,
+    out_dir: String,
+    options: FileExportOptionsDto,
+) -> CmdResult<FileExportSummaryDto> {
+    registry
+        .export_files(&install_dir, rel_paths, &out_dir, &options)
+        .map_err(|e| e.to_string())
+}
+
+/// Export every team's jersey/pants/socks as PNGs named by the team, into `out_dir`.
+#[tauri::command]
+pub fn export_team_outfits(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    roots: AssetRootsArgsDto,
+    out_dir: String,
+) -> CmdResult<OutfitExportSummaryDto> {
+    registry
+        .export_team_outfits(project_id, &roots, &out_dir)
+        .map_err(|e| e.to_string())
+}
+
+// ---------------------------------------------------------------- roster builder (Phase 5.4)
+
+/// Auto-detect EA identity matches for a corpus person against the open project — the Roster Builder
+/// Match/Create toggle. Needs both an open corpus and project `projectId`.
+#[tauri::command]
+pub fn match_ea_player(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    person_id: i64,
+) -> CmdResult<Vec<MatchCandidateDto>> {
+    registry
+        .match_ea_player(project_id, person_id)
+        .map_err(|e| e.to_string())
+}
+
+/// Dry-run a Roster Builder cart against `projectId`: per-item outcomes, player-count delta, audit,
+/// blockers, and ledger dedup flags — without mutating the session.
+#[tauri::command]
+pub fn import_preview(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    items: Vec<ImportItemDto>,
+) -> CmdResult<ChangeSetPreviewDto> {
+    registry
+        .import_preview(project_id, &items)
+        .map_err(|e| e.to_string())
+}
+
+/// Commit a Roster Builder cart against `projectId` — the same lowering as preview, applied as one
+/// transaction / one undo entry, then ledgered.
+#[tauri::command]
+pub fn import_commit(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    items: Vec<ImportItemDto>,
+) -> CmdResult<ImportResultDto> {
+    registry
+        .import_commit(project_id, &items)
+        .map_err(|e| e.to_string())
 }

@@ -35,9 +35,13 @@ Read [README.md](README.md) and the [docs/](docs/) folder for full context befor
 - The reference app proved **Legacy/14/15 on PS3/Xbox/Recomp**; **PS4** (Phase 9) and the **rest of
   the title range** (Phase 10) are net-new. Never assume an unproven (title, platform) layout matches
   a neighbor's — gate support on verified round-trip + in-game checks.
-- Deferred/out-of-scope research: recomp, NHL2K10 RE, rig-audit, head-import
-  ([docs/MESH_IMPORT_EXCLUSIVE_PATH.md](docs/MESH_IMPORT_EXCLUSIVE_PATH.md)), NHL24 weight-remap,
-  FMT plugins, EBOOT patcher.
+- **Production asset tools (Phase 6):** portraits, logos, appearance, hockey-shop/equipment, audio,
+  and — as of 2026-07-26 — **headmesh porting** (game-to-game, NHL24→Legacy first). Mesh/UV work
+  (6.2–6.5) uses a **bundled headless Blender** job harness. Asset support is proven-first, gated the
+  same way as DB support.
+- Deferred/out-of-scope research: recomp, NHL2K10 RE, rig-audit, exclusive-path head-*import*
+  ([docs/MESH_IMPORT_EXCLUSIVE_PATH.md](docs/MESH_IMPORT_EXCLUSIVE_PATH.md) — distinct from Phase 6.5
+  headmesh *porting*), NHL24 weight-remap, FMT plugins, EBOOT patcher.
 
 ## Hard rules
 
