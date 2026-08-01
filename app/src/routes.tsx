@@ -17,6 +17,7 @@ import { HistoricalPlayersPage } from "./pages/HistoricalPlayers";
 import { HistoricalPlayerDetail } from "./pages/HistoricalPlayerDetail";
 import { HistoricalTeamsPage } from "./pages/HistoricalTeams";
 import { HistoricalTeamDetail } from "./pages/HistoricalTeamDetail";
+import { RosterBuilderPage } from "./pages/RosterBuilder";
 import { FormulasPage } from "./pages/Formulas";
 import { PlayerAssetsPage } from "./pages/PlayerAssets";
 import { PlayerAssetDetail } from "./pages/PlayerAssetDetail";
@@ -97,6 +98,7 @@ export const router = createBrowserRouter([
               { path: ":id", element: <HistoricalTeamDetail /> },
             ],
           },
+          { path: "builder", element: <RosterBuilderPage /> },
           { path: "formulas", element: <FormulasPage /> },
         ],
       },

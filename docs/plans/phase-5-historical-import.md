@@ -331,7 +331,22 @@ end-to-end on an anchor. ✅
 - **Human-readable surfaces rule:** every cart/preview line resolves team + player names; raw ids only
   behind a details affordance.
 
-*Verify:* `npm run build` clean; the cart survives a reload; preview blockers disable Commit.
+> **Done — first slice (2026-08-01).** New **Historical → Roster Builder** subtab
+> (`app/src/pages/RosterBuilder.tsx`), route under `CorpusGate`, nav entry. A localStorage-persisted
+> cart store (`app/src/lib/rosterCart.tsx`, provider in `main.tsx`) survives reloads and dedups by
+> `(person, season)`. **"Send to Builder"** lands on the Historical player's **season-timeline rows**
+> (gated on an open project; shows *Queued* once added). The cart page: per-row **target-team** picker
+> (`list_teams`), **Match/Create** dropdown fed by `match_ea_player` (per-person, lazy), jersey; then
+> **Preview** (renders `ChangeSetPreviewDto` — per-item outcome pills, player-delta, blockers, the
+> audit summary, the ledger *already imported* flag) → **Commit** (disabled while `blocked > 0`; clears
+> the cart + invalidates the DB views on success). `npm run build` clean. **Human-readable surfaces:**
+> team + player **names** throughout; the `wBIz` rides only inside the Match option value.
+>
+> **Deferred (next FE slice):** "Send to Builder" from **team-detail roster rows** (a whole
+> team-season) and the **5.5b slot-target picker** (hand-fill named slots); the richer per-item
+> **diffs**/capacity bars once the 5.4-follow-up backend lands; a nav **cart-count badge**.
+
+*Verify:* `npm run build` clean; the cart survives a reload; preview blockers disable Commit. ✅
 
 ## Phase 5.5b — Manual roster construction (added 2026-07-26)
 

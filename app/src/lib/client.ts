@@ -48,6 +48,10 @@ import type { BrowseListingDto } from "../bindings/BrowseListingDto";
 import type { FileExportOptionsDto } from "../bindings/FileExportOptionsDto";
 import type { FileExportSummaryDto } from "../bindings/FileExportSummaryDto";
 import type { OutfitExportSummaryDto } from "../bindings/OutfitExportSummaryDto";
+import type { MatchCandidateDto } from "../bindings/MatchCandidateDto";
+import type { ImportItemDto } from "../bindings/ImportItemDto";
+import type { ChangeSetPreviewDto } from "../bindings/ChangeSetPreviewDto";
+import type { ImportResultDto } from "../bindings/ImportResultDto";
 
 export type Platform = "ps3" | "xbox" | "ps4" | "recomp";
 export type Role = "nhlng" | "roster" | "localization";
@@ -235,6 +239,24 @@ type Commands = {
   historical_franchise: {
     args: { kind: string; key: string; seasonYear: number | null };
     ret: HistoricalTeamFranchiseDto | null;
+  };
+
+  // Roster Builder (Stage 3) — bridge the corpus and an open EA project. Each needs both an open
+  // corpus AND `projectId`.
+  // Auto-detect EA identity matches for a corpus person (the cart's Match/Create toggle).
+  match_ea_player: {
+    args: { projectId: number; personId: number };
+    ret: MatchCandidateDto[];
+  };
+  // Dry-run a cart: per-item outcomes, player-count delta, audit, blockers, ledger dedup flag.
+  import_preview: {
+    args: { projectId: number; items: ImportItemDto[] };
+    ret: ChangeSetPreviewDto;
+  };
+  // Commit a cart: the same lowering applied for real as one transaction / one undo entry, then ledgered.
+  import_commit: {
+    args: { projectId: number; items: ImportItemDto[] };
+    ret: ImportResultDto;
   };
 
   // Formula engine (Stage 2) — compute EA ratings from FHM attrs; profiles are corpus-global.

@@ -36,6 +36,7 @@ export const SECTIONS: NavSection[] = [
     subtabs: [
       { to: "historical/players", label: "Players" },
       { to: "historical/teams", label: "Teams" },
+      { to: "historical/builder", label: "Roster Builder" },
       { to: "historical/formulas", label: "Formulas" },
     ],
   },
