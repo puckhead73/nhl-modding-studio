@@ -172,7 +172,7 @@ fn adapter_resolves_enum_identity_into_the_create_op() {
     let profile = default_profile();
     let maxima = corpus.attribute_maxima().unwrap();
 
-    let mut sess = open_anchor();
+    let sess = open_anchor();
     let team = sess.team_summaries().unwrap().first().unwrap().team_id;
 
     let items = vec![ImportItem {

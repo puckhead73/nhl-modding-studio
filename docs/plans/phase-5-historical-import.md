@@ -424,6 +424,28 @@ empty slot creates; a full block at the ceiling surfaces the S4 storage blocker,
 4. **Format-fact honesty:** S1/S2 outputs recorded with provenance/confidence; nothing unverified
    asserted as in-game-true.
 
+> **Gate sign-off ✅ (2026-08-01).**
+> 1. **Functional E2E.** `studio-domain/tests/roster_builder_e2e.rs` (CI, synthetic corpus): cart →
+>    **non-mutating preview** (clean audit + capacity) → **commit** (one undo entry) → **whole-DB audit
+>    clean** → **save → reload** into a coherent `RosterModel` with the created player retained. The
+>    dedup-warning + surfaced-`wBIz` half is proven by `studio-api/tests/roster_builder.rs`; live-corpus
+>    ratings by the `#[ignore]` `import_corpus_e2e.rs` (Joel Åhgren → 25 ratings, Left/Sweden/Two-Way).
+> 2. **Tests.** `cargo test --workspace` green (exit 0, 0 failures); `npm run build` clean; **zero new
+>    clippy warnings** in touched crates (fixed one `unused_mut` in a new test; the rest are pre-existing
+>    in untouched `tdb-archive-codec`/`tdb-rx2`/`tests/workspace.rs`).
+> 3. **Anti-pattern grep.** All import writes route through `EditTransaction::with_repairing_transaction`
+>    (`apply_import` → `create_player_inner`/`apply_import_write`, all private); **no** hardcoded rating
+>    offsets in `import.rs` (every offset probed via `FieldView::edit_offset`, S1); every new binding
+>    carries the ts-rs "Do not edit" header; the Roster Builder FE keeps raw `wBIz`/table ids only in
+>    `<option>` values, keys, and a `title=` tooltip — never as primary text.
+> 4. **Format-fact honesty.** The enum bridges resolve through the **verified** `defs/enums/*.toml`
+>    (operator-confirmed provenance); the capacity ceilings trace to `docs/audits/roster-capacity.md`;
+>    the three AI biases, goalie "Angles", and birthplace stay **deferred, not guessed**.
+>
+> **Phase 5 (Historical Import / Roster Builder) is complete.** Remaining, explicitly out of this
+> gate: per-item field **diffs** in the preview, a nav **cart-count badge**, and `roster_builder_capacity`
+> as a standalone command (folded into preview).
+
 ---
 
 ## Risks & deferrals
