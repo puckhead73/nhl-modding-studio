@@ -9,8 +9,8 @@ use std::path::{Path, PathBuf};
 
 use rusqlite::Connection;
 use studio_domain::{
-    default_profile, EditSession, FhmCorpus, ImportIdentity, ImportItem, ItemOutcome, Platform,
-    Project, ProjectRole,
+    default_profile, EditSession, FhmCorpus, ImportIdentity, ImportItem, ImportOp, ItemOutcome,
+    Platform, Project, ProjectRole,
 };
 use tdb_fhm::schema::{SCHEMA_SQL, SCHEMA_VERSION};
 use tdb_fhm::slug::person_slug;
@@ -44,10 +44,12 @@ fn synthetic_corpus() -> FhmCorpus {
     )
     .unwrap();
     let slug = person_slug("Import", "Fresh", "1995-03-04");
+    // `hand`/`nationality` use the corpus's real FHM vocab ("Left"/"Canada"), so the adapter resolves
+    // them against the EA enums exactly as it would on live data.
     conn.execute(
         "INSERT INTO person(person_id, slug, first_name, last_name, dob, height, weight, hand,
                             nationality, retired, first_year, last_year, season_count, is_goalie, position)
-         VALUES (1, ?1, 'Fresh', 'Import', '1995-03-04', 72, 200, 'L', 'CAN', 0, 2024, 2024, 1, 0, 'C')",
+         VALUES (1, ?1, 'Fresh', 'Import', '1995-03-04', 72, 200, 'Left', 'Canada', 0, 2024, 2024, 1, 0, 'C')",
         [slug],
     )
     .unwrap();
@@ -118,4 +120,37 @@ fn cart_lowers_mixed_create_match_and_blocks_unlowerable_items() {
     assert!(after.iter().any(|p| p.first_name == "Fresh" && p.last_name == "Import"), "create landed");
     let matched = after.iter().find(|p| p.player_id == existing).unwrap();
     assert_eq!((matched.first_name.as_str(), matched.last_name.as_str()), ("Fresh", "Import"));
+}
+
+#[test]
+fn adapter_resolves_enum_identity_into_the_create_op() {
+    let corpus = synthetic_corpus();
+    let profile = default_profile();
+    let maxima = corpus.attribute_maxima().unwrap();
+
+    let mut sess = open_anchor();
+    let team = sess.team_summaries().unwrap().first().unwrap().team_id;
+
+    let items = vec![ImportItem {
+        person_id: 1,
+        season_year: 2024,
+        target_team_id: team,
+        identity: ImportIdentity::CreateNew,
+        jersey: None,
+    }];
+    let lowered = sess.lower_change_set(&corpus, &items, &profile, maxima.as_ref()).unwrap();
+
+    let ImportOp::Create { writes, .. } = &lowered.ops[0] else {
+        panic!("expected a Create op");
+    };
+    let field = |id: &str| writes.iter().find(|w| w.field == id);
+    // Handedness "Left" → GRkp raw 0; Nationality "Canada" → Lelh raw 0 (both from the verified enums).
+    assert!(field("GRkp").is_some(), "handedness resolved to a bio write");
+    assert!(field("Lelh").is_some(), "nationality resolved to a bio write");
+    // No skips for the identity fields on nhl14 (they exist and the codes are in range).
+    assert!(
+        !lowered.items[0].skipped.iter().any(|s| s.field == "GRkp" || s.field == "Lelh"),
+        "identity fields present on nhl14: {:?}",
+        lowered.items[0].skipped
+    );
 }

@@ -63,6 +63,7 @@ fn corpus_person_imports_into_anchor() {
         maxima.as_ref(),
         &db,
         sess.project().meta(),
+        sess.project().enums(),
     )
     .unwrap()
     .expect("person present");
@@ -71,13 +72,19 @@ fn corpus_person_imports_into_anchor() {
     assert_eq!(ps.last_name, person.last_name);
     assert!(!ps.ratings.is_empty(), "computed ratings mapped to target dSvy fields");
     println!(
-        "  -> {} {}  h={:?} w={:?} dob={:?} pos={} ratings={}",
-        ps.first_name, ps.last_name, ps.height_inches, ps.weight_lb, ps.birthdate, ps.position, ps.ratings.len()
+        "  -> {} {}  h={:?} w={:?} dob={:?} pos={} hand={:?} nat={:?} style={:?} ratings={}",
+        ps.first_name, ps.last_name, ps.height_inches, ps.weight_lb, ps.birthdate, ps.position,
+        ps.handedness, ps.nationality, ps.style, ps.ratings.len()
     );
 
     // Lower + apply into the anchor.
     let (op, skipped) =
         import::lower_create(&db, sess.project().meta(), sess.project().enums(), &ps, team).unwrap();
+    // A resolved skater style must reach the companion as a QgFs write.
+    if ps.style.is_some() {
+        let studio_domain::ImportOp::Create { writes, .. } = &op else { panic!("create op") };
+        assert!(writes.iter().any(|w| w.field == "QgFs"), "style lowered to QgFs");
+    }
     println!("  lowered: {} skipped {:?}", ps.ratings.len(), skipped.iter().map(|s| &s.field).collect::<Vec<_>>());
     drop(db);
     sess.apply_import(&[op]).unwrap();

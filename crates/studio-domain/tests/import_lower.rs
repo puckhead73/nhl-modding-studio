@@ -60,6 +60,7 @@ fn round_trips_on(title: &str) {
         birthdate: Some((1990, 5, 15)),
         jersey: Some(91),
         ratings: vec![(rating_field.clone(), 88)],
+        ..Default::default()
     };
 
     // Lower against the current db, then apply as one cart.

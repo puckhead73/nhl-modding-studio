@@ -65,6 +65,7 @@ fn preview_is_non_mutating_and_commit_is_byte_identical() {
         birthdate: Some((1995, 3, 4)),
         jersey: Some(77),
         ratings: vec![(rating.clone(), 80)],
+        ..Default::default()
     };
     let upd_person = PersonSeason {
         first_name: "Renamed".into(),

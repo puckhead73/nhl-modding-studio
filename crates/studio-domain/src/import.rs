@@ -264,6 +264,15 @@ pub struct PersonSeason {
     /// Absolute `(year, month, day)`.
     pub birthdate: Option<(i64, i64, i64)>,
     pub jersey: Option<i64>,
+    /// Handedness enum raw for `ubPc.GRkp` (0 = Left, 1 = Right), already resolved against the target
+    /// title's enum vocabulary by the adapter. `None` when the corpus carries no usable hand.
+    pub handedness: Option<u64>,
+    /// Nationality enum raw for `ubPc.Lelh`, resolved from the corpus country name against the target
+    /// title's enum. `None` when the country is absent/unmapped (skip, never guessed).
+    pub nationality: Option<u64>,
+    /// Skater style enum raw for `dSvy.QgFs` (1-based; the archetype classifier's `ea_raw`). `None`
+    /// for goalies (no classifier) or when no attributes were scorable.
+    pub style: Option<u64>,
     /// `(companion studio field id, human rating on the display scale)`. The rating name→field
     /// resolution is the corpus adapter's job (`compute_person_ratings` + the rating vocabulary).
     pub ratings: Vec<(String, i64)>,
@@ -378,8 +387,22 @@ fn person_writes(
         push_semantic_int(db, meta, enums, bio, ImportTarget::Bio, &mut writes, &mut skipped, "Kswi", d);
     }
 
-    // Ratings on the kind-correct companion (Spike S1 rating edit_offset).
+    // Enum-coded identity — handedness + nationality on the bio. Each carries a raw enum code the
+    // adapter already resolved against the target title's vocabulary (offset 0; validated as a plain
+    // int by `push_semantic_int`, and as an enum member by the op audit).
+    if let Some(hand) = person.handedness {
+        push_semantic_int(db, meta, enums, bio, ImportTarget::Bio, &mut writes, &mut skipped, "GRkp", hand as i64);
+    }
+    if let Some(nat) = person.nationality {
+        push_semantic_int(db, meta, enums, bio, ImportTarget::Bio, &mut writes, &mut skipped, "Lelh", nat as i64);
+    }
+
+    // Ratings + skater style on the kind-correct companion (Spike S1 rating edit_offset). Style is the
+    // 1-based `QgFs` archetype code (skaters only; the adapter leaves it `None` for goalies).
     if let Some(comp) = companion {
+        if let Some(style) = person.style {
+            push_semantic_int(db, meta, enums, comp, ImportTarget::Companion, &mut writes, &mut skipped, "QgFs", style as i64);
+        }
         for (fid, human) in &person.ratings {
             push_semantic_int(db, meta, enums, comp, ImportTarget::Companion, &mut writes, &mut skipped, fid, *human);
         }
@@ -484,6 +507,19 @@ const GOALIE_EA_TO_SUFFIX: &[(&str, &str)] = &[
     ("Aggressiveness", "aggression"), ("Durability", "durability"), ("Vision", "vision"),
 ];
 
+/// FHM country names that differ from the EA nationality enum label. Only genuine spelling
+/// divergences (verified against the corpus vocab) — everything else matches the label verbatim, and
+/// an unmapped country resolves to `None` (skip, never guessed).
+const NATIONALITY_ALIASES: &[(&str, &str)] = &[("Czechia", "Czech Republic")];
+
+/// Resolve a corpus label to a target-title enum raw code for `table.field`, or `None` when the field
+/// carries no enum on this title or the label is not in its vocabulary. The single source of truth is
+/// the loaded, verified enum def — so this stays title-aware and never hardcodes a code.
+fn resolve_enum(enums: &EnumRegistry, table_canonical: &str, field: &str, label: &str) -> Option<u64> {
+    let raw = enums.for_field(table_canonical, field)?.raw_of(label)?;
+    u64::try_from(raw).ok()
+}
+
 /// Map a computed EA rating set onto the **target** companion table's field ids, via the explicit
 /// `ea_key → suffix` bridge, then `suffix → field` per the loaded title. Only standard 0..99 ratings
 /// are mapped; biases and unmapped attrs are dropped (deferred, not guessed). Returns
@@ -537,6 +573,7 @@ pub fn person_season_from_corpus(
     maxima: &tdb_fhm_store::AttributeMaxima,
     db: &TdbFile,
     meta: &FieldMetaIndex,
+    enums: &EnumRegistry,
 ) -> Result<Option<PersonSeason>, crate::FhmError> {
     let Some(detail) = corpus.person_detail(person_id)? else {
         return Ok(None);
@@ -552,9 +589,27 @@ pub fn person_season_from_corpus(
     let weight_lb = season.and_then(|s| s.weight).or(detail.weight);
     let birthdate = parse_dob(&detail.dob);
 
-    let ratings = match crate::formula::compute_person_ratings(corpus, person_id, season_year, profile, maxima)? {
-        Some(cr) => resolve_ratings(&cr.set, db, meta, detail.is_goalie),
-        None => Vec::new(),
+    // Enum-coded identity, resolved against the **target title's** vocabulary (the bio table's own
+    // canonical id). Handedness labels ("Left"/"Right") match the enum verbatim; nationality needs the
+    // FHM→EA spelling alias. Anything unmapped resolves to `None` — skip, never guessed.
+    let bio_canon = db.table_canonical(ids::BIO).map(|t| t.id.canonical(db.endian));
+    let handedness = bio_canon.as_deref().zip(detail.hand.as_deref()).and_then(|(tbl, hand)| {
+        resolve_enum(enums, tbl, "GRkp", hand.trim())
+    });
+    let nationality = bio_canon.as_deref().zip(detail.nationality.as_deref()).and_then(|(tbl, country)| {
+        let country = country.trim();
+        let mapped = NATIONALITY_ALIASES.iter().find(|(k, _)| *k == country).map(|(_, v)| *v).unwrap_or(country);
+        resolve_enum(enums, tbl, "Lelh", mapped)
+    });
+
+    // Ratings + skater style: one `compute_person_ratings` pass yields both (the archetype's `ea_raw`
+    // is the 1-based `QgFs` code; the classifier returns `None` for goalies).
+    let (ratings, style) = match crate::formula::compute_person_ratings(corpus, person_id, season_year, profile, maxima)? {
+        Some(cr) => {
+            let style = cr.set.archetype.as_ref().map(|a| a.ea_raw as u64);
+            (resolve_ratings(&cr.set, db, meta, detail.is_goalie), style)
+        }
+        None => (Vec::new(), None),
     };
 
     Ok(Some(PersonSeason {
@@ -565,6 +620,9 @@ pub fn person_season_from_corpus(
         weight_lb,
         birthdate,
         jersey: None,
+        handedness,
+        nationality,
+        style,
         ratings,
     }))
 }
@@ -690,7 +748,7 @@ pub fn lower_change_set(
     for item in items {
         // Resolve the corpus person-season (applying the cart's jersey override).
         let ps = match person_season_from_corpus(
-            corpus, item.person_id, item.season_year, profile, maxima, db, meta,
+            corpus, item.person_id, item.season_year, profile, maxima, db, meta, enums,
         )? {
             Some(mut ps) => {
                 if item.jersey.is_some() {
