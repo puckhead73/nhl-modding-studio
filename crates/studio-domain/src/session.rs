@@ -605,6 +605,24 @@ impl EditSession {
         self.apply_import(ops)
     }
 
+    /// Auto-detect EA identity matches for a corpus person — the Roster Builder's Match/Create toggle,
+    /// and the first read that bridges the corpus and the open project. Reads the person's bio from the
+    /// corpus, folds it with the **same** slug normalization the [`EaSlugIndex`](crate::import::EaSlugIndex)
+    /// uses, and returns ranked candidates (name+DOB high-confidence first, then same-name review
+    /// candidates). Empty ⇒ no match ⇒ the cart should Create. Identity is season-independent (name +
+    /// DOB), so no season year is needed. Builds the index fresh; caching it across a cart is 5.4's job.
+    pub fn match_ea_player(
+        &self,
+        corpus: &crate::historical::FhmCorpus,
+        person_id: i64,
+    ) -> Result<Vec<crate::import::MatchCandidate>> {
+        let Some(detail) = corpus.person_detail(person_id)? else {
+            return Ok(Vec::new());
+        };
+        let index = self.ea_slug_index()?;
+        Ok(index.match_player(&detail.last_name, &detail.first_name, Some(&detail.dob)))
+    }
+
     /// Lower a whole Roster Builder **cart** against the working state — the corpus→EA orchestration
     /// (Phase 5.2b). Resolves each [`ImportItem`](crate::import::ImportItem) through the corpus adapter
     /// and lowers it to an encoded op; returns the [`LoweredChangeSet`](crate::import::LoweredChangeSet)

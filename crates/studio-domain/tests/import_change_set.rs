@@ -68,6 +68,50 @@ fn synthetic_corpus() -> FhmCorpus {
     FhmCorpus::from_conn(conn).unwrap()
 }
 
+/// A person-only corpus (meta + one `person` row) — enough for `person_detail`/`match_ea_player`,
+/// which do not need season/ratings rows.
+fn corpus_with_person(first: &str, last: &str, dob: &str) -> FhmCorpus {
+    let conn = Connection::open_in_memory().unwrap();
+    conn.execute_batch(SCHEMA_SQL).unwrap();
+    conn.execute("INSERT INTO meta(key, value) VALUES ('schema_version', ?1)", [SCHEMA_VERSION.to_string()])
+        .unwrap();
+    let slug = person_slug(last, first, dob);
+    conn.execute(
+        "INSERT INTO person(person_id, slug, first_name, last_name, dob, retired, season_count, is_goalie)
+         VALUES (1, ?1, ?2, ?3, ?4, 0, 0, 0)",
+        rusqlite::params![slug, first, last, dob],
+    )
+    .unwrap();
+    FhmCorpus::from_conn(conn).unwrap()
+}
+
+#[test]
+fn match_ea_player_bridges_corpus_person_to_the_open_project() {
+    let sess = open_anchor();
+    // A real anchor player with a resolvable name — the identity a corpus person could share.
+    let target = sess
+        .player_summaries()
+        .unwrap()
+        .into_iter()
+        .find(|p| !p.first_name.is_empty() && !p.last_name.is_empty())
+        .expect("an anchor player with a name");
+
+    // A corpus person carrying the *same* name folds to the same slug key, so the match surfaces the
+    // EA player as a candidate (name-only here — the arbitrary DOB need not match).
+    let corpus = corpus_with_person(&target.first_name, &target.last_name, "1990-01-01");
+    let candidates = sess.match_ea_player(&corpus, 1).unwrap();
+    assert!(
+        candidates.iter().any(|c| c.ea_player_id == target.player_id),
+        "the same-named anchor player is a match candidate for {} {}",
+        target.first_name,
+        target.last_name
+    );
+
+    // A corpus person with a name no anchor player has → no candidates → the cart should Create.
+    let none = corpus_with_person("Zzyzx", "Qwerty-Nomatch", "1990-01-01");
+    assert!(sess.match_ea_player(&none, 1).unwrap().is_empty(), "unknown name → no match");
+}
+
 #[test]
 fn cart_lowers_mixed_create_match_and_blocks_unlowerable_items() {
     let corpus = synthetic_corpus();
