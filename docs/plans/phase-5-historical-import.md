@@ -375,6 +375,20 @@ change set; preview↔commit byte-identical; filling an occupied slot surfaces a
 empty slot creates; a full block at the ceiling surfaces the S4 storage blocker, never a silent drop.
 **Human-readable surfaces:** slot/target/player lines resolve to real names; raw ids behind details.
 
+> **Done — slot-fill slice (2026-08-01).** The cart row's placement control now unifies both sources:
+> an **optgroup "Same person (suggested)"** (the `match_ea_player` name+DOB candidates, 5.5a) and an
+> **optgroup "Replace on `<team>`"** — every current occupant of the chosen target team (from
+> `list_players`, filtered by `team_id`, minus anyone already offered as a same-person match). Picking a
+> "Replace" occupant sets `matchEaPlayerId` ⇒ the item lowers as an **Update** in that slot; "Add as a
+> new player" ⇒ **Create**. Occupants render **name · position · #jersey** (human-readable). Changing the
+> target team clears a slot-fill chosen against the old team. A **cross-season quick-add** ("＋ Builder")
+> now sits on the Historical Players **search rows** (latest season; gated on an open project) as the
+> fast curated-roster path, complementing the detail-timeline per-season add. `npm run build` clean.
+>
+> **Deferred:** capacity blockers still surface at **commit** (not preview) until the 5.4-follow-up
+> capacity projection lands; whole **team-season** "Send to Builder" and a season-chooser on the
+> quick-add are still to come.
+
 ## Phase 5.6 — Final verification (gate sign-off)
 
 1. **Functional E2E:** add a historical player-season to the cart → pick a target team → preview (new-

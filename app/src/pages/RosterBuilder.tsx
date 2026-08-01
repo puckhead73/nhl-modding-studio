@@ -159,7 +159,10 @@ export function RosterBuilderPage() {
   );
 }
 
-/** One editable cart row. Match candidates are fetched lazily per person (the corpus↔project bridge). */
+/** One editable cart row. Two ways to place the player, unified in one control (Phase 5.5b):
+ *  identity **matches** (same person, name+DOB — fetched lazily via the corpus↔project bridge) and
+ *  manual **slot fills** (replace any current occupant of the chosen target team). Both resolve to a
+ *  `wBIz` (update); "Add as a new player" creates. */
 function CartRow({
   item,
   projectId,
@@ -177,6 +180,21 @@ function CartRow({
     queryKey: ["match_ea_player", projectId, item.personId],
     queryFn: () => call("match_ea_player", { projectId, personId: item.personId }),
   });
+  // The whole roster (cached, shared key) — filtered to the chosen team for the slot-fill options.
+  const roster = useQuery({
+    queryKey: ["list_players", projectId],
+    queryFn: () => call("list_players", { projectId }),
+  });
+
+  const targetTeamName = teams.find((t) => t.team_id === item.targetTeamId)?.name;
+  const matchIds = new Set((matches.data ?? []).map((c) => c.ea_player_id));
+  // Current occupants of the target team, minus anyone already offered as a same-person match.
+  const occupants =
+    item.targetTeamId == null
+      ? []
+      : (roster.data ?? [])
+          .filter((p) => p.team_id === item.targetTeamId && !matchIds.has(p.player_id))
+          .sort((a, b) => `${a.last_name}${a.first_name}`.localeCompare(`${b.last_name}${b.first_name}`));
 
   const selectCls =
     "rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-xs text-slate-100 focus:border-sky-600 focus:outline-none";
@@ -203,7 +221,10 @@ function CartRow({
         <select
           className={selectCls}
           value={item.targetTeamId ?? ""}
-          onChange={(e) => onChange({ targetTeamId: e.target.value ? Number(e.target.value) : null })}
+          onChange={(e) =>
+            // Changing team invalidates a slot-fill chosen against the old team.
+            onChange({ targetTeamId: e.target.value ? Number(e.target.value) : null, matchEaPlayerId: null })
+          }
         >
           <option value="">Select team…</option>
           {teams.map((t) => (
@@ -224,14 +245,29 @@ function CartRow({
               onChange({ matchEaPlayerId: e.target.value ? Number(e.target.value) : null })
             }
           >
-            <option value="">Create new player</option>
-            {(matches.data ?? []).map((c) => (
-              <option key={c.ea_player_id} value={c.ea_player_id}>
-                Update: {c.full_name}
-                {c.team_name ? ` (${c.team_name})` : ""}
-                {c.confidence === "name_only" ? " — name only" : ""}
-              </option>
-            ))}
+            <option value="">Add as a new player</option>
+            {(matches.data ?? []).length > 0 && (
+              <optgroup label="Same person (suggested)">
+                {(matches.data ?? []).map((c) => (
+                  <option key={c.ea_player_id} value={c.ea_player_id}>
+                    Update {c.full_name}
+                    {c.team_name ? ` (${c.team_name})` : ""}
+                    {c.confidence === "name_only" ? " — name only" : ""}
+                  </option>
+                ))}
+              </optgroup>
+            )}
+            {occupants.length > 0 && (
+              <optgroup label={`Replace on ${targetTeamName ?? "team"}`}>
+                {occupants.map((p) => (
+                  <option key={p.player_id} value={p.player_id}>
+                    {p.position_label ? `${p.position_label} · ` : ""}
+                    {p.first_name} {p.last_name}
+                    {p.jersey_number != null ? ` #${p.jersey_number}` : ""}
+                  </option>
+                ))}
+              </optgroup>
+            )}
           </select>
         )}
       </td>
