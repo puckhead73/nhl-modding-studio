@@ -221,11 +221,20 @@ returns no candidate. Index build is lazy + cached (do not rebuild per cart item
 >   surface them; `EditSession::lower_change_set` bridges the working state → the same
 >   `preview_import`/`commit_import` ops (byte-identical). `tests/import_change_set.rs` (synthetic
 >   in-memory corpus, **CI**): mixed Create+Match+2 blockers → 2 ops, right outcomes, preview==commit.
-> - **Remaining (5.2b-next):** enum-coded identity (nationality / handedness / birthplace) + style +
->   the AI biases; **full per-table capacity projection + S4 blockers** and per-item **diffs** + 5.1
->   match candidates in the preview; ledger to 5.3 on commit. **Verify (open):** the bio-team **+1**
->   (Correction 3) — roster membership is confirmed via `eGlu`; confirm `ubPc.dXSB` reads back to the
->   target team before relying on it.
+> - **5.2b enum identity + style ✅** — the adapter now resolves **handedness** (`ubPc.GRkp`, corpus
+>   "Left"/"Right" → enum raw), **nationality** (`ubPc.Lelh`, corpus country name → enum raw, via the
+>   verified `defs/enums/nationality.toml` with one FHM spelling alias `Czechia`→`Czech Republic`; an
+>   unmapped country is skipped, never guessed), and skater **style** (`dSvy.QgFs`, the archetype
+>   classifier's 1-based `ea_raw`; `None` for goalies). Resolution goes through the loaded, verified
+>   enums (`EnumRegistry::for_field`/`raw_of`), so it is title-aware and hardcodes no code. **Proven on
+>   real data** (`import_corpus_e2e`): Joel Åhgren → hand 0 (Left), nat 69 (**Sweden**), style 9
+>   (Two-Way Forward). CI: `import_change_set` asserts GRkp+Lelh land in the create op.
+> - **Remaining (5.2b-next):** **birthplace** (`ubPc` birthcity string + `QvxI` birth-state — needs the
+>   postal-code→alphabetical bridge; deferred, not guessed) and the three AI **biases** (0..15, no
+>   verified formula source → still deferred); **full per-table capacity projection + S4 blockers** and
+>   per-item **diffs** + 5.1 match candidates in the preview; ledger to 5.3 on commit. **Verify (open):**
+>   the bio-team **+1** (Correction 3) — roster membership is confirmed via `eGlu`; confirm `ubPc.dXSB`
+>   reads back to the target team before relying on it.
 
 **There is no dry-run/preview anywhere in the stack today** — `commit()`
 ([txn.rs:1784](../../crates/tdb-edit/src/txn.rs#L1784)) is a CRC finalizer, not a two-phase gate.
