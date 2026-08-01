@@ -86,6 +86,9 @@ macro_rules! command_handler {
             $crate::commands::historical_team_filters,
             $crate::commands::list_historical_franchises,
             $crate::commands::historical_franchise,
+            $crate::commands::match_ea_player,
+            $crate::commands::import_preview,
+            $crate::commands::import_commit,
             $crate::commands::formula_default,
             $crate::commands::formula_catalog,
             $crate::commands::compute_ratings,
@@ -164,5 +167,9 @@ mod bindings {
         HistoricalCareerRatingsDto::export_all().expect("export HistoricalCareerRatingsDto + deps");
         FormulaProfileDto::export_all().expect("export FormulaProfileDto");
         FormulaCatalogDto::export_all().expect("export FormulaCatalogDto + deps");
+        MatchCandidateDto::export_all().expect("export MatchCandidateDto");
+        ImportItemDto::export_all().expect("export ImportItemDto");
+        ChangeSetPreviewDto::export_all().expect("export ChangeSetPreviewDto + deps");
+        ImportResultDto::export_all().expect("export ImportResultDto + deps");
     }
 }

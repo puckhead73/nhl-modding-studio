@@ -19,6 +19,7 @@ use crate::dto::{
     HistoricalTeamIndexEntryDto, HistoricalTeamSummaryDto, InstallReportDto, IntegrityReportDto,
     LinesViewDto, OpOutcomeDto, PlayerSummaryDto, PlayerViewDto, ProjectSummaryDto,
     RepairBlocksSummaryDto, TeamSummaryDto, TeamViewDto,
+    ChangeSetPreviewDto, ImportItemDto, ImportResultDto, MatchCandidateDto,
 };
 use crate::registry::{parse_platform, parse_role, Registry};
 
@@ -927,5 +928,46 @@ pub fn export_team_outfits(
 ) -> CmdResult<OutfitExportSummaryDto> {
     registry
         .export_team_outfits(project_id, &roots, &out_dir)
+        .map_err(|e| e.to_string())
+}
+
+// ---------------------------------------------------------------- roster builder (Phase 5.4)
+
+/// Auto-detect EA identity matches for a corpus person against the open project — the Roster Builder
+/// Match/Create toggle. Needs both an open corpus and project `projectId`.
+#[tauri::command]
+pub fn match_ea_player(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    person_id: i64,
+) -> CmdResult<Vec<MatchCandidateDto>> {
+    registry
+        .match_ea_player(project_id, person_id)
+        .map_err(|e| e.to_string())
+}
+
+/// Dry-run a Roster Builder cart against `projectId`: per-item outcomes, player-count delta, audit,
+/// blockers, and ledger dedup flags — without mutating the session.
+#[tauri::command]
+pub fn import_preview(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    items: Vec<ImportItemDto>,
+) -> CmdResult<ChangeSetPreviewDto> {
+    registry
+        .import_preview(project_id, &items)
+        .map_err(|e| e.to_string())
+}
+
+/// Commit a Roster Builder cart against `projectId` — the same lowering as preview, applied as one
+/// transaction / one undo entry, then ledgered.
+#[tauri::command]
+pub fn import_commit(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    items: Vec<ImportItemDto>,
+) -> CmdResult<ImportResultDto> {
+    registry
+        .import_commit(project_id, &items)
         .map_err(|e| e.to_string())
 }

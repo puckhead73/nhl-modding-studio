@@ -794,6 +794,80 @@ impl Workspace {
         }
     }
 
+    // --- Roster Builder import (Phase 5.4) ---
+    //
+    // Reads (match/lower/preview) run against the **canonical** `nhlng.db` — the write spine a commit
+    // targets — so a preview reflects exactly what commit will do.
+
+    /// The canonical `nhlng.db`'s on-disk path — a stable identity for the EA target (the import
+    /// ledger keys on it).
+    pub fn primary_path(&self) -> &str {
+        &self.nhlng_path
+    }
+
+    /// Auto-detect EA identity matches for a corpus person (the cart's Match/Create toggle).
+    pub fn match_ea_player(
+        &self,
+        corpus: &crate::historical::FhmCorpus,
+        person_id: i64,
+    ) -> Result<Vec<crate::import::MatchCandidate>> {
+        self.nhlng.match_ea_player(corpus, person_id)
+    }
+
+    /// Lower a whole cart against the canonical db (the ops a preview/commit consume).
+    pub fn lower_change_set(
+        &self,
+        corpus: &crate::historical::FhmCorpus,
+        items: &[crate::import::ImportItem],
+        profile: &tdb_formula::FormulaProfile,
+        maxima: &tdb_fhm_store::AttributeMaxima,
+    ) -> Result<crate::import::LoweredChangeSet> {
+        self.nhlng.lower_change_set(corpus, items, profile, maxima)
+    }
+
+    /// Dry-run a lowered cart against the canonical db — non-mutating (see
+    /// [`EditSession::preview_import`]).
+    pub fn preview_import(
+        &self,
+        ops: &[tdb_edit::txn::ImportOp],
+        skipped: Vec<crate::import::SkippedField>,
+    ) -> Result<crate::import::ImportPreview> {
+        self.nhlng.preview_import(ops, skipped)
+    }
+
+    /// Commit a lowered cart for real — one transaction, one undo entry. With a roster attached, the
+    /// identical ops apply to the mirror too and **full record alignment is re-verified**; any
+    /// divergence rolls both files back (the [`Workspace::create_player`] guard, for a whole cart).
+    pub fn commit_import(&mut self, ops: &[tdb_edit::txn::ImportOp]) -> Result<OpOutcome> {
+        if self.roster_only() {
+            let outcome = self.roster_mut().commit_import(ops)?;
+            self.record(OpTarget::Roster);
+            return Ok(outcome);
+        }
+        let outcome = self.nhlng.commit_import(ops)?;
+        let roster_result = self.roster.as_mut().map(|m| m.session.commit_import(ops));
+        match roster_result {
+            None => {
+                self.record_mirrored(false);
+                Ok(outcome)
+            }
+            Some(Err(e)) => {
+                self.nhlng.undo();
+                Err(e)
+            }
+            Some(Ok(_)) => {
+                if !self.fully_aligned()? {
+                    self.roll_back_both();
+                    return Err(DomainError::Sync(
+                        "import cart desynced the two files; both rolled back".into(),
+                    ));
+                }
+                self.record_mirrored(true);
+                Ok(outcome)
+            }
+        }
+    }
+
     /// Revert the most recent op on both sessions (used by the structural-op guard on divergence).
     fn roll_back_both(&mut self) {
         if let Some(m) = self.roster.as_mut() {

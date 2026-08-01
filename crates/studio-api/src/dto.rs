@@ -1356,3 +1356,94 @@ pub struct HeadPreviewDto {
     pub source_path: String,
     pub lenient_rig: bool,
 }
+
+// ---------------------------------------------------------------- roster builder (Phase 5.4)
+
+/// One Roster Builder cart line (FE → BE): a corpus person-season aimed at an EA team, with the
+/// create-vs-match decision (`match_ea_player_id`: `null` ⇒ create a new player; a `wBIz` ⇒ update
+/// that existing one) and an optional jersey override.
+#[derive(Deserialize, TS)]
+pub struct ImportItemDto {
+    #[ts(type = "number")]
+    pub person_id: i64,
+    #[ts(type = "number")]
+    pub season_year: i64,
+    #[ts(type = "number")]
+    pub target_team_id: u64,
+    /// `null` ⇒ CreateNew; a `wBIz` ⇒ Match(id) (update the existing player, no allocation).
+    #[ts(type = "number | null")]
+    pub match_ea_player_id: Option<u64>,
+    #[ts(type = "number | null")]
+    pub jersey: Option<i64>,
+}
+
+/// An EA identity-match candidate for a corpus person — the cart's Match/Create toggle. Human-readable
+/// surfaces (`full_name`/`team_name`); the raw `ea_player_id` (`wBIz`) is for progressive disclosure.
+#[derive(Serialize, TS)]
+pub struct MatchCandidateDto {
+    #[ts(type = "number")]
+    pub ea_player_id: u64,
+    pub full_name: String,
+    /// Composed `YYYY-MM-DD`, or `null` when the EA bio carries no usable DOB.
+    pub dob: Option<String>,
+    pub team_name: Option<String>,
+    /// `"name_and_dob"` (high confidence) | `"name_only"` (review candidate).
+    pub confidence: String,
+    /// `true` when more than one candidate was returned — the cart must disambiguate.
+    pub ambiguous: bool,
+}
+
+/// One cart item's outcome in a preview/commit, resolved for display.
+#[derive(Serialize, TS)]
+pub struct ImportItemResultDto {
+    #[ts(type = "number")]
+    pub person_id: i64,
+    #[ts(type = "number")]
+    pub season_year: i64,
+    #[ts(type = "number")]
+    pub target_team_id: u64,
+    pub full_name: String,
+    /// `"created"` | `"matched"` | `"person_missing"` | `"no_such_player"` | `"no_bio_table"`.
+    pub outcome: String,
+    /// The matched player's `wBIz` (for `"matched"`/`"no_such_player"`); `null` otherwise. A create's
+    /// new id is not known until commit, so it stays `null` in preview.
+    #[ts(type = "number | null")]
+    pub ea_player_id: Option<u64>,
+    /// Fields this item could not write (out of range / absent on this title) — resolved field names.
+    pub skipped_fields: Vec<String>,
+    /// `true` when this `(person, season)` was already imported to this target (the dedup warning —
+    /// advisory only, never blocks).
+    pub already_imported: bool,
+    /// `true` when this item lowered to an op (i.e. it will appear in the commit).
+    pub lowered: bool,
+}
+
+/// The dry-run result of a whole cart (preview): per-item rows, the player-count delta, the audit over
+/// the previewed state, and the blocker count. Commit re-runs the identical lowered ops, so what
+/// preview shows is what commit writes.
+#[derive(Serialize, TS)]
+pub struct ChangeSetPreviewDto {
+    pub items: Vec<ImportItemResultDto>,
+    #[ts(type = "number")]
+    pub players_before: usize,
+    #[ts(type = "number")]
+    pub players_after: usize,
+    /// Cart items that could not lower — a blocker; the FE disables Commit while `> 0`.
+    #[ts(type = "number")]
+    pub blocked: usize,
+    /// The four db-only audit predicates over the previewed state, resolved to human text.
+    pub audit: IntegrityReportDto,
+    /// Every field dropped across the cart (out of range / absent on this title).
+    pub skipped_fields: Vec<String>,
+}
+
+/// The result of committing a cart: the same per-item trail (creates now carry their new `wBIz`), the
+/// op outcome, and how many rows were written to the import ledger.
+#[derive(Serialize, TS)]
+pub struct ImportResultDto {
+    pub items: Vec<ImportItemResultDto>,
+    pub outcome: OpOutcomeDto,
+    /// How many `(person, season, target)` rows were recorded in the ledger (0 when it is disabled).
+    #[ts(type = "number")]
+    pub ledgered: usize,
+}

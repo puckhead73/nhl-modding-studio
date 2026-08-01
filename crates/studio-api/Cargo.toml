@@ -13,6 +13,8 @@ ts-rs = "10"
 # Portrait previews cross the Tauri boundary as PNG data URLs.
 base64 = "0.22"
 studio-domain = { path = "../studio-domain" }
+# The non-blocking Roster Builder import ledger (dedup warnings). Owned by the service layer.
+tdb-instance-registry = { path = "../tdb-instance-registry" }
 # Used by the `edit-qa` headless QA binary to re-parse saved artifacts and verify round-trip/CRC.
 tdb-core = { path = "../tdb-core" }
 tdb-savedata = { path = "../tdb-savedata" }
@@ -22,3 +24,9 @@ tdb-savedata = { path = "../tdb-savedata" }
 [[bin]]
 name = "edit-qa"
 path = "src/bin/edit_qa.rs"
+
+[dev-dependencies]
+# Build a synthetic FHM corpus file for the Roster Builder import round-trip test (bundled SQLite is
+# already compiled elsewhere in the workspace).
+rusqlite = { version = "0.31", features = ["bundled"] }
+tdb-fhm = { path = "../tdb-fhm" }

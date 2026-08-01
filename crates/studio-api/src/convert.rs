@@ -6,6 +6,7 @@ use studio_domain::{
     FileExportSummary, HeadPreview, OutfitExportSummary, PlayerAssets,
     ArenaRef, ArenaSummary, ArenaView, AttributeView, Capabilities, CareerStats, CellControl,
     DbOverview, EntityFieldProfile, ExtractSummary, FieldRaw, FieldView, HumanFinding, HumanReport,
+    ImportIdentity, ImportItem, ItemOutcome, LoweredItem, MatchCandidate, MatchConfidence,
     InstallReport, LineEntry, LinesView, OpOutcome, PlayerAttributes, PlayerData, PlayerHeader,
     PlayerSummary, PlayerView, ProfileCell, RosterMembership, SaveSlot, Severity, Source,
     TeamSummary, TeamView, TraitOption, TraitView, Workspace,
@@ -23,6 +24,7 @@ use crate::dto::{
     PlayerHeaderDto, PlayerSummaryDto, PlayerViewDto, ProjectSummaryDto, RosterMembershipDto,
     SaveSlotDto, SlotFieldDto, StrategyCellDto, TableSummaryDto, TeamEquipmentDto, TeamJerseyDto,
     TeamStrategiesDto, TeamSummaryDto, TeamViewDto, TraitOptionDto, TraitViewDto,
+    ImportItemResultDto, MatchCandidateDto,
 };
 
 /// Map an install report to its DTO, attaching platform-aware display labels to each save slot and
@@ -190,6 +192,61 @@ fn finding_dto(f: &HumanFinding) -> FindingDto {
         table: f.studio_table.clone(),
         field: f.studio_field.clone(),
         record: f.record,
+    }
+}
+
+// ---- Roster Builder import (Phase 5.4) --------------------------------------
+
+/// Map a FE cart line to the domain [`ImportItem`]: a `null` match id ⇒ CreateNew, else Match(id).
+pub fn import_item_from_dto(dto: &crate::dto::ImportItemDto) -> ImportItem {
+    ImportItem {
+        person_id: dto.person_id,
+        season_year: dto.season_year,
+        target_team_id: dto.target_team_id,
+        identity: match dto.match_ea_player_id {
+            Some(id) => ImportIdentity::Match(id),
+            None => ImportIdentity::CreateNew,
+        },
+        jersey: dto.jersey,
+    }
+}
+
+/// An EA match candidate → DTO (confidence lowered to a stable wire string).
+pub fn match_candidate_dto(c: &MatchCandidate) -> MatchCandidateDto {
+    MatchCandidateDto {
+        ea_player_id: c.ea_player_id,
+        full_name: c.full_name.clone(),
+        dob: c.dob.clone(),
+        team_name: c.team_name.clone(),
+        confidence: match c.confidence {
+            MatchConfidence::NameAndDob => "name_and_dob",
+            MatchConfidence::NameOnly => "name_only",
+        }
+        .to_string(),
+        ambiguous: c.ambiguous,
+    }
+}
+
+/// A lowered cart item → its result row. `already_imported` is the ledger dedup flag, supplied by the
+/// caller (the registry, which owns the ledger).
+pub fn lowered_item_result_dto(item: &LoweredItem, already_imported: bool) -> ImportItemResultDto {
+    let (outcome, ea_player_id) = match item.outcome {
+        ItemOutcome::Created => ("created", None),
+        ItemOutcome::Matched(id) => ("matched", Some(id)),
+        ItemOutcome::PersonMissing => ("person_missing", None),
+        ItemOutcome::NoSuchPlayer(id) => ("no_such_player", Some(id)),
+        ItemOutcome::NoBioTable => ("no_bio_table", None),
+    };
+    ImportItemResultDto {
+        person_id: item.person_id,
+        season_year: item.season_year,
+        target_team_id: item.target_team_id,
+        full_name: item.full_name.clone(),
+        outcome: outcome.to_string(),
+        ea_player_id,
+        skipped_fields: item.skipped.iter().map(|s| s.field.clone()).collect(),
+        already_imported,
+        lowered: item.lowered(),
     }
 }
 

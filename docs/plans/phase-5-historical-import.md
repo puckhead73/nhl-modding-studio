@@ -268,8 +268,18 @@ gate); tests for capacity blockers, `Capabilities` skipping on a title lacking a
 A **non-blocking** ledger of imported `(person_id, season_year, target game/db id, new ea_player_id)`.
 Preview **warns** (never blocks) when a cart item was already imported to this target.
 
+> **Done (2026-07-28).** `tdb-instance-registry` crate: `InstanceRegistry` over a single `imports`
+> table keyed `(person_id, season_year, target)` — `target` an opaque, caller-chosen EA-db identity.
+> `record` upserts (re-import overwrites the same key); `lookup` is the dedup-warning source;
+> `entries_for_target` lists a target's history. **Graceful degradation is structural:** `open` never
+> returns an error — a missing file is created, and a corrupt file / version skew / unwritable path
+> opens **disabled** (reads empty, writes silent no-ops), so the ledger can never block an import. The
+> crate is clock-free (`imported_at` supplied by the caller). Unit tests cover round-trip+dedup,
+> re-import overwrite, the disabled no-op, and corrupt-file→disabled. **Wiring into
+> preview/commit is 5.4** (the service layer owns the target id + ledger lifetime).
+
 *Verify:* round-trip a ledger entry; a re-preview of the same item surfaces the dedup warning; a
-missing/corrupt sidecar degrades to "no ledger" rather than failing the import.
+missing/corrupt sidecar degrades to "no ledger" rather than failing the import. ✅
 
 ## Phase 5.4 — Service layer: DTOs, convert, commands
 
@@ -286,8 +296,26 @@ runtime**).
   bridge both databases**. `with_workspace` ([registry.rs:503](../../crates/studio-api/src/registry.rs#L503))
   and `with_corpus` (:1008) are separate today; bridging them is a real seam, not a formality.
 
+> **Done — core slice (2026-08-01).** DTOs `ImportItemDto` (in; `match_ea_player_id: null ⇒ create`),
+> `MatchCandidateDto`, `ImportItemResultDto`, `ChangeSetPreviewDto`, `ImportResultDto` (+ convert +
+> `ts-rs` bindings regenerated). Commands `match_ea_player(projectId, personId)`,
+> `import_preview(projectId, items)`, `import_commit(projectId, items)` — all registered in
+> `command_handler!` + `export_typescript`. The bridge is real: `import_preview`/`commit` resolve the
+> active profile + maxima, then hold the **corpus + workspace** locks together to lower → preview/commit.
+> Commit is **roster-mirror aware** (`Workspace::commit_import` fans the cart to the mirror with the
+> full-alignment guard, rolling both files back on divergence). The **ledger** opens beside the corpus
+> (`ea_import_ledger.db`) on `open_corpus`; commit records each lowered item (best-effort), preview
+> flags `already_imported`. A registry test drives preview → commit → **re-preview shows the dedup
+> warning** on the `nhllegacy` anchor with a synthetic corpus. ✅
+>
+> **Deferred to the follow-up slice:** `roster_builder_capacity(teamId)`; the richer preview projection
+> (per-item **diffs**, **capacity** bars, the 5.1 **match candidates** embedded per cart row); and
+> surfacing the **created `wBIz`** back into the ledger/result (the batch op does not return new ids
+> yet, so a create currently ledgers `ea_player_id = 0` — dedup is keyed on `(person, season, target)`
+> so it still works).
+
 *Verify:* `cargo test -p studio-api` regenerates bindings; a registry test drives preview → commit
-end-to-end on an anchor.
+end-to-end on an anchor. ✅
 
 ## Phase 5.5 — Frontend: Roster Builder
 

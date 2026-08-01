@@ -16,9 +16,10 @@ use base64::Engine as _;
 
 use studio_domain::{
     AssetRoots, compute_maxima_at, compute_person_career_ratings, compute_person_ratings, default_profile,
-    AttributeMaxima, EditSession, FhmCorpus, FieldValue, NormalizationMode, Platform, Project,
-    ProjectProfile, ProjectRole, Workspace,
+    AttributeMaxima, EditSession, FhmCorpus, FieldValue, ImportItem, NormalizationMode, Platform,
+    Project, ProjectProfile, ProjectRole, Workspace,
 };
+use tdb_instance_registry::{InstanceRegistry, LedgerEntry};
 
 use crate::convert;
 use crate::dto::{
@@ -32,6 +33,7 @@ use crate::dto::{
     HistoricalTeamIndexEntryDto, HistoricalTeamSummaryDto, InstallReportDto, IntegrityReportDto,
     JerseyCorrectionDto, LinesViewDto, OpOutcomeDto, PlayerSummaryDto, PlayerViewDto,
     ProjectSummaryDto, RepairBlocksSummaryDto, TeamSummaryDto, TeamViewDto,
+    ChangeSetPreviewDto, ImportItemDto, ImportResultDto, MatchCandidateDto,
 };
 use crate::error::ApiError;
 
@@ -59,6 +61,9 @@ pub struct Registry {
     /// The open corpus's person count — a cheap fingerprint that invalidates a stale maxima sidecar
     /// if the data pack is rebuilt in place.
     corpus_person_count: Mutex<Option<u64>>,
+    /// The non-blocking Roster Builder import ledger (`ea_import_ledger.db` beside the corpus). Opened
+    /// when a corpus opens; `None`/disabled degrades to "no dedup warnings", never blocking an import.
+    ledger: Mutex<Option<InstanceRegistry>>,
 }
 
 /// The on-disk maxima sidecar: the maxima plus the corpus fingerprint it was computed from.
@@ -937,8 +942,11 @@ impl Registry {
             .meta("person_count")?
             .and_then(|v| v.parse().ok())
             .unwrap_or(0);
-        *self.corpus_dir.lock().unwrap() =
-            Path::new(path).parent().map(|p| p.to_path_buf());
+        let dir = Path::new(path).parent().map(|p| p.to_path_buf());
+        // Open the import ledger beside the corpus (created if absent; disabled if unwritable/corrupt).
+        *self.ledger.lock().unwrap() =
+            dir.as_ref().map(|d| InstanceRegistry::open(d.join("ea_import_ledger.db")));
+        *self.corpus_dir.lock().unwrap() = dir;
         *self.corpus_db_path.lock().unwrap() = Some(PathBuf::from(path));
         // A new corpus invalidates any previously-cached maxima.
         *self.maxima.lock().unwrap() = None;
@@ -950,6 +958,147 @@ impl Registry {
     /// Whether a corpus is currently open.
     pub fn corpus_open(&self) -> bool {
         self.corpus.lock().unwrap().is_some()
+    }
+
+    // ---- Roster Builder import (Phase 5.4) — the first commands to bridge both databases ----
+
+    /// Auto-detect EA identity matches for a corpus person against project `id` (the cart's
+    /// Match/Create toggle). Needs both an open corpus and the target project.
+    pub fn match_ea_player(
+        &self,
+        id: u32,
+        person_id: i64,
+    ) -> Result<Vec<MatchCandidateDto>, ApiError> {
+        self.with_corpus(|corpus| {
+            self.with_workspace(id, |ws| {
+                Ok(ws
+                    .match_ea_player(corpus, person_id)?
+                    .iter()
+                    .map(convert::match_candidate_dto)
+                    .collect())
+            })
+        })
+    }
+
+    /// Dry-run a Roster Builder cart against project `id`: lower every item through the corpus adapter
+    /// and report what commit would do — per-item outcomes, the player-count delta, the audit over the
+    /// previewed state, blockers, and the ledger dedup flag — **without** mutating the session.
+    pub fn import_preview(
+        &self,
+        id: u32,
+        items: &[ImportItemDto],
+    ) -> Result<ChangeSetPreviewDto, ApiError> {
+        // Resolve the active profile + maxima *first* — both briefly lock the corpus/maxima, which must
+        // be released before we hold the corpus lock across the bridge below.
+        let profile = convert::formula_profile_from_dto(&self.get_active_formula()?);
+        let maxima = self.maxima_for(&profile)?;
+        let items: Vec<ImportItem> = items.iter().map(convert::import_item_from_dto).collect();
+
+        self.with_corpus(|corpus| {
+            self.with_workspace(id, |ws| {
+                let lowered = ws.lower_change_set(corpus, &items, &profile, &maxima)?;
+                let preview = ws.preview_import(&lowered.ops, lowered.skipped.clone())?;
+                let target = ws.primary_path().to_string();
+
+                let ledger = self.ledger.lock().unwrap();
+                let rows: Vec<_> = lowered
+                    .items
+                    .iter()
+                    .map(|it| {
+                        let already = it.lowered() && self.was_imported(&ledger, it.person_id, it.season_year, &target);
+                        convert::lowered_item_result_dto(it, already)
+                    })
+                    .collect();
+                let blocked = lowered.items.iter().filter(|i| !i.lowered()).count();
+
+                Ok(ChangeSetPreviewDto {
+                    items: rows,
+                    players_before: preview.players_before,
+                    players_after: preview.players_after,
+                    blocked,
+                    audit: convert::report_dto(&preview.audit),
+                    skipped_fields: preview.skipped.iter().map(|s| s.field.clone()).collect(),
+                })
+            })
+        })
+    }
+
+    /// Commit a Roster Builder cart against project `id` — the same lowering as preview, applied for
+    /// real as one transaction / one undo entry (roster-mirror aware). On success, each created/matched
+    /// item is recorded to the import ledger (best-effort; a ledger failure never fails the commit).
+    pub fn import_commit(
+        &self,
+        id: u32,
+        items: &[ImportItemDto],
+    ) -> Result<ImportResultDto, ApiError> {
+        let profile = convert::formula_profile_from_dto(&self.get_active_formula()?);
+        let maxima = self.maxima_for(&profile)?;
+        let items: Vec<ImportItem> = items.iter().map(convert::import_item_from_dto).collect();
+        let now = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .map(|d| d.as_secs() as i64)
+            .unwrap_or(0);
+
+        self.with_corpus(|corpus| {
+            self.with_workspace(id, |ws| {
+                let lowered = ws.lower_change_set(corpus, &items, &profile, &maxima)?;
+                let target = ws.primary_path().to_string();
+                let outcome = ws.commit_import(&lowered.ops)?;
+
+                // Ledger each item that produced an op (best-effort — advisory only).
+                let ledger = self.ledger.lock().unwrap();
+                let mut ledgered = 0usize;
+                if let Some(reg) = ledger.as_ref() {
+                    for it in lowered.items.iter().filter(|i| i.lowered()) {
+                        let ea = match it.outcome {
+                            studio_domain::ItemOutcome::Created => None, // new wBIz not surfaced by the batch op
+                            studio_domain::ItemOutcome::Matched(pid) => Some(pid),
+                            _ => None,
+                        };
+                        if reg
+                            .record(&LedgerEntry {
+                                person_id: it.person_id,
+                                season_year: it.season_year,
+                                target: target.clone(),
+                                ea_player_id: ea.unwrap_or(0) as i64,
+                                imported_at: now,
+                            })
+                            .is_ok()
+                        {
+                            ledgered += 1;
+                        }
+                    }
+                }
+
+                Ok(ImportResultDto {
+                    items: lowered.items.iter().map(|it| convert::lowered_item_result_dto(it, false)).collect(),
+                    outcome: convert::outcome_dto(outcome),
+                    ledgered,
+                })
+            })
+        })
+    }
+
+    /// The maxima a profile needs: the corpus PositionMax scan, or an empty set for Nominal.
+    fn maxima_for(&self, profile: &studio_domain::FormulaProfile) -> Result<Arc<AttributeMaxima>, ApiError> {
+        match profile.normalisation_mode {
+            NormalizationMode::PositionMax => self.attribute_maxima(),
+            NormalizationMode::Nominal => Ok(Arc::new(AttributeMaxima::default())),
+        }
+    }
+
+    /// Ledger dedup probe (advisory): has this `(person, season)` already been imported to `target`?
+    fn was_imported(
+        &self,
+        ledger: &Option<InstanceRegistry>,
+        person_id: i64,
+        season_year: i64,
+        target: &str,
+    ) -> bool {
+        ledger
+            .as_ref()
+            .and_then(|l| l.lookup(person_id, season_year, target).ok().flatten())
+            .is_some()
     }
 
     /// The season + league filter options for the Historical browse dropdowns.

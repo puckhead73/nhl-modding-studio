@@ -3338,11 +3338,14 @@ name = "studio-api"
 version = "0.0.0"
 dependencies = [
  "base64 0.22.1",
+ "rusqlite",
  "serde",
  "serde_json",
  "studio-domain",
  "tauri",
  "tdb-core",
+ "tdb-fhm",
+ "tdb-instance-registry",
  "tdb-savedata",
  "ts-rs",
 ]
