@@ -213,12 +213,19 @@ returns no candidate. Index build is lazy + cached (do not rebuild per cart item
 >   (25 skater + 18 goalie; the 3 AI biases + goalie "Angles" deferred, not guessed). **Proven
 >   end-to-end** against the real `corpus/historical.db` (`tests/import_corpus_e2e.rs`, `#[ignore]`): a
 >   corpus person lowers into nhl14 with bio + physicals + 25 ratings, 0 skips, on the roster.
-> - **Remaining (5.2b-next):** `ImportItem`/`ImportChangeSet` orchestration (map a cart of items → ops
->   via the adapter + `lower_create`/`lower_update`) driving cart-level preview/commit; enum-coded
->   identity (nationality / handedness / birthplace) + style + the AI biases; **full per-table capacity
->   projection + S4 blockers** and per-item **diffs** + 5.1 match candidates in the preview; ledger to
->   5.3 on commit. **Verify (open):** the bio-team **+1** (Correction 3) — roster membership is
->   confirmed via `eGlu`; confirm `ubPc.dXSB` reads back to the target team before relying on it.
+> - **5.2b cart orchestration ✅** — `ImportItem { person_id, season_year, target_team_id, identity:
+>   CreateNew | Match(wBIz), jersey? }` + `lower_change_set` map a whole cart → encoded ops through the
+>   corpus adapter + `lower_create`/`lower_update`, returning a `LoweredChangeSet { ops, skipped, items }`
+>   with a per-item `ItemOutcome` trail (Created / Matched / **PersonMissing** / **NoSuchPlayer** /
+>   NoBioTable). Un-lowerable items are non-fatal **blockers** (no op, failing outcome) so preview can
+>   surface them; `EditSession::lower_change_set` bridges the working state → the same
+>   `preview_import`/`commit_import` ops (byte-identical). `tests/import_change_set.rs` (synthetic
+>   in-memory corpus, **CI**): mixed Create+Match+2 blockers → 2 ops, right outcomes, preview==commit.
+> - **Remaining (5.2b-next):** enum-coded identity (nationality / handedness / birthplace) + style +
+>   the AI biases; **full per-table capacity projection + S4 blockers** and per-item **diffs** + 5.1
+>   match candidates in the preview; ledger to 5.3 on commit. **Verify (open):** the bio-team **+1**
+>   (Correction 3) — roster membership is confirmed via `eGlu`; confirm `ubPc.dXSB` reads back to the
+>   target team before relying on it.
 
 **There is no dry-run/preview anywhere in the stack today** — `commit()`
 ([txn.rs:1784](../../crates/tdb-edit/src/txn.rs#L1784)) is a CRC finalizer, not a two-phase gate.
