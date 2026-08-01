@@ -1,0 +1,10 @@
+[package]
+name = "tdb-instance-registry"
+description = "Non-blocking SQLite sidecar ledger of Roster Builder imports (person-season → EA player, per target)."
+version = "0.0.0"
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+rusqlite = { version = "0.31", features = ["bundled"] }

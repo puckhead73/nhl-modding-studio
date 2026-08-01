@@ -3881,6 +3881,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "tdb-instance-registry"
+version = "0.0.0"
+dependencies = [
+ "rusqlite",
+]
+
+[[package]]
 name = "tdb-relations"
 version = "0.0.0"
 dependencies = [

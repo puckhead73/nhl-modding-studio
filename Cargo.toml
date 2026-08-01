@@ -18,6 +18,7 @@ members = [
     "crates/tdb-fhm-build",
     "crates/tdb-fhm-store",
     "crates/tdb-formula",
+    "crates/tdb-instance-registry",
     "crates/studio-domain",
     "crates/studio-api",
     "src-tauri",
