@@ -85,10 +85,14 @@ fn roster_builder_preview_commit_and_ledger_dedup() {
     assert!(!preview.items[0].already_imported, "first import is not a dup");
     assert_eq!(reg.list_players(id).unwrap().len(), before, "preview did not mutate");
 
-    // Commit: the create lands.
+    // Commit: the create lands, and the result echoes the freshly-created wBIz.
     let result = reg.import_commit(id, &items).unwrap();
     assert_eq!(result.items[0].outcome, "created");
-    assert_eq!(reg.list_players(id).unwrap().len(), before + 1, "commit added the player");
+    let new_id = result.items[0].ea_player_id.expect("the created wBIz is surfaced");
+    assert!(new_id != 0, "a real player id, not the 0 placeholder");
+    let players = reg.list_players(id).unwrap();
+    assert_eq!(players.len(), before + 1, "commit added the player");
+    assert!(players.iter().any(|p| p.player_id == new_id), "the created id is a real player on the roster");
 
     // Re-preview the same cart: the ledger now flags this person-season as already imported.
     let again = reg.import_preview(id, &items).unwrap();

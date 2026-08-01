@@ -185,6 +185,15 @@ pub enum ImportOp {
     Update { player_id: u64, writes: Vec<ImportWrite> },
 }
 
+/// The result of applying an import cart: the aggregate op outcome plus every newly-created `wBIz`
+/// (one per [`ImportOp::Create`], in op order — empty for an all-update cart). The created ids let the
+/// caller ledger the real player id and echo it back to the UI.
+#[derive(Clone, Debug, Default)]
+pub struct ImportApplied {
+    pub outcome: OpOutcome,
+    pub created: Vec<u64>,
+}
+
 /// A staged, in-memory edit session over one database snapshot.
 pub struct EditTransaction {
     working: Vec<u8>,
@@ -672,13 +681,17 @@ impl EditTransaction {
     /// [`with_repairing_transaction`](Self::with_repairing_transaction), so the delta audit runs once
     /// over the whole cart and the cart rolls back atomically on any violation. Cell values are
     /// already validated + encoded by the caller (`studio-domain`), mirroring [`Self::set_cell_int`].
-    pub fn apply_import(&mut self, ops: &[ImportOp]) -> Result<OpOutcome, EditError> {
-        self.with_repairing_transaction(|tx| {
+    pub fn apply_import(&mut self, ops: &[ImportOp]) -> Result<ImportApplied, EditError> {
+        // Created `wBIz`s are collected via a captured side-channel (the repairing-transaction harness
+        // is fixed to an `OpOutcome` return): one per Create op, in op order.
+        let mut created: Vec<u64> = Vec::new();
+        let outcome = self.with_repairing_transaction(|tx| {
             let mut total = OpOutcome::default();
             for op in ops {
                 match op {
                     ImportOp::Create { team, position, writes } => {
                         let c = tx.create_player_inner(*team, *position)?;
+                        created.push(c.wbiz);
                         total.edits += c.edits;
                         let companion = if c.goalie { ids::GOALIE_AI } else { ids::SKATER_AI };
                         for w in writes {
@@ -698,7 +711,8 @@ impl EditTransaction {
                 }
             }
             Ok(total)
-        })
+        })?;
+        Ok(ImportApplied { outcome, created })
     }
 
     /// Resolve a player's `(bio_record, companion_record, companion_table)` from the current model.

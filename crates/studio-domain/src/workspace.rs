@@ -848,18 +848,19 @@ impl Workspace {
     /// Commit a lowered cart for real — one transaction, one undo entry. With a roster attached, the
     /// identical ops apply to the mirror too and **full record alignment is re-verified**; any
     /// divergence rolls both files back (the [`Workspace::create_player`] guard, for a whole cart).
-    pub fn commit_import(&mut self, ops: &[tdb_edit::txn::ImportOp]) -> Result<OpOutcome> {
+    pub fn commit_import(&mut self, ops: &[tdb_edit::txn::ImportOp]) -> Result<tdb_edit::txn::ImportApplied> {
         if self.roster_only() {
-            let outcome = self.roster_mut().commit_import(ops)?;
+            let applied = self.roster_mut().commit_import(ops)?;
             self.record(OpTarget::Roster);
-            return Ok(outcome);
+            return Ok(applied);
         }
-        let outcome = self.nhlng.commit_import(ops)?;
+        // The canonical db is the authority for the created ids (an aligned mirror mints the same).
+        let applied = self.nhlng.commit_import(ops)?;
         let roster_result = self.roster.as_mut().map(|m| m.session.commit_import(ops));
         match roster_result {
             None => {
                 self.record_mirrored(false);
-                Ok(outcome)
+                Ok(applied)
             }
             Some(Err(e)) => {
                 self.nhlng.undo();
@@ -873,7 +874,7 @@ impl Workspace {
                     ));
                 }
                 self.record_mirrored(true);
-                Ok(outcome)
+                Ok(applied)
             }
         }
     }

@@ -571,7 +571,7 @@ impl EditSession {
     /// undo entry (Spike S3). The `ops` carry already-encoded cell values; `lower()` (Phase 5.2)
     /// builds them from the corpus. Preview and commit run the identical `ops`, so they lower to
     /// byte-identical edits.
-    pub fn apply_import(&mut self, ops: &[tdb_edit::txn::ImportOp]) -> Result<OpOutcome> {
+    pub fn apply_import(&mut self, ops: &[tdb_edit::txn::ImportOp]) -> Result<tdb_edit::txn::ImportApplied> {
         self.run(|tx| tx.apply_import(ops))
     }
 
@@ -600,8 +600,9 @@ impl EditSession {
     }
 
     /// Commit a previewed cart for real — the same ops, one transaction, one undo entry. Alias of
-    /// [`apply_import`](Self::apply_import), named for the two-phase pipeline.
-    pub fn commit_import(&mut self, ops: &[tdb_edit::txn::ImportOp]) -> Result<OpOutcome> {
+    /// [`apply_import`](Self::apply_import), named for the two-phase pipeline. Returns the op outcome
+    /// plus every newly-created `wBIz` (for the ledger + the UI result).
+    pub fn commit_import(&mut self, ops: &[tdb_edit::txn::ImportOp]) -> Result<tdb_edit::txn::ImportApplied> {
         self.apply_import(ops)
     }
 

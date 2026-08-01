@@ -320,11 +320,16 @@ runtime**).
 > over-ceiling save). `tests/capacity_projection.rs`: a 22-player cart fits every nhl14 ceiling
 > (ubPc=6873), 100k skaters overflow bio, unknown-title packed file stays unenforced.
 >
-> **Still deferred:** `roster_builder_capacity(teamId)` as a standalone command (the projection is wired
-> into preview instead); per-item **diffs** and embedded 5.1 **match candidates** in the preview; and
-> surfacing the **created `wBIz`** back into the ledger/result (the batch op does not return new ids
-> yet, so a create ledgers `ea_player_id = 0` — dedup is keyed on `(person, season, target)` so it
-> still works; threading the ids needs `OpOutcome`/`apply_import` to return them).
+> **Polish — created `wBIz` ✅ (2026-08-01).** `EditTransaction::apply_import` now returns
+> `ImportApplied { outcome, created }` — the new `wBIz` per `Create` op, in op order (collected via a
+> captured side-channel so the `OpOutcome`-fixed repairing-transaction harness is untouched). Threaded
+> through `EditSession`/`Workspace::commit_import` (the canonical db is the authority; an aligned mirror
+> mints the same ids) → `import_commit` maps each created id back to its Created item, **ledgers the
+> real id** (no more `0` placeholder) and echoes it in `ImportItemResultDto.ea_player_id`. The registry
+> test asserts the surfaced id is a real player on the roster.
+>
+> **Still deferred:** `roster_builder_capacity(teamId)` as a standalone command (folded into preview);
+> per-item **diffs** and embedded 5.1 **match candidates** in the preview.
 
 *Verify:* `cargo test -p studio-api` regenerates bindings; a registry test drives preview → commit
 end-to-end on an anchor. ✅
@@ -354,9 +359,12 @@ end-to-end on an anchor. ✅
 > the cart + invalidates the DB views on success). `npm run build` clean. **Human-readable surfaces:**
 > team + player **names** throughout; the `wBIz` rides only inside the Match option value.
 >
-> **Deferred (next FE slice):** "Send to Builder" from **team-detail roster rows** (a whole
-> team-season) and the **5.5b slot-target picker** (hand-fill named slots); the richer per-item
-> **diffs**/capacity bars once the 5.4-follow-up backend lands; a nav **cart-count badge**.
+> **Whole team-season send ✅ (2026-08-01).** The Historical **team-detail** roster tab now carries a
+> "Send team-season to Builder (N)" button that queues every roster member of that constituent's season
+> into the cart (dedup by `(person, season)`; N counts the not-yet-queued; gated on an open project).
+>
+> **Deferred (next FE slice):** capacity bars already landed with the 5.4 follow-up; remaining is a nav
+> **cart-count badge** and per-item **diffs** in the preview.
 
 *Verify:* `npm run build` clean; the cart survives a reload; preview blockers disable Commit. ✅
 

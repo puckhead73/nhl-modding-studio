@@ -1061,36 +1061,46 @@ impl Registry {
                         full.ceiling
                     )));
                 }
-                let outcome = ws.commit_import(&lowered.ops)?;
+                let applied = ws.commit_import(&lowered.ops)?;
+                // Created `wBIz`s come back in Create-op order — the same order the Created items appear.
+                let mut created = applied.created.iter().copied();
 
-                // Ledger each item that produced an op (best-effort — advisory only).
+                // Ledger each lowered item with its effective EA id (the new wBIz for a create, the
+                // matched id for an update), and echo that id back in the result. Best-effort ledger.
                 let ledger = self.ledger.lock().unwrap();
                 let mut ledgered = 0usize;
-                if let Some(reg) = ledger.as_ref() {
-                    for it in lowered.items.iter().filter(|i| i.lowered()) {
-                        let ea = match it.outcome {
-                            studio_domain::ItemOutcome::Created => None, // new wBIz not surfaced by the batch op
-                            studio_domain::ItemOutcome::Matched(pid) => Some(pid),
-                            _ => None,
-                        };
-                        if reg
-                            .record(&LedgerEntry {
-                                person_id: it.person_id,
-                                season_year: it.season_year,
-                                target: target.clone(),
-                                ea_player_id: ea.unwrap_or(0) as i64,
-                                imported_at: now,
-                            })
-                            .is_ok()
-                        {
-                            ledgered += 1;
+                let mut items = Vec::with_capacity(lowered.items.len());
+                for it in &lowered.items {
+                    let ea = match it.outcome {
+                        studio_domain::ItemOutcome::Created => created.next(),
+                        studio_domain::ItemOutcome::Matched(pid) => Some(pid),
+                        _ => None,
+                    };
+                    if it.lowered() {
+                        if let Some(reg) = ledger.as_ref() {
+                            let ok = reg
+                                .record(&LedgerEntry {
+                                    person_id: it.person_id,
+                                    season_year: it.season_year,
+                                    target: target.clone(),
+                                    ea_player_id: ea.unwrap_or(0) as i64,
+                                    imported_at: now,
+                                })
+                                .is_ok();
+                            if ok {
+                                ledgered += 1;
+                            }
                         }
                     }
+                    let mut dto = convert::lowered_item_result_dto(it, false);
+                    dto.ea_player_id = ea; // the real created id for a create
+                    items.push(dto);
                 }
+                drop(ledger);
 
                 Ok(ImportResultDto {
-                    items: lowered.items.iter().map(|it| convert::lowered_item_result_dto(it, false)).collect(),
-                    outcome: convert::outcome_dto(outcome),
+                    items,
+                    outcome: convert::outcome_dto(applied.outcome),
                     ledgered,
                 })
             })
