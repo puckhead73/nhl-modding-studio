@@ -50,7 +50,7 @@ pub use attributes::{
 };
 pub use audit::{humanize, HumanFinding, HumanReport};
 pub use capabilities::Capabilities;
-pub use capacity::CapacityGrowth;
+pub use capacity::{project_capacity, CapacityGrowth, PendingCreates, TableCapacity};
 pub use discovery::{
     detect_install, ps4_title_ids, title_ids, DbPaths, InstallReport, SaveSlot, TitleIds,
 };
@@ -58,9 +58,9 @@ pub use extract::{extract_install, find_big_archives, ExtractSummary};
 pub use field_profile::{CellControl, EntityFieldProfile, ProfileCell, ProfileSection};
 pub use historical::{FhmCorpus, FhmError};
 pub use import::{
-    lower_change_set, lower_create, lower_update, person_season_from_corpus, EaSlugIndex,
-    ImportIdentity, ImportItem, ImportPreview, ItemOutcome, LoweredChangeSet, LoweredItem,
-    MatchCandidate, MatchConfidence, PersonSeason, SkippedField,
+    count_creates, lower_change_set, lower_create, lower_update, person_season_from_corpus,
+    EaSlugIndex, ImportIdentity, ImportItem, ImportPreview, ItemOutcome, LoweredChangeSet,
+    LoweredItem, MatchCandidate, MatchConfidence, PersonSeason, SkippedField,
 };
 pub use formula::{
     compute_person_career_ratings, compute_person_ratings, default_profile, CareerRatings,

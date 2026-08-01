@@ -16,6 +16,7 @@
 //!   safe *floor* on GEN7 (a packed main's `max == cur ≤ ceiling`), so the pass always takes the
 //!   larger of the two sources.
 
+use tdb_core::TdbFile;
 use tdb_relations::entity::ids;
 
 /// The seven roster-bearing tables the ceilings apply to, in the audit's column order:
@@ -55,4 +56,99 @@ pub struct CapacityGrowth {
     pub table: String,
     pub from: u16,
     pub to: u16,
+}
+
+// ---------------------------------------------------------------------------
+// Roster Builder capacity projection (Phase 5.4 / Spike S4)
+// ---------------------------------------------------------------------------
+//
+// The write path grows a roster table past its vanilla ceiling freely (it only hard-errors at
+// `u16::MAX`), so a large import would silently produce an over-capacity save the game rejects. The
+// ceiling gate therefore lives in the **preview**: project each roster table's fill after the cart's
+// creates and flag any that would cross its ceiling (docs/audits/capacity-full-policy.md).
+
+/// Friendly labels for [`ROSTER_TABLES`], in the same column order — the human-readable surface for
+/// the capacity bars (raw canonical id rides along in `TableCapacity::table`).
+const ROSTER_TABLE_LABELS: [&str; 7] = [
+    "Player index",
+    "Player bios",
+    "Skater ratings",
+    "Skater equipment",
+    "Goalie ratings",
+    "Goalie equipment",
+    "Roster slots",
+];
+
+/// New player clusters a cart adds, by kind. A create appends **one** row to the shared index/bio/slot
+/// tables plus the **kind-correct** AI + equipment companions; an update (Match) adds nothing.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub struct PendingCreates {
+    pub skaters: u32,
+    pub goalies: u32,
+}
+
+impl PendingCreates {
+    /// Rows added to the roster table at `ROSTER_TABLES[i]` by these creates.
+    fn adding_for(&self, i: usize) -> u32 {
+        match i {
+            0 | 1 | 6 => self.skaters + self.goalies, // index, bio, slots — shared
+            2 | 3 => self.skaters,                    // skater AI / equip
+            4 | 5 => self.goalies,                    // goalie AI / equip
+            _ => 0,
+        }
+    }
+}
+
+/// One roster table's projected fill vs its vanilla ceiling after the pending creates.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct TableCapacity {
+    /// Canonical table id (`ubPc`, …) — raw id for progressive disclosure.
+    pub table: String,
+    /// Human label for the bar.
+    pub label: String,
+    pub current: u32,
+    /// The vanilla ceiling the game runtime accepts (GEN7 constant, else the db's own `max_records`).
+    pub ceiling: u32,
+    /// Rows this cart would add to the table.
+    pub adding: u32,
+    /// `current + adding > ceiling` — the storage blocker (only when `enforced`).
+    pub over: bool,
+    /// Whether the ceiling is reliable enough to block on. `false` when there is no ceiling source (a
+    /// packed file opened without a known title), so an unknown headroom never falsely blocks.
+    pub enforced: bool,
+}
+
+/// Project each roster-bearing table's fill after `creates`, given the loaded db and its title. The
+/// ceiling is the larger of the GEN7 constant for `game_id` (the real ceiling on packed GEN7 mains,
+/// whose own `max_records == current`) and the db's own `max_records` (which carries the ceiling on
+/// PS4 mains and pre-grown mirrors). A table absent from this title's schema is skipped. When no
+/// reliable ceiling exists (unknown title **and** a packed table), the row is reported unenforced so
+/// preview never blocks on a headroom it cannot know.
+pub fn project_capacity(db: &TdbFile, game_id: Option<&str>, creates: PendingCreates) -> Vec<TableCapacity> {
+    let gen7 = game_id.and_then(gen7_ceilings);
+    let mut out = Vec::new();
+    for (i, cid) in ROSTER_TABLES.iter().enumerate() {
+        let Some(t) = db.table_canonical(cid) else {
+            continue; // title lacks this table (e.g. gen6 has no equip tables)
+        };
+        let current = t.current_records as u32;
+        let max_rec = t.max_records as u32;
+        let gen7_ceiling = gen7.map(|c| c[i] as u32);
+        // The larger of the (known) GEN7 constant and the file's own allocation.
+        let ceiling = gen7_ceiling.unwrap_or(0).max(max_rec);
+        // Reliable when a GEN7 constant applies, or the file itself carries slack (PS4 / pre-grown).
+        let enforced = gen7_ceiling.is_some() || max_rec > current;
+        let adding = creates.adding_for(i);
+        let over = enforced && current + adding > ceiling;
+        out.push(TableCapacity {
+            table: (*cid).to_string(),
+            label: ROSTER_TABLE_LABELS[i].to_string(),
+            current,
+            ceiling,
+            adding,
+            over,
+            enforced,
+        });
+    }
+    out
 }

@@ -835,6 +835,16 @@ impl Workspace {
         self.nhlng.preview_import(ops, skipped)
     }
 
+    /// Project the roster tables' fill after `creates` against the canonical db + this workspace's
+    /// title (the S4 ceiling gate the preview shows). See [`crate::capacity::project_capacity`].
+    pub fn roster_capacity(
+        &self,
+        creates: crate::capacity::PendingCreates,
+    ) -> Result<Vec<crate::capacity::TableCapacity>> {
+        let db = TdbFile::parse(self.nhlng.bytes())?;
+        Ok(crate::capacity::project_capacity(&db, self.game_id.as_deref(), creates))
+    }
+
     /// Commit a lowered cart for real — one transaction, one undo entry. With a roster attached, the
     /// identical ops apply to the mirror too and **full record alignment is re-verified**; any
     /// divergence rolls both files back (the [`Workspace::create_player`] guard, for a whole cart).

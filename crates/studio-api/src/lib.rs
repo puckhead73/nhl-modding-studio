@@ -170,6 +170,7 @@ mod bindings {
         MatchCandidateDto::export_all().expect("export MatchCandidateDto");
         ImportItemDto::export_all().expect("export ImportItemDto");
         ChangeSetPreviewDto::export_all().expect("export ChangeSetPreviewDto + deps");
+        TableCapacityDto::export_all().expect("export TableCapacityDto");
         ImportResultDto::export_all().expect("export ImportResultDto + deps");
     }
 }

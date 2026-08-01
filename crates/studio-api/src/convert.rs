@@ -7,6 +7,7 @@ use studio_domain::{
     ArenaRef, ArenaSummary, ArenaView, AttributeView, Capabilities, CareerStats, CellControl,
     DbOverview, EntityFieldProfile, ExtractSummary, FieldRaw, FieldView, HumanFinding, HumanReport,
     ImportIdentity, ImportItem, ItemOutcome, LoweredItem, MatchCandidate, MatchConfidence,
+    TableCapacity,
     InstallReport, LineEntry, LinesView, OpOutcome, PlayerAttributes, PlayerData, PlayerHeader,
     PlayerSummary, PlayerView, ProfileCell, RosterMembership, SaveSlot, Severity, Source,
     TeamSummary, TeamView, TraitOption, TraitView, Workspace,
@@ -24,7 +25,7 @@ use crate::dto::{
     PlayerHeaderDto, PlayerSummaryDto, PlayerViewDto, ProjectSummaryDto, RosterMembershipDto,
     SaveSlotDto, SlotFieldDto, StrategyCellDto, TableSummaryDto, TeamEquipmentDto, TeamJerseyDto,
     TeamStrategiesDto, TeamSummaryDto, TeamViewDto, TraitOptionDto, TraitViewDto,
-    ImportItemResultDto, MatchCandidateDto,
+    ImportItemResultDto, MatchCandidateDto, TableCapacityDto,
 };
 
 /// Map an install report to its DTO, attaching platform-aware display labels to each save slot and
@@ -224,6 +225,19 @@ pub fn match_candidate_dto(c: &MatchCandidate) -> MatchCandidateDto {
         }
         .to_string(),
         ambiguous: c.ambiguous,
+    }
+}
+
+/// A projected roster-table capacity → DTO.
+pub fn table_capacity_dto(c: &TableCapacity) -> TableCapacityDto {
+    TableCapacityDto {
+        table: c.table.clone(),
+        label: c.label.clone(),
+        current: c.current,
+        ceiling: c.ceiling,
+        adding: c.adding,
+        over: c.over,
+        enforced: c.enforced,
     }
 }
 

@@ -308,11 +308,23 @@ runtime**).
 > flags `already_imported`. A registry test drives preview → commit → **re-preview shows the dedup
 > warning** on the `nhllegacy` anchor with a synthetic corpus. ✅
 >
-> **Deferred to the follow-up slice:** `roster_builder_capacity(teamId)`; the richer preview projection
-> (per-item **diffs**, **capacity** bars, the 5.1 **match candidates** embedded per cart row); and
+> **Follow-up — capacity gate ✅ (2026-08-01).** The **S4 ceiling gate** now lives in the preview, as
+> the audit demanded. `capacity::project_capacity(db, game_id, PendingCreates)` projects each of the 7
+> roster tables' fill after the cart's creates: `ceiling = max(gen7_ceilings(game_id), db.max_records)`,
+> `over = enforced && current + adding > ceiling`, with `enforced=false` when no reliable ceiling exists
+> (unknown title on a packed file) so it never falsely blocks. A create adds to the shared
+> index/bio/slot tables + the **kind-correct** AI/equip companions (`count_creates` splits skaters vs
+> goalies). Surfaced through `Workspace::roster_capacity` → `ChangeSetPreviewDto.capacity[]` +
+> `capacity_blocked`; **preview** renders per-table bars (current‖adding vs ceiling, over flagged) and
+> disables Commit, and **`import_commit` hard-refuses** an over-capacity write (never a silent
+> over-ceiling save). `tests/capacity_projection.rs`: a 22-player cart fits every nhl14 ceiling
+> (ubPc=6873), 100k skaters overflow bio, unknown-title packed file stays unenforced.
+>
+> **Still deferred:** `roster_builder_capacity(teamId)` as a standalone command (the projection is wired
+> into preview instead); per-item **diffs** and embedded 5.1 **match candidates** in the preview; and
 > surfacing the **created `wBIz`** back into the ledger/result (the batch op does not return new ids
-> yet, so a create currently ledgers `ea_player_id = 0` — dedup is keyed on `(person, season, target)`
-> so it still works).
+> yet, so a create ledgers `ea_player_id = 0` — dedup is keyed on `(person, season, target)` so it
+> still works; threading the ids needs `OpOutcome`/`apply_import` to return them).
 
 *Verify:* `cargo test -p studio-api` regenerates bindings; a registry test drives preview → commit
 end-to-end on an anchor. ✅

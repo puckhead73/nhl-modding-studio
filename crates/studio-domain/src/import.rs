@@ -715,6 +715,22 @@ impl LoweredChangeSet {
     }
 }
 
+/// Tally the new player clusters a lowered cart adds, by kind (position 4 = goalie) — the input to the
+/// capacity projection. Updates (Match) allocate nothing and are ignored.
+pub fn count_creates(ops: &[ImportOp]) -> crate::capacity::PendingCreates {
+    let mut c = crate::capacity::PendingCreates::default();
+    for op in ops {
+        if let ImportOp::Create { position, .. } = op {
+            if *position == 4 {
+                c.goalies += 1;
+            } else {
+                c.skaters += 1;
+            }
+        }
+    }
+    c
+}
+
 /// The display name for a person-season (human-readable surfaces).
 fn person_full_name(ps: &PersonSeason) -> String {
     match (ps.first_name.trim(), ps.last_name.trim()) {

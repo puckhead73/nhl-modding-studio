@@ -110,9 +110,15 @@ export function RosterBuilderPage() {
                 {doPreview.isPending ? "Previewing…" : "Preview"}
               </Button>
               <Button
-                disabled={!preview || preview.blocked > 0 || doCommit.isPending}
+                disabled={!preview || preview.blocked > 0 || preview.capacity_blocked || doCommit.isPending}
                 onClick={() => doCommit.mutate()}
-                title={preview && preview.blocked > 0 ? "Resolve blockers before committing" : undefined}
+                title={
+                  preview && preview.blocked > 0
+                    ? "Resolve blockers before committing"
+                    : preview && preview.capacity_blocked
+                      ? "The roster would exceed its capacity — free space or split the import"
+                      : undefined
+                }
               >
                 {doCommit.isPending ? "Committing…" : "Commit"}
               </Button>
@@ -344,8 +350,63 @@ function PreviewPanel({
         </p>
       )}
 
+      <CapacityBars capacity={preview.capacity} blocked={preview.capacity_blocked} />
       <AuditSummary audit={preview.audit} />
     </Card>
+  );
+}
+
+/** The S4 storage gate — a bar per roster table the cart adds to, current+adding vs the vanilla
+ *  ceiling. Only tables the cart touches are shown; an overflowing one is flagged (Commit is blocked).
+ *  Unenforced ceilings (unknown title on a packed file) render without a blocker. */
+function CapacityBars({
+  capacity,
+  blocked,
+}: {
+  capacity: ChangeSetPreviewDto["capacity"];
+  blocked: boolean;
+}) {
+  const rows = capacity.filter((c) => c.adding > 0);
+  if (rows.length === 0) return null;
+  return (
+    <div className="mt-3">
+      <div className="mb-1 flex items-center gap-2 text-[11px] uppercase tracking-wide text-slate-500">
+        Roster capacity
+        {blocked && <Pill tone="error">over capacity</Pill>}
+      </div>
+      <div className="space-y-1">
+        {rows.map((c) => {
+          const after = c.current + c.adding;
+          const pct = c.ceiling > 0 ? Math.min(100, (after / c.ceiling) * 100) : 0;
+          const basePct = c.ceiling > 0 ? Math.min(100, (c.current / c.ceiling) * 100) : 0;
+          return (
+            <div key={c.table} className="flex items-center gap-2 text-xs">
+              <span className="w-32 shrink-0 text-slate-400" title={c.table}>
+                {c.label}
+              </span>
+              <div className="relative h-2 flex-1 overflow-hidden rounded-full bg-slate-800">
+                <div
+                  className={"absolute inset-y-0 left-0 " + (c.over ? "bg-rose-500/80" : "bg-sky-600/70")}
+                  style={{ width: `${pct}%` }}
+                />
+                <div className="absolute inset-y-0 left-0 bg-slate-500/50" style={{ width: `${basePct}%` }} />
+              </div>
+              <span
+                className={
+                  "w-28 shrink-0 text-right tabular-nums " + (c.over ? "text-rose-300" : "text-slate-500")
+                }
+              >
+                {after.toLocaleString()} / {c.ceiling.toLocaleString()}
+                {!c.enforced && " *"}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+      {rows.some((c) => !c.enforced) && (
+        <p className="mt-1 text-[11px] text-slate-500">* ceiling unknown for this title — not enforced.</p>
+      )}
+    </div>
   );
 }
 

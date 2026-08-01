@@ -1011,11 +1011,17 @@ impl Registry {
                     .collect();
                 let blocked = lowered.items.iter().filter(|i| !i.lowered()).count();
 
+                // S4 ceiling gate: project each roster table's fill after the cart's creates.
+                let capacity = ws.roster_capacity(studio_domain::count_creates(&lowered.ops))?;
+                let capacity_blocked = capacity.iter().any(|c| c.over);
+
                 Ok(ChangeSetPreviewDto {
                     items: rows,
                     players_before: preview.players_before,
                     players_after: preview.players_after,
                     blocked,
+                    capacity: capacity.iter().map(convert::table_capacity_dto).collect(),
+                    capacity_blocked,
                     audit: convert::report_dto(&preview.audit),
                     skipped_fields: preview.skipped.iter().map(|s| s.field.clone()).collect(),
                 })
@@ -1043,6 +1049,18 @@ impl Registry {
             self.with_workspace(id, |ws| {
                 let lowered = ws.lower_change_set(corpus, &items, &profile, &maxima)?;
                 let target = ws.primary_path().to_string();
+
+                // Refuse an over-capacity write — the game rejects a save past the vanilla ceiling, and
+                // the write path would grow past it silently (S4). Preview surfaces this first.
+                let capacity = ws.roster_capacity(studio_domain::count_creates(&lowered.ops))?;
+                if let Some(full) = capacity.iter().find(|c| c.over) {
+                    return Err(ApiError::Workspace(format!(
+                        "roster capacity exceeded: {} would reach {} of {} — free space or split the import",
+                        full.label,
+                        full.current + full.adding,
+                        full.ceiling
+                    )));
+                }
                 let outcome = ws.commit_import(&lowered.ops)?;
 
                 // Ledger each item that produced an op (best-effort — advisory only).

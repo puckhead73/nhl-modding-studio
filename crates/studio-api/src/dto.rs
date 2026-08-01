@@ -1418,9 +1418,24 @@ pub struct ImportItemResultDto {
     pub lowered: bool,
 }
 
+/// One roster table's projected fill vs its vanilla ceiling after the cart's creates (the S4 storage
+/// gate). `label` is the human surface; `table` is the raw canonical id for progressive disclosure.
+#[derive(Serialize, TS)]
+pub struct TableCapacityDto {
+    pub table: String,
+    pub label: String,
+    pub current: u32,
+    pub ceiling: u32,
+    pub adding: u32,
+    /// `current + adding > ceiling` — this table would overflow (a storage blocker).
+    pub over: bool,
+    /// Whether the ceiling is reliable enough to block on (false ⇒ shown, never blocks).
+    pub enforced: bool,
+}
+
 /// The dry-run result of a whole cart (preview): per-item rows, the player-count delta, the audit over
-/// the previewed state, and the blocker count. Commit re-runs the identical lowered ops, so what
-/// preview shows is what commit writes.
+/// the previewed state, the capacity projection, and the blocker count. Commit re-runs the identical
+/// lowered ops, so what preview shows is what commit writes.
 #[derive(Serialize, TS)]
 pub struct ChangeSetPreviewDto {
     pub items: Vec<ImportItemResultDto>,
@@ -1431,6 +1446,10 @@ pub struct ChangeSetPreviewDto {
     /// Cart items that could not lower — a blocker; the FE disables Commit while `> 0`.
     #[ts(type = "number")]
     pub blocked: usize,
+    /// Per-table roster capacity after the cart's creates (the S4 ceiling gate).
+    pub capacity: Vec<TableCapacityDto>,
+    /// `true` when any enforced table would overflow — Commit is disabled.
+    pub capacity_blocked: bool,
     /// The four db-only audit predicates over the previewed state, resolved to human text.
     pub audit: IntegrityReportDto,
     /// Every field dropped across the cart (out of range / absent on this title).
