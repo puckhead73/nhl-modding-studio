@@ -568,3 +568,175 @@ pub fn person_season_from_corpus(
         ratings,
     }))
 }
+
+// ---------------------------------------------------------------------------
+// Cart orchestration: ImportChangeSet → lowered ops (Phase 5.2b-next)
+// ---------------------------------------------------------------------------
+
+/// The identity a cart item resolves to: create a brand-new EA player, or update one already in the
+/// project (matched via [`EaSlugIndex::match_player`]). The two lower to different ops — Create
+/// allocates a cluster; Match writes over the existing records with **no allocation**.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum ImportIdentity {
+    /// Allocate a new player cluster on the item's `target_team_id`.
+    CreateNew,
+    /// Update the existing EA player with this `wBIz` (no allocation, keeps its current team).
+    Match(u64),
+}
+
+/// One line of a Roster Builder cart: a corpus person-season aimed at an EA team, with the
+/// create-vs-match decision and an optional jersey override. `profile`/`maxima` are supplied to
+/// [`lower_change_set`] once for the whole cart (a per-item profile is a Phase 5.4 concern).
+#[derive(Clone, Debug)]
+pub struct ImportItem {
+    pub person_id: i64,
+    pub season_year: i64,
+    /// The EA team the created player lands on. Advisory for `Match` (which keeps the player's team).
+    pub target_team_id: u64,
+    pub identity: ImportIdentity,
+    /// Overrides the person-season's jersey number when `Some`.
+    pub jersey: Option<i64>,
+}
+
+/// What lowering did with one cart item — drives the preview's per-item rows. Human-readable
+/// surfaces: `full_name` is resolved; raw ids ride along for power users.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum ItemOutcome {
+    /// Lowered to an `ImportOp::Create` on `target_team_id`.
+    Created,
+    /// Lowered to an `ImportOp::Update` over EA player `wBIz`.
+    Matched(u64),
+    /// The person id is not in the corpus — nothing lowered for this item.
+    PersonMissing,
+    /// A `Match` item pointed at an EA player id absent from the project — nothing lowered.
+    NoSuchPlayer(u64),
+    /// The project's bio table is missing (a malformed target) — nothing lowered.
+    NoBioTable,
+}
+
+/// The per-item trail of a lowered cart: which person/season/target, the resolved name, the outcome,
+/// and any fields this item had to skip. One entry per input [`ImportItem`], in cart order.
+#[derive(Clone, Debug)]
+pub struct LoweredItem {
+    pub person_id: i64,
+    pub season_year: i64,
+    pub target_team_id: u64,
+    pub full_name: String,
+    pub outcome: ItemOutcome,
+    pub skipped: Vec<SkippedField>,
+}
+
+impl LoweredItem {
+    /// True when this item produced an encoded op (i.e. it will appear in a preview/commit).
+    pub fn lowered(&self) -> bool {
+        matches!(self.outcome, ItemOutcome::Created | ItemOutcome::Matched(_))
+    }
+}
+
+/// A whole cart lowered against the open project: the encoded ops (in cart order, only for items that
+/// lowered), the merged skip report, and the per-item trail. Preview and commit both consume `ops`,
+/// so lowering **once** and feeding the same `ops` to both keeps them byte-identical (the pipeline's
+/// headline invariant). Items that could not lower (missing person, unknown match) carry a failing
+/// [`ItemOutcome`] and contribute **no** op — a caller gates commit on `blocked()`.
+#[derive(Clone, Debug, Default)]
+pub struct LoweredChangeSet {
+    pub ops: Vec<ImportOp>,
+    pub skipped: Vec<SkippedField>,
+    pub items: Vec<LoweredItem>,
+}
+
+impl LoweredChangeSet {
+    /// The items that failed to lower (a blocker: commit should be disabled until the cart is fixed).
+    pub fn blocked(&self) -> impl Iterator<Item = &LoweredItem> {
+        self.items.iter().filter(|i| !i.lowered())
+    }
+
+    /// True when at least one cart item failed to lower.
+    pub fn has_blockers(&self) -> bool {
+        self.blocked().next().is_some()
+    }
+}
+
+/// The display name for a person-season (human-readable surfaces).
+fn person_full_name(ps: &PersonSeason) -> String {
+    match (ps.first_name.trim(), ps.last_name.trim()) {
+        ("", l) => l.to_string(),
+        (f, "") => f.to_string(),
+        (f, l) => format!("{f} {l}"),
+    }
+}
+
+/// Lower a whole cart of [`ImportItem`]s into encoded ops against the open project — the single seam
+/// the Roster Builder drives. Each item is resolved through the corpus adapter
+/// ([`person_season_from_corpus`]) then lowered by [`lower_create`] (CreateNew) or [`lower_update`]
+/// (Match); the ops accumulate in cart order and the per-item trail records every outcome and skip.
+///
+/// One `profile`/`maxima` pair covers the whole cart (a per-item profile is Phase 5.4). Items that
+/// cannot lower — person absent from the corpus, a `Match` at an unknown id — do **not** abort the
+/// lowering; they carry a failing [`ItemOutcome`] and add no op, so the preview can show them as
+/// blockers. Returns the merged [`LoweredChangeSet`] ready for `preview_import`/`commit_import`.
+#[allow(clippy::too_many_arguments)]
+pub fn lower_change_set(
+    corpus: &crate::historical::FhmCorpus,
+    items: &[ImportItem],
+    profile: &tdb_formula::FormulaProfile,
+    maxima: &tdb_fhm_store::AttributeMaxima,
+    db: &TdbFile,
+    meta: &FieldMetaIndex,
+    enums: &EnumRegistry,
+) -> Result<LoweredChangeSet, crate::FhmError> {
+    let mut out = LoweredChangeSet::default();
+
+    for item in items {
+        // Resolve the corpus person-season (applying the cart's jersey override).
+        let ps = match person_season_from_corpus(
+            corpus, item.person_id, item.season_year, profile, maxima, db, meta,
+        )? {
+            Some(mut ps) => {
+                if item.jersey.is_some() {
+                    ps.jersey = item.jersey;
+                }
+                ps
+            }
+            None => {
+                out.items.push(LoweredItem {
+                    person_id: item.person_id,
+                    season_year: item.season_year,
+                    target_team_id: item.target_team_id,
+                    full_name: String::new(),
+                    outcome: ItemOutcome::PersonMissing,
+                    skipped: Vec::new(),
+                });
+                continue;
+            }
+        };
+        let full_name = person_full_name(&ps);
+
+        // Lower per the identity decision; record the outcome + merge the item's skips.
+        let (outcome, op, skipped) = match item.identity {
+            ImportIdentity::CreateNew => match lower_create(db, meta, enums, &ps, item.target_team_id) {
+                Some((op, sk)) => (ItemOutcome::Created, Some(op), sk),
+                None => (ItemOutcome::NoBioTable, None, Vec::new()),
+            },
+            ImportIdentity::Match(id) => match lower_update(db, meta, enums, &ps, id) {
+                Some((op, sk)) => (ItemOutcome::Matched(id), Some(op), sk),
+                None => (ItemOutcome::NoSuchPlayer(id), None, Vec::new()),
+            },
+        };
+
+        if let Some(op) = op {
+            out.ops.push(op);
+            out.skipped.extend(skipped.iter().cloned());
+        }
+        out.items.push(LoweredItem {
+            person_id: item.person_id,
+            season_year: item.season_year,
+            target_team_id: item.target_team_id,
+            full_name,
+            outcome,
+            skipped,
+        });
+    }
+
+    Ok(out)
+}

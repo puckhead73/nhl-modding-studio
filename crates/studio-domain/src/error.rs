@@ -28,6 +28,8 @@ pub enum DomainError {
     Sync(String),
     /// Big-archive extraction failed (no archives found, or every archive failed to parse).
     Extract(String),
+    /// A read against the FHM historical corpus failed (query error / schema mismatch).
+    Corpus(tdb_fhm_store::FhmError),
 }
 
 impl fmt::Display for DomainError {
@@ -49,6 +51,7 @@ impl fmt::Display for DomainError {
             DomainError::Edit(e) => write!(f, "{e}"),
             DomainError::Sync(msg) => write!(f, "{msg}"),
             DomainError::Extract(msg) => write!(f, "{msg}"),
+            DomainError::Corpus(e) => write!(f, "{e}"),
         }
     }
 }
@@ -84,3 +87,4 @@ from_impl!(Enums, tdb_enums::EnumError);
 from_impl!(Relations, tdb_relations::RelationError);
 from_impl!(Save, tdb_savedata::SaveError);
 from_impl!(Edit, tdb_edit::EditError);
+from_impl!(Corpus, tdb_fhm_store::FhmError);

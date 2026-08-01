@@ -3352,6 +3352,7 @@ name = "studio-domain"
 version = "0.0.0"
 dependencies = [
  "image",
+ "rusqlite",
  "serde",
  "serde_json",
  "tdb-archive-big",

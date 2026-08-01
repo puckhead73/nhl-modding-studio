@@ -605,6 +605,31 @@ impl EditSession {
         self.apply_import(ops)
     }
 
+    /// Lower a whole Roster Builder **cart** against the working state — the corpus→EA orchestration
+    /// (Phase 5.2b). Resolves each [`ImportItem`](crate::import::ImportItem) through the corpus adapter
+    /// and lowers it to an encoded op; returns the [`LoweredChangeSet`](crate::import::LoweredChangeSet)
+    /// whose `ops` feed [`preview_import`](Self::preview_import) then [`commit_import`](Self::commit_import).
+    /// Lowering **once** and passing the same `ops` to both keeps preview and commit byte-identical.
+    /// This is the first read that bridges the EA project and the FHM corpus.
+    pub fn lower_change_set(
+        &self,
+        corpus: &crate::historical::FhmCorpus,
+        items: &[crate::import::ImportItem],
+        profile: &tdb_formula::FormulaProfile,
+        maxima: &tdb_fhm_store::AttributeMaxima,
+    ) -> Result<crate::import::LoweredChangeSet> {
+        let db = TdbFile::parse(&self.working)?;
+        Ok(crate::import::lower_change_set(
+            corpus,
+            items,
+            profile,
+            maxima,
+            &db,
+            self.project.meta(),
+            self.project.enums(),
+        )?)
+    }
+
     /// Clone an existing player onto a team (deep-copy of bio + companions); returns the new `wBIz`.
     pub fn clone_player(&mut self, source_player: u64, to_team: u64) -> Result<(u64, OpOutcome)> {
         self.run(|tx| tx.clone_player(source_player, to_team))
