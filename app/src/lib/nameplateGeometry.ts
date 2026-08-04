@@ -44,9 +44,17 @@ export interface NameplateZone {
   /** Current top-left position in texture pixels (where it repaints). */
   x: number;
   y: number;
-  /** Uniform scale applied to the stamp on repaint (1 = original size). Footprint = (w*scale, h*scale). */
-  scale: number;
+  /** Independent horizontal / vertical scale applied to the stamp on repaint (1 = original size).
+   *  Footprint = (w*scaleX, h*scaleY). Split per-axis so the operator can reshape a zone's rectangle
+   *  freely — the auto-detected bbox is a rectangle, but curved/irregular templates (e.g. Colorado's
+   *  arched name strip) need the name and number rects sized independently, not one uniform scale. */
+  scaleX: number;
+  scaleY: number;
 }
+
+/** A resize grip on a zone's rectangle: the four corners + four edge midpoints (compass points). */
+export type ResizeHandle = "nw" | "n" | "ne" | "e" | "se" | "s" | "sw" | "w";
+export const RESIZE_HANDLES: ResizeHandle[] = ["nw", "n", "ne", "e", "se", "s", "sw", "w"];
 
 interface Rect {
   x: number;
@@ -205,13 +213,83 @@ export function detectZones(
     h: b.h,
     x: b.x,
     y: b.y,
-    scale: 1,
+    scaleX: 1,
+    scaleY: 1,
   }));
 }
 
 /** Scaled footprint (painted size) of a zone in texture pixels. */
 export function footprint(el: NameplateZone): { w: number; h: number } {
-  return { w: el.w * el.scale, h: el.h * el.scale };
+  return { w: el.w * el.scaleX, h: el.h * el.scaleY };
+}
+
+/** The eight resize-handle centres of a zone's footprint, in texture pixels. */
+export function handleCenters(el: NameplateZone): Record<ResizeHandle, { x: number; y: number }> {
+  const fp = footprint(el);
+  const l = el.x;
+  const t = el.y;
+  const r = el.x + fp.w;
+  const b = el.y + fp.h;
+  const cx = (l + r) / 2;
+  const cy = (t + b) / 2;
+  return {
+    nw: { x: l, y: t },
+    n: { x: cx, y: t },
+    ne: { x: r, y: t },
+    e: { x: r, y: cy },
+    se: { x: r, y: b },
+    s: { x: cx, y: b },
+    sw: { x: l, y: b },
+    w: { x: l, y: cy },
+  };
+}
+
+/** The handle whose centre is within `tol` (texture px) of the point, or null. Corners are tested
+ *  before edges so a corner grab wins the overlap. */
+export function hitHandle(
+  el: NameplateZone,
+  tx: number,
+  ty: number,
+  tol: number,
+): ResizeHandle | null {
+  const centers = handleCenters(el);
+  // Corners first (they sit at edge endpoints, so an edge test could otherwise shadow them).
+  const order: ResizeHandle[] = ["nw", "ne", "se", "sw", "n", "e", "s", "w"];
+  for (const h of order) {
+    const c = centers[h];
+    if (Math.abs(tx - c.x) <= tol && Math.abs(ty - c.y) <= tol) return h;
+  }
+  return null;
+}
+
+/** Reshape a zone by dragging `handle` to texture-space point (px, py). The opposite edge/corner is
+ *  anchored; each dragged axis keeps a minimum footprint of `min` px. Recomputes x/y + scaleX/scaleY
+ *  (the source bbox w/h stay fixed — they're the stamp crop). Pure, so it's unit-tested in isolation. */
+export function resizeZone(
+  el: NameplateZone,
+  handle: ResizeHandle,
+  px: number,
+  py: number,
+  min = 4,
+): NameplateZone {
+  const fp = footprint(el);
+  let left = el.x;
+  let top = el.y;
+  let right = el.x + fp.w;
+  let bottom = el.y + fp.h;
+  if (handle.includes("e")) right = Math.max(left + min, px);
+  if (handle.includes("w")) left = Math.min(right - min, px);
+  if (handle.includes("s")) bottom = Math.max(top + min, py);
+  if (handle.includes("n")) top = Math.min(bottom - min, py);
+  const w = right - left;
+  const h = bottom - top;
+  return {
+    ...el,
+    x: left,
+    y: top,
+    scaleX: el.w > 0 ? w / el.w : el.scaleX,
+    scaleY: el.h > 0 ? h / el.h : el.scaleY,
+  };
 }
 
 /** Clamp a zone's position so its scaled footprint stays inside the canvas. Keeps `x`/`y` as floats

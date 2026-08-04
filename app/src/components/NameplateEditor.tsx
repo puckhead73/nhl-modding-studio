@@ -18,9 +18,14 @@ import {
   clampZone,
   detectZones,
   footprint,
+  handleCenters,
+  hitHandle,
   hitTest,
   isMarkerColor,
+  RESIZE_HANDLES,
+  resizeZone,
   type NameplateZone,
+  type ResizeHandle,
 } from "../lib/nameplateGeometry";
 import { buildFontMap, type FontMap, type GlyphRect } from "../lib/fontAtlas";
 import { captainCellOf, classifyZones, layoutText, nameCellOf, numberCellOf } from "../lib/nameplateCompositor";
@@ -99,6 +104,20 @@ const ZONE_EDIT_ALPHA = 0.4;
 const REFERENCE_ALPHA = 0.6;
 const MIN_SCALE = 0.1;
 const MAX_SCALE = 8;
+/** Resize-handle square size (display px) and the grab tolerance around each (display px). */
+const HANDLE_PX = 8;
+const HANDLE_HIT = 7;
+/** CSS cursor per resize handle. */
+const HANDLE_CURSOR: Record<ResizeHandle, string> = {
+  nw: "nwse-resize",
+  se: "nwse-resize",
+  ne: "nesw-resize",
+  sw: "nesw-resize",
+  n: "ns-resize",
+  s: "ns-resize",
+  e: "ew-resize",
+  w: "ew-resize",
+};
 
 /** Load a PNG data URL into an offscreen canvas so its pixels can be read back (getImageData). */
 function loadImageToCanvas(dataUrl: string): Promise<HTMLCanvasElement> {
@@ -308,6 +327,12 @@ export function NameplateEditor({
   const bgColorRef = useRef<[number, number, number]>([255, 255, 255]);
   const atlasRef = useRef<HTMLCanvasElement | null>(null);
   const fontMapRef = useRef<FontMap | null>(null);
+  // Active pointer drag on the 2D canvas: move a zone by its body, or resize it by a handle.
+  const dragRef = useRef<
+    | { mode: "move"; id: string; startTx: number; startTy: number; origX: number; origY: number }
+    | { mode: "resize"; id: string; handle: ResizeHandle }
+    | null
+  >(null);
 
   const [dims, setDims] = useState<{ w: number; h: number } | null>(null);
   const [zones, setZones] = useState<NameplateZone[]>([]);
@@ -506,6 +531,23 @@ export function NameplateEditor({
         );
       }
     }
+
+    // Resize handles on the selected zone — drag a corner/edge to reshape its rectangle.
+    const sel = zones.find((z) => z.id === selectedId);
+    if (sel) {
+      ctx.globalAlpha = 1;
+      const centers = handleCenters(sel);
+      for (const h of RESIZE_HANDLES) {
+        const c = centers[h];
+        const hx = c.x * scale;
+        const hy = c.y * scale;
+        ctx.fillStyle = "#38bdf8";
+        ctx.fillRect(hx - HANDLE_PX / 2, hy - HANDLE_PX / 2, HANDLE_PX, HANDLE_PX);
+        ctx.strokeStyle = "#0f172a";
+        ctx.lineWidth = 1;
+        ctx.strokeRect(hx - HANDLE_PX / 2 + 0.5, hy - HANDLE_PX / 2 + 0.5, HANDLE_PX - 1, HANDLE_PX - 1);
+      }
+    }
     ctx.globalAlpha = 1;
   }, [zones, selectedId, dims, scale, ready, effType, buildRenderList]);
 
@@ -542,13 +584,75 @@ export function NameplateEditor({
     setJerseyTick((n) => n + 1);
   }, [zones, dims, ready, buildRenderList]);
 
+  // Map a pointer event to texture-space coordinates.
+  const toTexture = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    return { tx: (e.clientX - rect.left) / scale, ty: (e.clientY - rect.top) / scale };
+  };
+
   const onPointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
     if (!dims) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    const tx = (e.clientX - rect.left) / scale;
-    const ty = (e.clientY - rect.top) / scale;
+    const { tx, ty } = toTexture(e);
+    // Grab a resize handle of the already-selected zone first (handles sit on the
+    // zone edges, so they take priority over a body move / a zone underneath).
+    const sel = zones.find((z) => z.id === selectedId);
+    if (sel) {
+      const handle = hitHandle(sel, tx, ty, HANDLE_HIT / scale);
+      if (handle) {
+        dragRef.current = { mode: "resize", id: sel.id, handle };
+        e.currentTarget.setPointerCapture(e.pointerId);
+        return;
+      }
+    }
+    // Otherwise select + start moving the topmost zone under the pointer.
     const hit = hitTest(zones, tx, ty);
-    if (hit) setSelectedId(hit.id);
+    if (hit) {
+      setSelectedId(hit.id);
+      dragRef.current = { mode: "move", id: hit.id, startTx: tx, startTy: ty, origX: hit.x, origY: hit.y };
+      e.currentTarget.setPointerCapture(e.pointerId);
+    }
+  };
+
+  const onPointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    if (!dims) return;
+    const { tx, ty } = toTexture(e);
+    const drag = dragRef.current;
+    if (!drag) {
+      // Idle hover: show a resize cursor over a selected zone's handle, a move
+      // cursor over a zone body, else the default pointer.
+      const sel = zones.find((z) => z.id === selectedId);
+      const handle = sel ? hitHandle(sel, tx, ty, HANDLE_HIT / scale) : null;
+      e.currentTarget.style.cursor = handle
+        ? HANDLE_CURSOR[handle]
+        : hitTest(zones, tx, ty)
+          ? "move"
+          : "pointer";
+      return;
+    }
+    setZones((prev) =>
+      prev.map((el) => {
+        if (el.id !== drag.id) return el;
+        if (drag.mode === "move") {
+          return clampZone(
+            { ...el, x: drag.origX + (tx - drag.startTx), y: drag.origY + (ty - drag.startTy) },
+            dims.w,
+            dims.h,
+          );
+        }
+        // Resize: clamp the dragged point into the canvas (anchored edge stays put,
+        // so the footprint can't leave the sheet) and reshape.
+        const cx = Math.max(0, Math.min(dims.w, tx));
+        const cy = Math.max(0, Math.min(dims.h, ty));
+        return resizeZone(el, drag.handle, cx, cy);
+      }),
+    );
+  };
+
+  const onPointerUp = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    if (dragRef.current) {
+      e.currentTarget.releasePointerCapture?.(e.pointerId);
+      dragRef.current = null;
+    }
   };
 
   const mutateSelected = useCallback(
@@ -565,11 +669,15 @@ export function NameplateEditor({
     (dx: number, dy: number) => mutateSelected((el) => ({ ...el, x: el.x + dx, y: el.y + dy })),
     [mutateSelected],
   );
+  const clampScale = (v: number) => Math.max(MIN_SCALE, Math.min(MAX_SCALE, v));
+  // Uniform resize (both axes) — keeps the ± buttons / +- keys as a quick overall
+  // grow/shrink; per-axis reshaping is done by dragging the zone's edge handles.
   const resize = useCallback(
     (factor: number) =>
       mutateSelected((el) => ({
         ...el,
-        scale: Math.max(MIN_SCALE, Math.min(MAX_SCALE, el.scale * factor)),
+        scaleX: clampScale(el.scaleX * factor),
+        scaleY: clampScale(el.scaleY * factor),
       })),
     [mutateSelected],
   );
@@ -665,10 +773,10 @@ export function NameplateEditor({
           <div>
             <h2 className="text-base font-semibold text-slate-100">Name / number / patch locations</h2>
             <p className="mt-0.5 text-[11px] text-slate-400">
-              {label} · select a zone (click it or the list), then nudge with the arrow keys (Shift =
-              10px) and resize with +/−. Zones show at {Math.round(ZONE_EDIT_ALPHA * 100)}% over the
-              jersey body for reference. Save repaints them onto a fresh sheet (keeps a{" "}
-              <code>.bak</code>).
+              {label} · select a zone (click it or the list), then drag it to move or drag its edge
+              handles to reshape it (arrow keys nudge, Shift = 10px; +/− resize). Zones show at{" "}
+              {Math.round(ZONE_EDIT_ALPHA * 100)}% over the jersey body for reference. Save repaints
+              them onto a fresh sheet (keeps a <code>.bak</code>).
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -709,6 +817,9 @@ export function NameplateEditor({
                 <canvas
                   ref={displayRef}
                   onPointerDown={onPointerDown}
+                  onPointerMove={onPointerMove}
+                  onPointerUp={onPointerUp}
+                  onPointerCancel={onPointerUp}
                   style={{ imageRendering: "pixelated", touchAction: "none", cursor: "pointer" }}
                 />
               </div>
@@ -854,7 +965,14 @@ export function NameplateEditor({
 
             <div>
               <div className="mb-1 text-[10px] uppercase tracking-wider text-slate-500">
-                Size {selected ? `(${Math.round(selected.scale * 100)}%)` : ""}
+                Size{" "}
+                {selected ? (
+                  <span className="font-mono normal-case tracking-normal text-slate-400">
+                    {Math.round(footprint(selected).w)} × {Math.round(footprint(selected).h)} px
+                  </span>
+                ) : (
+                  ""
+                )}
               </div>
               <div className="flex gap-1">
                 <button
@@ -874,6 +992,10 @@ export function NameplateEditor({
                   + Larger
                 </button>
               </div>
+              <p className="mt-1 text-[10px] leading-tight text-slate-500">
+                Drag the zone's edge/corner handles to reshape each side independently — e.g. shrink an
+                arched name strip off the number area.
+              </p>
             </div>
 
             <button
