@@ -2,7 +2,7 @@
 // a LIVE canvas texture (the jersey colour map + the player's name/number
 // composited at the zone UVs), so dragging a zone updates the wrap in real time.
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
@@ -68,6 +68,15 @@ export function NameplateJersey3D({
   const geoms = useMemo(() => submeshes.map(buildGeometry), [submeshes]);
   useEffect(() => () => geoms.forEach((g) => g.dispose()), [geoms]);
 
+  // Flipping `map` from undefined (texture not ready on first mount) to a real
+  // texture changes the compiled shader; three only recompiles when the material
+  // is flagged, which R3F doesn't do for the `map` prop alone. Without this the
+  // jersey renders white until a remount (the old off/on-toggle workaround).
+  const matRefs = useRef<(THREE.MeshStandardMaterial | null)[]>([]);
+  useEffect(() => {
+    for (const m of matRefs.current) if (m) m.needsUpdate = true;
+  }, [texture]);
+
   const dist = span * 2.2;
   return (
     <Canvas
@@ -86,6 +95,9 @@ export function NameplateJersey3D({
       {geoms.map((g, i) => (
         <mesh key={i} geometry={g}>
           <meshStandardMaterial
+            ref={(m) => {
+              matRefs.current[i] = m;
+            }}
             map={texture ?? undefined}
             color="#ffffff"
             side={THREE.DoubleSide}
