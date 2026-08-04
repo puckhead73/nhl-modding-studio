@@ -714,18 +714,37 @@ impl Registry {
                 .collect();
             let outfits = studio_domain::list_team_outfits(&rendering, &teams, team_id);
             let kit_texture = |piece: &str| -> Vec<String> {
-                // Prefer a texture whose file name carries this kit's (style,
-                // variant); fall back to any texture for the piece so an
-                // unmatched token still dresses the body rather than leaving it
-                // bare. Nameplate sheets are excluded — they're not colorways.
+                // Pick the piece's colour-map *diffuse* for this kit's (style,
+                // variant). The `sock` folder mixes real colorways
+                // (`sock_<set>_<team>_<variant>_cm`) with the sock **mesh's** own
+                // maps (`playersock_*_am` / `goaliesock_*_am`) — those sort ahead
+                // alphabetically and their `set_variant` tokens can collide with a
+                // (style, variant) match, so a naive first-match binds a grey alpha
+                // map and the sock renders white. Restrict to genuine diffuses
+                // (a `texlib_` bundle carries its `_cm` raster internally; loose
+                // rasters must be a `_cm` colour map) and prefer the kit-matched one.
+                // Nameplate sheets are excluded — they're not colorways.
                 let of_piece: Vec<&studio_domain::OutfitTexture> = outfits
                     .iter()
                     .filter(|t| t.piece == piece && !t.is_nameplate)
                     .collect();
-                let matched = of_piece
+                let diffuses: Vec<&&studio_domain::OutfitTexture> =
+                    of_piece.iter().filter(|t| is_colorway_diffuse(&t.file_name)).collect();
+                // 1) kit-matched diffuse, 2) any diffuse, 3) kit-matched of any
+                // kind, 4) first entry — so a title that names things differently
+                // (e.g. PS4 GNFs) still dresses the body rather than going bare.
+                let matched = diffuses
                     .iter()
                     .find(|t| outfit_matches_kit(&t.file_name, style, variant))
-                    .or_else(|| of_piece.first());
+                    .or_else(|| diffuses.first())
+                    .map(|t| **t)
+                    .or_else(|| {
+                        of_piece
+                            .iter()
+                            .find(|t| outfit_matches_kit(&t.file_name, style, variant))
+                            .or_else(|| of_piece.first())
+                            .copied()
+                    });
                 matched
                     .map(|t| vec![t.abs_path.to_string_lossy().into_owned()])
                     .unwrap_or_default()
@@ -2036,6 +2055,25 @@ pub fn parse_role(s: &str) -> Result<ProjectRole, ApiError> {
 /// outfit files are `PREFIX_{style}_{team}_…_{variant}[_cm].rx2`; drop the
 /// prefix word and any `_cm`, then style is the first number and variant the
 /// last — the same parse the Uniforms tab uses to group textures into kits.
+/// True when `file_name` is a genuine outfit **colour-map diffuse** — a
+/// `texlib_*` bundle (jersey/pant, whose `_cm` raster is chosen internally) or a
+/// loose `_cm` colour map (socks) — and not a mesh shape/alpha companion
+/// (`playersock_*` / `goaliesock_*`, or a `_am`/`_nm`/`_sm`/`_rm`/`_dm` map).
+/// Used to keep the kit preview from binding a sock mesh's grey alpha map instead
+/// of the team colorway (which renders the sock white).
+fn is_colorway_diffuse(file_name: &str) -> bool {
+    let n = file_name.to_ascii_lowercase();
+    let stem = n
+        .strip_suffix(".rx2")
+        .or_else(|| n.strip_suffix(".gnf"))
+        .unwrap_or(n.as_str());
+    // Sock/goalie-sock *mesh* files carry the shape's own maps, never a colorway.
+    if stem.starts_with("playersock") || stem.starts_with("goaliesock") {
+        return false;
+    }
+    stem.starts_with("texlib_") || stem.ends_with("_cm")
+}
+
 fn outfit_matches_kit(file_name: &str, style: u32, variant: u32) -> bool {
     let stem = file_name
         .strip_suffix(".rx2")
@@ -2140,7 +2178,23 @@ fn resolve_roots(args: &AssetRootsArgsDto) -> AssetRoots {
 
 #[cfg(test)]
 mod tests {
-    use super::outfit_matches_kit;
+    use super::{is_colorway_diffuse, outfit_matches_kit};
+
+    #[test]
+    fn colorway_diffuse_excludes_sock_mesh_maps() {
+        // Real colorways: sock `_cm` colour map + jersey/pant texlib bundle.
+        assert!(is_colorway_diffuse("sock_0_0_0_cm.rx2"));
+        assert!(is_colorway_diffuse("texlib_0_24_0.rx2"));
+        // The sock mesh's own maps must never be taken as a colorway — this is
+        // what made the Ducks (team 0) socks render white: `playersock_0_0_am`
+        // matched (style 0, variant 0) and sorted ahead of `sock_0_0_0_cm`.
+        assert!(!is_colorway_diffuse("playersock_0_0_am.rx2"));
+        assert!(!is_colorway_diffuse("goaliesock_1_0_am.rx2"));
+        assert!(!is_colorway_diffuse("playersock_0_0.rx2"));
+        // Non-colour maps for a loose raster are excluded too.
+        assert!(!is_colorway_diffuse("sock_0_0_0_nm.rx2"));
+        assert!(!is_colorway_diffuse("sock_0_0_0_sm.rx2"));
+    }
 
     #[test]
     fn outfit_matches_kit_reads_style_and_variant_tokens() {
