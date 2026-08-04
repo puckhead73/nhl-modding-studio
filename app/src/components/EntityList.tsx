@@ -78,6 +78,11 @@ export function EntityList<T>({
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
   const controlled = !!onSearchChange;
 
+  // Collapse the list to a thin rail so the detail view gets the full width. Starts open on every
+  // load and auto-collapses when a row is picked (below); the rail button reopens it. Deliberately
+  // not persisted — a fresh session always begins with the list visible.
+  const [collapsed, setCollapsed] = useState(false);
+
   // Debounce the search box into the server query (via useDeferredValue) when controlled.
   useEffect(() => {
     if (onSearchChange) onSearchChange(dq);
@@ -133,12 +138,52 @@ export function EntityList<T>({
   };
   const arrow = (k: string) => (sortKey === k ? (sortDir === "asc" ? " ↑" : " ↓") : "");
 
+  if (collapsed) {
+    return (
+      <div className="flex h-full gap-4">
+        <button
+          type="button"
+          onClick={() => setCollapsed(false)}
+          title={`Show ${title}`}
+          aria-label={`Show ${title} list`}
+          className="group flex w-9 shrink-0 flex-col items-center gap-3 rounded-md border border-slate-800 bg-slate-900/40 py-2 text-slate-400 transition-colors hover:bg-slate-800/60 hover:text-slate-200"
+        >
+          <span aria-hidden className="text-sm leading-none">
+            »
+          </span>
+          <span className="text-[11px] font-semibold uppercase tracking-wide [writing-mode:vertical-rl]">
+            {title}
+          </span>
+          <span className="text-[10px] tabular-nums text-slate-600 [writing-mode:vertical-rl]">
+            {(total ?? rows.length).toLocaleString()}
+          </span>
+        </button>
+        <section className="min-w-0 flex-1 overflow-auto">
+          <Outlet />
+        </section>
+      </div>
+    );
+  }
+
   return (
     <div className="flex h-full gap-4">
       <aside className={"flex shrink-0 flex-col " + (panelWidth ?? "w-80")}>
-        <div className="mb-2 flex items-baseline justify-between">
-          <h2 className="text-sm font-semibold text-slate-100">{title}</h2>
-          <span className="text-xs text-slate-500">
+        <div className="mb-2 flex items-center justify-between gap-2">
+          <div className="flex min-w-0 items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => setCollapsed(true)}
+              title={`Hide ${title}`}
+              aria-label={`Hide ${title} list`}
+              className="shrink-0 rounded p-0.5 text-slate-500 transition-colors hover:bg-slate-800/60 hover:text-slate-200"
+            >
+              <span aria-hidden className="block text-sm leading-none">
+                «
+              </span>
+            </button>
+            <h2 className="truncate text-sm font-semibold text-slate-100">{title}</h2>
+          </div>
+          <span className="shrink-0 text-xs text-slate-500">
             {view.length.toLocaleString()} / {(total ?? rows.length).toLocaleString()}
           </span>
         </div>
@@ -190,6 +235,8 @@ export function EntityList<T>({
                 <NavLink
                   key={seg}
                   to={seg}
+                  // Picking an entity hands the width to the detail view — auto-collapse the list.
+                  onClick={() => setCollapsed(true)}
                   style={{
                     ...gridStyle,
                     position: "absolute",

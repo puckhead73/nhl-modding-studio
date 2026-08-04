@@ -11,7 +11,7 @@ use studio_domain::FieldValue;
 use crate::dto::{
     AssetExportSummaryDto, AssetRootsArgsDto, AssetRootsDto, BrowseListingDto, ExportOptionsDto,
     FileExportOptionsDto, FileExportSummaryDto, HeadPreviewDto, ImportTextureSummaryDto,
-    OutfitExportSummaryDto, PlayerAssetsDto,
+    KitPieceInputDto, KitPreviewDto, OutfitExportSummaryDto, PlayerAssetsDto,
     AddCareerSeasonDto, ArenaSummaryDto, ArenaViewDto, AutocorrectSummaryDto, CareerStatsDto,
     CreatePlayerDto, EaComputedRatingsDto, ExtractSummaryDto, FormulaCatalogDto, FormulaProfileDto,
     HistoricalCareerRatingsDto, HistoricalFiltersDto, HistoricalPersonDto, HistoricalPersonSummaryDto,
@@ -864,6 +864,21 @@ pub fn team_logo(
         .map_err(|e| e.to_string())
 }
 
+/// One team's outfit textures (jersey / pants / socks) resolved from the install art tree, for the
+/// Uniforms surface. Each entry carries an install-relative path the texture preview/replace commands
+/// take. Empty when the title ships no team-keyed outfit textures.
+#[tauri::command]
+pub fn team_outfits(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    roots: AssetRootsArgsDto,
+    team_id: u64,
+) -> CmdResult<Vec<crate::dto::OutfitTextureDto>> {
+    registry
+        .team_outfits(project_id, &roots, team_id)
+        .map_err(|e| e.to_string())
+}
+
 /// Decode a player's head mesh (by head id) for the 3D viewer.
 #[tauri::command]
 pub fn head_preview(
@@ -885,6 +900,37 @@ pub fn head_preview_paths(
 ) -> CmdResult<HeadPreviewDto> {
     registry
         .head_preview_paths(mesh_paths, texture_paths)
+        .map_err(|e| e.to_string())
+}
+
+/// Assemble a full player kit (head + helmet + jersey + gloves + pants + socks
+/// + skates) for the 3D viewer from install-relative piece paths.
+#[tauri::command]
+pub fn kit_preview_paths(
+    registry: State<'_, Registry>,
+    install_dir: String,
+    pieces: Vec<KitPieceInputDto>,
+) -> CmdResult<KitPreviewDto> {
+    registry
+        .kit_preview_paths(&install_dir, pieces)
+        .map_err(|e| e.to_string())
+}
+
+/// Assemble a team's full uniform kit (selected jersey/pants/socks colorway on
+/// the shared body + a representative player's head + glove/helmet) for the 3D
+/// viewer. `playerId` picks whose head/pose is shown; absent = top-overall.
+#[tauri::command]
+pub fn team_kit_preview(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    roots: AssetRootsArgsDto,
+    team_id: u64,
+    style: u32,
+    variant: u32,
+    player_id: Option<u64>,
+) -> CmdResult<KitPreviewDto> {
+    registry
+        .team_kit_preview(project_id, &roots, team_id, style, variant, player_id)
         .map_err(|e| e.to_string())
 }
 
@@ -953,9 +999,55 @@ pub fn import_texture(
     rel_path: String,
     source_image_path: String,
     write_backup: bool,
+    texture_index: Option<u32>,
 ) -> CmdResult<ImportTextureSummaryDto> {
     registry
-        .import_texture(&install_dir, &rel_path, &source_image_path, write_backup)
+        .import_texture(&install_dir, &rel_path, &source_image_path, write_backup, texture_index)
+        .map_err(|e| e.to_string())
+}
+
+/// Write an in-memory PNG (base64) back into the extracted texture at `rel_path` — the bytes twin of
+/// `import_texture`, for a UI-baked texture (e.g. the nameplate editor). One-time `.bak` on
+/// `write_backup`.
+#[tauri::command]
+pub fn import_texture_bytes(
+    registry: State<'_, Registry>,
+    install_dir: String,
+    rel_path: String,
+    png_base64: String,
+    write_backup: bool,
+    texture_index: Option<u32>,
+) -> CmdResult<ImportTextureSummaryDto> {
+    registry
+        .import_texture_bytes(&install_dir, &rel_path, &png_base64, write_backup, texture_index)
+        .map_err(|e| e.to_string())
+}
+
+/// Decode the current on-disk texture at `rel_path` (under `install_dir`) to a PNG data URL for the
+/// Replace preview / row thumbnail. Reports the texture's real dimensions + container; `max_edge > 0`
+/// downscales for a thumbnail (`0` = full size).
+#[tauri::command]
+pub fn texture_preview(
+    registry: State<'_, Registry>,
+    install_dir: String,
+    rel_path: String,
+    max_edge: u32,
+    texture_index: Option<u32>,
+) -> CmdResult<crate::dto::TexturePreviewDto> {
+    registry
+        .texture_preview(&install_dir, &rel_path, max_edge, texture_index)
+        .map_err(|e| e.to_string())
+}
+
+/// Decode an operator-picked source image to a PNG data URL (with its dimensions) for the Replace
+/// preview's "after" side, so a size mismatch is visible before the write.
+#[tauri::command]
+pub fn source_image_preview(
+    registry: State<'_, Registry>,
+    source_image_path: String,
+) -> CmdResult<crate::dto::TexturePreviewDto> {
+    registry
+        .source_image_preview(&source_image_path)
         .map_err(|e| e.to_string())
 }
 

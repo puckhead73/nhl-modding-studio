@@ -26,7 +26,7 @@ use crate::dto::{
     AddCareerSeasonDto, ArenaSummaryDto, ArenaViewDto, AutocorrectSummaryDto, CareerStatsDto,
     AssetExportSummaryDto, AssetRootsArgsDto, AssetRootsDto, BrowseListingDto, ExportOptionsDto,
     FileExportOptionsDto, FileExportSummaryDto, HeadPreviewDto, ImportTextureSummaryDto,
-    OutfitExportSummaryDto, PlayerAssetsDto,
+    KitPieceInputDto, KitPreviewDto, OutfitExportSummaryDto, PlayerAssetsDto,
     CreatePlayerDto, EaComputedRatingsDto, ExtractSummaryDto, FormulaCatalogDto, FormulaProfileDto,
     HistoricalCareerRatingsDto, HistoricalFiltersDto, HistoricalPersonDto, HistoricalPersonSummaryDto,
     HistoricalTeamDto, HistoricalTeamFiltersDto, HistoricalTeamFranchiseDto,
@@ -403,6 +403,7 @@ impl Registry {
         rel_path: &str,
         source_image_path: &str,
         write_backup: bool,
+        texture_index: Option<u32>,
     ) -> Result<ImportTextureSummaryDto, ApiError> {
         let target = studio_domain::resolve_install_path(Path::new(install_dir), rel_path)
             .ok_or_else(|| {
@@ -414,9 +415,14 @@ impl Registry {
             .map_err(ApiError::Domain)?;
         let file_bytes = std::fs::read(&target)
             .map_err(|e| ApiError::Workspace(format!("could not read {target_str}: {e}")))?;
-        let write =
-            studio_domain::replace_texture_in_file(file_bytes, &img.rgba, img.width, img.height)
-                .map_err(ApiError::Domain)?;
+        let write = studio_domain::replace_texture_in_file(
+            file_bytes,
+            &img.rgba,
+            img.width,
+            img.height,
+            texture_index.map(|i| i as usize),
+        )
+        .map_err(ApiError::Domain)?;
 
         let backup_path = if write_backup {
             let bak = format!("{target_str}.bak");
@@ -438,6 +444,108 @@ impl Registry {
             height: write.height,
             bytes_written: write.bytes.len() as u64,
             backup_path,
+        })
+    }
+
+    /// Write an **in-memory PNG** (base64) back into the extracted texture at `rel_path` — the bytes
+    /// twin of [`Registry::import_texture`], for a texture the UI baked on the fly (the nameplate
+    /// editor renders a fresh sheet in-canvas and hands over the PNG rather than a saved file). Same
+    /// safe-join, container dispatch, and one-time `.bak` as `import_texture`.
+    pub fn import_texture_bytes(
+        &self,
+        install_dir: &str,
+        rel_path: &str,
+        png_base64: &str,
+        write_backup: bool,
+        texture_index: Option<u32>,
+    ) -> Result<ImportTextureSummaryDto, ApiError> {
+        let target = studio_domain::resolve_install_path(Path::new(install_dir), rel_path)
+            .ok_or_else(|| ApiError::Workspace(format!("{rel_path} escapes the install root")))?;
+        let target_str = target.to_string_lossy().into_owned();
+
+        let png = BASE64
+            .decode(png_base64)
+            .map_err(|e| ApiError::Workspace(format!("invalid base64 PNG: {e}")))?;
+        let img = studio_domain::decode_source_image_bytes(&png).map_err(ApiError::Domain)?;
+        let file_bytes = std::fs::read(&target)
+            .map_err(|e| ApiError::Workspace(format!("could not read {target_str}: {e}")))?;
+        let write = studio_domain::replace_texture_in_file(
+            file_bytes,
+            &img.rgba,
+            img.width,
+            img.height,
+            texture_index.map(|i| i as usize),
+        )
+        .map_err(ApiError::Domain)?;
+
+        let backup_path = if write_backup {
+            let bak = format!("{target_str}.bak");
+            if !Path::new(&bak).exists() {
+                std::fs::copy(&target, &bak)
+                    .map_err(|e| ApiError::Workspace(format!("could not write backup {bak}: {e}")))?;
+            }
+            Some(bak)
+        } else {
+            None
+        };
+        std::fs::write(&target, &write.bytes)
+            .map_err(|e| ApiError::Workspace(format!("could not write {target_str}: {e}")))?;
+
+        Ok(ImportTextureSummaryDto {
+            target_path: target_str,
+            container: write.container.label().to_string(),
+            width: write.width,
+            height: write.height,
+            bytes_written: write.bytes.len() as u64,
+            backup_path,
+        })
+    }
+
+    /// Decode the **current** on-disk texture at `rel_path` (safe-joined under
+    /// `install_dir`) to a PNG data URL for the Replace preview — the "before"
+    /// image, and the source of the file-browser row thumbnails. Reports the
+    /// texture's own dimensions + container so the UI can flag a source that
+    /// won't fit (the write path is same-size only). `max_edge > 0` downscales for
+    /// a lightweight thumbnail (aspect preserved, never upscaled); `0` = full size.
+    pub fn texture_preview(
+        &self,
+        install_dir: &str,
+        rel_path: &str,
+        max_edge: u32,
+        texture_index: Option<u32>,
+    ) -> Result<crate::dto::TexturePreviewDto, ApiError> {
+        let target = studio_domain::resolve_install_path(Path::new(install_dir), rel_path)
+            .ok_or_else(|| ApiError::Workspace(format!("{rel_path} escapes the install root")))?;
+        let (container, img) =
+            studio_domain::decode_texture_file(&target, texture_index.map(|i| i as usize))
+                .map_err(ApiError::Domain)?;
+        // Full-size dims describe the write target; the thumbnail is only a display scale.
+        let (width, height) = (img.width, img.height);
+        let png = img.thumbnail(max_edge).to_png().map_err(ApiError::Domain)?;
+        Ok(crate::dto::TexturePreviewDto {
+            data_url: format!("data:image/png;base64,{}", BASE64.encode(&png)),
+            width,
+            height,
+            container: Some(container.label().to_string()),
+        })
+    }
+
+    /// Decode an operator-supplied source image (PNG/JPG/…) to a PNG data URL for
+    /// the Replace preview — the "after" image, shown beside the current texture
+    /// with its dimensions so a size mismatch is caught before the write.
+    pub fn source_image_preview(
+        &self,
+        source_image_path: &str,
+    ) -> Result<crate::dto::TexturePreviewDto, ApiError> {
+        let img = studio_domain::decode_source_image(Path::new(source_image_path))
+            .map_err(ApiError::Domain)?;
+        let (width, height) = (img.width, img.height);
+        let png = img.to_png().map_err(ApiError::Domain)?;
+        Ok(crate::dto::TexturePreviewDto {
+            data_url: format!("data:image/png;base64,{}", BASE64.encode(&png)),
+            width,
+            height,
+            container: None,
         })
     }
 
@@ -469,8 +577,13 @@ impl Registry {
             .into_iter()
             .map(|p| p.to_string_lossy().into_owned())
             .collect();
-        let preview =
-            studio_domain::decode_head_preview(&meshes, &texs).map_err(ApiError::Domain)?;
+        // The eye texture ships separately (common `texlib_999`), so the eye
+        // submeshes are bare without it. This id-keyed path has no player context,
+        // so the default eye colour is used (per-player eyes drive the kit preview).
+        let eye = studio_domain::decode_eye_texture(Path::new(&roots.rendering), None);
+        let extra: Vec<_> = eye.into_iter().collect();
+        let preview = studio_domain::decode_head_preview(&meshes, &texs, &extra)
+            .map_err(ApiError::Domain)?;
         Ok(convert::head_preview_dto(&preview))
     }
 
@@ -489,9 +602,234 @@ impl Registry {
             return Err(ApiError::Workspace("no head mesh path given".into()));
         }
         let meshes: Vec<PathBuf> = mesh_paths.iter().map(PathBuf::from).collect();
-        let preview = studio_domain::decode_head_preview(&meshes, &texture_paths)
+        let preview = studio_domain::decode_head_preview(&meshes, &texture_paths, &[])
             .map_err(ApiError::Domain)?;
         Ok(convert::head_preview_dto(&preview))
+    }
+
+    /// Assemble a full player **kit** for the 3D viewer from install-relative
+    /// piece paths. Each piece names its mesh and texture files as forward-slash
+    /// paths under `install_dir` (the same convention the Uniforms tab's outfit
+    /// textures use); every path is safe-joined under the root, and any piece
+    /// whose file escapes the root is rejected. Pieces are laid into one shared
+    /// bind-pose model space — see `studio_domain::kit_preview`.
+    pub fn kit_preview_paths(
+        &self,
+        install_dir: &str,
+        pieces: Vec<KitPieceInputDto>,
+    ) -> Result<KitPreviewDto, ApiError> {
+        let root = Path::new(install_dir);
+        let mut inputs = Vec::with_capacity(pieces.len());
+        for p in &pieces {
+            let mesh_path = studio_domain::resolve_install_path(root, &p.mesh_rel_path)
+                .ok_or_else(|| {
+                    ApiError::Workspace(format!("{} escapes the install root", p.mesh_rel_path))
+                })?;
+            let mut texture_paths = Vec::with_capacity(p.texture_rel_paths.len());
+            for rel in &p.texture_rel_paths {
+                let t = studio_domain::resolve_install_path(root, rel)
+                    .ok_or_else(|| ApiError::Workspace(format!("{rel} escapes the install root")))?;
+                texture_paths.push(t.to_string_lossy().into_owned());
+            }
+            inputs.push(studio_domain::KitPieceInput {
+                kind: p.kind.clone(),
+                mesh_path,
+                texture_paths,
+                prebuilt_textures: Vec::new(),
+            });
+        }
+        let preview = studio_domain::decode_kit_preview(&inputs).map_err(ApiError::Domain)?;
+        Ok(convert::kit_preview_dto(&preview))
+    }
+
+    /// Assemble a team's full uniform kit for the 3D viewer: the selected
+    /// jersey/pants/socks colorway (resolved server-side) on the shared body,
+    /// with a representative player's head, plus the high-detail glove and a
+    /// helmet. `player_id` chooses whose head is shown (the picker); when absent
+    /// the top-overall active roster player stands in. `style`/`variant` select
+    /// which of the team's kits to dress — the same tokens the Uniforms tab uses.
+    pub fn team_kit_preview(
+        &self,
+        id: u32,
+        args: &AssetRootsArgsDto,
+        team_id: u64,
+        style: u32,
+        variant: u32,
+        player_id: Option<u64>,
+    ) -> Result<KitPreviewDto, ApiError> {
+        let roots = resolve_roots(args);
+        let rendering = PathBuf::from(&roots.rendering);
+        self.with_workspace(id, |ws| {
+            // Representative player: the caller's pick, else the team's top-overall
+            // active skater (a stable, recognisable stand-in for the head/pose).
+            let roster: Vec<studio_domain::PlayerSummary> = ws
+                .display()
+                .player_summaries()?
+                .into_iter()
+                .filter(|p| p.team_id == Some(team_id))
+                .collect();
+            let chosen = player_id
+                .and_then(|pid| roster.iter().find(|p| p.player_id == pid))
+                .or_else(|| {
+                    roster
+                        .iter()
+                        .filter(|p| p.is_active != Some(false))
+                        .max_by_key(|p| p.overall.unwrap_or(-1))
+                })
+                .or_else(|| roster.first());
+
+            // The chosen player's head model id (`ubPc.pPaD`) and eye colour
+            // (`ubPc.Zufj`), read off the full player view. Absent → no head piece
+            // (the kit still assembles). The eye texture ships separately from the
+            // player texlib, so it's appended explicitly (else the eyes are bare).
+            let head_mesh = chosen.and_then(|p| {
+                let view = ws.display().player_view(p.player_id).ok()??;
+                let field = |id: &str| {
+                    view.all_fields
+                        .iter()
+                        .find(|f| f.studio_field == id)
+                        .and_then(|f| f.decoded)
+                };
+                let head_id = field("pPaD")? as u64;
+                let eye_color = field("Zufj").map(|v| v as u32);
+                let mesh = roots.mesh_path(head_id, None)?;
+                let texs = roots.texture_paths(head_id, None);
+                Some((mesh, texs, eye_color))
+            });
+
+            // The team's outfit textures, resolved as the Uniforms tab sees them,
+            // narrowed to the selected kit (by the file-name style/variant tokens).
+            let teams: Vec<studio_domain::OutfitTeam> = ws
+                .display()
+                .team_summaries()?
+                .into_iter()
+                .filter_map(|t| {
+                    let slug = convert::team_name_slug(&t.name);
+                    (!slug.is_empty()).then_some(studio_domain::OutfitTeam {
+                        team_id: t.team_id,
+                        slug,
+                        abbrev: t.abbrev,
+                    })
+                })
+                .collect();
+            let outfits = studio_domain::list_team_outfits(&rendering, &teams, team_id);
+            let kit_texture = |piece: &str| -> Vec<String> {
+                // Prefer a texture whose file name carries this kit's (style,
+                // variant); fall back to any texture for the piece so an
+                // unmatched token still dresses the body rather than leaving it
+                // bare. Nameplate sheets are excluded — they're not colorways.
+                let of_piece: Vec<&studio_domain::OutfitTexture> = outfits
+                    .iter()
+                    .filter(|t| t.piece == piece && !t.is_nameplate)
+                    .collect();
+                let matched = of_piece
+                    .iter()
+                    .find(|t| outfit_matches_kit(&t.file_name, style, variant))
+                    .or_else(|| of_piece.first());
+                matched
+                    .map(|t| vec![t.abs_path.to_string_lossy().into_owned()])
+                    .unwrap_or_default()
+            };
+
+            let meshes = studio_domain::kit_mesh_defaults(&rendering);
+
+            // Glove/helmet diffuses are *composited* from their zone masks painted
+            // with the team's `hHbv` zone colours (there are no flat glove/helmet
+            // textures on disk). Skates carry no zone type, so they take a plain
+            // texlib diffuse from the skate folder.
+            let equipment = ws.display().team_equipment(team_id)?;
+            // Link equipment to the kit: prefer the glove/helmet record whose
+            // variant matches this kit's variant, falling back to the first of its
+            // type. Keeps the previewed glove/helmet colours in step with the
+            // kit-linked equipment cards shown in the Uniforms tab.
+            let zones_of = |type_raw: u32| -> Option<(u32, Vec<[u8; 3]>)> {
+                let of_type: Vec<_> =
+                    equipment.iter().filter(|e| e.equipment_type_raw == type_raw).collect();
+                let rec = of_type
+                    .iter()
+                    .find(|e| e.variant_raw == variant)
+                    .or_else(|| of_type.first())?;
+                Some((
+                    rec.brand_raw,
+                    rec.zones.iter().map(|z| [z.red, z.green, z.blue]).collect(),
+                ))
+            };
+
+            let glove_tex = zones_of(5).and_then(|(brand, zones)| {
+                let (masks, detail) = resolve_glove_masks(&rendering.join("glove"), brand);
+                studio_domain::composite_equipment_texture(
+                    &masks,
+                    detail.as_deref(),
+                    &zones,
+                    "glove_cm",
+                    None, // gloves: unpainted pixels stay transparent (ref app)
+                )
+            });
+            let helmet_tex = zones_of(8).and_then(|(_brand, zones)| {
+                let (style, variant) = meshes.helmet.as_deref().and_then(helmet_style_variant)?;
+                let hdir = rendering.join("helmet");
+                let mask = hdir.join(format!("helmet_0_{style}_tm.rx2"));
+                let masks: Vec<PathBuf> = mask.is_file().then_some(mask).into_iter().collect();
+                let detail = hdir.join(format!("helmet_0_{style}_{variant}_dm.rx2"));
+                let detail = detail.is_file().then_some(detail);
+                studio_domain::composite_equipment_texture(
+                    &masks,
+                    detail.as_deref(),
+                    &zones,
+                    "helmet_cm",
+                    zones.first().copied(), // helmet: main colour as the background
+                )
+            });
+            // Skate diffuse: the first texlib in the skate folder (per-player skate
+            // texturing needs a skate-id map not yet built — a later pass).
+            let skate_tex: Vec<String> = first_skate_texlib(&rendering.join("skate"))
+                .map(|p| vec![p.to_string_lossy().into_owned()])
+                .unwrap_or_default();
+
+            let mut pieces: Vec<studio_domain::KitPieceInput> = Vec::new();
+            let mut push = |kind: &str,
+                            mesh: Option<PathBuf>,
+                            textures: Vec<String>,
+                            prebuilt: Vec<studio_domain::PreviewTexture>| {
+                if let Some(mesh_path) = mesh {
+                    pieces.push(studio_domain::KitPieceInput {
+                        kind: kind.to_string(),
+                        mesh_path,
+                        texture_paths: textures,
+                        prebuilt_textures: prebuilt,
+                    });
+                }
+            };
+            // Legs up: skates, socks, pants, jersey (the colorway pieces), then the
+            // representative head, and the shared glove/helmet shapes with their
+            // composited zone-colour diffuses.
+            push("skates", meshes.skate.clone(), skate_tex, Vec::new());
+            push("socks", meshes.sock.clone(), kit_texture("sock"), Vec::new());
+            push("pants", meshes.pant.clone(), kit_texture("pant"), Vec::new());
+            push("jersey", meshes.jersey.clone(), kit_texture("jersey"), Vec::new());
+            if let Some((mesh, texs, eye_color)) = head_mesh {
+                // The player's eye texture (eyes_{Zufj}_cm from the common library),
+                // added as a prebuilt texture so the eye submeshes bind it.
+                let eye = studio_domain::decode_eye_texture(&rendering, eye_color);
+                push(
+                    "head",
+                    Some(mesh),
+                    texs.into_iter().map(|p| p.to_string_lossy().into_owned()).collect(),
+                    eye.into_iter().collect(),
+                );
+            }
+            push("gloves", meshes.glove.clone(), Vec::new(), glove_tex.into_iter().collect());
+            push("helmet", meshes.helmet.clone(), Vec::new(), helmet_tex.into_iter().collect());
+
+            if pieces.is_empty() {
+                return Err(ApiError::Workspace(
+                    "no kit pieces could be resolved for this team in the install's rendering tree"
+                        .into(),
+                ));
+            }
+            let preview = studio_domain::decode_kit_preview(&pieces).map_err(ApiError::Domain)?;
+            Ok(convert::kit_preview_dto(&preview))
+        })
     }
 
     /// Drop a workspace, freeing its working bytes. Returns `false` if it was not registered.
@@ -701,6 +1039,52 @@ impl Registry {
             };
             let png = img.cropped_to_opaque(0).to_png().map_err(ApiError::Domain)?;
             Ok(Some(format!("data:image/png;base64,{}", BASE64.encode(&png))))
+        })
+    }
+
+    /// One team's outfit textures (jersey / pants / socks) for the Uniforms surface. Resolves the
+    /// full roster to derive the title's team-id token position, lists this team's texture files
+    /// server-side, and maps each to an install-relative path the preview/replace commands take
+    /// (entries outside the install root are dropped — they can't be safely written). `Vec::new()`
+    /// when this title ships no team-keyed outfit textures (or the project has no install tree).
+    pub fn team_outfits(
+        &self,
+        id: u32,
+        args: &AssetRootsArgsDto,
+        team_id: u64,
+    ) -> Result<Vec<crate::dto::OutfitTextureDto>, ApiError> {
+        let roots = resolve_roots(args);
+        let install_dir = PathBuf::from(&args.install_dir);
+        self.with_workspace(id, |ws| {
+            // Full resolved roster — the team-id token position is derived across all teams.
+            let teams: Vec<studio_domain::OutfitTeam> = ws
+                .display()
+                .team_summaries()?
+                .into_iter()
+                .filter_map(|t| {
+                    let slug = convert::team_name_slug(&t.name);
+                    (!slug.is_empty()).then_some(studio_domain::OutfitTeam {
+                        team_id: t.team_id,
+                        slug,
+                        abbrev: t.abbrev,
+                    })
+                })
+                .collect();
+            let dtos = studio_domain::list_team_outfits(Path::new(&roots.rendering), &teams, team_id)
+                .into_iter()
+                .filter_map(|t| {
+                    let rel = t.abs_path.strip_prefix(&install_dir).ok()?;
+                    Some(crate::dto::OutfitTextureDto {
+                        rel_path: rel.to_string_lossy().replace('\\', "/"),
+                        texture_index: t.texture_index,
+                        piece: t.piece,
+                        label: t.label,
+                        file_name: t.file_name,
+                        is_nameplate: t.is_nameplate,
+                    })
+                })
+                .collect();
+            Ok(dtos)
         })
     }
 
@@ -1648,6 +2032,100 @@ pub fn parse_role(s: &str) -> Result<ProjectRole, ApiError> {
 /// The platform drives the on-disk layout (RenderWare `rendering/`+`fe/` vs the
 /// PS4 kettle tree). A missing/unrecognized platform string decodes as Xbox —
 /// the pre-PS4 behavior — so older callers keep working.
+/// Does an outfit texture file name belong to the kit `(style, variant)`? The
+/// outfit files are `PREFIX_{style}_{team}_…_{variant}[_cm].rx2`; drop the
+/// prefix word and any `_cm`, then style is the first number and variant the
+/// last — the same parse the Uniforms tab uses to group textures into kits.
+fn outfit_matches_kit(file_name: &str, style: u32, variant: u32) -> bool {
+    let stem = file_name
+        .strip_suffix(".rx2")
+        .or_else(|| file_name.strip_suffix(".RX2"))
+        .unwrap_or(file_name);
+    let stem = stem.strip_suffix("_cm").unwrap_or(stem);
+    let nums: Vec<u32> = stem
+        .split('_')
+        .skip(1) // prefix word (texlib / jersey / pant / sock / …)
+        .filter_map(|t| t.parse::<u32>().ok())
+        .collect();
+    match (nums.first(), nums.last()) {
+        (Some(&s), Some(&v)) if nums.len() >= 2 => s == style && v == variant,
+        _ => false,
+    }
+}
+
+/// Parse a helmet mesh file name `helmet_<style>_<variant>.rx2` → `(style,
+/// variant)`, so its zone mask (`helmet_0_<style>_tm`) and detail overlay
+/// (`helmet_0_<style>_<variant>_dm`) — both UV-mapped to that style — match.
+fn helmet_style_variant(mesh: &Path) -> Option<(u32, u32)> {
+    let stem = mesh.file_stem()?.to_str()?;
+    let rest = stem.strip_prefix("helmet_")?;
+    let (s, v) = rest.split_once('_')?;
+    Some((s.parse().ok()?, v.parse().ok()?))
+}
+
+/// The three zone-mask files (+ optional detail) for a glove brand:
+/// `feglove_<brand>_{0,1,2}_tm.rx2` and `feglove_<brand>_0_dm.rx2`. Falls back
+/// to the first complete mask set present when the team's brand ships none, so
+/// the glove is still painted with the team's zone colours rather than left bare.
+fn resolve_glove_masks(glove_dir: &Path, brand: u32) -> (Vec<PathBuf>, Option<PathBuf>) {
+    let set_for = |b: u32| -> Vec<PathBuf> {
+        let masks: Vec<PathBuf> = (0..3)
+            .map(|i| glove_dir.join(format!("feglove_{b}_{i}_tm.rx2")))
+            .collect();
+        if masks.iter().all(|p| p.is_file()) {
+            masks
+        } else {
+            Vec::new()
+        }
+    };
+    let mut masks = set_for(brand);
+    let mut brand = brand;
+    if masks.is_empty() {
+        // Scan for any brand with a complete `_0/_1/_2_tm` set.
+        if let Ok(rd) = std::fs::read_dir(glove_dir) {
+            let mut brands: Vec<u32> = rd
+                .filter_map(|e| e.ok())
+                .filter_map(|e| {
+                    let n = e.file_name().to_string_lossy().into_owned();
+                    n.strip_prefix("feglove_")
+                        .and_then(|r| r.split_once('_'))
+                        .filter(|(_, tail)| *tail == "0_tm.rx2")
+                        .and_then(|(b, _)| b.parse::<u32>().ok())
+                })
+                .collect();
+            brands.sort_unstable();
+            brands.dedup();
+            for b in brands {
+                let s = set_for(b);
+                if !s.is_empty() {
+                    masks = s;
+                    brand = b;
+                    break;
+                }
+            }
+        }
+    }
+    let detail = glove_dir.join(format!("feglove_{brand}_0_dm.rx2"));
+    let detail = detail.is_file().then_some(detail);
+    (masks, detail)
+}
+
+/// The first `texlib_*.rx2` (sorted) in the skate folder — a stand-in skate
+/// diffuse until per-player skate texturing is mapped.
+fn first_skate_texlib(skate_dir: &Path) -> Option<PathBuf> {
+    let mut hits: Vec<PathBuf> = std::fs::read_dir(skate_dir)
+        .ok()?
+        .filter_map(|e| e.ok().map(|e| e.path()))
+        .filter(|p| {
+            p.file_name()
+                .and_then(|s| s.to_str())
+                .is_some_and(|n| n.starts_with("texlib_") && n.to_ascii_lowercase().ends_with(".rx2"))
+        })
+        .collect();
+    hits.sort();
+    hits.into_iter().next()
+}
+
 fn resolve_roots(args: &AssetRootsArgsDto) -> AssetRoots {
     let platform = args
         .platform
@@ -1658,4 +2136,22 @@ fn resolve_roots(args: &AssetRootsArgsDto) -> AssetRoots {
         args.rendering_override.as_deref(),
         args.fe_override.as_deref(),
     )
+}
+
+#[cfg(test)]
+mod tests {
+    use super::outfit_matches_kit;
+
+    #[test]
+    fn outfit_matches_kit_reads_style_and_variant_tokens() {
+        // jersey_{style}_{team}_..._{variant}_cm.rx2 → style=first, variant=last.
+        assert!(outfit_matches_kit("jersey_0_10_2_0_0_0_cm.rx2", 0, 0));
+        assert!(outfit_matches_kit("pant_1_10_0_3.rx2", 1, 3));
+        assert!(outfit_matches_kit("playersock_2_4.rx2", 2, 4));
+        // Wrong style or variant → no match.
+        assert!(!outfit_matches_kit("jersey_1_10_2_0_0_0_cm.rx2", 0, 0));
+        assert!(!outfit_matches_kit("pant_1_10_0_3.rx2", 1, 0));
+        // Too few numeric tokens (only the team token) → no match.
+        assert!(!outfit_matches_kit("jersey_10.rx2", 10, 10));
+    }
 }

@@ -22,9 +22,13 @@ import {
   Stat,
   type Tone,
 } from "../components/primitives";
+import {
+  formatBytes,
+  TextureThumbnail,
+  useTextureReplace,
+} from "../components/TextureReplace";
 import type { BrowseEntryDto } from "../bindings/BrowseEntryDto";
 import type { FileExportSummaryDto } from "../bindings/FileExportSummaryDto";
-import type { ImportTextureSummaryDto } from "../bindings/ImportTextureSummaryDto";
 
 /** File kinds whose texture can be re-encoded and written back in place. */
 const REPLACEABLE_KINDS = new Set(["portrait", "texture"]);
@@ -48,7 +52,7 @@ export function FileBrowserPage() {
   const [copyUnrecognized, setCopyUnrecognized] = useState(false);
   const [crop, setCrop] = useState(false);
   const [summary, setSummary] = useState<FileExportSummaryDto | null>(null);
-  const [imported, setImported] = useState<ImportTextureSummaryDto | null>(null);
+  const [showThumbs, setShowThumbs] = useState(false);
 
   const listing = useQuery({
     queryKey: ["browseInstallFiles", installDir, cwd],
@@ -96,31 +100,9 @@ export function FileBrowserPage() {
     onSuccess: (s) => s && setSummary(s),
   });
 
-  // Write an edited image back into one extracted texture file. Picks the source
-  // PNG via a dialog, then dispatches server-side on the file's container.
-  const replace = useMutation({
-    mutationFn: async (relPath: string) => {
-      const src = await openDialog({
-        multiple: false,
-        directory: false,
-        title: "Choose the edited image to write into this texture",
-        filters: [{ name: "Image", extensions: ["png", "jpg", "jpeg", "bmp", "tga"] }],
-      });
-      if (typeof src !== "string") return null;
-      return call("import_texture", {
-        installDir: installDir!,
-        relPath,
-        sourceImagePath: src,
-        writeBackup: true,
-      });
-    },
-    onSuccess: (r) => {
-      if (r) {
-        setImported(r);
-        void listing.refetch(); // the on-disk size may have changed
-      }
-    },
-  });
+  // The pick → before/after preview → confirm → result flow (shared with the Team Uniforms surface).
+  // Refetch the listing after a write, since the on-disk size may have changed.
+  const replace = useTextureReplace(installDir, () => void listing.refetch());
 
   if (!installDir) {
     return (
@@ -161,27 +143,27 @@ export function FileBrowserPage() {
                   This folder is empty.
                 </div>
               ) : (
-                entries.map((e) => (
-                  <EntryRow
-                    key={e.rel_path}
-                    entry={e}
-                    checked={selected.has(e.rel_path)}
-                    onToggle={() => toggle(e.rel_path)}
-                    onOpen={e.is_dir ? () => setCwd(e.rel_path) : undefined}
-                    onReplace={
-                      !e.is_dir && e.kind && REPLACEABLE_KINDS.has(e.kind)
-                        ? () => replace.mutate(e.rel_path)
-                        : undefined
-                    }
-                    replacing={replace.isPending && replace.variables === e.rel_path}
-                  />
-                ))
+                entries.map((e) => {
+                  const replaceable = !e.is_dir && !!e.kind && REPLACEABLE_KINDS.has(e.kind);
+                  return (
+                    <EntryRow
+                      key={e.rel_path}
+                      entry={e}
+                      checked={selected.has(e.rel_path)}
+                      onToggle={() => toggle(e.rel_path)}
+                      onOpen={e.is_dir ? () => setCwd(e.rel_path) : undefined}
+                      onReplace={replaceable ? () => void replace.pick(e.rel_path, e.name) : undefined}
+                      replacing={replace.pendingRel === e.rel_path}
+                      thumb={showThumbs && replaceable ? { installDir } : undefined}
+                    />
+                  );
+                })
               )}
             </div>
           )}
 
           {entries.length > 0 ? (
-            <div className="mt-2 flex items-center gap-3 text-xs">
+            <div className="mt-2 flex flex-wrap items-center gap-3 text-xs">
               <button
                 onClick={selectAllHere}
                 className="text-sky-400 hover:text-sky-300"
@@ -190,20 +172,26 @@ export function FileBrowserPage() {
                 Select everything in this folder
               </button>
               <span className="text-slate-600">·</span>
+              <label className="flex cursor-pointer items-center gap-1.5 text-slate-400">
+                <input
+                  type="checkbox"
+                  checked={showThumbs}
+                  onChange={(ev) => setShowThumbs(ev.target.checked)}
+                />
+                Show thumbnails
+              </label>
+              <span className="text-slate-600">·</span>
               <span className="text-slate-500">
                 Portraits and textures show a <span className="text-sky-400">Replace…</span> action to
-                write an edited image back in place.
+                preview and write an edited image back in place.
               </span>
             </div>
           ) : null}
 
-          {replace.error ? (
-            <div className="mt-2">
-              <ErrorBanner title="Replace failed" message={String(replace.error)} />
-            </div>
-          ) : null}
-          {imported ? <ImportResult summary={imported} onDismiss={() => setImported(null)} /> : null}
+          {replace.result ? <div className="mt-2">{replace.result}</div> : null}
         </Card>
+
+        {replace.dialog}
 
         <Card title="Export" subtitle="What to write for the selected files.">
           <div className="space-y-4 text-sm">
@@ -292,6 +280,7 @@ function EntryRow({
   onOpen,
   onReplace,
   replacing,
+  thumb,
 }: {
   entry: BrowseEntryDto;
   checked: boolean;
@@ -299,6 +288,8 @@ function EntryRow({
   onOpen?: () => void;
   onReplace?: () => void;
   replacing?: boolean;
+  /** When set, show a decoded thumbnail of this texture in place of the file icon. */
+  thumb?: { installDir: string };
 }) {
   const kind = entry.kind ? KIND_META[entry.kind] : undefined;
   return (
@@ -311,7 +302,13 @@ function EntryRow({
         className="shrink-0"
         aria-label={`Select ${entry.name}`}
       />
-      <span className="w-5 shrink-0 text-center text-slate-500">{entry.is_dir ? "📁" : "📄"}</span>
+      {thumb ? (
+        <TextureThumbnail installDir={thumb.installDir} relPath={entry.rel_path} />
+      ) : (
+        <span className="w-5 shrink-0 text-center text-slate-500">
+          {entry.is_dir ? "📁" : "📄"}
+        </span>
+      )}
       {onOpen ? (
         <button
           onClick={onOpen}
@@ -333,9 +330,9 @@ function EntryRow({
           disabled={replacing}
           className="shrink-0 text-xs text-sky-400 hover:text-sky-300 disabled:text-slate-600"
           type="button"
-          title="Write an edited image back into this texture (keeps a .bak)"
+          title="Preview and write an edited image back into this texture (keeps a .bak)"
         >
-          {replacing ? "Replacing…" : "Replace…"}
+          Replace…
         </button>
       ) : null}
       <span className="w-20 shrink-0 text-right text-xs tabular-nums text-slate-500">
@@ -364,51 +361,6 @@ function Row({
       }
     >
       {children}
-    </div>
-  );
-}
-
-const CONTAINER_LABEL: Record<string, string> = {
-  gnf: "PS4 GNF",
-  portrait: "portrait archive",
-  texlib: "RW4 texlib",
-};
-
-function ImportResult({
-  summary,
-  onDismiss,
-}: {
-  summary: ImportTextureSummaryDto;
-  onDismiss: () => void;
-}) {
-  const name = summary.target_path.split(/[\\/]/).pop() ?? summary.target_path;
-  return (
-    <div className="mt-2 rounded-md border border-emerald-800/60 bg-emerald-950/30 p-3 text-sm">
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <p className="text-emerald-300">
-            Wrote <span className="font-medium">{name}</span> ·{" "}
-            {CONTAINER_LABEL[summary.container] ?? summary.container} · {summary.width}×
-            {summary.height} · {formatBytes(summary.bytes_written)}
-          </p>
-          {summary.backup_path ? (
-            <p className="mt-0.5 text-xs text-slate-400">
-              Original backed up to <span className="text-slate-300">{summary.backup_path}</span>
-            </p>
-          ) : null}
-          <p className="mt-1 text-xs text-slate-500">
-            The edited file is in your extracted tree — run it back through your own repack/install
-            step to see it in-game.
-          </p>
-        </div>
-        <button
-          onClick={onDismiss}
-          className="shrink-0 text-xs text-slate-400 hover:text-slate-200"
-          type="button"
-        >
-          Dismiss
-        </button>
-      </div>
     </div>
   );
 }
@@ -472,11 +424,4 @@ function Check({
       </span>
     </label>
   );
-}
-
-function formatBytes(n: number): string {
-  if (n < 1024) return `${n} B`;
-  if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KB`;
-  if (n < 1024 * 1024 * 1024) return `${(n / 1024 / 1024).toFixed(1)} MB`;
-  return `${(n / 1024 / 1024 / 1024).toFixed(2)} GB`;
 }

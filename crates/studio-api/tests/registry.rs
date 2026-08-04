@@ -112,7 +112,7 @@ fn import_texture_writes_edited_gnf_through_registry() {
     let root = dir.to_str().unwrap();
     let src_str = src.to_str().unwrap();
     let summary = reg
-        .import_texture(root, "p9000.gnf", src_str, true)
+        .import_texture(root, "p9000.gnf", src_str, true, None)
         .expect("import_texture");
     assert_eq!(summary.container, "gnf");
     assert_eq!((summary.width, summary.height), (w, h));
@@ -125,17 +125,17 @@ fn import_texture_writes_edited_gnf_through_registry() {
 
     // A second import must not clobber the pristine `.bak`.
     let summary2 = reg
-        .import_texture(root, "p9000.gnf", src_str, true)
+        .import_texture(root, "p9000.gnf", src_str, true, None)
         .expect("second import");
     assert_eq!(summary2.backup_path.as_deref(), Some(bak.as_str()));
     assert_eq!(std::fs::read(&bak).unwrap(), gnf, "bak still the pristine original");
 
     // A path escaping the install root is refused (containment).
-    assert!(reg.import_texture(root, "../escape.gnf", src_str, false).is_err());
+    assert!(reg.import_texture(root, "../escape.gnf", src_str, false, None).is_err());
     // Missing target / missing source surface as errors, not panics.
-    assert!(reg.import_texture(root, "nope.gnf", src_str, false).is_err());
+    assert!(reg.import_texture(root, "nope.gnf", src_str, false, None).is_err());
     assert!(reg
-        .import_texture(root, "p9000.gnf", dir.join("nope.png").to_str().unwrap(), false)
+        .import_texture(root, "p9000.gnf", dir.join("nope.png").to_str().unwrap(), false, None)
         .is_err());
 
     let _ = std::fs::remove_dir_all(&dir);

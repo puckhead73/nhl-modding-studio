@@ -11,13 +11,13 @@ import { StrategiesTab } from "../components/StrategiesTab";
 import { JerseyCaptaincyTab } from "../components/JerseyCaptaincyTab";
 import { ContractsTab } from "../components/ContractsTab";
 import { DraftPicksTab } from "../components/DraftPicksTab";
-import { JerseysTab } from "../components/JerseysTab";
-import { EquipmentTab } from "../components/EquipmentTab";
+import { UniformsTab } from "../components/UniformsTab";
 import { Spinner } from "../components/primitives";
+import { useAssetRootArgs } from "../lib/project";
 import { useCrumbLabel } from "../lib/breadcrumbs";
 import { POS_BADGE } from "../lib/position";
 import { ratingToneClass } from "../lib/ratingColor";
-import { TEAM_TABS, visibleTabKeys } from "../lib/surfaces";
+import { isAvailable, TEAM_TABS, visibleTabKeys } from "../lib/surfaces";
 import type { TeamViewDto } from "../bindings/TeamViewDto";
 import type { PlayerSummaryDto } from "../bindings/PlayerSummaryDto";
 
@@ -27,6 +27,7 @@ import type { PlayerSummaryDto } from "../bindings/PlayerSummaryDto";
 export function TeamDetail() {
   const { id } = useParams<{ id: string }>();
   const { project } = useProject();
+  const { installDir } = useAssetRootArgs();
   const projectId = project!.project_id;
   const teamId = Number(id);
 
@@ -89,27 +90,37 @@ export function TeamDetail() {
       label: "Draft Picks",
       content: <DraftPicksTab projectId={projectId} teamId={teamId} />,
     },
-    {
-      key: "jerseys",
-      label: "Jerseys",
-      content: <JerseysTab projectId={projectId} teamId={teamId} />,
-    },
-    {
-      key: "equipment",
-      label: "Equipment",
-      content: <EquipmentTab projectId={projectId} teamId={teamId} />,
-    },
+    // Equipment (glove/helmet zone colors) now lives inside the Uniforms tab — its
+    // standalone subtab was removed.
   ];
+
+  // Uniforms is the merged jersey/uniform surface: the `xjgw` jersey-registry metadata editor plus the
+  // per-kit textures from the extracted art tree (this replaces the old Jerseys tab). Shown when the
+  // schema carries the jersey registry OR the project has an install tree with uniform art.
+  if (installDir || isAvailable(project!.surfaces?.jerseys)) {
+    tabs.push({
+      key: "uniforms",
+      label: "Uniforms",
+      content: <UniformsTab projectId={projectId} teamId={teamId} />,
+      // The kit view uses the whole window width (preview · equipment · textures).
+      fullBleed: true,
+    });
+  }
 
   // Gate the tab strip on the probed surface contract: a title that ships no strategy sheet, no
   // jersey/equipment tables, or no draft-pick assets omits those tabs entirely (rather than showing
   // a tab that empties out on click). Roster-driven tabs (Depth Chart / Contracts) always show.
+  // The install-tree-gated Uniforms tab is not part of the DB-surface contract, so it's kept as-is.
   const visible = visibleTabKeys(TEAM_TABS, project!.surfaces);
-  const shownTabs = tabs.filter((t) => visible.has(t.key));
+  const shownTabs = tabs.filter((t) => t.key === "uniforms" || visible.has(t.key));
 
   return (
-    <div className="max-w-6xl space-y-3">
-      <TeamHeader team={team} />
+    <div className="space-y-3">
+      {/* Header stays capped for readability; each tab decides its own width
+          (Uniforms is full-bleed, the rest cap at max-w-6xl inside DetailTabs). */}
+      <div className="max-w-6xl">
+        <TeamHeader team={team} />
+      </div>
       <DetailTabs tabs={shownTabs} />
     </div>
   );

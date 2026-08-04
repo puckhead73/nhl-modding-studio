@@ -44,11 +44,15 @@ import type { PlayerAssetsDto } from "../bindings/PlayerAssetsDto";
 import type { ExportOptionsDto } from "../bindings/ExportOptionsDto";
 import type { AssetExportSummaryDto } from "../bindings/AssetExportSummaryDto";
 import type { HeadPreviewDto } from "../bindings/HeadPreviewDto";
+import type { KitPreviewDto } from "../bindings/KitPreviewDto";
+import type { KitPieceInputDto } from "../bindings/KitPieceInputDto";
 import type { BrowseListingDto } from "../bindings/BrowseListingDto";
 import type { FileExportOptionsDto } from "../bindings/FileExportOptionsDto";
 import type { FileExportSummaryDto } from "../bindings/FileExportSummaryDto";
 import type { OutfitExportSummaryDto } from "../bindings/OutfitExportSummaryDto";
 import type { ImportTextureSummaryDto } from "../bindings/ImportTextureSummaryDto";
+import type { TexturePreviewDto } from "../bindings/TexturePreviewDto";
+import type { OutfitTextureDto } from "../bindings/OutfitTextureDto";
 import type { MatchCandidateDto } from "../bindings/MatchCandidateDto";
 import type { ImportItemDto } from "../bindings/ImportItemDto";
 import type { ChangeSetPreviewDto } from "../bindings/ChangeSetPreviewDto";
@@ -292,6 +296,12 @@ type Commands = {
   portrait_preview: { args: { path: string; crop: boolean }; ret: string };
   // Portrait framed for the bottom-anchored header tile (cropped to content + lowest solid row).
   portrait_header_preview: { args: { path: string }; ret: string };
+  // A team's outfit textures (jersey/pants/socks) resolved from the install art tree; empty when the
+  // title ships none. Each entry's `rel_path` feeds texture_preview / import_texture.
+  team_outfits: {
+    args: { projectId: number; roots: AssetRootsArgsDto; teamId: number };
+    ret: OutfitTextureDto[];
+  };
   // The team's logo as a cropped PNG data URL for the header, or null when the title ships no logo.
   team_logo: {
     args: { projectId: number; roots: AssetRootsArgsDto; teamId: number };
@@ -306,6 +316,25 @@ type Commands = {
   head_preview_paths: {
     args: { meshPaths: string[]; texturePaths: string[] };
     ret: HeadPreviewDto;
+  };
+  // Assemble a full player kit (head + helmet + jersey + gloves + pants + socks
+  // + skates) for the 3D viewer from install-relative piece paths.
+  kit_preview_paths: {
+    args: { installDir: string; pieces: KitPieceInputDto[] };
+    ret: KitPreviewDto;
+  };
+  // Assemble a team's full kit (selected colorway + representative player head +
+  // glove/helmet) for the 3D viewer. playerId picks the head; absent = top-overall.
+  team_kit_preview: {
+    args: {
+      projectId: number;
+      roots: AssetRootsArgsDto;
+      teamId: number;
+      style: number;
+      variant: number;
+      playerId?: number | null;
+    };
+    ret: KitPreviewDto;
   };
   // `bioRecords: []` exports every scanned player.
   export_assets: {
@@ -351,8 +380,34 @@ type Commands = {
       relPath: string;
       sourceImagePath: string;
       writeBackup: boolean;
+      // Raster within a multi-texture texlib (jersey body vs. number font); omit for the primary.
+      textureIndex?: number;
     };
     ret: ImportTextureSummaryDto;
+  };
+  // Write an in-memory PNG (base64) back into an extracted texture — the bytes twin of import_texture,
+  // for a UI-baked texture (the nameplate editor). Writes a one-time `.bak` when `writeBackup` is set.
+  import_texture_bytes: {
+    args: {
+      installDir: string;
+      relPath: string;
+      pngBase64: string;
+      writeBackup: boolean;
+      textureIndex?: number;
+    };
+    ret: ImportTextureSummaryDto;
+  };
+  // Decode the current on-disk texture (the Replace "before" / a row thumbnail). `maxEdge > 0`
+  // downscales for a thumbnail; `0` = full size. `textureIndex` targets one raster of a texlib
+  // bundle (jersey body vs. font); omit for the auto-picked colour map. Reports dims + container.
+  texture_preview: {
+    args: { installDir: string; relPath: string; maxEdge: number; textureIndex?: number };
+    ret: TexturePreviewDto;
+  };
+  // Decode an operator-picked source image (the Replace "after") to a PNG data URL + dims.
+  source_image_preview: {
+    args: { sourceImagePath: string };
+    ret: TexturePreviewDto;
   };
 };
 

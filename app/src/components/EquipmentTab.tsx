@@ -138,7 +138,7 @@ export function EquipmentTab({ projectId, teamId }: { projectId: number; teamId:
   );
 }
 
-function EquipmentDetail({ projectId, record }: { projectId: number; record: TeamEquipmentDto }) {
+export function EquipmentDetail({ projectId, record }: { projectId: number; record: TeamEquipmentDto }) {
   const qc = useQueryClient();
   const { update } = useProject();
   const mut = useMutation({

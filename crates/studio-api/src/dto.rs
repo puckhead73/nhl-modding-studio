@@ -1376,6 +1376,39 @@ pub struct ImportTextureSummaryDto {
     pub backup_path: Option<String>,
 }
 
+/// One of a team's outfit textures (jersey / pants / socks) resolved from the install's art tree,
+/// for the per-team Uniforms surface. `rel_path` is the install-relative file-browser path the
+/// texture preview + replace commands take.
+#[derive(Serialize, TS)]
+pub struct OutfitTextureDto {
+    pub rel_path: String,
+    /// The raster within `rel_path` this entry refers to (a jersey texlib bundle exposes its body and
+    /// its number `font` as separate entries) — passed to the preview/replace commands.
+    pub texture_index: u32,
+    /// `"jersey"`, `"font"`, `"pant"`, `"sock"`, or `"name"` (a nameplate sheet).
+    pub piece: String,
+    /// Human-readable descriptor (piece + set/variant/map), team-scoped so the raw id is dropped.
+    pub label: String,
+    /// The raw on-disk file name, kept for a details tooltip (progressive disclosure).
+    pub file_name: String,
+    /// A `name_*` nameplate template (marker zones for name/number/patch positions) rather than a
+    /// paintable texture — the UI offers the location editor instead of a plain image replace.
+    pub is_nameplate: bool,
+}
+
+/// A decoded texture preview for the Replace flow: the current on-disk texture (the "before"),
+/// a picked source image (the "after"), or a small list-row thumbnail. `data_url` is a
+/// ready-to-render `data:image/png;base64,…`.
+#[derive(Serialize, TS)]
+pub struct TexturePreviewDto {
+    pub data_url: String,
+    pub width: u32,
+    pub height: u32,
+    /// The container the texture decoded from — `"gnf"`, `"portrait"`, or `"texlib"` — or `null`
+    /// for an operator-supplied source image (which isn't a game container).
+    pub container: Option<String>,
+}
+
 // ---------------------------------------------------------------- head preview
 
 /// One decoded texlib raster for the head viewer (RGBA8, base64).
@@ -1413,6 +1446,41 @@ pub struct HeadPreviewDto {
     pub span: f32,
     pub source_path: String,
     pub lenient_rig: bool,
+}
+
+// ---------------------------------------------------------------- kit preview
+
+/// One assembled uniform piece for the full-kit viewer: its submeshes (material
+/// indices point into `KitPreviewDto::textures`) plus provenance. `kind` drives
+/// the piece's toggle grouping; `label` is what the toggle shows.
+#[derive(Serialize, TS)]
+pub struct KitPieceDto {
+    pub kind: String,
+    pub label: String,
+    pub source_path: String,
+    pub submeshes: Vec<PreviewSubmeshDto>,
+}
+
+/// A full player kit decoded for the 3D viewer: every piece (head, helmet,
+/// jersey, gloves, pants, socks, skates) assembled in the shared bind-pose model
+/// space, a pooled texture set the submeshes reference, and camera framing over
+/// the whole figure.
+#[derive(Serialize, TS)]
+pub struct KitPreviewDto {
+    pub pieces: Vec<KitPieceDto>,
+    pub textures: Vec<PreviewTextureDto>,
+    pub center: [f32; 3],
+    pub span: f32,
+}
+
+/// One piece the caller asks the viewer to assemble: its kind, the mesh file
+/// (install-relative), and the texlib/raster files (install-relative) that
+/// texture it.
+#[derive(Deserialize, TS)]
+pub struct KitPieceInputDto {
+    pub kind: String,
+    pub mesh_rel_path: String,
+    pub texture_rel_paths: Vec<String>,
 }
 
 // ---------------------------------------------------------------- roster builder (Phase 5.4)

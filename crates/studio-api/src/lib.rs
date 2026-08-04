@@ -104,12 +104,18 @@ macro_rules! command_handler {
             $crate::commands::portrait_preview,
             $crate::commands::head_preview,
             $crate::commands::head_preview_paths,
+            $crate::commands::kit_preview_paths,
+            $crate::commands::team_kit_preview,
             $crate::commands::export_assets,
             $crate::commands::browse_install_files,
             $crate::commands::export_install_files,
             $crate::commands::export_team_outfits,
             $crate::commands::import_texture,
+            $crate::commands::import_texture_bytes,
+            $crate::commands::texture_preview,
+            $crate::commands::source_image_preview,
             $crate::commands::team_logo,
+            $crate::commands::team_outfits,
             $crate::commands::portrait_header_preview,
         ]
     };
@@ -140,7 +146,11 @@ mod bindings {
         FileExportSummaryDto::export_all().expect("export FileExportSummaryDto");
         OutfitExportSummaryDto::export_all().expect("export OutfitExportSummaryDto");
         ImportTextureSummaryDto::export_all().expect("export ImportTextureSummaryDto");
+        TexturePreviewDto::export_all().expect("export TexturePreviewDto");
+        OutfitTextureDto::export_all().expect("export OutfitTextureDto");
         HeadPreviewDto::export_all().expect("export HeadPreviewDto + deps");
+        KitPreviewDto::export_all().expect("export KitPreviewDto + deps");
+        KitPieceInputDto::export_all().expect("export KitPieceInputDto");
         IntegrityReportDto::export_all().expect("export IntegrityReportDto + deps");
         AutocorrectSummaryDto::export_all().expect("export AutocorrectSummaryDto + deps");
         RepairBlocksSummaryDto::export_all().expect("export RepairBlocksSummaryDto");

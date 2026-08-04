@@ -20,7 +20,8 @@ use crate::dto::{
     EntityFieldProfileDto, EnumOptionDto, EquipmentZoneDto, ExportOptionsDto, ExtractSummaryDto,
     FieldCellDto, FieldSectionDto, FieldViewDto, FileExportOptionsDto, FileExportSummaryDto,
     FindingDto, HeadPreviewDto, ImportItemResultDto, InstallReportDto, IntegrityReportDto,
-    LineEntryDto, LinesViewDto, MatchCandidateDto, OpOutcomeDto, OutfitExportSummaryDto,
+    KitPieceDto, KitPreviewDto, LineEntryDto, LinesViewDto, MatchCandidateDto, OpOutcomeDto,
+    OutfitExportSummaryDto,
     PlayerAssetsDto, PlayerAttributesDto, PlayerDataDto, PlayerHeaderDto, PlayerSummaryDto,
     PlayerViewDto, PreviewSubmeshDto, PreviewTextureDto, ProjectSummaryDto, RosterMembershipDto,
     SaveSlotDto, SlotFieldDto, StrategyCellDto, SurfaceCapabilitiesDto, SurfaceCapabilityDto,
@@ -1372,6 +1373,48 @@ pub fn head_preview_dto(p: &HeadPreview) -> HeadPreviewDto {
         span: p.span,
         source_path: p.source_path.clone(),
         lenient_rig: p.lenient_rig,
+    }
+}
+
+/// Map a decoded [`PreviewSubmesh`] to its DTO (shared by head + kit previews).
+fn preview_submesh_dto(s: &studio_domain::PreviewSubmesh) -> PreviewSubmeshDto {
+    PreviewSubmeshDto {
+        name: s.name.clone(),
+        positions: s.positions.clone(),
+        normals: s.normals.clone(),
+        uv1: s.uv1.clone(),
+        triangles: s.triangles.clone(),
+        material_index: s.material_index,
+        transparent: s.transparent,
+        render_order: s.render_order,
+    }
+}
+
+/// Map a decoded [`PreviewTexture`] to its DTO (shared by head + kit previews).
+fn preview_texture_dto(t: &studio_domain::PreviewTexture) -> PreviewTextureDto {
+    PreviewTextureDto {
+        name: t.name.clone(),
+        width: t.width,
+        height: t.height,
+        rgba_base64: t.rgba_base64.clone(),
+    }
+}
+
+pub fn kit_preview_dto(p: &studio_domain::KitPreview) -> KitPreviewDto {
+    KitPreviewDto {
+        pieces: p
+            .pieces
+            .iter()
+            .map(|piece| KitPieceDto {
+                kind: piece.kind.clone(),
+                label: piece.label.clone(),
+                source_path: piece.source_path.clone(),
+                submeshes: piece.submeshes.iter().map(preview_submesh_dto).collect(),
+            })
+            .collect(),
+        textures: p.textures.iter().map(preview_texture_dto).collect(),
+        center: p.center,
+        span: p.span,
     }
 }
 

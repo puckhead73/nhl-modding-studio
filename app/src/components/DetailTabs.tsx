@@ -1,6 +1,14 @@
 import { useState, type ReactNode } from "react";
 
-export type DetailTab = { key: string; label: string; badge?: ReactNode; content: ReactNode };
+export type DetailTab = {
+  key: string;
+  label: string;
+  badge?: ReactNode;
+  content: ReactNode;
+  /** Render this tab's content edge-to-edge (no max-width cap) — for wide,
+   *  space-hungry surfaces like the Uniforms kit view. */
+  fullBleed?: boolean;
+};
 
 /// A local subtab strip for a detail pane (Player / Team / Arena). State is component-local — detail
 /// subtabs are a within-record view switch, not app navigation, so they stay out of the URL.
@@ -37,7 +45,13 @@ export function DetailTabs({ tabs, initial }: { tabs: DetailTab[]; initial?: str
           );
         })}
       </div>
-      <div className="pt-3">{current?.content}</div>
+      <div className="pt-3">
+        {current?.fullBleed ? (
+          current.content
+        ) : (
+          <div className="max-w-6xl">{current?.content}</div>
+        )}
+      </div>
     </div>
   );
 }

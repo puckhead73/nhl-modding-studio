@@ -25,8 +25,10 @@ pub mod discovery;
 pub mod extract;
 pub mod field_profile;
 pub mod formula;
+pub mod equipment_texture;
 pub mod head_preview;
 pub mod historical;
+pub mod kit_preview;
 pub mod import;
 pub mod surfaces;
 mod error;
@@ -39,15 +41,23 @@ mod view;
 mod workspace;
 
 pub use assets::{
-    browse_asset_dir, decode_portrait, decode_source_image, decode_team_logo, export_asset_files,
-    export_player_assets, export_team_outfits, mark_generic_portraits, probe_birthdate_encoding,
+    browse_asset_dir, decode_portrait, decode_source_image, decode_source_image_bytes,
+    decode_team_logo, decode_texture_file, export_asset_files,
+    export_player_assets, export_team_outfits, list_team_outfits, mark_generic_portraits,
+    probe_birthdate_encoding,
     replace_gnf_texture, replace_portrait_texture, replace_texlib_texture, replace_texture_in_file,
     resolve_install_path, scan_player_assets, AssetExportSummary, AssetKind, AssetRoots,
     BirthdateEncoding, BrowseEntry,
     BrowseListing, DecodedImage, ExportOptions, FileExportOptions, FileExportSummary,
-    OutfitExportSummary, OutfitTeam, PlayerAssets, TextureContainer, TextureWrite,
+    OutfitExportSummary, OutfitTeam, OutfitTexture, PlayerAssets, TextureContainer, TextureWrite,
 };
-pub use head_preview::{decode_head_preview, HeadPreview, PreviewSubmesh, PreviewTexture};
+pub use head_preview::{
+    decode_eye_texture, decode_head_preview, HeadPreview, PreviewSubmesh, PreviewTexture,
+};
+pub use kit_preview::{
+    decode_kit_preview, kit_mesh_defaults, KitMeshDefaults, KitPiece, KitPieceInput, KitPreview,
+};
+pub use equipment_texture::composite_equipment_texture;
 pub use attributes::{
     build_player_attributes, AttributeView, PlayerAttributes, TraitOption, TraitView,
 };

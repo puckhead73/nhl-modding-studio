@@ -1098,6 +1098,28 @@ impl DecodedImage {
             .map_err(|e| DomainError::Extract(format!("png encode failed: {e}")))?;
         Ok(out)
     }
+
+    /// Downscale so the longest edge is at most `max_edge` (aspect preserved), for
+    /// a lightweight list thumbnail. Returns `self` unchanged when already within
+    /// bounds (never upscales) or `max_edge == 0`.
+    pub fn thumbnail(self, max_edge: u32) -> DecodedImage {
+        let long = self.width.max(self.height);
+        if max_edge == 0 || long <= max_edge {
+            return self;
+        }
+        let scale = max_edge as f64 / long as f64;
+        let nw = ((self.width as f64 * scale).round() as u32).max(1);
+        let nh = ((self.height as f64 * scale).round() as u32).max(1);
+        let Some(buf) = image::RgbaImage::from_raw(self.width, self.height, self.rgba.clone()) else {
+            return self;
+        };
+        let scaled = image::imageops::thumbnail(&buf, nw, nh);
+        DecodedImage {
+            width: scaled.width(),
+            height: scaled.height(),
+            rgba: scaled.into_raw(),
+        }
+    }
 }
 
 /// One raster pulled out of a portrait archive, normalised across the container
@@ -1199,6 +1221,14 @@ pub fn decode_portrait(path: &Path) -> Result<DecodedImage> {
             rgba,
         });
     }
+    best_portrait_raster(bytes, path)
+}
+
+/// Pick and decode the largest raster out of a `BIGF` portrait/logo archive. The
+/// entries are RefPack-unwrapped and every recognised raster kind (XPR2 / DDS /
+/// RX2) is compared by area, so the "main" picture wins over any thumbnail slot.
+/// Shared by [`decode_portrait`] and [`decode_texture_file`].
+fn best_portrait_raster(bytes: Vec<u8>, path: &Path) -> Result<DecodedImage> {
     let archive = tdb_archive_big::Archive::parse(bytes)
         .map_err(|e| DomainError::Extract(format!("{}: {e}", path.display())))?;
 
@@ -1234,6 +1264,99 @@ pub fn decode_portrait(path: &Path) -> Result<DecodedImage> {
         height: raster.height,
         rgba: raster_to_rgba(&raster)?,
     })
+}
+
+/// The visible name stem of a texlib raster, dropping the `.Raster`/`.mip` tail EA appends
+/// internally (`jersey_0_10_0_cm.Raster` → `jersey_0_10_0_cm`).
+fn raster_name_stem(name: &str) -> &str {
+    name.split('.').next().unwrap_or(name)
+}
+
+/// Rank a texlib raster by how likely it is the *visible colour picture*: a colour map (`_cm`) wins,
+/// an obvious non-colour map (spec/normal/roughness/…) loses, anything else is neutral. EA's
+/// jersey/equipment texlibs bundle a colour map **and a same-size spec map**, so plain
+/// largest-by-area selection can land on the grayscale spec map (the "jersey previews as grayscale"
+/// bug). Pairing this rank ahead of area picks the colour map; ties still break on larger area.
+fn raster_colour_rank(name: &str) -> u8 {
+    match raster_name_stem(name).rsplit('_').next() {
+        Some("cm") => 2,
+        Some(t) if MAP_TOKENS.contains(&t) => 0, // sm / nm / rm / mm / am / coeff / spec / gloss
+        _ => 1,
+    }
+}
+
+/// Pick the index of a texlib's primary (visible colour) raster: colour map first, then largest.
+fn primary_raster_index(textures: &[tdb_rx2::texlib::Texture]) -> Option<usize> {
+    textures
+        .iter()
+        .enumerate()
+        .max_by_key(|(_, t)| (raster_colour_rank(&t.name), t.width as u64 * t.height as u64))
+        .map(|(i, _)| i)
+}
+
+/// Decode an extracted texture file to RGBA for preview, tagging which container
+/// it turned out to be. The read-side companion to [`replace_texture_in_file`]:
+/// it recognises the same three extracted containers, so the file browser can
+/// show a "before" image (and a row thumbnail) for anything it can also write
+/// back.
+///
+/// * `GNF ` → the PS4 Kettle texture's base mip.
+/// * `BIGF` → the largest raster in the portrait/logo archive (XPR2 / DDS slot).
+/// * `\x89RW4` → the largest raster in the RW4 texlib (logo / uniform / equipment).
+///
+/// An outer whole-file RefPack layer (NHL 08's wrapped files) is unwrapped first
+/// via [`read_asset_file`], so those decode too.
+///
+/// `texture_index` targets a specific raster inside a multi-texture RW4 texlib (a jersey bundle holds
+/// the body colour map, the number `font` map, and their spec maps) — `None` auto-picks the primary
+/// colour map. It only applies to the texlib container; GNF/portrait hold a single image.
+pub fn decode_texture_file(
+    path: &Path,
+    texture_index: Option<usize>,
+) -> Result<(TextureContainer, DecodedImage)> {
+    let bytes = read_asset_file(path)?;
+    if bytes.starts_with(tdb_rx2::gnf::MAGIC_GNF) {
+        let tex = tdb_rx2::gnf::parse(&bytes)
+            .map_err(|e| DomainError::Extract(format!("{}: {e}", path.display())))?;
+        let rgba = gnf_to_rgba(&tex)?;
+        return Ok((
+            TextureContainer::Gnf,
+            DecodedImage { width: tex.width, height: tex.height, rgba },
+        ));
+    }
+    if bytes.starts_with(b"BIGF") {
+        return Ok((TextureContainer::Portrait, best_portrait_raster(bytes, path)?));
+    }
+    if bytes.starts_with(b"\x89RW4") {
+        let lib = tdb_rx2::texlib::parse(&bytes)
+            .map_err(|e| DomainError::Extract(format!("{}: texlib parse: {e}", path.display())))?;
+        // An explicit index selects one raster (the jersey body vs. the number font); `None`
+        // auto-picks the colour map — a bundle carries a same-size grayscale spec map, so plain
+        // largest-area would show that instead of the colour.
+        let idx = match texture_index {
+            Some(i) if i < lib.textures.len() => i,
+            Some(i) => {
+                return Err(DomainError::Extract(format!(
+                    "{}: texture index {i} out of range ({} rasters)",
+                    path.display(),
+                    lib.textures.len()
+                )))
+            }
+            None => primary_raster_index(&lib.textures).ok_or_else(|| {
+                DomainError::Extract(format!("{}: texlib has no texture", path.display()))
+            })?,
+        };
+        let best = &lib.textures[idx];
+        let rgba = linear_to_rgba(best.format, best.width, best.height, &best.base_mip_linear)?;
+        return Ok((
+            TextureContainer::Texlib,
+            DecodedImage { width: best.width, height: best.height, rgba },
+        ));
+    }
+    Err(DomainError::Extract(format!(
+        "{}: unrecognized texture container (expected a GNF, a BIGF portrait archive, or an RW4 texlib)",
+        path.display()
+    )))
 }
 
 /// A pickable portrait texture slot, tagged by the platform's inner encoding.
@@ -1547,18 +1670,35 @@ pub fn replace_gnf_texture(gnf_bytes: &[u8], rgba: &[u8], w: u32, h: u32) -> Res
 /// and is out of scope here. DXT slots go through [`tdb_archive_codec::compress_bc`];
 /// an uncompressed `Argb8888` slot takes the RGBA re-ordered to the texlib's
 /// stored `[A,R,G,B]` byte layout.
-pub fn replace_texlib_texture(file_bytes: &[u8], rgba: &[u8], w: u32, h: u32) -> Result<Vec<u8>> {
+pub fn replace_texlib_texture(
+    file_bytes: &[u8],
+    rgba: &[u8],
+    w: u32,
+    h: u32,
+    texture_index: Option<usize>,
+) -> Result<Vec<u8>> {
     use tdb_rx2::texlib::PixelFormat;
 
     let lib = tdb_rx2::texlib::parse(file_bytes)
         .map_err(|e| DomainError::Extract(format!("texlib parse: {e}")))?;
-    let (idx, tw, th, tf) = lib
-        .textures
-        .iter()
-        .enumerate()
-        .max_by_key(|(_, t)| t.width as u64 * t.height as u64)
-        .map(|(i, t)| (i, t.width, t.height, t.format))
-        .ok_or_else(|| DomainError::Extract("texlib has no texture to replace".into()))?;
+    // An explicit index targets one raster (the jersey body vs. the number font); `None` targets the
+    // colour-map raster — writing into the same-size grayscale spec map would leave the jersey
+    // unchanged and corrupt its spec map. Matches the read-side pick in `decode_texture_file`.
+    let idx = match texture_index {
+        Some(i) if i < lib.textures.len() => i,
+        Some(i) => {
+            return Err(DomainError::Extract(format!(
+                "texture index {i} out of range ({} rasters)",
+                lib.textures.len()
+            )))
+        }
+        None => primary_raster_index(&lib.textures)
+            .ok_or_else(|| DomainError::Extract("texlib has no texture to replace".into()))?,
+    };
+    let (tw, th, tf) = {
+        let t = &lib.textures[idx];
+        (t.width, t.height, t.format)
+    };
     if (w, h) != (tw, th) {
         return Err(DomainError::Extract(format!(
             "texlib replace is same-size only: got {w}x{h}, slot is {tw}x{th}"
@@ -1634,7 +1774,13 @@ impl std::fmt::Debug for TextureWrite {
 /// A whole-file-RefPack container (NHL 08's wrapped `.big`) is rejected with a
 /// clear message rather than mis-parsed — the confirmed extracted trees ship
 /// these three containers unwrapped.
-pub fn replace_texture_in_file(file_bytes: Vec<u8>, rgba: &[u8], w: u32, h: u32) -> Result<TextureWrite> {
+pub fn replace_texture_in_file(
+    file_bytes: Vec<u8>,
+    rgba: &[u8],
+    w: u32,
+    h: u32,
+    texture_index: Option<usize>,
+) -> Result<TextureWrite> {
     if file_bytes.starts_with(tdb_rx2::gnf::MAGIC_GNF) {
         let bytes = replace_gnf_texture(&file_bytes, rgba, w, h)?;
         return Ok(TextureWrite { container: TextureContainer::Gnf, width: w, height: h, bytes });
@@ -1644,7 +1790,7 @@ pub fn replace_texture_in_file(file_bytes: Vec<u8>, rgba: &[u8], w: u32, h: u32)
         return Ok(TextureWrite { container: TextureContainer::Portrait, width: w, height: h, bytes });
     }
     if file_bytes.starts_with(b"\x89RW4") {
-        let bytes = replace_texlib_texture(&file_bytes, rgba, w, h)?;
+        let bytes = replace_texlib_texture(&file_bytes, rgba, w, h, texture_index)?;
         return Ok(TextureWrite { container: TextureContainer::Texlib, width: w, height: h, bytes });
     }
     if tdb_archive_codec::is_refpack(&file_bytes) {
@@ -1739,6 +1885,20 @@ pub fn decode_team_logo(roots: &AssetRoots, artid: u64) -> Option<DecodedImage> 
 pub fn decode_source_image(path: &Path) -> Result<DecodedImage> {
     let img = image::open(path)
         .map_err(|e| DomainError::Extract(format!("{}: image decode failed: {e}", path.display())))?
+        .to_rgba8();
+    Ok(DecodedImage {
+        width: img.width(),
+        height: img.height(),
+        rgba: img.into_raw(),
+    })
+}
+
+/// Decode an in-memory source image (PNG/JPG/… bytes) to RGBA8 — the bytes twin of
+/// [`decode_source_image`], for a texture the UI produced on the fly (e.g. the nameplate editor
+/// bakes a fresh PNG in-canvas and hands over the bytes rather than a path).
+pub fn decode_source_image_bytes(bytes: &[u8]) -> Result<DecodedImage> {
+    let img = image::load_from_memory(bytes)
+        .map_err(|e| DomainError::Extract(format!("image decode failed: {e}")))?
         .to_rgba8();
     Ok(DecodedImage {
         width: img.width(),
@@ -2898,9 +3058,21 @@ pub fn export_team_outfits(
 
     let by_id: HashMap<u64, &str> = teams.iter().map(|t| (t.team_id, t.slug.as_str())).collect();
 
-    // 1. Walk each outfit folder (recursively — NHL 07/08 nest a per-team subfolder), collecting the
-    //    texture files. The team-id token position varies by title, so derive it per folder from the
-    //    filenames, then match.
+    // 1. Walk each outfit folder, deriving the team-id token position per folder, collecting the work.
+    let work = collect_outfit_work(rendering_root, &by_id);
+
+    // 2. Decode + write in parallel across the cores, then merge the per-worker tallies.
+    let mut summary = run_outfit_workers(&work, |item, s| process_one_outfit(item, out_dir, s));
+    summary.teams_considered = teams.len();
+    summary.rendering_root = rendering_root.to_string_lossy().into_owned();
+    Ok(summary)
+}
+
+/// Walk the RenderWare `jersey/`/`pant/`/`sock/` folders and resolve each outfit texture to the team
+/// it belongs to. The team-id token position varies per title, so it's derived per folder from the
+/// filenames ([`derive_team_index`]) before matching. Shared by the bulk [`export_team_outfits`] and
+/// the per-team [`list_team_outfits`].
+fn collect_outfit_work(rendering_root: &Path, by_id: &HashMap<u64, &str>) -> Vec<OutfitWork> {
     let mut work: Vec<OutfitWork> = Vec::new();
     for &folder in OUTFIT_FOLDERS {
         let mut files: Vec<(PathBuf, String)> = Vec::new();
@@ -2909,7 +3081,7 @@ pub fn export_team_outfits(
             continue; // this title/platform doesn't ship the piece here
         }
         let stems: Vec<String> = files.iter().map(|(_, s)| s.clone()).collect();
-        let Some(team_idx) = derive_team_index(&stems, &by_id) else {
+        let Some(team_idx) = derive_team_index(&stems, by_id) else {
             continue; // no team-keyed position here — don't guess
         };
         for (path, stem) in files {
@@ -2917,8 +3089,7 @@ pub fn export_team_outfits(
                 continue;
             };
             // Resolve to the DB team name, or fall back to a generic `team_<id>` so entries the DB
-            // doesn't carry (special/all-star slots, ids beyond the roster) are still exported and
-            // stay distinguishable.
+            // doesn't carry (special/all-star slots, ids beyond the roster) stay distinguishable.
             let slug = by_id
                 .get(&team_id)
                 .map(|s| s.to_string())
@@ -2933,12 +3104,248 @@ pub fn export_team_outfits(
             });
         }
     }
+    work
+}
 
-    // 2. Decode + write in parallel across the cores, then merge the per-worker tallies.
-    let mut summary = run_outfit_workers(&work, |item, s| process_one_outfit(item, out_dir, s));
-    summary.teams_considered = teams.len();
-    summary.rendering_root = rendering_root.to_string_lossy().into_owned();
-    Ok(summary)
+/// One outfit texture file resolved to a team, for the per-team Uniforms surface. `abs_path` is the
+/// source file (a texlib `.rx2` or PS4 `.gnf`); the caller maps it to an install-relative path for
+/// preview/replace. `label` is a human-readable descriptor (piece + set/variant/map, team token
+/// dropped since the surface is already team-scoped) — a resolved descriptor per the
+/// human-readable-surfaces rule, not the raw id-bearing filename (kept in `file_name` for details).
+#[derive(Clone, Debug)]
+pub struct OutfitTexture {
+    pub abs_path: PathBuf,
+    /// The raster within the file this entry refers to — a jersey texlib bundle yields separate
+    /// entries for its body colour map and its number `font` map (different `texture_index`, same
+    /// file). Threaded to the preview/replace commands so each targets its own raster.
+    pub texture_index: u32,
+    /// The outfit piece: `jersey` / `font` / `pant` / `sock`, or `name` for a nameplate sheet.
+    /// Derived from the raster's own name (a jersey bundle's `font_*` raster is piece `font`), so
+    /// the body and the number font group apart.
+    pub piece: String,
+    pub label: String,
+    pub file_name: String,
+    /// A `name_*` sheet: a fully-opaque template of marker zones (name / number / patch positions),
+    /// not a paintable texture — the game reads only *where* the zones are. Drives the nameplate
+    /// (name/number/patch location) editor instead of a plain image replace.
+    pub is_nameplate: bool,
+}
+
+/// The map-suffix codes an outfit raster stem can end in, mapped to a human word for the label.
+fn outfit_map_word(stem: &str) -> Option<&'static str> {
+    match stem.rsplit('_').next()? {
+        "cm" => Some("color map"),
+        "nm" => Some("normal map"),
+        "sm" => Some("spec map"),
+        "am" => Some("alpha map"),
+        "lm" => Some("light map"),
+        _ => None,
+    }
+}
+
+/// Turn a piece + id-bearing stem into a readable, team-scoped descriptor: drop the team token and
+/// the leading piece word, translate the trailing map code, and keep the set/variant digits.
+/// `jersey_0_10_0_cm` (team 10 at idx 2) → `Jersey · set 0 · variant 0 · color map`.
+fn outfit_label(piece: &str, stem: &str, team_idx: usize, team_id: u64) -> String {
+    let mut toks: Vec<&str> = stem.split('_').collect();
+    if toks.get(team_idx).and_then(|t| t.parse::<u64>().ok()) == Some(team_id) {
+        toks.remove(team_idx);
+    }
+    // Drop a leading piece word (`jersey`/`pant`/`sock`/`texlib`) — it's the group heading already.
+    if toks
+        .first()
+        .is_some_and(|t| *t == piece || *t == "texlib")
+    {
+        toks.remove(0);
+    }
+    let map = outfit_map_word(stem);
+    if map.is_some() {
+        toks.pop(); // the map code is re-added as a word
+    }
+    let piece_title = {
+        let mut c = piece.chars();
+        c.next().map(|f| f.to_uppercase().collect::<String>() + c.as_str()).unwrap_or_default()
+    };
+    let digits = toks.join(" · ");
+    match (digits.is_empty(), map) {
+        (true, Some(m)) => format!("{piece_title} · {m}"),
+        (true, None) => piece_title,
+        (false, Some(m)) => format!("{piece_title} · {digits} · {m}"),
+        (false, None) => format!("{piece_title} · {digits}"),
+    }
+}
+
+/// List one team's outfit texture files (jersey/pants/socks — plus PS4 `font` sheets) from the
+/// install's `rendering/` tree, for the per-team Uniforms surface. Same discovery as
+/// [`export_team_outfits`] but targeted at one `team_id` and returning the source files (so the
+/// caller can preview/replace them in place) rather than decoding to PNG.
+///
+/// `teams` is the full resolved roster (needed to derive the team-id token position); the result is
+/// filtered to `team_id`. Sorted by piece then filename for a stable UI. Empty when this title ships
+/// no team-keyed outfit textures.
+pub fn list_team_outfits(
+    rendering_root: &Path,
+    teams: &[OutfitTeam],
+    team_id: u64,
+) -> Vec<OutfitTexture> {
+    // PS4 kettle layout: outfit GNFs live under `characters/player`, filename-keyed by team name.
+    let ps4_player = rendering_root.join("characters").join("player");
+    if ps4_player.is_dir() {
+        return list_ps4_team_outfits(&ps4_player, teams, team_id);
+    }
+
+    let by_id: HashMap<u64, &str> = teams.iter().map(|t| (t.team_id, t.slug.as_str())).collect();
+    let mut out: Vec<OutfitTexture> = Vec::new();
+    for w in collect_outfit_work(rendering_root, &by_id)
+        .into_iter()
+        .filter(|w| w.team_id == team_id)
+    {
+        let file_name = w
+            .path
+            .file_name()
+            .map(|n| n.to_string_lossy().into_owned())
+            .unwrap_or_else(|| w.file_stem.clone());
+        outfit_entries_for_file(&w, &file_name, &mut out);
+    }
+    out.sort_by(|a, b| {
+        (a.piece.as_str(), &a.file_name, a.texture_index)
+            .cmp(&(b.piece.as_str(), &b.file_name, b.texture_index))
+    });
+    out
+}
+
+/// Expand one outfit file into per-raster [`OutfitTexture`] entries, appended to `out`. A RW4 texlib
+/// jersey bundle yields separate entries for each of its **colour-map** rasters — the body and the
+/// number `font` — so both preview and replace independently; a `name_*` sheet or an unparseable file
+/// yields a single entry (the whole file, primary raster). Non-colour rasters (spec/normal maps) are
+/// skipped. The file is read only here (per matched team file), not during the folder scan.
+fn outfit_entries_for_file(w: &OutfitWork, file_name: &str, out: &mut Vec<OutfitTexture>) {
+    let single = |idx: u32, piece: String, is_nameplate: bool| OutfitTexture {
+        abs_path: w.path.clone(),
+        texture_index: idx,
+        label: outfit_label(&piece, &w.file_stem, w.team_idx, w.team_id),
+        piece,
+        file_name: file_name.to_string(),
+        is_nameplate,
+    };
+    // A `name_*` sheet is the nameplate template (marker zones), regardless of internal raster names.
+    if w.file_stem.starts_with("name") {
+        out.push(single(0, "name".to_string(), true));
+        return;
+    }
+    // Parse the bundle and emit one entry per raster — colour map, spec, normal and the number `font`
+    // maps alike — so every texture is exposed for replacement (not just the visible colour maps).
+    // Piece is taken from the raster's own name (`font_*` → font, `jersey_*` → jersey); the label
+    // carries the full raster stem (with its `_cm`/`_sm`/`_nm` suffix) so the map type reads clearly.
+    // Falls back to a single folder-tagged entry when the file doesn't parse as a texlib (e.g. a PS4
+    // GNF, or the empty fixtures in tests).
+    match read_asset_file(&w.path).and_then(|b| {
+        tdb_rx2::texlib::parse(&b).map_err(|e| DomainError::Extract(format!("texlib parse: {e}")))
+    }) {
+        Ok(lib) if !lib.textures.is_empty() => {
+            for (i, tex) in lib.textures.iter().enumerate() {
+                let piece = raster_piece(&tex.name, w.folder);
+                let stem = raster_name_stem(&tex.name);
+                out.push(OutfitTexture {
+                    abs_path: w.path.clone(),
+                    texture_index: i as u32,
+                    label: outfit_label(&piece, stem, w.team_idx, w.team_id),
+                    piece,
+                    file_name: file_name.to_string(),
+                    is_nameplate: false,
+                });
+            }
+        }
+        // Unparseable or empty (PS4 GNF, test fixtures) — surface a single entry so nothing drops.
+        _ => out.push(single(0, w.folder.to_string(), false)),
+    }
+}
+
+/// The outfit piece a texlib raster belongs to, from its own name (`font_0_10_0_cm` → `font`,
+/// `jersey_0_10_0_cm` → `jersey`), falling back to the containing `folder` for anything unrecognised.
+fn raster_piece(raster_name: &str, folder: &str) -> String {
+    match raster_name_stem(raster_name).split('_').next() {
+        Some("font") => "font",
+        Some("jersey") => "jersey",
+        Some("name") => "name",
+        Some("pant") => "pant",
+        Some("sock") => "sock",
+        _ => folder,
+    }
+    .to_string()
+}
+
+/// PS4 per-team outfit listing: GNFs under `characters/player`, resolved to a team by the same slug
+/// resolver the export uses. Returns the files whose resolved team matches this team's slug.
+fn list_ps4_team_outfits(
+    player_dir: &Path,
+    teams: &[OutfitTeam],
+    team_id: u64,
+) -> Vec<OutfitTexture> {
+    let Some(team) = teams.iter().find(|t| t.team_id == team_id) else {
+        return Vec::new();
+    };
+    let resolver = build_ps4_team_resolver(teams);
+    let mut out: Vec<OutfitTexture> = Vec::new();
+    let Ok(read) = std::fs::read_dir(player_dir) else {
+        return out;
+    };
+    for ent in read.flatten() {
+        let fname = ent.file_name().to_string_lossy().into_owned();
+        let Some(stem) = fname.strip_suffix(".gnf") else {
+            continue;
+        };
+        let Some(piece) = PS4_OUTFIT_TYPES
+            .iter()
+            .find(|t| stem.starts_with(&format!("{t}_")))
+            .copied()
+        else {
+            continue;
+        };
+        // The resolved output stem leads with the team slug when it matched a DB team.
+        let Some(resolved) = ps4_output_stem(stem, &resolver) else {
+            continue;
+        };
+        if !resolved.starts_with(&format!("{}_", team.slug)) {
+            continue;
+        }
+        out.push(OutfitTexture {
+            texture_index: 0, // PS4 GNFs are single-texture files
+            label: ps4_outfit_label(piece, stem, &team.slug),
+            piece: piece.to_string(),
+            file_name: fname,
+            is_nameplate: false, // PS4 font sheets are handled as textures; no nameplate zones yet
+            abs_path: ent.path(),
+        });
+    }
+    out.sort_by(|a, b| (a.piece.as_str(), &a.file_name).cmp(&(b.piece.as_str(), &b.file_name)));
+    out
+}
+
+/// PS4 label: strip the team words the resolver matched, keep era/variant/map. Falls back to the raw
+/// stem when nothing strips cleanly.
+fn ps4_outfit_label(piece: &str, stem: &str, _slug: &str) -> String {
+    let piece_title = {
+        let mut c = piece.chars();
+        c.next().map(|f| f.to_uppercase().collect::<String>() + c.as_str()).unwrap_or_default()
+    };
+    // Keep every token after the leading piece word; the team words stay (PS4 uses city names, which
+    // read fine), and the trailing map code is translated.
+    let mut toks: Vec<&str> = stem.split('_').collect();
+    if toks.first().is_some_and(|t| *t == piece) {
+        toks.remove(0);
+    }
+    let map = outfit_map_word(stem);
+    if map.is_some() {
+        toks.pop();
+    }
+    let rest = toks.join(" · ");
+    match (rest.is_empty(), map) {
+        (true, Some(m)) => format!("{piece_title} · {m}"),
+        (true, None) => piece_title,
+        (false, Some(m)) => format!("{piece_title} · {rest} · {m}"),
+        (false, None) => format!("{piece_title} · {rest}"),
+    }
 }
 
 /// Fan `work` out across the machine's cores, folding each worker's tally into one. `process` decodes
@@ -3699,6 +4106,34 @@ mod tests {
                 "identities.csv drifted — re-run with QA_WRITE=1 to regenerate"
             );
         }
+    }
+
+    /// A jersey texlib bundle exposes its body colour map and its number `font` map as **separate**
+    /// [`OutfitTexture`] entries (same file, different `texture_index`) — the per-raster listing the
+    /// Uniforms kit view rides on. Mount-gated (real NHL Legacy jersey bundle).
+    #[test]
+    fn legacy_x360_list_team_outfits_surfaces_font_raster() {
+        const ROOT: &str = r"X:\Games\Emulation\Roms\XBOX360\NHL Legacy\NHL Legacy";
+        let rendering = std::path::Path::new(ROOT).join("rendering");
+        if !rendering.is_dir() {
+            eprintln!("skipping: no mount");
+            return;
+        }
+        // The full roster is needed for the team-id token position to derive (min 4 teams).
+        let teams: Vec<OutfitTeam> = (0..40u64)
+            .map(|id| OutfitTeam {
+                team_id: id,
+                slug: if id == 10 { "detroit_red_wings".into() } else { format!("team_{id}") },
+                abbrev: format!("t{id}"),
+            })
+            .collect();
+        let got = list_team_outfits(&rendering, &teams, 10);
+        let body = got.iter().find(|o| o.piece == "jersey" && o.file_name == "texlib_0_10_0.rx2");
+        let font = got.iter().find(|o| o.piece == "font" && o.file_name == "texlib_0_10_0.rx2");
+        let body = body.expect("jersey body entry present");
+        let font = font.expect("font entry present");
+        assert_ne!(body.texture_index, font.texture_index, "body and font are distinct rasters");
+        assert!(got.iter().any(|o| o.is_nameplate), "nameplate sheet still surfaces");
     }
 
     /// Phase 5.2 (uniforms) + 5.3 (equipment) — NHL Legacy Xbox 360 texture
@@ -4521,7 +4956,7 @@ mod tests {
             h,
             &tdb_archive_codec::compress_bc(tdb_archive_codec::DdsFormat::Dxt1, w, h, &rgba),
         );
-        let out = replace_texture_in_file(gnf, &rgba, w, h).expect("GNF dispatch");
+        let out = replace_texture_in_file(gnf, &rgba, w, h, None).expect("GNF dispatch");
         assert_eq!(out.container, TextureContainer::Gnf);
         assert_eq!(out.container.label(), "gnf");
         assert!(tdb_rx2::gnf::parse(&out.bytes).is_ok(), "GNF rebuilt parses");
@@ -4534,23 +4969,92 @@ mod tests {
         builder.add_entry("apt", b"Apt Data\0".to_vec());
         builder.add_entry("p1", tdb_archive_codec::refpack_compress(&dds));
         let big = builder.build().unwrap();
-        let out = replace_texture_in_file(big, &rgba, w, h).expect("portrait dispatch");
+        let out = replace_texture_in_file(big, &rgba, w, h, None).expect("portrait dispatch");
         assert_eq!(out.container, TextureContainer::Portrait);
 
         // --- Texlib routing: `\x89RW4` magic reaches the texlib branch (parse
         // error proves the dispatch, without needing a full synthetic texlib). ---
-        let err = replace_texture_in_file(b"\x89RW4bogustexlibbytes".to_vec(), &rgba, w, h)
+        let err = replace_texture_in_file(b"\x89RW4bogustexlibbytes".to_vec(), &rgba, w, h, None)
             .unwrap_err();
         assert!(format!("{err}").contains("texlib"), "RW4 routed to texlib: {err}");
 
         // --- Whole-file RefPack rejected with a clear message. ---
         let refpacked = tdb_archive_codec::refpack_compress(b"whatever payload bytes here");
-        let err = replace_texture_in_file(refpacked, &rgba, w, h).unwrap_err();
+        let err = replace_texture_in_file(refpacked, &rgba, w, h, None).unwrap_err();
         assert!(format!("{err}").contains("RefPack"), "refpack rejected: {err}");
 
         // --- Unrecognized container. ---
-        let err = replace_texture_in_file(vec![0u8; 64], &rgba, w, h).unwrap_err();
+        let err = replace_texture_in_file(vec![0u8; 64], &rgba, w, h, None).unwrap_err();
         assert!(format!("{err}").contains("unrecognized"), "unknown rejected: {err}");
+    }
+
+    /// The read-side `decode_texture_file` must recognise the same containers as
+    /// the writer, tag which one it found, and report the texture's real
+    /// dimensions — this is what the file browser's before/after preview and row
+    /// thumbnails ride on.
+    #[test]
+    fn decode_texture_file_reads_each_container() {
+        let (w, h) = (64u32, 64u32);
+        let rgba = gradient_rgba(w, h);
+        let tmp = std::env::temp_dir().join("nhlms_decode_texture_file_test");
+        std::fs::create_dir_all(&tmp).unwrap();
+
+        // --- GNF (PS4) ---
+        let gnf = tdb_rx2::gnf::encode_gnf(
+            tdb_rx2::gnf::BcFormat::Bc1,
+            w,
+            h,
+            &tdb_archive_codec::compress_bc(tdb_archive_codec::DdsFormat::Dxt1, w, h, &rgba),
+        );
+        let gnf_path = tmp.join("t.gnf");
+        std::fs::write(&gnf_path, &gnf).unwrap();
+        let (container, img) = decode_texture_file(&gnf_path, None).expect("decode GNF");
+        assert_eq!(container, TextureContainer::Gnf);
+        assert_eq!((img.width, img.height), (w, h));
+
+        // --- Portrait (BIGF → RefPack → DDS) ---
+        let dds_blocks =
+            tdb_archive_codec::compress_bc(tdb_archive_codec::DdsFormat::Dxt5, w, h, &rgba);
+        let dds =
+            tdb_archive_codec::encode_dds(tdb_archive_codec::DdsFormat::Dxt5, w, h, 1, &dds_blocks);
+        let mut builder = tdb_archive_big::ArchiveBuilder::new();
+        builder.add_entry("apt", b"Apt Data\0".to_vec());
+        builder.add_entry("p1", tdb_archive_codec::refpack_compress(&dds));
+        let big = builder.build().unwrap();
+        let big_path = tmp.join("p1.big");
+        std::fs::write(&big_path, &big).unwrap();
+        let (container, img) = decode_texture_file(&big_path, None).expect("decode portrait");
+        assert_eq!(container, TextureContainer::Portrait);
+        assert_eq!((img.width, img.height), (w, h));
+
+        // --- Unrecognized container gives a clear error, not a panic. ---
+        let junk = tmp.join("junk.bin");
+        std::fs::write(&junk, [0u8; 64]).unwrap();
+        match decode_texture_file(&junk, None) {
+            Err(e) => assert!(format!("{e}").contains("unrecognized"), "junk rejected: {e}"),
+            Ok(_) => panic!("junk bytes should not decode as a texture"),
+        }
+
+        std::fs::remove_dir_all(&tmp).ok();
+    }
+
+    /// `thumbnail` downscales to a max longest edge (aspect preserved) and never
+    /// upscales — the row-thumbnail decode rides on this to keep data URLs small.
+    #[test]
+    fn thumbnail_downscales_longest_edge_only() {
+        let big = DecodedImage { width: 100, height: 40, rgba: vec![0u8; 100 * 40 * 4] };
+        let t = big.thumbnail(48);
+        assert_eq!(t.width, 48, "longest edge clamped to 48");
+        assert_eq!(t.height, 19, "aspect preserved (40 * 48/100 ≈ 19)");
+        assert_eq!(t.rgba.len(), 48 * 19 * 4, "buffer matches new dims");
+
+        // Already within bounds → returned unchanged (no upscale).
+        let small = DecodedImage { width: 30, height: 20, rgba: vec![1u8; 30 * 20 * 4] };
+        let same = small.thumbnail(48);
+        assert_eq!((same.width, same.height), (30, 20));
+        // max_edge 0 = full size, unchanged.
+        let full = DecodedImage { width: 80, height: 80, rgba: vec![2u8; 80 * 80 * 4] };
+        assert_eq!(full.thumbnail(0).width, 80);
     }
 
     fn player_with_portrait(record: u32, portrait_path: Option<String>) -> PlayerAssets {
@@ -4630,6 +5134,108 @@ mod tests {
             outfit_output_name("detroit_red_wings", "jersey_0_7_0_cm", 2, 10),
             "detroit_red_wings_jersey_0_7_0_cm"
         );
+    }
+
+    /// EA jersey/equipment texlibs bundle a colour map and a **same-size** grayscale spec map, so the
+    /// visible-raster pick must prefer the colour map (`_cm`) — otherwise the jersey previews/writes
+    /// as the grayscale spec map (the reported bug). This guards the ranking that
+    /// [`primary_raster_index`] pairs ahead of area (end-to-end pick verified against the real bundle:
+    /// a 1024² `_cm` tied in area with a 1024² `_sm` selects the `_cm`).
+    #[test]
+    fn colour_map_raster_outranks_same_size_spec() {
+        assert_eq!(raster_colour_rank("jersey_0_10_0_cm.Raster"), 2, "colour map ranks top");
+        assert_eq!(raster_colour_rank("jersey_0_10_0_sm.Raster"), 0, "spec map ranks bottom");
+        assert_eq!(raster_colour_rank("jersey_0_10_0_nm.Raster"), 0, "normal map ranks bottom");
+        assert_eq!(raster_colour_rank("logo_0.Raster"), 1, "unsuffixed is neutral");
+
+        // The composite selection key `primary_raster_index` maximises is `(colour_rank, area)`. At
+        // equal area the colour map must win even though the spec map is listed last (where plain
+        // max-by-area — which keeps the *last* equal max — would land).
+        let key = |name: &str, area: u64| (raster_colour_rank(name), area);
+        let sz = 1024u64 * 1024;
+        assert!(
+            key("jersey_0_10_0_cm.Raster", sz) > key("jersey_0_10_0_sm.Raster", sz),
+            "colour map beats a same-size spec map"
+        );
+        // A colour map still wins when it's the smaller of the two (real bundles ship a full-res cm).
+        assert!(key("jersey_0_10_0_cm.Raster", 512 * 512) > key("jersey_0_10_0_sm.Raster", sz));
+    }
+
+    #[test]
+    fn outfit_label_is_team_scoped_and_human() {
+        // Team token dropped (surface is already team-scoped), piece word becomes the heading, the
+        // map code becomes a word, set/variant digits stay.
+        assert_eq!(outfit_label("jersey", "jersey_0_10_0_cm", 2, 10), "Jersey · 0 · 0 · color map");
+        assert_eq!(outfit_label("pant", "pant_1_10_2_nm", 2, 10), "Pant · 1 · 2 · normal map");
+        // A texlib bundle stem: the `texlib_` lead is dropped like a piece word.
+        assert_eq!(outfit_label("jersey", "texlib_0_10_0_cm", 2, 10), "Jersey · 0 · 0 · color map");
+        // No map suffix → just piece + digits.
+        assert_eq!(outfit_label("sock", "sock_0_10_1", 2, 10), "Sock · 0 · 1");
+    }
+
+    /// `decode_source_image_bytes` (the nameplate editor's save path decodes the baked PNG) must
+    /// round-trip a PNG back to the same pixels — the bytes twin of `decode_source_image`.
+    #[test]
+    fn decode_source_image_bytes_round_trips_png() {
+        let (w, h) = (8u32, 6u32);
+        let src = DecodedImage { width: w, height: h, rgba: gradient_rgba(w, h) };
+        let png = src.to_png().expect("encode png");
+        let back = decode_source_image_bytes(&png).expect("decode png bytes");
+        assert_eq!((back.width, back.height), (w, h));
+        assert_eq!(back.rgba, src.rgba, "pixels survive the PNG round-trip");
+        // Garbage is a clean error, not a panic.
+        assert!(decode_source_image_bytes(b"not a png").is_err());
+    }
+
+    /// `list_team_outfits` scans the RenderWare `jersey/pant/sock` folders by *name only* (no decode),
+    /// derives the team-id token position across the roster, and returns just the requested team's
+    /// files, grouped-ready and human-labelled. Uses empty `.rx2` files — the scan never parses them.
+    #[test]
+    fn list_team_outfits_filters_to_one_team() {
+        let tmp = std::env::temp_dir().join("nhlms_list_team_outfits_test");
+        let _ = std::fs::remove_dir_all(&tmp);
+        // Four teams' jerseys (so the team-id token position is derivable), plus pant+sock for team 10.
+        for (folder, teams) in [
+            ("jersey", &[10u64, 11, 12, 13][..]),
+            ("pant", &[10, 11, 12, 13][..]),
+            ("sock", &[10, 11, 12, 13][..]),
+        ] {
+            let dir = tmp.join("rendering").join(folder);
+            std::fs::create_dir_all(&dir).unwrap();
+            for &t in teams {
+                std::fs::write(dir.join(format!("{folder}_0_{t}_0_cm.rx2")), b"").unwrap();
+            }
+        }
+        // A mesh-style file (bare index tail, no map suffix) must be ignored by the scan.
+        std::fs::write(tmp.join("rendering").join("jersey").join("jersey_0_10_0_0.rx2"), b"").unwrap();
+        // Nameplate sheets live in the jersey folder too, keyed the same way.
+        for t in [10u64, 11, 12, 13] {
+            std::fs::write(tmp.join("rendering").join("jersey").join(format!("name_0_{t}_0_cm.rx2")), b"").unwrap();
+        }
+
+        let teams: Vec<OutfitTeam> = [10u64, 11, 12, 13]
+            .iter()
+            .map(|&id| OutfitTeam { team_id: id, slug: format!("team_slug_{id}"), abbrev: format!("t{id}") })
+            .collect();
+
+        let got = list_team_outfits(&tmp.join("rendering"), &teams, 10);
+        // jersey + pant + sock + nameplate for team 10 (not the mesh file, not other teams).
+        assert_eq!(got.len(), 4, "team 10 outfits, got {:?}", got.iter().map(|o| &o.file_name).collect::<Vec<_>>());
+        assert!(got.iter().any(|o| o.piece == "jersey" && o.file_name == "jersey_0_10_0_cm.rx2"));
+        assert!(got.iter().any(|o| o.piece == "pant"));
+        assert!(got.iter().any(|o| o.piece == "sock"));
+        // No other team leaked in.
+        assert!(got.iter().all(|o| o.file_name.contains("_10_")));
+        // The `name_*` sheet is re-tagged as a nameplate (own piece + flag), not a paintable jersey.
+        let np = got.iter().find(|o| o.file_name == "name_0_10_0_cm.rx2").unwrap();
+        assert!(np.is_nameplate, "name_* sheet flagged as nameplate");
+        assert_eq!(np.piece, "name");
+        // Paintable jersey body is not a nameplate.
+        let jersey = got.iter().find(|o| o.piece == "jersey").unwrap();
+        assert!(!jersey.is_nameplate);
+        assert_eq!(jersey.label, "Jersey · 0 · 0 · color map");
+
+        std::fs::remove_dir_all(&tmp).ok();
     }
 
     #[test]

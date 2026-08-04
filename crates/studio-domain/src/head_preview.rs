@@ -13,12 +13,47 @@
 //! `historical_head` module (name-keyed: `hair`→hair maps, `eye`→eye maps,
 //! `mouth`→mouth/head, else head).
 
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use serde::{Deserialize, Serialize};
 
 use crate::assets::linear_to_rgba;
 use crate::{DomainError, Result};
+
+/// Decode a player's eye texture: the `eyes_{colour}_cm` raster from the shared
+/// `player_common/texlib_999.rx2` common library. The `eyel_`/`eyer_` submeshes
+/// are UV-mapped to it, but it ships **separately** from the per-player texlib,
+/// so the eyes render bare unless it's added. `eye_color` is the bio `Zufj`
+/// value (0..=6, clamped). Returned as a single [`PreviewTexture`] named
+/// `eyes_cm` so the eye submeshes bind it — decoding only the chosen raster (not
+/// the whole common library) keeps its head/hair rasters out of the pool. `None`
+/// when the library or an `eyes_*` raster is absent.
+pub fn decode_eye_texture(rendering_root: &Path, eye_color: Option<u32>) -> Option<PreviewTexture> {
+    let path = rendering_root
+        .join("player_common")
+        .join("texlib_999.rx2");
+    let bytes = crate::assets::read_asset_file(&path).ok()?;
+    let lib = tdb_rx2::texlib::parse(&bytes).ok()?;
+    let want = format!("eyes_{}_cm", eye_color.unwrap_or(0).min(6));
+    let tex = lib
+        .textures
+        .iter()
+        .find(|t| t.name.to_ascii_lowercase().contains(&want))
+        // Fall back to any `eyes_*_cm` raster if the exact colour isn't present.
+        .or_else(|| {
+            lib.textures.iter().find(|t| {
+                let n = t.name.to_ascii_lowercase();
+                n.contains("eyes_") && n.contains("_cm")
+            })
+        })?;
+    let rgba = linear_to_rgba(tex.format, tex.width, tex.height, &tex.base_mip_linear).ok()?;
+    Some(PreviewTexture {
+        name: "eyes_cm".to_string(),
+        width: tex.width,
+        height: tex.height,
+        rgba_base64: base64_encode(&rgba),
+    })
+}
 
 /// One decoded texlib raster, as RGBA8 for upload to a `DataTexture`.
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -80,12 +115,16 @@ pub struct HeadPreview {
 pub fn decode_head_preview(
     mesh_paths: &[PathBuf],
     texture_paths: &[String],
+    extra_textures: &[PreviewTexture],
 ) -> Result<HeadPreview> {
     let head_path = mesh_paths
         .first()
         .ok_or_else(|| DomainError::Extract("no head mesh path given".into()))?;
 
-    let textures = decode_textures(texture_paths);
+    // Textures decoded from files, plus any pre-decoded ones (the eye raster,
+    // pulled from the common library) — the submesh binding sees them together.
+    let mut textures = decode_textures(texture_paths);
+    textures.extend(extra_textures.iter().cloned());
 
     let mut submeshes = Vec::new();
     let mut min = [f32::MAX; 3];
@@ -167,7 +206,7 @@ pub fn decode_head_preview(
 /// Decode every raster in the given texlib containers to RGBA. A container that
 /// fails to read or parse is skipped rather than sinking the whole preview —
 /// the mesh still renders, just untextured for the affected maps.
-fn decode_textures(texture_paths: &[String]) -> Vec<PreviewTexture> {
+pub(crate) fn decode_textures(texture_paths: &[String]) -> Vec<PreviewTexture> {
     let mut out = Vec::new();
     for path in texture_paths {
         let p = std::path::Path::new(path);
@@ -229,7 +268,7 @@ fn decode_textures(texture_paths: &[String]) -> Vec<PreviewTexture> {
 /// Blend classification by submesh name, ported from the prior app: hair
 /// shells/cards are alpha-cutout and draw after the opaque head (cards after
 /// the haircap), so layered hair composites correctly.
-fn submesh_blend_mode(name: &str) -> (bool, i32) {
+pub(crate) fn submesh_blend_mode(name: &str) -> (bool, i32) {
     let n = name.to_ascii_lowercase();
     if n.contains("cards") {
         (true, 2)
@@ -245,7 +284,7 @@ fn submesh_blend_mode(name: &str) -> (bool, i32) {
 /// `pick_submesh_texture`: `hair`/`cards`→hair maps, `eye`→eye maps (no head
 /// fallback — eye UVs are authored against a standalone eye raster), `mouth`→
 /// mouth/teeth/tongue then head, else head.
-fn pick_submesh_texture(submesh_name: &str, textures: &[PreviewTexture]) -> Option<u32> {
+pub(crate) fn pick_submesh_texture(submesh_name: &str, textures: &[PreviewTexture]) -> Option<u32> {
     let n = submesh_name.to_ascii_lowercase();
     let is_eye = n.contains("eye");
     let keywords: &[&str] = if n.contains("hair") || n.contains("cards") {
@@ -283,7 +322,7 @@ fn pick_submesh_texture(submesh_name: &str, textures: &[PreviewTexture]) -> Opti
 
 /// Standard base64 (no line breaks) — the payloads cross the Tauri boundary as
 /// one string per texture. Kept local so the module has no base64 dependency.
-fn base64_encode(bytes: &[u8]) -> String {
+pub(crate) fn base64_encode(bytes: &[u8]) -> String {
     const T: &[u8; 64] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
     let mut out = String::with_capacity(bytes.len().div_ceil(3) * 4);
     for chunk in bytes.chunks(3) {
@@ -324,7 +363,7 @@ mod tests {
             return;
         }
         let preview =
-            decode_head_preview(&[PathBuf::from(path)], &[]).expect("mcd head must preview");
+            decode_head_preview(&[PathBuf::from(path)], &[], &[]).expect("mcd head must preview");
         assert!(!preview.submeshes.is_empty(), "submeshes present");
         assert!(preview.span > 0.0, "framing computed");
         // Named submeshes drive texture binding downstream.
@@ -340,6 +379,48 @@ mod tests {
                 assert!(t.iter().all(|&i| (i as usize) < s.positions.len()));
             }
         }
+    }
+
+    /// Real Legacy head: with the eye raster decoded from the common library
+    /// (`player_common/texlib_999.rx2` → `eyes_{colour}_cm`) passed as an extra
+    /// texture, the `eyel_`/`eyer_` submeshes bind it (bare without it). The eye
+    /// texture is `eyes_*` and the head map is `head_*`, so they don't cross-bind.
+    /// Mount-gated.
+    #[test]
+    fn legacy_x360_head_eyes_bind_with_eye_texture() {
+        let root = std::path::Path::new(
+            r"X:\Games\Emulation\Roms\XBOX360\NHL Legacy\NHL Legacy\rendering",
+        );
+        if !root.is_dir() {
+            eprintln!("skipping: no mount");
+            return;
+        }
+        let mesh = root.join("player").join("player_10.rx2");
+        if !mesh.is_file() {
+            eprintln!("skipping: player_10 absent");
+            return;
+        }
+        let eye = decode_eye_texture(root, Some(3)).expect("eye raster decodes from texlib_999");
+        assert_eq!(eye.name, "eyes_cm");
+        assert!(eye.width >= 32 && !eye.rgba_base64.is_empty(), "eye raster decoded");
+
+        let mut texs = Vec::new();
+        let texlib = root.join("player").join("texlib_10.rx2");
+        if texlib.is_file() {
+            texs.push(texlib.to_string_lossy().into_owned());
+        }
+        let preview =
+            decode_head_preview(&[mesh], &texs, std::slice::from_ref(&eye)).expect("head previews");
+        let eye_sm = preview
+            .submeshes
+            .iter()
+            .find(|s| s.name.to_ascii_lowercase().contains("eye"))
+            .expect("an eye submesh exists");
+        let bound = eye_sm.material_index.expect("eye submesh binds a texture (was bare before)");
+        assert_eq!(
+            preview.textures[bound as usize].name, "eyes_cm",
+            "eye binds the eye raster, not the head map"
+        );
     }
 
     fn tex(name: &str) -> PreviewTexture {
