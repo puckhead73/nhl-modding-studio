@@ -3,20 +3,13 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { call } from "../lib/client";
 import { EntityList, type Column } from "../components/EntityList";
 import { POS_BADGE } from "../lib/position";
-import { useProject } from "../lib/project";
-import { useRosterCart } from "../lib/rosterCart";
 
 type Row = {
   id: number;
   name: string;
-  firstName: string;
-  lastName: string;
   pos: string;
-  isGoalie: boolean;
   seasons: number;
   nat: string;
-  /** The person's latest logged season (the quick-add target); null when they have no season. */
-  lastYear: number | null;
 };
 
 const LIMIT = 500;
@@ -28,8 +21,6 @@ export function HistoricalPlayersPage() {
   const [search, setSearch] = useState("");
   const [posMode, setPosMode] = useState<"all" | "skaters" | "goalies">("all");
   const goalieFilter = posMode === "all" ? null : posMode === "goalies";
-  const { project } = useProject();
-  const cart = useRosterCart();
 
   const players = useQuery({
     queryKey: ["hist_players", search, goalieFilter],
@@ -40,13 +31,9 @@ export function HistoricalPlayersPage() {
   const rows: Row[] = (players.data ?? []).map((p) => ({
     id: p.person_id,
     name: `${p.last_name}, ${p.first_name}`,
-    firstName: p.first_name,
-    lastName: p.last_name,
     pos: p.position ?? (p.is_goalie ? "G" : ""),
-    isGoalie: p.is_goalie,
     seasons: p.seasons_played,
     nat: p.nationality ?? "",
-    lastYear: p.last_year,
   }));
 
   const capped = rows.length >= LIMIT;
@@ -93,49 +80,6 @@ export function HistoricalPlayersPage() {
       render: (r) => r.nat,
       cellClass: () => "text-slate-400 truncate",
     },
-    // Quick-add the player's latest season to the Roster Builder cart (only with an open project).
-    // Open the player for finer per-season control; this is the fast path for curated rosters.
-    ...(project
-      ? [
-          {
-            key: "builder",
-            label: "",
-            width: "96px",
-            render: (r: Row) => {
-              const queued = r.lastYear != null && cart.has(r.id, r.lastYear);
-              return (
-                <button
-                  type="button"
-                  disabled={r.lastYear == null || queued}
-                  onClick={(e) => {
-                    // The row is a NavLink — prevent both the anchor default and the client-side nav.
-                    e.preventDefault();
-                    e.stopPropagation();
-                    if (r.lastYear == null) return;
-                    cart.add({
-                      personId: r.id,
-                      seasonYear: r.lastYear,
-                      personName: `${r.firstName} ${r.lastName}`.trim(),
-                      seasonLabel: `${r.lastYear - 1}-${r.lastYear}`,
-                      position: r.pos || null,
-                    });
-                  }}
-                  className="rounded border border-slate-700 px-1.5 py-0.5 text-[11px] text-slate-300 hover:border-sky-600 hover:text-sky-300 disabled:cursor-default disabled:border-slate-800 disabled:text-slate-600"
-                  title={
-                    r.lastYear == null
-                      ? "No season on record"
-                      : queued
-                        ? "Already in the Roster Builder cart"
-                        : `Add ${r.lastYear - 1}-${r.lastYear} to the Roster Builder`
-                  }
-                >
-                  {queued ? "Queued" : "＋ Builder"}
-                </button>
-              );
-            },
-          } as Column<Row>,
-        ]
-      : []),
   ];
 
   return (

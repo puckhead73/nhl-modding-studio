@@ -108,6 +108,9 @@ macro_rules! command_handler {
             $crate::commands::browse_install_files,
             $crate::commands::export_install_files,
             $crate::commands::export_team_outfits,
+            $crate::commands::import_texture,
+            $crate::commands::team_logo,
+            $crate::commands::portrait_header_preview,
         ]
     };
 }
@@ -136,6 +139,7 @@ mod bindings {
         FileExportOptionsDto::export_all().expect("export FileExportOptionsDto");
         FileExportSummaryDto::export_all().expect("export FileExportSummaryDto");
         OutfitExportSummaryDto::export_all().expect("export OutfitExportSummaryDto");
+        ImportTextureSummaryDto::export_all().expect("export ImportTextureSummaryDto");
         HeadPreviewDto::export_all().expect("export HeadPreviewDto + deps");
         IntegrityReportDto::export_all().expect("export IntegrityReportDto + deps");
         AutocorrectSummaryDto::export_all().expect("export AutocorrectSummaryDto + deps");

@@ -60,6 +60,41 @@ pub struct CapabilitiesDto {
     pub main_team_offset: u8,
 }
 
+/// One database surface's availability verdict (Phase 1 presentation-capability contract). `state`
+/// is one of `not-applicable` | `readable` | `editable` | `disabled` | `unverified`; `reason` carries
+/// the human explanation for the non-plain states. Drives the UI's omit/disable/caution decisions per
+/// tab, so an absent feature is never rendered as an empty tab a user can't tell from a bug.
+#[derive(Serialize, TS)]
+pub struct SurfaceCapabilityDto {
+    pub state: String,
+    pub reason: Option<String>,
+}
+
+/// The per-surface availability contract for the loaded database — one verdict per user-facing
+/// surface (Phase 1B). Probed from the file's own schema (table + key + join + fields), never the
+/// title id.
+#[derive(Serialize, TS)]
+pub struct SurfaceCapabilitiesDto {
+    pub players: SurfaceCapabilityDto,
+    pub teams: SurfaceCapabilityDto,
+    pub arenas: SurfaceCapabilityDto,
+    pub career: SurfaceCapabilityDto,
+    pub attributes: SurfaceCapabilityDto,
+    pub traits: SurfaceCapabilityDto,
+    pub lines: SurfaceCapabilityDto,
+    pub strategies: SurfaceCapabilityDto,
+    pub captaincy: SurfaceCapabilityDto,
+    pub contracts: SurfaceCapabilityDto,
+    pub draft_picks: SurfaceCapabilityDto,
+    pub jerseys: SurfaceCapabilityDto,
+    pub team_equipment: SurfaceCapabilityDto,
+    pub player_equipment: SurfaceCapabilityDto,
+    pub portraits: SurfaceCapabilityDto,
+    pub logos: SurfaceCapabilityDto,
+    pub heads: SurfaceCapabilityDto,
+    pub audio: SurfaceCapabilityDto,
+}
+
 /// A loaded project plus a structural summary of its current working database.
 #[derive(Serialize, TS)]
 pub struct ProjectSummaryDto {
@@ -95,6 +130,8 @@ pub struct ProjectSummaryDto {
     pub display_roster: bool,
     /// The optional schema features this title's database carries (probed at load).
     pub capabilities: CapabilitiesDto,
+    /// The per-surface availability contract — which tabs the UI should show, disable, or omit.
+    pub surfaces: SurfaceCapabilitiesDto,
     /// True when saving this project uses an **experimentally-supported** write path: NHL10/11 v1
     /// containers (the `tag_1c` integrity word is un-reversed, so an edited save carries a stale tag)
     /// or PS4 roster saves (repack is code-complete but on-console load is unverified). The bytes are
@@ -845,6 +882,9 @@ pub struct HistoricalSeasonRowDto {
     pub height: Option<i64>,
     #[ts(type = "number | null")]
     pub weight: Option<i64>,
+    /// The number worn that season (lowest, if several) — pre-fills the Roster Builder jersey.
+    #[ts(type = "number | null")]
+    pub jersey: Option<i64>,
     pub ability: Option<f64>,
     pub potential: Option<f64>,
 }
@@ -1316,6 +1356,24 @@ pub struct OutfitExportSummaryDto {
     /// The art folder scanned for outfit textures — shown when nothing was found so the operator can
     /// see where the exporter looked.
     pub rendering_root: String,
+}
+
+// ---------------------------------------------------------------- texture import
+
+/// Result of writing an edited texture back into an extracted asset file.
+#[derive(Serialize, TS)]
+pub struct ImportTextureSummaryDto {
+    /// The extracted file that was overwritten.
+    pub target_path: String,
+    /// Which container it was: `"gnf"` (PS4), `"portrait"` (BIGF), or `"texlib"` (RW4 `.rx2`).
+    pub container: String,
+    pub width: u32,
+    pub height: u32,
+    #[ts(type = "number")]
+    pub bytes_written: u64,
+    /// The `.bak` written before the first overwrite of this file, when a backup was requested and
+    /// none existed yet.
+    pub backup_path: Option<String>,
 }
 
 // ---------------------------------------------------------------- head preview

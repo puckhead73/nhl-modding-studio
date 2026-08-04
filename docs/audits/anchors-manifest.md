@@ -1,7 +1,9 @@
 # Anchors Manifest
 
 > Inventory of every file under `anchors/` with sha256, size, platform, game, and role.
-> Machine-readable: [`data/anchors-manifest.csv`](data/anchors-manifest.csv) (**497 files**, ~608 MB).
+> Machine-readable: [`data/anchors-manifest.csv`](data/anchors-manifest.csv) (**552 files**).
+> Regenerated deterministically by `cargo run -p tdb-qa --bin qa-inventory` (Phase 0 — see
+> [qa-ledger.md](qa-ledger.md)); do not hand-edit the CSV.
 > Table-level capacity & editable-data breakdown:
 > [anchor-capacity-and-editable-tables.md](anchor-capacity-and-editable-tables.md).
 
@@ -10,13 +12,16 @@ clean-slate starting point to be packaged with the program for users who start a
 
 ## Current population
 
-All three platforms are now populated (PS4 and Xbox360 added since the first pass).
+All three platforms are populated (NHL 07–09 gen6/early-gen7 added since the prior pass).
 
 | Platform | Games populated | Per game |
 |---|---|---|
-| **ps3** | nhl10, nhl11, nhl12, nhl13, nhl14, nhl15, nhllegacy | `databases/` + `savefiles/` |
+| **ps3** | nhl07*, nhl08, nhl09, nhl10, nhl11, nhl12, nhl13, nhl14, nhl15, nhllegacy | `databases/` + `savefiles/` |
 | **ps4** | nhl15, nhl16, nhl17, nhl18, nhl19, nhl20, nhl21 | `databases/` + `savefiles/` |
-| **xbox360** | nhl10, nhl11, nhl12, nhl13, nhl14, nhl15, nhllegacy | `databases/` + `savefiles/` |
+| **xbox360** | nhl07, nhl08, nhl09, nhl10, nhl11, nhl12, nhl13, nhl14, nhl15, nhllegacy | `databases/` + `savefiles/` |
+
+> \* PS3 NHL 07 (`NHL07NG.db`) is a **research copy**, not a supported catalog platform — see
+> [qa-ledger.md](qa-ledger.md). NHL 07 is gen6 (`NHL07NG.db`); NHL 08–15/Legacy are gen7 (`nhlng.db`).
 
 > **PS3 = Xbox360 databases are byte-identical** per game (same tables, record counts, and record
 > lengths — verified for all of NHL 10–15 + Legacy). The two platforms diverge only in the *save-file*

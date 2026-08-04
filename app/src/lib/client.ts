@@ -48,6 +48,7 @@ import type { BrowseListingDto } from "../bindings/BrowseListingDto";
 import type { FileExportOptionsDto } from "../bindings/FileExportOptionsDto";
 import type { FileExportSummaryDto } from "../bindings/FileExportSummaryDto";
 import type { OutfitExportSummaryDto } from "../bindings/OutfitExportSummaryDto";
+import type { ImportTextureSummaryDto } from "../bindings/ImportTextureSummaryDto";
 import type { MatchCandidateDto } from "../bindings/MatchCandidateDto";
 import type { ImportItemDto } from "../bindings/ImportItemDto";
 import type { ChangeSetPreviewDto } from "../bindings/ChangeSetPreviewDto";
@@ -289,6 +290,13 @@ type Commands = {
   };
   // Returns a `data:image/png;base64,...` URL.
   portrait_preview: { args: { path: string; crop: boolean }; ret: string };
+  // Portrait framed for the bottom-anchored header tile (cropped to content + lowest solid row).
+  portrait_header_preview: { args: { path: string }; ret: string };
+  // The team's logo as a cropped PNG data URL for the header, or null when the title ships no logo.
+  team_logo: {
+    args: { projectId: number; roots: AssetRootsArgsDto; teamId: number };
+    ret: string | null;
+  };
   // Decode a player's head mesh (by head id) for the 3D viewer.
   head_preview: {
     args: { roots: AssetRootsArgsDto; headId: number };
@@ -332,6 +340,19 @@ type Commands = {
   export_team_outfits: {
     args: { projectId: number; roots: AssetRootsArgsDto; outDir: string };
     ret: OutfitExportSummaryDto;
+  };
+
+  // ---- Assets: texture import (write an edited PNG back into an extracted file) ----
+  // `relPath` is resolved safely under `installDir`; dispatches on the file's container (GNF /
+  // BIGF portrait / RW4 texlib). Writes a one-time `.bak` when `writeBackup` is set.
+  import_texture: {
+    args: {
+      installDir: string;
+      relPath: string;
+      sourceImagePath: string;
+      writeBackup: boolean;
+    };
+    ret: ImportTextureSummaryDto;
   };
 };
 

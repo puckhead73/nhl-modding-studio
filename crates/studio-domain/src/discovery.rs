@@ -31,14 +31,14 @@ pub struct TitleIds {
 /// Look up the product/title codes for a studio game id (`nhl07` … `nhllegacy`). Returns `None` for
 /// titles outside the proven PS3/Xbox range (PS4 / Recomp use the legacy file-pick path).
 ///
-/// NHL 07–09 are **Xbox 360 only** in this tool (their next-gen release was 360-native), so their PS3
-/// product codes are empty — [`detect_ps3`] guards against that and is never reached for them anyway
-/// (the catalog offers only Xbox). The Xbox title ids are read from each title's `default.xex`.
+/// NHL 07 is Xbox 360 only in this tool. NHL 08–09 have verified PS3 anchors; their product codes
+/// below are the regional ids used for install/save discovery. The Xbox title ids are read from each
+/// title's `default.xex`.
 pub fn title_ids(game_id: &str) -> Option<TitleIds> {
     let ids = match game_id {
         "nhl07" => ("", "", "454107F3"),
-        "nhl08" => ("", "", "45410820"),
-        "nhl09" => ("", "", "45410872"),
+        "nhl08" => ("BLUS30062", "", "45410820"),
+        "nhl09" => ("BLUS30168", "", "45410872"),
         "nhl10" => ("BLUS30345", "BLES00567", "454108BA"),
         "nhl11" => ("BLUS30568", "BLES00984", "454108FD"),
         "nhl12" => ("BLUS30791", "BLES01357", "45410964"),
@@ -188,7 +188,7 @@ fn note_extract_needed(install_dir: &Path, report: &mut InstallReport) {
 }
 
 fn detect_ps3(root: &Path, ids: &TitleIds, report: &mut InstallReport) {
-    // Xbox-only titles (NHL 07–09) carry empty PS3 codes; nothing to detect and an empty prefix
+    // Xbox-only titles (currently NHL 07) carry empty PS3 codes; nothing to detect and an empty prefix
     // would match every save folder in the scan below, so bail early.
     if ids.ps3_us.is_empty() && ids.ps3_eu.is_empty() {
         return;
@@ -216,7 +216,9 @@ fn detect_ps3(root: &Path, ids: &TitleIds, report: &mut InstallReport) {
                 continue;
             }
             let name = entry.file_name().to_string_lossy().to_uppercase();
-            if !(name.starts_with(ids.ps3_us) || name.starts_with(ids.ps3_eu)) {
+            let matches_region = (!ids.ps3_us.is_empty() && name.starts_with(ids.ps3_us))
+                || (!ids.ps3_eu.is_empty() && name.starts_with(ids.ps3_eu));
+            if !matches_region {
                 continue;
             }
             if let Some(slot) = classify_save(&entry.path().join("SYS-DATA")) {

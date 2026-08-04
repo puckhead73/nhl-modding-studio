@@ -388,4 +388,215 @@ mod tests {
         assert_eq!(base64_encode(b"foo"), "Zm9v");
         assert_eq!(base64_encode(b"foobar"), "Zm9vYmFy");
     }
+
+    // ---------------------------------------------------------------
+    // Phase 5.1 — NHL Legacy Xbox 360 texture-variant confirmation.
+    //
+    // These prove the Xbox-360 `RW4xb2` texture path (`texlib::parse` +
+    // Xbox tiling + 16-bit-pair swap + DXT/Argb decode) and the BIGF
+    // portrait chain (`decode_portrait`) actually decode the *real*
+    // extracted-tree assets to sane, non-degenerate images — the
+    // `preview`/`export` half of the capability model. They drive the
+    // same production functions the app uses; nothing here re-implements
+    // decode. Skipped when the extracted tree isn't mounted (CI /
+    // clean-room), matching `ps4_mcd_head_decodes_for_preview`. Set
+    // `QA_ASSET_OUT` to a directory to dump PNGs for eyeball review.
+    // ---------------------------------------------------------------
+
+    /// Root of the user-provided, read-only NHL Legacy Xbox 360 extracted tree.
+    const LEGACY_X360_ROOT: &str = r"X:\Games\Emulation\Roms\XBOX360\NHL Legacy\NHL Legacy";
+
+    /// Distinct-color count over an RGBA8 buffer, capped so a large image
+    /// doesn't allocate an unbounded set. A correctly de-tiled/de-swizzled
+    /// texture has many colors; a decode that produced a flat or garbage
+    /// buffer collapses to a handful.
+    fn distinct_colors(rgba: &[u8], cap: usize) -> usize {
+        let mut seen = std::collections::HashSet::new();
+        for px in rgba.chunks_exact(4) {
+            seen.insert([px[0], px[1], px[2], px[3]]);
+            if seen.len() >= cap {
+                break;
+            }
+        }
+        seen.len()
+    }
+
+    /// Optional PNG dump target (`QA_ASSET_OUT`), created on first use.
+    fn dump_dir() -> Option<std::path::PathBuf> {
+        let d = std::env::var_os("QA_ASSET_OUT")?;
+        let p = std::path::PathBuf::from(d);
+        std::fs::create_dir_all(&p).ok()?;
+        Some(p)
+    }
+
+    fn dump_png(dir: &Option<std::path::PathBuf>, name: &str, img: &crate::assets::DecodedImage) {
+        if let Some(dir) = dir {
+            if let Ok(png) = img.to_png() {
+                let _ = std::fs::write(dir.join(format!("{name}.png")), png);
+            }
+        }
+    }
+
+    /// The first `n` files in `dir` whose name matches `pred`, sorted for
+    /// determinism.
+    fn sample_files(
+        dir: &std::path::Path,
+        n: usize,
+        pred: impl Fn(&str) -> bool,
+    ) -> Vec<std::path::PathBuf> {
+        let Ok(rd) = std::fs::read_dir(dir) else {
+            return Vec::new();
+        };
+        let mut names: Vec<std::path::PathBuf> = rd
+            .filter_map(|e| e.ok().map(|e| e.path()))
+            .filter(|p| {
+                p.file_name()
+                    .and_then(|s| s.to_str())
+                    .is_some_and(&pred)
+            })
+            .collect();
+        names.sort();
+        names.truncate(n);
+        names
+    }
+
+    #[test]
+    fn legacy_x360_logos_decode_from_extracted_tree() {
+        use crate::assets::{linear_to_rgba, DecodedImage};
+
+        let logo_dir = std::path::Path::new(LEGACY_X360_ROOT)
+            .join("rendering")
+            .join("logo");
+        if !logo_dir.is_dir() {
+            eprintln!("skipping: {} not present", logo_dir.display());
+            return;
+        }
+        let files = sample_files(&logo_dir, 24, |n| {
+            n.starts_with("texlib_") && n.ends_with(".rx2")
+        });
+        assert!(!files.is_empty(), "extracted logo tree has texlib_*.rx2");
+
+        let out = dump_dir();
+        let mut decoded_rasters = 0usize;
+        // A texlib bundles a rich color map plus low-color companions (alpha /
+        // mask / normal rasters that are legitimately near-binary), so richness
+        // is asserted in aggregate: the color content must decode somewhere, and
+        // no raster may collapse to a single flat fill (the all-zero-buffer /
+        // wrong-offset signature of a broken de-tile).
+        let mut max_colors = 0usize;
+        let mut rich_rasters = 0usize;
+        for path in &files {
+            let bytes = crate::assets::read_asset_file(path).expect("read logo rx2");
+            let lib = tdb_rx2::texlib::parse(&bytes)
+                .unwrap_or_else(|e| panic!("{}: texlib parse — {e}", path.display()));
+            assert!(
+                !lib.textures.is_empty(),
+                "{}: texlib carried no textures",
+                path.display()
+            );
+            for (i, t) in lib.textures.iter().enumerate() {
+                // Dimensions must be sane and the linear base mip the exact
+                // size the format+dims imply — a mis-read descriptor or a
+                // wrong tiling stride shows up here immediately.
+                assert!(
+                    (8..=4096).contains(&t.width) && (8..=4096).contains(&t.height),
+                    "{} [{}]: implausible dims {}x{}",
+                    path.display(),
+                    t.name,
+                    t.width,
+                    t.height
+                );
+                let rgba = linear_to_rgba(t.format, t.width, t.height, &t.base_mip_linear)
+                    .unwrap_or_else(|e| panic!("{} [{}]: to rgba — {e}", path.display(), t.name));
+                assert_eq!(rgba.len(), (t.width as usize) * (t.height as usize) * 4);
+                let colors = distinct_colors(&rgba, 64);
+                let stem_dbg = path.file_stem().unwrap().to_string_lossy();
+                eprintln!(
+                    "  {stem_dbg} [{}] {}x{} {:?} — {colors} colors, px0={:?}",
+                    t.name,
+                    t.width,
+                    t.height,
+                    t.format,
+                    &rgba[..4]
+                );
+                max_colors = max_colors.max(colors);
+                if colors >= 16 {
+                    rich_rasters += 1;
+                }
+                let stem = path.file_stem().unwrap().to_string_lossy();
+                dump_png(
+                    &out,
+                    &format!("logo_{stem}_{i}_{}", t.name.replace('.', "_")),
+                    &DecodedImage {
+                        width: t.width,
+                        height: t.height,
+                        rgba,
+                    },
+                );
+                decoded_rasters += 1;
+            }
+        }
+        // Real logo color maps decode to full-color images (the Xbox tiling +
+        // 16-bit swap + DXT/Argb path is right), and most texlibs carry at least
+        // one such map.
+        assert!(
+            max_colors >= 32,
+            "no richly-colored logo raster decoded (max {max_colors} colors) — de-tile suspect"
+        );
+        assert!(
+            rich_rasters >= files.len() / 2,
+            "only {rich_rasters} rich rasters across {} texlibs — de-tile suspect",
+            files.len()
+        );
+        eprintln!(
+            "legacy x360 logos: {} texlib files, {decoded_rasters} rasters decoded OK \
+             ({rich_rasters} rich, max {max_colors} colors)",
+            files.len()
+        );
+    }
+
+    #[test]
+    fn legacy_x360_portraits_decode_from_extracted_tree() {
+        use crate::assets::decode_portrait;
+
+        let dir = std::path::Path::new(LEGACY_X360_ROOT)
+            .join("fe")
+            .join("ion")
+            .join("artassets")
+            .join("playerheadssmall")
+            .join("p0_4000");
+        if !dir.is_dir() {
+            eprintln!("skipping: {} not present", dir.display());
+            return;
+        }
+        let files = sample_files(&dir, 24, |n| n.starts_with('p') && n.ends_with(".big"));
+        assert!(!files.is_empty(), "extracted portrait tree has p*.big bundles");
+
+        let out = dump_dir();
+        let mut ok = 0usize;
+        for path in &files {
+            let img = decode_portrait(path)
+                .unwrap_or_else(|e| panic!("{}: portrait decode — {e}", path.display()));
+            assert!(
+                (8..=1024).contains(&img.width) && (8..=1024).contains(&img.height),
+                "{}: implausible portrait dims {}x{}",
+                path.display(),
+                img.width,
+                img.height
+            );
+            assert_eq!(img.rgba.len(), (img.width as usize) * (img.height as usize) * 4);
+            // A real portrait face has plenty of skin/hair tones; a broken
+            // de-tile collapses to a flat or single-block image.
+            let colors = distinct_colors(&img.rgba, 64);
+            assert!(
+                colors >= 16,
+                "{}: only {colors} distinct colors — portrait decode looks degenerate",
+                path.display()
+            );
+            let stem = path.file_stem().unwrap().to_string_lossy();
+            dump_png(&out, &format!("portrait_{stem}"), &img);
+            ok += 1;
+        }
+        eprintln!("legacy x360 portraits: {ok}/{} bundles decoded OK", files.len());
+    }
 }

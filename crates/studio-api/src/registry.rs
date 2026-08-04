@@ -25,8 +25,8 @@ use crate::convert;
 use crate::dto::{
     AddCareerSeasonDto, ArenaSummaryDto, ArenaViewDto, AutocorrectSummaryDto, CareerStatsDto,
     AssetExportSummaryDto, AssetRootsArgsDto, AssetRootsDto, BrowseListingDto, ExportOptionsDto,
-    FileExportOptionsDto, FileExportSummaryDto, HeadPreviewDto, OutfitExportSummaryDto,
-    PlayerAssetsDto,
+    FileExportOptionsDto, FileExportSummaryDto, HeadPreviewDto, ImportTextureSummaryDto,
+    OutfitExportSummaryDto, PlayerAssetsDto,
     CreatePlayerDto, EaComputedRatingsDto, ExtractSummaryDto, FormulaCatalogDto, FormulaProfileDto,
     HistoricalCareerRatingsDto, HistoricalFiltersDto, HistoricalPersonDto, HistoricalPersonSummaryDto,
     HistoricalTeamDto, HistoricalTeamFiltersDto, HistoricalTeamFranchiseDto,
@@ -386,6 +386,61 @@ impl Registry {
         })
     }
 
+    /// Write an edited texture (`source_image_path`, a PNG/JPG the operator
+    /// exported and edited) back into an extracted asset file, dispatching on the
+    /// file's container. The target is `rel_path` (a forward-slash file-browser
+    /// path) resolved **safely under `install_dir`** — a path that escapes the
+    /// install root is refused, so the UI can never write outside the tree. Pure
+    /// filesystem — no project/workspace needed; the confirmed
+    /// export→edit→reimport loop for every texture family runs through here.
+    ///
+    /// On `write_backup`, a one-time `<target>.bak` is written before the first
+    /// overwrite (kept if it already exists, so repeated edits don't clobber the
+    /// pristine original).
+    pub fn import_texture(
+        &self,
+        install_dir: &str,
+        rel_path: &str,
+        source_image_path: &str,
+        write_backup: bool,
+    ) -> Result<ImportTextureSummaryDto, ApiError> {
+        let target = studio_domain::resolve_install_path(Path::new(install_dir), rel_path)
+            .ok_or_else(|| {
+                ApiError::Workspace(format!("{rel_path} escapes the install root"))
+            })?;
+        let target_str = target.to_string_lossy().into_owned();
+
+        let img = studio_domain::decode_source_image(Path::new(source_image_path))
+            .map_err(ApiError::Domain)?;
+        let file_bytes = std::fs::read(&target)
+            .map_err(|e| ApiError::Workspace(format!("could not read {target_str}: {e}")))?;
+        let write =
+            studio_domain::replace_texture_in_file(file_bytes, &img.rgba, img.width, img.height)
+                .map_err(ApiError::Domain)?;
+
+        let backup_path = if write_backup {
+            let bak = format!("{target_str}.bak");
+            if !Path::new(&bak).exists() {
+                std::fs::copy(&target, &bak)
+                    .map_err(|e| ApiError::Workspace(format!("could not write backup {bak}: {e}")))?;
+            }
+            Some(bak)
+        } else {
+            None
+        };
+        std::fs::write(&target, &write.bytes)
+            .map_err(|e| ApiError::Workspace(format!("could not write {target_str}: {e}")))?;
+
+        Ok(ImportTextureSummaryDto {
+            target_path: target_str,
+            container: write.container.label().to_string(),
+            width: write.width,
+            height: write.height,
+            bytes_written: write.bytes.len() as u64,
+            backup_path,
+        })
+    }
+
     /// Decode a head for the 3D viewer, resolved server-side from `head_id`
     /// (`player_<head_id>.rx2` + its texlib) — no path crosses the boundary.
     /// Works for any head with a mesh on disk, not just bespoke ones, so a
@@ -609,6 +664,43 @@ impl Registry {
     pub fn team_view(&self, id: u32, team_id: u64) -> Result<Option<TeamViewDto>, ApiError> {
         self.with_workspace(id, |ws| {
             Ok(ws.display().team_view(team_id)?.as_ref().map(convert::team_view_dto))
+        })
+    }
+
+    /// A player portrait framed for the **bottom-anchored header tile**: decoded,
+    /// then cropped to the content horizontally and down to its lowest *solid*
+    /// row (dropping any faded bottom edge — see
+    /// [`studio_domain::DecodedImage::cropped_to_solid_bottom`]). Returned as a
+    /// PNG data URL; the header pins its bottom to the tile and scales to 95% tall.
+    pub fn portrait_header_preview(&self, path: &str) -> Result<String, ApiError> {
+        let img = studio_domain::decode_portrait(Path::new(path)).map_err(ApiError::Domain)?;
+        let png = img.cropped_to_solid_bottom(8).to_png().map_err(ApiError::Domain)?;
+        Ok(format!("data:image/png;base64,{}", BASE64.encode(&png)))
+    }
+
+    /// The team's logo as a cropped PNG data URL for the header window, or `None`
+    /// when this title ships no logo file / the team has no art id. Resolves the
+    /// team's `kOtt.lOnr` art id server-side, decodes the logo texlib, and crops
+    /// to the opaque content so the header fills the tile with the mark itself.
+    pub fn team_logo(
+        &self,
+        id: u32,
+        args: &AssetRootsArgsDto,
+        team_id: u64,
+    ) -> Result<Option<String>, ApiError> {
+        let roots = resolve_roots(args);
+        self.with_workspace(id, |ws| {
+            let Some(view) = ws.display().team_view(team_id)? else {
+                return Ok(None);
+            };
+            let Some(artid) = view.logo_artid else {
+                return Ok(None);
+            };
+            let Some(img) = studio_domain::decode_team_logo(&roots, artid) else {
+                return Ok(None);
+            };
+            let png = img.cropped_to_opaque(0).to_png().map_err(ApiError::Domain)?;
+            Ok(Some(format!("data:image/png;base64,{}", BASE64.encode(&png))))
         })
     }
 

@@ -1,0 +1,18 @@
+[package]
+name = "tdb-qa"
+description = "Phase 0 QA inventory — deterministic generator for the anchor manifest, per-anchor schema snapshots, cross-title schema diff, and the game-QA matrix ledger."
+version = "0.0.0"
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+tdb-core = { path = "../tdb-core" }
+tdb-defs = { path = "../tdb-defs" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+
+[[bin]]
+name = "qa-inventory"
+path = "src/bin/qa_inventory.rs"

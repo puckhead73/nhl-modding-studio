@@ -5,6 +5,7 @@ import { useProject } from "./lib/project";
 import { call } from "./lib/client";
 import { Button, Pill } from "./components/primitives";
 import { SECTIONS, activeSection } from "./nav";
+import { isAvailable } from "./lib/surfaces";
 import { BreadcrumbProvider, useBreadcrumbs } from "./lib/breadcrumbs";
 import headerLogo from "./assets/ui/NHL Modding Studio Header.png";
 import type { ProjectSummaryDto } from "./bindings/ProjectSummaryDto";
@@ -139,16 +140,22 @@ function Shell({ project, dbPath }: { project: ProjectSummaryDto; dbPath: string
       )}
       {/* History trail — the views clicked through, under the primary tabs; click to jump back. */}
       <Breadcrumbs />
-      {/* Contextual subtab bar — only when the active section has subtabs. */}
-      {section.subtabs.length > 0 && (
-        <nav className="flex shrink-0 items-center gap-1 border-b border-slate-800 bg-slate-950/60 px-4 py-1.5">
-          {section.subtabs.map((sub) => (
-            <NavLink key={sub.to} to={sub.to} className={subClass}>
-              {sub.label}
-            </NavLink>
-          ))}
-        </nav>
-      )}
+      {/* Contextual subtab bar — only when the active section has subtabs. Capability-gated subtabs
+          (Arenas) drop out when the loaded title's schema doesn't carry that surface. */}
+      {(() => {
+        const subtabs = section.subtabs.filter(
+          (sub) => sub.to !== "database/arenas" || isAvailable(project.surfaces?.arenas),
+        );
+        return subtabs.length > 0 ? (
+          <nav className="flex shrink-0 items-center gap-1 border-b border-slate-800 bg-slate-950/60 px-4 py-1.5">
+            {subtabs.map((sub) => (
+              <NavLink key={sub.to} to={sub.to} className={subClass}>
+                {sub.label}
+              </NavLink>
+            ))}
+          </nav>
+        ) : null;
+      })()}
       <main className="flex min-h-0 flex-1 flex-col overflow-hidden">
         <div className="min-h-0 flex-1 overflow-y-auto px-6 py-6">
           {save.isError && (

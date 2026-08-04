@@ -43,3 +43,21 @@ export function useProject(): ProjectState {
   if (!ctx) throw new Error("useProject must be used within a ProjectProvider");
   return ctx;
 }
+
+/**
+ * The asset-root arguments every asset command needs — install dir + platform (which drives the
+ * on-disk art layout server-side). `installDir` is `null` for the legacy file-pick path (no install
+ * tree), which callers use to gate their queries. Shared so the header previews and the asset pages
+ * build roots identically.
+ */
+export function useAssetRootArgs() {
+  const { install } = useProject();
+  const installDir = install?.install_dir ?? null;
+  const rootArgs = {
+    install_dir: installDir ?? "",
+    platform: install?.platform ?? undefined,
+    rendering_override: null,
+    fe_override: null,
+  };
+  return { installDir, rootArgs };
+}

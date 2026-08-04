@@ -11,12 +11,14 @@ import { AttributesTab } from "../components/AttributesTab";
 import { CareerStatsTab } from "../components/CareerStatsTab";
 import { EmptyState, Spinner } from "../components/primitives";
 import { useCrumbLabel } from "../lib/breadcrumbs";
+import { PLAYER_TABS, isAvailable, visibleTabKeys } from "../lib/surfaces";
 import type { PlayerViewDto } from "../bindings/PlayerViewDto";
 
 export function PlayerDetail() {
   const { id } = useParams<{ id: string }>();
   const { project } = useProject();
   const projectId = project!.project_id;
+  const surfaces = project!.surfaces;
   const playerId = Number(id);
 
   const view = useQuery({
@@ -24,10 +26,13 @@ export function PlayerDetail() {
     queryFn: () => call("player_view", { projectId, playerId }),
     enabled: Number.isFinite(playerId),
   });
+  // Don't fetch a surface the schema lacks: skip the career query when this file carries no career
+  // tables (roster-save display, or a gen shape without them).
+  const careerAvailable = isAvailable(surfaces?.career);
   const career = useQuery({
     queryKey: ["career", projectId, playerId],
     queryFn: () => call("career_stats", { projectId, playerId }),
-    enabled: Number.isFinite(playerId),
+    enabled: Number.isFinite(playerId) && careerAvailable,
   });
   useCrumbLabel(view.data?.header.full_name);
   if (view.isLoading) return <Spinner label="Loading…" />;
@@ -64,16 +69,24 @@ export function PlayerDetail() {
       content: (
         <EmptyState
           title="Portrait — preview only"
-          hint="Portrait preview and DDS↔PNG replace arrive with the Production Asset tools in a later phase."
+          hint={
+            surfaces?.portraits.reason ??
+            "Portrait preview and DDS↔PNG replace arrive with the Production Asset tools in a later phase."
+          }
         />
       ),
     },
   ];
 
+  // Gate the tab strip on the probed surface contract: omit tabs whose backing schema is absent (an
+  // absent feature is never rendered as an empty tab a user can't tell from a bug).
+  const visible = visibleTabKeys(PLAYER_TABS, surfaces);
+  const shownTabs = tabs.filter((t) => visible.has(t.key));
+
   return (
     <div className="max-w-6xl space-y-3">
       <PlayerHeader player={player} />
-      <DetailTabs tabs={tabs} />
+      <DetailTabs tabs={shownTabs} />
     </div>
   );
 }

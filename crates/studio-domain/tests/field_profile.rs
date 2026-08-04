@@ -51,6 +51,23 @@ fn assert_no_dangling(p: &EntityFieldProfile) {
     }
 }
 
+/// Prove that every field-backed profile cell is a real, addressable cell in this database.
+fn assert_profile_targets_exist(db: &TdbFile, p: &EntityFieldProfile, anchor: &str) {
+    assert_no_dangling(p);
+    for cell in p.sections.iter().flat_map(|s| &s.cells) {
+        let Some(field) = &cell.field else { continue };
+        let table = db.table_canonical(&field.studio_table).unwrap_or_else(|| {
+            panic!("{anchor}: '{}' targets missing table {}", cell.label, field.studio_table)
+        });
+        assert!(cell.record < table.current_records as u32,
+            "{anchor}: '{}' targets record {} beyond {}.{}",
+            cell.label, cell.record, field.studio_table, table.current_records);
+        assert!(table.fields.iter().any(|f| f.id.canonical(db.endian) == field.studio_field),
+            "{anchor}: '{}' targets missing field {}.{}",
+            cell.label, field.studio_table, field.studio_field);
+    }
+}
+
 const NHL07_DB: &str = "anchors/xbox360/nhl07/databases/NHL07NG.db";
 const NHL07_META: &str = "anchors/xbox360/nhl07/databases/NHL07NG-meta.xml";
 
@@ -209,4 +226,45 @@ fn profile_generalizes_across_anchors() {
             }
         }
     }
+}
+
+/// Matrix gate: auto-discover every committed main DB. Adding an anchor expands this test without a
+/// hand-maintained title list; the count assertion also makes accidental anchor removal visible.
+#[test]
+fn every_anchor_exposes_only_addressable_profile_fields() {
+    let root = repo("anchors");
+    let enums = EnumRegistry::from_dir(repo("defs").join("enums")).unwrap();
+    let mut checked = Vec::new();
+    for platform in std::fs::read_dir(&root).unwrap().flatten().filter(|e| e.path().is_dir()) {
+        for game in std::fs::read_dir(platform.path()).unwrap().flatten().filter(|e| e.path().is_dir()) {
+            let databases = game.path().join("databases");
+            let pair = [
+                ("NHL07NG.db", "NHL07NG-meta.xml"),
+                ("nhlng.db", "nhlng-meta.xml"),
+                ("nhl_game.db", "nhl_game-meta.xml"),
+            ].into_iter().find(|(db, meta)| databases.join(db).is_file() && databases.join(meta).is_file());
+            let Some((db_name, meta_name)) = pair else { continue };
+            let label = format!("{}/{}", platform.file_name().to_string_lossy(), game.file_name().to_string_lossy());
+            let bytes = std::fs::read(databases.join(db_name)).unwrap();
+            let db = TdbFile::parse(&bytes).unwrap_or_else(|e| panic!("{label}: {e}"));
+            let meta = FieldMetaIndex::from_xml(&std::fs::read_to_string(databases.join(meta_name)).unwrap())
+                .unwrap_or_else(|e| panic!("{label}: {e}"));
+            let model = RosterModel::build(&db).unwrap_or_else(|e| panic!("{label}: {e}"));
+            assert!(!model.players.is_empty(), "{label}: no players");
+            assert!(!model.teams.is_empty(), "{label}: no teams");
+            for kind in [PlayerKind::Skater, PlayerKind::Goalie] {
+                if let Some(player) = model.players.iter().find(|p| p.kind == kind) {
+                    let view = player_view(&db, &meta, &enums, &model, player.player_id)
+                        .unwrap_or_else(|| panic!("{label}: player view failed"));
+                    assert_profile_targets_exist(&db, &view.profile, &label);
+                }
+            }
+            let team = &model.teams[0];
+            let view = team_view(&db, &meta, &enums, &model, team.team_id)
+                .unwrap_or_else(|| panic!("{label}: team view failed"));
+            assert_profile_targets_exist(&db, &view.profile, &label);
+            checked.push(label);
+        }
+    }
+    assert_eq!(checked.len(), 27, "anchor inventory changed: {checked:#?}");
 }

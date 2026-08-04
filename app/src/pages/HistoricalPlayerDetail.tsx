@@ -273,6 +273,7 @@ function SeasonTimeline({ p }: { p: HistoricalPersonDto }) {
                             personName: `${p.first_name} ${p.last_name}`.trim(),
                             seasonLabel: s.season_label,
                             position: p.position ?? null,
+                            jersey: s.jersey,
                           })
                         }
                         className="rounded border border-slate-700 px-1.5 py-0.5 text-[11px] text-slate-300 hover:border-sky-600 hover:text-sky-300 disabled:cursor-default disabled:border-slate-800 disabled:text-slate-600"

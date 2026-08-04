@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
 import { openUrl } from "@tauri-apps/plugin-opener";
+import { useQuery } from "@tanstack/react-query";
+import { call } from "../lib/client";
+import { usePlayerAssets } from "../pages/PlayerAssets";
 import { POS_BADGE, POS_FULL } from "../lib/position";
 import type { PlayerViewDto } from "../bindings/PlayerViewDto";
 
@@ -23,7 +26,7 @@ export function PlayerHeader({ player }: { player: PlayerViewDto }) {
 
   return (
     <div className="flex items-start gap-4 rounded-lg border border-slate-800 bg-gradient-to-r from-slate-900/80 to-slate-900/30 p-4">
-      <Portrait name={fullName} />
+      <Portrait name={fullName} bioRecord={player.bio_record} />
 
       <div className="min-w-0 flex-1 space-y-1.5">
         <div className="flex items-center gap-2">
@@ -88,16 +91,40 @@ export function PlayerHeader({ player }: { player: PlayerViewDto }) {
   );
 }
 
-function Portrait({ name }: { name: string }) {
+/// The player portrait window. Finds this player's portrait file from the (cached, app-wide) asset
+/// scan and decodes it **bottom-framed** (`portrait_header_preview`): cropped to the content and down
+/// to its lowest solid row, so the solid bottom of the portrait pins to the tile bottom, the content
+/// stands 95% of the tile tall, and any width wider than the tile is clipped (never shrunk). Falls
+/// back to a neutral silhouette while loading or when the player has no portrait.
+function Portrait({ name, bioRecord }: { name: string; bioRecord: number }) {
+  const { assets } = usePlayerAssets();
+  const portraitPath =
+    assets.data?.find((a) => a.bio_record === bioRecord)?.portrait_path ?? null;
+  const preview = useQuery({
+    queryKey: ["portraitHeaderPreview", portraitPath],
+    queryFn: () => call("portrait_header_preview", { path: portraitPath! }),
+    enabled: !!portraitPath,
+    staleTime: Infinity,
+  });
+
   return (
     <div
-      className="grid h-28 w-28 shrink-0 place-items-center overflow-hidden rounded-md border border-slate-700 bg-slate-800/70"
-      title={`${name} — portrait preview arrives with the Assets tools`}
+      className="relative grid h-28 w-28 shrink-0 place-items-center overflow-hidden rounded-md border border-slate-700 bg-slate-800/70"
+      title={preview.data ? `${name} portrait` : `${name} — no portrait art found`}
     >
-      {/* No portrait image pipeline yet (Phase 6) — a neutral silhouette placeholder. */}
-      <svg viewBox="0 0 24 24" className="h-14 w-14 text-slate-600" fill="currentColor" aria-hidden>
-        <path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5Z" />
-      </svg>
+      {preview.data ? (
+        // Pin the (solid) bottom to the tile, stand 95% tall, center horizontally; the tile's
+        // overflow-hidden clips any width that spills past the sides (not shrunk to fit).
+        <img
+          src={preview.data}
+          alt={`${name} portrait`}
+          className="absolute bottom-0 left-1/2 h-[95%] w-auto max-w-none -translate-x-1/2"
+        />
+      ) : (
+        <svg viewBox="0 0 24 24" className="h-14 w-14 text-slate-600" fill="currentColor" aria-hidden>
+          <path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5Z" />
+        </svg>
+      )}
     </div>
   );
 }

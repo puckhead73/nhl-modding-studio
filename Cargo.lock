@@ -3346,6 +3346,7 @@ dependencies = [
  "tdb-core",
  "tdb-fhm",
  "tdb-instance-registry",
+ "tdb-rx2",
  "tdb-savedata",
  "ts-rs",
 ]
@@ -3888,6 +3889,17 @@ name = "tdb-instance-registry"
 version = "0.0.0"
 dependencies = [
  "rusqlite",
+]
+
+[[package]]
+name = "tdb-qa"
+version = "0.0.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "sha2",
+ "tdb-core",
+ "tdb-defs",
 ]
 
 [[package]]

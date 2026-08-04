@@ -212,6 +212,44 @@ pub fn is_dds(bytes: &[u8]) -> bool {
     bytes.len() >= 4 && <[u8; 4]>::try_from(&bytes[..4]).unwrap() == *DDS_MAGIC
 }
 
+/// Sniff a **block-compressed** DDS's format, dimensions, and top-mip
+/// block slice — without decoding the pixels.
+///
+/// Returns `(format, width, height, base_mip_blocks)` for a classic
+/// `DDS ` file whose fourcc is `DXT1` / `DXT3` / `DXT5`, where
+/// `base_mip_blocks` is the top mip's DXT block stream (already linear /
+/// untiled — DDS never tiles). Returns `None` for non-DDS input, an
+/// uncompressed / DX10 / unrecognised fourcc, zero dimensions, or a
+/// payload too short to hold the top mip.
+///
+/// This is the read/pick counterpart to [`encode_dds`]: the portrait
+/// replace path uses it to recognise a PS3-style RefPack→`DDS ` slot and
+/// learn its format before re-encoding, and the portrait read path uses
+/// the block slice as an untiled base mip.
+pub fn dds_base_mip(bytes: &[u8]) -> Option<(DdsFormat, u32, u32, &[u8])> {
+    if bytes.len() < 128 || &bytes[..4] != DDS_MAGIC {
+        return None;
+    }
+    let height = u32::from_le_bytes(bytes[12..16].try_into().unwrap());
+    let width = u32::from_le_bytes(bytes[16..20].try_into().unwrap());
+    if width == 0 || height == 0 {
+        return None;
+    }
+    let fourcc: [u8; 4] = bytes[84..88].try_into().unwrap();
+    let format = match &fourcc {
+        b"DXT1" => DdsFormat::Dxt1,
+        b"DXT3" => DdsFormat::Dxt3,
+        b"DXT5" => DdsFormat::Dxt5,
+        _ => return None,
+    };
+    let block_len = format.linear_size(width, height) as usize;
+    let end = 128usize.checked_add(block_len)?;
+    if bytes.len() < end {
+        return None;
+    }
+    Some((format, width, height, &bytes[128..end]))
+}
+
 /// Decoded top-mip RGBA from a DDS file.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct DecodedDds {
@@ -356,6 +394,30 @@ mod tests {
         assert!(is_dds(b"DDS \x7C\x00\x00\x00"));
         assert!(!is_dds(b"\x89RW4short"));
         assert!(!is_dds(b"too"));
+    }
+
+    #[test]
+    fn dds_base_mip_recovers_format_dims_and_block_slice() {
+        // A DXT5 top mip for 8×8 is 4 blocks × 16 bytes = 64 bytes.
+        let blocks = vec![0x11u8; 64];
+        let dds = encode_dds(DdsFormat::Dxt5, 8, 8, 1, &blocks);
+        let (fmt, w, h, base) = dds_base_mip(&dds).expect("sniff DXT5 DDS");
+        assert_eq!(fmt, DdsFormat::Dxt5);
+        assert_eq!((w, h), (8, 8));
+        assert_eq!(base, &blocks[..]);
+    }
+
+    #[test]
+    fn dds_base_mip_rejects_uncompressed_truncated_and_non_dds() {
+        // Uncompressed (Rgba32) has no DXT fourcc → None.
+        let rgba = encode_dds(DdsFormat::Rgba32, 4, 4, 1, &[0u8; 64]);
+        assert!(dds_base_mip(&rgba).is_none());
+        // Valid header but payload too short to hold the declared top mip.
+        let mut short = encode_dds(DdsFormat::Dxt1, 16, 16, 1, &[0u8; 128]);
+        short.truncate(128 + 8); // 16×16 DXT1 needs 128 bytes, keep only 8
+        assert!(dds_base_mip(&short).is_none());
+        // Not a DDS at all.
+        assert!(dds_base_mip(b"\x89RW4not-a-dds-header-padding-to-len").is_none());
     }
 
     #[test]

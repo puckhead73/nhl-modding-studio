@@ -1,0 +1,5 @@
+asset_family,format,discover,identify,preview,export,reimport_unchanged,replace_modified,reassign_existing,rebuild,install,game_verified,evidence
+portraits,BIGF->refpack->XPR2/RX2,pass,pass,pass,pass,pass,pass,pass,pass,external,not_run,"extracted p{id}.big write verified: RGBA->DXT->XPR2->RefPack->BIGF rebuild, re-decodes with gradient intact; pipeline ported from prior app (2026-08-03)"
+logos,texlib RX2 (RW4xb2) DXT5,pass,pass,pass,pass,pass,pass,pass,pass,external,not_run,"extracted .rx2 write verified: lossless round-trip + magenta edit re-decoded on texlib_10_0_0 (2026-08-03)"
+uniforms,loose RX2 rasters (jersey/pant/sock),pass,pass,pass,pass,pass,pass,pass,pass,external,not_run,"texlib::replace_* on extracted .rx2; same path as logos (2026-08-03)"
+equipment,loose RX2 rasters (helmet/glove/blocker/trapper/goaliepad/goaliehelmet/goaliestick/playerstick),pass,partial,pass,pass,pass,pass,pass,pass,external,not_run,"texlib::replace_* on extracted .rx2; identify partial (brand-keyed) (2026-08-03)"

@@ -17,6 +17,7 @@ import { Spinner } from "../components/primitives";
 import { useCrumbLabel } from "../lib/breadcrumbs";
 import { POS_BADGE } from "../lib/position";
 import { ratingToneClass } from "../lib/ratingColor";
+import { TEAM_TABS, visibleTabKeys } from "../lib/surfaces";
 import type { TeamViewDto } from "../bindings/TeamViewDto";
 import type { PlayerSummaryDto } from "../bindings/PlayerSummaryDto";
 
@@ -100,10 +101,16 @@ export function TeamDetail() {
     },
   ];
 
+  // Gate the tab strip on the probed surface contract: a title that ships no strategy sheet, no
+  // jersey/equipment tables, or no draft-pick assets omits those tabs entirely (rather than showing
+  // a tab that empties out on click). Roster-driven tabs (Depth Chart / Contracts) always show.
+  const visible = visibleTabKeys(TEAM_TABS, project!.surfaces);
+  const shownTabs = tabs.filter((t) => visible.has(t.key));
+
   return (
     <div className="max-w-6xl space-y-3">
       <TeamHeader team={team} />
-      <DetailTabs tabs={tabs} />
+      <DetailTabs tabs={shownTabs} />
     </div>
   );
 }

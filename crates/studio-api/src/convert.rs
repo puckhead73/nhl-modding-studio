@@ -2,30 +2,30 @@
 //! `raw_id` string helpers carried over from the prior app.
 
 use studio_domain::{
-    AssetExportSummary, AssetRoots, BrowseListing, ExportOptions, FileExportOptions,
-    FileExportSummary, HeadPreview, OutfitExportSummary, PlayerAssets,
-    ArenaRef, ArenaSummary, ArenaView, AttributeView, Capabilities, CareerStats, CellControl,
-    DbOverview, EntityFieldProfile, ExtractSummary, FieldRaw, FieldView, HumanFinding, HumanReport,
-    ImportIdentity, ImportItem, ItemOutcome, LoweredItem, MatchCandidate, MatchConfidence,
-    TableCapacity,
-    InstallReport, LineEntry, LinesView, OpOutcome, PlayerAttributes, PlayerData, PlayerHeader,
-    PlayerSummary, PlayerView, ProfileCell, RosterMembership, SaveSlot, Severity, Source,
-    TeamSummary, TeamView, TraitOption, TraitView, Workspace,
+    ArenaRef, ArenaSummary, ArenaView, AssetExportSummary, AssetRoots, AttributeView,
+    BrowseListing, Capabilities, CareerStats, CellControl, DbOverview, EntityFieldProfile,
+    ExportOptions, ExtractSummary, FieldRaw, FieldView, FileExportOptions, FileExportSummary,
+    HeadPreview, HumanFinding, HumanReport, ImportIdentity, ImportItem, InstallReport, ItemOutcome,
+    LineEntry, LinesView, LoweredItem, MatchCandidate, MatchConfidence, OpOutcome,
+    OutfitExportSummary, PlayerAssets, PlayerAttributes, PlayerData, PlayerHeader, PlayerSummary,
+    PlayerView, ProfileCell, RosterMembership, SaveSlot, Severity, Source, SurfaceCapabilities,
+    SurfaceCapability, SurfaceState, TableCapacity, TeamSummary, TeamView, TraitOption, TraitView,
+    Workspace,
 };
 
 use crate::dto::{
-    AssetExportSummaryDto, AssetRootsDto, BrowseEntryDto, BrowseListingDto, ExportOptionsDto,
-    FileExportOptionsDto, FileExportSummaryDto, HeadPreviewDto, OutfitExportSummaryDto,
-    PlayerAssetsDto, PreviewSubmeshDto, PreviewTextureDto,
-    ArenaRefDto, ArenaSummaryDto, ArenaViewDto, AttributeViewDto, CapabilitiesDto, CareerColumnDto,
-    CareerRowDto, CareerSectionDto, CareerStatsDto, CreatePlayerDto, DraftPickDto, EnumOptionDto,
-    EntityFieldProfileDto, EquipmentZoneDto, ExtractSummaryDto, FieldCellDto, FieldSectionDto,
-    FieldViewDto, FindingDto, InstallReportDto,
-    IntegrityReportDto, LineEntryDto, LinesViewDto, OpOutcomeDto, PlayerAttributesDto, PlayerDataDto,
-    PlayerHeaderDto, PlayerSummaryDto, PlayerViewDto, ProjectSummaryDto, RosterMembershipDto,
-    SaveSlotDto, SlotFieldDto, StrategyCellDto, TableSummaryDto, TeamEquipmentDto, TeamJerseyDto,
-    TeamStrategiesDto, TeamSummaryDto, TeamViewDto, TraitOptionDto, TraitViewDto,
-    ImportItemResultDto, MatchCandidateDto, TableCapacityDto,
+    ArenaRefDto, ArenaSummaryDto, ArenaViewDto, AssetExportSummaryDto, AssetRootsDto,
+    AttributeViewDto, BrowseEntryDto, BrowseListingDto, CapabilitiesDto, CareerColumnDto,
+    CareerRowDto, CareerSectionDto, CareerStatsDto, CreatePlayerDto, DraftPickDto,
+    EntityFieldProfileDto, EnumOptionDto, EquipmentZoneDto, ExportOptionsDto, ExtractSummaryDto,
+    FieldCellDto, FieldSectionDto, FieldViewDto, FileExportOptionsDto, FileExportSummaryDto,
+    FindingDto, HeadPreviewDto, ImportItemResultDto, InstallReportDto, IntegrityReportDto,
+    LineEntryDto, LinesViewDto, MatchCandidateDto, OpOutcomeDto, OutfitExportSummaryDto,
+    PlayerAssetsDto, PlayerAttributesDto, PlayerDataDto, PlayerHeaderDto, PlayerSummaryDto,
+    PlayerViewDto, PreviewSubmeshDto, PreviewTextureDto, ProjectSummaryDto, RosterMembershipDto,
+    SaveSlotDto, SlotFieldDto, StrategyCellDto, SurfaceCapabilitiesDto, SurfaceCapabilityDto,
+    TableCapacityDto, TableSummaryDto, TeamEquipmentDto, TeamJerseyDto, TeamStrategiesDto,
+    TeamSummaryDto, TeamViewDto, TraitOptionDto, TraitViewDto,
 };
 
 /// Map an install report to its DTO, attaching platform-aware display labels to each save slot and
@@ -117,6 +117,7 @@ pub fn project_summary_dto(
         roster_aligned: ws.roster_aligned(),
         display_roster: ws.display_roster(),
         capabilities,
+        surfaces: surface_caps_dto(&session.surface_capabilities()?),
         // Experimental if either the canonical session or the (possibly v1) roster mirror writes
         // through an un-reversed integrity tag.
         write_experimental: write_experimental(project.source())
@@ -156,6 +157,46 @@ fn capabilities_dto(c: &Capabilities) -> CapabilitiesDto {
         goalie_ratings_labelled: c.goalie_ratings_labelled,
         goalie_ratings_total: c.goalie_ratings_total,
         main_team_offset: c.main_team_offset,
+    }
+}
+
+fn surface_state_str(s: SurfaceState) -> &'static str {
+    match s {
+        SurfaceState::NotApplicable => "not-applicable",
+        SurfaceState::Readable => "readable",
+        SurfaceState::Editable => "editable",
+        SurfaceState::Disabled => "disabled",
+        SurfaceState::Unverified => "unverified",
+    }
+}
+
+fn surface_cap_dto(c: SurfaceCapability) -> SurfaceCapabilityDto {
+    SurfaceCapabilityDto {
+        state: surface_state_str(c.state).to_string(),
+        reason: c.reason.map(str::to_string),
+    }
+}
+
+fn surface_caps_dto(s: &SurfaceCapabilities) -> SurfaceCapabilitiesDto {
+    SurfaceCapabilitiesDto {
+        players: surface_cap_dto(s.players),
+        teams: surface_cap_dto(s.teams),
+        arenas: surface_cap_dto(s.arenas),
+        career: surface_cap_dto(s.career),
+        attributes: surface_cap_dto(s.attributes),
+        traits: surface_cap_dto(s.traits),
+        lines: surface_cap_dto(s.lines),
+        strategies: surface_cap_dto(s.strategies),
+        captaincy: surface_cap_dto(s.captaincy),
+        contracts: surface_cap_dto(s.contracts),
+        draft_picks: surface_cap_dto(s.draft_picks),
+        jerseys: surface_cap_dto(s.jerseys),
+        team_equipment: surface_cap_dto(s.team_equipment),
+        player_equipment: surface_cap_dto(s.player_equipment),
+        portraits: surface_cap_dto(s.portraits),
+        logos: surface_cap_dto(s.logos),
+        heads: surface_cap_dto(s.heads),
+        audio: surface_cap_dto(s.audio),
     }
 }
 
@@ -501,7 +542,11 @@ pub fn career_stats_dto(c: &CareerStats) -> CareerStatsDto {
                         season_label: r.season_label.clone(),
                         league_label: r.league_label.clone(),
                         team: r.team.clone(),
-                        cells: r.cells.iter().map(|c| c.as_ref().map(field_view_dto)).collect(),
+                        cells: r
+                            .cells
+                            .iter()
+                            .map(|c| c.as_ref().map(field_view_dto))
+                            .collect(),
                     })
                     .collect(),
             })
@@ -691,33 +736,60 @@ pub fn parse_raw_id(s: &str) -> Option<[u8; 4]> {
 
 // ---- Historical (FHM corpus) converters -----------------------------------
 
+use crate::dto::{
+    HistoricalAwardDto, HistoricalCareerRowDto, HistoricalContractDto, HistoricalDraftDto,
+    HistoricalFiltersDto, HistoricalLeagueOptionDto, HistoricalPersonDto,
+    HistoricalPersonSummaryDto, HistoricalRosterEntryDto, HistoricalSeasonOptionDto,
+    HistoricalSeasonRowDto, HistoricalStatCellDto, HistoricalTeamAffiliateDto,
+    HistoricalTeamBlockDto, HistoricalTeamContractDto, HistoricalTeamDto, HistoricalTeamFiltersDto,
+    HistoricalTeamFranchiseDto, HistoricalTeamIndexEntryDto, HistoricalTeamMemberDto,
+    HistoricalTeamSummaryDto,
+};
 use studio_domain::historical::{
     AwardRow, CareerStatRow, ContractRow, DraftRow, LeagueOption, PersonDetail, PersonSummary,
     PlayerSeasonRow, SeasonOption, TeamAffiliate, TeamContractLine, TeamFranchiseDetail,
     TeamIndexEntry, TeamRosterEntry, TeamRosterMember, TeamSeasonBlock, TeamSeasonDetail,
     TeamSeasonSummary,
 };
-use crate::dto::{
-    HistoricalAwardDto, HistoricalCareerRowDto, HistoricalContractDto, HistoricalDraftDto,
-    HistoricalFiltersDto, HistoricalLeagueOptionDto, HistoricalPersonDto, HistoricalPersonSummaryDto,
-    HistoricalRosterEntryDto, HistoricalSeasonOptionDto, HistoricalSeasonRowDto,
-    HistoricalStatCellDto, HistoricalTeamAffiliateDto, HistoricalTeamBlockDto, HistoricalTeamContractDto,
-    HistoricalTeamDto, HistoricalTeamFiltersDto, HistoricalTeamFranchiseDto,
-    HistoricalTeamIndexEntryDto, HistoricalTeamMemberDto, HistoricalTeamSummaryDto,
-};
 
 /// Curated career-column display order (matches the FHM export layout); extras are appended after.
 const SKATER_COLS: &[&str] = &[
-    "GP", "G", "A", "PIM", "+/-", "PP G", "PP A", "SH G", "SH A", "GWG", "SOG", "GR", "FO", "FO W",
-    "HIT", "GvA", "TkA", "SB", "TOI", "PPTOI", "SHTOI", "Fights", "Fights Won",
+    "GP",
+    "G",
+    "A",
+    "PIM",
+    "+/-",
+    "PP G",
+    "PP A",
+    "SH G",
+    "SH A",
+    "GWG",
+    "SOG",
+    "GR",
+    "FO",
+    "FO W",
+    "HIT",
+    "GvA",
+    "TkA",
+    "SB",
+    "TOI",
+    "PPTOI",
+    "SHTOI",
+    "Fights",
+    "Fights Won",
 ];
-const GOALIE_COLS: &[&str] = &["GP", "GS", "Min", "W", "L", "T/OL", "ENG", "SO", "GA", "SA", "GR"];
+const GOALIE_COLS: &[&str] = &[
+    "GP", "GS", "Min", "W", "L", "T/OL", "ENG", "SO", "GA", "SA", "GR",
+];
 
 fn season_label(year: i64) -> String {
     format!("{}-{}", year - 1, year)
 }
 
-pub fn historical_filters_dto(seasons: &[SeasonOption], leagues: &[LeagueOption]) -> HistoricalFiltersDto {
+pub fn historical_filters_dto(
+    seasons: &[SeasonOption],
+    leagues: &[LeagueOption],
+) -> HistoricalFiltersDto {
     HistoricalFiltersDto {
         seasons: seasons
             .iter()
@@ -809,6 +881,7 @@ fn historical_season_row_dto(s: &PlayerSeasonRow) -> HistoricalSeasonRowDto {
         league_abbr: s.league_abbr.clone(),
         height: s.height,
         weight: s.weight,
+        jersey: s.jersey,
         ability: s.ability,
         potential: s.potential,
     }
@@ -830,7 +903,11 @@ fn historical_career_row_dto(c: &CareerStatRow) -> HistoricalCareerRowDto {
 fn stat_cells(kind: &str, stats_json: &str) -> Vec<HistoricalStatCellDto> {
     let map: serde_json::Map<String, serde_json::Value> =
         serde_json::from_str(stats_json).unwrap_or_default();
-    let order: &[&str] = if kind == "goalie" { GOALIE_COLS } else { SKATER_COLS };
+    let order: &[&str] = if kind == "goalie" {
+        GOALIE_COLS
+    } else {
+        SKATER_COLS
+    };
     let mut cells = Vec::new();
     let mut seen = std::collections::HashSet::new();
     for &label in order {
@@ -958,7 +1035,11 @@ pub fn historical_team_franchise_dto(d: &TeamFranchiseDetail) -> HistoricalTeamF
         notes: d.notes.clone(),
         seasons: d.seasons.clone(),
         season_year: d.season_year,
-        constituents: d.constituents.iter().map(historical_team_block_dto).collect(),
+        constituents: d
+            .constituents
+            .iter()
+            .map(historical_team_block_dto)
+            .collect(),
     }
 }
 
@@ -976,9 +1057,17 @@ fn historical_team_block_dto(b: &TeamSeasonBlock) -> HistoricalTeamBlockDto {
         primary_color: b.primary_color.clone(),
         secondary_color: b.secondary_color.clone(),
         text_color: b.text_color.clone(),
-        affiliates: b.affiliates.iter().map(historical_team_affiliate_dto).collect(),
+        affiliates: b
+            .affiliates
+            .iter()
+            .map(historical_team_affiliate_dto)
+            .collect(),
         roster: b.roster.iter().map(historical_team_member_dto).collect(),
-        contracts: b.contracts.iter().map(historical_team_contract_dto).collect(),
+        contracts: b
+            .contracts
+            .iter()
+            .map(historical_team_contract_dto)
+            .collect(),
     }
 }
 
@@ -1023,13 +1112,12 @@ fn historical_team_contract_dto(c: &TeamContractLine) -> HistoricalTeamContractD
 
 // ---- Formula engine (Stage 2) converters ----------------------------------
 
+use crate::dto::{
+    CareerSeasonOverallDto, EaComputedRatingsDto, EaRatingDto, FhmAttrDto, FhmGroupDto,
+    FhmValueDto, FormulaCatalogDto, FormulaProfileDto, HistoricalCareerRatingsDto, PrebuiltDto,
+};
 use studio_domain::formula::catalog as fcat;
 use studio_domain::{CareerRatings, ComputedRatings, FormulaProfile};
-use crate::dto::{
-    CareerSeasonOverallDto, EaComputedRatingsDto, EaRatingDto, FhmAttrDto, FhmGroupDto, FhmValueDto,
-    FormulaCatalogDto, HistoricalCareerRatingsDto,
-    FormulaProfileDto, PrebuiltDto,
-};
 
 /// Map a computed EA rating set (+ its raw FHM inputs) → wire DTO.
 pub fn ea_computed_ratings_dto(cr: &ComputedRatings) -> EaComputedRatingsDto {
@@ -1098,8 +1186,14 @@ pub fn formula_profile_from_dto(dto: &FormulaProfileDto) -> FormulaProfile {
 /// The static formula catalog for the Formulas UI.
 pub fn formula_catalog_dto() -> FormulaCatalogDto {
     FormulaCatalogDto {
-        skater_ea_attrs: fcat::SKATER_EA_ATTRS.iter().map(|s| s.to_string()).collect(),
-        goalie_ea_attrs: fcat::GOALIE_EA_ATTRS.iter().map(|s| s.to_string()).collect(),
+        skater_ea_attrs: fcat::SKATER_EA_ATTRS
+            .iter()
+            .map(|s| s.to_string())
+            .collect(),
+        goalie_ea_attrs: fcat::GOALIE_EA_ATTRS
+            .iter()
+            .map(|s| s.to_string())
+            .collect(),
         fhm_groups: fcat::FHM_ATTR_GROUPS
             .iter()
             .map(|(group, attrs)| FhmGroupDto {

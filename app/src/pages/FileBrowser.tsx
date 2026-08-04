@@ -24,6 +24,10 @@ import {
 } from "../components/primitives";
 import type { BrowseEntryDto } from "../bindings/BrowseEntryDto";
 import type { FileExportSummaryDto } from "../bindings/FileExportSummaryDto";
+import type { ImportTextureSummaryDto } from "../bindings/ImportTextureSummaryDto";
+
+/** File kinds whose texture can be re-encoded and written back in place. */
+const REPLACEABLE_KINDS = new Set(["portrait", "texture"]);
 
 /** Badge tone + label for a file's decoded output kind (null = the exporter doesn't recognize it). */
 const KIND_META: Record<string, { tone: Tone; label: string }> = {
@@ -44,6 +48,7 @@ export function FileBrowserPage() {
   const [copyUnrecognized, setCopyUnrecognized] = useState(false);
   const [crop, setCrop] = useState(false);
   const [summary, setSummary] = useState<FileExportSummaryDto | null>(null);
+  const [imported, setImported] = useState<ImportTextureSummaryDto | null>(null);
 
   const listing = useQuery({
     queryKey: ["browseInstallFiles", installDir, cwd],
@@ -89,6 +94,32 @@ export function FileBrowserPage() {
       });
     },
     onSuccess: (s) => s && setSummary(s),
+  });
+
+  // Write an edited image back into one extracted texture file. Picks the source
+  // PNG via a dialog, then dispatches server-side on the file's container.
+  const replace = useMutation({
+    mutationFn: async (relPath: string) => {
+      const src = await openDialog({
+        multiple: false,
+        directory: false,
+        title: "Choose the edited image to write into this texture",
+        filters: [{ name: "Image", extensions: ["png", "jpg", "jpeg", "bmp", "tga"] }],
+      });
+      if (typeof src !== "string") return null;
+      return call("import_texture", {
+        installDir: installDir!,
+        relPath,
+        sourceImagePath: src,
+        writeBackup: true,
+      });
+    },
+    onSuccess: (r) => {
+      if (r) {
+        setImported(r);
+        void listing.refetch(); // the on-disk size may have changed
+      }
+    },
   });
 
   if (!installDir) {
@@ -137,6 +168,12 @@ export function FileBrowserPage() {
                     checked={selected.has(e.rel_path)}
                     onToggle={() => toggle(e.rel_path)}
                     onOpen={e.is_dir ? () => setCwd(e.rel_path) : undefined}
+                    onReplace={
+                      !e.is_dir && e.kind && REPLACEABLE_KINDS.has(e.kind)
+                        ? () => replace.mutate(e.rel_path)
+                        : undefined
+                    }
+                    replacing={replace.isPending && replace.variables === e.rel_path}
                   />
                 ))
               )}
@@ -152,8 +189,20 @@ export function FileBrowserPage() {
               >
                 Select everything in this folder
               </button>
+              <span className="text-slate-600">·</span>
+              <span className="text-slate-500">
+                Portraits and textures show a <span className="text-sky-400">Replace…</span> action to
+                write an edited image back in place.
+              </span>
             </div>
           ) : null}
+
+          {replace.error ? (
+            <div className="mt-2">
+              <ErrorBanner title="Replace failed" message={String(replace.error)} />
+            </div>
+          ) : null}
+          {imported ? <ImportResult summary={imported} onDismiss={() => setImported(null)} /> : null}
         </Card>
 
         <Card title="Export" subtitle="What to write for the selected files.">
@@ -241,11 +290,15 @@ function EntryRow({
   checked,
   onToggle,
   onOpen,
+  onReplace,
+  replacing,
 }: {
   entry: BrowseEntryDto;
   checked: boolean;
   onToggle: () => void;
   onOpen?: () => void;
+  onReplace?: () => void;
+  replacing?: boolean;
 }) {
   const kind = entry.kind ? KIND_META[entry.kind] : undefined;
   return (
@@ -274,6 +327,17 @@ function EntryRow({
         </span>
       )}
       {kind ? <Pill tone={kind.tone}>{kind.label}</Pill> : null}
+      {onReplace ? (
+        <button
+          onClick={onReplace}
+          disabled={replacing}
+          className="shrink-0 text-xs text-sky-400 hover:text-sky-300 disabled:text-slate-600"
+          type="button"
+          title="Write an edited image back into this texture (keeps a .bak)"
+        >
+          {replacing ? "Replacing…" : "Replace…"}
+        </button>
+      ) : null}
       <span className="w-20 shrink-0 text-right text-xs tabular-nums text-slate-500">
         {entry.is_dir ? "" : formatBytes(entry.size)}
       </span>
@@ -300,6 +364,51 @@ function Row({
       }
     >
       {children}
+    </div>
+  );
+}
+
+const CONTAINER_LABEL: Record<string, string> = {
+  gnf: "PS4 GNF",
+  portrait: "portrait archive",
+  texlib: "RW4 texlib",
+};
+
+function ImportResult({
+  summary,
+  onDismiss,
+}: {
+  summary: ImportTextureSummaryDto;
+  onDismiss: () => void;
+}) {
+  const name = summary.target_path.split(/[\\/]/).pop() ?? summary.target_path;
+  return (
+    <div className="mt-2 rounded-md border border-emerald-800/60 bg-emerald-950/30 p-3 text-sm">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-emerald-300">
+            Wrote <span className="font-medium">{name}</span> ·{" "}
+            {CONTAINER_LABEL[summary.container] ?? summary.container} · {summary.width}×
+            {summary.height} · {formatBytes(summary.bytes_written)}
+          </p>
+          {summary.backup_path ? (
+            <p className="mt-0.5 text-xs text-slate-400">
+              Original backed up to <span className="text-slate-300">{summary.backup_path}</span>
+            </p>
+          ) : null}
+          <p className="mt-1 text-xs text-slate-500">
+            The edited file is in your extracted tree — run it back through your own repack/install
+            step to see it in-game.
+          </p>
+        </div>
+        <button
+          onClick={onDismiss}
+          className="shrink-0 text-xs text-slate-400 hover:text-slate-200"
+          type="button"
+        >
+          Dismiss
+        </button>
+      </div>
     </div>
   );
 }

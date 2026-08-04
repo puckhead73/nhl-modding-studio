@@ -28,6 +28,7 @@ pub mod formula;
 pub mod head_preview;
 pub mod historical;
 pub mod import;
+pub mod surfaces;
 mod error;
 mod overview;
 mod profile;
@@ -38,11 +39,13 @@ mod view;
 mod workspace;
 
 pub use assets::{
-    browse_asset_dir, decode_portrait, export_asset_files, export_player_assets,
-    export_team_outfits, mark_generic_portraits, probe_birthdate_encoding, scan_player_assets,
-    AssetExportSummary, AssetKind, AssetRoots, BirthdateEncoding, BrowseEntry, BrowseListing,
-    DecodedImage, ExportOptions, FileExportOptions, FileExportSummary, OutfitExportSummary,
-    OutfitTeam, PlayerAssets,
+    browse_asset_dir, decode_portrait, decode_source_image, decode_team_logo, export_asset_files,
+    export_player_assets, export_team_outfits, mark_generic_portraits, probe_birthdate_encoding,
+    replace_gnf_texture, replace_portrait_texture, replace_texlib_texture, replace_texture_in_file,
+    resolve_install_path, scan_player_assets, AssetExportSummary, AssetKind, AssetRoots,
+    BirthdateEncoding, BrowseEntry,
+    BrowseListing, DecodedImage, ExportOptions, FileExportOptions, FileExportSummary,
+    OutfitExportSummary, OutfitTeam, PlayerAssets, TextureContainer, TextureWrite,
 };
 pub use head_preview::{decode_head_preview, HeadPreview, PreviewSubmesh, PreviewTexture};
 pub use attributes::{
@@ -50,6 +53,7 @@ pub use attributes::{
 };
 pub use audit::{humanize, HumanFinding, HumanReport};
 pub use capabilities::Capabilities;
+pub use surfaces::{SurfaceCapabilities, SurfaceCapability, SurfaceState};
 pub use capacity::{project_capacity, CapacityGrowth, PendingCreates, TableCapacity};
 pub use discovery::{
     detect_install, ps4_title_ids, title_ids, DbPaths, InstallReport, SaveSlot, TitleIds,

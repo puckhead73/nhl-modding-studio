@@ -981,6 +981,100 @@ impl DecodedImage {
         }
     }
 
+    /// Crop for the **bottom-anchored header portrait** framing.
+    ///
+    /// Vertically, keep from the top of the visible content down to the lowest
+    /// *solid* row — the lowest row that still holds a fully-opaque pixel
+    /// (alpha `>= SOLID`). Any faded / alpha-gradient bottom edge below that row
+    /// (shoulders trailing off into transparency) is dropped, so the caller can
+    /// pin the result's bottom to the tile and know it sits on real content, not
+    /// a fade. Horizontally, crop to the content bounds over that kept span.
+    ///
+    /// Horizontally, crop to the content bounds over that kept span, then pad
+    /// symmetrically with transparency so the **highest point** (the midpoint of
+    /// the topmost content row — the crown of the head) is the exact horizontal
+    /// centre of the result. A plain centre-in-tile then lands the crown in the
+    /// middle, steadier than centring on the shoulder-driven bounding box.
+    ///
+    /// `threshold` bounds what counts as visible content for the horizontal and
+    /// top extent (ignores near-transparent dust). Falls back to
+    /// [`Self::cropped_to_opaque`] when nothing solid exists to anchor to.
+    pub fn cropped_to_solid_bottom(self, threshold: u8) -> DecodedImage {
+        /// Alpha at/above which a pixel counts as fully opaque ("no transparency").
+        /// Just under 255 to tolerate codec quantization of a solid edge.
+        const SOLID: u8 = 250;
+
+        let (w, h) = (self.width as usize, self.height as usize);
+        let mut top: Option<usize> = None;
+        let mut solid_bottom: Option<usize> = None;
+        for y in 0..h {
+            let mut has_content = false;
+            let mut has_solid = false;
+            for x in 0..w {
+                let a = self.rgba[(y * w + x) * 4 + 3];
+                has_content |= a > threshold;
+                has_solid |= a >= SOLID;
+            }
+            if has_content && top.is_none() {
+                top = Some(y);
+            }
+            if has_solid {
+                solid_bottom = Some(y);
+            }
+        }
+        let (Some(top), Some(bottom)) = (top, solid_bottom) else {
+            return self.cropped_to_opaque(threshold);
+        };
+        if bottom < top {
+            return self.cropped_to_opaque(threshold);
+        }
+
+        // Horizontal bounds over the kept vertical span only.
+        let (mut min_x, mut max_x) = (w, 0usize);
+        for y in top..=bottom {
+            for x in 0..w {
+                if self.rgba[(y * w + x) * 4 + 3] > threshold {
+                    min_x = min_x.min(x);
+                    max_x = max_x.max(x);
+                }
+            }
+        }
+        if min_x > max_x {
+            return self.cropped_to_opaque(threshold);
+        }
+
+        // Highest-point horizontal centre: the midpoint of the content span in the
+        // topmost row (the crown of the head). We pad the crop symmetrically about
+        // this x so a plain centre-in-tile lands the highest point in the middle —
+        // steadier than centring on the (shoulder-driven) bounding box.
+        let (mut hx_min, mut hx_max) = (max_x, min_x);
+        for x in min_x..=max_x {
+            if self.rgba[(top * w + x) * 4 + 3] > threshold {
+                hx_min = hx_min.min(x);
+                hx_max = hx_max.max(x);
+            }
+        }
+        let cw = max_x - min_x + 1;
+        let ch = bottom - top + 1;
+        // Highest-point x within the crop, and the padding that centres it.
+        let cx = (hx_min + hx_max) / 2 - min_x;
+        let half = cx.max(cw - 1 - cx); // half-width of the centred output
+        let left_pad = half - cx;
+        let out_w = 2 * half + 1;
+
+        let mut rgba = vec![0u8; out_w * ch * 4]; // transparent padding
+        for (r, y) in (top..=bottom).enumerate() {
+            let src = (y * w + min_x) * 4;
+            let dst = (r * out_w + left_pad) * 4;
+            rgba[dst..dst + cw * 4].copy_from_slice(&self.rgba[src..src + cw * 4]);
+        }
+        DecodedImage {
+            width: out_w as u32,
+            height: ch as u32,
+            rgba,
+        }
+    }
+
     /// Encode as a PNG.
     pub fn to_png(&self) -> Result<Vec<u8>> {
         let buf = image::RgbaImage::from_raw(self.width, self.height, self.rgba.clone())
@@ -1142,12 +1236,151 @@ pub fn decode_portrait(path: &Path) -> Result<DecodedImage> {
     })
 }
 
+/// A pickable portrait texture slot, tagged by the platform's inner encoding.
+/// Xbox 360 front-ends wrap an `XPR2` (Xbox-tiled DXT); PS3 front-ends wrap a
+/// plain little-endian `DDS ` (DXT1/3/5). Both sit inside the same `BIGF` +
+/// RefPack envelope — only the inner texture differs — so the picker sniffs
+/// which and the writer branches. Mirrors the prior app's `PortraitTarget`.
+enum PortraitSlot {
+    Xpr2 {
+        entry: String,
+        xpr: tdb_rx2::xpr::Xpr2Texture,
+    },
+    Dds {
+        entry: String,
+        width: u32,
+        height: u32,
+        fmt: tdb_archive_codec::DdsFormat,
+    },
+}
+
+impl PortraitSlot {
+    fn area(&self) -> u64 {
+        match self {
+            PortraitSlot::Xpr2 { xpr, .. } => xpr.width as u64 * xpr.height as u64,
+            PortraitSlot::Dds { width, height, .. } => *width as u64 * *height as u64,
+        }
+    }
+}
+
+/// Write an edited texture back into an extracted **portrait** archive (`p{id}.big` — the extracted
+/// file itself, a `BIGF` holding a RefPack-wrapped texture). Picks the largest decodable slot and
+/// re-encodes `rgba` (w×h RGBA8) into the slot's DXT format, splicing it back through the platform's
+/// container → RefPack → BIGF and returning the rebuilt archive bytes ready to write over the file.
+///
+/// Two platform encodings, both mirrored from the prior app's proven `portrait_replace` pipeline
+/// (verified there against real EA bytes):
+/// * **Xbox 360 `XPR2`** — same dimensions keep the descriptor via
+///   [`Xpr2Texture::replace_base_mip_linear`]; a size change regenerates it via
+///   [`Xpr2Texture::replace_resized`].
+/// * **PS3 `DDS `** — re-encode at the source dimensions with a freshly regenerated full mip chain
+///   (`compress_bc_mip_chain` → [`encode_dds`](tdb_archive_codec::encode_dds)), matching how a real
+///   EA portrait DDS ships a complete chain.
+///
+/// DXT slots require 4-aligned dimensions (4×4 block compression).
+pub fn replace_portrait_texture(archive_bytes: Vec<u8>, rgba: &[u8], w: u32, h: u32) -> Result<Vec<u8>> {
+    use tdb_rx2::xpr::{Xpr2Texture, XPR2_MAGIC};
+
+    let archive = tdb_archive_big::Archive::parse(archive_bytes)
+        .map_err(|e| DomainError::Extract(format!("portrait archive parse: {e}")))?;
+
+    // Largest decodable slot (RefPack-unwrapped), either encoding — matches the
+    // read-side picker in `decode_portrait`/`rasters_in`.
+    let mut best: Option<PortraitSlot> = None;
+    for entry in archive.iter_entries() {
+        if entry.name.is_empty() {
+            continue;
+        }
+        let Ok(raw) = archive.read_entry_raw(&entry.name) else {
+            continue;
+        };
+        let decoded = if tdb_archive_codec::is_refpack(&raw) {
+            match tdb_archive_codec::refpack_decompress(&raw) {
+                Ok(d) => d,
+                Err(_) => continue,
+            }
+        } else {
+            raw
+        };
+        let candidate = if decoded.len() >= 4 && &decoded[..4] == XPR2_MAGIC {
+            Xpr2Texture::parse(decoded).ok().map(|xpr| PortraitSlot::Xpr2 {
+                entry: entry.name.clone(),
+                xpr,
+            })
+        } else if let Some((fmt, dw, dh, _)) = tdb_archive_codec::dds_base_mip(&decoded) {
+            Some(PortraitSlot::Dds {
+                entry: entry.name.clone(),
+                width: dw,
+                height: dh,
+                fmt,
+            })
+        } else {
+            None
+        };
+        if let Some(candidate) = candidate {
+            if best.as_ref().is_none_or(|b| candidate.area() > b.area()) {
+                best = Some(candidate);
+            }
+        }
+    }
+    let slot = best.ok_or_else(|| {
+        DomainError::Extract("no XPR2 or DDS texture in portrait archive to replace".into())
+    })?;
+
+    // Both encodings we handle here are DXT; guard the 4×4 block constraint once.
+    if w % 4 != 0 || h % 4 != 0 {
+        return Err(DomainError::Extract(format!(
+            "portrait is DXT (4×4 blocks); replacement {w}×{h} must have both dims divisible by 4"
+        )));
+    }
+
+    let (entry_name, packed) = match slot {
+        PortraitSlot::Xpr2 { entry, xpr } => {
+            let dxt = xpr.format.as_dxt().ok_or_else(|| {
+                DomainError::Extract(
+                    "portrait slot is uncompressed (8_8_8_8) — replace not supported".into(),
+                )
+            })?;
+            let dds_fmt = dds_format_of(dxt)?;
+            let linear = tdb_archive_codec::compress_bc(dds_fmt, w, h, rgba);
+            let new_xpr = if w == xpr.width && h == xpr.height {
+                xpr.replace_base_mip_linear(&linear)
+            } else {
+                xpr.replace_resized(w, h, &linear)
+            }
+            .map_err(|e| DomainError::Extract(format!("XPR2 rewrite: {e}")))?;
+            (entry, tdb_archive_codec::refpack_compress(&new_xpr))
+        }
+        // PS3: RefPack-wrapped little-endian DDS. Adopt the source dims and
+        // regenerate a full mip chain so the DDS is internally consistent.
+        PortraitSlot::Dds { entry, fmt, .. } => {
+            let (chain, mip_count) = compress_bc_mip_chain(fmt, w, h, rgba);
+            let dds_bytes = tdb_archive_codec::encode_dds(fmt, w, h, mip_count, &chain);
+            (entry, tdb_archive_codec::refpack_compress(&dds_bytes))
+        }
+    };
+
+    let mut builder = archive
+        .to_builder()
+        .map_err(|e| DomainError::Extract(format!("archive to_builder: {e}")))?;
+    if !builder.replace_entry(&entry_name, packed) {
+        return Err(DomainError::Extract(format!(
+            "entry {entry_name} vanished before replace"
+        )));
+    }
+    builder
+        .build()
+        .map_err(|e| DomainError::Extract(format!("archive rebuild: {e}")))
+}
+
 /// Every raster one archive entry carries.
 ///
-/// EA shipped portraits in **two different containers**, verified against real
+/// EA shipped portraits in **three different containers**, verified against real
 /// installs:
 ///
-/// * NHL Legacy / 14 / 15 — a RefPack-compressed, Xbox-tiled `XPR2` package.
+/// * NHL Legacy / 14 (Xbox 360) — a RefPack-compressed, Xbox-tiled `XPR2` package.
+/// * **NHL Legacy / 15 (PS3)** — a RefPack-compressed, little-endian `DDS `
+///   (DXT1/3/5). Untiled, so the top-mip block stream is a linear base mip.
 /// * **NHL 10** — an uncompressed `\x89RW4xb2` RX2 container, the same format
 ///   the `rendering/` texlibs use. No RefPack, no XPR2.
 ///
@@ -1167,6 +1400,20 @@ fn rasters_in(payload: Vec<u8>) -> Vec<Raster> {
             linear: tex.decode_base_mip_linear(),
             format,
         }];
+    }
+    // PS3 DDS: `DDS ` magic + a DXT fourcc. The base-mip block slice is already
+    // untiled/linear, so it drops straight into a `Raster` (the same shape the
+    // XPR2 branch produces after un-tiling). Uncompressed / DX10 DDS return
+    // `None` here and fall through (unobserved for portraits).
+    if let Some((fmt, w, h, base)) = tdb_archive_codec::dds_base_mip(&payload) {
+        if let Some(format) = dds_to_texlib_format(fmt) {
+            return vec![Raster {
+                width: w,
+                height: h,
+                linear: base.to_vec(),
+                format,
+            }];
+        }
     }
     if let Ok(lib) = tdb_rx2::texlib::parse(&payload) {
         return lib
@@ -1249,6 +1496,257 @@ pub(crate) fn gnf_to_rgba(tex: &tdb_rx2::gnf::GnfTexture) -> Result<Vec<u8>> {
     }
 }
 
+/// Write an edited texture back into an extracted **PS4 GNF** (`.gnf` — the
+/// extracted Kettle asset itself). Re-encodes `rgba` (w×h RGBA8) into the GNF's
+/// existing BCn format, re-tiles it into the GNM `tiling_index = 13` layout, and
+/// splices it back while preserving the file's authentic 256-byte header + any
+/// trailing mip data byte-for-byte (via [`tdb_rx2::gnf::replace_base_mip`]).
+///
+/// **Same-format, same-dimensions only.** A GNF edit keeps the original T#
+/// descriptor verbatim — that is what makes the write verifiable rather than a
+/// guessed-from-scratch header — so the replacement must match the slot's
+/// dimensions. Resizing/reformatting would require regenerating the descriptor
+/// and is out of scope here.
+///
+/// Every GNF BCn format is now writable: BC1/BC2/BC3 via
+/// [`tdb_archive_codec::compress_bc`] (texpresso), **BC7** via [`tdb_rx2::bc7`]
+/// (mode-6 — NHL 16+ portraits), and **BC4/BC5** via [`tdb_rx2::bc45`]
+/// (single/dual-channel roughness / normal maps). Unlike DXT-in-a-.big, GNF
+/// carries partial edge blocks, so non-multiple-of-4 dimensions (e.g. the
+/// 512×340 portraits) are fine.
+pub fn replace_gnf_texture(gnf_bytes: &[u8], rgba: &[u8], w: u32, h: u32) -> Result<Vec<u8>> {
+    use tdb_archive_codec::DdsFormat;
+    use tdb_rx2::gnf::BcFormat;
+
+    let tex = tdb_rx2::gnf::parse(gnf_bytes)
+        .map_err(|e| DomainError::Extract(format!("GNF parse: {e}")))?;
+    if (w, h) != (tex.width, tex.height) {
+        return Err(DomainError::Extract(format!(
+            "GNF replace is same-size only: got {w}x{h}, slot is {}x{}",
+            tex.width, tex.height
+        )));
+    }
+    let linear = match tex.format {
+        BcFormat::Bc1 => tdb_archive_codec::compress_bc(DdsFormat::Dxt1, w, h, rgba),
+        BcFormat::Bc2 => tdb_archive_codec::compress_bc(DdsFormat::Dxt3, w, h, rgba),
+        BcFormat::Bc3 => tdb_archive_codec::compress_bc(DdsFormat::Dxt5, w, h, rgba),
+        BcFormat::Bc4 => tdb_rx2::bc45::encode_bc4(rgba, w, h),
+        BcFormat::Bc5 => tdb_rx2::bc45::encode_bc5(rgba, w, h),
+        BcFormat::Bc7 => tdb_rx2::bc7::encode(rgba, w, h),
+    };
+    tdb_rx2::gnf::replace_base_mip(gnf_bytes, &linear)
+        .map_err(|e| DomainError::Extract(format!("GNF base-mip rewrite: {e}")))
+}
+
+/// Write an edited texture into an extracted **RW4 texlib** (`.rx2` — the loose
+/// logo/uniform/equipment rasters). Picks the largest texture by area (the same
+/// slot preview/export show), re-encodes `rgba` (w×h RGBA8) into that slot's
+/// format, and rewrites it in place via [`tdb_rx2::texlib::replace_same_size`].
+///
+/// **Same-dimensions only** — a texlib resize regenerates the Xenos descriptor
+/// and is out of scope here. DXT slots go through [`tdb_archive_codec::compress_bc`];
+/// an uncompressed `Argb8888` slot takes the RGBA re-ordered to the texlib's
+/// stored `[A,R,G,B]` byte layout.
+pub fn replace_texlib_texture(file_bytes: &[u8], rgba: &[u8], w: u32, h: u32) -> Result<Vec<u8>> {
+    use tdb_rx2::texlib::PixelFormat;
+
+    let lib = tdb_rx2::texlib::parse(file_bytes)
+        .map_err(|e| DomainError::Extract(format!("texlib parse: {e}")))?;
+    let (idx, tw, th, tf) = lib
+        .textures
+        .iter()
+        .enumerate()
+        .max_by_key(|(_, t)| t.width as u64 * t.height as u64)
+        .map(|(i, t)| (i, t.width, t.height, t.format))
+        .ok_or_else(|| DomainError::Extract("texlib has no texture to replace".into()))?;
+    if (w, h) != (tw, th) {
+        return Err(DomainError::Extract(format!(
+            "texlib replace is same-size only: got {w}x{h}, slot is {tw}x{th}"
+        )));
+    }
+    let base = if matches!(tf, PixelFormat::Argb8888) {
+        // Stored `[A,R,G,B]` per texel — rotate RGBA into that order.
+        let mut v = Vec::with_capacity(rgba.len());
+        for px in rgba.chunks_exact(4) {
+            v.extend_from_slice(&[px[3], px[0], px[1], px[2]]);
+        }
+        v
+    } else {
+        tdb_archive_codec::compress_bc(dds_format_of(tf)?, w, h, rgba)
+    };
+    lib.replace_same_size(idx, &base)
+        .map_err(|e| DomainError::Extract(format!("texlib replace: {e}")))
+}
+
+/// The extracted texture container a file is, as recognised by
+/// [`replace_texture_in_file`] — surfaced so the UI can name what it wrote.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum TextureContainer {
+    /// PS4 Kettle `.gnf`.
+    Gnf,
+    /// Xbox 360 / PS3 portrait `BIGF` archive (`p{id}.big`).
+    Portrait,
+    /// Loose RW4 `.rx2` texlib (logo / uniform / equipment raster).
+    Texlib,
+}
+
+impl TextureContainer {
+    /// Stable lower-case tag for DTOs / logs.
+    pub fn label(self) -> &'static str {
+        match self {
+            TextureContainer::Gnf => "gnf",
+            TextureContainer::Portrait => "portrait",
+            TextureContainer::Texlib => "texlib",
+        }
+    }
+}
+
+/// The rebuilt bytes of an edited texture file plus what it turned out to be.
+pub struct TextureWrite {
+    pub container: TextureContainer,
+    pub width: u32,
+    pub height: u32,
+    pub bytes: Vec<u8>,
+}
+
+impl std::fmt::Debug for TextureWrite {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        // Summarise the payload rather than dumping every byte.
+        f.debug_struct("TextureWrite")
+            .field("container", &self.container)
+            .field("width", &self.width)
+            .field("height", &self.height)
+            .field("bytes", &format_args!("<{} bytes>", self.bytes.len()))
+            .finish()
+    }
+}
+
+/// Write an edited texture (RGBA `w`×`h`) back into an extracted asset file,
+/// dispatching on the file's container magic. Returns the rebuilt file bytes
+/// ready to write over the original — the single entry point the app seam calls
+/// so the UI's export→edit→reimport loop works across every texture family.
+///
+/// Dispatch:
+/// * `GNF ` → [`replace_gnf_texture`] (PS4 heads/portraits/maps).
+/// * `BIGF` → [`replace_portrait_texture`] (Xbox 360 XPR2 / PS3 DDS portraits).
+/// * `\x89RW4` → [`replace_texlib_texture`] (logos / uniforms / equipment).
+///
+/// A whole-file-RefPack container (NHL 08's wrapped `.big`) is rejected with a
+/// clear message rather than mis-parsed — the confirmed extracted trees ship
+/// these three containers unwrapped.
+pub fn replace_texture_in_file(file_bytes: Vec<u8>, rgba: &[u8], w: u32, h: u32) -> Result<TextureWrite> {
+    if file_bytes.starts_with(tdb_rx2::gnf::MAGIC_GNF) {
+        let bytes = replace_gnf_texture(&file_bytes, rgba, w, h)?;
+        return Ok(TextureWrite { container: TextureContainer::Gnf, width: w, height: h, bytes });
+    }
+    if file_bytes.starts_with(b"BIGF") {
+        let bytes = replace_portrait_texture(file_bytes, rgba, w, h)?;
+        return Ok(TextureWrite { container: TextureContainer::Portrait, width: w, height: h, bytes });
+    }
+    if file_bytes.starts_with(b"\x89RW4") {
+        let bytes = replace_texlib_texture(&file_bytes, rgba, w, h)?;
+        return Ok(TextureWrite { container: TextureContainer::Texlib, width: w, height: h, bytes });
+    }
+    if tdb_archive_codec::is_refpack(&file_bytes) {
+        return Err(DomainError::Extract(
+            "whole-file RefPack container is not supported for in-place texture write yet \
+             (extracted GNF / BIGF portrait / RW4 texlib only)"
+                .into(),
+        ));
+    }
+    Err(DomainError::Extract(
+        "unrecognized texture container (expected a GNF, a BIGF portrait archive, or an RW4 texlib)"
+            .into(),
+    ))
+}
+
+/// Decode a team's **logo** to an RGBA image for the header preview.
+///
+/// The logo raster is the `rendering/logo/texlib_{artid}_*.rx2` texlib named by
+/// the team's `kOtt.lOnr` (`artid`). Tries the known on-disk name variants,
+/// parses the texlib, and returns its largest raster de-tiled to RGBA. `None`
+/// when the title ships no such file or it doesn't decode — the caller then
+/// shows the neutral placeholder.
+pub fn decode_team_logo(roots: &AssetRoots, artid: u64) -> Option<DecodedImage> {
+    // Primary source: the **front-end team crest** at
+    // `fe/ion/artassets/teamlogos/t{artid}.big` — a BIGF archive holding the
+    // full-colour 256×256 team logo, keyed by the same `kOtt.lOnr` artid. Verified
+    // against the real install (t10 = Red Wings winged wheel, t1 = Jets crest).
+    //
+    // The `rendering/logo/texlib_{artid}_*.rx2` texlibs are NOT the primary logo:
+    // they are the in-rink art — a wide 256×128 **wordmark** plus mostly-empty
+    // crest slots — so reading them (and picking the largest raster) yielded
+    // wordmarks/secondaries. They stay only as a last-ditch fallback below.
+    if !roots.fe.is_empty() {
+        let crest = Path::new(&roots.fe)
+            .join("ion")
+            .join("artassets")
+            .join("teamlogos")
+            .join(format!("t{artid}.big"));
+        if crest.is_file() {
+            if let Ok(img) = decode_portrait(&crest) {
+                return Some(img);
+            }
+        }
+    }
+
+    // Fallback (titles without the fe crest tree): the rendering texlib. Prefer a
+    // non-empty **square** raster (the crest) over the wide wordmark, and skip
+    // empty slots — a better guess than largest-by-area, which is the wordmark.
+    let logo_dir = Path::new(&roots.rendering).join("logo");
+    let candidates = [
+        format!("texlib_{artid}_0_0.rx2"),
+        format!("texlib_{artid}.rx2"),
+        format!("texlib_{artid}_0.rx2"),
+    ];
+    for name in candidates {
+        let path = logo_dir.join(&name);
+        if !path.is_file() {
+            continue;
+        }
+        let Ok(bytes) = read_asset_file(&path) else { continue };
+        let Ok(lib) = tdb_rx2::texlib::parse(&bytes) else { continue };
+        let best = lib
+            .textures
+            .iter()
+            .filter_map(|t| {
+                let rgba = linear_to_rgba(t.format, t.width, t.height, &t.base_mip_linear).ok()?;
+                let covered = rgba.chunks_exact(4).filter(|p| p[3] > 8).count();
+                // Skip near-empty slots (the common empty crest rasters).
+                if covered * 50 < (t.width * t.height) as usize {
+                    return None; // < 2% covered
+                }
+                // Rank: most-square first (crest over wordmark), then larger.
+                let squareness = t.width.min(t.height) as f64 / t.width.max(t.height).max(1) as f64;
+                let score = (squareness * 1000.0) as u64 * 1_000_000 + covered as u64;
+                Some((score, t, rgba))
+            })
+            .max_by_key(|(score, _, _)| *score);
+        if let Some((_, t, rgba)) = best {
+            return Some(DecodedImage {
+                width: t.width,
+                height: t.height,
+                rgba,
+            });
+        }
+    }
+    None
+}
+
+/// Decode an operator-supplied source image (PNG/JPG/…) to RGBA8 for import.
+/// The `image` crate sniffs the format, so the UI can hand over whatever the
+/// operator exported and edited.
+pub fn decode_source_image(path: &Path) -> Result<DecodedImage> {
+    let img = image::open(path)
+        .map_err(|e| DomainError::Extract(format!("{}: image decode failed: {e}", path.display())))?
+        .to_rgba8();
+    Ok(DecodedImage {
+        width: img.width(),
+        height: img.height(),
+        rgba: img.into_raw(),
+    })
+}
+
 fn dds_format_of(fmt: tdb_rx2::texlib::PixelFormat) -> Result<tdb_archive_codec::DdsFormat> {
     use tdb_archive_codec::DdsFormat;
     use tdb_rx2::texlib::PixelFormat;
@@ -1262,6 +1760,66 @@ fn dds_format_of(fmt: tdb_rx2::texlib::PixelFormat) -> Result<tdb_archive_codec:
             )))
         }
     })
+}
+
+/// Inverse of [`dds_format_of`] for the DXT variants a portrait DDS uses.
+/// Returns `None` for `Rgba32` (uncompressed portraits are unobserved and go
+/// through a different channel-order path, so we don't claim them here).
+fn dds_to_texlib_format(
+    fmt: tdb_archive_codec::DdsFormat,
+) -> Option<tdb_rx2::texlib::PixelFormat> {
+    use tdb_archive_codec::DdsFormat;
+    use tdb_rx2::texlib::PixelFormat;
+    match fmt {
+        DdsFormat::Dxt1 => Some(PixelFormat::Dxt1),
+        DdsFormat::Dxt3 => Some(PixelFormat::Dxt3),
+        DdsFormat::Dxt5 => Some(PixelFormat::Dxt5),
+        DdsFormat::Rgba32 => None,
+    }
+}
+
+/// Full DDS mip-chain length for a texture of the given dimensions:
+/// `floor(log2(max(w, h))) + 1` (512×512 → 10, 256×128 → 9, 4×4 → 3, 1×1 → 1).
+/// A real EA portrait DDS ships the full chain, so the PS3 write path
+/// regenerates it to keep the file internally consistent.
+fn full_mip_count(w: u32, h: u32) -> u32 {
+    let mut max_dim = w.max(h).max(1);
+    let mut count = 1u32;
+    while max_dim > 1 {
+        max_dim >>= 1;
+        count += 1;
+    }
+    count
+}
+
+/// Compress `rgba` (w×h RGBA8) into a full DXT mip chain (top mip first,
+/// levels packed contiguously) for `fmt`, returning `(chain, mip_count)`.
+///
+/// Each level below the base is a box/triangle downsample of the source via the
+/// `image` crate, then block-compressed with [`tdb_archive_codec::compress_bc`].
+/// `mip_count` matches [`full_mip_count`]; if the source buffer can't be wrapped
+/// as an image (length mismatch) we fall back to a single base mip and report
+/// `1` so the DDS header stays consistent with the payload.
+fn compress_bc_mip_chain(
+    fmt: tdb_archive_codec::DdsFormat,
+    w: u32,
+    h: u32,
+    rgba: &[u8],
+) -> (Vec<u8>, u32) {
+    let base_blocks = tdb_archive_codec::compress_bc(fmt, w, h, rgba);
+    let Some(base_img) = image::RgbaImage::from_raw(w, h, rgba.to_vec()) else {
+        return (base_blocks, 1);
+    };
+    let mip_count = full_mip_count(w, h);
+    let mut chain = base_blocks;
+    for level in 1..mip_count {
+        let mw = (w >> level).max(1);
+        let mh = (h >> level).max(1);
+        let scaled =
+            image::imageops::resize(&base_img, mw, mh, image::imageops::FilterType::Triangle);
+        chain.extend_from_slice(&tdb_archive_codec::compress_bc(fmt, mw, mh, scaled.as_raw()));
+    }
+    (chain, mip_count)
 }
 
 // ---------------------------------------------------------------- export
@@ -1670,6 +2228,15 @@ fn safe_join_rel(root: &Path, rel: &str) -> Option<PathBuf> {
         }
     }
     Some(out)
+}
+
+/// Resolve a file-browser selection (`rel`, a forward-slash path relative to the
+/// install root) to an absolute path under `root`, refusing anything that would
+/// escape the root (`..`, absolute paths, drive prefixes) → `None`. The public
+/// entry point the app seam uses so a UI-supplied path can never write outside
+/// the install tree — the write-side counterpart to [`browse_asset_dir`].
+pub fn resolve_install_path(root: &Path, rel: &str) -> Option<PathBuf> {
+    safe_join_rel(root, rel)
 }
 
 /// One entry in a browsed directory of the extracted install.
@@ -2671,6 +3238,54 @@ mod tests {
         assert_eq!((out.width, out.height), (4, 4)); // below threshold => nothing opaque
     }
 
+    /// The header framing (a) drops a faded bottom edge below the lowest solid
+    /// row, and (b) centres the highest point (crown) horizontally by padding.
+    #[test]
+    fn solid_bottom_crop_drops_fade_and_centres_crown() {
+        // 8×8. A head whose crown (topmost pixel) sits left of centre, widening to
+        // a solid bottom row, with a faded row beneath it.
+        let (w, h) = (8usize, 8usize);
+        let mut rgba = vec![0u8; w * h * 4];
+        let put = |rgba: &mut [u8], x: usize, y: usize, a: u8| {
+            let i = (y * w + x) * 4;
+            rgba[i..i + 4].copy_from_slice(&[200, 100, 50, a]);
+        };
+        put(&mut rgba, 2, 1, 255); // crown (highest point), off-centre-left
+        for x in 1..=3 {
+            put(&mut rgba, x, 2, 255);
+        }
+        for x in 0..=6 {
+            put(&mut rgba, x, 3, 255); // solid bottom (widest)
+            put(&mut rgba, x, 4, 100); // fade below — must be dropped
+        }
+        let out = DecodedImage { width: 8, height: 8, rgba }.cropped_to_solid_bottom(8);
+
+        // Rows 1–3 kept (fade row 4 dropped) → height 3; no partial-alpha survives.
+        assert_eq!(out.height, 3, "fade row dropped");
+        assert!(
+            out.rgba.chunks_exact(4).all(|p| p[3] == 0 || p[3] == 255),
+            "no faded pixel survives (only opaque content + transparent padding)"
+        );
+        // The crown (top row's only opaque pixel) sits at the horizontal centre.
+        let ow = out.width as usize;
+        let centre = ow / 2;
+        let top_alpha = |x: usize| out.rgba[x * 4 + 3];
+        assert_eq!(top_alpha(centre), 255, "crown is centred");
+        assert_eq!(top_alpha(0), 0, "left edge of top row is transparent padding/space");
+        assert_eq!(top_alpha(ow - 1), 0, "right edge of top row is transparent");
+    }
+
+    /// With no solid pixel anywhere (all partial alpha), the header crop falls
+    /// back to the plain opaque-bounds crop rather than returning nothing.
+    #[test]
+    fn solid_bottom_crop_falls_back_without_solids() {
+        let mut rgba = vec![0u8; 4 * 4 * 4];
+        let i = (1 * 4 + 1) * 4;
+        rgba[i..i + 4].copy_from_slice(&[10, 20, 30, 120]); // one partial pixel
+        let out = DecodedImage { width: 4, height: 4, rgba }.cropped_to_solid_bottom(8);
+        assert_eq!((out.width, out.height), (1, 1)); // fell back to opaque-bounds crop
+    }
+
     /// Recomp keeps the real install one level down. Anchoring on the picked
     /// root would name `<root>/rendering` for a tree whose art extracts to
     /// `<root>/game/rendering` — the paths would be wrong *and* the "not
@@ -2968,6 +3583,974 @@ mod tests {
         let overridden = roots.with_overrides(Some("   "), Some("/custom/fe"));
         assert_eq!(overridden.rendering, rendering);
         assert_eq!(overridden.fe, "/custom/fe");
+    }
+
+    /// Generate + drift-guard the NHL Legacy Xbox 360 **team-logo identity map**
+    /// (`docs/audits/data/assets/nhllegacy/xbox360/identities.csv`) from the
+    /// committed anchor, and verify (hard-rule-3) that the on-disk logo texlib id
+    /// is `kOtt.lOnr` (`artid`) — not the record index / team key.
+    ///
+    /// Evidence: the team resolving to "Red Wings" carries `lOnr == 10` (matching
+    /// the eyeballed `texlib_10` → Red Wings wordmark), and the artid space is
+    /// sparse and reaches far past the 252 team records (max > 20000 — an index
+    /// could never), the same high range the on-disk `texlib_{id}` files occupy.
+    ///
+    /// Reads only `anchors/`, so it runs in CI. `QA_WRITE=1` rewrites the CSV;
+    /// otherwise it asserts the committed file is byte-identical.
+    #[test]
+    fn legacy_x360_team_logo_identity_map() {
+        use tdb_core::TdbFile;
+        use tdb_defs::FieldMetaIndex;
+
+        let manifest = std::path::Path::new(env!("CARGO_MANIFEST_DIR"));
+        let repo = manifest.join("..").join("..");
+        let base = repo
+            .join("anchors")
+            .join("xbox360")
+            .join("nhllegacy")
+            .join("databases");
+        let db_path = base.join("nhlng.db");
+        if !db_path.is_file() {
+            eprintln!("skipping: {} not present", db_path.display());
+            return;
+        }
+        let bytes = std::fs::read(&db_path).expect("read anchor");
+        let db = TdbFile::parse(&bytes).expect("parse anchor");
+        let meta = FieldMetaIndex::from_xml(
+            &std::fs::read_to_string(base.join("nhlng-meta.xml")).expect("meta"),
+        )
+        .expect("parse meta");
+        let kott = db.table_canonical("kOtt").expect("team table");
+        let f_artid = field_by_studio_id(&db, kott, "lOnr").expect("kOtt.lOnr");
+        let f_key = field_by_studio_id(&db, kott, "vfEq").expect("kOtt.vfEq");
+
+        // CSV escape for a field that may hold a comma or quote.
+        let esc = |s: &str| {
+            if s.contains([',', '"', '\n']) {
+                format!("\"{}\"", s.replace('"', "\"\""))
+            } else {
+                s.to_string()
+            }
+        };
+
+        let mut csv = String::from(
+            "team_record,logo_artid,logo_texlib_stem,fullname,shortname,abbrname,artabbr\n",
+        );
+        let mut red_wings_artid: Option<u64> = None;
+        let mut max_artid = 0u64;
+        let mut divergent = 0usize;
+        for rec in 0..kott.current_records as u32 {
+            let artid = db.read_u64(kott, rec, f_artid).unwrap_or(u64::MAX);
+            let key = db.read_u64(kott, rec, f_key).unwrap_or(u64::MAX);
+            let full = read_str_by_name(&db, &meta, kott, rec, "fullname");
+            let short = read_str_by_name(&db, &meta, kott, rec, "shortname");
+            let abbr = read_str_by_name(&db, &meta, kott, rec, "abbrname");
+            let artabbr = read_str_by_name(&db, &meta, kott, rec, "artabbr");
+            // Skip empty/placeholder rows so the map holds only real teams.
+            if full.trim().is_empty() && short.trim().is_empty() {
+                continue;
+            }
+            if artid != u64::MAX {
+                max_artid = max_artid.max(artid);
+                if artid != key {
+                    divergent += 1;
+                }
+            }
+            if full.contains("Red Wings") || short.contains("Red Wings") {
+                red_wings_artid = Some(artid);
+            }
+            csv.push_str(&format!(
+                "{rec},{artid},texlib_{artid},{},{},{},{}\n",
+                esc(full.trim()),
+                esc(short.trim()),
+                esc(abbr.trim()),
+                esc(artabbr.trim()),
+            ));
+        }
+
+        // Hard-rule-3 assertions: logo id == artid (lOnr), not an index/key.
+        assert_eq!(
+            red_wings_artid,
+            Some(10),
+            "Red Wings logo artid should be 10 (matches eyeballed texlib_10)"
+        );
+        assert!(
+            max_artid > kott.current_records as u64,
+            "artid space (max {max_artid}) must exceed the {} team records — proves it is not a \
+             record index",
+            kott.current_records
+        );
+        assert!(
+            divergent > 0,
+            "artid must diverge from the team key on some teams — proves logo id is lOnr, not vfEq"
+        );
+
+        let csv_path = repo
+            .join("docs/audits/data/assets/nhllegacy/xbox360/identities.csv");
+        if std::env::var_os("QA_WRITE").is_some() {
+            std::fs::create_dir_all(csv_path.parent().unwrap()).unwrap();
+            std::fs::write(&csv_path, &csv).unwrap();
+            eprintln!("wrote {} ({} bytes)", csv_path.display(), csv.len());
+        } else {
+            let committed = std::fs::read_to_string(&csv_path).unwrap_or_default();
+            assert_eq!(
+                committed.replace("\r\n", "\n"),
+                csv,
+                "identities.csv drifted — re-run with QA_WRITE=1 to regenerate"
+            );
+        }
+    }
+
+    /// Phase 5.2 (uniforms) + 5.3 (equipment) — NHL Legacy Xbox 360 texture
+    /// decode confirmation from the extracted tree. Content-driven (try
+    /// `texlib::parse`; a mesh `.rx2` yields zero textures and is skipped),
+    /// mirroring `process_one_outfit`'s real decode. Asserts every decoded raster
+    /// is structurally valid and that each family's color content decodes
+    /// somewhere (a color map is richly-colored). Skips without the mount;
+    /// `QA_ASSET_OUT` dumps one sample PNG per family for eyeball review.
+    #[test]
+    fn legacy_x360_outfit_and_equipment_decode_from_extracted_tree() {
+        const ROOT: &str = r"X:\Games\Emulation\Roms\XBOX360\NHL Legacy\NHL Legacy";
+        let rendering = std::path::Path::new(ROOT).join("rendering");
+        if !rendering.is_dir() {
+            eprintln!("skipping: {} not present", rendering.display());
+            return;
+        }
+
+        // 5.2 uniforms, then 5.3 equipment. Each is a `rendering/<folder>` of loose `.rx2`
+        // (mesh + per-map-suffix texture rasters).
+        let families: &[&str] = &[
+            "jersey", "pant", "sock", // 5.2
+            "helmet", "glove", "blocker", "trapper", "goaliepad", "goaliehelmet",
+            "goaliestick", "playerstick", // 5.3
+        ];
+
+        let distinct_colors = |rgba: &[u8], cap: usize| -> usize {
+            let mut seen = std::collections::HashSet::new();
+            for px in rgba.chunks_exact(4) {
+                seen.insert([px[0], px[1], px[2], px[3]]);
+                if seen.len() >= cap {
+                    break;
+                }
+            }
+            seen.len()
+        };
+        let out = std::env::var_os("QA_ASSET_OUT").map(std::path::PathBuf::from);
+        if let Some(d) = &out {
+            std::fs::create_dir_all(d).ok();
+        }
+
+        let mut families_seen = 0usize;
+        let mut global_max_colors = 0usize;
+        for &family in families {
+            let dir = rendering.join(family);
+            let Ok(rd) = std::fs::read_dir(&dir) else {
+                eprintln!("  {family}: folder absent — skipped");
+                continue;
+            };
+            let mut files: Vec<std::path::PathBuf> = rd
+                .filter_map(|e| e.ok().map(|e| e.path()))
+                .filter(|p| p.extension().is_some_and(|e| e.eq_ignore_ascii_case("rx2")))
+                .collect();
+            files.sort();
+            // Prefer color-map (`_cm`) files up front so a rich raster is in the sample.
+            files.sort_by_key(|p| {
+                let s = p.file_stem().and_then(|s| s.to_str()).unwrap_or("");
+                !s.to_ascii_lowercase().ends_with("_cm")
+            });
+            files.truncate(18);
+            if files.is_empty() {
+                continue;
+            }
+            families_seen += 1;
+
+            let mut textures = 0usize;
+            let mut meshes = 0usize;
+            let mut max_colors = 0usize;
+            let mut dumped = false;
+            for path in &files {
+                let bytes = read_asset_file(path).expect("read outfit rx2");
+                let Ok(lib) = tdb_rx2::texlib::parse(&bytes) else {
+                    meshes += 1; // parse-fail (unexpected shape) — treat as non-texture
+                    continue;
+                };
+                if lib.textures.is_empty() {
+                    meshes += 1; // a mesh `.rx2` (FXRS, no texture slots)
+                    continue;
+                }
+                for t in &lib.textures {
+                    assert!(
+                        (4..=4096).contains(&t.width) && (4..=4096).contains(&t.height),
+                        "{}: implausible {family} texture dims {}x{}",
+                        path.display(),
+                        t.width,
+                        t.height
+                    );
+                    let rgba = linear_to_rgba(t.format, t.width, t.height, &t.base_mip_linear)
+                        .unwrap_or_else(|e| panic!("{}: to rgba — {e}", path.display()));
+                    assert_eq!(rgba.len(), (t.width as usize) * (t.height as usize) * 4);
+                    let colors = distinct_colors(&rgba, 64);
+                    max_colors = max_colors.max(colors);
+                    textures += 1;
+                    // Dump the first richly-colored raster in this family.
+                    if !dumped && colors >= 32 {
+                        if let Some(d) = &out {
+                            let stem = path.file_stem().unwrap().to_string_lossy();
+                            if let Ok(png) = (DecodedImage {
+                                width: t.width,
+                                height: t.height,
+                                rgba,
+                            })
+                            .to_png()
+                            {
+                                let _ = std::fs::write(d.join(format!("{family}_{stem}.png")), png);
+                                dumped = true;
+                            }
+                        }
+                    }
+                }
+            }
+            eprintln!(
+                "  {family}: {} files sampled — {textures} texture rasters, {meshes} meshes, \
+                 max {max_colors} colors",
+                files.len()
+            );
+            // Each family ships texture rasters, and its color content decodes to a
+            // real (richly-colored) image — the Xbox-360 texture path is right.
+            assert!(
+                textures > 0,
+                "{family}: no texture rasters decoded from {} files",
+                files.len()
+            );
+            // Degeneracy guard: the family's color content decodes to a real image,
+            // not a flat/garbage buffer. (A few families sample mostly normal/detail
+            // maps, so the floor is lenient; the global check below proves rich
+            // color decode outright.)
+            assert!(
+                max_colors >= 16,
+                "{family}: richest raster only {max_colors} colors — decode suspect"
+            );
+            global_max_colors = global_max_colors.max(max_colors);
+        }
+        assert!(families_seen >= 8, "expected most outfit/equipment folders present");
+        // At least one family decoded a fully rich color map (the Ducks goalie mask
+        // etc.) — proof the Xbox-360 texlib path is right, not just non-degenerate.
+        assert!(
+            global_max_colors >= 48,
+            "no richly-colored outfit/equipment raster decoded (global max {global_max_colors})"
+        );
+        eprintln!("outfit/equipment: {families_seen} families confirmed (global max {global_max_colors} colors)");
+    }
+
+    /// Build a solid-magenta linear (untiled, LE) DXT base mip of the given
+    /// format + dims — an unmistakable in-game marker.
+    fn magenta_base_mip(format: tdb_rx2::texlib::PixelFormat, width: u32, height: u32) -> Vec<u8> {
+        use tdb_rx2::texlib::PixelFormat;
+        let bw = ((width + 3) / 4).max(1) as usize;
+        let bh = ((height + 3) / 4).max(1) as usize;
+        // Magenta in RGB565 = R31 G0 B31 = 0xF81F, little-endian [0x1F, 0xF8].
+        let color = [0x1F, 0xF8, 0x1F, 0xF8, 0x00, 0x00, 0x00, 0x00];
+        let block: Vec<u8> = match format {
+            PixelFormat::Dxt1 => color.to_vec(),
+            // DXT3: 8-byte explicit-alpha block (all 0xFF = opaque) + color block.
+            PixelFormat::Dxt3 => [[0xFFu8; 8].as_slice(), &color].concat(),
+            // DXT5: alpha0=alpha1=0xFF (opaque) + 6 index bytes + color block.
+            PixelFormat::Dxt5 => {
+                [[0xFF, 0xFF, 0, 0, 0, 0, 0, 0].as_slice(), &color].concat()
+            }
+            PixelFormat::Argb8888 => vec![0xFF, 0x00, 0xFF, 0xFF], // A R G B per texel
+        };
+        block.repeat(bw * bh)
+    }
+
+    /// **Game-verified probe generator (write path, option B1).** Recolor one boot
+    /// texture solid magenta, store it **raw** into `boot.big` via the new
+    /// `eb::EbFile` writer (original `+12` checksum kept), and write the repacked
+    /// archive to `QA_ASSET_OUT`. Loading it in an emulator answers both write-path
+    /// unknowns at once: does the loader accept a substituted (raw) codec where
+    /// `chunklzx` was, and does it validate the `+12` checksum? Mount-gated; also
+    /// dumps a preview PNG of each boot texlib so the visible target is known.
+    #[test]
+    fn legacy_x360_boot_write_probe() {
+        use tdb_archive_big::eb::EbFile;
+        const ROOT: &str = r"X:\Games\Emulation\Roms\XBOX360\NHL Legacy\NHL Legacy";
+        let boot_big = std::path::Path::new(ROOT).join("boot.big");
+        let Ok(archive_bytes) = std::fs::read(&boot_big) else {
+            eprintln!("skipping: {} not present", boot_big.display());
+            return;
+        };
+        let Some(out) = std::env::var_os("QA_ASSET_OUT").map(std::path::PathBuf::from) else {
+            eprintln!("skipping: set QA_ASSET_OUT to generate the probe");
+            return;
+        };
+        std::fs::create_dir_all(&out).ok();
+
+        // Preview every boot texlib so the visible target is unambiguous.
+        for n in [0u32, 1, 2, 3, 4, 5, 6] {
+            let p = std::path::Path::new(ROOT)
+                .join("rendering")
+                .join("boot")
+                .join(format!("texlib_{n}.rx2"));
+            let Ok(bytes) = read_asset_file(&p) else { continue };
+            let Ok(lib) = tdb_rx2::texlib::parse(&bytes) else { continue };
+            for (i, t) in lib.textures.iter().enumerate() {
+                if let Ok(rgba) = linear_to_rgba(t.format, t.width, t.height, &t.base_mip_linear) {
+                    let img = DecodedImage { width: t.width, height: t.height, rgba };
+                    if let Ok(png) = img.to_png() {
+                        let _ = std::fs::write(
+                            out.join(format!("boot_texlib_{n}_{i}_{}x{}.png", t.width, t.height)),
+                            png,
+                        );
+                    }
+                }
+            }
+        }
+
+        // Targets: both 1280x720 HD boot-splash copies (texlib_0 and texlib_5), so the
+        // magenta shows whichever the game displays. Override with BOOT_TARGET=n[,m].
+        let targets: Vec<u32> = std::env::var("BOOT_TARGET")
+            .ok()
+            .map(|s| s.split(',').filter_map(|t| t.trim().parse().ok()).collect())
+            .unwrap_or_else(|| vec![0, 5]);
+
+        let mut eb = EbFile::parse(&archive_bytes).expect("parse boot.big");
+        for target in &targets {
+            let src_path = std::path::Path::new(ROOT)
+                .join("rendering")
+                .join("boot")
+                .join(format!("texlib_{target}.rx2"));
+            let src = read_asset_file(&src_path).expect("read extracted boot texlib");
+            let lib = tdb_rx2::texlib::parse(&src).expect("parse boot texlib");
+            let (idx, tw, th, tf) = lib
+                .textures
+                .iter()
+                .enumerate()
+                .max_by_key(|(_, t)| t.width * t.height)
+                .map(|(i, t)| (i, t.width, t.height, t.format))
+                .expect("texlib has a texture");
+            let magenta = magenta_base_mip(tf, tw, th);
+            let modified_rx2 = lib.replace_same_size(idx, &magenta).expect("recolor base mip");
+
+            // Substitute the codec: wrap the recolored RW4 as `chunkzip` (which the loader's codec
+            // recognises) instead of the original `chunklzx`, then pad to the EXACT original stored
+            // size so the edit is fully in-place — no reflow, archive byte-length unchanged.
+            let chunkzip = tdb_archive_codec::compress_chunkzip(&modified_rx2);
+            assert_eq!(
+                tdb_archive_codec::decompress_if_wrapped(&chunkzip).unwrap(),
+                modified_rx2,
+                "our chunkzip must round-trip"
+            );
+
+            let entry_path = format!("rendering/boot/texlib_{target}.rx2");
+            let entry_idx = eb
+                .slots()
+                .iter()
+                .position(|s| s.path == entry_path)
+                .unwrap_or_else(|| panic!("{entry_path} not in boot.big"));
+            let orig_stored = eb.slots()[entry_idx].bytes.len();
+            assert!(
+                chunkzip.len() <= orig_stored,
+                "{entry_path}: chunkzip {} > original slot {orig_stored}; cannot stay in-place",
+                chunkzip.len()
+            );
+            let mut payload = chunkzip;
+            let chunkzip_len = payload.len();
+            payload.resize(orig_stored, 0); // pad to exact original size → same-size in-place
+            eb.replace_payload_in_place(entry_idx, payload).expect("in-place replace");
+            eprintln!(
+                "  {entry_path} texture[{idx}] {tw}x{th} {tf:?}: magenta RW4 {} B \
+                 -> chunkzip {chunkzip_len} B padded to {orig_stored} B (in-place, no reflow)",
+                modified_rx2.len()
+            );
+        }
+
+        let repacked = eb.encode();
+        assert_eq!(
+            repacked.len(),
+            archive_bytes.len(),
+            "in-place edit must keep the archive byte-length identical"
+        );
+        // Sanity: the independent reader still parses it, and each edited payload inflates to our
+        // magenta RW4.
+        let re = tdb_archive_big::eb::EbArchive::parse(&repacked).expect("re-parse repacked");
+        for target in &targets {
+            let path = format!("rendering/boot/texlib_{target}.rx2");
+            let e = re.entries.iter().find(|e| e.path == path).expect("entry present");
+            let raw = repacked[e.offset as usize..e.offset as usize + e.size as usize].to_vec();
+            let inflated = tdb_archive_codec::decompress_if_wrapped(&raw).expect("inflates");
+            assert!(inflated.starts_with(b"\x89RW4xb2"), "{path} inflates to an RW4");
+        }
+
+        let dst = out.join("boot.big");
+        std::fs::write(&dst, &repacked).expect("write probe archive");
+        eprintln!(
+            "WROTE in-place chunkzip probe {} ({} bytes == original {}; +12 checksums kept; no reflow)",
+            dst.display(),
+            repacked.len(),
+            archive_bytes.len()
+        );
+    }
+
+    /// **Checksum-isolation probe (write path, B1 follow-up).** Two write probes
+    /// (raw+reflow, and chunkzip in-place) both crashed. This one changes NOTHING
+    /// about the payloads — the original, valid `chunklzx` bytes are kept — and only
+    /// corrupts the `+12` field of the two boot-splash entries. It isolates the last
+    /// ambiguity:
+    ///   * boots normally  -> `+12` is NOT validated => the crash was the payload
+    ///     codec => the game requires `chunklzx` specifically => implement LZX (B2);
+    ///   * crashes         -> `+12` IS validated => must reverse the `+12` algorithm.
+    /// Mount-gated; writes to `QA_ASSET_OUT`.
+    #[test]
+    fn legacy_x360_boot_checksum_probe() {
+        use tdb_archive_big::eb::EbFile;
+        const ROOT: &str = r"X:\Games\Emulation\Roms\XBOX360\NHL Legacy\NHL Legacy";
+        let boot_big = std::path::Path::new(ROOT).join("boot.big");
+        let Ok(mut archive_bytes) = std::fs::read(&boot_big) else {
+            eprintln!("skipping: {} not present", boot_big.display());
+            return;
+        };
+        let Some(out) = std::env::var_os("QA_ASSET_OUT").map(std::path::PathBuf::from) else {
+            eprintln!("skipping: set QA_ASSET_OUT to generate the probe");
+            return;
+        };
+        std::fs::create_dir_all(&out).ok();
+
+        // 16-byte entries, file table at 0x30; the `+12` word is at entry+12.
+        const FILE_TABLE_OFFSET: usize = 0x30;
+        const ENTRY_SIZE: usize = 16;
+        let eb = EbFile::parse(&archive_bytes).expect("parse boot.big");
+        for target in [0u32, 5] {
+            let path = format!("rendering/boot/texlib_{target}.rx2");
+            let idx = eb
+                .slots()
+                .iter()
+                .position(|s| s.path == path)
+                .unwrap_or_else(|| panic!("{path} not found"));
+            let crc_off = FILE_TABLE_OFFSET + idx * ENTRY_SIZE + 12;
+            let orig = u32::from_be_bytes(archive_bytes[crc_off..crc_off + 4].try_into().unwrap());
+            // Deliberately-wrong, non-zero value (0 could be a "skip" sentinel).
+            archive_bytes[crc_off..crc_off + 4].copy_from_slice(&0xDEAD_BEEFu32.to_be_bytes());
+            eprintln!("  corrupted +12 of {path} (entry {idx}): 0x{orig:08X} -> 0xDEADBEEF");
+        }
+        // Everything else — payloads (valid chunklzx), offsets, sizes — is untouched.
+        let dst = out.join("boot.big");
+        std::fs::write(&dst, &archive_bytes).expect("write probe");
+        eprintln!("WROTE checksum probe {} ({} bytes; only two +12 words changed)", dst.display(), archive_bytes.len());
+    }
+
+    /// The team-logo preview must resolve the **front-end crest**
+    /// (`fe/ion/artassets/teamlogos/t{artid}.big`), not the in-rink wordmark in
+    /// `rendering/logo/`. Red Wings (artid 10) → the 256×256 winged-wheel crest,
+    /// richly covered — a wordmark would be 256×128 and ~7% covered. Mount-gated.
+    #[test]
+    fn legacy_x360_team_logo_uses_fe_crest() {
+        const ROOT: &str = r"X:\Games\Emulation\Roms\XBOX360\NHL Legacy\NHL Legacy";
+        if !std::path::Path::new(ROOT).join("fe").is_dir() {
+            eprintln!("skipping: {ROOT} mount not present");
+            return;
+        }
+        let roots = AssetRoots::resolve(std::path::Path::new(ROOT), default_platform());
+        let img = decode_team_logo(&roots, 10).expect("Red Wings crest resolves");
+        assert_eq!((img.width, img.height), (256, 256), "fe crest is 256×256");
+        let covered = img.rgba.chunks_exact(4).filter(|p| p[3] > 8).count();
+        let pct = covered as f64 / (img.width * img.height) as f64;
+        assert!(
+            pct > 0.10,
+            "crest should be richly covered ({:.0}%), not a sparse wordmark",
+            pct * 100.0
+        );
+    }
+
+    /// **Extracted-format WRITE path** (the actual goal): read a real extracted texlib `.rx2`, edit a
+    /// texture, and write the modified `.rx2` back — verifying (a) a **lossless round-trip** (writing
+    /// an unchanged base mip re-decodes byte-for-byte) and (b) an **edit** (recolor) survives a
+    /// write→re-parse→decode cycle. No `.big`, no LZX — this is `tdb_rx2::texlib::replace_*` on the
+    /// extracted file, which is all this workflow needs. Mount-gated; dumps before/after PNGs.
+    #[test]
+    fn legacy_x360_extracted_texlib_write_roundtrip() {
+        const ROOT: &str = r"X:\Games\Emulation\Roms\XBOX360\NHL Legacy\NHL Legacy";
+        let src_path = std::path::Path::new(ROOT)
+            .join("rendering")
+            .join("logo")
+            .join("texlib_10_0_0.rx2"); // Detroit Red Wings primary logo
+        let Ok(bytes) = std::fs::read(&src_path) else {
+            eprintln!("skipping: {} not present", src_path.display());
+            return;
+        };
+        let out = std::env::var_os("QA_ASSET_OUT").map(std::path::PathBuf::from);
+        if let Some(d) = &out {
+            std::fs::create_dir_all(d).ok();
+        }
+
+        let lib = tdb_rx2::texlib::parse(&bytes).expect("parse texlib");
+        let (idx, tw, th, tf) = lib
+            .textures
+            .iter()
+            .enumerate()
+            .max_by_key(|(_, t)| t.width * t.height)
+            .map(|(i, t)| (i, t.width, t.height, t.format))
+            .expect("texlib has a texture");
+        let original_base = lib.textures[idx].base_mip_linear.clone();
+
+        // (a) Lossless round-trip: write the *unchanged* base mip back and confirm it re-decodes
+        // byte-for-byte (the tile/untile + endian-swap survive a write→read cycle intact).
+        let rewritten = lib
+            .replace_base_keep_tail(idx, &original_base)
+            .expect("rewrite unchanged base");
+        let relib = tdb_rx2::texlib::parse(&rewritten).expect("re-parse rewritten");
+        assert_eq!(
+            relib.textures[idx].base_mip_linear, original_base,
+            "unchanged rewrite must re-decode identically (lossless)"
+        );
+
+        // (b) Real edit: recolor the logo magenta, write the extracted .rx2, re-parse + decode.
+        let magenta = magenta_base_mip(tf, tw, th);
+        let edited = lib.replace_same_size(idx, &magenta).expect("recolor");
+        let edited_lib = tdb_rx2::texlib::parse(&edited).expect("re-parse edited");
+        let et = &edited_lib.textures[idx];
+        assert_eq!((et.width, et.height, et.format), (tw, th, tf), "dims/format preserved");
+        let rgba = linear_to_rgba(et.format, et.width, et.height, &et.base_mip_linear).expect("rgba");
+        // Every pixel is magenta (R=255,G=0,B=255) — the edit took.
+        let all_magenta = rgba
+            .chunks_exact(4)
+            .all(|p| p[0] == 255 && p[1] == 0 && p[2] == 255);
+        assert!(all_magenta, "edited texture must read back as solid magenta");
+
+        if let Some(d) = &out {
+            // before
+            if let Ok(png) = (DecodedImage {
+                width: tw,
+                height: th,
+                rgba: linear_to_rgba(tf, tw, th, &original_base).unwrap(),
+            })
+            .to_png()
+            {
+                let _ = std::fs::write(d.join("extracted_write_before.png"), png);
+            }
+            if let Ok(png) = (DecodedImage { width: tw, height: th, rgba }).to_png() {
+                let _ = std::fs::write(d.join("extracted_write_after.png"), png);
+            }
+            let _ = std::fs::write(d.join("texlib_10_edited.rx2"), &edited);
+        }
+        eprintln!(
+            "extracted write OK: texlib_10 {tw}x{th} {tf:?} — lossless round-trip + magenta edit \
+             re-decoded ({} bytes written)",
+            edited.len()
+        );
+    }
+
+    /// **Extracted PORTRAIT write** (ported from the prior app's proven pipeline): take a real
+    /// extracted `p{id}.big`, replace its XPR2 with a gradient, rebuild the archive, write it, and
+    /// re-`decode_portrait` the rebuilt file — confirming it's a loadable extracted portrait whose
+    /// pixels are now the new image. Mount-gated; dumps before/after PNGs to `QA_ASSET_OUT`.
+    #[test]
+    fn legacy_x360_extracted_portrait_write_roundtrip() {
+        const ROOT: &str = r"X:\Games\Emulation\Roms\XBOX360\NHL Legacy\NHL Legacy";
+        let p = std::path::Path::new(ROOT)
+            .join(r"fe\ion\artassets\playerheadssmall\p0_4000\p1.big");
+        let Ok(bytes) = std::fs::read(&p) else {
+            eprintln!("skipping: {} not present", p.display());
+            return;
+        };
+        let before = decode_portrait(&p).expect("decode original portrait");
+        let (w, h) = (before.width, before.height);
+        assert!(w % 4 == 0 && h % 4 == 0, "portrait dims {w}x{h} DXT-aligned");
+
+        // Gradient source: R ramps across, B ramps down — unmistakable + directional.
+        let mut rgba = vec![0u8; (w * h * 4) as usize];
+        for y in 0..h {
+            for x in 0..w {
+                let i = ((y * w + x) * 4) as usize;
+                rgba[i] = (x * 255 / w.max(1)) as u8;
+                rgba[i + 2] = (y * 255 / h.max(1)) as u8;
+                rgba[i + 3] = 255;
+            }
+        }
+
+        let rebuilt = replace_portrait_texture(bytes, &rgba, w, h).expect("portrait replace");
+
+        // Write the rebuilt extracted p*.big and re-decode it through the same read path.
+        let dir = std::env::var_os("QA_ASSET_OUT")
+            .map(std::path::PathBuf::from)
+            .unwrap_or_else(std::env::temp_dir);
+        std::fs::create_dir_all(&dir).ok();
+        let rebuilt_path = dir.join("p1_rebuilt.big");
+        std::fs::write(&rebuilt_path, &rebuilt).expect("write rebuilt");
+        let after = decode_portrait(&rebuilt_path).expect("decode rebuilt portrait");
+
+        assert_eq!((after.width, after.height), (w, h), "geometry preserved");
+        // The gradient survived (proves our pixels landed, not the original): bottom-right is
+        // redder + bluer than top-left. DXT5 is lossy, so allow slack.
+        let px = |x: u32, y: u32| {
+            let i = ((y * w + x) * 4) as usize;
+            [after.rgba[i], after.rgba[i + 1], after.rgba[i + 2]]
+        };
+        let tl = px(0, 0);
+        let br = px(w - 1, h - 1);
+        assert!(br[0] as i32 > tl[0] as i32 + 40, "red gradient lost ({tl:?} -> {br:?})");
+        assert!(br[2] as i32 > tl[2] as i32 + 40, "blue gradient lost ({tl:?} -> {br:?})");
+
+        if std::env::var_os("QA_ASSET_OUT").is_some() {
+            let _ = std::fs::write(dir.join("portrait_before.png"), before.to_png().unwrap());
+            let _ = std::fs::write(dir.join("portrait_after.png"), after.to_png().unwrap());
+        }
+        eprintln!(
+            "extracted portrait write OK: {w}x{h} XPR2 -> RefPack -> BIGF rebuilt ({} bytes), \
+             re-decoded with gradient intact",
+            rebuilt.len()
+        );
+    }
+
+    /// Build a directional gradient RGBA8 (R ramps across, B ramps down) — an
+    /// unmistakable, orientation-revealing test image.
+    fn gradient_rgba(w: u32, h: u32) -> Vec<u8> {
+        let mut rgba = vec![0u8; (w * h * 4) as usize];
+        for y in 0..h {
+            for x in 0..w {
+                let i = ((y * w + x) * 4) as usize;
+                rgba[i] = (x * 255 / w.max(1)) as u8;
+                rgba[i + 2] = (y * 255 / h.max(1)) as u8;
+                rgba[i + 3] = 255;
+            }
+        }
+        rgba
+    }
+
+    /// **PS3 DDS portrait write** — the analogue of the Xbox XPR2 test above, on
+    /// the PS3 container (`BIGF` → RefPack → little-endian `DDS `). Fully
+    /// synthetic (no mount): build a PS3-style portrait archive from a DXT5 DDS,
+    /// replace it via `replace_portrait_texture`, and confirm (a) the rebuilt
+    /// entry is a full-mip-chain DDS — proving the DDS branch (not XPR2) ran —
+    /// and (b) it re-decodes through `decode_portrait` with the new gradient
+    /// intact. Proves the extracted PS3-portrait write path end-to-end.
+    #[test]
+    fn ps3_dds_portrait_write_roundtrip_synthetic() {
+        let (w, h) = (64u32, 64u32);
+
+        // Synthesize a PS3-style portrait `.big`: a DXT5 DDS (RefPack-wrapped)
+        // plus a small non-texture entry so the picker must choose by area.
+        let original = gradient_rgba(w, h);
+        // Reverse the ramp so the "before" and "after" are clearly distinct.
+        let mut original_flipped = original.clone();
+        for y in 0..h {
+            for x in 0..w {
+                let i = ((y * w + x) * 4) as usize;
+                original_flipped[i] = 255 - original[i];
+            }
+        }
+        let base_blocks =
+            tdb_archive_codec::compress_bc(tdb_archive_codec::DdsFormat::Dxt5, w, h, &original_flipped);
+        let dds = tdb_archive_codec::encode_dds(tdb_archive_codec::DdsFormat::Dxt5, w, h, 1, &base_blocks);
+        let wrapped = tdb_archive_codec::refpack_compress(&dds);
+
+        let mut builder = tdb_archive_big::ArchiveBuilder::new();
+        builder.add_entry("apt", b"Apt Data\0not-a-texture".to_vec());
+        builder.add_entry("p1", wrapped);
+        let archive_bytes = builder.build().expect("build synthetic portrait .big");
+
+        // Sanity: the synthetic archive reads back as the flipped gradient.
+        let dir = std::env::temp_dir().join("nhlms_ps3_dds_portrait");
+        std::fs::create_dir_all(&dir).ok();
+        let src_path = dir.join("p1_src.big");
+        std::fs::write(&src_path, &archive_bytes).unwrap();
+        let before = decode_portrait(&src_path).expect("decode synthetic PS3 portrait");
+        assert_eq!((before.width, before.height), (w, h), "synthetic geometry");
+
+        // Replace with a fresh (non-flipped) gradient through the write path.
+        let replacement = gradient_rgba(w, h);
+        let rebuilt =
+            replace_portrait_texture(archive_bytes, &replacement, w, h).expect("PS3 DDS replace");
+
+        // (a) The rebuilt `p1` entry must be a RefPack-wrapped DDS carrying the
+        // FULL mip chain (proves the DDS arm ran, not the XPR2 arm).
+        let rebuilt_archive = tdb_archive_big::Archive::parse(rebuilt.clone()).expect("re-parse");
+        let raw = rebuilt_archive.read_entry_raw("p1").expect("p1 present");
+        let inner = tdb_archive_codec::refpack_decompress(&raw).expect("entry is RefPack-wrapped");
+        assert!(tdb_archive_codec::is_dds(&inner), "rebuilt entry must be a DDS");
+        let mip_count = u32::from_le_bytes(inner[28..32].try_into().unwrap());
+        assert_eq!(mip_count, full_mip_count(w, h), "DDS must carry the full mip chain");
+
+        // (b) Re-decode through the read path; the new gradient must have landed.
+        let rebuilt_path = dir.join("p1_rebuilt.big");
+        std::fs::write(&rebuilt_path, &rebuilt).unwrap();
+        let after = decode_portrait(&rebuilt_path).expect("decode rebuilt PS3 portrait");
+        assert_eq!((after.width, after.height), (w, h), "geometry preserved");
+        let px = |x: u32, y: u32| {
+            let i = ((y * w + x) * 4) as usize;
+            [after.rgba[i], after.rgba[i + 1], after.rgba[i + 2]]
+        };
+        let tl = px(0, 0);
+        let br = px(w - 1, h - 1);
+        assert!(br[0] as i32 > tl[0] as i32 + 40, "red gradient lost ({tl:?} -> {br:?})");
+        assert!(br[2] as i32 > tl[2] as i32 + 40, "blue gradient lost ({tl:?} -> {br:?})");
+
+        eprintln!(
+            "PS3 DDS portrait write OK: {w}x{h} DXT5 -> DDS ({mip_count} mips) -> RefPack -> BIGF \
+             rebuilt ({} bytes), re-decoded with gradient intact",
+            rebuilt.len()
+        );
+    }
+
+    /// **PS4 GNF texture write** — self-contained (no mount). Build a BC1 GNF from
+    /// a gradient, replace it via `replace_gnf_texture` with a fresh gradient, and
+    /// confirm (a) the 256-byte GNF header is preserved verbatim and (b) it
+    /// re-decodes through `gnf_to_rgba` with the new gradient intact. Proves the
+    /// RGBA → BC1 → GNM re-tile → header-preserving splice write end-to-end.
+    #[test]
+    fn ps4_gnf_write_roundtrip_synthetic() {
+        let (w, h) = (64u32, 64u32);
+
+        // Source GNF: a flipped-red gradient, BC1-compressed and wrapped.
+        let base = gradient_rgba(w, h);
+        let mut flipped = base.clone();
+        for y in 0..h {
+            for x in 0..w {
+                let i = ((y * w + x) * 4) as usize;
+                flipped[i] = 255 - base[i];
+            }
+        }
+        let src_blocks =
+            tdb_archive_codec::compress_bc(tdb_archive_codec::DdsFormat::Dxt1, w, h, &flipped);
+        let gnf = tdb_rx2::gnf::encode_gnf(tdb_rx2::gnf::BcFormat::Bc1, w, h, &src_blocks);
+
+        // Replace with a fresh (non-flipped) gradient.
+        let replacement = gradient_rgba(w, h);
+        let rebuilt = replace_gnf_texture(&gnf, &replacement, w, h).expect("GNF replace");
+        assert_eq!(&rebuilt[..0x100], &gnf[..0x100], "GNF header preserved verbatim");
+        assert_eq!(rebuilt.len(), gnf.len(), "same-size edit keeps the file length");
+
+        let tex = tdb_rx2::gnf::parse(&rebuilt).expect("re-parse rebuilt GNF");
+        assert_eq!((tex.width, tex.height), (w, h));
+        assert_eq!(tex.format, tdb_rx2::gnf::BcFormat::Bc1);
+        let after = gnf_to_rgba(&tex).expect("decode rebuilt GNF");
+        let px = |x: u32, y: u32| {
+            let i = ((y * w + x) * 4) as usize;
+            [after[i], after[i + 1], after[i + 2]]
+        };
+        let tl = px(0, 0);
+        let br = px(w - 1, h - 1);
+        assert!(br[0] as i32 > tl[0] as i32 + 40, "red gradient lost ({tl:?} -> {br:?})");
+        assert!(br[2] as i32 > tl[2] as i32 + 40, "blue gradient lost ({tl:?} -> {br:?})");
+        eprintln!("PS4 GNF write OK: {w}x{h} BC1 re-tiled + header-preserved, gradient intact");
+    }
+
+    /// **PS4 BC4 / BC5 map write** — single-channel (roughness) and dual-channel
+    /// (normal) GNF maps. Build each from a gradient, replace via
+    /// `replace_gnf_texture`, and confirm the header is preserved and the edited
+    /// channel(s) survive a decode round-trip.
+    #[test]
+    fn ps4_gnf_bc4_bc5_map_write_roundtrip_synthetic() {
+        let (w, h) = (64u32, 64u32);
+
+        // BC4: a horizontal grayscale gradient.
+        let mut gray = vec![0u8; (w * h * 4) as usize];
+        for y in 0..h {
+            for x in 0..w {
+                let i = ((y * w + x) * 4) as usize;
+                let v = (x * 255 / w) as u8;
+                gray[i..i + 4].copy_from_slice(&[v, v, v, 255]);
+            }
+        }
+        let gnf4 = tdb_rx2::gnf::encode_gnf(
+            tdb_rx2::gnf::BcFormat::Bc4,
+            w,
+            h,
+            &tdb_rx2::bc45::encode_bc4(&vec![0u8; (w * h * 4) as usize], w, h),
+        );
+        let rebuilt4 = replace_gnf_texture(&gnf4, &gray, w, h).expect("BC4 replace");
+        assert_eq!(&rebuilt4[..0x100], &gnf4[..0x100], "BC4 GNF header preserved");
+        let back4 = gnf_to_rgba(&tdb_rx2::gnf::parse(&rebuilt4).unwrap()).unwrap();
+        let r4 = |x: u32| back4[(x * 4) as usize] as i32; // row 0
+        assert!(r4(w - 1) > r4(0) + 40, "BC4 gradient lost");
+
+        // BC5: R varies with x, G with y.
+        let mut rg = vec![0u8; (w * h * 4) as usize];
+        for y in 0..h {
+            for x in 0..w {
+                let i = ((y * w + x) * 4) as usize;
+                rg[i] = (x * 255 / w) as u8;
+                rg[i + 1] = (y * 255 / h) as u8;
+                rg[i + 3] = 255;
+            }
+        }
+        let gnf5 = tdb_rx2::gnf::encode_gnf(
+            tdb_rx2::gnf::BcFormat::Bc5,
+            w,
+            h,
+            &tdb_rx2::bc45::encode_bc5(&vec![0u8; (w * h * 4) as usize], w, h),
+        );
+        let rebuilt5 = replace_gnf_texture(&gnf5, &rg, w, h).expect("BC5 replace");
+        assert_eq!(&rebuilt5[..0x100], &gnf5[..0x100], "BC5 GNF header preserved");
+        let back5 = gnf_to_rgba(&tdb_rx2::gnf::parse(&rebuilt5).unwrap()).unwrap();
+        let at = |x: u32, y: u32, c: usize| back5[((y * w + x) * 4) as usize + c] as i32;
+        assert!(at(w - 1, 0, 0) > at(0, 0, 0) + 40, "BC5 red (x) gradient lost");
+        assert!(at(0, h - 1, 1) > at(0, 0, 1) + 40, "BC5 green (y) gradient lost");
+    }
+
+    /// **PS4 BC7 portrait write** — the NHL 16+ portrait format. Build a BC7 GNF
+    /// from a gradient, replace it via `replace_gnf_texture`, and confirm the
+    /// header is preserved and the new gradient survives a decode round-trip.
+    /// Exercises the full RGBA → BC7 (mode 6) → GNM re-tile → splice path.
+    #[test]
+    fn ps4_gnf_bc7_portrait_write_roundtrip_synthetic() {
+        let (w, h) = (64u32, 64u32);
+        // Source BC7 GNF from a flipped gradient.
+        let base = gradient_rgba(w, h);
+        let mut flipped = base.clone();
+        for y in 0..h {
+            for x in 0..w {
+                let i = ((y * w + x) * 4) as usize;
+                flipped[i] = 255 - base[i];
+            }
+        }
+        let src_blocks = tdb_rx2::bc7::encode(&flipped, w, h);
+        let gnf = tdb_rx2::gnf::encode_gnf(tdb_rx2::gnf::BcFormat::Bc7, w, h, &src_blocks);
+
+        let replacement = gradient_rgba(w, h);
+        let rebuilt = replace_gnf_texture(&gnf, &replacement, w, h).expect("BC7 GNF replace");
+        assert_eq!(&rebuilt[..0x100], &gnf[..0x100], "GNF header preserved verbatim");
+        assert_eq!(rebuilt.len(), gnf.len(), "same-size edit keeps the file length");
+
+        let tex = tdb_rx2::gnf::parse(&rebuilt).expect("re-parse rebuilt BC7 GNF");
+        assert_eq!(tex.format, tdb_rx2::gnf::BcFormat::Bc7);
+        let after = gnf_to_rgba(&tex).expect("decode rebuilt BC7 GNF");
+        let px = |x: u32, y: u32| {
+            let i = ((y * w + x) * 4) as usize;
+            [after[i], after[i + 1], after[i + 2]]
+        };
+        let tl = px(0, 0);
+        let br = px(w - 1, h - 1);
+        assert!(br[0] as i32 > tl[0] as i32 + 40, "red gradient lost ({tl:?} -> {br:?})");
+        assert!(br[2] as i32 > tl[2] as i32 + 40, "blue gradient lost ({tl:?} -> {br:?})");
+        eprintln!("PS4 BC7 portrait write OK: {w}x{h} mode-6 re-tiled + header-preserved, gradient intact");
+    }
+
+    /// **Real PS4 head-texture edit** (mount-gated): take a real BC1 `head_*_cm.gnf`,
+    /// paint a red patch, write it back via `replace_gnf_texture`, and confirm the
+    /// patch survives a decode round-trip while the header + file length are
+    /// preserved. Proves the write on genuine EA-tiled data.
+    #[test]
+    fn ps4_gnf_head_write_roundtrip_real() {
+        const ROOT: &str = r"H:\Emulators\ShadPS4\Games\CUSA00561\databigs\Extracted";
+        let p = format!(
+            r"{ROOT}\nhl\data\kettle\rendering\characters\player\head_alexander_ovechkin_cm.gnf"
+        );
+        let Ok(bytes) = std::fs::read(&p) else {
+            eprintln!("skipping: {p} not present");
+            return;
+        };
+        let tex = tdb_rx2::gnf::parse(&bytes).expect("parse real head GNF");
+        assert_eq!(tex.format, tdb_rx2::gnf::BcFormat::Bc1);
+        let (w, h) = (tex.width, tex.height);
+
+        // Paint a 64×64 red patch in the top-left of the decoded image.
+        let mut edited = gnf_to_rgba(&tex).expect("decode head");
+        for y in 0..64u32 {
+            for x in 0..64u32 {
+                let i = ((y * w + x) * 4) as usize;
+                edited[i..i + 4].copy_from_slice(&[255, 0, 0, 255]);
+            }
+        }
+
+        let rebuilt = replace_gnf_texture(&bytes, &edited, w, h).expect("GNF head replace");
+        assert_eq!(&rebuilt[..0x100], &bytes[..0x100], "header byte-identical");
+        assert_eq!(rebuilt.len(), bytes.len(), "same-size edit keeps file length");
+
+        let after = gnf_to_rgba(&tdb_rx2::gnf::parse(&rebuilt).unwrap()).expect("re-decode");
+        let c = ((32 * w + 32) * 4) as usize; // centre of the painted patch
+        assert!(
+            after[c] > 180 && after[c + 1] < 80 && after[c + 2] < 80,
+            "red patch must survive the write ({:?})",
+            &after[c..c + 3]
+        );
+        eprintln!("PS4 real head write OK: {w}x{h} BC1, red patch round-tripped ({} bytes)", rebuilt.len());
+    }
+
+    /// **Real PS4 BC7 portrait edit** (mount-gated): take a real NHL 16 BC7
+    /// `p{id}.gnf` portrait, paint a red patch, write it back via
+    /// `replace_gnf_texture` (the mode-6 encoder path), and confirm the patch
+    /// survives a decode round-trip with the header + file length preserved.
+    /// Proves BC7 write on genuine EA-tiled portrait data.
+    #[test]
+    fn ps4_gnf_bc7_portrait_write_roundtrip_real() {
+        const ROOT: &str = r"H:\Emulators\ShadPS4\Games\CUSA01909\databigs\Extracted";
+        let p = format!(r"{ROOT}\nhl\ui\kettle_assets\playerportraits\p10000.gnf");
+        let Ok(bytes) = std::fs::read(&p) else {
+            eprintln!("skipping: {p} not present");
+            return;
+        };
+        let tex = tdb_rx2::gnf::parse(&bytes).expect("parse real portrait GNF");
+        assert_eq!(tex.format, tdb_rx2::gnf::BcFormat::Bc7);
+        let (w, h) = (tex.width, tex.height);
+
+        // Paint a 64×64 red patch in the top-left of the decoded portrait.
+        let mut edited = gnf_to_rgba(&tex).expect("decode portrait");
+        for y in 0..64u32 {
+            for x in 0..64u32 {
+                let i = ((y * w + x) * 4) as usize;
+                edited[i..i + 4].copy_from_slice(&[255, 0, 0, 255]);
+            }
+        }
+
+        let rebuilt = replace_gnf_texture(&bytes, &edited, w, h).expect("BC7 portrait replace");
+        assert_eq!(&rebuilt[..0x100], &bytes[..0x100], "header byte-identical");
+        assert_eq!(rebuilt.len(), bytes.len(), "same-size edit keeps file length");
+
+        let after = gnf_to_rgba(&tdb_rx2::gnf::parse(&rebuilt).unwrap()).expect("re-decode");
+        let c = ((32 * w + 32) * 4) as usize; // centre of the painted patch
+        assert!(
+            after[c] > 180 && after[c + 1] < 80 && after[c + 2] < 80,
+            "red patch must survive the BC7 write ({:?})",
+            &after[c..c + 3]
+        );
+        eprintln!("PS4 real BC7 portrait write OK: {w}x{h}, red patch round-tripped ({} bytes)", rebuilt.len());
+    }
+
+    /// The unified `replace_texture_in_file` dispatcher must route by container
+    /// magic (GNF / BIGF portrait / RW4 texlib), round-trip a real edit for the
+    /// containers it fully handles, and give clear errors for the rest.
+    #[test]
+    fn replace_texture_in_file_dispatches_by_container() {
+        let (w, h) = (64u32, 64u32);
+        let rgba = gradient_rgba(w, h);
+
+        // --- GNF (PS4) ---
+        let gnf = tdb_rx2::gnf::encode_gnf(
+            tdb_rx2::gnf::BcFormat::Bc1,
+            w,
+            h,
+            &tdb_archive_codec::compress_bc(tdb_archive_codec::DdsFormat::Dxt1, w, h, &rgba),
+        );
+        let out = replace_texture_in_file(gnf, &rgba, w, h).expect("GNF dispatch");
+        assert_eq!(out.container, TextureContainer::Gnf);
+        assert_eq!(out.container.label(), "gnf");
+        assert!(tdb_rx2::gnf::parse(&out.bytes).is_ok(), "GNF rebuilt parses");
+
+        // --- Portrait (BIGF → RefPack → DDS) ---
+        let dds_blocks =
+            tdb_archive_codec::compress_bc(tdb_archive_codec::DdsFormat::Dxt5, w, h, &rgba);
+        let dds = tdb_archive_codec::encode_dds(tdb_archive_codec::DdsFormat::Dxt5, w, h, 1, &dds_blocks);
+        let mut builder = tdb_archive_big::ArchiveBuilder::new();
+        builder.add_entry("apt", b"Apt Data\0".to_vec());
+        builder.add_entry("p1", tdb_archive_codec::refpack_compress(&dds));
+        let big = builder.build().unwrap();
+        let out = replace_texture_in_file(big, &rgba, w, h).expect("portrait dispatch");
+        assert_eq!(out.container, TextureContainer::Portrait);
+
+        // --- Texlib routing: `\x89RW4` magic reaches the texlib branch (parse
+        // error proves the dispatch, without needing a full synthetic texlib). ---
+        let err = replace_texture_in_file(b"\x89RW4bogustexlibbytes".to_vec(), &rgba, w, h)
+            .unwrap_err();
+        assert!(format!("{err}").contains("texlib"), "RW4 routed to texlib: {err}");
+
+        // --- Whole-file RefPack rejected with a clear message. ---
+        let refpacked = tdb_archive_codec::refpack_compress(b"whatever payload bytes here");
+        let err = replace_texture_in_file(refpacked, &rgba, w, h).unwrap_err();
+        assert!(format!("{err}").contains("RefPack"), "refpack rejected: {err}");
+
+        // --- Unrecognized container. ---
+        let err = replace_texture_in_file(vec![0u8; 64], &rgba, w, h).unwrap_err();
+        assert!(format!("{err}").contains("unrecognized"), "unknown rejected: {err}");
     }
 
     fn player_with_portrait(record: u32, portrait_path: Option<String>) -> PlayerAssets {

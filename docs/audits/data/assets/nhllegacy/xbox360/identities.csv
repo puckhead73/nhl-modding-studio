@@ -1,0 +1,253 @@
+team_record,logo_artid,logo_texlib_stem,fullname,shortname,abbrname,artabbr
+0,0,texlib_0,Anaheim Ducks®,Anaheim,ANA,ANA
+1,1,texlib_1,Winnipeg Jets™,Winnipeg,WPG,WPG
+2,2,texlib_2,Boston Bruins®,Boston,BOS,BOS
+3,3,texlib_3,Buffalo Sabres®,Buffalo,BUF,BUF
+4,4,texlib_4,Calgary Flames®,Calgary,CGY,CGY
+5,5,texlib_5,Carolina Hurricanes®,Carolina,CAR,CAR
+6,6,texlib_6,Chicago Blackhawks®,Chicago,CHI,CHI
+7,7,texlib_7,Colorado Avalanche®,Colorado,COL,COL
+8,8,texlib_8,Columbus Blue Jackets®,Columbus,CBJ,CBJ
+9,9,texlib_9,Dallas Stars™,Dallas,DAL,DAL
+10,10,texlib_10,Detroit Red Wings®,Detroit,DET,DET
+11,11,texlib_11,Edmonton Oilers®,Edmonton,EDM,EDM
+12,12,texlib_12,Florida Panthers®,Florida,FLA,FLA
+13,13,texlib_13,Los Angeles Kings®,Los Angeles,LA,LA
+14,14,texlib_14,Minnesota Wild®,Minnesota,MIN,MIN
+15,15,texlib_15,Montreal Canadiens®,Montreal,MTL,MTL
+16,16,texlib_16,Nashville Predators®,Nashville,NSH,NSH
+17,17,texlib_17,New Jersey Devils®,New Jersey,NJ,NJ
+18,18,texlib_18,New York Islanders®,NY Islanders®,NYI,NYI
+19,19,texlib_19,New York Rangers®,NY Rangers®,NYR,NYR
+20,20,texlib_20,Ottawa Senators®,Ottawa,OTT,OTT
+21,21,texlib_21,Philadelphia Flyers®,Philadelphia,PHI,PHI
+22,22,texlib_22,Arizona Coyotes®,Arizona,ARZ,PHX
+23,23,texlib_23,Pittsburgh Penguins®,Pittsburgh,PIT,PIT
+24,24,texlib_24,St. Louis Blues®,St. Louis,STL,STL
+25,25,texlib_25,San Jose Sharks®,San Jose,SJ,SJ
+26,26,texlib_26,Tampa Bay Lightning™,Tampa Bay,TB,TB
+27,27,texlib_27,Toronto Maple Leafs®,Toronto,TOR,TOR
+28,28,texlib_28,Vancouver Canucks®,Vancouver,VAN,VAN
+29,29,texlib_29,Washington Capitals®,Washington,WSH,WSH
+30,30,texlib_30,Green / Red,Red,RED,EAS
+31,31,texlib_31,Black / Blue,Blue,BLU,WES
+32,141,texlib_141,Albany Devils,Albany,ALB,ALB
+33,163,texlib_163,Bakersfield Condors,Bakersfield,BAK,BAKE
+34,131,texlib_131,Binghamton Senators,Binghamton,BNG,BIN
+35,132,texlib_132,Bridgeport Sound Tigers,Bridgeport,BRI,BRP
+36,162,texlib_162,Charlotte Checkers,Charlotte,CHA,CHR
+37,133,texlib_133,Chicago Wolves®,Chicago,CHW,CHA
+38,135,texlib_135,Grand Rapids Griffins,Grand Rapids,GRA,GRR
+39,137,texlib_137,Hartford Wolf Pack,Hartford,HAR,HAR
+40,138,texlib_138,Hershey Bears®,Hershey,HER,HER
+41,139,texlib_139,Iowa Wild,Iowa,IOW,IOW
+42,134,texlib_134,Lake Erie Monsters,Lake Erie,LEM,LEM
+43,148,texlib_148,Lehigh Valley Phantoms,Lehigh Valley,LVP,LEH
+44,143,texlib_143,Manitoba Moose,Manitoba,MAN,MTB
+45,144,texlib_144,Milwaukee Admirals,Milwaukee,MIL,MIL
+46,142,texlib_142,Ontario Reign,Ontario,ONT,ONT
+47,149,texlib_149,Portland Pirates,Portland,POR,POR
+48,150,texlib_150,Providence Bruins,Providence,PRO,PRO
+49,151,texlib_151,Rochester Americans,Rochester,RCH,ROC
+50,158,texlib_158,Rockford IceHogs,Rockford,RFD,RCK
+51,165,texlib_165,St. John's IceCaps,St. John's,STJ,SJNL
+52,152,texlib_152,San Antonio Rampage,San Antonio,SAN,SAN
+53,145,texlib_145,San Diego Gulls,San Diego,SD,SD
+54,157,texlib_157,San Jose Barracuda,San Jose,SJ,SJA
+55,153,texlib_153,Springfield Falcons,Springfield,SPR,SPR
+56,161,texlib_161,Stockton Heat,Stockton,STO,STOC
+57,154,texlib_154,Syracuse Crunch,Syracuse,SYR,SYR
+58,159,texlib_159,Texas Stars,Texas,TEX,TEX
+59,155,texlib_155,Toronto Marlies,Toronto,TOA,TOA
+60,164,texlib_164,Utica Comets,Utica,UTI,UTI
+61,156,texlib_156,Wilkes-Barre/Scranton Penguins,W-B/Scranton,WBS,WBS
+62,70,texlib_70,Brynäs IF,Brynäs,BIF,BIF
+63,71,texlib_71,Djurgårdens Hockey,Djurgården,DIF,DIF
+64,72,texlib_72,Färjestad BK,Färjestads,FBK,FBK
+65,81,texlib_81,Frölunda Indians,Frölunda,FHC,VF
+66,73,texlib_73,HV71,HV71,HV71,HV
+67,66,texlib_66,Karlskrona Hockey,Karlskrona,KAR,KRLS
+68,75,texlib_75,Linköping HC,Linköpings,LHC,LHC
+69,76,texlib_76,Luleå Hockey,Luleå,LHF,LHF
+70,127,texlib_127,Malmo Redhawks,Malmo,MAL,MALM
+71,78,texlib_78,MODO Hockey,MODO,MODO,MOD
+72,68,texlib_68,Orebro Hockey,Orebro,OHK,ORE
+73,69,texlib_69,Rogle BK,Rogle,ROG,ROG
+74,74,texlib_74,Skelleftea AIK,Skelleftea,SAIK,SKE
+75,97,texlib_97,Växjö Lakers,Växjö,VLH,VXJ
+76,82,texlib_82,Porin Ässät,Ässät,ÄSS,ASS
+77,83,texlib_83,Espoo Blues,Espoo,BLU,BLU
+78,85,texlib_85,HPK Hämeenlinna,HPK,HPK,HPK
+79,84,texlib_84,Helsingin IFK,HIFK,IFK,IFK
+80,86,texlib_86,Tampereen Ilves,Ilves,ILV,ILV
+81,88,texlib_88,JYP Jyväskylä,JYP,JYP,JYP
+82,95,texlib_95,KalPa Kuopio,KalPa,KAL,KAL
+83,89,texlib_89,Oulun Kärpät,Kärpät,KÄR,KAR
+84,99,texlib_99,KooKoo Kouvala,Kouvala,KOU,KOU
+85,90,texlib_90,Rauman Lukko,Lukko,LUK,LUK
+86,91,texlib_91,Pelicans Lahti,Pelicans,PEL,PEL
+87,92,texlib_92,SaiPa Lappeenranta,SaiPa,SAI,SAI
+88,93,texlib_93,Tampereen Tappara,Tappara,TAP,TAP
+89,94,texlib_94,TPS Turku,TPS,TPS,TPS
+90,98,texlib_98,Vaasan Sport,Vaasa,VAA,VAA
+91,181,texlib_181,Augsburger Panther,Augsburger,AUG,AUG
+92,183,texlib_183,Eisbären Berlin,Berlin,EBB,EBB
+93,182,texlib_182,Düsseldorfer EG,Düsseldorf,DEG,DEG
+94,187,texlib_187,Hamburg Freezers,Hamburg,HHF,HHF
+95,184,texlib_184,ERC Ingolstadt,Ingolstadt,ING,ING
+96,189,texlib_189,Iserlohn Roosters,Iserlohn,IEC,IEC
+97,190,texlib_190,Kölner Haie,Kölner,KEC,KEC
+98,191,texlib_191,Krefeld Pinguine,Krefeld,KEV,KEV
+99,180,texlib_180,Adler Mannheim,Mannheim,MAN,MAN
+100,196,texlib_196,EHC München,München,MUC,EHC
+101,192,texlib_192,Nurnberg Ice Tigers,Nurnberg,NUR,NIT
+102,197,texlib_197,Schwenninger Wild Wings,Schwenninger,SCH,SCHW
+103,193,texlib_193,Straubing Tigers,Straubing,STR,STR
+104,194,texlib_194,Grizzly Adams Wolfsburg,Wolfsburg,WOB,WOF
+105,295,texlib_295,HC Kometa Brno,Brno,BRNO,BRNO
+106,286,texlib_286,Mountfield HK,Hradec Kralove,MHK,CBE
+107,292,texlib_292,Piráti Chomutov,Chomutov,CHO,CHOM
+108,281,texlib_281,HC Energie Karlovy Vary,Karlovy Vary,KVA,KVA
+109,280,texlib_280,Bilí Tygři Liberec,Liberec,LBC,LBC
+110,284,texlib_284,HC VERVA Litvinov,Litvinov,LIT,LIT
+111,294,texlib_294,BK Mladá Boleslav,Mlada Boleslav,MBL,MBL
+112,296,texlib_296,HC Olomouc,Olomouc,OLO,OLO
+113,285,texlib_285,HC ČSOB POJIŠŤOVNA Pardubice,Pardubice,PCE,PCE
+114,283,texlib_283,HC Plzeň 1929,Plzen,PLZ,PLZ
+115,290,texlib_290,HC Sparta Praha,Sparta Praha,SPA,SPA
+116,287,texlib_287,HC Oceláři Třinec,Trinec,TRI,TRI
+117,291,texlib_291,HC Vítkovice Steel,Vitkovice,VIT,VIT
+118,293,texlib_293,PSG Zlín,Zlin,ZLN,ZLN
+119,324,texlib_324,HC Ambri-Piotta,Ambri-Piotta,AMB,HCAP
+120,329,texlib_329,SC Bern,Bern,SCB,BERN
+121,320,texlib_320,EHC Biel,Biel,BIE,BIEL
+122,325,texlib_325,HC Davos,Davos,HCD,HCD
+123,322,texlib_322,HC Fribourg-Gottéron,Fribourg,FRI,FRI
+124,323,texlib_323,Genève-Servette HC,Geneve,GSHC,GEN
+125,327,texlib_327,Kloten Flyers,Kloten,KLO,KLOT
+126,332,texlib_332,HC Lausanne,Lausanne,LAU,LAU
+127,326,texlib_326,HC Lugano,Lugano,LUG,HCL
+128,330,texlib_330,SCL Tigers,SCL,SCL,SCL
+129,321,texlib_321,EV Zug,Zug,EVZ,ZUG
+130,331,texlib_331,ZSC Lions,Zurich,ZSC,ZSC
+131,300,texlib_300,Stavanger Oilers,Stavanger,STAV,STAV
+132,301,texlib_301,Valerenga IF,Valerenga,VAL,VALE
+133,34,texlib_34,Austria,Austria,AUS,AUS
+134,35,texlib_35,Belarus,Belarus,BEL,BEL
+135,36,texlib_36,Canada,Canada,CAN,CAN
+136,37,texlib_37,Czech Republic,Czech Republic,CZE,CZE
+137,108,texlib_108,Denmark,Denmark,DEN,DEN
+138,39,texlib_39,Finland,Finland,FIN,FIN
+139,40,texlib_40,France,France,FRA,FRA
+140,41,texlib_41,Germany,Germany,GER,GER
+141,38,texlib_38,Great Britain,Great Britain,GBR,GBR
+142,42,texlib_42,Italy,Italy,ITA,ITA
+143,43,texlib_43,Japan,Japan,JPN,JPN
+144,44,texlib_44,Kazakstan,Kazakstan,KAZ,KAZ
+145,45,texlib_45,Latvia,Latvia,LAT,LAT
+146,46,texlib_46,Norway,Norway,NOR,NOR
+147,47,texlib_47,Poland,Poland,POL,POL
+148,48,texlib_48,Russia,Russia,RUS,RUS
+149,49,texlib_49,Slovakia,Slovakia,SLV,SLV
+150,50,texlib_50,Sweden,Sweden,SWE,SWE
+151,51,texlib_51,Switzerland,Switzerland,SWI,SWI
+152,52,texlib_52,Ukraine,Ukraine,UKR,UKR
+153,53,texlib_53,USA,USA,USA,USA
+154,382,texlib_382,Barrie Colts,Barrie,BAR,BARR
+155,385,texlib_385,Erie Otters,Erie,ER,ERIE
+156,396,texlib_396,Flint Firebirds,Flint,FLI,FLNT
+157,386,texlib_386,Guelph Storm,Guelph,GUE,GUEL
+158,136,texlib_136,Hamilton Bulldogs,Hamilton,HAM,HAM
+159,387,texlib_387,Kingston Frontenacs,Kingston,KGN,KING
+160,388,texlib_388,Kitchener Rangers,Kitchener,KIT,KITC
+161,389,texlib_389,London Knights,London,LDN,LOND
+162,390,texlib_390,Mississauga Steelheads,Mississauga,MISS,MISS
+163,391,texlib_391,Niagara IceDogs,Niagara,NIA,NIAG
+164,384,texlib_384,North Bay Battalion,North Bay,NBAY,NBAY
+165,392,texlib_392,Oshawa Generals,Oshawa,OSH,OSHA
+166,393,texlib_393,Ottawa 67's,Ottawa,OTT,OTTO
+167,394,texlib_394,Owen Sound Attack,Owen Sound,OS,OWEN
+168,395,texlib_395,Peterborough Petes,Peterborough,PBO,PETE
+169,397,texlib_397,Saginaw Spirit,Saginaw,SAG,SAGI
+170,398,texlib_398,Sarnia Sting,Sarnia,SAR,SARN
+171,399,texlib_399,Sault Ste. Marie Greyhounds,Sault Ste. Marie,SSM,SOO
+172,400,texlib_400,Sudbury Wolves,Sudbury,SBY,SUDB
+173,401,texlib_401,Windsor Spitfires,Windsor,WSR,WIND
+174,402,texlib_402,Acadie-Bathurst Titan,Acadie-Bathurst,BAT,ACAD
+175,403,texlib_403,Baie-Comeau Drakkar,Baie-Comeau,BAC,BAIE
+176,411,texlib_411,Blainville-Boisbriand Armada,Blainville-Boisbriand,BLB,BOIS
+177,404,texlib_404,Cape Breton Screaming Eagles,Cape Breton,CAP,CAPE
+178,412,texlib_412,Charlottetown Islanders,Charlottetown,CHAR,CHAR
+179,405,texlib_405,Chicoutimi Saguenéens,Chicoutimi,CHI,CHIC
+180,406,texlib_406,Drummondville Voltigeurs,Drummondville,DRU,DRUM
+181,407,texlib_407,Gatineau Olympiques,Gatineau,GAT,GATI
+182,408,texlib_408,Halifax Mooseheads,Halifax,HAL,HLFX
+183,410,texlib_410,Moncton Wildcats,Moncton,MON,MONC
+184,413,texlib_413,Québec Remparts,Québec,QUE,QUEB
+185,414,texlib_414,Rimouski Océanic,Rimouski,RIM,RIMO
+186,415,texlib_415,Rouyn-Noranda Huskies,Rouyn-Noranda,ROU,ROUY
+187,416,texlib_416,Saint John Sea Dogs,Saint John,SNB,STJN
+188,417,texlib_417,Shawinigan Cataractes,Shawinigan,SHA,SHAW
+189,421,texlib_421,Sherbrooke Phoenix,Sherbrooke,SHE,SHER
+190,418,texlib_418,Val-D'Or Foreurs,Val-D'or,VDO,VDOR
+191,419,texlib_419,Victoriaville Tigres,Victoriaville,VIC,VICT
+192,360,texlib_360,Brandon Wheat Kings,Brandon,BDN,BRAN
+193,361,texlib_361,Calgary Hitmen,Calgary,CAL,CALW
+194,363,texlib_363,Edmonton Oil Kings,Edmonton,EDM,EDMW
+195,364,texlib_364,Everett Silvertips,Everett,EVT,EVER
+196,365,texlib_365,Kamloops Blazers,Kamloops,KAM,KAML
+197,366,texlib_366,Kelowna Rockets,Kelowna,KEL,KELW
+198,367,texlib_367,Kootenay Ice,Kootenay,KTN,KOOT
+199,368,texlib_368,Lethbridge Hurricanes,Lethbridge,LET,LETH
+200,369,texlib_369,Medicine Hat Tigers,Medicine Hat,MH,MEDH
+201,370,texlib_370,Moose Jaw Warriors,Moose Jaw,MJ,MJAW
+202,371,texlib_371,Portland Winter Hawks,Portland,POR,PORW
+203,372,texlib_372,Prince Albert Raiders,Prince Albert,PA,PALB
+204,373,texlib_373,Prince George Cougars,Prince George,PG,PGEO
+205,374,texlib_374,Red Deer Rebels,Red Deer,RD,REDD
+206,375,texlib_375,Regina Pats,Regina,REG,REGI
+207,376,texlib_376,Saskatoon Blades,Saskatoon,SAS,SASK
+208,377,texlib_377,Seattle Thunderbirds,Seattle,SEA,SEAT
+209,378,texlib_378,Spokane Chiefs,Spokane,SPO,SPOK
+210,379,texlib_379,Swift Current Broncos,Swift Current,SC,SWFT
+211,380,texlib_380,Tri-City Americans,Tri-City,TC,TRIC
+212,381,texlib_381,Vancouver Giants,Vancouver,VAN,VANW
+213,420,texlib_420,Victoria Royals,Victoria,VIC,VIC
+214,342,texlib_342,Top Prospects Red,Top Prospects Red,TPR,PRSA
+215,341,texlib_341,Top Prospects White,Top Prospects White,TPW,PRSB
+216,19,texlib_19,New York Rangers® WC,NY Rangers®,NYR,NYR
+217,21,texlib_21,Philadelphia Flyers® WC,Philadelphia,PHI,PHI
+218,23,texlib_23,Pittsburgh Penguins® WC,Pittsburgh,PIT,PIT
+219,29,texlib_29,Washington Capitals® WC,Washington,WSH,WSH
+220,255,texlib_255,EASHL 1,EASHL 1,EASHL,EASHL1
+221,255,texlib_255,EASHL 2,EASHL 2,EASHL,EASHL2
+222,20054,texlib_20054,Custom Team 00,,,
+223,20054,texlib_20054,Custom Team 01,,,
+224,20054,texlib_20054,Custom Team 02,,,
+225,20054,texlib_20054,Custom Team 03,,,
+226,20054,texlib_20054,Custom Team 04,,,
+227,20054,texlib_20054,Custom Team 05,,,
+228,20054,texlib_20054,Custom Team 06,,,
+229,20054,texlib_20054,Custom Team 07,,,
+230,20054,texlib_20054,Custom Team 08,,,
+231,20054,texlib_20054,Custom Team 09,,,
+232,20054,texlib_20054,Custom Team 10,,,
+233,20054,texlib_20054,Custom Team 11,,,
+234,20054,texlib_20054,Custom Team 12,,,
+235,20054,texlib_20054,Custom Team 13,,,
+236,20054,texlib_20054,Custom Team 14,,,
+237,20054,texlib_20054,Custom Team 15,,,
+238,20054,texlib_20054,Custom Team 16,,,
+239,20054,texlib_20054,Custom Team 17,,,
+240,20054,texlib_20054,Custom Team 18,,,
+241,20054,texlib_20054,Custom Team 19,,,
+242,20054,texlib_20054,Custom Team 20,,,
+243,20054,texlib_20054,Custom Team 21,,,
+244,20054,texlib_20054,Custom Team 22,,,
+245,20054,texlib_20054,Custom Team 23,,,
+246,20054,texlib_20054,Custom Team 24,,,
+247,20054,texlib_20054,Custom Team 25,,,
+248,20054,texlib_20054,Custom Team 26,,,
+249,20054,texlib_20054,Custom Team 27,,,
+250,20054,texlib_20054,Custom Team 28,,,
+251,20054,texlib_20054,Custom Team 29,,,

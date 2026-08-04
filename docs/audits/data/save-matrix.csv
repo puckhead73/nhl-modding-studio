@@ -1,0 +1,122 @@
+platform,game,slot,detected_type,codec,inner_tdb,semantic_edit,status
+ps3,nhl08,BLUS30062-001-000 - DYNASTY,beagm,v3,no,no,read-only
+ps3,nhl08,BLUS30062-002-000 - ROSTER,roster,v3,yes,no,edit-roundtrip
+ps3,nhl09,BLUS3016801002026 - DYNASTY,beagm,v3,yes,no,roundtrip
+ps3,nhl09,BLUS3016802002026 - ROSTER,roster,v3,yes,yes,edit-roundtrip
+ps3,nhl09,BLUS3016805002026 - BEAPRO,beapro,v3,yes,no,roundtrip
+ps3,nhl09,BLUS3016809002026 - HOCKEYCARD,hockeycard,v3,no,no,read-only
+ps3,nhl10,BLUS303450000 - SETTINGS,unknown,unsupported,no,no,read-only
+ps3,nhl10,BLUS303450100 - BEAGM,beagm,v1,yes,no,roundtrip
+ps3,nhl10,BLUS303450200 - ROSTER,roster,v1,yes,yes,experimental-roundtrip
+ps3,nhl10,BLUS303450500 - BEAPRO,beapro,v1,yes,no,roundtrip
+ps3,nhl10,BLUS303450900 - HOCKEYCARD,unknown,v2,no,no,read-only
+ps3,nhl10,BLUS303451100 - SEASON,season,v1,yes,no,roundtrip
+ps3,nhl11,BLUS305680000 - SETTINGS,unknown,unsupported,no,no,read-only
+ps3,nhl11,BLUS305680100 - BEAGM,beagm,v1,yes,no,roundtrip
+ps3,nhl11,BLUS305680200 - ROSTER,roster,v1,yes,yes,experimental-roundtrip
+ps3,nhl11,BLUS305680500 - BEAPRO,beapro,v1,yes,no,roundtrip
+ps3,nhl11,BLUS305680900 - HOCKEYCARD,unknown,v2,no,no,read-only
+ps3,nhl11,BLUS305681100 - SEASON,season,v1,yes,no,roundtrip
+ps3,nhl12,BLUS307910000 - SETTINGS,unknown,v1,no,no,read-only
+ps3,nhl12,BLUS307910100 - BEAGM,beagm,v1,no,no,read-only
+ps3,nhl12,BLUS307910200 - ROSTER,roster,v2,yes,yes,edit-roundtrip
+ps3,nhl12,BLUS307910500 - BEAPRO,beapro,v1,no,no,read-only
+ps3,nhl12,BLUS307910900 - HOCKEYCARD,unknown,v2,no,no,read-only
+ps3,nhl12,BLUS307911100 - SEASON,season,v1,no,no,read-only
+ps3,nhl13,BLUS310030000 - SETTINGS,unknown,v2,yes,no,roundtrip
+ps3,nhl13,BLUS310030200 - ROSTER,roster,v2,yes,yes,edit-roundtrip
+ps3,nhl13,BLUS310030900 - HOCKEYCARD,unknown,v2,no,no,read-only
+ps3,nhl14,BLUS311790000 - SETTINGS,unknown,unsupported,no,no,read-only
+ps3,nhl14,BLUS311790200 - ROSTER,roster,v4,yes,yes,edit-roundtrip
+ps3,nhl14,BLUS311790800 - HOCKEYCARD,unknown,v2,no,no,read-only
+ps3,nhl15,BLUS314360000 - SETTINGS,unknown,unsupported,no,no,read-only
+ps3,nhl15,BLUS314360200 - ROSTER,roster,v4,yes,yes,edit-roundtrip
+ps3,nhl15,BLUS314360800 - HOCKEYCARD,unknown,v2,no,no,read-only
+ps3,nhllegacy,BLUS315400000 - SETTINGS,unknown,v4,no,no,read-only
+ps3,nhllegacy,BLUS315400200 - ROSTER,roster,v4,yes,yes,edit-roundtrip
+ps3,nhllegacy,BLUS315400800 - HOCKEYCARD,unknown,v4,no,no,read-only
+ps4,nhl15,84f8102f - ROSTER,unknown,unsupported,no,no,read-only
+ps4,nhl15,b49bd9c0 - PROFILE,unknown,unsupported,no,no,read-only
+ps4,nhl15,c6b05b60 - BEAGM,unknown,unsupported,no,no,read-only
+ps4,nhl16,84f8102f - ROSTER,roster,ps4-lz4,yes,yes,edit-roundtrip
+ps4,nhl16,b49bd9c0 - PROFILE,unknown,unsupported,no,no,read-only
+ps4,nhl16,c6b05b61 - BEAGM,roster,ps4-lz4,yes,yes,edit-roundtrip
+ps4,nhl16,f0d3332a - SEASON,roster,ps4-lz4,yes,yes,edit-roundtrip
+ps4,nhl16,fbc2aea8 - BEAPRO,non-roster,ps4-lz4,no,no,read-only
+ps4,nhl17,BeAGM0,non-roster,ps4-lz4,no,no,read-only
+ps4,nhl17,BeAPro0,non-roster,ps4-lz4,no,no,read-only
+ps4,nhl17,Profile0,unknown,unsupported,no,no,read-only
+ps4,nhl17,RosterCustom0,roster,ps4-lz4,yes,yes,edit-roundtrip
+ps4,nhl17,Season0,non-roster,ps4-lz4,no,no,read-only
+ps4,nhl18,BeAGM0,non-roster,ps4-lz4,no,no,read-only
+ps4,nhl18,BeAPro0,non-roster,ps4-lz4,no,no,read-only
+ps4,nhl18,Profile0,unknown,unsupported,no,no,read-only
+ps4,nhl18,RosterCustom0,roster,ps4-lz4,yes,yes,edit-roundtrip
+ps4,nhl18,Season0,non-roster,ps4-lz4,no,no,read-only
+ps4,nhl18,ThreeOnThree0,roster,ps4-lz4,yes,yes,edit-roundtrip
+ps4,nhl19,BeAGM2,non-roster,ps4-lz4,no,no,read-only
+ps4,nhl19,BeAPro0,non-roster,ps4-lz4,no,no,read-only
+ps4,nhl19,Profile0,unknown,unsupported,no,no,read-only
+ps4,nhl19,RosterCustom0,roster,ps4-lz4,yes,yes,edit-roundtrip
+ps4,nhl19,Season0,non-roster,ps4-lz4,no,no,read-only
+ps4,nhl20,BeAGM0,non-roster,ps4-lz4,no,no,read-only
+ps4,nhl20,BeAPro0,non-roster,ps4-lz4,no,no,read-only
+ps4,nhl20,Profile0,unknown,unsupported,no,no,read-only
+ps4,nhl20,Season0,non-roster,ps4-lz4,no,no,read-only
+ps4,nhl20,ThreeOnThree0,roster,ps4-lz4,yes,yes,edit-roundtrip
+ps4,nhl21,BeAGM0,non-roster,ps4-lz4,no,no,read-only
+ps4,nhl21,BeAPro0,non-roster,ps4-lz4,no,no,read-only
+ps4,nhl21,Profile0,unknown,unsupported,no,no,read-only
+ps4,nhl21,Season0,non-roster,ps4-lz4,no,no,read-only
+ps4,nhl21,ThreeOnThree0,roster,ps4-lz4,yes,yes,edit-roundtrip
+xbox360,nhl07,DYNASTY1,beagm,v3,yes,no,roundtrip
+xbox360,nhl07,ROSTER1,roster,v3,yes,no,edit-roundtrip
+xbox360,nhl07,USER PROFILE1,unknown,v4,no,no,read-only
+xbox360,nhl08,DYNASTY1 20260718064632,beagm,v3,no,no,read-only
+xbox360,nhl08,ROSTER1 20260718064658,roster,v3,yes,no,edit-roundtrip
+xbox360,nhl09,BEAPRO1 20260717230946,unknown,v3,yes,no,roundtrip
+xbox360,nhl09,DYNASTY1 20260717231008,unknown,v3,yes,no,roundtrip
+xbox360,nhl09,HOCKEYCARD1 20260717230755,unknown,v3,no,no,read-only
+xbox360,nhl09,ROSTER1 20260717230804,roster,v3,yes,yes,edit-roundtrip
+xbox360,nhl09,USER PROFILE1 20260717230755,unknown,v4,no,no,read-only
+xbox360,nhl10,BEAPRO1 20260627045613,unknown,v1,yes,no,roundtrip
+xbox360,nhl10,DYNASTY1 20260627045642,unknown,v1,yes,no,roundtrip
+xbox360,nhl10,HOCKEYCARD1 20260627045518,unknown,v2,no,no,read-only
+xbox360,nhl10,ROSTER1 20260627045748,roster,v1,yes,yes,experimental-roundtrip
+xbox360,nhl10,SEASON1 20260627045542,season,v1,yes,no,roundtrip
+xbox360,nhl11,BEAPRO1 20260627050122,unknown,v1,yes,no,roundtrip
+xbox360,nhl11,DYNASTY1 20260627050212,unknown,v1,yes,no,roundtrip
+xbox360,nhl11,HOCKEYCARD1 20260627050040,unknown,v2,no,no,read-only
+xbox360,nhl11,PROFILE1 20260627050040,unknown,unsupported,no,no,read-only
+xbox360,nhl11,ROSTER1 20260627054323,roster,v1,yes,yes,experimental-roundtrip
+xbox360,nhl11,SEASON1 20260627050256,season,v1,yes,no,roundtrip
+xbox360,nhl12,BEAPRO 20260627050859,unknown,v1,no,no,read-only
+xbox360,nhl12,DYNASTY 20260627051033,unknown,v1,no,no,read-only
+xbox360,nhl12,HOCKEYCARD 20260627050744,unknown,v2,no,no,read-only
+xbox360,nhl12,PROFILE 20260627050832,settings,v1,no,no,read-only
+xbox360,nhl12,ROSTER 20260627052113,roster,v2,yes,yes,edit-roundtrip
+xbox360,nhl12,SEASON 20260627051102,season,v1,no,no,read-only
+xbox360,nhl13,BEAPRO 20260627051457,unknown,v3,no,no,read-only
+xbox360,nhl13,DYNASTY 20260627051414,unknown,v3,no,no,read-only
+xbox360,nhl13,HOCKEYCARD 20260627051255,unknown,v2,no,no,read-only
+xbox360,nhl13,PROFILE 20260627051511,settings,v2,yes,no,roundtrip
+xbox360,nhl13,ROSTER 20260627051601,roster,v2,yes,yes,edit-roundtrip
+xbox360,nhl13,SEASON 20260627051530,season,v3,no,no,read-only
+xbox360,nhl14,BEAPRO 20260627054618,unknown,unsupported,no,no,read-only
+xbox360,nhl14,DYNASTY 20260627054656,unknown,unsupported,no,no,read-only
+xbox360,nhl14,HOCKEYCARD 20260627054530,unknown,v2,no,no,read-only
+xbox360,nhl14,PROFILE 20260627054703,unknown,unsupported,no,no,read-only
+xbox360,nhl14,ROSTER 20260627054746,roster,v4,yes,yes,edit-roundtrip
+xbox360,nhl14,SEASON 20260627054727,unknown,unsupported,no,no,read-only
+xbox360,nhl15,BEAPRO 20260627055248,unknown,unsupported,no,no,read-only
+xbox360,nhl15,DYNASTY 20260627055335,unknown,unsupported,no,no,read-only
+xbox360,nhl15,HOCKEYCARD 20260627055213,unknown,v2,no,no,read-only
+xbox360,nhl15,PROFILE 20260627055345,unknown,unsupported,no,no,read-only
+xbox360,nhl15,ROSTER 20260627055422,roster,v4,yes,yes,edit-roundtrip
+xbox360,nhl15,SEASON 20260627055406,unknown,unsupported,no,no,read-only
+xbox360,nhllegacy,BEAPRO 20260627055928,unknown,unsupported,no,no,read-only
+xbox360,nhllegacy,DYNASTY 20260627060005,unknown,unsupported,no,no,read-only
+xbox360,nhllegacy,HOCKEYCARD 20260627055850,unknown,v4,no,no,read-only
+xbox360,nhllegacy,PROFILE 20260627060011,settings,v4,no,no,read-only
+xbox360,nhllegacy,ROSTER 20260627060052,roster,v4,yes,yes,edit-roundtrip
+xbox360,nhllegacy,SEASON 20260627060034,unknown,unsupported,no,no,read-only

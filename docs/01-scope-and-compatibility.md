@@ -4,7 +4,8 @@
 
 ## Titles in scope
 
-NHL Modding Studio targets **NHL 10 through NHL 21** (the full EA NHL run across that span).
+NHL Modding Studio targets **17 catalog entries**: NHL 07 through NHL 21, NHL Legacy, and NHL
+Legacy Recompiled.
 
 ## Platforms in scope
 
@@ -29,7 +30,7 @@ candidate's full matrix below extends that with **net-new** work tracked in
 [ROADMAP.md](ROADMAP.md):
 
 - **PS4** (Phase 9) — net-new little-endian engine paths + a new save container.
-- **The rest of NHL 10–21** (Phase 10) — per-title schema reversing for years the reference app did
+- **The rest of NHL 07–21** (Phase 10) — per-title schema reversing for years the reference app did
   not cover.
 
 ## Compatibility matrix
@@ -40,18 +41,23 @@ existence unverified · `—` believed not to exist on that platform.
 
 | Title  | Xbox | PS3 | PS4 | Legacy Recomp |
 |--------|:----:|:---:|:---:|:-------------:|
-| NHL 10 |  ⬜  | ⬜  |  —  |      ⬜       |
-| NHL 11 |  ⬜  | ⬜  |  —  |      ⬜       |
-| NHL 12 |  ⬜  | ⬜  |  —  |      ⬜       |
-| NHL 13 |  ⬜  | ⬜  |  —  |      ⬜       |
-| NHL 14 |  🟡  | 🟡  |  —  |      🟡       |
-| NHL 15 |  🟡  | 🟡  | ⬜  |      🟡       |
-| NHL 16 |  ⬜  | —  | ⬜  |      ⬜       |
-| NHL 17 |  ⬜  | —  | ⬜  |      ⬜       |
-| NHL 18 |  ⬜  | —  | ⬜  |      ⬜       |
-| NHL 19 |  ⬜  | —  | ⬜  |      ⬜       |
-| NHL 20 |  ⬜  | —  | ⬜  |      ⬜       |
-| NHL 21 |  ⬜  | —  | ⬜  |      ⬜       |
+| NHL 07 |  🟡  | —  |  —  |      —       |
+| NHL 08 |  🟡  | 🟡 |  —  |      —       |
+| NHL 09 |  🟡  | 🟡 |  —  |      —       |
+| NHL 10 |  🟡  | 🟡 |  —  |      —       |
+| NHL 11 |  🟡  | 🟡 |  —  |      —       |
+| NHL 12 |  🟡  | 🟡 |  —  |      —       |
+| NHL 13 |  🟡  | 🟡 |  —  |      —       |
+| NHL 14 |  🟡  | 🟡 |  —  |      —       |
+| NHL 15 |  🟡  | 🟡 | 🟡 |      —       |
+| NHL 16 |  —   | —  | 🟡 |      —       |
+| NHL 17 |  —   | —  | 🟡 |      —       |
+| NHL 18 |  —   | —  | 🟡 |      —       |
+| NHL 19 |  —   | —  | 🟡 |      —       |
+| NHL 20 |  —   | —  | 🟡 |      —       |
+| NHL 21 |  —   | —  | 🟡 |      —       |
+| NHL Legacy | 🟡 | 🟡 | — | — |
+| Legacy Recompiled | — | — | — | 🟡 |
 
 > 🟡 cells reflect the reference app's proven Legacy/14/15 lineage and must be re-verified in the new
 > engine before promotion to ✅. The hardware-generation cells (which platforms shipped which titles)
@@ -60,7 +66,7 @@ existence unverified · `—` believed not to exist on that platform.
 
 ## Out of scope (initially)
 
-- Titles before NHL 10 or after NHL 21.
+- Titles before NHL 07 or after NHL 21.
 - PC platform (unless a title's PC build is explicitly added later).
 - The deferred research tracks (recomp, NHL2K10 RE, rig-audit, head-import, NHL24 weight-remap, FMT
   plugins, EBOOT patcher) — see [ROADMAP.md](ROADMAP.md#out-of-scope-deferred-to-a-separate-nhl-research-roadmap).

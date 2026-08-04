@@ -130,6 +130,22 @@ impl EditSession {
         Ok(crate::Capabilities::probe(&db, self.project.meta()))
     }
 
+    /// Probe the per-surface availability contract the UI gates tabs/queries on (Phase 1). Like
+    /// [`Self::capabilities`] it reads the working file's own schema (so it reflects the current
+    /// display file, roster mirror included), and reuses the field-level capabilities for the rating
+    /// tallies.
+    pub fn surface_capabilities(&self) -> Result<crate::SurfaceCapabilities> {
+        let db = TdbFile::parse(&self.working)?;
+        let model = self.build_model(&db)?;
+        let caps = crate::Capabilities::probe(&db, self.project.meta());
+        Ok(crate::SurfaceCapabilities::probe(
+            &db,
+            self.project.meta(),
+            &model,
+            &caps,
+        ))
+    }
+
     /// Assemble the Layer 2 entity model over the current working state.
     pub fn model(&self) -> Result<RosterModel> {
         let db = TdbFile::parse(&self.working)?;
@@ -522,6 +538,18 @@ impl EditSession {
                 table: studio_table.to_string(),
                 field: studio_field.to_string(),
             })?;
+
+        // Keys/identity fields are never editable as scalars — even when the schema marks them
+        // `update=True` (e.g. NHL07 `vfEq`). Editing a primary key in place would orphan its foreign
+        // keys; the structural operations that legitimately assign ids mint them through the Layer-1
+        // path, never this validated scalar seam. (Presentation mirrors this: `FieldView.editable`
+        // is `updatable && !key`.)
+        if meta.key {
+            return Err(EditError::Invalid(ValidationError::NotUpdatable {
+                field: studio_field.to_string(),
+            })
+            .into());
+        }
 
         let payload = match value {
             FieldValue::Int(i) => {

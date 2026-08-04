@@ -28,12 +28,12 @@ const PS3_XBOX: Platform[] = ["ps3", "xbox"];
 const PS3_XBOX_PS4: Platform[] = ["ps3", "xbox", "ps4"];
 
 // Every ingested title, in release order. Multi-system titles prompt for the console after selection;
-// NHL 07–09 are Xbox 360 only (the pre-nhl10 titles we've verified); NHL 15 spans PS3/Xbox/PS4 (the
+// NHL 07 is Xbox 360 only; NHL 08–09 span PS3/Xbox; NHL 15 spans PS3/Xbox/PS4 (the
 // bridge title); NHL 16–21 are PS4; Legacy Recompiled is PC (recomp).
 export const GAMES: GameDef[] = [
   { id: "nhl07", label: "NHL 07", file: "nhl07.png", platforms: ["xbox"] },
-  { id: "nhl08", label: "NHL 08", file: "nhl08.png", platforms: ["xbox"] },
-  { id: "nhl09", label: "NHL 09", file: "nhl09.png", platforms: ["xbox"] },
+  { id: "nhl08", label: "NHL 08", file: "nhl08.png", platforms: PS3_XBOX },
+  { id: "nhl09", label: "NHL 09", file: "nhl09.png", platforms: PS3_XBOX },
   { id: "nhl10", label: "NHL 10", file: "nhl10.png", platforms: PS3_XBOX },
   { id: "nhl11", label: "NHL 11", file: "nhl11.png", platforms: PS3_XBOX },
   { id: "nhl12", label: "NHL 12", file: "nhl12.png", platforms: PS3_XBOX },

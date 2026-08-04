@@ -73,6 +73,74 @@ fn players_listing_view_and_edit_through_registry() {
     assert!(reg.player_view(0, u64::MAX).unwrap().is_none());
 }
 
+/// The texture-import seam end-to-end (no Tauri): decode a source PNG, dispatch on the target file's
+/// container, overwrite it, and write a one-time `.bak` — all through `Registry::import_texture`.
+#[test]
+fn import_texture_writes_edited_gnf_through_registry() {
+    let reg = Registry::default();
+    let dir = std::env::temp_dir().join("studio_api_import_texture");
+    std::fs::create_dir_all(&dir).unwrap();
+    let (w, h) = (64u32, 64u32);
+
+    // A synthetic BC7 GNF target (a flat 50% grey so we can see the edit take).
+    let grey = vec![128u8; (w * h * 4) as usize];
+    let gnf = tdb_rx2::gnf::encode_gnf(
+        tdb_rx2::gnf::BcFormat::Bc7,
+        w,
+        h,
+        &tdb_rx2::bc7::encode(&grey, w, h),
+    );
+    let target = dir.join("p9000.gnf");
+    std::fs::write(&target, &gnf).unwrap();
+
+    // A source PNG: a directional gradient (R across, B down) written via the domain encoder.
+    let mut rgba = vec![0u8; (w * h * 4) as usize];
+    for y in 0..h {
+        for x in 0..w {
+            let i = ((y * w + x) * 4) as usize;
+            rgba[i] = (x * 255 / w) as u8;
+            rgba[i + 2] = (y * 255 / h) as u8;
+            rgba[i + 3] = 255;
+        }
+    }
+    let png = studio_domain::DecodedImage { width: w, height: h, rgba }
+        .to_png()
+        .unwrap();
+    let src = dir.join("edit.png");
+    std::fs::write(&src, png).unwrap();
+
+    let root = dir.to_str().unwrap();
+    let src_str = src.to_str().unwrap();
+    let summary = reg
+        .import_texture(root, "p9000.gnf", src_str, true)
+        .expect("import_texture");
+    assert_eq!(summary.container, "gnf");
+    assert_eq!((summary.width, summary.height), (w, h));
+    assert!(summary.bytes_written > 0);
+    let bak = summary.backup_path.expect("backup written");
+    assert!(std::path::Path::new(&bak).exists(), "backup file exists");
+    // The backup holds the pristine original; the target now holds the edit.
+    assert_eq!(std::fs::read(&bak).unwrap(), gnf, "backup == pristine original");
+    assert_ne!(std::fs::read(&target).unwrap(), gnf, "target was overwritten");
+
+    // A second import must not clobber the pristine `.bak`.
+    let summary2 = reg
+        .import_texture(root, "p9000.gnf", src_str, true)
+        .expect("second import");
+    assert_eq!(summary2.backup_path.as_deref(), Some(bak.as_str()));
+    assert_eq!(std::fs::read(&bak).unwrap(), gnf, "bak still the pristine original");
+
+    // A path escaping the install root is refused (containment).
+    assert!(reg.import_texture(root, "../escape.gnf", src_str, false).is_err());
+    // Missing target / missing source surface as errors, not panics.
+    assert!(reg.import_texture(root, "nope.gnf", src_str, false).is_err());
+    assert!(reg
+        .import_texture(root, "p9000.gnf", dir.join("nope.png").to_str().unwrap(), false)
+        .is_err());
+
+    let _ = std::fs::remove_dir_all(&dir);
+}
+
 /// The Transactions pool reader end-to-end: the FA pool is exactly the `team_id == None` slice of
 /// the master list (S1 occupancy model), and release/sign move a player across the boundary.
 #[test]

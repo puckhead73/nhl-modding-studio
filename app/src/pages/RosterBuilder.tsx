@@ -5,6 +5,8 @@ import { useProject } from "../lib/project";
 import { useRosterCart, type CartItem } from "../lib/rosterCart";
 import { Button, Card, EmptyState, Pill } from "../components/primitives";
 import { POS_BADGE } from "../lib/position";
+import { teamLabel } from "../lib/team";
+import type { TeamSummaryDto } from "../bindings/TeamSummaryDto";
 import type { ImportItemDto } from "../bindings/ImportItemDto";
 import type { ChangeSetPreviewDto } from "../bindings/ChangeSetPreviewDto";
 import type { ImportResultDto as ImportResult } from "../bindings/ImportResultDto";
@@ -178,7 +180,7 @@ function CartRow({
 }: {
   item: CartItem;
   projectId: number;
-  teams: { team_id: number; name: string }[];
+  teams: TeamSummaryDto[];
   onChange: (patch: Partial<CartItem>) => void;
   onRemove: () => void;
 }) {
@@ -192,7 +194,8 @@ function CartRow({
     queryFn: () => call("list_players", { projectId }),
   });
 
-  const targetTeamName = teams.find((t) => t.team_id === item.targetTeamId)?.name;
+  const targetTeam = teams.find((t) => t.team_id === item.targetTeamId);
+  const targetTeamName = targetTeam ? teamLabel(targetTeam) : undefined;
   const matchIds = new Set((matches.data ?? []).map((c) => c.ea_player_id));
   // Current occupants of the target team, minus anyone already offered as a same-person match.
   const occupants =
@@ -235,7 +238,7 @@ function CartRow({
           <option value="">Select team…</option>
           {teams.map((t) => (
             <option key={t.team_id} value={t.team_id}>
-              {t.name}
+              {teamLabel(t)}
             </option>
           ))}
         </select>
@@ -316,9 +319,12 @@ function PreviewPanel({
   teams,
 }: {
   preview: ChangeSetPreviewDto;
-  teams: { team_id: number; name: string }[];
+  teams: TeamSummaryDto[];
 }) {
-  const teamName = (id: number) => teams.find((t) => t.team_id === id)?.name ?? `Team #${id}`;
+  const teamName = (id: number) => {
+    const t = teams.find((t) => t.team_id === id);
+    return t ? teamLabel(t) : `Team #${id}`;
+  };
   const net = preview.players_after - preview.players_before;
   return (
     <Card

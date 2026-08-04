@@ -10,8 +10,8 @@ use studio_domain::FieldValue;
 
 use crate::dto::{
     AssetExportSummaryDto, AssetRootsArgsDto, AssetRootsDto, BrowseListingDto, ExportOptionsDto,
-    FileExportOptionsDto, FileExportSummaryDto, HeadPreviewDto, OutfitExportSummaryDto,
-    PlayerAssetsDto,
+    FileExportOptionsDto, FileExportSummaryDto, HeadPreviewDto, ImportTextureSummaryDto,
+    OutfitExportSummaryDto, PlayerAssetsDto,
     AddCareerSeasonDto, ArenaSummaryDto, ArenaViewDto, AutocorrectSummaryDto, CareerStatsDto,
     CreatePlayerDto, EaComputedRatingsDto, ExtractSummaryDto, FormulaCatalogDto, FormulaProfileDto,
     HistoricalCareerRatingsDto, HistoricalFiltersDto, HistoricalPersonDto, HistoricalPersonSummaryDto,
@@ -840,6 +840,30 @@ pub fn list_player_assets(
         .map_err(|e| e.to_string())
 }
 
+/// A player portrait framed for the bottom-anchored header tile (cropped to content + down to the
+/// lowest solid row, dropping any faded edge). Returns a PNG data URL.
+#[tauri::command]
+pub fn portrait_header_preview(
+    registry: State<'_, Registry>,
+    path: String,
+) -> CmdResult<String> {
+    registry.portrait_header_preview(&path).map_err(|e| e.to_string())
+}
+
+/// The team's logo as a cropped PNG data URL for the Team header window (`null` when the title ships
+/// no logo file or the team has no art id). Resolved + cropped server-side.
+#[tauri::command]
+pub fn team_logo(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    roots: AssetRootsArgsDto,
+    team_id: u64,
+) -> CmdResult<Option<String>> {
+    registry
+        .team_logo(project_id, &roots, team_id)
+        .map_err(|e| e.to_string())
+}
+
 /// Decode a player's head mesh (by head id) for the 3D viewer.
 #[tauri::command]
 pub fn head_preview(
@@ -915,6 +939,23 @@ pub fn export_install_files(
 ) -> CmdResult<FileExportSummaryDto> {
     registry
         .export_files(&install_dir, rel_paths, &out_dir, &options)
+        .map_err(|e| e.to_string())
+}
+
+/// Write an edited texture (`source_image_path`) back into the extracted asset file at `rel_path`
+/// (resolved safely under `install_dir`), dispatching on the file's container (PS4 GNF / BIGF portrait
+/// / RW4 texlib). Writes a one-time `.bak` when `write_backup` is set. Pure filesystem — no project
+/// needed.
+#[tauri::command]
+pub fn import_texture(
+    registry: State<'_, Registry>,
+    install_dir: String,
+    rel_path: String,
+    source_image_path: String,
+    write_backup: bool,
+) -> CmdResult<ImportTextureSummaryDto> {
+    registry
+        .import_texture(&install_dir, &rel_path, &source_image_path, write_backup)
         .map_err(|e| e.to_string())
 }
 

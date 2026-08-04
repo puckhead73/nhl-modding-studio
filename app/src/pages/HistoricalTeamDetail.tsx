@@ -10,6 +10,7 @@ import { useRosterCart } from "../lib/rosterCart";
 import type { HistoricalTeamBlockDto } from "../bindings/HistoricalTeamBlockDto";
 import type { HistoricalTeamMemberDto } from "../bindings/HistoricalTeamMemberDto";
 import type { HistoricalTeamAffiliateDto } from "../bindings/HistoricalTeamAffiliateDto";
+import { teamLabel } from "../lib/team";
 
 /// Historical Team detail — franchise-consolidated. The `:id` route param is a `kind:key` composite
 /// (`franchise:<id>` or `team:<team_key>`). A per-team season dropdown re-scopes the view; the shown
@@ -104,13 +105,24 @@ export function HistoricalTeamDetail() {
 
 /// The page/card title for a club. Franchise era names are already complete ("Minnesota North
 /// Stars"); a standalone team's name is just the city, so its nickname is appended.
-/** Bulk "Send to Builder" for a whole team-season: queue every roster member (that season) into the
- *  Roster Builder cart. Dedups by (person, season), so members already queued are skipped. Gated on an
- *  open EA project. */
+/** Bulk "Send to Builder" for a whole team-season: pick the EA team this historical club is replacing,
+ *  then queue every roster member (that season) into the Roster Builder cart already aimed at that team
+ *  — so a full-team import needs one placement, not one per player. Each member also carries its
+ *  historical jersey number over. Dedups by (person, season), so members already queued are skipped.
+ *  Gated on an open EA project. */
 function SendTeamSeason({ block }: { block: HistoricalTeamBlockDto }) {
   const { project } = useProject();
   const cart = useRosterCart();
+  const projectId = project?.project_id ?? null;
   const [added, setAdded] = useState<number | null>(null);
+  const [targetTeamId, setTargetTeamId] = useState<number | null>(null);
+
+  const teams = useQuery({
+    queryKey: ["list_teams", projectId],
+    queryFn: () => call("list_teams", { projectId: projectId! }),
+    enabled: projectId != null,
+  });
+
   if (!project) return null;
 
   // How many members aren't already in the cart for this season.
@@ -125,17 +137,48 @@ function SendTeamSeason({ block }: { block: HistoricalTeamBlockDto }) {
         personName: `${m.first_name} ${m.last_name}`.trim(),
         seasonLabel: `${block.season_year - 1}-${block.season_year}`,
         position: m.position ?? (m.is_goalie ? "G" : null),
+        targetTeamId,
+        jersey: m.jersey,
       });
       if (ok) n += 1;
     }
     setAdded(n);
   };
 
+  const selectCls =
+    "rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-xs text-slate-100 focus:border-sky-600 focus:outline-none";
+
+  const teamList = teams.data ?? [];
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <Button variant="secondary" onClick={send} disabled={remaining === 0}>
+      <label className="text-[11px] uppercase tracking-wider text-slate-500">Replaces</label>
+      <select
+        className={selectCls}
+        value={targetTeamId ?? ""}
+        onChange={(e) => {
+          setTargetTeamId(e.target.value ? Number(e.target.value) : null);
+          setAdded(null);
+        }}
+        disabled={teams.isLoading || teamList.length === 0}
+      >
+        <option value="">
+          {teams.isLoading ? "Loading teams…" : teamList.length === 0 ? "No teams found" : "Select EA team…"}
+        </option>
+        {teamList.map((t) => (
+          <option key={t.team_id} value={t.team_id}>
+            {teamLabel(t)}
+          </option>
+        ))}
+      </select>
+      <Button variant="secondary" onClick={send} disabled={remaining === 0 || targetTeamId == null}>
         {remaining === 0 ? "All queued" : `Send team-season to Builder (${remaining})`}
       </Button>
+      {teams.isError && (
+        <span className="text-xs text-rose-400">Couldn’t load the project’s teams.</span>
+      )}
+      {targetTeamId == null && remaining > 0 && !teams.isError && teamList.length > 0 && (
+        <span className="text-xs text-amber-400">Choose the EA team to place this roster onto.</span>
+      )}
       {added != null && (
         <span className="text-xs text-slate-400">
           {added > 0 ? `Added ${added} player${added === 1 ? "" : "s"} to the cart.` : "Already in the cart."}

@@ -30,3 +30,5 @@ path = "src/bin/edit_qa.rs"
 # already compiled elsewhere in the workspace).
 rusqlite = { version = "0.31", features = ["bundled"] }
 tdb-fhm = { path = "../tdb-fhm" }
+# Build a synthetic GNF target for the texture-import round-trip test.
+tdb-rx2 = { path = "../tdb-rx2" }

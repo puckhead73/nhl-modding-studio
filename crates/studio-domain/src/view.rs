@@ -118,7 +118,12 @@ pub fn read_field(
     let kind = fm
         .map(|m| FieldKind::from_meta(&m.kind))
         .unwrap_or(FieldKind::Other);
-    let editable = fm.map(|m| m.updatable).unwrap_or(false);
+    // A field is editable as a scalar iff its metadata marks it updatable **and** it is not a
+    // key/identity field. Some schemas (e.g. NHL07 `vfEq`) ship a primary key with `update=True`;
+    // editing a key in place would orphan its foreign keys, so the edit-entry guardrail refuses it
+    // (`EditSession::set_field` enforces the same rule on the write side). Keys are still shown as
+    // read-only cells for disclosure.
+    let editable = fm.map(|m| m.updatable && !m.key).unwrap_or(false);
     let range_low = fm.and_then(|m| m.range_low);
     let range_high = fm.and_then(|m| m.range_high);
     let is_string = kind == FieldKind::String;
@@ -946,6 +951,9 @@ pub fn lines_view(
 const ARENA_TABLE: &str = "StEO";
 const ARENA_KEY: &str = "vfEq";
 const TEAM_ARENA_FK: &str = "buDa";
+/// `kOtt.lOnr` — the team's logo **art id** (EA `artid`), which names the on-disk
+/// logo texlib. Distinct from the `ubPc.lOnr` portrait id (same raw id, other table).
+const TEAM_LOGO_ARTID: &str = "lOnr";
 
 /// Curated team identity fields (metadata `name`s), in display order.
 const TEAM_IDENTITY: &[&str] = &[
@@ -993,6 +1001,10 @@ pub struct TeamView {
     /// This team's retired jersey numbers (`wcSL`), sorted ascending.
     pub retired_numbers: Vec<u32>,
     pub all_fields: Vec<FieldView>,
+    /// The team's logo art id (`kOtt.lOnr`) — names the on-disk logo texlib. `None`
+    /// on schemas without the field. Kept for the header logo preview; the raw id
+    /// stays behind the scenes (human-readable-surfaces rule).
+    pub logo_artid: Option<u64>,
     /// The server-driven curated section layout the UI renders (evidence-first per-game profile).
     pub profile: crate::field_profile::EntityFieldProfile,
 }
@@ -1678,6 +1690,7 @@ pub fn team_view(
         kott_record: team.record,
         has_arena,
     });
+    let logo_artid = read_u64_by_studio(db, kott, team.record, TEAM_LOGO_ARTID);
     Some(TeamView {
         team_id,
         record: team.record,
@@ -1686,6 +1699,7 @@ pub fn team_view(
         roster_count: model.team_roster(team_id).len(),
         retired_numbers: crate::team_tabs::retired_numbers(db, team_id),
         all_fields,
+        logo_artid,
         profile,
     })
 }
