@@ -105,6 +105,36 @@ export function UniformsTab({ projectId, teamId }: { projectId: number; teamId: 
     }
   }, [kits, selectedKey]);
 
+  const current = kits.find((k) => k.key === selectedKey) ?? kits[0];
+
+  // The previewed player, shared by the 3D viewer and the equipment panel so both
+  // react to the same pick. null = the backend's top-overall default; we mirror
+  // that here (top-overall active on the team) to know whether it's a goalie —
+  // which swaps the equipment cards from skater gloves/helmet to blocker/trapper/
+  // pads. Reset to the default whenever the kit changes. (These hooks live above
+  // the early returns so hook order stays stable.)
+  const [playerId, setPlayerId] = useState<number | null>(null);
+  useEffect(() => setPlayerId(null), [current?.key]);
+  const roster = useQuery({
+    queryKey: ["players", projectId],
+    queryFn: () => call("list_players", { projectId }),
+  });
+  const teamPlayers = useMemo(
+    () => (roster.data ?? []).filter((p) => p.team_id === teamId),
+    [roster.data, teamId],
+  );
+  const selectedPlayer = useMemo(() => {
+    if (playerId != null) return teamPlayers.find((p) => p.player_id === playerId);
+    // Mirror the backend default: top-overall active player.
+    return teamPlayers
+      .filter((p) => p.is_active !== false)
+      .reduce<(typeof teamPlayers)[number] | undefined>(
+        (best, p) => (best == null || (p.overall ?? -1) > (best.overall ?? -1) ? p : best),
+        undefined,
+      );
+  }, [teamPlayers, playerId]);
+  const previewIsGoalie = selectedPlayer?.is_goalie ?? false;
+
   if (jerseys.isLoading) return <Spinner label="Loading kits…" />;
   if (jerseys.isError) return <p className="text-sm text-rose-400">{String(jerseys.error)}</p>;
 
@@ -121,7 +151,6 @@ export function UniformsTab({ projectId, teamId }: { projectId: number; teamId: 
     );
   }
 
-  const current = kits.find((k) => k.key === selectedKey) ?? kits[0];
   const showPreview =
     !!installDir && Number.isFinite(current.style) && Number.isFinite(current.variant);
 
@@ -172,7 +201,8 @@ export function UniformsTab({ projectId, teamId }: { projectId: number; teamId: 
                 teamId={teamId}
                 style={current.style}
                 variant={current.variant}
-                kitKey={current.key}
+                playerId={playerId}
+                onPlayerIdChange={setPlayerId}
               />
             ) : (
               <p className="rounded-md border border-slate-800 bg-slate-900/40 px-3 py-2 text-xs text-slate-400">
@@ -183,7 +213,12 @@ export function UniformsTab({ projectId, teamId }: { projectId: number; teamId: 
           </section>
 
           <section className="min-w-[22rem] flex-1 basis-[26rem]">
-            <KitEquipment projectId={projectId} teamId={teamId} variant={current.variant} />
+            <KitEquipment
+              projectId={projectId}
+              teamId={teamId}
+              variant={current.variant}
+              isGoalie={previewIsGoalie}
+            />
           </section>
 
           {wide ? (
@@ -221,14 +256,29 @@ export function UniformsTab({ projectId, teamId }: { projectId: number; teamId: 
  *  `EquipmentDetail` editor and invalidate the queries, so the 3D preview (which
  *  paints gloves/helmet from these same zone colors) updates live. Replaces the
  *  former standalone Equipment tab + its record selector. */
+/** The equipment types shown for each player kind, in display order. Goalie types
+ *  are a FLAGGED best-guess (must match GOALIE_TYPE_* in registry.rs). */
+const SKATER_EQUIPMENT: { type: number; title: string }[] = [
+  { type: 5, title: "Gloves" },
+  { type: 8, title: "Helmet" },
+];
+const GOALIE_EQUIPMENT: { type: number; title: string }[] = [
+  { type: 1, title: "Blocker" },
+  { type: 2, title: "Trapper" },
+  { type: 3, title: "Pads" },
+];
+
 function KitEquipment({
   projectId,
   teamId,
   variant,
+  isGoalie,
 }: {
   projectId: number;
   teamId: number;
   variant: number;
+  /** The previewed player is a goalie → show blocker/trapper/pads instead of glove/helmet. */
+  isGoalie: boolean;
 }) {
   const q = useQuery({
     queryKey: ["equipment", projectId, teamId],
@@ -239,8 +289,10 @@ function KitEquipment({
     const ofType = (q.data ?? []).filter((r) => r.equipment_type_raw === type);
     return ofType.find((r) => r.variant_raw === variant) ?? ofType[0];
   };
-  const glove = pick(5); // EQUIPMENT_TYPE_GLOVES
-  const helmet = pick(8); // EQUIPMENT_TYPE_HELMET
+  const wanted = isGoalie ? GOALIE_EQUIPMENT : SKATER_EQUIPMENT;
+  const groups = wanted
+    .map((w) => ({ ...w, record: pick(w.type) }))
+    .filter((g): g is typeof g & { record: TeamEquipmentDto } => g.record != null);
 
   if (q.isLoading) return <Spinner label="Loading equipment…" />;
   if (q.isError) return <p className="text-sm text-rose-400">{String(q.error)}</p>;
@@ -248,18 +300,23 @@ function KitEquipment({
   return (
     <div className="space-y-4">
       <div className="flex items-baseline justify-between">
-        <h3 className="text-sm font-semibold text-slate-100">Equipment</h3>
+        <h3 className="text-sm font-semibold text-slate-100">
+          {isGoalie ? "Goalie equipment" : "Equipment"}
+        </h3>
         <span className="text-[10px] uppercase tracking-wide text-slate-500">linked to kit</span>
       </div>
-      {glove || helmet ? (
-        <>
-          {glove ? <EquipmentGroup title="Gloves" projectId={projectId} record={glove} /> : null}
-          {helmet ? <EquipmentGroup title="Helmet" projectId={projectId} record={helmet} /> : null}
-        </>
+      {groups.length > 0 ? (
+        groups.map((g) => (
+          <EquipmentGroup key={g.type} title={g.title} projectId={projectId} record={g.record} />
+        ))
       ) : (
         <EmptyState
-          title="No glove or helmet equipment registered"
-          hint="This team's hHbv table carries no gloves (type 5) or helmet (type 8) rows."
+          title={`No ${isGoalie ? "goalie" : "glove or helmet"} equipment registered`}
+          hint={
+            isGoalie
+              ? "This team's hHbv table carries no blocker (type 1), trapper (type 2) or pads (type 3) rows."
+              : "This team's hHbv table carries no gloves (type 5) or helmet (type 8) rows."
+          }
         />
       )}
     </div>

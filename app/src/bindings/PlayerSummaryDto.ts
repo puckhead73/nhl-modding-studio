@@ -23,4 +23,10 @@ rights_team_id: number | null,
 /**
  * The bio record index (lets list-driven surfaces edit `ubPc` cells directly).
  */
-bio_record: number, cap_hit_dollars: number | null, contract_years: number | null, contract_status: string | null, is_two_way: boolean | null, };
+bio_record: number, cap_hit_dollars: number | null, contract_years: number | null, contract_status: string | null, is_two_way: boolean | null, 
+/**
+ * `true` for goaltenders — the Uniforms tab swaps the skater glove/helmet
+ * equipment cards for the goalie set (blocker / trapper / pads) when the
+ * previewed player is a goalie.
+ */
+is_goalie: boolean, };

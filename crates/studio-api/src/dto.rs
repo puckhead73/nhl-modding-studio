@@ -382,6 +382,10 @@ pub struct PlayerSummaryDto {
     pub contract_years: Option<u32>,
     pub contract_status: Option<String>,
     pub is_two_way: Option<bool>,
+    /// `true` for goaltenders — the Uniforms tab swaps the skater glove/helmet
+    /// equipment cards for the goalie set (blocker / trapper / pads) when the
+    /// previewed player is a goalie.
+    pub is_goalie: bool,
 }
 
 /// A player's roster membership on one team.

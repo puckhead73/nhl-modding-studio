@@ -52,8 +52,15 @@ export function compareJerseys(a: TeamJerseyDto, b: TeamJerseyDto): number {
 
 /** `jJpM` labels with confirmed in-game meaning; other codes surface as `Equipment #N`. */
 export const EQUIPMENT_TYPE_LABELS: Record<number, string> = {
+  // Skater.
   5: "Gloves",
   8: "Helmet",
+  // Goalie (hHbv types 1/2/3). The type→piece assignment is a FLAGGED best-guess
+  // that must match GOALIE_TYPE_* in crates/studio-api/src/registry.rs — correct
+  // both together once verified in-game.
+  1: "Blocker",
+  2: "Trapper",
+  3: "Pads",
 };
 
 export const ERA_LABELS: Record<number, string> = { 0: "Reebok", 1: "90's" };

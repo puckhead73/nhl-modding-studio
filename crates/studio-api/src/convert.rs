@@ -405,6 +405,7 @@ pub fn player_summary_dto(s: &PlayerSummary) -> PlayerSummaryDto {
         contract_years: s.contract_years,
         contract_status: s.contract_status.clone(),
         is_two_way: s.is_two_way,
+        is_goalie: s.is_goalie,
     }
 }
 

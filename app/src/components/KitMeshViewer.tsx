@@ -99,19 +99,19 @@ export function TeamKitViewer({
   teamId,
   style,
   variant,
-  kitKey,
+  playerId,
+  onPlayerIdChange,
 }: {
   projectId: number;
   roots: AssetRootsArgsDto;
   teamId: number;
   style: number;
   variant: number;
-  /** Changing kit resets the head pick back to the default. */
-  kitKey: string;
+  /** The previewed player (null = top-overall default). Controlled by the parent
+   *  so the equipment panel reacts to the same selection (skater vs goalie gear). */
+  playerId: number | null;
+  onPlayerIdChange: (id: number | null) => void;
 }) {
-  const [playerId, setPlayerId] = useState<number | null>(null);
-  useEffect(() => setPlayerId(null), [kitKey]);
-
   const roster = useQuery({
     queryKey: ["players", projectId],
     queryFn: () => call("list_players", { projectId }),
@@ -146,13 +146,14 @@ export function TeamKitViewer({
       </span>
       <select
         value={playerId ?? ""}
-        onChange={(e) => setPlayerId(e.target.value === "" ? null : Number(e.target.value))}
+        onChange={(e) => onPlayerIdChange(e.target.value === "" ? null : Number(e.target.value))}
         className="max-w-[16rem] rounded border border-slate-700 bg-slate-950 px-2 py-1 text-xs text-slate-100 focus:border-sky-600 focus:outline-none"
       >
         <option value="">Top-overall player (default)</option>
         {teamPlayers.map((p) => (
           <option key={p.player_id} value={p.player_id}>
             {[p.last_name, p.first_name].filter(Boolean).join(", ") || `#${p.player_id}`}
+            {p.position_label ? ` · ${p.position_label}` : ""}
             {p.overall != null ? ` · ${p.overall} OVR` : ""}
           </option>
         ))}
