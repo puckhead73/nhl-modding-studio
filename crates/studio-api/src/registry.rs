@@ -1093,16 +1093,19 @@ impl Registry {
         crate::hockey_shop::list(store_root, slot)
     }
 
-    /// Extract a representative texture per game equipment id into the store.
+    /// Extract a representative texture per game equipment id into the store, naming each entry
+    /// from the slot's enum vocabulary (loaded from the bundled `defs/`).
     pub fn hockey_shop_sync(
         &self,
         args: &AssetRootsArgsDto,
         store_root: &str,
         slot: &str,
+        defs_root: &Path,
     ) -> Result<HockeyShopSyncSummaryDto, ApiError> {
         let roots = resolve_roots(args);
         let rendering = PathBuf::from(&roots.rendering);
-        crate::hockey_shop::sync(&rendering, store_root, slot)
+        let enums = self.shop_enums(defs_root);
+        crate::hockey_shop::sync(&rendering, store_root, slot, &enums)
     }
 
     /// Ingest an operator PNG as a new store item.

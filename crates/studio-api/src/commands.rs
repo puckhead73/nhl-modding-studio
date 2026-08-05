@@ -994,12 +994,16 @@ pub fn hockey_shop_list(
 /// Extract a representative texture per game equipment id into the store (idempotent).
 #[tauri::command]
 pub fn hockey_shop_sync(
+    app: tauri::AppHandle,
     registry: State<'_, Registry>,
     roots: AssetRootsArgsDto,
     store_root: String,
     slot: String,
 ) -> CmdResult<HockeyShopSyncSummaryDto> {
-    registry.hockey_shop_sync(&roots, &store_root, &slot).map_err(|e| e.to_string())
+    let defs = resolve_defs(&app);
+    registry
+        .hockey_shop_sync(&roots, &store_root, &slot, &defs)
+        .map_err(|e| e.to_string())
 }
 
 /// Ingest an operator PNG as a new store item.

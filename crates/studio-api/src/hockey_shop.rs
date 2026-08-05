@@ -43,11 +43,15 @@ pub fn list(store_root: &str, slot: &str) -> Result<Vec<HockeyShopItemDto>, ApiE
 }
 
 /// Extract a representative colour texture for every game equipment id the store
-/// doesn't already carry (named `<Label> <id>`, credited to EA Sports). Idempotent.
+/// doesn't already carry. Each entry is named from the slot's enum vocabulary (e.g.
+/// "CCM Ribcore 40K"), falling back to `<Label> <id>` for an uncatalogued id, credited
+/// to EA Sports, and tracked back to its game id via `source: "game"` + `game_asset_id`.
+/// Idempotent — re-running only picks up new ids.
 pub fn sync(
     rendering: &Path,
     store_root: &str,
     slot: &str,
+    enums: &studio_domain::EnumRegistry,
 ) -> Result<HockeyShopSyncSummaryDto, ApiError> {
     let spec = spec_for(slot)?;
     let store = ensure_store_slot_dir(store_root, slot)?;
@@ -76,9 +80,13 @@ pub fn sync(
             summary.failed.push(format!("{file}: {e}"));
             continue;
         }
+        // Name from the anchored vocabulary where the id is catalogued (the same
+        // model names the game list shows); fall back to a generated `<Label> <id>`.
+        let name = studio_domain::slot_enum_label(spec, enums, asset.id)
+            .unwrap_or_else(|| format!("{} {}", spec.label, asset.id));
         manifest.items.push(HockeyShopItemDto {
             id,
-            name: format!("{} {}", spec.label, asset.id),
+            name,
             author: "EA Sports".to_owned(),
             source: "game".to_owned(),
             game_asset_id: Some(asset.id),
