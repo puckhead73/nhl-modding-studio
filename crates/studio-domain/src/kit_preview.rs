@@ -43,6 +43,16 @@ pub struct KitPieceInput {
     /// empty; the `#[serde(default)]` keeps older callers/paths valid.
     #[serde(default)]
     pub prebuilt_textures: Vec<PreviewTexture>,
+    /// Mirror this piece across the body centreline (negate model-space X). Used to
+    /// place a hand piece authored for one hand onto the other (goalie blocker /
+    /// trapper, which are both authored on the +X hand). Normals flip with it and
+    /// triangle winding is reversed so faces stay outward. Defaults false.
+    #[serde(default)]
+    pub mirror_x: bool,
+    /// Raise this piece by a fraction of its own height (model-space +Y), applied
+    /// after mirroring. Used to lift the goalie mask off the forehead. Defaults 0.
+    #[serde(default)]
+    pub raise_frac: f32,
 }
 
 /// One assembled piece: its submeshes (material indices point into
@@ -386,19 +396,29 @@ pub fn decode_kit_preview(pieces: &[KitPieceInput]) -> Result<KitPreview> {
         };
         textures.extend(piece_textures.iter().cloned());
 
+        // Per-piece bbox over the *transformed* positions (mirror is applied inline;
+        // the raise offset is applied after, once the piece's own height is known).
+        let mut pmin = [f32::MAX; 3];
+        let mut pmax = [f32::MIN; 3];
         let mut submeshes = Vec::with_capacity(asset.submeshes.len());
         for sm in &asset.submeshes {
             let mut positions = Vec::with_capacity(sm.vertices.len());
             let mut normals = Vec::with_capacity(sm.vertices.len());
             let mut uv1 = Vec::with_capacity(sm.vertices.len());
             for v in &sm.vertices {
-                positions.push(v.position);
-                normals.push(v.normal);
-                uv1.push(v.uv);
-                for a in 0..3 {
-                    min[a] = min[a].min(v.position[a]);
-                    max[a] = max[a].max(v.position[a]);
+                let mut pos = v.position;
+                let mut nrm = v.normal;
+                if p.mirror_x {
+                    pos[0] = -pos[0];
+                    nrm[0] = -nrm[0];
                 }
+                for a in 0..3 {
+                    pmin[a] = pmin[a].min(pos[a]);
+                    pmax[a] = pmax[a].max(pos[a]);
+                }
+                positions.push(pos);
+                normals.push(nrm);
+                uv1.push(v.uv);
             }
             let material_index = if is_head(&p.kind) {
                 pick_submesh_texture(&sm.name, &piece_textures).map(|i| base + i)
@@ -406,18 +426,47 @@ pub fn decode_kit_preview(pieces: &[KitPieceInput]) -> Result<KitPreview> {
                 equip_mat
             };
             let (transparent, render_order) = submesh_blend_mode(&sm.name);
+            // Mirroring flips face orientation — reverse winding so faces stay outward.
+            let triangles: Vec<[u32; 3]> = if p.mirror_x {
+                sm.triangles.iter().map(|t| [t[0], t[2], t[1]]).collect()
+            } else {
+                sm.triangles.clone()
+            };
             let mut out = PreviewSubmesh {
                 material_index,
                 name: sm.name.clone(),
                 positions,
                 normals,
                 uv1,
-                triangles: sm.triangles.clone(),
+                triangles,
                 transparent,
                 render_order,
             };
             ensure_normals(&mut out);
             submeshes.push(out);
+        }
+
+        // Lift the piece by a fraction of its own height (mask off the forehead),
+        // then fold the final piece bbox into the shared kit extent.
+        let dy = if p.raise_frac != 0.0 && pmax[1] >= pmin[1] {
+            p.raise_frac * (pmax[1] - pmin[1])
+        } else {
+            0.0
+        };
+        if dy != 0.0 {
+            for sm in &mut submeshes {
+                for pos in &mut sm.positions {
+                    pos[1] += dy;
+                }
+            }
+            pmin[1] += dy;
+            pmax[1] += dy;
+        }
+        if pmin[0] <= pmax[0] {
+            for a in 0..3 {
+                min[a] = min[a].min(pmin[a]);
+                max[a] = max[a].max(pmax[a]);
+            }
         }
 
         out_pieces.push(KitPiece {
@@ -578,6 +627,8 @@ mod tests {
             mesh_path: root.join(rel),
             texture_paths: vec![],
             prebuilt_textures: vec![],
+            mirror_x: false,
+            raise_frac: 0.0,
         };
         let inputs = vec![
             piece("head", "player/player_10.rx2"),
@@ -642,6 +693,8 @@ mod tests {
                 mesh_path,
                 texture_paths: vec![],
                 prebuilt_textures: vec![],
+                mirror_x: false,
+                raise_frac: 0.0,
             })
         };
         let inputs: Vec<KitPieceInput> = [
@@ -661,5 +714,49 @@ mod tests {
             let verts: usize = p.submeshes.iter().map(|s| s.positions.len()).sum();
             assert!(verts > 0, "{} has geometry", p.kind);
         }
+
+        // Mirror + raise transforms actually move geometry.
+        let x_centroid = |k: &KitPreview| -> f64 {
+            let mut s = 0.0f64;
+            let mut n = 0u64;
+            for p in &k.pieces {
+                for sm in &p.submeshes {
+                    for v in &sm.positions {
+                        s += v[0] as f64;
+                        n += 1;
+                    }
+                }
+            }
+            s / n.max(1) as f64
+        };
+        let min_y = |k: &KitPreview| -> f32 {
+            k.pieces
+                .iter()
+                .flat_map(|p| p.submeshes.iter())
+                .flat_map(|s| s.positions.iter())
+                .map(|v| v[1])
+                .fold(f32::MAX, f32::min)
+        };
+        let blk = |mirror: bool| KitPieceInput {
+            kind: "blocker".into(),
+            mesh_path: g.blocker.clone().unwrap(),
+            texture_paths: vec![],
+            prebuilt_textures: vec![],
+            mirror_x: mirror,
+            raise_frac: 0.0,
+        };
+        let plain = decode_kit_preview(&[blk(false)]).unwrap();
+        let mirrored = decode_kit_preview(&[blk(true)]).unwrap();
+        // The blocker is authored on +X; mirroring flips its centroid to −X.
+        assert!(x_centroid(&plain) > 0.0, "blocker authored on +X");
+        assert!((x_centroid(&mirrored) + x_centroid(&plain)).abs() < 1e-3, "mirror negates X");
+
+        let mask_plain = decode_kit_preview(&[piece("mask", &g.mask).unwrap()]).unwrap();
+        let mask_raised = decode_kit_preview(&[KitPieceInput {
+            raise_frac: 0.2,
+            ..piece("mask", &g.mask).unwrap()
+        }])
+        .unwrap();
+        assert!(min_y(&mask_raised) > min_y(&mask_plain), "raise lifts the mask");
     }
 }

@@ -636,6 +636,8 @@ impl Registry {
                 mesh_path,
                 texture_paths,
                 prebuilt_textures: Vec::new(),
+                mirror_x: false,
+                raise_frac: 0.0,
             });
         }
         let preview = studio_domain::decode_kit_preview(&inputs).map_err(ApiError::Domain)?;
@@ -680,6 +682,23 @@ impl Registry {
             // Goalies wear an entirely different gear set (mask, pads, blocker,
             // trapper, goalie skate/sock) — drives the goalie branch below.
             let is_goalie = chosen.map(|p| p.is_goalie).unwrap_or(false);
+            // Catching hand for the goalie's glove placement (`ubPc.GRkp`: 0 = Left,
+            // 1 = Right; for goalies this is the catch hand). Defaults to a regular
+            // catch-left goalie when unknown.
+            let catch_left = if is_goalie {
+                chosen
+                    .and_then(|p| ws.display().player_view(p.player_id).ok().flatten())
+                    .and_then(|v| {
+                        v.all_fields
+                            .iter()
+                            .find(|f| f.studio_field == "GRkp")
+                            .and_then(|f| f.decoded)
+                    })
+                    .map(|h| h == 0)
+                    .unwrap_or(true)
+            } else {
+                true
+            };
 
             // The chosen player's head model id (`ubPc.pPaD`) and eye colour
             // (`ubPc.Zufj`), read off the full player view. Absent → no head piece
@@ -795,6 +814,8 @@ impl Registry {
                         mesh_path,
                         texture_paths: textures,
                         prebuilt_textures: prebuilt,
+                        mirror_x: false,
+                        raise_frac: 0.0,
                     });
                 }
             };
@@ -885,6 +906,23 @@ impl Registry {
                 push("socks", meshes.sock.clone(), kit_texture("sock"), Vec::new());
                 push("gloves", meshes.glove.clone(), Vec::new(), glove_tex.into_iter().collect());
                 push("helmet", meshes.helmet.clone(), Vec::new(), helmet_tex.into_iter().collect());
+            }
+
+            if is_goalie {
+                // Place the two hand pieces on opposite hands (both blocker and
+                // trapper meshes are authored on the +X hand) and lift the mask off
+                // the forehead. Convention: **+X is the character's LEFT hand**, so
+                // the catch glove (trapper) sits at +X for a catch-LEFT goalie and
+                // the blocker mirrors to the right; a catch-RIGHT goalie is the
+                // mirror image. If the hands read swapped in-game, flip this pair.
+                for pc in pieces.iter_mut() {
+                    match pc.kind.as_str() {
+                        "mask" | "cage" => pc.raise_frac = MASK_RAISE_FRAC,
+                        "trapper" => pc.mirror_x = !catch_left,
+                        "blocker" => pc.mirror_x = catch_left,
+                        _ => {}
+                    }
+                }
             }
 
             if pieces.is_empty() {
@@ -2206,6 +2244,10 @@ fn resolve_glove_masks(glove_dir: &Path, brand: u32) -> (Vec<PathBuf>, Option<Pa
 const GOALIE_TYPE_BLOCKER: u32 = 1;
 const GOALIE_TYPE_TRAPPER: u32 = 2;
 const GOALIE_TYPE_PADS: u32 = 3;
+
+/// Fraction of its own height to lift the goalie mask so it sits on the head
+/// instead of clipping through the forehead.
+const MASK_RAISE_FRAC: f32 = 0.2;
 
 /// Zone masks (+ optional `_dm` detail) for a goalie piece of a given brand, from
 /// its `fe*` mask files (`feblocker_<model>_<brand>_<i>_tm`,
