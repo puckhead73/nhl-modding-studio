@@ -162,6 +162,9 @@ function SlotShop({
 
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState<number | null>(null);
+  // A selected store item drives the center viewport (its texture) instead of the game 3D
+  // preview — whichever side was clicked last wins, mirroring the old app.
+  const [storeSel, setStoreSel] = useState<HockeyShopItemDto | null>(null);
 
   // Keep a valid selection as the slot's item list loads / changes.
   useEffect(() => {
@@ -232,11 +235,16 @@ function SlotShop({
                   <li key={a.id}>
                     <button
                       type="button"
-                      onClick={() => setSelectedId(a.id)}
+                      onClick={() => {
+                        setSelectedId(a.id);
+                        setStoreSel(null);
+                      }}
                       title={`${a.files.length} render file${a.files.length === 1 ? "" : "s"}`}
                       className={
                         "flex w-full items-baseline gap-2 border-b border-slate-900 px-3 py-1.5 text-left text-xs transition-colors " +
-                        (on ? "bg-sky-900/40 text-sky-50" : "text-slate-200 hover:bg-slate-800/60")
+                        (on && !storeSel
+                          ? "bg-sky-900/40 text-sky-50"
+                          : "text-slate-200 hover:bg-slate-800/60")
                       }
                     >
                       <span className="w-8 shrink-0 font-mono text-[10px] text-slate-500">
@@ -258,40 +266,63 @@ function SlotShop({
         </div>
       </aside>
 
-      {/* Center — 3D preview + textures. */}
+      {/* Center — 3D preview + textures (game side), or the selected store item's texture. */}
       <section className="flex min-h-0 min-w-[26rem] flex-1 flex-col gap-3 overflow-y-auto pr-1">
-        <div className="h-[58vh] min-h-[28rem] shrink-0">
-          <EquipmentItemViewer roots={rootArgs} slot={slot.key} id={selectedId} />
-        </div>
-        {selected ? (
-          <ItemTextures installDir={installDir} slot={slot} asset={selected} />
-        ) : null}
+        {storeSel && storeRoot ? (
+          <StoreTexturePreview storeRoot={storeRoot} slot={slot.key} item={storeSel} />
+        ) : (
+          <>
+            <div className="h-[58vh] min-h-[28rem] shrink-0">
+              <EquipmentItemViewer roots={rootArgs} slot={slot.key} id={selectedId} />
+            </div>
+            {selected ? (
+              <ItemTextures installDir={installDir} slot={slot} asset={selected} />
+            ) : null}
+          </>
+        )}
       </section>
 
       {/* Right — the store. */}
       <aside className="w-72 shrink-0">
-        <StorePanel slot={slot} rootArgs={rootArgs} storeRoot={storeRoot} gameIds={gameIds} />
+        <StorePanel
+          slot={slot}
+          rootArgs={rootArgs}
+          storeRoot={storeRoot}
+          gameIds={gameIds}
+          selectedId={storeSel?.id ?? null}
+          onSelect={setStoreSel}
+        />
       </aside>
     </div>
   );
 }
 
 /** The slot's disk-backed store library: sync game items in, import a PNG, install, delete. Entries
- *  extracted from an id that's currently installed in the game grey out. */
+ *  extracted from an id that's currently installed in the game grey out. Selecting a row previews
+ *  its texture in the center viewport (no per-row thumbnails). */
 function StorePanel({
   slot,
   rootArgs,
   storeRoot,
   gameIds,
+  selectedId,
+  onSelect,
 }: {
   slot: EquipmentSlotDto;
   rootArgs: ReturnType<typeof useAssetRootArgs>["rootArgs"];
   storeRoot: string | null;
   gameIds: ReadonlySet<number>;
+  selectedId: string | null;
+  onSelect: (item: HockeyShopItemDto | null) => void;
 }) {
   const qc = useQueryClient();
   const fileInput = useRef<HTMLInputElement>(null);
   const [search, setSearch] = useState("");
+  // After a file pick we stage the image and open a modal to capture name + author (the old app's
+  // flow) — imports are no longer silently credited to "Me".
+  const [pendingImport, setPendingImport] = useState<{ name: string; imageBase64: string } | null>(
+    null,
+  );
   const invalidate = () =>
     qc.invalidateQueries({ queryKey: ["hockeyShopStore", storeRoot, slot.key] });
 
@@ -315,7 +346,10 @@ function StorePanel({
   const remove = useMutation({
     mutationFn: (entryId: string) =>
       call("hockey_shop_delete", { storeRoot: storeRoot!, slot: slot.key, entryId }),
-    onSuccess: invalidate,
+    onSuccess: (_r, entryId) => {
+      invalidate();
+      if (entryId === selectedId) onSelect(null); // its viewport preview is now gone
+    },
   });
 
   const onPickFile = (file: File) => {
@@ -324,7 +358,7 @@ function StorePanel({
       const url = String(reader.result); // data:image/png;base64,XXXX
       const b64 = url.slice(url.indexOf(",") + 1);
       const name = file.name.replace(/\.[^.]+$/, "").replace(/[_-]+/g, " ").trim();
-      importItem.mutate({ name, author: "Me", imageBase64: b64 });
+      setPendingImport({ name, imageBase64: b64 });
     };
     reader.readAsDataURL(file);
   };
@@ -408,14 +442,14 @@ function StorePanel({
               : "No matches."}
           </p>
         ) : (
-          <ul className="space-y-1.5">
+          <ul className="space-y-1">
             {filtered.map((it) => (
               <StoreRow
                 key={it.id}
                 item={it}
-                slot={slot.key}
-                storeRoot={storeRoot!}
                 installed={isInstalled(it)}
+                selected={it.id === selectedId}
+                onSelect={() => onSelect(it)}
                 onInstall={() => setInstalling(it)}
                 onDelete={() => remove.mutate(it.id)}
                 deleting={remove.isPending}
@@ -424,6 +458,27 @@ function StorePanel({
           </ul>
         )}
       </div>
+
+      {pendingImport && storeRoot ? (
+        <AddToStoreModal
+          slotLabel={slot.label}
+          pending={pendingImport}
+          importing={importItem.isPending}
+          error={importItem.error ? String(importItem.error) : null}
+          onCancel={() => setPendingImport(null)}
+          onConfirm={(name, author) =>
+            importItem.mutate(
+              { name, author, imageBase64: pendingImport.imageBase64 },
+              {
+                onSuccess: (entry) => {
+                  setPendingImport(null);
+                  onSelect(entry); // preview the freshly-imported texture
+                },
+              },
+            )
+          }
+        />
+      ) : null}
 
       {installing && storeRoot ? (
         <InstallModal
@@ -444,57 +499,58 @@ function StorePanel({
   );
 }
 
+/** Author credit tone: EA Sports (extracted game textures) reads purple; community authors blue. */
+function authorTone(author: string): string {
+  return author.toUpperCase().includes("EA SPORTS") ? "text-purple-400" : "text-sky-400";
+}
+
+/** A single store entry: name + author on one line (no thumbnail — the texture previews in the
+ *  center viewport when selected). Installed-in-game entries carry a badge; row highlights when
+ *  selected. Install / remove sit on the right. */
 function StoreRow({
   item,
-  slot,
-  storeRoot,
   installed,
+  selected,
+  onSelect,
   onInstall,
   onDelete,
   deleting,
 }: {
   item: HockeyShopItemDto;
-  slot: string;
-  storeRoot: string;
   installed: boolean;
+  selected: boolean;
+  onSelect: () => void;
   onInstall: () => void;
   onDelete: () => void;
   deleting: boolean;
 }) {
-  const tex = useQuery({
-    queryKey: ["hockeyShopTex", storeRoot, slot, item.id],
-    queryFn: () => call("hockey_shop_load_texture", { storeRoot, slot, entryId: item.id }),
-    staleTime: Infinity,
-    retry: false,
-  });
   return (
     <li
       className={
-        "flex items-center gap-2 rounded border p-1.5 " +
-        (installed
-          ? "border-emerald-900/50 bg-emerald-950/30"
-          : "border-slate-800 bg-slate-900/50")
+        "flex items-center gap-1 rounded border transition-colors " +
+        (selected
+          ? "border-sky-700 bg-sky-900/40"
+          : installed
+            ? "border-emerald-900/50 bg-emerald-950/30 hover:bg-emerald-900/30"
+            : "border-slate-800 bg-slate-900/50 hover:bg-slate-800/60")
       }
     >
-      <div className="h-10 w-10 shrink-0 overflow-hidden rounded border border-slate-800 bg-slate-950">
-        {tex.data ? (
-          <img
-            src={tex.data}
-            alt={item.name}
-            className="h-full w-full object-cover"
-            style={{ imageRendering: "pixelated" }}
-          />
-        ) : null}
-      </div>
-      <div className="min-w-0 flex-1">
-        <p className="truncate text-xs font-medium text-slate-200" title={item.name}>
+      <button
+        type="button"
+        onClick={onSelect}
+        title={`By ${item.author}${installed ? " · installed in game" : ""}`}
+        className="flex min-w-0 flex-1 items-baseline gap-2 px-2 py-1.5 text-left"
+      >
+        <span className="min-w-0 flex-1 truncate text-xs font-medium text-slate-100">
           {item.name}
-        </p>
-        <p className="truncate text-[10px] text-slate-500">
-          {item.source === "game" ? "game" : item.author} · {item.width}×{item.height}
-          {installed ? " · installed" : ""}
-        </p>
-      </div>
+        </span>
+        {installed ? (
+          <span className="shrink-0 rounded bg-emerald-900/60 px-1 text-[9px] uppercase tracking-wider text-emerald-200">
+            installed
+          </span>
+        ) : null}
+        <span className={"shrink-0 text-[10px] " + authorTone(item.author)}>{item.author}</span>
+      </button>
       <button
         type="button"
         onClick={onInstall}
@@ -508,11 +564,139 @@ function StoreRow({
         onClick={onDelete}
         disabled={deleting}
         title="Remove from store"
-        className="shrink-0 rounded px-1 text-slate-500 hover:bg-slate-800 hover:text-rose-400 disabled:opacity-50"
+        className="mr-1 shrink-0 rounded px-1 text-slate-500 hover:bg-slate-800 hover:text-rose-400 disabled:opacity-50"
       >
         ✕
       </button>
     </li>
+  );
+}
+
+/** The selected store item's texture, shown in the center viewport (fetched on demand — not per
+ *  list row). Mirrors the old app's "texture previews in the viewport on selection". */
+function StoreTexturePreview({
+  storeRoot,
+  slot,
+  item,
+}: {
+  storeRoot: string;
+  slot: string;
+  item: HockeyShopItemDto;
+}) {
+  const tex = useQuery({
+    queryKey: ["hockeyShopTex", storeRoot, slot, item.id],
+    queryFn: () => call("hockey_shop_load_texture", { storeRoot, slot, entryId: item.id }),
+    staleTime: Infinity,
+    retry: false,
+  });
+  return (
+    <div className="flex min-h-0 flex-1 flex-col rounded-lg border border-slate-800 bg-slate-900/40">
+      <header className="flex shrink-0 items-baseline justify-between gap-2 border-b border-slate-800 px-3 py-2">
+        <div className="min-w-0">
+          <p className="truncate text-sm font-semibold text-slate-100" title={item.name}>
+            {item.name}
+          </p>
+          <p className="truncate text-[10px] text-slate-500">
+            by <span className={authorTone(item.author)}>{item.author}</span> · {item.width}×
+            {item.height}
+          </p>
+        </div>
+      </header>
+      <div className="flex min-h-0 flex-1 items-center justify-center overflow-hidden p-3">
+        {tex.isLoading ? (
+          <Spinner label="Loading texture…" />
+        ) : tex.error ? (
+          <p className="text-xs text-rose-400">{String(tex.error)}</p>
+        ) : tex.data ? (
+          <img
+            src={tex.data}
+            alt={item.name}
+            className="max-h-full max-w-full rounded object-contain"
+            style={{ imageRendering: "pixelated" }}
+          />
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
+/** Import modal: capture a display name (prefilled from the file) + author before ingesting a PNG
+ *  into the store. */
+function AddToStoreModal({
+  slotLabel,
+  pending,
+  importing,
+  error,
+  onCancel,
+  onConfirm,
+}: {
+  slotLabel: string;
+  pending: { name: string; imageBase64: string };
+  /** Whether the import mutation is running. */
+  importing: boolean;
+  error: string | null;
+  onCancel: () => void;
+  onConfirm: (name: string, author: string) => void;
+}) {
+  const [name, setName] = useState(pending.name);
+  const [author, setAuthor] = useState("");
+  const canConfirm = name.trim().length > 0 && author.trim().length > 0 && !importing;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-6" onClick={onCancel}>
+      <div
+        className="w-full max-w-md rounded-lg border border-slate-700 bg-slate-900 shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <header className="border-b border-slate-800 px-4 py-2.5">
+          <p className="text-sm font-medium text-slate-100">Add {slotLabel} texture to store</p>
+          <p className="mt-0.5 text-[11px] text-slate-500">
+            It's saved to the store only — installing it into the game is a separate step.
+          </p>
+        </header>
+        <div className="space-y-3 p-4 text-xs">
+          <label className="block space-y-1">
+            <span className="text-[11px] text-slate-400">Name</span>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              autoFocus
+              placeholder="e.g. CCM Ribcore 40K (custom)"
+              className="w-full rounded border border-slate-700 bg-slate-950 px-2 py-1 text-slate-100 focus:border-sky-600 focus:outline-none"
+            />
+          </label>
+          <label className="block space-y-1">
+            <span className="text-[11px] text-slate-400">Author</span>
+            <input
+              type="text"
+              value={author}
+              onChange={(e) => setAuthor(e.target.value)}
+              placeholder="Who created this texture?"
+              className="w-full rounded border border-slate-700 bg-slate-950 px-2 py-1 text-slate-100 focus:border-sky-600 focus:outline-none"
+            />
+          </label>
+          {error ? <p className="text-[11px] text-rose-400">{error}</p> : null}
+        </div>
+        <footer className="flex justify-end gap-2 border-t border-slate-800 px-4 py-2.5">
+          <button
+            type="button"
+            onClick={onCancel}
+            disabled={importing}
+            className="rounded border border-slate-700 px-3 py-1 text-xs text-slate-300 hover:bg-slate-800 disabled:opacity-50"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={() => onConfirm(name.trim(), author.trim())}
+            disabled={!canConfirm}
+            className="rounded border border-emerald-700/60 bg-emerald-900/40 px-3 py-1 text-xs font-medium text-emerald-100 hover:bg-emerald-900/60 disabled:opacity-50"
+          >
+            {importing ? "Adding…" : "Add to store"}
+          </button>
+        </footer>
+      </div>
+    </div>
   );
 }
 
