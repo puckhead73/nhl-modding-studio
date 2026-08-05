@@ -25,7 +25,7 @@ use crate::convert;
 use crate::dto::{
     AddCareerSeasonDto, ArenaSummaryDto, ArenaViewDto, AutocorrectSummaryDto, CareerStatsDto,
     AssetExportSummaryDto, AssetRootsArgsDto, AssetRootsDto, BrowseListingDto, ExportOptionsDto,
-    EquipmentSlotAssetDto, EquipmentSlotDto,
+    EquipmentSlotAssetDto, EquipmentSlotDto, HockeyShopItemDto, HockeyShopSyncSummaryDto,
     FileExportOptionsDto, FileExportSummaryDto, HeadPreviewDto, ImportTextureSummaryDto,
     KitPieceInputDto, KitPreviewDto, OutfitExportSummaryDto, PlayerAssetsDto,
     CreatePlayerDto, EaComputedRatingsDto, ExtractSummaryDto, FormulaCatalogDto, FormulaProfileDto,
@@ -1057,6 +1057,59 @@ impl Registry {
         }
         let preview = studio_domain::decode_kit_preview(&pieces).map_err(ApiError::Domain)?;
         Ok(convert::kit_preview_dto(&preview))
+    }
+
+    /// List a slot's Hockey Shop store items (disk-backed PNG library).
+    pub fn hockey_shop_list(
+        &self,
+        store_root: &str,
+        slot: &str,
+    ) -> Result<Vec<HockeyShopItemDto>, ApiError> {
+        crate::hockey_shop::list(store_root, slot)
+    }
+
+    /// Extract a representative texture per game equipment id into the store.
+    pub fn hockey_shop_sync(
+        &self,
+        args: &AssetRootsArgsDto,
+        store_root: &str,
+        slot: &str,
+    ) -> Result<HockeyShopSyncSummaryDto, ApiError> {
+        let roots = resolve_roots(args);
+        let rendering = PathBuf::from(&roots.rendering);
+        crate::hockey_shop::sync(&rendering, store_root, slot)
+    }
+
+    /// Ingest an operator PNG as a new store item.
+    pub fn hockey_shop_import(
+        &self,
+        store_root: &str,
+        slot: &str,
+        name: &str,
+        author: &str,
+        image_base64: &str,
+    ) -> Result<HockeyShopItemDto, ApiError> {
+        crate::hockey_shop::import(store_root, slot, name, author, image_base64)
+    }
+
+    /// Remove a store item (manifest entry + its PNG).
+    pub fn hockey_shop_delete(
+        &self,
+        store_root: &str,
+        slot: &str,
+        entry_id: &str,
+    ) -> Result<(), ApiError> {
+        crate::hockey_shop::delete(store_root, slot, entry_id)
+    }
+
+    /// One store item's PNG as a data URL for the frontend preview tile.
+    pub fn hockey_shop_load_texture(
+        &self,
+        store_root: &str,
+        slot: &str,
+        entry_id: &str,
+    ) -> Result<String, ApiError> {
+        crate::hockey_shop::load_texture_data_url(store_root, slot, entry_id)
     }
 
     /// Drop a workspace, freeing its working bytes. Returns `false` if it was not registered.

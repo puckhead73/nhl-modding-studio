@@ -47,6 +47,8 @@ import type { HeadPreviewDto } from "../bindings/HeadPreviewDto";
 import type { KitPreviewDto } from "../bindings/KitPreviewDto";
 import type { EquipmentSlotDto } from "../bindings/EquipmentSlotDto";
 import type { EquipmentSlotAssetDto } from "../bindings/EquipmentSlotAssetDto";
+import type { HockeyShopItemDto } from "../bindings/HockeyShopItemDto";
+import type { HockeyShopSyncSummaryDto } from "../bindings/HockeyShopSyncSummaryDto";
 import type { KitPieceInputDto } from "../bindings/KitPieceInputDto";
 import type { BrowseListingDto } from "../bindings/BrowseListingDto";
 import type { FileExportOptionsDto } from "../bindings/FileExportOptionsDto";
@@ -350,6 +352,26 @@ type Commands = {
   equipment_item_preview: {
     args: { roots: AssetRootsArgsDto; slot: string; id: number };
     ret: KitPreviewDto;
+  };
+  hockey_shop_list: {
+    args: { storeRoot: string; slot: string };
+    ret: HockeyShopItemDto[];
+  };
+  hockey_shop_sync: {
+    args: { roots: AssetRootsArgsDto; storeRoot: string; slot: string };
+    ret: HockeyShopSyncSummaryDto;
+  };
+  hockey_shop_import: {
+    args: { storeRoot: string; slot: string; name: string; author: string; imageBase64: string };
+    ret: HockeyShopItemDto;
+  };
+  hockey_shop_delete: {
+    args: { storeRoot: string; slot: string; entryId: string };
+    ret: null;
+  };
+  hockey_shop_load_texture: {
+    args: { storeRoot: string; slot: string; entryId: string };
+    ret: string;
   };
   // `bioRecords: []` exports every scanned player.
   export_assets: {

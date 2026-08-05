@@ -10,7 +10,7 @@ use studio_domain::FieldValue;
 
 use crate::dto::{
     AssetExportSummaryDto, AssetRootsArgsDto, AssetRootsDto, BrowseListingDto, ExportOptionsDto,
-    EquipmentSlotAssetDto, EquipmentSlotDto,
+    EquipmentSlotAssetDto, EquipmentSlotDto, HockeyShopItemDto, HockeyShopSyncSummaryDto,
     FileExportOptionsDto, FileExportSummaryDto, HeadPreviewDto, ImportTextureSummaryDto,
     KitPieceInputDto, KitPreviewDto, OutfitExportSummaryDto, PlayerAssetsDto,
     AddCareerSeasonDto, ArenaSummaryDto, ArenaViewDto, AutocorrectSummaryDto, CareerStatsDto,
@@ -974,6 +974,66 @@ pub fn equipment_item_preview(
 ) -> CmdResult<KitPreviewDto> {
     registry
         .equipment_item_preview(&roots, &slot, id)
+        .map_err(|e| e.to_string())
+}
+
+/// List a slot's Hockey Shop store items (disk-backed PNG library).
+#[tauri::command]
+pub fn hockey_shop_list(
+    registry: State<'_, Registry>,
+    store_root: String,
+    slot: String,
+) -> CmdResult<Vec<HockeyShopItemDto>> {
+    registry.hockey_shop_list(&store_root, &slot).map_err(|e| e.to_string())
+}
+
+/// Extract a representative texture per game equipment id into the store (idempotent).
+#[tauri::command]
+pub fn hockey_shop_sync(
+    registry: State<'_, Registry>,
+    roots: AssetRootsArgsDto,
+    store_root: String,
+    slot: String,
+) -> CmdResult<HockeyShopSyncSummaryDto> {
+    registry.hockey_shop_sync(&roots, &store_root, &slot).map_err(|e| e.to_string())
+}
+
+/// Ingest an operator PNG as a new store item.
+#[tauri::command]
+pub fn hockey_shop_import(
+    registry: State<'_, Registry>,
+    store_root: String,
+    slot: String,
+    name: String,
+    author: String,
+    image_base64: String,
+) -> CmdResult<HockeyShopItemDto> {
+    registry
+        .hockey_shop_import(&store_root, &slot, &name, &author, &image_base64)
+        .map_err(|e| e.to_string())
+}
+
+/// Remove a store item (manifest entry + its PNG).
+#[tauri::command]
+pub fn hockey_shop_delete(
+    registry: State<'_, Registry>,
+    store_root: String,
+    slot: String,
+    entry_id: String,
+) -> CmdResult<()> {
+    registry.hockey_shop_delete(&store_root, &slot, &entry_id).map_err(|e| e.to_string())
+}
+
+/// One store item's PNG as a data URL for the preview tile.
+#[tauri::command]
+pub fn hockey_shop_load_texture(
+    registry: State<'_, Registry>,
+    store_root: String,
+    slot: String,
+    entry_id: String,
+) -> CmdResult<String> {
+    registry
+        .hockey_shop_load_texture(&store_root, &slot, &entry_id)
         .map_err(|e| e.to_string())
 }
 

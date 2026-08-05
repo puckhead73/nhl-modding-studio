@@ -15,6 +15,7 @@ pub mod commands;
 pub mod convert;
 pub mod dto;
 mod error;
+mod hockey_shop;
 mod registry;
 
 pub use convert::{parse_raw_id, raw_id_to_string};
@@ -109,6 +110,11 @@ macro_rules! command_handler {
             $crate::commands::equipment_slots,
             $crate::commands::list_equipment_slot_assets,
             $crate::commands::equipment_item_preview,
+            $crate::commands::hockey_shop_list,
+            $crate::commands::hockey_shop_sync,
+            $crate::commands::hockey_shop_import,
+            $crate::commands::hockey_shop_delete,
+            $crate::commands::hockey_shop_load_texture,
             $crate::commands::export_assets,
             $crate::commands::browse_install_files,
             $crate::commands::export_install_files,
@@ -156,6 +162,8 @@ mod bindings {
         KitPieceInputDto::export_all().expect("export KitPieceInputDto");
         EquipmentSlotDto::export_all().expect("export EquipmentSlotDto");
         EquipmentSlotAssetDto::export_all().expect("export EquipmentSlotAssetDto + deps");
+        HockeyShopItemDto::export_all().expect("export HockeyShopItemDto");
+        HockeyShopSyncSummaryDto::export_all().expect("export HockeyShopSyncSummaryDto");
         IntegrityReportDto::export_all().expect("export IntegrityReportDto + deps");
         AutocorrectSummaryDto::export_all().expect("export AutocorrectSummaryDto + deps");
         RepairBlocksSummaryDto::export_all().expect("export RepairBlocksSummaryDto");

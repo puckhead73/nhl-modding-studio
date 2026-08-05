@@ -12,6 +12,8 @@ serde_json = "1"
 ts-rs = "10"
 # Portrait previews cross the Tauri boundary as PNG data URLs.
 base64 = "0.22"
+# The Hockey Shop store normalises imported textures to PNG + reads their dimensions.
+image = { version = "0.25", default-features = false, features = ["png"] }
 studio-domain = { path = "../studio-domain" }
 # The non-blocking Roster Builder import ledger (dedup warnings). Owned by the service layer.
 tdb-instance-registry = { path = "../tdb-instance-registry" }

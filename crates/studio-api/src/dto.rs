@@ -776,6 +776,37 @@ pub struct EquipmentSlotAssetDto {
     pub files: Vec<EquipmentSlotFileDto>,
 }
 
+/// One Hockey Shop store item — a texture in the disk-backed library. Also the
+/// on-disk `store.json` row shape, so it round-trips through Deserialize.
+#[derive(Serialize, Deserialize, TS, Clone)]
+pub struct HockeyShopItemDto {
+    /// Stable slug id (manifest key + PNG file stem).
+    pub id: String,
+    pub name: String,
+    pub author: String,
+    /// `"game"` (extracted from the install) or `"import"` (operator PNG).
+    pub source: String,
+    /// The game equipment id a `"game"` item was extracted from; `null` for imports.
+    #[serde(default)]
+    #[ts(optional)]
+    pub game_asset_id: Option<u32>,
+    /// PNG filename inside the slot's store directory.
+    pub file: String,
+    pub width: u32,
+    pub height: u32,
+    #[ts(type = "number")]
+    pub added_unix: u64,
+}
+
+/// Result of one store sync pass (extract game textures into the store).
+#[derive(Serialize, TS)]
+pub struct HockeyShopSyncSummaryDto {
+    pub added: u32,
+    pub already_present: u32,
+    pub failed: Vec<String>,
+    pub store_dir: String,
+}
+
 /// A compact arena row for the master list.
 #[derive(Serialize, TS)]
 pub struct ArenaSummaryDto {

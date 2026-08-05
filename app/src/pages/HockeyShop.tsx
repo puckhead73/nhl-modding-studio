@@ -7,8 +7,9 @@
 // ids on each player's xmja/fMVl record; to put an item on a player, set that field
 // in the player's Equipment tab.
 
-import { useEffect, useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { appDataDir, join } from "@tauri-apps/api/path";
 import { call } from "../lib/client";
 import { useAssetRootArgs } from "../lib/project";
 import { EmptyState, Spinner } from "../components/primitives";
@@ -16,6 +17,7 @@ import { EquipmentItemViewer } from "../components/KitMeshViewer";
 import { TextureThumbnail } from "../components/TextureReplace";
 import type { EquipmentSlotDto } from "../bindings/EquipmentSlotDto";
 import type { EquipmentSlotAssetDto } from "../bindings/EquipmentSlotAssetDto";
+import type { HockeyShopItemDto } from "../bindings/HockeyShopItemDto";
 
 export function HockeyShopPage() {
   const { installDir, rootArgs } = useAssetRootArgs();
@@ -29,6 +31,15 @@ export function HockeyShopPage() {
 
   const [slotKey, setSlotKey] = useState<string>("stick");
   const slot = slots.find((s) => s.key === slotKey) ?? slots[0];
+
+  // The store library lives in an app-managed folder (Tauri's app-data dir), kept
+  // separate from the game install so operator imports survive re-extraction.
+  const storeRootQ = useQuery({
+    queryKey: ["hockeyShopStoreRoot"],
+    queryFn: async () => join(await appDataDir(), "hockey_shop"),
+    staleTime: Infinity,
+  });
+  const storeRoot = storeRootQ.data ?? null;
 
   if (!installDir) {
     return (
@@ -61,7 +72,15 @@ export function HockeyShopPage() {
           <SlotGroup title="Goalie" slots={goalie} active={slot?.key} onPick={setSlotKey} />
         </nav>
 
-        {slot ? <SlotShop key={slot.key} slot={slot} installDir={installDir} rootArgs={rootArgs} /> : null}
+        {slot ? (
+          <SlotShop
+            key={slot.key}
+            slot={slot}
+            installDir={installDir}
+            rootArgs={rootArgs}
+            storeRoot={storeRoot}
+          />
+        ) : null}
       </div>
     </div>
   );
@@ -115,10 +134,12 @@ function SlotShop({
   slot,
   installDir,
   rootArgs,
+  storeRoot,
 }: {
   slot: EquipmentSlotDto;
   installDir: string;
   rootArgs: ReturnType<typeof useAssetRootArgs>["rootArgs"];
+  storeRoot: string | null;
 }) {
   const assetsQ = useQuery({
     queryKey: ["equipmentSlotAssets", rootArgs.install_dir, slot.key],
@@ -207,7 +228,177 @@ function SlotShop({
         </div>
         {selected ? <ItemTextures installDir={installDir} asset={selected} /> : null}
       </section>
+
+      {/* Store library. */}
+      <aside className="w-72 shrink-0">
+        <StorePanel slot={slot} rootArgs={rootArgs} storeRoot={storeRoot} />
+      </aside>
     </>
+  );
+}
+
+/** The slot's disk-backed store library: sync game items in, import a PNG, delete.
+ *  Kept beside the game browser so the operator can build a personal catalog. */
+function StorePanel({
+  slot,
+  rootArgs,
+  storeRoot,
+}: {
+  slot: EquipmentSlotDto;
+  rootArgs: ReturnType<typeof useAssetRootArgs>["rootArgs"];
+  storeRoot: string | null;
+}) {
+  const qc = useQueryClient();
+  const fileInput = useRef<HTMLInputElement>(null);
+  const invalidate = () =>
+    qc.invalidateQueries({ queryKey: ["hockeyShopStore", storeRoot, slot.key] });
+
+  const itemsQ = useQuery({
+    queryKey: ["hockeyShopStore", storeRoot, slot.key],
+    queryFn: () => call("hockey_shop_list", { storeRoot: storeRoot!, slot: slot.key }),
+    enabled: !!storeRoot,
+  });
+  const items = itemsQ.data ?? [];
+
+  const sync = useMutation({
+    mutationFn: () =>
+      call("hockey_shop_sync", { roots: rootArgs, storeRoot: storeRoot!, slot: slot.key }),
+    onSuccess: invalidate,
+  });
+  const importItem = useMutation({
+    mutationFn: (v: { name: string; author: string; imageBase64: string }) =>
+      call("hockey_shop_import", { storeRoot: storeRoot!, slot: slot.key, ...v }),
+    onSuccess: invalidate,
+  });
+  const remove = useMutation({
+    mutationFn: (entryId: string) =>
+      call("hockey_shop_delete", { storeRoot: storeRoot!, slot: slot.key, entryId }),
+    onSuccess: invalidate,
+  });
+
+  const onPickFile = (file: File) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const url = String(reader.result); // data:image/png;base64,XXXX
+      const b64 = url.slice(url.indexOf(",") + 1);
+      const name = file.name.replace(/\.[^.]+$/, "");
+      importItem.mutate({ name, author: "Me", imageBase64: b64 });
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const busy = sync.isPending || importItem.isPending || remove.isPending;
+  const err = sync.error ?? importItem.error ?? remove.error;
+
+  return (
+    <div className="rounded-lg border border-slate-800 bg-slate-900/40 p-3">
+      <div className="mb-2 flex items-baseline justify-between">
+        <h3 className="text-sm font-semibold text-slate-100">Store</h3>
+        <span className="text-[10px] text-slate-500">{items.length} saved</span>
+      </div>
+
+      <div className="mb-2 flex gap-1.5">
+        <button
+          type="button"
+          onClick={() => sync.mutate()}
+          disabled={!storeRoot || busy}
+          title="Extract a texture for every game item in this slot into the store"
+          className="flex-1 rounded border border-slate-700 px-2 py-1 text-xs text-slate-300 hover:border-sky-700 hover:text-sky-200 disabled:opacity-50"
+        >
+          {sync.isPending ? "Syncing…" : "Sync game"}
+        </button>
+        <button
+          type="button"
+          onClick={() => fileInput.current?.click()}
+          disabled={!storeRoot || busy}
+          title="Import a PNG texture into this slot's store"
+          className="flex-1 rounded border border-slate-700 px-2 py-1 text-xs text-slate-300 hover:border-sky-700 hover:text-sky-200 disabled:opacity-50"
+        >
+          Import PNG…
+        </button>
+        <input
+          ref={fileInput}
+          type="file"
+          accept="image/png"
+          className="hidden"
+          onChange={(e) => {
+            const f = e.target.files?.[0];
+            if (f) onPickFile(f);
+            e.target.value = "";
+          }}
+        />
+      </div>
+
+      {err ? <p className="mb-2 text-xs text-rose-400">{String(err)}</p> : null}
+
+      {itemsQ.isLoading ? (
+        <Spinner label="Loading store…" />
+      ) : items.length === 0 ? (
+        <p className="px-1 py-4 text-center text-xs text-slate-500">
+          Empty. “Sync game” pulls this slot's shipped textures in, or import your own PNG.
+        </p>
+      ) : (
+        <ul className="max-h-[56vh] space-y-1.5 overflow-y-auto pr-1">
+          {items.map((it) => (
+            <StoreRow
+              key={it.id}
+              item={it}
+              slot={slot.key}
+              storeRoot={storeRoot!}
+              onDelete={() => remove.mutate(it.id)}
+              deleting={remove.isPending}
+            />
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+function StoreRow({
+  item,
+  slot,
+  storeRoot,
+  onDelete,
+  deleting,
+}: {
+  item: HockeyShopItemDto;
+  slot: string;
+  storeRoot: string;
+  onDelete: () => void;
+  deleting: boolean;
+}) {
+  const tex = useQuery({
+    queryKey: ["hockeyShopTex", storeRoot, slot, item.id],
+    queryFn: () => call("hockey_shop_load_texture", { storeRoot, slot, entryId: item.id }),
+    staleTime: Infinity,
+    retry: false,
+  });
+  return (
+    <li className="flex items-center gap-2 rounded border border-slate-800 bg-slate-900/50 p-1.5">
+      <div className="h-10 w-10 shrink-0 overflow-hidden rounded border border-slate-800 bg-slate-950">
+        {tex.data ? (
+          <img src={tex.data} alt={item.name} className="h-full w-full object-cover" style={{ imageRendering: "pixelated" }} />
+        ) : null}
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-xs font-medium text-slate-200" title={item.name}>
+          {item.name}
+        </p>
+        <p className="truncate text-[10px] text-slate-500">
+          {item.source === "game" ? "game" : item.author} · {item.width}×{item.height}
+        </p>
+      </div>
+      <button
+        type="button"
+        onClick={onDelete}
+        disabled={deleting}
+        title="Remove from store"
+        className="shrink-0 rounded px-1 text-slate-500 hover:bg-slate-800 hover:text-rose-400 disabled:opacity-50"
+      >
+        ✕
+      </button>
+    </li>
   );
 }
 
