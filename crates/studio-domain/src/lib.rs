@@ -65,7 +65,7 @@ pub use equipment_slots::{
     list_equipment_slot_assets, match_stem_id, rename_stem, slot_spec, EquipmentSlotAsset,
     EquipmentSlotSpec, SLOT_SPECS,
 };
-pub use equipment_piece::{resolve_equipment_piece, EquipmentPiece};
+pub use equipment_piece::{resolve_equipment_piece, slot_preview_pieces, EquipmentPiece};
 pub use attributes::{
     build_player_attributes, AttributeView, PlayerAttributes, TraitOption, TraitView,
 };

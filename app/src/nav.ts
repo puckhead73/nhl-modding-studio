@@ -40,6 +40,8 @@ export const SECTIONS: NavSection[] = [
       { to: "historical/formulas", label: "Formulas" },
     ],
   },
+  // Hockey Shop — per-slot equipment browse / preview / (later) store + install.
+  { key: "shop", label: "Hockey Shop", index: "shop", subtabs: [] },
   {
     key: "assets",
     label: "Assets",

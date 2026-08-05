@@ -10,6 +10,7 @@ use studio_domain::FieldValue;
 
 use crate::dto::{
     AssetExportSummaryDto, AssetRootsArgsDto, AssetRootsDto, BrowseListingDto, ExportOptionsDto,
+    EquipmentSlotAssetDto, EquipmentSlotDto,
     FileExportOptionsDto, FileExportSummaryDto, HeadPreviewDto, ImportTextureSummaryDto,
     KitPieceInputDto, KitPreviewDto, OutfitExportSummaryDto, PlayerAssetsDto,
     AddCareerSeasonDto, ArenaSummaryDto, ArenaViewDto, AutocorrectSummaryDto, CareerStatsDto,
@@ -942,6 +943,37 @@ pub fn team_kit_preview(
             player_id,
             player_gear.unwrap_or(false),
         )
+        .map_err(|e| e.to_string())
+}
+
+/// The Hockey Shop slot catalog (Stick / Gloves / Helmet / Skates + goalie gear).
+#[tauri::command]
+pub fn equipment_slots(registry: State<'_, Registry>) -> CmdResult<Vec<EquipmentSlotDto>> {
+    Ok(registry.equipment_slots())
+}
+
+/// Scan one Hockey Shop slot's render folder → equipment ids and their files.
+#[tauri::command]
+pub fn list_equipment_slot_assets(
+    registry: State<'_, Registry>,
+    roots: AssetRootsArgsDto,
+    slot: String,
+) -> CmdResult<Vec<EquipmentSlotAssetDto>> {
+    registry
+        .list_equipment_slot_assets(&roots, &slot)
+        .map_err(|e| e.to_string())
+}
+
+/// Assemble the 3D preview for one Hockey Shop equipment item (mesh + colour map).
+#[tauri::command]
+pub fn equipment_item_preview(
+    registry: State<'_, Registry>,
+    roots: AssetRootsArgsDto,
+    slot: String,
+    id: u32,
+) -> CmdResult<KitPreviewDto> {
+    registry
+        .equipment_item_preview(&roots, &slot, id)
         .map_err(|e| e.to_string())
 }
 

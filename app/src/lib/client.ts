@@ -45,6 +45,8 @@ import type { ExportOptionsDto } from "../bindings/ExportOptionsDto";
 import type { AssetExportSummaryDto } from "../bindings/AssetExportSummaryDto";
 import type { HeadPreviewDto } from "../bindings/HeadPreviewDto";
 import type { KitPreviewDto } from "../bindings/KitPreviewDto";
+import type { EquipmentSlotDto } from "../bindings/EquipmentSlotDto";
+import type { EquipmentSlotAssetDto } from "../bindings/EquipmentSlotAssetDto";
 import type { KitPieceInputDto } from "../bindings/KitPieceInputDto";
 import type { BrowseListingDto } from "../bindings/BrowseListingDto";
 import type { FileExportOptionsDto } from "../bindings/FileExportOptionsDto";
@@ -337,6 +339,16 @@ type Commands = {
       // (`xmja`/`fMVl`) rather than the team defaults — the player Equipment tab.
       playerGear?: boolean;
     };
+    ret: KitPreviewDto;
+  };
+  // Hockey Shop — the equipment-slot catalog + per-slot item browse + item 3D preview.
+  equipment_slots: { args: Record<string, never>; ret: EquipmentSlotDto[] };
+  list_equipment_slot_assets: {
+    args: { roots: AssetRootsArgsDto; slot: string };
+    ret: EquipmentSlotAssetDto[];
+  };
+  equipment_item_preview: {
+    args: { roots: AssetRootsArgsDto; slot: string; id: number };
     ret: KitPreviewDto;
   };
   // `bioRecords: []` exports every scanned player.

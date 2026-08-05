@@ -17,7 +17,8 @@ use crate::dto::{
     ArenaRefDto, ArenaSummaryDto, ArenaViewDto, AssetExportSummaryDto, AssetRootsDto,
     AttributeViewDto, BrowseEntryDto, BrowseListingDto, CapabilitiesDto, CareerColumnDto,
     CareerRowDto, CareerSectionDto, CareerStatsDto, CreatePlayerDto, DraftPickDto,
-    EntityFieldProfileDto, EnumOptionDto, EquipmentZoneDto, ExportOptionsDto, ExtractSummaryDto,
+    EntityFieldProfileDto, EnumOptionDto, EquipmentSlotAssetDto, EquipmentSlotFileDto,
+    EquipmentZoneDto, ExportOptionsDto, ExtractSummaryDto,
     FieldCellDto, FieldSectionDto, FieldViewDto, FileExportOptionsDto, FileExportSummaryDto,
     FindingDto, HeadPreviewDto, ImportItemResultDto, InstallReportDto, IntegrityReportDto,
     KitPieceDto, KitPreviewDto, LineEntryDto, LinesViewDto, MatchCandidateDto, OpOutcomeDto,
@@ -651,6 +652,19 @@ pub fn team_equipment_dto(e: &studio_domain::TeamEquipment) -> TeamEquipmentDto 
                 red: z.red,
                 green: z.green,
                 blue: z.blue,
+            })
+            .collect(),
+    }
+}
+
+pub fn equipment_slot_asset_dto(a: &studio_domain::EquipmentSlotAsset) -> EquipmentSlotAssetDto {
+    EquipmentSlotAssetDto {
+        id: a.id,
+        files: a
+            .files
+            .iter()
+            .map(|relative_path| EquipmentSlotFileDto {
+                relative_path: relative_path.clone(),
             })
             .collect(),
     }

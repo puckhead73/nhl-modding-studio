@@ -24,6 +24,7 @@ import { PlayerAssetDetail } from "./pages/PlayerAssetDetail";
 import { AssetExportPage } from "./pages/AssetExport";
 import { FileBrowserPage } from "./pages/FileBrowser";
 import { TeamOutfitsPage } from "./pages/TeamOutfits";
+import { HockeyShopPage } from "./pages/HockeyShop";
 import { SelectPrompt } from "./components/primitives";
 
 export const router = createBrowserRouter([
@@ -102,6 +103,9 @@ export const router = createBrowserRouter([
           { path: "formulas", element: <FormulasPage /> },
         ],
       },
+
+      // Hockey Shop — per-equipment-slot browse + 3D preview (store + install later).
+      { path: "shop", element: <HockeyShopPage /> },
 
       // Assets section — the shipped art tools. Player portraits/heads land first (asset prep);
       // textures, logos, equipment and audio follow in Phase 6.

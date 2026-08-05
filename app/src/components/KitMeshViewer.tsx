@@ -192,6 +192,57 @@ export function TeamKitViewer({
   return <LoadedKit data={preview.data} pickerNode={hidePicker ? undefined : picker} />;
 }
 
+/** Hockey Shop item viewer — decodes one equipment item's mesh + colour map
+ *  (`equipment_item_preview`) and renders it in the shared kit canvas. Texture-only
+ *  slots (no decodable mesh) surface a note; the shop shows the flat texture tiles
+ *  beside this either way. */
+export function EquipmentItemViewer({
+  roots,
+  slot,
+  id,
+}: {
+  roots: AssetRootsArgsDto;
+  slot: string;
+  id: number | null;
+}) {
+  const preview = useQuery({
+    queryKey: ["equipmentItemPreview", roots.install_dir, slot, id ?? null],
+    queryFn: () => call("equipment_item_preview", { roots, slot, id: id! }),
+    enabled: id != null,
+    staleTime: Infinity,
+    retry: false,
+  });
+
+  if (id == null) {
+    return (
+      <ViewerFrame>
+        <div className="grid h-full w-full place-items-center p-4 text-center text-xs text-slate-400">
+          Select an item to preview it in 3D.
+        </div>
+      </ViewerFrame>
+    );
+  }
+  if (preview.isLoading) {
+    return (
+      <ViewerFrame>
+        <div className="grid h-full w-full place-items-center">
+          <Spinner label="Assembling item…" />
+        </div>
+      </ViewerFrame>
+    );
+  }
+  if (preview.error || !preview.data) {
+    return (
+      <ViewerFrame>
+        <div className="grid h-full w-full place-items-center p-4 text-center text-xs text-slate-400">
+          No decodable 3D mesh for this item — its textures are shown below.
+        </div>
+      </ViewerFrame>
+    );
+  }
+  return <LoadedKit data={preview.data} />;
+}
+
 /** The rink-backed canvas box (shared across loading / error / loaded states). */
 function ViewerFrame({ children }: { children: React.ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);

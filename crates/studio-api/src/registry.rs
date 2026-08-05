@@ -25,6 +25,7 @@ use crate::convert;
 use crate::dto::{
     AddCareerSeasonDto, ArenaSummaryDto, ArenaViewDto, AutocorrectSummaryDto, CareerStatsDto,
     AssetExportSummaryDto, AssetRootsArgsDto, AssetRootsDto, BrowseListingDto, ExportOptionsDto,
+    EquipmentSlotAssetDto, EquipmentSlotDto,
     FileExportOptionsDto, FileExportSummaryDto, HeadPreviewDto, ImportTextureSummaryDto,
     KitPieceInputDto, KitPreviewDto, OutfitExportSummaryDto, PlayerAssetsDto,
     CreatePlayerDto, EaComputedRatingsDto, ExtractSummaryDto, FormulaCatalogDto, FormulaProfileDto,
@@ -999,6 +1000,63 @@ impl Registry {
             let preview = studio_domain::decode_kit_preview(&pieces).map_err(ApiError::Domain)?;
             Ok(convert::kit_preview_dto(&preview))
         })
+    }
+
+    // ── Hockey Shop ─────────────────────────────────────────────────────────────
+
+    /// The Hockey Shop slot catalog (static — resolved names, no workspace needed).
+    pub fn equipment_slots(&self) -> Vec<EquipmentSlotDto> {
+        studio_domain::SLOT_SPECS
+            .iter()
+            .map(|s| EquipmentSlotDto {
+                key: s.key.to_string(),
+                label: s.label.to_string(),
+                category: if is_goalie_slot(s.key) { "goalie" } else { "skater" }.to_string(),
+                field_ref: format!("{}.{}", s.table, s.field),
+                max_id: s.max_id,
+            })
+            .collect()
+    }
+
+    /// Scan the install's rendering tree for one slot's items (id → render files).
+    /// Needs only the asset roots — the render tree is independent of the open DB.
+    pub fn list_equipment_slot_assets(
+        &self,
+        args: &AssetRootsArgsDto,
+        slot: &str,
+    ) -> Result<Vec<EquipmentSlotAssetDto>, ApiError> {
+        let spec = studio_domain::slot_spec(slot)
+            .ok_or_else(|| ApiError::Workspace(format!("unknown equipment slot `{slot}`")))?;
+        let roots = resolve_roots(args);
+        let rendering = PathBuf::from(&roots.rendering);
+        Ok(studio_domain::list_equipment_slot_assets(&rendering, spec)
+            .iter()
+            .map(convert::equipment_slot_asset_dto)
+            .collect())
+    }
+
+    /// Assemble the 3D preview for one equipment item (its mesh + colour map, plus
+    /// tape/cage). Errors when the item is texture-only (no decodable mesh) — the
+    /// frontend then shows the flat texture tiles instead.
+    pub fn equipment_item_preview(
+        &self,
+        args: &AssetRootsArgsDto,
+        slot: &str,
+        id: u32,
+    ) -> Result<KitPreviewDto, ApiError> {
+        if studio_domain::slot_spec(slot).is_none() {
+            return Err(ApiError::Workspace(format!("unknown equipment slot `{slot}`")));
+        }
+        let roots = resolve_roots(args);
+        let rendering = PathBuf::from(&roots.rendering);
+        let pieces = studio_domain::slot_preview_pieces(&rendering, slot, id);
+        if pieces.is_empty() {
+            return Err(ApiError::Workspace(format!(
+                "no decodable 3D mesh for {slot} id {id} in the install's rendering tree"
+            )));
+        }
+        let preview = studio_domain::decode_kit_preview(&pieces).map_err(ApiError::Domain)?;
+        Ok(convert::kit_preview_dto(&preview))
     }
 
     /// Drop a workspace, freeing its working bytes. Returns `false` if it was not registered.
@@ -2413,6 +2471,14 @@ fn first_skate_texlib(skate_dir: &Path) -> Option<PathBuf> {
         .collect();
     hits.sort();
     hits.into_iter().next()
+}
+
+/// Which Hockey Shop slots belong to the goalie category strip.
+fn is_goalie_slot(key: &str) -> bool {
+    matches!(
+        key,
+        "goalie-stick" | "blocker" | "trapper" | "pads" | "goalie-helmet"
+    )
 }
 
 fn resolve_roots(args: &AssetRootsArgsDto) -> AssetRoots {

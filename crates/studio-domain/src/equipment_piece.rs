@@ -12,6 +12,7 @@
 use std::path::{Path, PathBuf};
 
 use crate::equipment_slots::{list_equipment_slot_assets, slot_spec};
+use crate::kit_preview::KitPieceInput;
 
 /// Texture-map filename suffixes, ordered by preview preference: the colour map
 /// first, then diffuse/albedo-ish fallbacks. Normal / spec maps are never the
@@ -131,6 +132,87 @@ pub fn resolve_equipment_piece(
 
     let piece = EquipmentPiece { mesh_path, texture_paths };
     (piece.mesh_path.is_some() || !piece.texture_paths.is_empty()).then_some(piece)
+}
+
+/// Assemble the preview pieces for ONE equipment item (the Hockey Shop's 3D view):
+/// its mesh — the per-id mesh where the slot has one, else the slot's shared mesh
+/// (skates/sticks share a single `<mesh_prefix>_*` shape) — textured with its colour
+/// map, plus the flat tape/cage companion mesh where the slot has one. Empty when no
+/// decodable mesh resolves (the caller falls back to flat texture tiles).
+pub fn slot_preview_pieces(rendering_root: &Path, slot: &str, id: u32) -> Vec<KitPieceInput> {
+    let Some(spec) = slot_spec(slot) else {
+        return Vec::new();
+    };
+    let resolved = resolve_equipment_piece(rendering_root, slot, id);
+    let texture_paths = resolved
+        .as_ref()
+        .map(|p| p.texture_paths.clone())
+        .unwrap_or_default();
+    let folder = rendering_root.join(spec.folder);
+    let main_mesh = resolved
+        .and_then(|p| p.mesh_path)
+        .or_else(|| find_prefixed_mesh(&folder, spec.mesh_prefix));
+
+    let mut pieces = Vec::new();
+    if let Some(mesh_path) = main_mesh {
+        pieces.push(KitPieceInput {
+            kind: spec.key.to_string(),
+            mesh_path,
+            texture_paths,
+            prebuilt_textures: Vec::new(),
+            mirror_x: false,
+            raise_frac: 0.0,
+        });
+    }
+    // Sticks render a flat-black tape wrap; the goalie mask a flat-metal cage.
+    if let Some(tape_prefix) = spec.tape_prefix {
+        if let Some(tape_mesh) = find_prefixed_mesh(&folder, tape_prefix) {
+            let kind = if tape_prefix == "cage" { "cage" } else { "tape" };
+            pieces.push(KitPieceInput {
+                kind: kind.to_string(),
+                mesh_path: tape_mesh,
+                texture_paths: Vec::new(),
+                prebuilt_textures: Vec::new(),
+                mirror_x: false,
+                raise_frac: 0.0,
+            });
+        }
+    }
+    pieces
+}
+
+/// Find the first `<prefix>_*.rx2` file under `dir` whose bytes actually decode as a
+/// mesh (so a same-prefixed *texture* container is skipped). `None` when none do.
+fn find_prefixed_mesh(dir: &Path, prefix: &str) -> Option<PathBuf> {
+    let Ok(read) = std::fs::read_dir(dir) else {
+        return None;
+    };
+    let mut candidates: Vec<PathBuf> = read
+        .flatten()
+        .map(|e| e.path())
+        .filter(|p| {
+            p.extension().and_then(|s| s.to_str()).is_some_and(|e| e.eq_ignore_ascii_case("rx2"))
+                && p.file_stem()
+                    .and_then(|s| s.to_str())
+                    .is_some_and(|s| s.starts_with(&format!("{prefix}_")) || s == prefix)
+        })
+        .collect();
+    candidates.sort();
+    candidates.into_iter().find(|p| {
+        std::fs::read(p).is_ok_and(|bytes| decodes_as_mesh(&bytes))
+    })
+}
+
+/// Whether these bytes decode as an equipment mesh with either reader.
+fn decodes_as_mesh(bytes: &[u8]) -> bool {
+    if let Ok(mesh) = tdb_rx2::parse_mesh(bytes) {
+        if !mesh.positions.is_empty() && !mesh.triangles.is_empty() {
+            return true;
+        }
+    }
+    tdb_rx2::playermesh::parse_equipment_mesh(bytes)
+        .map(|a| a.submeshes.iter().any(|s| !s.triangles.is_empty()))
+        .unwrap_or(false)
 }
 
 /// Pick ONE colour-map file: standalone maps in `cm > dm > am` preference, then the

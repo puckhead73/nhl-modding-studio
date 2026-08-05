@@ -747,6 +747,35 @@ pub struct TeamEquipmentDto {
     pub zones: Vec<EquipmentZoneDto>,
 }
 
+/// One equipment slot in the Hockey Shop catalog.
+#[derive(Serialize, TS)]
+pub struct EquipmentSlotDto {
+    /// Stable key the frontend sends back (`"gloves"`, `"blocker"`, …).
+    pub key: String,
+    /// Operator-facing name ("Gloves").
+    pub label: String,
+    /// `"skater"` | `"goalie"` — the category strip the slot lives under.
+    pub category: String,
+    /// The player-companion DB field that selects this slot's id (`xmja.NmUR`, …),
+    /// surfaced behind progressive disclosure for power users.
+    pub field_ref: String,
+    /// Inclusive ID ceiling from the field's bit width.
+    pub max_id: u32,
+}
+
+/// One render file belonging to an equipment id (path relative to `<rendering>/`).
+#[derive(Serialize, TS)]
+pub struct EquipmentSlotFileDto {
+    pub relative_path: String,
+}
+
+/// One equipment id and the render files it owns, from scanning the slot folder.
+#[derive(Serialize, TS)]
+pub struct EquipmentSlotAssetDto {
+    pub id: u32,
+    pub files: Vec<EquipmentSlotFileDto>,
+}
+
 /// A compact arena row for the master list.
 #[derive(Serialize, TS)]
 pub struct ArenaSummaryDto {
