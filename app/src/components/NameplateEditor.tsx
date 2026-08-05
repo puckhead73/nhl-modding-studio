@@ -14,8 +14,12 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { call } from "../lib/client";
 import { Button, ErrorBanner, Spinner } from "./primitives";
 import {
+  arcTable,
   backgroundColor,
   clampZone,
+  curveDest,
+  curveNorm,
+  deriveZoneCurve,
   detectZones,
   footprint,
   handleCenters,
@@ -26,6 +30,7 @@ import {
   resizeZone,
   type NameplateZone,
   type ResizeHandle,
+  type ZoneCurve,
 } from "../lib/nameplateGeometry";
 import { buildFontMap, type FontMap, type GlyphRect } from "../lib/fontAtlas";
 import { captainCellOf, classifyZones, layoutText, nameCellOf, numberCellOf } from "../lib/nameplateCompositor";
@@ -99,6 +104,76 @@ function renderZoneRun(
   ctx.restore();
 }
 
+/**
+ * Draw a text run along a quadratic baseline (control points already in destination pixels), laying
+ * glyphs by arc length and rotating each to the local tangent. Same 180°-atlas + reversed-order
+ * correction as the straight {@link renderZoneRun}: at a horizontal tangent this reduces exactly to it.
+ */
+function renderCurvedRun(
+  ctx: CanvasRenderingContext2D,
+  atlas: CanvasImageSource,
+  text: string,
+  cellOf: (ch: string) => GlyphRect | null,
+  p0: [number, number],
+  p1: [number, number],
+  p2: [number, number],
+  height: number,
+) {
+  if (!text) return;
+  const path = arcTable(p0, p1, p2);
+  const runLen = path.length;
+  if (runLen < 1) return;
+  // Lay the reversed string across a straight run of the curve's arc length; then map each glyph's
+  // along-position onto the curve and rotate it to the tangent.
+  const reversed = [...text].reverse().join("");
+  const placements = layoutText(reversed, cellOf, { x: 0, y: 0, w: runLen, h: height });
+  for (const g of placements) {
+    const s = g.dst.x + g.dst.w / 2; // arc distance to the glyph centre
+    const perp = g.dst.y + g.dst.h / 2 - height / 2; // offset from the baseline (≈0)
+    const at = path.at(s);
+    ctx.save();
+    ctx.translate(at.x, at.y);
+    ctx.rotate(at.angle); // align local x with the curve, local y with its normal
+    ctx.translate(0, perp);
+    ctx.rotate(Math.PI); // atlas glyphs are stored upside-down (see renderZoneRun)
+    ctx.drawImage(atlas, g.src.x, g.src.y, g.src.w, g.src.h, -g.dst.w / 2, -g.dst.h / 2, g.dst.w, g.dst.h);
+    ctx.restore();
+  }
+}
+
+/** Render one text entry into the target canvas at scale (sx, sy): along the zone's curved baseline
+ *  when it has one, else straight across its rect. Shared by the 2D editor and the 3D compositor. */
+function renderTextEntry(
+  ctx: CanvasRenderingContext2D,
+  atlas: CanvasImageSource,
+  zone: NameplateZone,
+  text: string,
+  cellOf: (ch: string) => GlyphRect | null,
+  angle: number,
+  sx: number,
+  sy: number,
+) {
+  const fp = footprint(zone);
+  if (zone.curve) {
+    const map = (n: [number, number]): [number, number] => [
+      (zone.x + n[0] * fp.w) * sx,
+      (zone.y + n[1] * fp.h) * sy,
+    ];
+    renderCurvedRun(
+      ctx,
+      atlas,
+      text,
+      cellOf,
+      map(zone.curve.p0),
+      map(zone.curve.p1),
+      map(zone.curve.p2),
+      zone.curve.thickness * fp.h * sy,
+    );
+  } else {
+    renderZoneRun(ctx, atlas, text, cellOf, zone.x * sx, zone.y * sy, fp.w * sx, fp.h * sy, angle);
+  }
+}
+
 const MAX_DISPLAY = 512;
 const ZONE_EDIT_ALPHA = 0.4;
 const REFERENCE_ALPHA = 0.6;
@@ -107,6 +182,12 @@ const MAX_SCALE = 8;
 /** Resize-handle square size (display px) and the grab tolerance around each (display px). */
 const HANDLE_PX = 8;
 const HANDLE_HIT = 7;
+/** Curve control-point handle radius + grab tolerance (display px). */
+const CURVE_HANDLE_R = 5;
+const CURVE_HIT = 8;
+/** Curvature / slant (fraction of bbox height) above which a name marker auto-seeds a curved
+ *  baseline rather than staying a straight rect. */
+const CURVE_SEED_THRESHOLD = 0.12;
 /** CSS cursor per resize handle. */
 const HANDLE_CURSOR: Record<ResizeHandle, string> = {
   nw: "nwse-resize",
@@ -327,10 +408,12 @@ export function NameplateEditor({
   const bgColorRef = useRef<[number, number, number]>([255, 255, 255]);
   const atlasRef = useRef<HTMLCanvasElement | null>(null);
   const fontMapRef = useRef<FontMap | null>(null);
-  // Active pointer drag on the 2D canvas: move a zone by its body, or resize it by a handle.
+  // Active pointer drag on the 2D canvas: move a zone by its body, resize it by a handle, or drag one
+  // of a curved zone's baseline control points (0 = left end, 1 = bend, 2 = right end).
   const dragRef = useRef<
     | { mode: "move"; id: string; startTx: number; startTy: number; origX: number; origY: number }
     | { mode: "resize"; id: string; handle: ResizeHandle }
+    | { mode: "curve"; id: string; point: 0 | 1 | 2 }
     | null
   >(null);
 
@@ -412,8 +495,18 @@ export function NameplateEditor({
       const stamps = new Map<string, HTMLCanvasElement>();
       for (const z of detected) stamps.set(z.id, buildStamp(c, z, bg));
       stampsRef.current = stamps;
+      // Auto-seed a curved baseline on any marker whose midline bends or tilts noticeably (e.g.
+      // Colorado's bowl-shaped nameplate) — straight rects are left alone. The operator can toggle it
+      // per zone and drag the control points to refine.
+      const seeded = detected.map((z) => {
+        const d = deriveZoneCurve(rgba, c.width, z, bg);
+        if (d && (d.curvature > CURVE_SEED_THRESHOLD || d.slant > CURVE_SEED_THRESHOLD)) {
+          return { ...z, curve: d.curve };
+        }
+        return z;
+      });
       setDims({ w: c.width, h: c.height });
-      setZones(detected);
+      setZones(seeded);
       setSelectedId(detected[0]?.id ?? null);
       setReady((n) => n + 1);
     });
@@ -517,25 +610,15 @@ export function NameplateEditor({
     if (atlas) {
       ctx.globalAlpha = 1;
       for (const { zone, text, cellOf, angle } of renderList) {
-        const fp = footprint(zone);
-        renderZoneRun(
-          ctx,
-          atlas,
-          text,
-          cellOf,
-          zone.x * scale,
-          zone.y * scale,
-          fp.w * scale,
-          fp.h * scale,
-          angle,
-        );
+        renderTextEntry(ctx, atlas, zone, text, cellOf, angle, scale, scale);
       }
     }
 
-    // Resize handles on the selected zone — drag a corner/edge to reshape its rectangle.
+    // Selected zone: resize handles (reshape the rect) and, if curved, the baseline + curve handles.
     const sel = zones.find((z) => z.id === selectedId);
     if (sel) {
       ctx.globalAlpha = 1;
+      // Rect resize handles (sky squares).
       const centers = handleCenters(sel);
       for (const h of RESIZE_HANDLES) {
         const c = centers[h];
@@ -546,6 +629,39 @@ export function NameplateEditor({
         ctx.strokeStyle = "#0f172a";
         ctx.lineWidth = 1;
         ctx.strokeRect(hx - HANDLE_PX / 2 + 0.5, hy - HANDLE_PX / 2 + 0.5, HANDLE_PX - 1, HANDLE_PX - 1);
+      }
+      // Curved baseline overlay (magenta line + 3 round control handles).
+      if (sel.curve) {
+        const dp = (n: [number, number]) => {
+          const d = curveDest(sel, n);
+          return { x: d.x * scale, y: d.y * scale };
+        };
+        const a = dp(sel.curve.p0);
+        const bpt = dp(sel.curve.p1);
+        const c2 = dp(sel.curve.p2);
+        ctx.strokeStyle = "rgba(232,121,249,0.9)";
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.quadraticCurveTo(bpt.x, bpt.y, c2.x, c2.y);
+        ctx.stroke();
+        // Guide lines to the bend control.
+        ctx.strokeStyle = "rgba(232,121,249,0.35)";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(bpt.x, bpt.y);
+        ctx.lineTo(c2.x, c2.y);
+        ctx.stroke();
+        for (const p of [a, bpt, c2]) {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, CURVE_HANDLE_R, 0, Math.PI * 2);
+          ctx.fillStyle = "#e879f9";
+          ctx.fill();
+          ctx.strokeStyle = "#0f172a";
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
       }
     }
     ctx.globalAlpha = 1;
@@ -576,8 +692,7 @@ export function NameplateEditor({
       const sx = out.width / dims.w;
       const sy = out.height / dims.h;
       for (const { zone, text, cellOf, angle } of buildRenderList(fontMap)) {
-        const fp = footprint(zone);
-        renderZoneRun(ctx, atlas, text, cellOf, zone.x * sx, zone.y * sy, fp.w * sx, fp.h * sy, angle);
+        renderTextEntry(ctx, atlas, zone, text, cellOf, angle, sx, sy);
       }
     }
     setJerseyTex(out);
@@ -590,13 +705,31 @@ export function NameplateEditor({
     return { tx: (e.clientX - rect.left) / scale, ty: (e.clientY - rect.top) / scale };
   };
 
+  // Which baseline control point of a curved zone is within grab tolerance of (tx,ty), or null.
+  const hitCurve = (z: NameplateZone, tx: number, ty: number): 0 | 1 | 2 | null => {
+    if (!z.curve) return null;
+    const tol = CURVE_HIT / scale;
+    const pts: [number, number][] = [z.curve.p0, z.curve.p1, z.curve.p2];
+    for (let i = 0; i < 3; i++) {
+      const d = curveDest(z, pts[i]);
+      if (Math.hypot(tx - d.x, ty - d.y) <= tol) return i as 0 | 1 | 2;
+    }
+    return null;
+  };
+
   const onPointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
     if (!dims) return;
     const { tx, ty } = toTexture(e);
-    // Grab a resize handle of the already-selected zone first (handles sit on the
-    // zone edges, so they take priority over a body move / a zone underneath).
     const sel = zones.find((z) => z.id === selectedId);
     if (sel) {
+      // Curve control points sit on top and are the finest control — grab them first.
+      const cp = hitCurve(sel, tx, ty);
+      if (cp != null) {
+        dragRef.current = { mode: "curve", id: sel.id, point: cp };
+        e.currentTarget.setPointerCapture(e.pointerId);
+        return;
+      }
+      // Then a resize handle (handles sit on the zone edges, above a body move).
       const handle = hitHandle(sel, tx, ty, HANDLE_HIT / scale);
       if (handle) {
         dragRef.current = { mode: "resize", id: sel.id, handle };
@@ -618,15 +751,13 @@ export function NameplateEditor({
     const { tx, ty } = toTexture(e);
     const drag = dragRef.current;
     if (!drag) {
-      // Idle hover: show a resize cursor over a selected zone's handle, a move
-      // cursor over a zone body, else the default pointer.
+      // Idle hover: curve handle → crosshair, resize handle → resize cursor, zone body → move,
+      // else the default pointer.
       const sel = zones.find((z) => z.id === selectedId);
-      const handle = sel ? hitHandle(sel, tx, ty, HANDLE_HIT / scale) : null;
-      e.currentTarget.style.cursor = handle
-        ? HANDLE_CURSOR[handle]
-        : hitTest(zones, tx, ty)
-          ? "move"
-          : "pointer";
+      const cp = sel ? hitCurve(sel, tx, ty) : null;
+      const handle = sel && cp == null ? hitHandle(sel, tx, ty, HANDLE_HIT / scale) : null;
+      e.currentTarget.style.cursor =
+        cp != null ? "crosshair" : handle ? HANDLE_CURSOR[handle] : hitTest(zones, tx, ty) ? "move" : "pointer";
       return;
     }
     setZones((prev) =>
@@ -638,6 +769,12 @@ export function NameplateEditor({
             dims.w,
             dims.h,
           );
+        }
+        if (drag.mode === "curve") {
+          if (!el.curve) return el;
+          const n = curveNorm(el, tx, ty);
+          const key = (["p0", "p1", "p2"] as const)[drag.point];
+          return { ...el, curve: { ...el.curve, [key]: n } };
         }
         // Resize: clamp the dragged point into the canvas (anchored edge stays put,
         // so the footprint can't leave the sheet) and reshape.
@@ -686,6 +823,27 @@ export function NameplateEditor({
     setZones((prev) => prev.filter((e) => e.id !== selectedId));
     setSelectedId(null);
   };
+
+  // Seed a curved baseline for a zone: trace its marker's midline when possible, else a flat baseline
+  // across the footprint centre for the operator to bend by hand.
+  const seedCurveFor = (el: NameplateZone): ZoneCurve => {
+    const src = sourceRef.current;
+    if (src) {
+      const rgba = src.getContext("2d")!.getImageData(0, 0, src.width, src.height).data;
+      const d = deriveZoneCurve(rgba, src.width, el, bgColorRef.current);
+      if (d) return d.curve;
+    }
+    return { p0: [0, 0.5], p1: [0.5, 0.5], p2: [1, 0.5], thickness: 0.7 };
+  };
+  const toggleCurve = () =>
+    mutateSelected((el) => (el.curve ? { ...el, curve: undefined } : { ...el, curve: seedCurveFor(el) }));
+  const refitCurve = () => mutateSelected((el) => ({ ...el, curve: seedCurveFor(el) }));
+  const bumpThickness = (delta: number) =>
+    mutateSelected((el) =>
+      el.curve
+        ? { ...el, curve: { ...el.curve, thickness: Math.max(0.05, Math.min(1, el.curve.thickness + delta)) } }
+        : el,
+    );
 
   // Keyboard: Esc closes; arrows nudge (Shift = 10px); +/- resize.
   useEffect(() => {
@@ -996,6 +1154,50 @@ export function NameplateEditor({
                 Drag the zone's edge/corner handles to reshape each side independently — e.g. shrink an
                 arched name strip off the number area.
               </p>
+            </div>
+
+            <div>
+              <div className="mb-1 text-[10px] uppercase tracking-wider text-slate-500">Baseline</div>
+              <button
+                type="button"
+                onClick={toggleCurve}
+                disabled={!selected}
+                className="w-full rounded border border-slate-700 px-2 py-1 text-[11px] text-slate-200 hover:bg-slate-800 disabled:opacity-40"
+              >
+                {selected?.curve ? "Straighten baseline" : "Curve baseline (arch / diagonal)"}
+              </button>
+              {selected?.curve && (
+                <>
+                  <div className="mt-1 flex items-center gap-1">
+                    <span className="text-[10px] text-slate-500">Thickness</span>
+                    <button
+                      type="button"
+                      onClick={() => bumpThickness(-0.05)}
+                      className="rounded border border-slate-700 px-2 py-0.5 text-[11px] text-slate-200 hover:bg-slate-800"
+                    >
+                      −
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => bumpThickness(0.05)}
+                      className="rounded border border-slate-700 px-2 py-0.5 text-[11px] text-slate-200 hover:bg-slate-800"
+                    >
+                      +
+                    </button>
+                    <button
+                      type="button"
+                      onClick={refitCurve}
+                      className="ml-auto rounded border border-slate-700 px-2 py-0.5 text-[10px] text-slate-200 hover:bg-slate-800"
+                    >
+                      Refit to marker
+                    </button>
+                  </div>
+                  <p className="mt-1 text-[10px] leading-tight text-slate-500">
+                    Drag the three <span className="text-fuchsia-300">magenta</span> dots — the two ends
+                    set the name span, the middle bends it (arch or diagonal).
+                  </p>
+                </>
+              )}
             </div>
 
             <button

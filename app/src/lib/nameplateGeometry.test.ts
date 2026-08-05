@@ -1,12 +1,17 @@
 import { describe, expect, it } from "vitest";
 import {
+  arcTable,
   backgroundColor,
   clampZone,
+  curveDest,
+  curveNorm,
+  deriveZoneCurve,
   detectZones,
   footprint,
   hitHandle,
   hitTest,
   isMarkerColor,
+  quadAt,
   resizeZone,
   type NameplateZone,
 } from "./nameplateGeometry";
@@ -109,5 +114,61 @@ describe("nameplateGeometry", () => {
     expect(hitTest(zones, 3, 3)?.id).toBe(zones[0].id);
     expect(hitTest(zones, 13, 3)?.id).toBe(zones[1].id);
     expect(hitTest(zones, 8, 8)).toBeNull(); // between them, on background
+  });
+
+  it("maps footprint-normalized curve points to/from texture space", () => {
+    const z: NameplateZone = { id: "z", srcX: 0, srcY: 0, w: 20, h: 10, x: 30, y: 40, scaleX: 2, scaleY: 1 };
+    // footprint = 40 × 10; (0.5, 1) → (30 + 0.5*40, 40 + 1*10) = (50, 50).
+    expect(curveDest(z, [0.5, 1])).toEqual({ x: 50, y: 50 });
+    expect(curveNorm(z, 50, 50)).toEqual([0.5, 1]);
+  });
+
+  it("evaluates a quadratic Bézier endpoints and horizontal tangent", () => {
+    const p0: [number, number] = [0, 0];
+    const p1: [number, number] = [5, 0];
+    const p2: [number, number] = [10, 0];
+    expect(quadAt(p0, p1, p2, 0)).toMatchObject({ x: 0, y: 0 });
+    expect(quadAt(p0, p1, p2, 1)).toMatchObject({ x: 10, y: 0 });
+    expect(quadAt(p0, p1, p2, 0.5).angle).toBeCloseTo(0); // straight → 0 rad
+  });
+
+  it("arc length of a straight quadratic equals the chord", () => {
+    const path = arcTable([0, 0], [5, 0], [10, 0]);
+    expect(path.length).toBeCloseTo(10, 3);
+    expect(path.at(5).x).toBeCloseTo(5, 1); // halfway along
+    expect(path.at(0).x).toBeCloseTo(0, 3);
+  });
+
+  it("derives a curved baseline from an arched marker midline", () => {
+    // Paint a ∩-arched band: each column's marker centre rises toward the middle.
+    const W = 40;
+    const H = 40;
+    const rgba = new Uint8ClampedArray(W * H * 4).fill(255);
+    for (let x = 4; x < 36; x++) {
+      const u = (x - 4) / 31; // 0..1
+      const centre = 24 - Math.round(10 * Math.sin(u * Math.PI)); // rises (smaller y) at the middle
+      for (let y = centre - 2; y <= centre + 2; y++) {
+        const i = (y * W + x) * 4;
+        rgba[i] = 255;
+        rgba[i + 1] = 255;
+        rgba[i + 2] = 0; // yellow marker
+      }
+    }
+    const [z] = detectZones(rgba, W, H);
+    const d = deriveZoneCurve(rgba, W, z, [255, 255, 255]);
+    expect(d).not.toBeNull();
+    // The bend control sits ABOVE (smaller normalized y than) the two ends → an arch.
+    expect(d!.curve.p1[1]).toBeLessThan(d!.curve.p0[1]);
+    expect(d!.curve.p1[1]).toBeLessThan(d!.curve.p2[1]);
+    expect(d!.curvature).toBeGreaterThan(0.12); // clearly curved, not flat
+  });
+
+  it("reports low curvature for a flat rectangular marker", () => {
+    const rgba = sheet(40, 40, [[6, 16, 28, 6]]); // a plain horizontal bar
+    const [z] = detectZones(rgba, 40, 40);
+    const d = deriveZoneCurve(rgba, 40, z, [255, 255, 255]);
+    expect(d).not.toBeNull();
+    expect(d!.curvature).toBeLessThan(0.05);
+    expect(d!.slant).toBeLessThan(0.05);
   });
 });

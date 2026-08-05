@@ -50,6 +50,25 @@ export interface NameplateZone {
    *  arched name strip) need the name and number rects sized independently, not one uniform scale. */
   scaleX: number;
   scaleY: number;
+  /** Optional curved text baseline. When present (and the zone renders text), glyphs are laid along
+   *  this quadratic curve instead of straight across the rect — for arched / diagonal names (e.g.
+   *  Colorado's bowl-shaped nameplate). Control points + thickness are NORMALIZED to the zone
+   *  footprint ([0,1] × [0,1]), so the curve rides along as the zone is moved/resized. */
+  curve?: ZoneCurve;
+}
+
+/** A quadratic text baseline in footprint-normalized coordinates ([0,1] within the zone footprint;
+ *  values can stray slightly outside when the operator drags a handle past an edge). `p1` is the
+ *  Bézier control point (the "bend"), not a point on the curve. */
+export interface ZoneCurve {
+  /** Left end of the baseline. */
+  p0: [number, number];
+  /** Bend control point. */
+  p1: [number, number];
+  /** Right end of the baseline. */
+  p2: [number, number];
+  /** Glyph height as a fraction of the footprint height. */
+  thickness: number;
 }
 
 /** A resize grip on a zone's rectangle: the four corners + four edge midpoints (compass points). */
@@ -299,6 +318,142 @@ export function clampZone(el: NameplateZone, width: number, height: number): Nam
   const x = Math.max(0, Math.min(Math.max(0, width - fp.w), el.x));
   const y = Math.max(0, Math.min(Math.max(0, height - fp.h), el.y));
   return { ...el, x, y };
+}
+
+// ── Curved text baselines ──────────────────────────────────────────────────────────────────────
+
+/** Map a footprint-normalized point (u,v ∈ [0,1]) to texture space using a zone's current position
+ *  and scaled footprint. */
+export function curveDest(
+  el: NameplateZone,
+  norm: [number, number],
+): { x: number; y: number } {
+  const fp = footprint(el);
+  return { x: el.x + norm[0] * fp.w, y: el.y + norm[1] * fp.h };
+}
+
+/** Inverse of {@link curveDest}: texture-space point → footprint-normalized (u,v). */
+export function curveNorm(el: NameplateZone, tx: number, ty: number): [number, number] {
+  const fp = footprint(el);
+  return [fp.w > 0 ? (tx - el.x) / fp.w : 0, fp.h > 0 ? (ty - el.y) / fp.h : 0];
+}
+
+/** Evaluate a quadratic Bézier (control points already in the target space) at parameter t ∈ [0,1],
+ *  returning the point and the tangent angle (radians). */
+export function quadAt(
+  p0: [number, number],
+  p1: [number, number],
+  p2: [number, number],
+  t: number,
+): { x: number; y: number; angle: number } {
+  const mt = 1 - t;
+  const x = mt * mt * p0[0] + 2 * mt * t * p1[0] + t * t * p2[0];
+  const y = mt * mt * p0[1] + 2 * mt * t * p1[1] + t * t * p2[1];
+  // B'(t) = 2(1-t)(P1-P0) + 2t(P2-P1)
+  const dx = 2 * mt * (p1[0] - p0[0]) + 2 * t * (p2[0] - p1[0]);
+  const dy = 2 * mt * (p1[1] - p0[1]) + 2 * t * (p2[1] - p1[1]);
+  return { x, y, angle: Math.atan2(dy, dx) };
+}
+
+/** An arc-length lookup over a quadratic Bézier: total `length` and `at(s)` → point + tangent at arc
+ *  distance s (px), so glyphs can be spaced evenly along the curve regardless of its curvature. */
+export function arcTable(
+  p0: [number, number],
+  p1: [number, number],
+  p2: [number, number],
+  samples = 48,
+): { length: number; at: (s: number) => { x: number; y: number; angle: number } } {
+  const ts: number[] = [];
+  const cum: number[] = [];
+  let prev = quadAt(p0, p1, p2, 0);
+  ts.push(0);
+  cum.push(0);
+  let total = 0;
+  for (let i = 1; i <= samples; i++) {
+    const t = i / samples;
+    const pt = quadAt(p0, p1, p2, t);
+    total += Math.hypot(pt.x - prev.x, pt.y - prev.y);
+    ts.push(t);
+    cum.push(total);
+    prev = pt;
+  }
+  const at = (s: number) => {
+    const target = Math.max(0, Math.min(total, s));
+    // Binary-search the cumulative table for the segment containing `target`.
+    let lo = 0;
+    let hi = cum.length - 1;
+    while (lo < hi) {
+      const mid = (lo + hi) >> 1;
+      if (cum[mid] < target) lo = mid + 1;
+      else hi = mid;
+    }
+    const i = Math.max(1, lo);
+    const seg = cum[i] - cum[i - 1] || 1;
+    const f = (target - cum[i - 1]) / seg;
+    const t = ts[i - 1] + (ts[i] - ts[i - 1]) * f;
+    return quadAt(p0, p1, p2, t);
+  };
+  return { length: total, at };
+}
+
+/** Auto-seed a curved baseline for a zone by tracing the marker's per-column vertical midline within
+ *  its source bbox, fitting a quadratic through the midline at the two ends + centre, and measuring
+ *  the glyph height from the band thickness. Returns the curve plus how far the midline bends
+ *  (`curvature`) and tilts (`slant`) — both as fractions of the bbox height — so the caller can decide
+ *  whether a zone is curved enough to warrant a baseline (vs. staying a straight rect). Returns null
+ *  when the marker is too sparse to trace. */
+export function deriveZoneCurve(
+  rgba: Uint8Array | Uint8ClampedArray,
+  width: number,
+  el: NameplateZone,
+  bg: [number, number, number],
+): { curve: ZoneCurve; curvature: number; slant: number } | null {
+  const { srcX, srcY, w, h } = el;
+  if (w < 2 || h < 1) return null;
+  const mids: Array<number | null> = new Array(w).fill(null);
+  const thicks: number[] = [];
+  for (let u = 0; u < w; u++) {
+    let lo = h;
+    let hi = -1;
+    for (let v = 0; v < h; v++) {
+      const i = ((srcY + v) * width + (srcX + u)) * 4;
+      if (isMarkerColor(rgba[i], rgba[i + 1], rgba[i + 2], bg)) {
+        if (v < lo) lo = v;
+        if (v > hi) hi = v;
+      }
+    }
+    if (hi >= lo) {
+      mids[u] = (lo + hi) / 2;
+      thicks.push(hi - lo + 1);
+    }
+  }
+  if (thicks.length < 2) return null;
+  // Nearest-non-null sample at a normalized column position.
+  const sampleAt = (frac: number): number => {
+    const target = Math.round(frac * (w - 1));
+    for (let d = 0; d < w; d++) {
+      const a = mids[Math.max(0, target - d)];
+      if (a != null) return a;
+      const b = mids[Math.min(w - 1, target + d)];
+      if (b != null) return b;
+    }
+    return h / 2;
+  };
+  const m0 = sampleAt(0);
+  const mc = sampleAt(0.5);
+  const m1 = sampleAt(1);
+  // Bézier control whose curve passes THROUGH the measured centre midline point (B(0.5) = mc).
+  const p1y = 2 * mc - (m0 + m1) / 2;
+  const median = [...thicks].sort((a, b) => a - b)[thicks.length >> 1];
+  const curvature = Math.abs((m0 + m1) / 2 - mc) / h; // bend depth vs the chord
+  const slant = Math.abs(m1 - m0) / h; // end-to-end tilt
+  const curve: ZoneCurve = {
+    p0: [0, m0 / h],
+    p1: [0.5, p1y / h],
+    p2: [1, m1 / h],
+    thickness: Math.min(1, Math.max(0.05, median / h)),
+  };
+  return { curve, curvature, slant };
 }
 
 /** Hit-test: the topmost zone whose scaled footprint contains the texture-space point, or null. */
