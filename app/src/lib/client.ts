@@ -361,7 +361,7 @@ type Commands = {
     ret: HockeyShopItemDto[];
   };
   hockey_shop_sync: {
-    args: { roots: AssetRootsArgsDto; storeRoot: string; slot: string };
+    args: { roots: AssetRootsArgsDto; storeRoot: string; slot: string; game?: string };
     ret: HockeyShopSyncSummaryDto;
   };
   hockey_shop_import: {

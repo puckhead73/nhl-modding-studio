@@ -44,16 +44,24 @@ pub fn list(store_root: &str, slot: &str) -> Result<Vec<HockeyShopItemDto>, ApiE
 
 /// Extract a representative colour texture for every game equipment id the store
 /// doesn't already carry. Each entry is named from the slot's enum vocabulary (e.g.
-/// "CCM Ribcore 40K"), falling back to `<Label> <id>` for an uncatalogued id, credited
-/// to EA Sports, and tracked back to its game id via `source: "game"` + `game_asset_id`.
-/// Idempotent — re-running only picks up new ids.
+/// "CCM Ribcore 40K"), falling back to `<Label> <id>` for an uncatalogued id, and
+/// tracked back to its game id via `source: "game"` + `game_asset_id`. The author
+/// credits EA Sports plus the game it was extracted from ("EA Sports NHL Legacy") so
+/// textures from different titles stay distinguishable in the store. Idempotent —
+/// re-running only picks up new ids.
 pub fn sync(
     rendering: &Path,
     store_root: &str,
     slot: &str,
     enums: &studio_domain::EnumRegistry,
+    game_label: Option<&str>,
 ) -> Result<HockeyShopSyncSummaryDto, ApiError> {
     let spec = spec_for(slot)?;
+    // "EA Sports NHL Legacy" when the game is known, else bare "EA Sports".
+    let author = match game_label.map(str::trim) {
+        Some(g) if !g.is_empty() => format!("EA Sports {g}"),
+        _ => "EA Sports".to_owned(),
+    };
     let store = ensure_store_slot_dir(store_root, slot)?;
     let mut manifest = read_manifest(&store)?;
     let existing: std::collections::BTreeSet<u32> =
@@ -87,7 +95,7 @@ pub fn sync(
         manifest.items.push(HockeyShopItemDto {
             id,
             name,
-            author: "EA Sports".to_owned(),
+            author: author.clone(),
             source: "game".to_owned(),
             game_asset_id: Some(asset.id),
             file,

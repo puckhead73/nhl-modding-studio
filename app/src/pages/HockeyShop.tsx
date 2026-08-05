@@ -14,7 +14,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { appDataDir, join } from "@tauri-apps/api/path";
 import { call } from "../lib/client";
-import { useAssetRootArgs } from "../lib/project";
+import { useAssetRootArgs, useProject } from "../lib/project";
+import { gameById } from "../lib/catalog";
 import { EmptyState, Spinner } from "../components/primitives";
 import { EquipmentItemViewer } from "../components/KitMeshViewer";
 import { TextureThumbnail } from "../components/TextureReplace";
@@ -316,6 +317,10 @@ function StorePanel({
   onSelect: (item: HockeyShopItemDto | null) => void;
 }) {
   const qc = useQueryClient();
+  const { install } = useProject();
+  // The game the store's extracted textures come from — credited on synced items so textures from
+  // different titles stay distinguishable ("EA Sports NHL Legacy").
+  const gameLabel = gameById(install?.game_id)?.label;
   const fileInput = useRef<HTMLInputElement>(null);
   const [search, setSearch] = useState("");
   // After a file pick we stage the image and open a modal to capture name + author (the old app's
@@ -335,7 +340,12 @@ function StorePanel({
 
   const sync = useMutation({
     mutationFn: () =>
-      call("hockey_shop_sync", { roots: rootArgs, storeRoot: storeRoot!, slot: slot.key }),
+      call("hockey_shop_sync", {
+        roots: rootArgs,
+        storeRoot: storeRoot!,
+        slot: slot.key,
+        game: gameLabel,
+      }),
     onSuccess: invalidate,
   });
   const importItem = useMutation({
@@ -544,11 +554,6 @@ function StoreRow({
         <span className="min-w-0 flex-1 truncate text-xs font-medium text-slate-100">
           {item.name}
         </span>
-        {installed ? (
-          <span className="shrink-0 rounded bg-emerald-900/60 px-1 text-[9px] uppercase tracking-wider text-emerald-200">
-            installed
-          </span>
-        ) : null}
         <span className={"shrink-0 text-[10px] " + authorTone(item.author)}>{item.author}</span>
       </button>
       <button

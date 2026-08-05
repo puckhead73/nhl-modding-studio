@@ -999,10 +999,11 @@ pub fn hockey_shop_sync(
     roots: AssetRootsArgsDto,
     store_root: String,
     slot: String,
+    game: Option<String>,
 ) -> CmdResult<HockeyShopSyncSummaryDto> {
     let defs = resolve_defs(&app);
     registry
-        .hockey_shop_sync(&roots, &store_root, &slot, &defs)
+        .hockey_shop_sync(&roots, &store_root, &slot, &defs, game.as_deref())
         .map_err(|e| e.to_string())
 }
 
