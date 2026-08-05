@@ -1196,6 +1196,10 @@ export function NameplateEditor({
                     Drag the three <span className="text-fuchsia-300">magenta</span> dots — the two ends
                     set the name span, the middle bends it (arch or diagonal).
                   </p>
+                  <p className="mt-1 rounded border border-amber-500/40 bg-amber-500/10 px-2 py-1 text-[10px] leading-tight text-amber-300/90">
+                    Experimental — curved baselines are preview-only. Save does not write them back to
+                    the texture; a curved nameplate must be edited manually outside the suite.
+                  </p>
                 </>
               )}
             </div>
