@@ -203,6 +203,25 @@ fn find_prefixed_mesh(dir: &Path, prefix: &str) -> Option<PathBuf> {
     })
 }
 
+/// Locate the COLOUR-map texture slot inside an Xbox `.rx2` texlib: the
+/// `(texture_index, width, height)` of the texture whose name carries `_cm`, else
+/// texture 0. `None` when the file isn't a decodable texlib (e.g. a PS3 container —
+/// install is Xbox-only). Drives the Hockey Shop install splice target.
+pub fn color_map_slot(path: &Path) -> Option<(usize, u32, u32)> {
+    let bytes = std::fs::read(path).ok()?;
+    if !bytes.starts_with(tdb_rx2::MAGIC_RX2) {
+        return None;
+    }
+    let lib = tdb_rx2::texlib::parse(&bytes).ok()?;
+    let idx = lib
+        .textures
+        .iter()
+        .position(|t| t.name.to_ascii_lowercase().contains("_cm"))
+        .unwrap_or(0);
+    let t = lib.textures.get(idx)?;
+    Some((idx, t.width, t.height))
+}
+
 /// Whether these bytes decode as an equipment mesh with either reader.
 fn decodes_as_mesh(bytes: &[u8]) -> bool {
     if let Ok(mesh) = tdb_rx2::parse_mesh(bytes) {

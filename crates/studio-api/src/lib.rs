@@ -115,6 +115,8 @@ macro_rules! command_handler {
             $crate::commands::hockey_shop_import,
             $crate::commands::hockey_shop_delete,
             $crate::commands::hockey_shop_load_texture,
+            $crate::commands::hockey_shop_install_plan,
+            $crate::commands::hockey_shop_install_apply,
             $crate::commands::export_assets,
             $crate::commands::browse_install_files,
             $crate::commands::export_install_files,
@@ -164,6 +166,9 @@ mod bindings {
         EquipmentSlotAssetDto::export_all().expect("export EquipmentSlotAssetDto + deps");
         HockeyShopItemDto::export_all().expect("export HockeyShopItemDto");
         HockeyShopSyncSummaryDto::export_all().expect("export HockeyShopSyncSummaryDto");
+        InstallStoreItemRequestDto::export_all().expect("export InstallStoreItemRequestDto");
+        InstallStoreItemPlanDto::export_all().expect("export InstallStoreItemPlanDto");
+        InstallStoreItemApplyResponseDto::export_all().expect("export InstallStoreItemApplyResponseDto");
         IntegrityReportDto::export_all().expect("export IntegrityReportDto + deps");
         AutocorrectSummaryDto::export_all().expect("export AutocorrectSummaryDto + deps");
         RepairBlocksSummaryDto::export_all().expect("export RepairBlocksSummaryDto");

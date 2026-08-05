@@ -49,6 +49,9 @@ import type { EquipmentSlotDto } from "../bindings/EquipmentSlotDto";
 import type { EquipmentSlotAssetDto } from "../bindings/EquipmentSlotAssetDto";
 import type { HockeyShopItemDto } from "../bindings/HockeyShopItemDto";
 import type { HockeyShopSyncSummaryDto } from "../bindings/HockeyShopSyncSummaryDto";
+import type { InstallStoreItemRequestDto } from "../bindings/InstallStoreItemRequestDto";
+import type { InstallStoreItemPlanDto } from "../bindings/InstallStoreItemPlanDto";
+import type { InstallStoreItemApplyResponseDto } from "../bindings/InstallStoreItemApplyResponseDto";
 import type { KitPieceInputDto } from "../bindings/KitPieceInputDto";
 import type { BrowseListingDto } from "../bindings/BrowseListingDto";
 import type { FileExportOptionsDto } from "../bindings/FileExportOptionsDto";
@@ -372,6 +375,14 @@ type Commands = {
   hockey_shop_load_texture: {
     args: { storeRoot: string; slot: string; entryId: string };
     ret: string;
+  };
+  hockey_shop_install_plan: {
+    args: { roots: AssetRootsArgsDto; storeRoot: string; request: InstallStoreItemRequestDto };
+    ret: InstallStoreItemPlanDto;
+  };
+  hockey_shop_install_apply: {
+    args: { roots: AssetRootsArgsDto; storeRoot: string; request: InstallStoreItemRequestDto };
+    ret: InstallStoreItemApplyResponseDto;
   };
   // `bioRecords: []` exports every scanned player.
   export_assets: {

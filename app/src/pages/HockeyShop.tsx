@@ -18,6 +18,7 @@ import { TextureThumbnail } from "../components/TextureReplace";
 import type { EquipmentSlotDto } from "../bindings/EquipmentSlotDto";
 import type { EquipmentSlotAssetDto } from "../bindings/EquipmentSlotAssetDto";
 import type { HockeyShopItemDto } from "../bindings/HockeyShopItemDto";
+import type { InstallStoreItemRequestDto } from "../bindings/InstallStoreItemRequestDto";
 
 export function HockeyShopPage() {
   const { installDir, rootArgs } = useAssetRootArgs();
@@ -287,6 +288,7 @@ function StorePanel({
     reader.readAsDataURL(file);
   };
 
+  const [installing, setInstalling] = useState<HockeyShopItemDto | null>(null);
   const busy = sync.isPending || importItem.isPending || remove.isPending;
   const err = sync.error ?? importItem.error ?? remove.error;
 
@@ -345,12 +347,29 @@ function StorePanel({
               item={it}
               slot={slot.key}
               storeRoot={storeRoot!}
+              onInstall={() => setInstalling(it)}
               onDelete={() => remove.mutate(it.id)}
               deleting={remove.isPending}
             />
           ))}
         </ul>
       )}
+
+      {installing && storeRoot ? (
+        <InstallModal
+          slot={slot}
+          rootArgs={rootArgs}
+          storeRoot={storeRoot}
+          item={installing}
+          onClose={() => setInstalling(null)}
+          onInstalled={() => {
+            setInstalling(null);
+            // The install wrote render files — refresh the game browser + preview.
+            qc.invalidateQueries({ queryKey: ["equipmentSlotAssets"] });
+            qc.invalidateQueries({ queryKey: ["equipmentItemPreview"] });
+          }}
+        />
+      ) : null}
     </div>
   );
 }
@@ -359,12 +378,14 @@ function StoreRow({
   item,
   slot,
   storeRoot,
+  onInstall,
   onDelete,
   deleting,
 }: {
   item: HockeyShopItemDto;
   slot: string;
   storeRoot: string;
+  onInstall: () => void;
   onDelete: () => void;
   deleting: boolean;
 }) {
@@ -391,6 +412,14 @@ function StoreRow({
       </div>
       <button
         type="button"
+        onClick={onInstall}
+        title="Install this texture into the game at an equipment id"
+        className="shrink-0 rounded border border-slate-700 px-1.5 py-0.5 text-[10px] text-slate-300 hover:border-sky-700 hover:text-sky-200"
+      >
+        Install…
+      </button>
+      <button
+        type="button"
         onClick={onDelete}
         disabled={deleting}
         title="Remove from store"
@@ -399,6 +428,124 @@ function StoreRow({
         ✕
       </button>
     </li>
+  );
+}
+
+/** Install a store item into the game at a chosen equipment id: pick the id, see a
+ *  live plan (overwrite vs create, donor, warnings, blockers), then apply. The apply
+ *  writes render files into the install (a .bak first) — it never edits the .db. */
+function InstallModal({
+  slot,
+  rootArgs,
+  storeRoot,
+  item,
+  onClose,
+  onInstalled,
+}: {
+  slot: EquipmentSlotDto;
+  rootArgs: ReturnType<typeof useAssetRootArgs>["rootArgs"];
+  storeRoot: string;
+  item: HockeyShopItemDto;
+  onClose: () => void;
+  onInstalled: () => void;
+}) {
+  const [targetId, setTargetId] = useState<number>(item.game_asset_id ?? 0);
+  const request: InstallStoreItemRequestDto = {
+    slot: slot.key,
+    entry_id: item.id,
+    target_id: targetId,
+    write_backup: true,
+  };
+
+  const plan = useQuery({
+    queryKey: ["hockeyShopInstallPlan", storeRoot, slot.key, item.id, targetId],
+    queryFn: () => call("hockey_shop_install_plan", { roots: rootArgs, storeRoot, request }),
+    enabled: Number.isFinite(targetId),
+    retry: false,
+  });
+  const apply = useMutation({
+    mutationFn: () => call("hockey_shop_install_apply", { roots: rootArgs, storeRoot, request }),
+    onSuccess: onInstalled,
+  });
+
+  const p = plan.data;
+  const blocked = (p?.blocking_errors.length ?? 1) > 0;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-6" onClick={onClose}>
+      <div
+        className="w-full max-w-lg rounded-lg border border-slate-700 bg-slate-900 shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <header className="flex items-center justify-between border-b border-slate-800 px-4 py-2">
+          <p className="text-sm font-medium text-slate-100">
+            Install “{item.name}” — {slot.label}
+          </p>
+          <button type="button" onClick={onClose} className="rounded border border-slate-700 px-2 py-0.5 text-xs text-slate-200 hover:bg-slate-800">
+            Close
+          </button>
+        </header>
+        <div className="space-y-3 p-4">
+          <label className="flex items-center gap-2 text-xs text-slate-300">
+            <span className="shrink-0">Install at equipment id</span>
+            <input
+              type="number"
+              min={0}
+              max={slot.max_id}
+              value={targetId}
+              onChange={(e) => setTargetId(Number(e.target.value))}
+              className="w-24 rounded border border-slate-700 bg-slate-950 px-2 py-1 font-mono text-slate-100 focus:border-sky-600 focus:outline-none"
+            />
+            <span className="text-slate-500">0–{slot.max_id}</span>
+          </label>
+
+          {plan.isLoading ? (
+            <Spinner label="Planning…" />
+          ) : plan.error ? (
+            <p className="text-xs text-rose-400">{String(plan.error)}</p>
+          ) : p ? (
+            <div className="space-y-2 rounded-md border border-slate-800 bg-slate-950/50 p-3 text-xs">
+              <p className="text-slate-300">
+                Mode: <b className={p.mode === "overwrite" ? "text-amber-300" : "text-sky-300"}>{p.mode}</b>
+                {p.mode === "overwrite" && p.target_existing_label ? (
+                  <span className="text-slate-500"> — replaces “{p.target_existing_label}”</span>
+                ) : null}
+                {p.mode === "create" && p.donor_id != null ? (
+                  <span className="text-slate-500"> — clones donor id {p.donor_id} ({p.cloned_files.length} files)</span>
+                ) : null}
+              </p>
+              {p.target_color_file ? (
+                <p className="truncate text-slate-500" title={p.target_color_file}>
+                  → {p.target_color_file} · tex {p.target_texture_index} · {p.target_width}×{p.target_height}
+                </p>
+              ) : null}
+              {p.warnings.map((w, i) => (
+                <p key={i} className="text-amber-400/80">⚠ {w}</p>
+              ))}
+              {p.blocking_errors.map((e, i) => (
+                <p key={i} className="text-rose-400">✕ {e}</p>
+              ))}
+            </div>
+          ) : null}
+
+          {apply.error ? <p className="text-xs text-rose-400">{String(apply.error)}</p> : null}
+
+          <div className="flex justify-end gap-2">
+            <button type="button" onClick={onClose} className="rounded border border-slate-700 px-3 py-1 text-xs text-slate-300 hover:bg-slate-800">
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={() => apply.mutate()}
+              disabled={blocked || apply.isPending || plan.isLoading}
+              className="rounded border border-sky-700 bg-sky-900/50 px-3 py-1 text-xs font-medium text-sky-100 hover:bg-sky-900/80 disabled:opacity-50"
+            >
+              {apply.isPending ? "Installing…" : "Install to game"}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 

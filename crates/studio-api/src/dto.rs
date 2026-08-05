@@ -807,6 +807,63 @@ pub struct HockeyShopSyncSummaryDto {
     pub store_dir: String,
 }
 
+/// Request to install a store item into the game at a target equipment id
+/// (existing id → overwrite its colour map; unused id → create by cloning a donor).
+#[derive(Deserialize, TS)]
+pub struct InstallStoreItemRequestDto {
+    pub slot: String,
+    pub entry_id: String,
+    pub target_id: u32,
+    /// For a CREATE install: which shipped id's container to clone as the template.
+    /// `null` = auto (the item's source game id if shipped, else the lowest id).
+    #[serde(default)]
+    #[ts(optional)]
+    pub donor_id: Option<u32>,
+    /// Back up files before overwriting. Defaults to `true`.
+    #[serde(default)]
+    #[ts(optional)]
+    pub write_backup: Option<bool>,
+}
+
+/// Read-only plan for an install — drives the modal's overwrite/create preview and
+/// gates Apply on `blocking_errors`. Touches no files.
+#[derive(Serialize, TS, Clone)]
+pub struct InstallStoreItemPlanDto {
+    pub slot: String,
+    pub entry_id: String,
+    pub entry_name: String,
+    pub target_id: u32,
+    /// `"overwrite"` (target id already ships assets) or `"create"` (empty id).
+    pub mode: String,
+    /// The label already occupying the target id (overwrite mode).
+    #[ts(optional)]
+    pub target_existing_label: Option<String>,
+    /// Donor id whose container is cloned (create mode).
+    #[ts(optional)]
+    pub donor_id: Option<u32>,
+    /// Rendering-relative file that receives the store texture.
+    #[ts(optional)]
+    pub target_color_file: Option<String>,
+    pub target_texture_index: u32,
+    pub target_width: u32,
+    pub target_height: u32,
+    /// Files cloned from the donor (create mode; dest rel paths).
+    pub cloned_files: Vec<String>,
+    pub warnings: Vec<String>,
+    pub blocking_errors: Vec<String>,
+}
+
+/// Result of applying an install.
+#[derive(Serialize, TS)]
+pub struct InstallStoreItemApplyResponseDto {
+    pub plan: InstallStoreItemPlanDto,
+    /// Rendering-relative files written (cloned container files + the spliced file).
+    pub files_written: Vec<String>,
+    /// The game-side install ledger path (records what's installed at each id).
+    #[ts(optional)]
+    pub ledger_path: Option<String>,
+}
+
 /// A compact arena row for the master list.
 #[derive(Serialize, TS)]
 pub struct ArenaSummaryDto {

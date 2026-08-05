@@ -11,6 +11,7 @@ use studio_domain::FieldValue;
 use crate::dto::{
     AssetExportSummaryDto, AssetRootsArgsDto, AssetRootsDto, BrowseListingDto, ExportOptionsDto,
     EquipmentSlotAssetDto, EquipmentSlotDto, HockeyShopItemDto, HockeyShopSyncSummaryDto,
+    InstallStoreItemApplyResponseDto, InstallStoreItemPlanDto, InstallStoreItemRequestDto,
     FileExportOptionsDto, FileExportSummaryDto, HeadPreviewDto, ImportTextureSummaryDto,
     KitPieceInputDto, KitPreviewDto, OutfitExportSummaryDto, PlayerAssetsDto,
     AddCareerSeasonDto, ArenaSummaryDto, ArenaViewDto, AutocorrectSummaryDto, CareerStatsDto,
@@ -1034,6 +1035,33 @@ pub fn hockey_shop_load_texture(
 ) -> CmdResult<String> {
     registry
         .hockey_shop_load_texture(&store_root, &slot, &entry_id)
+        .map_err(|e| e.to_string())
+}
+
+/// Read-only plan for installing a store item into the game at a target id.
+#[tauri::command]
+pub fn hockey_shop_install_plan(
+    registry: State<'_, Registry>,
+    roots: AssetRootsArgsDto,
+    store_root: String,
+    request: InstallStoreItemRequestDto,
+) -> CmdResult<InstallStoreItemPlanDto> {
+    registry
+        .hockey_shop_install_plan(&roots, &store_root, &request)
+        .map_err(|e| e.to_string())
+}
+
+/// Apply an install — clones a donor (create mode) + splices the store texture into
+/// the target colour map. Writes `.rx2` files into the install (a `.bak` first).
+#[tauri::command]
+pub fn hockey_shop_install_apply(
+    registry: State<'_, Registry>,
+    roots: AssetRootsArgsDto,
+    store_root: String,
+    request: InstallStoreItemRequestDto,
+) -> CmdResult<InstallStoreItemApplyResponseDto> {
+    registry
+        .hockey_shop_install_apply(&roots, &store_root, &request)
         .map_err(|e| e.to_string())
 }
 

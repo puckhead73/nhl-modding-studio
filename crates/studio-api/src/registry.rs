@@ -26,6 +26,7 @@ use crate::dto::{
     AddCareerSeasonDto, ArenaSummaryDto, ArenaViewDto, AutocorrectSummaryDto, CareerStatsDto,
     AssetExportSummaryDto, AssetRootsArgsDto, AssetRootsDto, BrowseListingDto, ExportOptionsDto,
     EquipmentSlotAssetDto, EquipmentSlotDto, HockeyShopItemDto, HockeyShopSyncSummaryDto,
+    InstallStoreItemApplyResponseDto, InstallStoreItemPlanDto, InstallStoreItemRequestDto,
     FileExportOptionsDto, FileExportSummaryDto, HeadPreviewDto, ImportTextureSummaryDto,
     KitPieceInputDto, KitPreviewDto, OutfitExportSummaryDto, PlayerAssetsDto,
     CreatePlayerDto, EaComputedRatingsDto, ExtractSummaryDto, FormulaCatalogDto, FormulaProfileDto,
@@ -1110,6 +1111,31 @@ impl Registry {
         entry_id: &str,
     ) -> Result<String, ApiError> {
         crate::hockey_shop::load_texture_data_url(store_root, slot, entry_id)
+    }
+
+    /// Read-only plan for installing a store item into the game at a target id.
+    pub fn hockey_shop_install_plan(
+        &self,
+        args: &AssetRootsArgsDto,
+        store_root: &str,
+        req: &InstallStoreItemRequestDto,
+    ) -> Result<InstallStoreItemPlanDto, ApiError> {
+        let roots = resolve_roots(args);
+        let rendering = PathBuf::from(&roots.rendering);
+        crate::hockey_shop::plan_install(&rendering, store_root, req)
+    }
+
+    /// Apply an install: clone the donor (create mode) + splice the store texture
+    /// into the target colour map (writes `.rx2` files into the install, `.bak` first).
+    pub fn hockey_shop_install_apply(
+        &self,
+        args: &AssetRootsArgsDto,
+        store_root: &str,
+        req: &InstallStoreItemRequestDto,
+    ) -> Result<InstallStoreItemApplyResponseDto, ApiError> {
+        let roots = resolve_roots(args);
+        let rendering = PathBuf::from(&roots.rendering);
+        crate::hockey_shop::apply_install(&rendering, store_root, req)
     }
 
     /// Drop a workspace, freeing its working bytes. Returns `false` if it was not registered.

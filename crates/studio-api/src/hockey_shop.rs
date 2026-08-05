@@ -18,7 +18,10 @@
 use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use crate::dto::{HockeyShopItemDto, HockeyShopSyncSummaryDto};
+use crate::dto::{
+    HockeyShopItemDto, HockeyShopSyncSummaryDto, InstallStoreItemApplyResponseDto,
+    InstallStoreItemPlanDto, InstallStoreItemRequestDto,
+};
 use crate::error::ApiError;
 
 /// `texlib_999` (and siblings) is the shared sentinel/placeholder asset, not a real
@@ -188,6 +191,377 @@ pub fn load_texture_data_url(
     use base64::Engine as _;
     let b64 = base64::engine::general_purpose::STANDARD.encode(&bytes);
     Ok(format!("data:image/png;base64,{b64}"))
+}
+
+// ── Install-to-game (write path) ─────────────────────────────────────────────────
+
+#[derive(Default, serde::Serialize, serde::Deserialize)]
+struct InstallLedger {
+    #[serde(default)]
+    installed: Vec<InstalledLedgerEntry>,
+}
+
+#[derive(serde::Serialize, serde::Deserialize)]
+struct InstalledLedgerEntry {
+    equipment_id: u32,
+    slot: String,
+    entry_id: String,
+    name: String,
+    author: String,
+    source: String,
+    installed_unix: u64,
+}
+
+/// Read-only plan for installing a store item into the game: resolve overwrite vs
+/// create, the donor template (create), the destination colour file + texture slot,
+/// and any warnings/blocking errors. Xbox `.rx2` only. Touches no files.
+pub fn plan_install(
+    rendering: &Path,
+    store_root: &str,
+    req: &InstallStoreItemRequestDto,
+) -> Result<InstallStoreItemPlanDto, ApiError> {
+    let spec = spec_for(&req.slot)?;
+    let store = store_slot_dir(store_root, &req.slot)?;
+    let manifest = read_manifest(&store)?;
+    let entry = manifest
+        .items
+        .iter()
+        .find(|s| s.id == req.entry_id)
+        .ok_or_else(|| ApiError::Workspace(format!("no store item with id `{}`", req.entry_id)))?
+        .clone();
+
+    let mut warnings: Vec<String> = Vec::new();
+    let mut blocking_errors: Vec<String> = Vec::new();
+
+    if req.target_id > spec.max_id {
+        blocking_errors.push(format!(
+            "target id {} is above the {}.{} ceiling ({}). Widening the field would \
+             change the record bit layout and break the game binary.",
+            req.target_id, spec.table, spec.field, spec.max_id
+        ));
+    }
+
+    let assets = studio_domain::list_equipment_slot_assets(rendering, spec);
+    let target_asset = assets.iter().find(|a| a.id == req.target_id);
+    let mode = if target_asset.is_some() { "overwrite" } else { "create" };
+
+    let mut target_existing_label: Option<String> = None;
+    let mut donor_id: Option<u32> = None;
+    let mut target_color_file: Option<String> = None;
+    let mut cloned_files: Vec<String> = Vec::new();
+
+    // The file whose colour slot we inspect for index + dims: the target's own file
+    // (overwrite) or the donor's (create — the clone is byte-identical).
+    let color_source_rel: Option<String> = match target_asset {
+        Some(asset) => {
+            let label = format!("{} {}", spec.label, asset.id);
+            let color = pick_color_rel(&asset.files);
+            if color.is_none() {
+                blocking_errors
+                    .push(format!("id {} ships no colour texture to overwrite.", req.target_id));
+            } else {
+                warnings.push(format!(
+                    "id {} already ships \"{label}\" — installing overwrites its colour \
+                     texture in place (a .bak is written first).",
+                    req.target_id
+                ));
+            }
+            target_existing_label = Some(label);
+            target_color_file = color.clone();
+            color
+        }
+        None => {
+            let chosen = req.donor_id.or_else(|| {
+                entry
+                    .game_asset_id
+                    .filter(|gid| assets.iter().any(|a| a.id == *gid))
+                    .or_else(|| assets.first().map(|a| a.id))
+            });
+            match chosen.and_then(|d| assets.iter().find(|a| a.id == d)) {
+                None => {
+                    blocking_errors.push(format!(
+                        "the {} slot ships no assets to clone as a template for the new id.",
+                        spec.label.to_lowercase()
+                    ));
+                    None
+                }
+                Some(donor) => {
+                    donor_id = Some(donor.id);
+                    cloned_files = donor
+                        .files
+                        .iter()
+                        .filter_map(|r| predict_target_rel(spec, r, req.target_id))
+                        .collect();
+                    let donor_color = pick_color_rel(&donor.files);
+                    match &donor_color {
+                        None => blocking_errors
+                            .push(format!("donor id {} has no colour texture.", donor.id)),
+                        Some(dc) => {
+                            target_color_file = predict_target_rel(spec, dc, req.target_id);
+                            warnings.push(format!(
+                                "id {} is empty — its container is created by cloning donor id \
+                                 {} ({} file(s)), then your texture is spliced in.",
+                                req.target_id,
+                                donor.id,
+                                cloned_files.len()
+                            ));
+                        }
+                    }
+                    donor_color
+                }
+            }
+        }
+    };
+
+    let mut target_texture_index = 0u32;
+    let mut target_width = 0u32;
+    let mut target_height = 0u32;
+    if let Some(rel) = color_source_rel.as_ref() {
+        match studio_domain::color_map_slot(&join_rel(rendering, rel)) {
+            Some((idx, w, h)) => {
+                target_texture_index = idx as u32;
+                target_width = w;
+                target_height = h;
+                if entry.width != w || entry.height != h {
+                    warnings.push(format!(
+                        "store texture is {}×{}; the target slot is {w}×{h} — it will be \
+                         resized to fit on install.",
+                        entry.width, entry.height
+                    ));
+                }
+            }
+            None => blocking_errors.push(format!(
+                "{rel} is not a decodable Xbox texlib — install is Xbox-only for now."
+            )),
+        }
+    }
+
+    warnings.push(format!(
+        "Reminder: to make a player use this {}, set {}.{} = {} on their record \
+         (their Equipment tab). Install never edits the .db.",
+        spec.label.to_lowercase(),
+        spec.table,
+        spec.field,
+        req.target_id
+    ));
+
+    Ok(InstallStoreItemPlanDto {
+        slot: req.slot.clone(),
+        entry_id: entry.id.clone(),
+        entry_name: entry.name.clone(),
+        target_id: req.target_id,
+        mode: mode.to_owned(),
+        target_existing_label,
+        donor_id,
+        target_color_file,
+        target_texture_index,
+        target_width,
+        target_height,
+        cloned_files,
+        warnings,
+        blocking_errors,
+    })
+}
+
+/// Install a store item into the game. Create mode clones the donor's container into
+/// the target id first; both modes then splice the store texture (resized) into the
+/// target's colour map. Writes a `.bak` first. Fails fast on plan blocking errors.
+pub fn apply_install(
+    rendering: &Path,
+    store_root: &str,
+    req: &InstallStoreItemRequestDto,
+) -> Result<InstallStoreItemApplyResponseDto, ApiError> {
+    let spec = spec_for(&req.slot)?;
+    let store = store_slot_dir(store_root, &req.slot)?;
+    let plan = plan_install(rendering, store_root, req)?;
+    if !plan.blocking_errors.is_empty() {
+        return Err(ApiError::Workspace(format!(
+            "install plan has blocking error(s); refusing to apply: {}",
+            plan.blocking_errors.join("; ")
+        )));
+    }
+    let target_color_file = plan
+        .target_color_file
+        .clone()
+        .ok_or_else(|| ApiError::Workspace("install plan resolved no target colour file".into()))?;
+    let write_backup = req.write_backup.unwrap_or(true);
+    let mut files_written: Vec<String> = Vec::new();
+
+    // Create mode: byte-clone every donor file into the target id's filenames first.
+    if plan.mode == "create" {
+        let donor = plan
+            .donor_id
+            .ok_or_else(|| ApiError::Workspace("create-mode plan resolved no donor id".into()))?;
+        let assets = studio_domain::list_equipment_slot_assets(rendering, spec);
+        let donor_asset = assets
+            .iter()
+            .find(|a| a.id == donor)
+            .ok_or_else(|| ApiError::Workspace(format!("donor id {donor} vanished")))?;
+        for src_rel in &donor_asset.files {
+            let Some(dest_rel) = predict_target_rel(spec, src_rel, req.target_id) else {
+                continue;
+            };
+            let src_abs = join_rel(rendering, src_rel);
+            let dest_abs = join_rel(rendering, &dest_rel);
+            let bytes = std::fs::read(&src_abs)
+                .map_err(|e| ApiError::Workspace(format!("reading {src_rel}: {e}")))?;
+            atomic_write_with_backup(&dest_abs, &bytes, write_backup)?;
+            files_written.push(dest_rel);
+        }
+    } else if write_backup {
+        // Overwrite: snapshot the target colour file before splicing.
+        let target = join_rel(rendering, &target_color_file);
+        backup_once(&target)?;
+    }
+
+    // Splice the store texture (resized to the slot) into the target colour map.
+    let rgba = store_image_resized_rgba(&store, &plan.entry_id, plan.target_width, plan.target_height)?;
+    let target_abs = join_rel(rendering, &target_color_file);
+    let target_bytes = std::fs::read(&target_abs)
+        .map_err(|e| ApiError::Workspace(format!("reading {target_color_file}: {e}")))?;
+    let write = studio_domain::replace_texture_in_file(
+        target_bytes,
+        &rgba,
+        plan.target_width,
+        plan.target_height,
+        Some(plan.target_texture_index as usize),
+    )
+    .map_err(ApiError::Domain)?;
+    std::fs::write(&target_abs, &write.bytes)
+        .map_err(|e| ApiError::Workspace(format!("writing {target_color_file}: {e}")))?;
+    if !files_written.contains(&target_color_file) {
+        files_written.push(target_color_file);
+    }
+
+    // Record the install so the item's name/id stays documented at the target id.
+    let ledger_path = read_manifest(&store)
+        .ok()
+        .and_then(|m| m.items.into_iter().find(|s| s.id == plan.entry_id))
+        .and_then(|entry| record_install(rendering, spec, req.target_id, &entry).ok())
+        .map(|p| p.display().to_string());
+
+    Ok(InstallStoreItemApplyResponseDto {
+        plan,
+        files_written,
+        ledger_path,
+    })
+}
+
+/// Predict the cloned destination path for one donor render file at `target_id`
+/// (rendering-relative, forward slashes) — mirrors the clone rename.
+fn predict_target_rel(
+    spec: &studio_domain::EquipmentSlotSpec,
+    donor_rel: &str,
+    target_id: u32,
+) -> Option<String> {
+    let file_name = donor_rel.rsplit('/').next().unwrap_or(donor_rel);
+    let (stem, ext) = file_name.rsplit_once('.').unwrap_or((file_name, ""));
+    let new_stem = studio_domain::rename_stem(spec, stem, target_id)?;
+    Some(format!("{}/{new_stem}.{ext}", spec.folder))
+}
+
+/// The best colour-map candidate among an id's render files (by [`color_rank`]).
+fn pick_color_rel(rels: &[String]) -> Option<String> {
+    let mut v: Vec<&String> = rels.iter().collect();
+    v.sort_by(|a, b| color_rank(a).cmp(&color_rank(b)).then_with(|| a.cmp(b)));
+    v.first().map(|s| (*s).clone())
+}
+
+/// Decode a store item's PNG and resize it to the target slot's dimensions.
+fn store_image_resized_rgba(
+    store: &Path,
+    entry_id: &str,
+    target_w: u32,
+    target_h: u32,
+) -> Result<Vec<u8>, ApiError> {
+    if target_w == 0 || target_h == 0 {
+        return Err(ApiError::Workspace("target texture has zero dimensions".into()));
+    }
+    let manifest = read_manifest(store)?;
+    let entry = manifest
+        .items
+        .iter()
+        .find(|s| s.id == entry_id)
+        .ok_or_else(|| ApiError::Workspace(format!("no store item with id `{entry_id}`")))?;
+    let path = store.join(&entry.file);
+    let bytes = std::fs::read(&path)
+        .map_err(|e| ApiError::Workspace(format!("reading {}: {e}", path.display())))?;
+    let img = image::load_from_memory_with_format(&bytes, image::ImageFormat::Png)
+        .map_err(|e| ApiError::Workspace(format!("PNG decode failed: {e}")))?;
+    let rgba = img.to_rgba8();
+    let resized = if rgba.width() == target_w && rgba.height() == target_h {
+        rgba
+    } else {
+        image::imageops::resize(&rgba, target_w, target_h, image::imageops::FilterType::Lanczos3)
+    };
+    Ok(resized.into_raw())
+}
+
+/// Copy `path` to `path.bak` once (never clobber an existing backup).
+fn backup_once(path: &Path) -> Result<(), ApiError> {
+    if !path.is_file() {
+        return Ok(());
+    }
+    let mut bak = path.as_os_str().to_owned();
+    bak.push(".bak");
+    let bak = PathBuf::from(bak);
+    if !bak.exists() {
+        std::fs::copy(path, &bak)
+            .map_err(|e| ApiError::Workspace(format!("backing up {}: {e}", path.display())))?;
+    }
+    Ok(())
+}
+
+/// Write `bytes` to `path`, backing the existing file up to `.bak` first (once).
+fn atomic_write_with_backup(path: &Path, bytes: &[u8], backup: bool) -> Result<(), ApiError> {
+    if let Some(parent) = path.parent() {
+        std::fs::create_dir_all(parent)
+            .map_err(|e| ApiError::Workspace(format!("creating {}: {e}", parent.display())))?;
+    }
+    if backup {
+        backup_once(path)?;
+    }
+    std::fs::write(path, bytes)
+        .map_err(|e| ApiError::Workspace(format!("writing {}: {e}", path.display())))
+}
+
+/// Upsert an install record into the slot's game-side ledger
+/// (`<rendering>/<folder>/hockey_shop_installed.json`) — the latest install per id
+/// wins. Invisible to the slot asset scan (it only reads `.rx2`/`.rpsgl`).
+fn record_install(
+    rendering: &Path,
+    spec: &studio_domain::EquipmentSlotSpec,
+    target_id: u32,
+    entry: &HockeyShopItemDto,
+) -> Result<PathBuf, ApiError> {
+    let dir = rendering.join(spec.folder);
+    std::fs::create_dir_all(&dir)
+        .map_err(|e| ApiError::Workspace(format!("creating {}: {e}", dir.display())))?;
+    let path = dir.join("hockey_shop_installed.json");
+    let mut ledger: InstallLedger = if path.is_file() {
+        std::fs::read(&path)
+            .ok()
+            .and_then(|b| serde_json::from_slice(&b).ok())
+            .unwrap_or_default()
+    } else {
+        InstallLedger::default()
+    };
+    ledger.installed.retain(|e| e.equipment_id != target_id);
+    ledger.installed.push(InstalledLedgerEntry {
+        equipment_id: target_id,
+        slot: spec.key.to_owned(),
+        entry_id: entry.id.clone(),
+        name: entry.name.clone(),
+        author: entry.author.clone(),
+        source: entry.source.clone(),
+        installed_unix: now_unix(),
+    });
+    ledger.installed.sort_by_key(|e| e.equipment_id);
+    let json = serde_json::to_vec_pretty(&ledger)
+        .map_err(|e| ApiError::Workspace(format!("ledger serialize: {e}")))?;
+    std::fs::write(&path, json)
+        .map_err(|e| ApiError::Workspace(format!("writing {}: {e}", path.display())))?;
+    Ok(path)
 }
 
 // ── Internals ───────────────────────────────────────────────────────────────────
