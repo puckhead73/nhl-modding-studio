@@ -327,6 +327,15 @@ pub struct PlayerView {
     pub ratings_record: Option<u32>,
     /// The companion table id the `ratings` fields belong to (`dSvy` or `mHuy`).
     pub ratings_table: &'static str,
+    /// The per-player equipment companion fields (`xmja` skater / `fMVl` goalie) — the individual
+    /// gear selections (helmet/visor/stick for skaters, goalie gear + zones for goalies). Empty when
+    /// the schema carries no equipment companion (gen6) or the cluster is broken.
+    pub equipment: Vec<FieldView>,
+    /// The equipment companion record index the `equipment` fields belong to — needed to edit them.
+    /// `None` if the player has no equipment companion.
+    pub equipment_record: Option<u32>,
+    /// The equipment companion table id the `equipment` fields belong to (`xmja` or `fMVl`).
+    pub equipment_table: &'static str,
     pub memberships: Vec<RosterMembership>,
     pub all_fields: Vec<FieldView>,
     /// Resolved, display-ready banner values for the Player detail header.
@@ -1797,6 +1806,17 @@ pub fn player_view(
         crate::attributes::restrict_style_options(&mut ratings, player.position);
     }
 
+    // Per-player equipment companion (`xmja` skater / `fMVl` goalie) — the individual gear the
+    // Equipment tab edits. Same resolution shape as ratings: the model already linked the companion
+    // record by `wBIz`; absent on gen6 (no equipment table) or a broken cluster → empty.
+    let (equipment_table, equipment_record) = match player.kind {
+        PlayerKind::Goalie => (ids::GOALIE_EQUIP, player.goalie_equip),
+        PlayerKind::Skater => (ids::SKATER_EQUIP, player.skater_equip),
+    };
+    let equipment = equipment_record
+        .map(|rec| entity_fields(db, meta, enums, equipment_table, rec))
+        .unwrap_or_default();
+
     let memberships: Vec<RosterMembership> = model
         .slots
         .iter()
@@ -1843,6 +1863,9 @@ pub fn player_view(
         ratings,
         ratings_record: companion_record,
         ratings_table: companion_table,
+        equipment,
+        equipment_record,
+        equipment_table,
         memberships,
         all_fields,
         header,

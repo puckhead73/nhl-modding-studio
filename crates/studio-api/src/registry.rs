@@ -658,6 +658,7 @@ impl Registry {
         style: u32,
         variant: u32,
         player_id: Option<u64>,
+        player_gear: bool,
     ) -> Result<KitPreviewDto, ApiError> {
         let roots = resolve_roots(args);
         let rendering = PathBuf::from(&roots.rendering);
@@ -682,12 +683,19 @@ impl Registry {
             // Goalies wear an entirely different gear set (mask, pads, blocker,
             // trapper, goalie skate/sock) — drives the goalie branch below.
             let is_goalie = chosen.map(|p| p.is_goalie).unwrap_or(false);
+
+            // Load the chosen player's full view once — it carries the bio fields
+            // (head/eye/hand) and the equipment companion fields (`xmja`/`fMVl`)
+            // used to resolve the player's own selected gear when `player_gear`.
+            let chosen_view =
+                chosen.and_then(|p| ws.display().player_view(p.player_id).ok().flatten());
+
             // Catching hand for the goalie's glove placement (`ubPc.GRkp`: 0 = Left,
             // 1 = Right; for goalies this is the catch hand). Defaults to a regular
             // catch-left goalie when unknown.
             let catch_left = if is_goalie {
-                chosen
-                    .and_then(|p| ws.display().player_view(p.player_id).ok().flatten())
+                chosen_view
+                    .as_ref()
                     .and_then(|v| {
                         v.all_fields
                             .iter()
@@ -704,8 +712,7 @@ impl Registry {
             // (`ubPc.Zufj`), read off the full player view. Absent → no head piece
             // (the kit still assembles). The eye texture ships separately from the
             // player texlib, so it's appended explicitly (else the eyes are bare).
-            let head_mesh = chosen.and_then(|p| {
-                let view = ws.display().player_view(p.player_id).ok()??;
+            let head_mesh = chosen_view.as_ref().and_then(|view| {
                 let field = |id: &str| {
                     view.all_fields
                         .iter()
@@ -718,6 +725,27 @@ impl Registry {
                 let texs = roots.texture_paths(head_id, None);
                 Some((mesh, texs, eye_color))
             });
+
+            // Player-selected gear resolver: read the equipment id off the player's
+            // `xmja`/`fMVl` companion field, then resolve it to its render files
+            // (mesh + colour map) via the equipment-slot matchers. `None` when
+            // `player_gear` is off, no player is chosen, the field is absent/zero,
+            // or the id ships no files — every caller falls back to the team default.
+            let player_piece = |slot: &str, field: &str| -> Option<studio_domain::EquipmentPiece> {
+                if !player_gear {
+                    return None;
+                }
+                let v = chosen_view.as_ref()?;
+                let raw = v
+                    .equipment
+                    .iter()
+                    .find(|f| f.studio_field == field)
+                    .and_then(|f| f.decoded)?;
+                if raw < 0 {
+                    return None;
+                }
+                studio_domain::resolve_equipment_piece(&rendering, slot, raw as u32)
+            };
 
             // The team's outfit textures, resolved as the Uniforms tab sees them,
             // narrowed to the selected kit (by the file-name style/variant tokens).
@@ -866,10 +894,28 @@ impl Registry {
 
                 push("skates", g.skate, skate_tex, Vec::new());
                 push("socks", g.sock, kit_texture("sock"), Vec::new());
-                push("pads", g.pad, Vec::new(), pad_tex.into_iter().collect());
-                push("blocker", g.blocker, Vec::new(), blocker_tex.into_iter().collect());
-                push("trapper", g.trapper, Vec::new(), trapper_tex.into_iter().collect());
-                push("mask", g.mask, mask_tex, Vec::new());
+                // Pads / blocker / trapper: the player's selected model (`fMVl.mIUA`
+                // / `fMVl.Kmxz` / `fMVl.OTJR`) — its own mesh + colour map — else the
+                // pinned default mesh painted by the team's hHbv zones.
+                match player_piece("pads", "mIUA") {
+                    Some(p) if p.mesh_path.is_some() => push("pads", p.mesh_path, p.texture_paths, Vec::new()),
+                    _ => push("pads", g.pad, Vec::new(), pad_tex.into_iter().collect()),
+                }
+                match player_piece("blocker", "Kmxz") {
+                    Some(p) if p.mesh_path.is_some() => push("blocker", p.mesh_path, p.texture_paths, Vec::new()),
+                    _ => push("blocker", g.blocker, Vec::new(), blocker_tex.into_iter().collect()),
+                }
+                match player_piece("trapper", "OTJR") {
+                    Some(p) if p.mesh_path.is_some() => push("trapper", p.mesh_path, p.texture_paths, Vec::new()),
+                    _ => push("trapper", g.trapper, Vec::new(), trapper_tex.into_iter().collect()),
+                }
+                // Mask: keep the pinned shell mesh but paint it with the player's own
+                // mask design (`fMVl.JOlt` → `goaliehelmet_<style>_<id>_cm`) when set.
+                let mask_tex_final = player_piece("goalie-helmet", "JOlt")
+                    .filter(|p| !p.texture_paths.is_empty())
+                    .map(|p| p.texture_paths)
+                    .unwrap_or(mask_tex);
+                push("mask", g.mask, mask_tex_final, Vec::new());
                 // The cage is bare metal — no paint; it renders with the flat piece colour.
                 push("cage", g.cage, Vec::new(), Vec::new());
             } else {
@@ -902,10 +948,29 @@ impl Registry {
                         zones.first().copied(), // helmet: main colour as the background
                     )
                 });
-                push("skates", meshes.skate.clone(), skate_tex, Vec::new());
+                // Skates share one mesh across ids; swap in the player's own skate
+                // texlib (`xmja.AOOe`) when set, else the team's first skate texlib.
+                let skate_tex_final = player_piece("skates", "AOOe")
+                    .filter(|p| !p.texture_paths.is_empty())
+                    .map(|p| p.texture_paths)
+                    .unwrap_or(skate_tex);
+                push("skates", meshes.skate.clone(), skate_tex_final, Vec::new());
                 push("socks", meshes.sock.clone(), kit_texture("sock"), Vec::new());
-                push("gloves", meshes.glove.clone(), Vec::new(), glove_tex.into_iter().collect());
-                push("helmet", meshes.helmet.clone(), Vec::new(), helmet_tex.into_iter().collect());
+                // Gloves/helmet: the player's selected model (`xmja.NmUR`/`xmja.YUZp`)
+                // — its own mesh + colour map — else the pinned default mesh painted
+                // by the team's hHbv zones (the Uniforms-tab behaviour).
+                match player_piece("gloves", "NmUR") {
+                    Some(p) if p.mesh_path.is_some() => {
+                        push("gloves", p.mesh_path, p.texture_paths, Vec::new())
+                    }
+                    _ => push("gloves", meshes.glove.clone(), Vec::new(), glove_tex.into_iter().collect()),
+                }
+                match player_piece("helmet", "YUZp") {
+                    Some(p) if p.mesh_path.is_some() => {
+                        push("helmet", p.mesh_path, p.texture_paths, Vec::new())
+                    }
+                    _ => push("helmet", meshes.helmet.clone(), Vec::new(), helmet_tex.into_iter().collect()),
+                }
             }
 
             if is_goalie {

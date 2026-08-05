@@ -49,7 +49,7 @@ export const PLAYER_TABS: readonly TabGate[] = [
   { key: "player-data", surface: "players" },
   { key: "career", surface: "career" },
   { key: "attributes", surface: "attributes" },
-  { key: "portrait", surface: "portraits" },
+  { key: "equipment", surface: "player_equipment" },
 ];
 
 /** Team-detail tabs, in display order, with their backing surface. Depth Chart and Contracts are

@@ -101,6 +101,8 @@ export function TeamKitViewer({
   variant,
   playerId,
   onPlayerIdChange,
+  hidePicker = false,
+  playerGear = false,
 }: {
   projectId: number;
   roots: AssetRootsArgsDto;
@@ -111,6 +113,12 @@ export function TeamKitViewer({
    *  so the equipment panel reacts to the same selection (skater vs goalie gear). */
   playerId: number | null;
   onPlayerIdChange: (id: number | null) => void;
+  /** Suppress the head/equipment picker — for the Player Equipment tab, where the
+   *  previewed player is fixed to the record being edited. */
+  hidePicker?: boolean;
+  /** Resolve gear from the previewed player's own selected equipment ids
+   *  (`xmja`/`fMVl`) instead of the team defaults — the player Equipment tab. */
+  playerGear?: boolean;
 }) {
   const roster = useQuery({
     queryKey: ["players", projectId],
@@ -125,7 +133,7 @@ export function TeamKitViewer({
   );
 
   const preview = useQuery({
-    queryKey: ["teamKitPreview", projectId, teamId, style, variant, playerId ?? null],
+    queryKey: ["teamKitPreview", projectId, teamId, style, variant, playerId ?? null, playerGear],
     queryFn: () =>
       call("team_kit_preview", {
         projectId,
@@ -134,6 +142,7 @@ export function TeamKitViewer({
         style,
         variant,
         playerId: playerId ?? null,
+        playerGear,
       }),
     staleTime: Infinity,
     retry: false,
@@ -180,7 +189,7 @@ export function TeamKitViewer({
     );
   }
   if (!preview.data) return null;
-  return <LoadedKit data={preview.data} pickerNode={picker} />;
+  return <LoadedKit data={preview.data} pickerNode={hidePicker ? undefined : picker} />;
 }
 
 /** The rink-backed canvas box (shared across loading / error / loaded states). */

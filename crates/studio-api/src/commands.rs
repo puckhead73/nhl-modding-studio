@@ -928,9 +928,20 @@ pub fn team_kit_preview(
     style: u32,
     variant: u32,
     player_id: Option<u64>,
+    // When true, gear pieces resolve from the previewed player's own `xmja`/`fMVl`
+    // selected equipment ids rather than the team defaults (player Equipment tab).
+    player_gear: Option<bool>,
 ) -> CmdResult<KitPreviewDto> {
     registry
-        .team_kit_preview(project_id, &roots, team_id, style, variant, player_id)
+        .team_kit_preview(
+            project_id,
+            &roots,
+            team_id,
+            style,
+            variant,
+            player_id,
+            player_gear.unwrap_or(false),
+        )
         .map_err(|e| e.to_string())
 }
 

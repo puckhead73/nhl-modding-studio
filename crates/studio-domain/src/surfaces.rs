@@ -206,10 +206,12 @@ impl SurfaceCapabilities {
             SurfaceCapability::absent("no team-equipment table (hHbv)")
         };
 
-        // Per-player equipment: the separate equipment companions exist on gen7+, but no read/edit
-        // surface is built yet (Phase 6) → Disabled where present, NotApplicable on gen6.
+        // Per-player equipment: the separate equipment companions (`xmja` skater / `fMVl` goalie)
+        // exist on gen7+ and are surfaced by the Player Equipment tab as resolved, editable field
+        // rows → Editable where present, NotApplicable on gen6 (NHL07, which ships no equipment
+        // tables — its gear fields fold into the AI companion instead).
         let player_equipment = if caps.has_skater_equip || caps.has_goalie_equip {
-            SurfaceCapability::disabled("per-player equipment editor not built (Phase 6)")
+            SurfaceCapability::editable()
         } else {
             SurfaceCapability::absent("no per-player equipment tables (gen6)")
         };

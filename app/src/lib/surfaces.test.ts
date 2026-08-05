@@ -30,7 +30,7 @@ function surfaces(overrides: Partial<SurfaceCapabilitiesDto> = {}): SurfaceCapab
     draft_picks: cap("editable"),
     jerseys: cap("editable"),
     team_equipment: cap("editable"),
-    player_equipment: cap("disabled", "no editor (Phase 6)"),
+    player_equipment: cap("editable"),
     portraits: cap("disabled", "preview only"),
     logos: cap("disabled", "preview only"),
     heads: cap("disabled", "preview only"),
@@ -53,7 +53,7 @@ describe("isAvailable", () => {
 describe("player tabs", () => {
   it("shows all four when every surface is present", () => {
     const keys = visibleTabKeys(PLAYER_TABS, surfaces());
-    expect([...keys].sort()).toEqual(["attributes", "career", "player-data", "portrait"]);
+    expect([...keys].sort()).toEqual(["attributes", "career", "equipment", "player-data"]);
   });
 
   it("omits the Career tab when the file has no career tables (roster save / gen shape)", () => {
@@ -62,11 +62,19 @@ describe("player tabs", () => {
     expect(keys.has("player-data")).toBe(true);
   });
 
-  it("keeps the Portrait tab but marks it disabled with the backend reason", () => {
-    const tab = resolveTabs(PLAYER_TABS, surfaces()).find((t) => t.key === "portrait")!;
+  it("shows the Equipment tab editable when the equipment companion is present", () => {
+    const tab = resolveTabs(PLAYER_TABS, surfaces()).find((t) => t.key === "equipment")!;
     expect(tab.show).toBe(true);
-    expect(tab.disabled).toBe(true);
-    expect(tab.reason).toBe("preview only");
+    expect(tab.disabled).toBe(false);
+  });
+
+  it("omits the Equipment tab on gen6 shapes with no equipment companion", () => {
+    const keys = visibleTabKeys(
+      PLAYER_TABS,
+      surfaces({ player_equipment: cap("not-applicable", "no per-player equipment tables (gen6)") }),
+    );
+    expect(keys.has("equipment")).toBe(false);
+    expect(keys.has("player-data")).toBe(true);
   });
 });
 

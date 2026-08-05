@@ -25,6 +25,8 @@ pub mod discovery;
 pub mod extract;
 pub mod field_profile;
 pub mod formula;
+pub mod equipment_piece;
+pub mod equipment_slots;
 pub mod equipment_texture;
 pub mod head_preview;
 pub mod historical;
@@ -59,6 +61,11 @@ pub use kit_preview::{
     KitMeshDefaults, KitPiece, KitPieceInput, KitPreview,
 };
 pub use equipment_texture::composite_equipment_texture;
+pub use equipment_slots::{
+    list_equipment_slot_assets, match_stem_id, rename_stem, slot_spec, EquipmentSlotAsset,
+    EquipmentSlotSpec, SLOT_SPECS,
+};
+pub use equipment_piece::{resolve_equipment_piece, EquipmentPiece};
 pub use attributes::{
     build_player_attributes, AttributeView, PlayerAttributes, TraitOption, TraitView,
 };

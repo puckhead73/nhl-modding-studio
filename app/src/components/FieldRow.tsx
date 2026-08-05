@@ -13,10 +13,15 @@ export function FieldRow({
   projectId,
   record,
   field,
+  labelWidth = "180px",
 }: {
   projectId: number;
   record: number;
   field: FieldViewDto;
+  /** Width of the label column. Narrower packs the value closer to the name — used by dense,
+   *  half-width panels (e.g. the player Equipment tab) so short labels don't leave a wide gap the
+   *  value bleeds across. Defaults to the studio's standard 180px. */
+  labelWidth?: string;
 }) {
   const qc = useQueryClient();
   const { update } = useProject();
@@ -46,12 +51,17 @@ export function FieldRow({
       : null;
 
   return (
-    <div className="grid grid-cols-[180px_1fr] items-center gap-2 border-b border-slate-800/60 py-1">
-      <span className="text-xs text-slate-400" title={field.studio_field}>
+    <div
+      className="grid min-w-0 items-center gap-2 border-b border-slate-800/60 py-1"
+      // `minmax(0, 1fr)` (not `1fr`) lets the value column shrink below its content's intrinsic
+      // width so it stays inside the row and truncates, instead of overflowing into the next column.
+      style={{ gridTemplateColumns: `${labelWidth} minmax(0, 1fr)` }}
+    >
+      <span className="truncate text-xs text-slate-400" title={field.studio_field}>
         {field.name}
       </span>
       {field.editable && field.enum_options.length > 0 ? (
-        <span className="flex items-center gap-2">
+        <span className="flex min-w-0 items-center gap-2">
           <span className="w-52 max-w-full">
             <ClickToEdit display={field.display}>
               <select
@@ -74,7 +84,7 @@ export function FieldRow({
           {mut.isError && <span className="text-xs text-rose-400">{String(mut.error)}</span>}
         </span>
       ) : field.editable ? (
-        <span className="flex items-center gap-2">
+        <span className="flex min-w-0 items-center gap-2">
           <span className="w-52 max-w-full">
             <ClickToEdit display={field.display}>
               <RowInput field={field} onCommit={(payload) => mut.mutate(payload)} />
@@ -85,7 +95,9 @@ export function FieldRow({
           {mut.isError && <span className="text-xs text-rose-400">{String(mut.error)}</span>}
         </span>
       ) : (
-        <span className="font-mono text-xs text-slate-100">{field.display}</span>
+        <span className="truncate font-mono text-xs text-slate-100" title={field.display}>
+          {field.display}
+        </span>
       )}
     </div>
   );

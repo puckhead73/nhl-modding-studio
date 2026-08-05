@@ -536,6 +536,12 @@ pub struct PlayerViewDto {
     pub ratings_record: Option<u32>,
     /// The companion table id the ratings belong to (`dSvy` or `mHuy`).
     pub ratings_table: String,
+    /// The per-player equipment companion fields (`xmja` skater / `fMVl` goalie) — the Equipment tab.
+    pub equipment: Vec<FieldViewDto>,
+    /// The equipment companion record index (needed to edit the fields); `null` if absent.
+    pub equipment_record: Option<u32>,
+    /// The equipment companion table id the fields belong to (`xmja` or `fMVl`).
+    pub equipment_table: String,
     pub memberships: Vec<RosterMembershipDto>,
     pub all_fields: Vec<FieldViewDto>,
     /// The server-driven curated section layout the UI renders (per-game field profile).

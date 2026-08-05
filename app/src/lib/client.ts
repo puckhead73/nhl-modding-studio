@@ -333,6 +333,9 @@ type Commands = {
       style: number;
       variant: number;
       playerId?: number | null;
+      // Resolve gear from the previewed player's own selected equipment ids
+      // (`xmja`/`fMVl`) rather than the team defaults — the player Equipment tab.
+      playerGear?: boolean;
     };
     ret: KitPreviewDto;
   };

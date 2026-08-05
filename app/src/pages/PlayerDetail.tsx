@@ -9,7 +9,8 @@ import { DetailTabs, type DetailTab } from "../components/DetailTabs";
 import { PlayerHeader } from "../components/PlayerHeader";
 import { AttributesTab } from "../components/AttributesTab";
 import { CareerStatsTab } from "../components/CareerStatsTab";
-import { EmptyState, Spinner } from "../components/primitives";
+import { PlayerEquipmentTab } from "../components/PlayerEquipmentTab";
+import { Spinner } from "../components/primitives";
 import { useCrumbLabel } from "../lib/breadcrumbs";
 import { PLAYER_TABS, isAvailable, visibleTabKeys } from "../lib/surfaces";
 import type { PlayerViewDto } from "../bindings/PlayerViewDto";
@@ -64,17 +65,9 @@ export function PlayerDetail() {
       content: <AttributesTab projectId={projectId} player={player} />,
     },
     {
-      key: "portrait",
-      label: "Portrait",
-      content: (
-        <EmptyState
-          title="Portrait — preview only"
-          hint={
-            surfaces?.portraits.reason ??
-            "Portrait preview and DDS↔PNG replace arrive with the Production Asset tools in a later phase."
-          }
-        />
-      ),
+      key: "equipment",
+      label: "Equipment",
+      content: <PlayerEquipmentTab projectId={projectId} player={player} />,
     },
   ];
 
