@@ -34,6 +34,12 @@ const PIECE_COLORS: Record<string, string> = {
   pants: "#fbbf24",
   socks: "#c084fc",
   skates: "#2dd4bf",
+  // Goalie gear.
+  mask: "#38bdf8",
+  cage: "#64748b",
+  pads: "#f59e0b",
+  blocker: "#a3e635",
+  trapper: "#84cc16",
 };
 const FALLBACK_COLOR = "#94a3b8";
 

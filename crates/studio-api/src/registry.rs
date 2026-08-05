@@ -677,6 +677,9 @@ impl Registry {
                         .max_by_key(|p| p.overall.unwrap_or(-1))
                 })
                 .or_else(|| roster.first());
+            // Goalies wear an entirely different gear set (mask, pads, blocker,
+            // trapper, goalie skate/sock) — drives the goalie branch below.
+            let is_goalie = chosen.map(|p| p.is_goalie).unwrap_or(false);
 
             // The chosen player's head model id (`ubPc.pPaD`) and eye colour
             // (`ubPc.Zufj`), read off the full player view. Absent → no head piece
@@ -774,33 +777,9 @@ impl Registry {
                 ))
             };
 
-            let glove_tex = zones_of(5).and_then(|(brand, zones)| {
-                let (masks, detail) = resolve_glove_masks(&rendering.join("glove"), brand);
-                studio_domain::composite_equipment_texture(
-                    &masks,
-                    detail.as_deref(),
-                    &zones,
-                    "glove_cm",
-                    None, // gloves: unpainted pixels stay transparent (ref app)
-                )
-            });
-            let helmet_tex = zones_of(8).and_then(|(_brand, zones)| {
-                let (style, variant) = meshes.helmet.as_deref().and_then(helmet_style_variant)?;
-                let hdir = rendering.join("helmet");
-                let mask = hdir.join(format!("helmet_0_{style}_tm.rx2"));
-                let masks: Vec<PathBuf> = mask.is_file().then_some(mask).into_iter().collect();
-                let detail = hdir.join(format!("helmet_0_{style}_{variant}_dm.rx2"));
-                let detail = detail.is_file().then_some(detail);
-                studio_domain::composite_equipment_texture(
-                    &masks,
-                    detail.as_deref(),
-                    &zones,
-                    "helmet_cm",
-                    zones.first().copied(), // helmet: main colour as the background
-                )
-            });
             // Skate diffuse: the first texlib in the skate folder (per-player skate
-            // texturing needs a skate-id map not yet built — a later pass).
+            // texturing needs a skate-id map not yet built — a later pass). Shared by
+            // the skater and goalie skate meshes.
             let skate_tex: Vec<String> = first_skate_texlib(&rendering.join("skate"))
                 .map(|p| vec![p.to_string_lossy().into_owned()])
                 .unwrap_or_default();
@@ -819,11 +798,9 @@ impl Registry {
                     });
                 }
             };
-            // Legs up: skates, socks, pants, jersey (the colorway pieces), then the
-            // representative head, and the shared glove/helmet shapes with their
-            // composited zone-colour diffuses.
-            push("skates", meshes.skate.clone(), skate_tex, Vec::new());
-            push("socks", meshes.sock.clone(), kit_texture("sock"), Vec::new());
+
+            // Colorway pieces every kit shares: pants + jersey (reused as-is for
+            // goalies — there is no goalie-specific jersey/pant cut) and the head.
             push("pants", meshes.pant.clone(), kit_texture("pant"), Vec::new());
             push("jersey", meshes.jersey.clone(), kit_texture("jersey"), Vec::new());
             if let Some((mesh, texs, eye_color)) = head_mesh {
@@ -837,8 +814,78 @@ impl Registry {
                     eye.into_iter().collect(),
                 );
             }
-            push("gloves", meshes.glove.clone(), Vec::new(), glove_tex.into_iter().collect());
-            push("helmet", meshes.helmet.clone(), Vec::new(), helmet_tex.into_iter().collect());
+
+            if is_goalie {
+                // ── Goalie gear ─────────────────────────────────────────────────
+                // Zone-painted pieces (blocker / trapper / pads) composite exactly
+                // like skater gloves — brand masks painted by the team's `hHbv`
+                // zone colours. The `hHbv` equipment-type codes for goalie gear are
+                // a FLAGGED BEST-GUESS (see `goalie_zone_type`); the mask takes a
+                // team-keyed `goaliehelmet_<style>_<team>_cm` paint directly.
+                let g = studio_domain::goalie_kit_mesh_defaults(&rendering);
+                let composite = |dir: &str, fe_prefix: &str, type_raw: u32, name: &str| {
+                    zones_of(type_raw).and_then(|(brand, zones)| {
+                        let (masks, detail) =
+                            resolve_goalie_masks(&rendering.join(dir), fe_prefix, brand);
+                        studio_domain::composite_equipment_texture(
+                            &masks,
+                            detail.as_deref(),
+                            &zones,
+                            name,
+                            zones.first().copied(),
+                        )
+                    })
+                };
+                let blocker_tex = composite("blocker", "feblocker", GOALIE_TYPE_BLOCKER, "blocker_cm");
+                let trapper_tex = composite("trapper", "fetrapper", GOALIE_TYPE_TRAPPER, "trapper_cm");
+                let pad_tex = composite("goaliepad", "fegoaliepad", GOALIE_TYPE_PADS, "goaliepad_cm");
+                // Mask paint: team-keyed `goaliehelmet_<style>_<team>_cm` for mask
+                // style 0 (matching the pinned mask shell), else any style-0 paint.
+                let mask_tex = goalie_mask_texture(&rendering.join("goaliehelmet"), 0, team_id);
+
+                push("skates", g.skate, skate_tex, Vec::new());
+                push("socks", g.sock, kit_texture("sock"), Vec::new());
+                push("pads", g.pad, Vec::new(), pad_tex.into_iter().collect());
+                push("blocker", g.blocker, Vec::new(), blocker_tex.into_iter().collect());
+                push("trapper", g.trapper, Vec::new(), trapper_tex.into_iter().collect());
+                push("mask", g.mask, mask_tex, Vec::new());
+                // The cage is bare metal — no paint; it renders with the flat piece colour.
+                push("cage", g.cage, Vec::new(), Vec::new());
+            } else {
+                // ── Skater gear ─────────────────────────────────────────────────
+                // Glove/helmet diffuses are *composited* from their zone masks
+                // painted with the team's `hHbv` zone colours (there are no flat
+                // glove/helmet textures on disk).
+                let glove_tex = zones_of(5).and_then(|(brand, zones)| {
+                    let (masks, detail) = resolve_glove_masks(&rendering.join("glove"), brand);
+                    studio_domain::composite_equipment_texture(
+                        &masks,
+                        detail.as_deref(),
+                        &zones,
+                        "glove_cm",
+                        None, // gloves: unpainted pixels stay transparent (ref app)
+                    )
+                });
+                let helmet_tex = zones_of(8).and_then(|(_brand, zones)| {
+                    let (style, variant) = meshes.helmet.as_deref().and_then(helmet_style_variant)?;
+                    let hdir = rendering.join("helmet");
+                    let mask = hdir.join(format!("helmet_0_{style}_tm.rx2"));
+                    let masks: Vec<PathBuf> = mask.is_file().then_some(mask).into_iter().collect();
+                    let detail = hdir.join(format!("helmet_0_{style}_{variant}_dm.rx2"));
+                    let detail = detail.is_file().then_some(detail);
+                    studio_domain::composite_equipment_texture(
+                        &masks,
+                        detail.as_deref(),
+                        &zones,
+                        "helmet_cm",
+                        zones.first().copied(), // helmet: main colour as the background
+                    )
+                });
+                push("skates", meshes.skate.clone(), skate_tex, Vec::new());
+                push("socks", meshes.sock.clone(), kit_texture("sock"), Vec::new());
+                push("gloves", meshes.glove.clone(), Vec::new(), glove_tex.into_iter().collect());
+                push("helmet", meshes.helmet.clone(), Vec::new(), helmet_tex.into_iter().collect());
+            }
 
             if pieces.is_empty() {
                 return Err(ApiError::Workspace(
@@ -2146,6 +2193,103 @@ fn resolve_glove_masks(glove_dir: &Path, brand: u32) -> (Vec<PathBuf>, Option<Pa
     let detail = glove_dir.join(format!("feglove_{brand}_0_dm.rx2"));
     let detail = detail.is_file().then_some(detail);
     (masks, detail)
+}
+
+// ── Goalie equipment (Phase 1) ──────────────────────────────────────────────
+//
+// UNVERIFIED best-guess `hHbv.jJpM` equipment-type codes for the three nine-zone
+// goalie pieces. The Legacy anchor carries types 1/2/3 (goalie brands 10–20) plus
+// type 4 (mask, brand 0); which of 1/2/3 is blocker vs trapper vs pads is NOT
+// derivable from the data alone (the prior tool only ever exposed skater 5/8 and
+// handled goalie gear per-player via `fMVl`). Confirm in-game and correct here —
+// this is the single source of truth for the mapping.
+const GOALIE_TYPE_BLOCKER: u32 = 1;
+const GOALIE_TYPE_TRAPPER: u32 = 2;
+const GOALIE_TYPE_PADS: u32 = 3;
+
+/// Zone masks (+ optional `_dm` detail) for a goalie piece of a given brand, from
+/// its `fe*` mask files (`feblocker_<model>_<brand>_<i>_tm`,
+/// `fetrapper_<model>_<brand>_<i>_tm`, `fegoaliepad_<brand>_<i>_tm`). The brand is
+/// the numeric token before the trailing mask index, so one rule covers all three
+/// naming shapes. Falls back to the lowest brand present when the team's brand
+/// ships no masks, so the piece is still painted rather than left bare.
+fn resolve_goalie_masks(dir: &Path, fe_prefix: &str, brand: u32) -> (Vec<PathBuf>, Option<PathBuf>) {
+    // (brand, mask index) from a stem whose last two numeric tokens are brand, index.
+    let brand_idx = |core: &str| -> Option<(u32, u32)> {
+        let nums: Vec<u32> = core.split('_').filter_map(|t| t.parse::<u32>().ok()).collect();
+        (nums.len() >= 2).then(|| (nums[nums.len() - 2], nums[nums.len() - 1]))
+    };
+    let Ok(rd) = std::fs::read_dir(dir) else {
+        return (Vec::new(), None);
+    };
+    let files: Vec<(String, PathBuf)> = rd
+        .filter_map(|e| e.ok())
+        .map(|e| (e.file_name().to_string_lossy().to_ascii_lowercase(), e.path()))
+        .filter(|(n, _)| n.starts_with(fe_prefix) && n.ends_with(".rx2"))
+        .collect();
+    let masks_for = |b: u32| -> (Vec<PathBuf>, Option<PathBuf>) {
+        let mut masks: Vec<(u32, PathBuf)> = Vec::new();
+        let mut detail = None;
+        for (n, p) in &files {
+            let stem = n.strip_suffix(".rx2").unwrap_or(n);
+            if let Some(core) = stem.strip_suffix("_tm") {
+                if brand_idx(core).is_some_and(|(bb, _)| bb == b) {
+                    masks.push((brand_idx(core).unwrap().1, p.clone()));
+                }
+            } else if let Some(core) = stem.strip_suffix("_dm") {
+                if brand_idx(core).is_some_and(|(bb, _)| bb == b) {
+                    detail = Some(p.clone());
+                }
+            }
+        }
+        masks.sort_by_key(|(i, _)| *i);
+        (masks.into_iter().map(|(_, p)| p).collect(), detail)
+    };
+    let (masks, detail) = masks_for(brand);
+    if !masks.is_empty() {
+        return (masks, detail);
+    }
+    // Fall back to the lowest brand that ships a mask set.
+    let mut brands: Vec<u32> = files
+        .iter()
+        .filter_map(|(n, _)| {
+            let stem = n.strip_suffix(".rx2").unwrap_or(n);
+            stem.strip_suffix("_tm").and_then(brand_idx).map(|(b, _)| b)
+        })
+        .collect();
+    brands.sort_unstable();
+    brands.dedup();
+    for b in brands {
+        let set = masks_for(b);
+        if !set.0.is_empty() {
+            return set;
+        }
+    }
+    (Vec::new(), None)
+}
+
+/// The team's goalie-mask paint texture path — the team-keyed
+/// `goaliehelmet_<style>_<team>_cm.rx2` for the given mask style, falling back to
+/// any style-matched paint so the mask is dressed rather than bare.
+fn goalie_mask_texture(dir: &Path, style: u32, team_id: u64) -> Vec<String> {
+    let exact = dir.join(format!("goaliehelmet_{style}_{team_id}_cm.rx2"));
+    if exact.is_file() {
+        return vec![exact.to_string_lossy().into_owned()];
+    }
+    let prefix = format!("goaliehelmet_{style}_");
+    let mut hits: Vec<PathBuf> = std::fs::read_dir(dir)
+        .into_iter()
+        .flatten()
+        .filter_map(|e| e.ok().map(|e| e.path()))
+        .filter(|p| {
+            p.file_name().and_then(|s| s.to_str()).is_some_and(|n| {
+                let l = n.to_ascii_lowercase();
+                l.starts_with(&prefix) && l.ends_with("_cm.rx2")
+            })
+        })
+        .collect();
+    hits.sort();
+    hits.into_iter().next().map(|p| vec![p.to_string_lossy().into_owned()]).unwrap_or_default()
 }
 
 /// The first `texlib_*.rx2` (sorted) in the skate folder — a stand-in skate

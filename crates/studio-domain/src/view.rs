@@ -308,6 +308,9 @@ pub struct PlayerSummary {
     pub contract_status: Option<String>,
     /// Two-way contract flag (`LoVD`).
     pub is_two_way: Option<bool>,
+    /// `true` when this player is a goaltender (`PlayerKind::Goalie`) — drives the goalie-gear kit
+    /// preview (goalie meshes + equipment) instead of the skater set.
+    pub is_goalie: bool,
 }
 
 /// The full Player detail: curated identity, ratings (the kind-correct companion's fields), roster
@@ -572,6 +575,7 @@ pub fn player_summaries(
                     }
                 }),
                 is_two_way: read_dec(twoway_f, p.bio_record).map(|r| r != 0),
+                is_goalie: p.kind == PlayerKind::Goalie,
             }
         })
         .collect()

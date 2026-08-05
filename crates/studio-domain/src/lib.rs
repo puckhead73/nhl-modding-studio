@@ -55,7 +55,8 @@ pub use head_preview::{
     decode_eye_texture, decode_head_preview, HeadPreview, PreviewSubmesh, PreviewTexture,
 };
 pub use kit_preview::{
-    decode_kit_preview, kit_mesh_defaults, KitMeshDefaults, KitPiece, KitPieceInput, KitPreview,
+    decode_kit_preview, goalie_kit_mesh_defaults, kit_mesh_defaults, GoalieKitMeshDefaults,
+    KitMeshDefaults, KitPiece, KitPieceInput, KitPreview,
 };
 pub use equipment_texture::composite_equipment_texture;
 pub use attributes::{

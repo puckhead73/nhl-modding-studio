@@ -77,6 +77,12 @@ fn piece_label(kind: &str) -> String {
         "pants" => "Pants",
         "socks" => "Socks",
         "skates" => "Skates",
+        // Goalie gear.
+        "mask" => "Goalie Mask",
+        "cage" => "Mask Cage",
+        "pads" => "Leg Pads",
+        "blocker" => "Blocker",
+        "trapper" => "Trapper",
         other => return other.to_string(),
     }
     .to_string()
@@ -99,6 +105,11 @@ fn piece_keyword(kind: &str) -> &'static str {
         "pants" => "pant",
         "socks" => "sock",
         "skates" => "skate",
+        // Goalie gear (the composited/direct textures are named after the piece).
+        "mask" => "goaliehelmet",
+        "pads" => "goaliepad",
+        "blocker" => "blocker",
+        "trapper" => "trapper",
         _ => "",
     }
 }
@@ -270,6 +281,67 @@ pub fn kit_mesh_defaults(rendering_root: &std::path::Path) -> KitMeshDefaults {
         glove,
         helmet,
         skate,
+    }
+}
+
+/// The shared-shape default meshes for a **goalie** kit. Goalies swap the skater
+/// gloves/helmet/skate/sock for their own gear (mask + cage, leg pads, blocker,
+/// trapper, goalie skate, goalie sock) but reuse the team jersey/pant cut (there is
+/// no goalie-specific jersey/pant mesh in the Legacy tree). `None` for any piece
+/// whose folder/mesh is absent.
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
+pub struct GoalieKitMeshDefaults {
+    pub jersey: Option<PathBuf>,
+    pub pant: Option<PathBuf>,
+    /// Goalie sock (`sock/goaliesock_<model>_<lod>`).
+    pub sock: Option<PathBuf>,
+    /// Goalie skate (`skate/goalieskate_<lod>`).
+    pub skate: Option<PathBuf>,
+    /// Mask shell (`goaliehelmet/helmet_<style>_<lod>`).
+    pub mask: Option<PathBuf>,
+    /// Mask cage (`goaliehelmet/cage_<style>_<a>_<lod>`), drawn with the mask.
+    pub cage: Option<PathBuf>,
+    /// Leg pads (`goaliepad/goaliepad_<lod>`).
+    pub pad: Option<PathBuf>,
+    /// Blocker (`blocker/blocker_<model>_<lod>`).
+    pub blocker: Option<PathBuf>,
+    /// Trapper / catch glove (`trapper/trapper_<model>_<lod>`).
+    pub trapper: Option<PathBuf>,
+}
+
+/// Resolve the shared goalie meshes under an install's `rendering` root. Pins the
+/// high-detail LOD (2) where present — the same "pin the best, else first" pattern
+/// as the skater glove/skate — and falls back to any mesh of the family otherwise.
+pub fn goalie_kit_mesh_defaults(rendering_root: &std::path::Path) -> GoalieKitMeshDefaults {
+    let dir = |name: &str| rendering_root.join(name);
+    // Pin `<prefix><suffix>` when it exists, else the first mesh matching `prefix`.
+    let pin = |folder: PathBuf, prefix: &'static str, pinned: &str| -> Option<PathBuf> {
+        let p = folder.join(pinned);
+        if p.is_file() {
+            Some(p)
+        } else {
+            first_file(&folder, move |n| is_mesh_named(n, prefix))
+        }
+    };
+    GoalieKitMeshDefaults {
+        jersey: first_file(&dir("jersey"), |n| is_mesh_named(n, "jersey_")),
+        pant: first_file(&dir("pant"), |n| is_mesh_named(n, "pant_")),
+        sock: pin(dir("sock"), "goaliesock_", "goaliesock_1_2.rx2"),
+        skate: pin(dir("skate"), "goalieskate_", "goalieskate_2.rx2"),
+        // The mask shell + cage in the goaliehelmet folder are `helmet_*` / `cage_*`
+        // meshes keyed by mask style; pin style 0, LOD 2.
+        mask: pin(dir("goaliehelmet"), "helmet_", "helmet_0_2.rx2"),
+        cage: {
+            let c = dir("goaliehelmet").join("cage_0_0_2.rx2");
+            if c.is_file() {
+                Some(c)
+            } else {
+                first_file(&dir("goaliehelmet"), |n| is_mesh_named(n, "cage_"))
+            }
+        },
+        pad: pin(dir("goaliepad"), "goaliepad_", "goaliepad_2.rx2"),
+        blocker: pin(dir("blocker"), "blocker_", "blocker_0_2.rx2"),
+        trapper: pin(dir("trapper"), "trapper_", "trapper_0_2.rx2"),
     }
 }
 
@@ -531,5 +603,63 @@ mod tests {
         // The union spans a whole standing figure (skates/socks near the ice to
         // the helmet ~2 m up), not a single piece.
         assert!(kit.span > 1.2, "kit spans a full figure, got {}", kit.span);
+    }
+
+    #[test]
+    fn legacy_x360_goalie_mesh_defaults_resolve() {
+        let root = std::path::Path::new(
+            r"X:\Games\Emulation\Roms\XBOX360\NHL Legacy\NHL Legacy\rendering",
+        );
+        if !root.is_dir() {
+            eprintln!("skipping: {} not present", root.display());
+            return;
+        }
+        let g = goalie_kit_mesh_defaults(root);
+        // Every goalie piece resolves to a real mesh on disk.
+        for (name, got) in [
+            ("jersey", &g.jersey),
+            ("pant", &g.pant),
+            ("sock", &g.sock),
+            ("skate", &g.skate),
+            ("mask", &g.mask),
+            ("cage", &g.cage),
+            ("pad", &g.pad),
+            ("blocker", &g.blocker),
+            ("trapper", &g.trapper),
+        ] {
+            assert!(got.is_some(), "goalie {name} mesh resolved");
+            assert!(got.as_ref().unwrap().is_file(), "goalie {name} mesh exists on disk");
+        }
+        // The goalie-specific pieces come from their own folders/prefixes.
+        assert!(g.sock.as_ref().unwrap().to_string_lossy().contains("goaliesock"));
+        assert!(g.skate.as_ref().unwrap().to_string_lossy().contains("goalieskate"));
+        assert!(g.pad.as_ref().unwrap().to_string_lossy().contains("goaliepad"));
+
+        // A goalie kit assembles into a common model space (bind-pose, no skinning).
+        let piece = |kind: &str, mesh: &Option<PathBuf>| {
+            mesh.clone().map(|mesh_path| KitPieceInput {
+                kind: kind.into(),
+                mesh_path,
+                texture_paths: vec![],
+                prebuilt_textures: vec![],
+            })
+        };
+        let inputs: Vec<KitPieceInput> = [
+            piece("pads", &g.pad),
+            piece("blocker", &g.blocker),
+            piece("trapper", &g.trapper),
+            piece("mask", &g.mask),
+            piece("skates", &g.skate),
+            piece("socks", &g.sock),
+        ]
+        .into_iter()
+        .flatten()
+        .collect();
+        let kit = decode_kit_preview(&inputs).expect("goalie kit assembles");
+        assert_eq!(kit.pieces.len(), inputs.len(), "all goalie pieces decoded");
+        for p in &kit.pieces {
+            let verts: usize = p.submeshes.iter().map(|s| s.positions.len()).sum();
+            assert!(verts > 0, "{} has geometry", p.kind);
+        }
     }
 }
