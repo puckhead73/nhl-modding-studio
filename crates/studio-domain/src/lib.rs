@@ -62,9 +62,10 @@ pub use kit_preview::{
 };
 pub use equipment_texture::composite_equipment_texture;
 pub use equipment_slots::{
-    list_equipment_slot_assets, match_stem_id, rename_stem, slot_spec, EquipmentSlotAsset,
-    EquipmentSlotSpec, SLOT_SPECS,
+    list_equipment_slot_assets, match_stem_id, rename_stem, slot_enum_label, slot_spec,
+    EquipmentSlotAsset, EquipmentSlotSpec, SLOT_SPECS,
 };
+pub use tdb_enums::EnumRegistry;
 pub use equipment_piece::{
     color_map_slot, resolve_equipment_piece, slot_preview_pieces, EquipmentPiece,
 };

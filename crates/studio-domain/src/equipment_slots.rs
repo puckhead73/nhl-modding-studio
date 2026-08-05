@@ -21,6 +21,7 @@
 
 use std::collections::BTreeMap;
 use std::path::Path;
+use tdb_enums::EnumRegistry;
 
 /// Texture-map suffixes EA appends to per-ID render files. Used to disambiguate the
 /// two `helmet_…` filename shapes (plain mesh vs mapped texture).
@@ -260,6 +261,21 @@ pub const SLOT_SPECS: &[EquipmentSlotSpec] = &[
 /// into a user-facing validation error listing the valid keys).
 pub fn slot_spec(key: &str) -> Option<&'static EquipmentSlotSpec> {
     SLOT_SPECS.iter().find(|s| s.key == key)
+}
+
+/// The operator-facing model name for one equipment id, resolved from the slot's anchored enum
+/// vocabulary (`defs/enums/*.toml`). `None` when the slot has no vocabulary (goalie gear) or the id
+/// isn't catalogued — the caller then falls back to a generated label. Matched by the slot's
+/// `enum_name` rather than its `(table, field)`, so the goalie stick (which shares `xmja.wXFx` with
+/// the skater stick but has no vocabulary) does not borrow the skater stick's names.
+pub fn slot_enum_label(spec: &EquipmentSlotSpec, enums: &EnumRegistry, id: u32) -> Option<String> {
+    let name = spec.enum_name?;
+    enums
+        .defs()
+        .iter()
+        .find(|d| d.name == name)
+        .and_then(|d| d.label(id as i64))
+        .map(str::to_owned)
 }
 
 /// Try to extract this slot's equipment ID from a filename stem.

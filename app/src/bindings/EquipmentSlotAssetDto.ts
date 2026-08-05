@@ -4,4 +4,9 @@ import type { EquipmentSlotFileDto } from "./EquipmentSlotFileDto";
 /**
  * One equipment id and the render files it owns, from scanning the slot folder.
  */
-export type EquipmentSlotAssetDto = { id: number, files: Array<EquipmentSlotFileDto>, };
+export type EquipmentSlotAssetDto = { id: number, 
+/**
+ * Resolved model name from the slot's anchored enum vocabulary ("CCM Ribcore 40K"), or
+ * `null` for an uncatalogued id / a slot with no vocabulary — the UI then shows the raw id.
+ */
+label: string | null, files: Array<EquipmentSlotFileDto>, };

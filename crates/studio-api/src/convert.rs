@@ -657,9 +657,13 @@ pub fn team_equipment_dto(e: &studio_domain::TeamEquipment) -> TeamEquipmentDto 
     }
 }
 
-pub fn equipment_slot_asset_dto(a: &studio_domain::EquipmentSlotAsset) -> EquipmentSlotAssetDto {
+pub fn equipment_slot_asset_dto(
+    a: &studio_domain::EquipmentSlotAsset,
+    label: Option<String>,
+) -> EquipmentSlotAssetDto {
     EquipmentSlotAssetDto {
         id: a.id,
+        label,
         files: a
             .files
             .iter()

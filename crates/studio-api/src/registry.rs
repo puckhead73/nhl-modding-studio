@@ -66,6 +66,10 @@ pub struct Registry {
     /// The non-blocking Roster Builder import ledger (`ea_import_ledger.db` beside the corpus). Opened
     /// when a corpus opens; `None`/disabled degrades to "no dedup warnings", never blocking an import.
     ledger: Mutex<Option<InstanceRegistry>>,
+    /// The confirmed equipment-model enum vocabularies (`defs/enums/*.toml`), loaded once and shared
+    /// across Hockey Shop slot scans to resolve id → model name. DB-independent, so it lives here
+    /// rather than inside a `Workspace`.
+    shop_enums: Mutex<Option<Arc<studio_domain::EnumRegistry>>>,
 }
 
 /// The on-disk maxima sidecar: the maxima plus the corpus fingerprint it was computed from.
@@ -1019,20 +1023,40 @@ impl Registry {
             .collect()
     }
 
-    /// Scan the install's rendering tree for one slot's items (id → render files).
-    /// Needs only the asset roots — the render tree is independent of the open DB.
+    /// The confirmed equipment-model enum vocabularies, loaded once from the bundled `defs/` tree and
+    /// cached. Degrades to an empty registry (all ids show as raw numbers) if the dir is unreadable.
+    fn shop_enums(&self, defs_root: &Path) -> Arc<studio_domain::EnumRegistry> {
+        let mut guard = self.shop_enums.lock().unwrap();
+        if let Some(reg) = guard.as_ref() {
+            return reg.clone();
+        }
+        let reg = Arc::new(
+            studio_domain::EnumRegistry::from_dir(defs_root.join("enums")).unwrap_or_default(),
+        );
+        *guard = Some(reg.clone());
+        reg
+    }
+
+    /// Scan the install's rendering tree for one slot's items (id → render files), resolving each
+    /// id's model name from the slot's enum vocabulary. Needs the asset roots plus the bundled `defs`
+    /// dir (for the vocabularies) — both independent of the open DB.
     pub fn list_equipment_slot_assets(
         &self,
         args: &AssetRootsArgsDto,
         slot: &str,
+        defs_root: &Path,
     ) -> Result<Vec<EquipmentSlotAssetDto>, ApiError> {
         let spec = studio_domain::slot_spec(slot)
             .ok_or_else(|| ApiError::Workspace(format!("unknown equipment slot `{slot}`")))?;
         let roots = resolve_roots(args);
         let rendering = PathBuf::from(&roots.rendering);
+        let enums = self.shop_enums(defs_root);
         Ok(studio_domain::list_equipment_slot_assets(&rendering, spec)
             .iter()
-            .map(convert::equipment_slot_asset_dto)
+            .map(|a| {
+                let label = studio_domain::slot_enum_label(spec, &enums, a.id);
+                convert::equipment_slot_asset_dto(a, label)
+            })
             .collect())
     }
 

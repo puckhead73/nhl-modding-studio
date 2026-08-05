@@ -773,6 +773,9 @@ pub struct EquipmentSlotFileDto {
 #[derive(Serialize, TS)]
 pub struct EquipmentSlotAssetDto {
     pub id: u32,
+    /// Resolved model name from the slot's anchored enum vocabulary ("CCM Ribcore 40K"), or
+    /// `null` for an uncatalogued id / a slot with no vocabulary — the UI then shows the raw id.
+    pub label: Option<String>,
     pub files: Vec<EquipmentSlotFileDto>,
 }
 

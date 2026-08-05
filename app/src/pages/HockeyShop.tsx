@@ -1,11 +1,14 @@
-// Hockey Shop — per-equipment-slot browse + 3D preview (read-only first cut).
+// Hockey Shop — the studio's port of the prior app's Equipment Studio. A category strip
+// (Skater / Goalie) over a slot-tab strip, each slot a three-column view:
 //
-// The studio's port of the prior app's Equipment Studio. Pick a slot (skater or
-// goalie gear), browse every equipment id the install ships for it, and preview the
-// selected item in 3D with its texture files. Store (import/sync) and install-to-game
-// arrive in later phases. This never edits the .db — gear is referenced by numeric
-// ids on each player's xmja/fMVl record; to put an item on a player, set that field
-// in the player's Equipment tab.
+//   • Left   — the game's shipped equipment ids for the slot, searchable by id or model name,
+//              each row resolving to its catalogued name (from defs/enums/*.toml) where one exists.
+//   • Center — a 3D preview of the selected item + its decoded texture files.
+//   • Right  — the Store: a disk-backed library of textures (sync from game / import PNG),
+//              with entries already installed in the game greyed out, plus install-to-game.
+//
+// This never edits the .db — gear is referenced by numeric ids on each player's xmja/fMVl
+// record; to put an item on a player, set that slot's field in the player's Equipment tab.
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -20,6 +23,13 @@ import type { EquipmentSlotAssetDto } from "../bindings/EquipmentSlotAssetDto";
 import type { HockeyShopItemDto } from "../bindings/HockeyShopItemDto";
 import type { InstallStoreItemRequestDto } from "../bindings/InstallStoreItemRequestDto";
 
+type Category = "skater" | "goalie";
+
+const CATEGORIES: { key: Category; label: string }[] = [
+  { key: "skater", label: "Skater Equipment" },
+  { key: "goalie", label: "Goalie Equipment" },
+];
+
 export function HockeyShopPage() {
   const { installDir, rootArgs } = useAssetRootArgs();
 
@@ -28,13 +38,14 @@ export function HockeyShopPage() {
     queryFn: () => call("equipment_slots", {}),
     staleTime: Infinity,
   });
-  const slots = slotsQ.data ?? [];
+  const slots = useMemo(() => slotsQ.data ?? [], [slotsQ.data]);
 
   const [slotKey, setSlotKey] = useState<string>("stick");
   const slot = slots.find((s) => s.key === slotKey) ?? slots[0];
+  const activeCategory: Category = (slot?.category as Category) ?? "skater";
 
-  // The store library lives in an app-managed folder (Tauri's app-data dir), kept
-  // separate from the game install so operator imports survive re-extraction.
+  // The store library lives in an app-managed folder (Tauri's app-data dir), kept separate from
+  // the game install so operator imports survive re-extraction.
   const storeRootQ = useQuery({
     queryKey: ["hockeyShopStoreRoot"],
     queryFn: async () => join(await appDataDir(), "hockey_shop"),
@@ -52,85 +63,85 @@ export function HockeyShopPage() {
   }
   if (slotsQ.isLoading) return <Spinner label="Loading equipment slots…" />;
 
-  const skater = slots.filter((s) => s.category === "skater");
-  const goalie = slots.filter((s) => s.category === "goalie");
+  const setCategory = (next: Category) => {
+    if (next === activeCategory) return;
+    const first = slots.find((s) => s.category === next);
+    if (first) setSlotKey(first.key);
+  };
+
+  const categorySlots = slots.filter((s) => s.category === activeCategory);
 
   return (
-    <div className="space-y-3">
-      <header className="space-y-1">
+    <div className="flex min-h-0 flex-1 flex-col gap-3">
+      <header className="shrink-0 space-y-1">
         <h1 className="text-lg font-semibold text-slate-100">Hockey Shop</h1>
         <p className="text-xs text-slate-500">
-          Browse the equipment the install ships for each slot and preview it in 3D. Editing a
-          player's gear happens on their Equipment tab — the shop reads and (later) authors the render
-          files, never the database.
+          Browse the equipment the install ships for each slot and preview it in 3D. The store on the
+          right is a library of textures you can build up and install into the game. Editing a
+          player's gear happens on their Equipment tab — the shop reads and authors the render files,
+          never the database.
         </p>
       </header>
 
-      <div className="flex flex-wrap items-start gap-3">
-        {/* Slot picker — skater + goalie category strips. */}
-        <nav className="w-48 shrink-0 space-y-3">
-          <SlotGroup title="Skater" slots={skater} active={slot?.key} onPick={setSlotKey} />
-          <SlotGroup title="Goalie" slots={goalie} active={slot?.key} onPick={setSlotKey} />
-        </nav>
-
-        {slot ? (
-          <SlotShop
-            key={slot.key}
-            slot={slot}
-            installDir={installDir}
-            rootArgs={rootArgs}
-            storeRoot={storeRoot}
-          />
-        ) : null}
-      </div>
-    </div>
-  );
-}
-
-function SlotGroup({
-  title,
-  slots,
-  active,
-  onPick,
-}: {
-  title: string;
-  slots: EquipmentSlotDto[];
-  active: string | undefined;
-  onPick: (key: string) => void;
-}) {
-  return (
-    <div className="rounded-lg border border-slate-800 bg-slate-900/40 p-2">
-      <div className="px-1 pb-1 text-[10px] font-semibold uppercase tracking-wide text-slate-500">
-        {title}
-      </div>
-      <ul className="space-y-0.5">
-        {slots.map((s) => {
-          const on = s.key === active;
+      {/* Category strip. */}
+      <div className="flex shrink-0 items-center gap-2">
+        {CATEGORIES.map((c) => {
+          const on = c.key === activeCategory;
           return (
-            <li key={s.key}>
-              <button
-                type="button"
-                onClick={() => onPick(s.key)}
-                title={s.field_ref}
-                className={
-                  "w-full rounded px-2 py-1 text-left text-sm transition-colors " +
-                  (on
-                    ? "bg-sky-900/50 font-medium text-sky-100"
-                    : "text-slate-300 hover:bg-slate-800/60 hover:text-slate-100")
-                }
-              >
-                {s.label}
-              </button>
-            </li>
+            <button
+              key={c.key}
+              type="button"
+              onClick={() => setCategory(c.key)}
+              className={
+                "rounded-md px-4 py-1.5 text-sm font-semibold transition-colors " +
+                (on
+                  ? "bg-sky-600 text-white"
+                  : "bg-slate-800/60 text-slate-300 hover:bg-slate-800 hover:text-slate-100")
+              }
+            >
+              {c.label}
+            </button>
           );
         })}
-      </ul>
+      </div>
+
+      {/* Slot tabs for the active category. */}
+      <div className="flex shrink-0 items-center gap-1 overflow-x-auto border-b border-slate-800 px-1">
+        {categorySlots.map((s) => {
+          const on = s.key === slot?.key;
+          return (
+            <button
+              key={s.key}
+              type="button"
+              onClick={() => setSlotKey(s.key)}
+              title={s.field_ref}
+              className={
+                "shrink-0 rounded-t-md px-3 py-1.5 text-sm transition-colors " +
+                (on
+                  ? "border-b-2 border-sky-500 bg-slate-900/80 text-slate-100"
+                  : "text-slate-400 hover:text-slate-200")
+              }
+            >
+              {s.label}
+            </button>
+          );
+        })}
+      </div>
+
+      {slot ? (
+        <SlotShop
+          key={slot.key}
+          slot={slot}
+          installDir={installDir}
+          rootArgs={rootArgs}
+          storeRoot={storeRoot}
+        />
+      ) : null}
     </div>
   );
 }
 
-/** One slot's browse + preview: item list on the left, 3D preview + texture tiles
- *  on the right. Its own component so switching slots resets the selection. */
+/** One slot's three-column view: game list (left), 3D preview + textures (center), store (right). */
 function SlotShop({
   slot,
   installDir,
@@ -160,97 +171,127 @@ function SlotShop({
     }
   }, [assets, selectedId]);
 
+  // Sort by model name where known (uncatalogued ids fall to the bottom, id-ascending), matching
+  // the old app's alphabetical-by-label ordering.
+  const sorted = useMemo(() => {
+    return [...assets].sort((a, b) => {
+      if (a.label && b.label) return a.label.localeCompare(b.label);
+      if (a.label) return -1;
+      if (b.label) return 1;
+      return a.id - b.id;
+    });
+  }, [assets]);
+
   const filtered = useMemo(() => {
-    const q = query.trim();
-    if (!q) return assets;
-    return assets.filter((a) => String(a.id).includes(q));
-  }, [assets, query]);
+    const q = query.trim().toLowerCase();
+    if (!q) return sorted;
+    return sorted.filter(
+      (a) => String(a.id).includes(q) || (a.label?.toLowerCase().includes(q) ?? false),
+    );
+  }, [sorted, query]);
 
   const selected = assets.find((a) => a.id === selectedId) ?? null;
+  const gameIds = useMemo(() => new Set(assets.map((a) => a.id)), [assets]);
 
   return (
-    <>
-      {/* Item list. */}
-      <section className="w-56 shrink-0 rounded-lg border border-slate-800 bg-slate-900/40 p-2">
-        <div className="mb-2 flex items-baseline justify-between gap-2">
-          <span className="text-xs font-semibold text-slate-200">{slot.label}</span>
-          <span className="text-[10px] text-slate-500">
-            {assets.length} {assets.length === 1 ? "item" : "items"}
-          </span>
+    <div className="flex min-h-0 flex-1 gap-3">
+      {/* Left — game item list. */}
+      <aside className="flex w-72 shrink-0 flex-col rounded-lg border border-slate-800 bg-slate-900/40">
+        <header className="shrink-0 border-b border-slate-800 p-2.5">
+          <div className="flex items-baseline justify-between gap-2">
+            <span className="text-sm font-semibold text-slate-100">{slot.label}</span>
+            <span className="text-[10px] text-slate-500">
+              {filtered.length} / {assets.length}
+            </span>
+          </div>
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search by id or name…"
+            className="mt-2 w-full rounded border border-slate-700 bg-slate-950 px-2 py-1 text-xs text-slate-100 placeholder-slate-600 focus:border-sky-600 focus:outline-none"
+          />
+        </header>
+        <div className="min-h-0 flex-1 overflow-y-auto">
+          {assetsQ.isLoading ? (
+            <div className="p-3">
+              <Spinner label="Scanning…" />
+            </div>
+          ) : assetsQ.isError ? (
+            <p className="p-3 text-xs text-rose-400">{String(assetsQ.error)}</p>
+          ) : filtered.length === 0 ? (
+            <p className="px-3 py-6 text-center text-xs text-slate-500">
+              {assets.length === 0
+                ? `No ${slot.label.toLowerCase()} render files under this install.`
+                : "No matches."}
+            </p>
+          ) : (
+            <ul>
+              {filtered.map((a) => {
+                const on = a.id === selectedId;
+                return (
+                  <li key={a.id}>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedId(a.id)}
+                      title={`${a.files.length} render file${a.files.length === 1 ? "" : "s"}`}
+                      className={
+                        "flex w-full items-baseline gap-2 border-b border-slate-900 px-3 py-1.5 text-left text-xs transition-colors " +
+                        (on ? "bg-sky-900/40 text-sky-50" : "text-slate-200 hover:bg-slate-800/60")
+                      }
+                    >
+                      <span className="w-8 shrink-0 font-mono text-[10px] text-slate-500">
+                        {a.id}
+                      </span>
+                      <span
+                        className={
+                          "min-w-0 flex-1 truncate" + (a.label ? "" : " italic text-slate-400")
+                        }
+                      >
+                        {a.label ?? `#${a.id}`}
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
         </div>
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Filter by id…"
-          className="mb-2 w-full rounded border border-slate-700 bg-slate-950 px-2 py-1 text-xs text-slate-100 focus:border-sky-600 focus:outline-none"
-        />
-        {assetsQ.isLoading ? (
-          <Spinner label="Scanning…" />
-        ) : assetsQ.isError ? (
-          <p className="text-xs text-rose-400">{String(assetsQ.error)}</p>
-        ) : filtered.length === 0 ? (
-          <p className="px-1 py-4 text-center text-xs text-slate-500">
-            {assets.length === 0
-              ? `No ${slot.label.toLowerCase()} render files under this install.`
-              : "No ids match that filter."}
-          </p>
-        ) : (
-          <ul className="max-h-[62vh] space-y-0.5 overflow-y-auto pr-1">
-            {filtered.map((a) => {
-              const on = a.id === selectedId;
-              return (
-                <li key={a.id}>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedId(a.id)}
-                    className={
-                      "flex w-full items-baseline justify-between gap-2 rounded px-2 py-1 text-left text-xs transition-colors " +
-                      (on
-                        ? "bg-sky-900/50 text-sky-100"
-                        : "text-slate-300 hover:bg-slate-800/60 hover:text-slate-100")
-                    }
-                  >
-                    <span className="font-mono font-medium">#{a.id}</span>
-                    <span className="text-[10px] text-slate-500">
-                      {a.files.length} {a.files.length === 1 ? "file" : "files"}
-                    </span>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </section>
+      </aside>
 
-      {/* Preview + textures. */}
-      <section className="min-w-[28rem] flex-1 basis-[36rem] space-y-3">
-        <div className="h-[60vh] min-h-[30rem]">
+      {/* Center — 3D preview + textures. */}
+      <section className="flex min-h-0 min-w-[26rem] flex-1 flex-col gap-3 overflow-y-auto pr-1">
+        <div className="h-[58vh] min-h-[28rem] shrink-0">
           <EquipmentItemViewer roots={rootArgs} slot={slot.key} id={selectedId} />
         </div>
-        {selected ? <ItemTextures installDir={installDir} asset={selected} /> : null}
+        {selected ? (
+          <ItemTextures installDir={installDir} slot={slot} asset={selected} />
+        ) : null}
       </section>
 
-      {/* Store library. */}
+      {/* Right — the store. */}
       <aside className="w-72 shrink-0">
-        <StorePanel slot={slot} rootArgs={rootArgs} storeRoot={storeRoot} />
+        <StorePanel slot={slot} rootArgs={rootArgs} storeRoot={storeRoot} gameIds={gameIds} />
       </aside>
-    </>
+    </div>
   );
 }
 
-/** The slot's disk-backed store library: sync game items in, import a PNG, delete.
- *  Kept beside the game browser so the operator can build a personal catalog. */
+/** The slot's disk-backed store library: sync game items in, import a PNG, install, delete. Entries
+ *  extracted from an id that's currently installed in the game grey out. */
 function StorePanel({
   slot,
   rootArgs,
   storeRoot,
+  gameIds,
 }: {
   slot: EquipmentSlotDto;
   rootArgs: ReturnType<typeof useAssetRootArgs>["rootArgs"];
   storeRoot: string | null;
+  gameIds: ReadonlySet<number>;
 }) {
   const qc = useQueryClient();
   const fileInput = useRef<HTMLInputElement>(null);
+  const [search, setSearch] = useState("");
   const invalidate = () =>
     qc.invalidateQueries({ queryKey: ["hockeyShopStore", storeRoot, slot.key] });
 
@@ -282,78 +323,107 @@ function StorePanel({
     reader.onload = () => {
       const url = String(reader.result); // data:image/png;base64,XXXX
       const b64 = url.slice(url.indexOf(",") + 1);
-      const name = file.name.replace(/\.[^.]+$/, "");
+      const name = file.name.replace(/\.[^.]+$/, "").replace(/[_-]+/g, " ").trim();
       importItem.mutate({ name, author: "Me", imageBase64: b64 });
     };
     reader.readAsDataURL(file);
   };
+
+  const isInstalled = (it: HockeyShopItemDto) =>
+    it.game_asset_id != null && gameIds.has(it.game_asset_id);
+
+  const sorted = [...items].sort((a, b) => a.name.localeCompare(b.name));
+  const q = search.trim().toLowerCase();
+  const filtered = q
+    ? sorted.filter(
+        (e) => e.name.toLowerCase().includes(q) || e.author.toLowerCase().includes(q),
+      )
+    : sorted;
 
   const [installing, setInstalling] = useState<HockeyShopItemDto | null>(null);
   const busy = sync.isPending || importItem.isPending || remove.isPending;
   const err = sync.error ?? importItem.error ?? remove.error;
 
   return (
-    <div className="rounded-lg border border-slate-800 bg-slate-900/40 p-3">
-      <div className="mb-2 flex items-baseline justify-between">
-        <h3 className="text-sm font-semibold text-slate-100">Store</h3>
-        <span className="text-[10px] text-slate-500">{items.length} saved</span>
-      </div>
-
-      <div className="mb-2 flex gap-1.5">
-        <button
-          type="button"
-          onClick={() => sync.mutate()}
-          disabled={!storeRoot || busy}
-          title="Extract a texture for every game item in this slot into the store"
-          className="flex-1 rounded border border-slate-700 px-2 py-1 text-xs text-slate-300 hover:border-sky-700 hover:text-sky-200 disabled:opacity-50"
-        >
-          {sync.isPending ? "Syncing…" : "Sync game"}
-        </button>
-        <button
-          type="button"
-          onClick={() => fileInput.current?.click()}
-          disabled={!storeRoot || busy}
-          title="Import a PNG texture into this slot's store"
-          className="flex-1 rounded border border-slate-700 px-2 py-1 text-xs text-slate-300 hover:border-sky-700 hover:text-sky-200 disabled:opacity-50"
-        >
-          Import PNG…
-        </button>
+    <div className="flex h-full min-h-0 flex-col rounded-lg border border-slate-800 bg-slate-900/40">
+      <header className="shrink-0 space-y-2 border-b border-slate-800 p-2.5">
+        <div className="flex items-baseline justify-between">
+          <h3 className="text-sm font-semibold text-slate-100">Store</h3>
+          <span className="text-[10px] text-slate-500">
+            {filtered.length} / {items.length}
+          </span>
+        </div>
+        <div className="flex gap-1.5">
+          <button
+            type="button"
+            onClick={() => sync.mutate()}
+            disabled={!storeRoot || busy}
+            title="Extract a texture for every game item in this slot into the store"
+            className="flex-1 rounded border border-slate-700 px-2 py-1 text-xs text-slate-300 hover:border-sky-700 hover:text-sky-200 disabled:opacity-50"
+          >
+            {sync.isPending ? "Syncing…" : "Sync game"}
+          </button>
+          <button
+            type="button"
+            onClick={() => fileInput.current?.click()}
+            disabled={!storeRoot || busy}
+            title="Import a PNG texture into this slot's store"
+            className="flex-1 rounded border border-emerald-700/60 bg-emerald-900/40 px-2 py-1 text-xs text-emerald-100 hover:bg-emerald-900/60 disabled:opacity-50"
+          >
+            Add PNG…
+          </button>
+          <input
+            ref={fileInput}
+            type="file"
+            accept="image/png"
+            className="hidden"
+            onChange={(e) => {
+              const f = e.target.files?.[0];
+              if (f) onPickFile(f);
+              e.target.value = "";
+            }}
+          />
+        </div>
         <input
-          ref={fileInput}
-          type="file"
-          accept="image/png"
-          className="hidden"
-          onChange={(e) => {
-            const f = e.target.files?.[0];
-            if (f) onPickFile(f);
-            e.target.value = "";
-          }}
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search by name or author…"
+          className="w-full rounded border border-slate-700 bg-slate-950 px-2 py-1 text-[11px] text-slate-100 placeholder-slate-600 focus:border-sky-600 focus:outline-none"
         />
+        {err ? <p className="text-[10px] text-rose-400">{String(err)}</p> : null}
+        {sync.data && sync.data.added > 0 ? (
+          <p className="text-[10px] text-emerald-300">
+            Extracted {sync.data.added} game item{sync.data.added === 1 ? "" : "s"} into the store.
+          </p>
+        ) : null}
+      </header>
+
+      <div className="min-h-0 flex-1 overflow-y-auto p-2">
+        {itemsQ.isLoading ? (
+          <Spinner label="Loading store…" />
+        ) : filtered.length === 0 ? (
+          <p className="px-1 py-6 text-center text-xs text-slate-500">
+            {items.length === 0
+              ? "Empty. “Sync game” pulls this slot's shipped textures in, or add your own PNG."
+              : "No matches."}
+          </p>
+        ) : (
+          <ul className="space-y-1.5">
+            {filtered.map((it) => (
+              <StoreRow
+                key={it.id}
+                item={it}
+                slot={slot.key}
+                storeRoot={storeRoot!}
+                installed={isInstalled(it)}
+                onInstall={() => setInstalling(it)}
+                onDelete={() => remove.mutate(it.id)}
+                deleting={remove.isPending}
+              />
+            ))}
+          </ul>
+        )}
       </div>
-
-      {err ? <p className="mb-2 text-xs text-rose-400">{String(err)}</p> : null}
-
-      {itemsQ.isLoading ? (
-        <Spinner label="Loading store…" />
-      ) : items.length === 0 ? (
-        <p className="px-1 py-4 text-center text-xs text-slate-500">
-          Empty. “Sync game” pulls this slot's shipped textures in, or import your own PNG.
-        </p>
-      ) : (
-        <ul className="max-h-[56vh] space-y-1.5 overflow-y-auto pr-1">
-          {items.map((it) => (
-            <StoreRow
-              key={it.id}
-              item={it}
-              slot={slot.key}
-              storeRoot={storeRoot!}
-              onInstall={() => setInstalling(it)}
-              onDelete={() => remove.mutate(it.id)}
-              deleting={remove.isPending}
-            />
-          ))}
-        </ul>
-      )}
 
       {installing && storeRoot ? (
         <InstallModal
@@ -378,6 +448,7 @@ function StoreRow({
   item,
   slot,
   storeRoot,
+  installed,
   onInstall,
   onDelete,
   deleting,
@@ -385,6 +456,7 @@ function StoreRow({
   item: HockeyShopItemDto;
   slot: string;
   storeRoot: string;
+  installed: boolean;
   onInstall: () => void;
   onDelete: () => void;
   deleting: boolean;
@@ -396,10 +468,22 @@ function StoreRow({
     retry: false,
   });
   return (
-    <li className="flex items-center gap-2 rounded border border-slate-800 bg-slate-900/50 p-1.5">
+    <li
+      className={
+        "flex items-center gap-2 rounded border p-1.5 " +
+        (installed
+          ? "border-emerald-900/50 bg-emerald-950/30"
+          : "border-slate-800 bg-slate-900/50")
+      }
+    >
       <div className="h-10 w-10 shrink-0 overflow-hidden rounded border border-slate-800 bg-slate-950">
         {tex.data ? (
-          <img src={tex.data} alt={item.name} className="h-full w-full object-cover" style={{ imageRendering: "pixelated" }} />
+          <img
+            src={tex.data}
+            alt={item.name}
+            className="h-full w-full object-cover"
+            style={{ imageRendering: "pixelated" }}
+          />
         ) : null}
       </div>
       <div className="min-w-0 flex-1">
@@ -408,6 +492,7 @@ function StoreRow({
         </p>
         <p className="truncate text-[10px] text-slate-500">
           {item.source === "game" ? "game" : item.author} · {item.width}×{item.height}
+          {installed ? " · installed" : ""}
         </p>
       </div>
       <button
@@ -431,9 +516,9 @@ function StoreRow({
   );
 }
 
-/** Install a store item into the game at a chosen equipment id: pick the id, see a
- *  live plan (overwrite vs create, donor, warnings, blockers), then apply. The apply
- *  writes render files into the install (a .bak first) — it never edits the .db. */
+/** Install a store item into the game at a chosen equipment id: pick the id, see a live plan
+ *  (overwrite vs create, donor, warnings, blockers), then apply. The apply writes render files
+ *  into the install (a .bak first) — it never edits the .db. */
 function InstallModal({
   slot,
   rootArgs,
@@ -481,7 +566,11 @@ function InstallModal({
           <p className="text-sm font-medium text-slate-100">
             Install “{item.name}” — {slot.label}
           </p>
-          <button type="button" onClick={onClose} className="rounded border border-slate-700 px-2 py-0.5 text-xs text-slate-200 hover:bg-slate-800">
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded border border-slate-700 px-2 py-0.5 text-xs text-slate-200 hover:bg-slate-800"
+          >
             Close
           </button>
         </header>
@@ -506,24 +595,35 @@ function InstallModal({
           ) : p ? (
             <div className="space-y-2 rounded-md border border-slate-800 bg-slate-950/50 p-3 text-xs">
               <p className="text-slate-300">
-                Mode: <b className={p.mode === "overwrite" ? "text-amber-300" : "text-sky-300"}>{p.mode}</b>
+                Mode:{" "}
+                <b className={p.mode === "overwrite" ? "text-amber-300" : "text-sky-300"}>
+                  {p.mode}
+                </b>
                 {p.mode === "overwrite" && p.target_existing_label ? (
                   <span className="text-slate-500"> — replaces “{p.target_existing_label}”</span>
                 ) : null}
                 {p.mode === "create" && p.donor_id != null ? (
-                  <span className="text-slate-500"> — clones donor id {p.donor_id} ({p.cloned_files.length} files)</span>
+                  <span className="text-slate-500">
+                    {" "}
+                    — clones donor id {p.donor_id} ({p.cloned_files.length} files)
+                  </span>
                 ) : null}
               </p>
               {p.target_color_file ? (
                 <p className="truncate text-slate-500" title={p.target_color_file}>
-                  → {p.target_color_file} · tex {p.target_texture_index} · {p.target_width}×{p.target_height}
+                  → {p.target_color_file} · tex {p.target_texture_index} · {p.target_width}×
+                  {p.target_height}
                 </p>
               ) : null}
               {p.warnings.map((w, i) => (
-                <p key={i} className="text-amber-400/80">⚠ {w}</p>
+                <p key={i} className="text-amber-400/80">
+                  ⚠ {w}
+                </p>
               ))}
               {p.blocking_errors.map((e, i) => (
-                <p key={i} className="text-rose-400">✕ {e}</p>
+                <p key={i} className="text-rose-400">
+                  ✕ {e}
+                </p>
               ))}
             </div>
           ) : null}
@@ -531,7 +631,11 @@ function InstallModal({
           {apply.error ? <p className="text-xs text-rose-400">{String(apply.error)}</p> : null}
 
           <div className="flex justify-end gap-2">
-            <button type="button" onClick={onClose} className="rounded border border-slate-700 px-3 py-1 text-xs text-slate-300 hover:bg-slate-800">
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded border border-slate-700 px-3 py-1 text-xs text-slate-300 hover:bg-slate-800"
+            >
               Cancel
             </button>
             <button
@@ -550,12 +654,23 @@ function InstallModal({
 }
 
 /** The selected item's render files as decoded texture thumbnails (index 0 each). */
-function ItemTextures({ installDir, asset }: { installDir: string; asset: EquipmentSlotAssetDto }) {
+function ItemTextures({
+  installDir,
+  slot,
+  asset,
+}: {
+  installDir: string;
+  slot: EquipmentSlotDto;
+  asset: EquipmentSlotAssetDto;
+}) {
   return (
     <div className="rounded-lg border border-slate-800 bg-slate-900/40 p-3">
-      <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
-        Textures — id #{asset.id}
-      </h3>
+      <div className="mb-2 flex items-baseline justify-between gap-2">
+        <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+          Textures — {asset.label ?? `${slot.label} #${asset.id}`}
+        </h3>
+        <span className="font-mono text-[10px] text-slate-500">#{asset.id}</span>
+      </div>
       <div className="grid grid-cols-4 gap-3 sm:grid-cols-6">
         {asset.files.map((f) => {
           const name = f.relative_path.split("/").pop() ?? f.relative_path;

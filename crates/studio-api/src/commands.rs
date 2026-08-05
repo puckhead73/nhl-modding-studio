@@ -953,15 +953,18 @@ pub fn equipment_slots(registry: State<'_, Registry>) -> CmdResult<Vec<Equipment
     Ok(registry.equipment_slots())
 }
 
-/// Scan one Hockey Shop slot's render folder → equipment ids and their files.
+/// Scan one Hockey Shop slot's render folder → equipment ids and their files, with each id's model
+/// name resolved from the bundled enum vocabularies.
 #[tauri::command]
 pub fn list_equipment_slot_assets(
+    app: tauri::AppHandle,
     registry: State<'_, Registry>,
     roots: AssetRootsArgsDto,
     slot: String,
 ) -> CmdResult<Vec<EquipmentSlotAssetDto>> {
+    let defs = resolve_defs(&app);
     registry
-        .list_equipment_slot_assets(&roots, &slot)
+        .list_equipment_slot_assets(&roots, &slot, &defs)
         .map_err(|e| e.to_string())
 }
 
