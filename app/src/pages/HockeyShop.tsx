@@ -73,7 +73,10 @@ export function HockeyShopPage() {
   const categorySlots = slots.filter((s) => s.category === activeCategory);
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col gap-3">
+    // h-full (not flex-1) because the router mounts pages inside a plain scroll block, so flex-1
+    // has nothing to fill — a definite height is what lets the two sidebars cap to the window and
+    // scroll internally instead of growing the whole page.
+    <div className="flex h-full min-h-0 flex-col gap-3">
       <header className="shrink-0 space-y-1">
         <h1 className="text-lg font-semibold text-slate-100">Hockey Shop</h1>
         <p className="text-xs text-slate-500">
@@ -515,8 +518,8 @@ function authorTone(author: string): string {
 }
 
 /** A single store entry: name + author on one line (no thumbnail — the texture previews in the
- *  center viewport when selected). Installed-in-game entries carry a badge; row highlights when
- *  selected. Install / remove sit on the right. */
+ *  center viewport when selected). Installed-in-game entries highlight green and hide the Install
+ *  button (already in the game); the row also highlights when selected. Remove sits on the right. */
 function StoreRow({
   item,
   installed,
@@ -551,11 +554,10 @@ function StoreRow({
         title={`By ${item.author}${installed ? " · installed in game" : ""}`}
         className="flex min-w-0 flex-1 items-baseline gap-2 px-2 py-1.5 text-left"
       >
-        <span className="min-w-0 flex-1 truncate text-xs font-medium text-slate-100">
-          {item.name}
-        </span>
+        <span className="min-w-0 flex-1 truncate text-xs text-slate-100">{item.name}</span>
         <span className={"shrink-0 text-[10px] " + authorTone(item.author)}>{item.author}</span>
       </button>
+      {installed ? null : (
       <button
         type="button"
         onClick={onInstall}
@@ -564,6 +566,7 @@ function StoreRow({
       >
         Install…
       </button>
+      )}
       <button
         type="button"
         onClick={onDelete}
