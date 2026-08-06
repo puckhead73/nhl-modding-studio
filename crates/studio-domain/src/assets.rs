@@ -1663,13 +1663,22 @@ pub fn replace_gnf_texture(gnf_bytes: &[u8], rgba: &[u8], w: u32, h: u32) -> Res
 
 /// Write an edited texture into an extracted **RW4 texlib** (`.rx2` — the loose
 /// logo/uniform/equipment rasters). Picks the largest texture by area (the same
-/// slot preview/export show), re-encodes `rgba` (w×h RGBA8) into that slot's
-/// format, and rewrites it in place via [`tdb_rx2::texlib::replace_same_size`].
+/// slot preview/export show) and re-encodes `rgba` (w×h RGBA8) into that slot's
+/// format.
 ///
 /// **Same-dimensions only** — a texlib resize regenerates the Xenos descriptor
-/// and is out of scope here. DXT slots go through [`tdb_archive_codec::compress_bc`];
-/// an uncompressed `Argb8888` slot takes the RGBA re-ordered to the texlib's
-/// stored `[A,R,G,B]` byte layout.
+/// and is out of scope here.
+///
+/// A DXT slot's **full mip chain is regenerated** (base + each halved level,
+/// block-compressed then tiled) and written via
+/// [`tdb_rx2::texlib::replace_with_mip_chain`], so the distant-LOD levels the game
+/// samples match the new image instead of being left zeroed (which read as black
+/// as the camera pulls back). The chain is packed into the slot's reserved buffer
+/// exactly as EA laid it out — the same mip setup as the destination.
+///
+/// An uncompressed `Argb8888` slot is stored linear (no DXT mip tiling), so it
+/// takes the RGBA re-ordered to the stored `[A,R,G,B]` byte layout and writes the
+/// base level via [`tdb_rx2::texlib::replace_same_size`].
 pub fn replace_texlib_texture(
     file_bytes: &[u8],
     rgba: &[u8],
@@ -1677,7 +1686,7 @@ pub fn replace_texlib_texture(
     h: u32,
     texture_index: Option<usize>,
 ) -> Result<Vec<u8>> {
-    use tdb_rx2::texlib::PixelFormat;
+    use tdb_rx2::texlib::{LinearMip, PixelFormat};
 
     let lib = tdb_rx2::texlib::parse(file_bytes)
         .map_err(|e| DomainError::Extract(format!("texlib parse: {e}")))?;
@@ -1704,17 +1713,32 @@ pub fn replace_texlib_texture(
             "texlib replace is same-size only: got {w}x{h}, slot is {tw}x{th}"
         )));
     }
-    let base = if matches!(tf, PixelFormat::Argb8888) {
-        // Stored `[A,R,G,B]` per texel — rotate RGBA into that order.
-        let mut v = Vec::with_capacity(rgba.len());
+
+    if matches!(tf, PixelFormat::Argb8888) {
+        // Uncompressed slot: stored linear `[A,R,G,B]` per texel (no DXT mip tiling) —
+        // rotate RGBA into that order and write the base level.
+        let mut base = Vec::with_capacity(rgba.len());
         for px in rgba.chunks_exact(4) {
-            v.extend_from_slice(&[px[3], px[0], px[1], px[2]]);
+            base.extend_from_slice(&[px[3], px[0], px[1], px[2]]);
         }
-        v
-    } else {
-        tdb_archive_codec::compress_bc(dds_format_of(tf)?, w, h, rgba)
-    };
-    lib.replace_same_size(idx, &base)
+        return lib
+            .replace_same_size(idx, &base)
+            .map_err(|e| DomainError::Extract(format!("texlib replace: {e}")));
+    }
+
+    // DXT slot: regenerate the full mip chain so the sampled distance LODs match the
+    // new image, then let the texlib pack as many tiled levels as the slot reserves
+    // (the rest zeroed) — matching the destination's original mip layout.
+    let levels = compress_bc_mip_levels(dds_format_of(tf)?, w, h, rgba);
+    let mips: Vec<LinearMip<'_>> = levels
+        .iter()
+        .map(|(mw, mh, data)| LinearMip {
+            width: *mw,
+            height: *mh,
+            linear_dxt: data,
+        })
+        .collect();
+    lib.replace_with_mip_chain(idx, &mips)
         .map_err(|e| DomainError::Extract(format!("texlib replace: {e}")))
 }
 
@@ -1952,32 +1976,54 @@ fn full_mip_count(w: u32, h: u32) -> u32 {
     count
 }
 
+/// Compress `rgba` (w×h RGBA8) into a full DXT mip chain, returning one entry per
+/// level `(width, height, linear DXT block stream)` — top mip first, each level a
+/// box/triangle downsample of the source block-compressed with
+/// [`tdb_archive_codec::compress_bc`]. Levels count matches [`full_mip_count`]; if
+/// the source can't be wrapped as an image (length mismatch) only the base level is
+/// returned. This is the per-level form the texlib mip-chain writer consumes; the
+/// contiguous-chain form ([`compress_bc_mip_chain`]) is the DDS writer's view of the
+/// same data.
+fn compress_bc_mip_levels(
+    fmt: tdb_archive_codec::DdsFormat,
+    w: u32,
+    h: u32,
+    rgba: &[u8],
+) -> Vec<(u32, u32, Vec<u8>)> {
+    let base = tdb_archive_codec::compress_bc(fmt, w, h, rgba);
+    let Some(base_img) = image::RgbaImage::from_raw(w, h, rgba.to_vec()) else {
+        return vec![(w, h, base)];
+    };
+    let mip_count = full_mip_count(w, h);
+    let mut levels = Vec::with_capacity(mip_count as usize);
+    levels.push((w, h, base));
+    for level in 1..mip_count {
+        let mw = (w >> level).max(1);
+        let mh = (h >> level).max(1);
+        let scaled =
+            image::imageops::resize(&base_img, mw, mh, image::imageops::FilterType::Triangle);
+        levels.push((mw, mh, tdb_archive_codec::compress_bc(fmt, mw, mh, scaled.as_raw())));
+    }
+    levels
+}
+
 /// Compress `rgba` (w×h RGBA8) into a full DXT mip chain (top mip first,
 /// levels packed contiguously) for `fmt`, returning `(chain, mip_count)`.
 ///
-/// Each level below the base is a box/triangle downsample of the source via the
-/// `image` crate, then block-compressed with [`tdb_archive_codec::compress_bc`].
-/// `mip_count` matches [`full_mip_count`]; if the source buffer can't be wrapped
-/// as an image (length mismatch) we fall back to a single base mip and report
-/// `1` so the DDS header stays consistent with the payload.
+/// The contiguous form a DDS payload wants; see [`compress_bc_mip_levels`] for the
+/// per-level form. `mip_count` matches [`full_mip_count`] (or `1` when the source
+/// couldn't be downsampled) so the DDS header stays consistent with the payload.
 fn compress_bc_mip_chain(
     fmt: tdb_archive_codec::DdsFormat,
     w: u32,
     h: u32,
     rgba: &[u8],
 ) -> (Vec<u8>, u32) {
-    let base_blocks = tdb_archive_codec::compress_bc(fmt, w, h, rgba);
-    let Some(base_img) = image::RgbaImage::from_raw(w, h, rgba.to_vec()) else {
-        return (base_blocks, 1);
-    };
-    let mip_count = full_mip_count(w, h);
-    let mut chain = base_blocks;
-    for level in 1..mip_count {
-        let mw = (w >> level).max(1);
-        let mh = (h >> level).max(1);
-        let scaled =
-            image::imageops::resize(&base_img, mw, mh, image::imageops::FilterType::Triangle);
-        chain.extend_from_slice(&tdb_archive_codec::compress_bc(fmt, mw, mh, scaled.as_raw()));
+    let levels = compress_bc_mip_levels(fmt, w, h, rgba);
+    let mip_count = levels.len() as u32;
+    let mut chain = Vec::new();
+    for (_, _, data) in &levels {
+        chain.extend_from_slice(data);
     }
     (chain, mip_count)
 }
@@ -3551,6 +3597,31 @@ fn export_ps4_outfits(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn mip_levels_cover_the_full_chain_with_halving_dims() {
+        // 64×32 DXT5 → full_mip_count(64,32)=7 levels: 64x32,32x16,16x8,8x4,4x2,2x1,1x1.
+        let (w, h) = (64u32, 32u32);
+        let rgba = vec![0x80u8; (w * h * 4) as usize];
+        let levels = compress_bc_mip_levels(tdb_archive_codec::DdsFormat::Dxt5, w, h, &rgba);
+        assert_eq!(levels.len() as u32, full_mip_count(w, h), "one entry per mip level");
+
+        // Dims halve each level (min 1) and each level's payload is the exact BC block size.
+        let bpb = 16u32; // DXT5 = 16 bytes / 4×4 block
+        for (i, (mw, mh, data)) in levels.iter().enumerate() {
+            assert_eq!(*mw, (w >> i).max(1), "level {i} width");
+            assert_eq!(*mh, (h >> i).max(1), "level {i} height");
+            let expected = mw.div_ceil(4) * mh.div_ceil(4) * bpb;
+            assert_eq!(data.len() as u32, expected, "level {i} block-stream size");
+        }
+        // The base level is NOT all-zero for a non-zero source — i.e. a real chain, not padding.
+        assert!(levels[0].2.iter().any(|&b| b != 0), "base mip must carry real block data");
+
+        // The contiguous-chain view is just the levels concatenated.
+        let (chain, count) = compress_bc_mip_chain(tdb_archive_codec::DdsFormat::Dxt5, w, h, &rgba);
+        assert_eq!(count, levels.len() as u32);
+        assert_eq!(chain.len(), levels.iter().map(|(_, _, d)| d.len()).sum::<usize>());
+    }
 
     #[test]
     fn portrait_bucket_covers_shipped_range_only() {
