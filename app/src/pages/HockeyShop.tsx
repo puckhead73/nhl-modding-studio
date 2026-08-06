@@ -17,7 +17,7 @@ import { call } from "../lib/client";
 import { useAssetRootArgs, useProject } from "../lib/project";
 import { gameById } from "../lib/catalog";
 import { EmptyState, Spinner } from "../components/primitives";
-import { EquipmentItemViewer } from "../components/KitMeshViewer";
+import { EquipmentItemViewer, StoreItemModelViewer } from "../components/KitMeshViewer";
 import { TextureThumbnail } from "../components/TextureReplace";
 import type { EquipmentSlotDto } from "../bindings/EquipmentSlotDto";
 import type { EquipmentSlotAssetDto } from "../bindings/EquipmentSlotAssetDto";
@@ -273,7 +273,25 @@ function SlotShop({
       {/* Center — 3D preview + textures (game side), or the selected store item's texture. */}
       <section className="flex min-h-0 min-w-[26rem] flex-1 flex-col gap-3 overflow-y-auto pr-1">
         {storeSel && storeRoot ? (
-          <StoreTexturePreview storeRoot={storeRoot} slot={slot.key} item={storeSel} />
+          <>
+            <div className="h-[58vh] min-h-[28rem] shrink-0">
+              <StoreItemModelViewer
+                roots={rootArgs}
+                slot={slot.key}
+                storeRoot={storeRoot}
+                entryId={storeSel.id}
+                baseMeshId={storeSel.game_asset_id ?? assets[0]?.id ?? null}
+              />
+            </div>
+            <div className="rounded-lg border border-slate-800 bg-slate-900/40 px-3 py-2">
+              <span className="text-sm font-semibold text-slate-100">{storeSel.name}</span>
+              <span className="ml-2 text-[10px] text-slate-500">
+                by <span className={authorTone(storeSel.author)}>{storeSel.author}</span> ·{" "}
+                {storeSel.width}×{storeSel.height} · store texture on the {slot.label.toLowerCase()}{" "}
+                model
+              </span>
+            </div>
+          </>
         ) : (
           <>
             <div className="h-[58vh] min-h-[28rem] shrink-0">
@@ -577,54 +595,6 @@ function StoreRow({
         ✕
       </button>
     </li>
-  );
-}
-
-/** The selected store item's texture, shown in the center viewport (fetched on demand — not per
- *  list row). Mirrors the old app's "texture previews in the viewport on selection". */
-function StoreTexturePreview({
-  storeRoot,
-  slot,
-  item,
-}: {
-  storeRoot: string;
-  slot: string;
-  item: HockeyShopItemDto;
-}) {
-  const tex = useQuery({
-    queryKey: ["hockeyShopTex", storeRoot, slot, item.id],
-    queryFn: () => call("hockey_shop_load_texture", { storeRoot, slot, entryId: item.id }),
-    staleTime: Infinity,
-    retry: false,
-  });
-  return (
-    <div className="flex min-h-0 flex-1 flex-col rounded-lg border border-slate-800 bg-slate-900/40">
-      <header className="flex shrink-0 items-baseline justify-between gap-2 border-b border-slate-800 px-3 py-2">
-        <div className="min-w-0">
-          <p className="truncate text-sm font-semibold text-slate-100" title={item.name}>
-            {item.name}
-          </p>
-          <p className="truncate text-[10px] text-slate-500">
-            by <span className={authorTone(item.author)}>{item.author}</span> · {item.width}×
-            {item.height}
-          </p>
-        </div>
-      </header>
-      <div className="flex min-h-0 flex-1 items-center justify-center overflow-hidden p-3">
-        {tex.isLoading ? (
-          <Spinner label="Loading texture…" />
-        ) : tex.error ? (
-          <p className="text-xs text-rose-400">{String(tex.error)}</p>
-        ) : tex.data ? (
-          <img
-            src={tex.data}
-            alt={item.name}
-            className="max-h-full max-w-full rounded object-contain"
-            style={{ imageRendering: "pixelated" }}
-          />
-        ) : null}
-      </div>
-    </div>
   );
 }
 

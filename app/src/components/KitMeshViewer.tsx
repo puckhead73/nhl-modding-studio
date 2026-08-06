@@ -21,6 +21,7 @@ import type { KitPreviewDto } from "../bindings/KitPreviewDto";
 import type { KitPieceDto } from "../bindings/KitPieceDto";
 import type { KitPieceInputDto } from "../bindings/KitPieceInputDto";
 import type { PreviewSubmeshDto } from "../bindings/PreviewSubmeshDto";
+import type { PreviewTextureDto } from "../bindings/PreviewTextureDto";
 import type { AssetRootsArgsDto } from "../bindings/AssetRootsArgsDto";
 import rinkBackground from "../assets/rink-background.png";
 
@@ -241,6 +242,144 @@ export function EquipmentItemViewer({
     );
   }
   return <LoadedKit data={preview.data} />;
+}
+
+/** Flat near-black 1×1 map for the texture-less companion submesh (stick tape, goalie mask
+ *  cage) — rendered flat rather than sampling the store colour map. */
+const TAPE_TEXTURE: PreviewTextureDto = {
+  name: "tape",
+  width: 1,
+  height: 1,
+  rgba_base64: btoa(String.fromCharCode(0x1a, 0x1a, 0x1a, 0xff)),
+};
+
+/** The companion submesh the backend ships flat (stick tape / goalie mask cage). */
+function isTapeSubmesh(name: string): boolean {
+  const n = name.toLowerCase();
+  return n.includes("tape") || n.includes("cage");
+}
+
+/** Rebuild a decoded mesh so its colour map is the store item's texture (index 0) instead of the
+ *  game item's own: colour submeshes sample the store texture, tape/cage stay flat, and submeshes
+ *  the backend left untextured stay untextured. */
+function applyStoreTexture(base: KitPreviewDto, store: PreviewTextureDto): KitPreviewDto {
+  const textures = [store, TAPE_TEXTURE];
+  const pieces = base.pieces.map((p) => ({
+    ...p,
+    submeshes: p.submeshes.map((sm) => ({
+      ...sm,
+      material_index: isTapeSubmesh(sm.name) ? 1 : sm.material_index !== null ? 0 : null,
+    })),
+  }));
+  return { ...base, pieces, textures };
+}
+
+/** Decode a PNG data URL to an RGBA `PreviewTextureDto` (top-down rows, matching the backend's
+ *  decoded texlibs) so it can be fed to the shared kit renderer. `null` until decoded. */
+function useDecodedPng(dataUrl: string | null | undefined): PreviewTextureDto | null {
+  const [out, setOut] = useState<PreviewTextureDto | null>(null);
+  useEffect(() => {
+    if (!dataUrl) {
+      setOut(null);
+      return;
+    }
+    let cancelled = false;
+    const img = new Image();
+    img.onload = () => {
+      if (cancelled) return;
+      const w = img.naturalWidth;
+      const h = img.naturalHeight;
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+      ctx.drawImage(img, 0, 0);
+      const { data } = ctx.getImageData(0, 0, w, h);
+      let bin = "";
+      const CHUNK = 0x8000;
+      for (let i = 0; i < data.length; i += CHUNK) {
+        bin += String.fromCharCode.apply(null, Array.from(data.subarray(i, i + CHUNK)));
+      }
+      setOut({ name: "store", width: w, height: h, rgba_base64: btoa(bin) });
+    };
+    img.onerror = () => {
+      if (!cancelled) setOut(null);
+    };
+    img.src = dataUrl;
+    return () => {
+      cancelled = true;
+    };
+  }, [dataUrl]);
+  return out;
+}
+
+/** Store-item viewer — the slot's real mesh (from a representative game id) textured with a store
+ *  item's PNG instead of the game's own colour map, so operators see their texture on the model.
+ *  Falls back to the flat texture image for slots with no decodable mesh. */
+export function StoreItemModelViewer({
+  roots,
+  slot,
+  storeRoot,
+  entryId,
+  baseMeshId,
+}: {
+  roots: AssetRootsArgsDto;
+  slot: string;
+  storeRoot: string;
+  entryId: string;
+  /** A game id whose mesh stands in for this slot (the store item's origin id, or any shipped id —
+   *  sticks share one mesh). `null` → no mesh available, show the flat texture. */
+  baseMeshId: number | null;
+}) {
+  const texQ = useQuery({
+    queryKey: ["hockeyShopTex", storeRoot, slot, entryId],
+    queryFn: () => call("hockey_shop_load_texture", { storeRoot, slot, entryId }),
+    staleTime: Infinity,
+    retry: false,
+  });
+  const store = useDecodedPng(texQ.data);
+  const preview = useQuery({
+    queryKey: ["equipmentItemPreview", roots.install_dir, slot, baseMeshId ?? null],
+    queryFn: () => call("equipment_item_preview", { roots, slot, id: baseMeshId! }),
+    enabled: baseMeshId != null,
+    staleTime: Infinity,
+    retry: false,
+  });
+  const merged = useMemo(
+    () => (preview.data && store ? applyStoreTexture(preview.data, store) : null),
+    [preview.data, store],
+  );
+
+  // No decodable mesh for this slot → show the flat texture instead.
+  if (baseMeshId == null || preview.error) {
+    return (
+      <ViewerFrame>
+        <div className="grid h-full w-full place-items-center p-4">
+          {texQ.data ? (
+            <img
+              src={texQ.data}
+              alt="store texture"
+              className="max-h-full max-w-full object-contain"
+              style={{ imageRendering: "pixelated" }}
+            />
+          ) : (
+            <p className="text-center text-xs text-slate-400">No 3D mesh for this slot.</p>
+          )}
+        </div>
+      </ViewerFrame>
+    );
+  }
+  if (!merged) {
+    return (
+      <ViewerFrame>
+        <div className="grid h-full w-full place-items-center">
+          <Spinner label="Applying texture…" />
+        </div>
+      </ViewerFrame>
+    );
+  }
+  return <LoadedKit data={merged} />;
 }
 
 /** The rink-backed canvas box (shared across loading / error / loaded states). */
