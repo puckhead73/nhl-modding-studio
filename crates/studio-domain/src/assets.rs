@@ -2162,7 +2162,7 @@ pub fn export_player_assets(
             match read_asset_file(Path::new(src))
                 .and_then(|b| parse_head_mesh(Path::new(src), &b, false)) {
                 Ok(asset) => {
-                    let glb = tdb_rx2::playermesh::write_glb(&asset);
+                    let glb = tdb_rx2::playermesh::write_glb_geometry_only(&asset);
                     let dst = out_dir.join("heads").join(format!("{slug}.glb"));
                     match write_file(&dst, &glb) {
                         Ok(n) => {
@@ -2552,7 +2552,7 @@ fn mesh_output(path: &Path) -> Result<DecodedOutput> {
     Ok(DecodedOutput {
         ext: "glb",
         suffix: None,
-        bytes: tdb_rx2::playermesh::write_glb(&asset),
+        bytes: tdb_rx2::playermesh::write_glb_geometry_only(&asset),
     })
 }
 

@@ -1046,6 +1046,18 @@ fn parse_mesh_impl(data: &[u8], skin_policy: SkinPolicy) -> Result<PlayerAsset, 
 /// vertex-group names (`bone_NNN`) survive the round-trip into and
 /// out of Blender.
 pub fn write_glb(asset: &PlayerAsset) -> Vec<u8> {
+    write_glb_impl(asset, true)
+}
+
+/// Like [`write_glb`] but **geometry only** — the head and its submeshes
+/// (POSITION / TEXCOORD_0 / indices), with **no armature**: no skin, no bone
+/// nodes, and no JOINTS_0 / WEIGHTS_0 attributes. This is what the asset export
+/// uses — the operator wants the mesh, not the rig.
+pub fn write_glb_geometry_only(asset: &PlayerAsset) -> Vec<u8> {
+    write_glb_impl(asset, false)
+}
+
+fn write_glb_impl(asset: &PlayerAsset, include_armature: bool) -> Vec<u8> {
     use serde_json::{json, Value};
 
     let mut bin: Vec<u8> = Vec::new();
@@ -1126,23 +1138,28 @@ pub fn write_glb(asset: &PlayerAsset) -> Vec<u8> {
     //   - IBM accessor = inverse(BTM)
     // For an orthonormal rotation R and origin O,
     //   inverse(BTM) = (R^T, -R^T * O).
-    let mut ibm_bytes = Vec::with_capacity(asset.skin.matrices.len() * 64);
-    for m in &asset.skin.matrices {
-        let ibm = inverse_btm_col_major(m);
-        for f in &ibm {
-            ibm_bytes.extend_from_slice(&f.to_le_bytes());
+    // Inverse-bind matrices only exist when we emit the armature/skin.
+    let ibm_accessor: Option<usize> = if include_armature {
+        let mut ibm_bytes = Vec::with_capacity(asset.skin.matrices.len() * 64);
+        for m in &asset.skin.matrices {
+            let ibm = inverse_btm_col_major(m);
+            for f in &ibm {
+                ibm_bytes.extend_from_slice(&f.to_le_bytes());
+            }
         }
-    }
-    let ibm_view = push_view(&mut bin, &mut buffer_views, &ibm_bytes, None);
-    let ibm_accessor = push_accessor(
-        &mut accessors,
-        ibm_view,
-        FLOAT,
-        asset.skin.matrices.len(),
-        "MAT4",
-        None,
-        false,
-    );
+        let ibm_view = push_view(&mut bin, &mut buffer_views, &ibm_bytes, None);
+        Some(push_accessor(
+            &mut accessors,
+            ibm_view,
+            FLOAT,
+            asset.skin.matrices.len(),
+            "MAT4",
+            None,
+            false,
+        ))
+    } else {
+        None
+    };
 
     let mut mesh_entries: Vec<Value> = Vec::new();
     for sm in &asset.submeshes {
@@ -1187,50 +1204,57 @@ pub fn write_glb(asset: &PlayerAsset) -> Vec<u8> {
             false,
         );
 
-        let mut joints_bytes = Vec::with_capacity(sm.vertices.len() * 8);
-        for v in &sm.vertices {
-            for c in 0..4 {
-                joints_bytes.extend_from_slice(&v.joints[c].to_le_bytes());
+        // Skin attributes only when the armature is emitted; a geometry-only export
+        // drops them so the primitive is a plain unskinned mesh.
+        let (joints_acc, weights_acc) = if include_armature {
+            let mut joints_bytes = Vec::with_capacity(sm.vertices.len() * 8);
+            for v in &sm.vertices {
+                for c in 0..4 {
+                    joints_bytes.extend_from_slice(&v.joints[c].to_le_bytes());
+                }
             }
-        }
-        let joints_view = push_view(
-            &mut bin,
-            &mut buffer_views,
-            &joints_bytes,
-            Some(ARRAY_BUFFER),
-        );
-        let joints_acc = push_accessor(
-            &mut accessors,
-            joints_view,
-            USHORT,
-            sm.vertices.len(),
-            "VEC4",
-            None,
-            false,
-        );
+            let joints_view = push_view(
+                &mut bin,
+                &mut buffer_views,
+                &joints_bytes,
+                Some(ARRAY_BUFFER),
+            );
+            let joints_acc = push_accessor(
+                &mut accessors,
+                joints_view,
+                USHORT,
+                sm.vertices.len(),
+                "VEC4",
+                None,
+                false,
+            );
 
-        let mut weights_bytes = Vec::with_capacity(sm.vertices.len() * 4);
-        for v in &sm.vertices {
-            for c in 0..4 {
-                let q = (v.weights[c] * 255.0).round().clamp(0.0, 255.0) as u8;
-                weights_bytes.push(q);
+            let mut weights_bytes = Vec::with_capacity(sm.vertices.len() * 4);
+            for v in &sm.vertices {
+                for c in 0..4 {
+                    let q = (v.weights[c] * 255.0).round().clamp(0.0, 255.0) as u8;
+                    weights_bytes.push(q);
+                }
             }
-        }
-        let weights_view = push_view(
-            &mut bin,
-            &mut buffer_views,
-            &weights_bytes,
-            Some(ARRAY_BUFFER),
-        );
-        let weights_acc = push_accessor(
-            &mut accessors,
-            weights_view,
-            UBYTE,
-            sm.vertices.len(),
-            "VEC4",
-            None,
-            true,
-        );
+            let weights_view = push_view(
+                &mut bin,
+                &mut buffer_views,
+                &weights_bytes,
+                Some(ARRAY_BUFFER),
+            );
+            let weights_acc = push_accessor(
+                &mut accessors,
+                weights_view,
+                UBYTE,
+                sm.vertices.len(),
+                "VEC4",
+                None,
+                true,
+            );
+            (Some(joints_acc), Some(weights_acc))
+        } else {
+            (None, None)
+        };
 
         let mut idx_bytes = Vec::with_capacity(sm.triangles.len() * 12);
         for t in &sm.triangles {
@@ -1254,13 +1278,16 @@ pub fn write_glb(asset: &PlayerAsset) -> Vec<u8> {
             false,
         );
 
+        let mut attributes = json!({
+            "POSITION": pos_acc,
+            "TEXCOORD_0": uv_acc,
+        });
+        if let (Some(j), Some(w)) = (joints_acc, weights_acc) {
+            attributes["JOINTS_0"] = json!(j);
+            attributes["WEIGHTS_0"] = json!(w);
+        }
         let primitive = json!({
-            "attributes": {
-                "POSITION": pos_acc,
-                "TEXCOORD_0": uv_acc,
-                "JOINTS_0": joints_acc,
-                "WEIGHTS_0": weights_acc,
-            },
+            "attributes": attributes,
             "indices": idx_acc,
             "mode": 4,
         });
@@ -1270,55 +1297,65 @@ pub fn write_glb(asset: &PlayerAsset) -> Vec<u8> {
         }));
     }
 
+    // Node graph. With the armature: root → [armature(+bone nodes), submesh nodes],
+    // each submesh node skinned. Geometry only: root → [submesh nodes], no armature,
+    // no bones, no skin binding.
     let root = 0u32;
-    let armature = 1u32;
-    let joints_start = 2u32;
-    let joint_count = asset.skin.matrices.len() as u32;
-    let submeshes_start = joints_start + joint_count;
+    let mut nodes: Vec<Value> = Vec::new();
+    let mut skins: Vec<Value> = Vec::new();
 
-    let mut nodes: Vec<Value> =
-        Vec::with_capacity(2 + joint_count as usize + asset.submeshes.len());
-    let root_children: Vec<u32> = {
-        let mut c = vec![armature];
-        for i in 0..asset.submeshes.len() {
-            c.push(submeshes_start + i as u32);
+    if include_armature {
+        let armature = 1u32;
+        let joints_start = 2u32;
+        let joint_count = asset.skin.matrices.len() as u32;
+        let submeshes_start = joints_start + joint_count;
+
+        let root_children: Vec<u32> = {
+            let mut c = vec![armature];
+            for i in 0..asset.submeshes.len() {
+                c.push(submeshes_start + i as u32);
+            }
+            c
+        };
+        nodes.push(json!({ "name": "root", "children": root_children }));
+        nodes.push(json!({
+            "name": "armature",
+            "children": (0..joint_count).map(|j| joints_start + j).collect::<Vec<_>>(),
+        }));
+        for j in 0..joint_count {
+            let m = &asset.skin.matrices[j as usize];
+            // Bone-to-model transform as glTF node.matrix (column-major
+            // 4x4). Basis vectors from m[0..3], origin from m[3].
+            let btm = btm_col_major(m);
+            nodes.push(json!({
+                "name": format!("bone_{:03}", j),
+                "matrix": btm.to_vec(),
+            }));
         }
-        c
-    };
-    nodes.push(json!({
-        "name": "root",
-        "children": root_children,
-    }));
-    nodes.push(json!({
-        "name": "armature",
-        "children": (0..joint_count).map(|j| joints_start + j).collect::<Vec<_>>(),
-    }));
-    for j in 0..joint_count {
-        let m = &asset.skin.matrices[j as usize];
-        // Bone-to-model transform as glTF node.matrix (column-major
-        // 4x4). Basis vectors from m[0..3], origin from m[3].
-        let btm = btm_col_major(m);
-        nodes.push(json!({
-            "name": format!("bone_{:03}", j),
-            "matrix": btm.to_vec(),
+        for (i, sm) in asset.submeshes.iter().enumerate() {
+            nodes.push(json!({
+                "name": format!("{}_node", sm.name),
+                "mesh": i,
+                "skin": 0,
+            }));
+        }
+        let joints_array: Vec<u32> = (0..joint_count).map(|j| joints_start + j).collect();
+        skins.push(json!({
+            "inverseBindMatrices": ibm_accessor,
+            "joints": joints_array,
+            "skeleton": armature,
         }));
-    }
-    let joints_array: Vec<u32> = (0..joint_count).map(|j| joints_start + j).collect();
-    for (i, _) in asset.submeshes.iter().enumerate() {
-        nodes.push(json!({
-            "name": format!("{}_node", asset.submeshes[i].name),
-            "mesh": i,
-            "skin": 0,
-        }));
+    } else {
+        let submeshes_start = 1u32;
+        let root_children: Vec<u32> =
+            (0..asset.submeshes.len() as u32).map(|i| submeshes_start + i).collect();
+        nodes.push(json!({ "name": "root", "children": root_children }));
+        for (i, sm) in asset.submeshes.iter().enumerate() {
+            nodes.push(json!({ "name": format!("{}_node", sm.name), "mesh": i }));
+        }
     }
 
-    let skins = vec![json!({
-        "inverseBindMatrices": ibm_accessor,
-        "joints": joints_array,
-        "skeleton": armature,
-    })];
-
-    let gltf = json!({
+    let mut gltf = json!({
         "asset": { "version": "2.0", "generator": "tdb-rx2 playermesh decoder" },
         "scene": 0,
         "scenes": [{ "nodes": [root] }],
@@ -1327,8 +1364,10 @@ pub fn write_glb(asset: &PlayerAsset) -> Vec<u8> {
         "accessors": accessors,
         "bufferViews": buffer_views,
         "buffers": [{ "byteLength": bin.len() }],
-        "skins": skins,
     });
+    if !skins.is_empty() {
+        gltf["skins"] = json!(skins);
+    }
 
     let json_text = serde_json::to_string(&gltf).expect("json serialization");
     let mut json_bytes = json_text.into_bytes();
@@ -1994,5 +2033,76 @@ mod tests {
         let parsed: serde_json::Value = serde_json::from_slice(&glb[20..20 + json_len]).unwrap();
         assert_eq!(parsed["asset"]["version"], "2.0");
         assert_eq!(parsed["meshes"].as_array().unwrap().len(), 5);
+    }
+
+    /// A minimal two-submesh asset with a bone palette, so the writer variants can be
+    /// compared without a real head file.
+    fn synthetic_asset() -> PlayerAsset {
+        let vert = Vertex {
+            position: [0.0, 1.0, 2.0],
+            normal: [0.0, 0.0, 1.0],
+            uv: [0.25, 0.75],
+            joints: [24, 0, 0, 0],
+            weights: [1.0, 0.0, 0.0, 0.0],
+        };
+        let submesh = |name: &str| Submesh {
+            name: name.to_string(),
+            stride: 0,
+            position_format: PositionFormat::Float,
+            uv_format: UvFormat::Float,
+            has_blend_indices: true,
+            has_blend_weights: true,
+            vertices: vec![vert, vert, vert],
+            triangles: vec![[0, 1, 2]],
+        };
+        PlayerAsset {
+            submeshes: vec![submesh("head"), submesh("eyes")],
+            skin: BonePalette { matrices: vec![[[0.0; 4]; 4]; 2] },
+        }
+    }
+
+    fn glb_json(glb: &[u8]) -> serde_json::Value {
+        let json_len = u32::from_le_bytes([glb[12], glb[13], glb[14], glb[15]]) as usize;
+        serde_json::from_slice(&glb[20..20 + json_len]).unwrap()
+    }
+
+    #[test]
+    fn geometry_only_export_drops_the_armature_but_keeps_every_submesh() {
+        let asset = synthetic_asset();
+        let json = glb_json(&write_glb_geometry_only(&asset));
+
+        // No armature: no skin binding and no bone nodes.
+        assert!(json.get("skins").is_none(), "geometry-only must not emit a skin");
+        let nodes = json["nodes"].as_array().unwrap();
+        assert!(
+            nodes.iter().all(|n| {
+                let name = n["name"].as_str().unwrap_or("");
+                name != "armature" && !name.starts_with("bone_") && n.get("skin").is_none()
+            }),
+            "no armature / bone nodes / skinned nodes",
+        );
+
+        // Every submesh is still present as an unskinned mesh (position + uv only).
+        let meshes = json["meshes"].as_array().unwrap();
+        assert_eq!(meshes.len(), 2, "both submeshes exported");
+        for mesh in meshes {
+            let attrs = &mesh["primitives"][0]["attributes"];
+            assert!(attrs.get("POSITION").is_some() && attrs.get("TEXCOORD_0").is_some());
+            assert!(
+                attrs.get("JOINTS_0").is_none() && attrs.get("WEIGHTS_0").is_none(),
+                "no skin attributes on a geometry-only primitive",
+            );
+        }
+    }
+
+    #[test]
+    fn rigged_export_still_emits_the_armature_and_skin() {
+        let asset = synthetic_asset();
+        let json = glb_json(&write_glb(&asset));
+        assert!(json["skins"].as_array().is_some_and(|s| !s.is_empty()), "skin present");
+        let nodes = json["nodes"].as_array().unwrap();
+        assert!(nodes.iter().any(|n| n["name"] == "armature"), "armature node present");
+        let attrs = &json["meshes"][0]["primitives"][0]["attributes"];
+        assert!(attrs.get("JOINTS_0").is_some(), "rigged primitive keeps JOINTS_0");
     }
 }
