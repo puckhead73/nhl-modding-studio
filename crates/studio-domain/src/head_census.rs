@@ -171,24 +171,20 @@ fn stem_is_texture(stem: &str) -> bool {
         .is_some_and(|last| MAP_SUFFIXES.contains(&last))
 }
 
-/// First numeric run in a name → id (`head_generic_player_60046` → 60046,
-/// `player_10043` → 10043). Picks the **last** numeric run so the pool id in
-/// `head_generic_player_{id}` wins over any leading digits.
+/// The head id is the **first** numeric run in the name: `player_10043` → 10043,
+/// `head_generic_player_60046` → 60046 (its only run), `hair_512_0_0_0` → 512 (the
+/// trailing `_0_0_0` is the style/length/colour variant, **not** the id — taking
+/// the last run would collapse every separate-hair file to id 0).
 fn parse_id(stem: &str) -> Option<u64> {
-    let mut best: Option<u64> = None;
     let mut cur = String::new();
     for ch in stem.chars() {
         if ch.is_ascii_digit() {
             cur.push(ch);
         } else if !cur.is_empty() {
-            best = cur.parse().ok().or(best);
-            cur.clear();
+            return cur.parse().ok();
         }
     }
-    if !cur.is_empty() {
-        best = cur.parse().ok().or(best);
-    }
-    best
+    cur.parse().ok()
 }
 
 fn starts_with_any(name: &str, keys: &[&str]) -> bool {
@@ -307,7 +303,7 @@ fn class_label(e: &CensusEntry) -> String {
 /// The `rendering/` (RenderWare) or `characters/` (PS4) subfolders that can hold
 /// head / hair / staff geometry. We walk exactly these — not the whole tree — so
 /// the census stays scoped to appearance assets.
-fn appearance_folders(platform: Platform) -> &'static [&'static str] {
+pub fn appearance_folders(platform: Platform) -> &'static [&'static str] {
     if platform == Platform::Ps4 {
         &["player", "skater", "coach", "referee", "trainer", "commissioner"]
     } else {
@@ -492,10 +488,12 @@ mod tests {
     }
 
     #[test]
-    fn ids_take_the_last_numeric_run() {
+    fn ids_take_the_first_numeric_run() {
         assert_eq!(parse_id("player_10043"), Some(10043));
         assert_eq!(parse_id("head_generic_player_60046"), Some(60046));
-        assert_eq!(parse_id("hair_67_0_0_0"), Some(0));
+        // The head id is the first run; the `_0_0_0` variant infix is not the id.
+        assert_eq!(parse_id("hair_67_0_0_0"), Some(67));
+        assert_eq!(parse_id("hair_512_0_0_0"), Some(512));
         assert_eq!(parse_id("alexander_ovechkin"), None);
     }
 

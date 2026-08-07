@@ -20,7 +20,7 @@
 //! name. The `{game}` token is the workspace `game_id` (`nhl14`, `nhllegacy`, …).
 
 use std::collections::HashSet;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 use serde::{Deserialize, Serialize};
 
@@ -46,6 +46,9 @@ pub struct CatalogOptions {
 pub struct CatalogEntry {
     /// File stem, e.g. `ovechkin_alexander_hair_nhllegacy`.
     pub name: String,
+    /// Where this asset came from: `player` (a bespoke player's own head) or one
+    /// of `generic` / `coach` / `referee` / `trainer` / `commissioner` (swept).
+    pub origin: String,
     /// `head` | `hair` | `facialhair`.
     pub class: String,
     /// Game token.
@@ -173,6 +176,7 @@ fn decode_texture_pngs(path: &Path) -> Vec<(String, Vec<u8>)> {
 /// Phase-4 staff/generic sweep.
 pub fn write_head_group(
     base: &str,
+    origin: &str,
     asset: &PlayerAsset,
     texture_paths: &[String],
     source: &str,
@@ -227,6 +231,7 @@ pub fn write_head_group(
                 }
                 summary.entries.push(CatalogEntry {
                     name: format!("{base}_{class}_{game}"),
+                    origin: origin.to_string(),
                     class: class.to_string(),
                     game: game.clone(),
                     mesh_file: format!("heads/{fname}"),
@@ -268,7 +273,7 @@ pub fn export_player_head_catalog(
 
         let mesh = p.mesh_path.as_deref().unwrap();
         let asset = match read_asset_file(Path::new(mesh))
-            .and_then(|b| parse_head_mesh(Path::new(mesh), &b, false))
+            .and_then(|b| parse_head_mesh(Path::new(mesh), &b, true))
         {
             Ok(a) => a,
             Err(e) => {
@@ -276,8 +281,182 @@ pub fn export_player_head_catalog(
                 continue;
             }
         };
-        write_head_group(&base, &asset, &p.texture_paths, mesh, out_dir, opts, &mut summary);
+        write_head_group(&base, "player", &asset, &p.texture_paths, mesh, out_dir, opts, &mut summary);
     }
+    Ok(summary)
+}
+
+/// Write a **hair-only** asset (a standalone hair mesh file, e.g. NHL 08/09
+/// `hair_{id}.rx2` or PS4 `hair_*.mcd`) — every submesh is hair, so it becomes one
+/// `{base}_hair_{game}.glb` with no head/facial split.
+fn write_hair_only(
+    base: &str,
+    origin: &str,
+    asset: &PlayerAsset,
+    source: &str,
+    out_dir: &Path,
+    opts: &CatalogOptions,
+    summary: &mut HeadCatalogSummary,
+) {
+    if asset.submeshes.is_empty() {
+        return;
+    }
+    let game = &opts.game_tag;
+    let glb = tdb_rx2::playermesh::write_glb_geometry_only(asset);
+    let fname = format!("{base}_hair_{game}.glb");
+    let dst = out_dir.join("heads").join(&fname);
+    match write_out(&dst, &glb) {
+        Ok(n) => {
+            summary.hair_written += 1;
+            summary.bytes_written += n;
+            summary.entries.push(CatalogEntry {
+                name: format!("{base}_hair_{game}"),
+                origin: origin.to_string(),
+                class: "hair".to_string(),
+                game: game.clone(),
+                mesh_file: format!("heads/{fname}"),
+                submeshes: asset.submeshes.iter().map(|s| s.name.clone()).collect(),
+                textures: Vec::new(),
+                source: source.to_string(),
+            });
+        }
+        Err(e) => summary.failures.push(format!("{base} hair: {e}")),
+    }
+}
+
+/// The catalog name prefix for a swept file's role. A shared *player*-folder head
+/// (not captured as a bespoke player's own) is generic, so `Player`/`Generic` both
+/// map to `generic`.
+fn origin_for_role(role: crate::head_census::Role) -> &'static str {
+    use crate::head_census::Role;
+    match role {
+        Role::Coach => "coach",
+        Role::Referee => "referee",
+        Role::Trainer => "trainer",
+        Role::Commissioner => "commissioner",
+        Role::Timekeeper => "timekeeper",
+        Role::Player | Role::Generic | Role::Unknown => "generic",
+    }
+}
+
+/// Sweep the rendering tree for every head/hair mesh **not** already written as a
+/// bespoke player's own — generic/pool heads, referees, coaches, trainers, and any
+/// unreferenced head file — and add them to the catalog under `{role}_{id}` names
+/// (`generic_60046_head_{game}`, `referee_31000_head_{game}`, `coach_100_hair_{game}`).
+/// Geometry-only: staff/generic texture resolution differs per role and is a
+/// follow-up; bespoke players already carry textures from the player export.
+///
+/// `exclude_sources` are the canonicalized mesh paths already written by the player
+/// export, so a bespoke head sitting in the shared `player/` folder isn't captured
+/// twice.
+///
+/// Known limitation: a few **rigid** `.rx2` hair meshes (e.g. NHL 09 coach hair
+/// style variants `hair_*_aa/ab.rx2`) carry no AnimationSkin chunk, which the mesh
+/// parser currently requires; they're reported as failures rather than captured
+/// (a rigid-`.rx2` parse path is a follow-up). Everything decodable is captured.
+pub fn sweep_nonplayer_heads(
+    roots: &crate::assets::AssetRoots,
+    exclude_sources: &HashSet<String>,
+    out_dir: &Path,
+    opts: &CatalogOptions,
+    summary: &mut HeadCatalogSummary,
+) {
+    use crate::head_census::{appearance_folders, classify, Part};
+
+    let platform = roots.platform();
+    let base_dir = if platform == crate::Platform::Ps4 {
+        Path::new(&roots.rendering).join("characters")
+    } else {
+        Path::new(&roots.rendering).to_path_buf()
+    };
+    let canon = |p: &Path| {
+        std::fs::canonicalize(p)
+            .map(|c| c.to_string_lossy().into_owned())
+            .unwrap_or_else(|_| p.to_string_lossy().into_owned())
+    };
+    // Fallback counter for files whose name carries no id.
+    let mut anon = 0u64;
+
+    for folder in appearance_folders(platform) {
+        let dir = base_dir.join(folder);
+        let Ok(rd) = std::fs::read_dir(&dir) else {
+            continue;
+        };
+        // Collect (path) for this folder and any one-level-nested per-head folders
+        // (NHL 07 `player/player_{id}/head_{id}.rx2`).
+        let mut files: Vec<PathBuf> = Vec::new();
+        for e in rd.flatten() {
+            let p = e.path();
+            if p.is_dir() {
+                if let Ok(inner) = std::fs::read_dir(&p) {
+                    files.extend(inner.flatten().map(|e| e.path()).filter(|p| p.is_file()));
+                }
+            } else {
+                files.push(p);
+            }
+        }
+        files.sort();
+
+        for path in files {
+            let Some(fname) = path.file_name().and_then(|s| s.to_str()) else {
+                continue;
+            };
+            let ext = path.extension().and_then(|s| s.to_str()).unwrap_or("");
+            if !matches!(ext.to_ascii_lowercase().as_str(), "rx2" | "mcd") {
+                continue;
+            }
+            let entry = classify(folder, fname, platform);
+            if entry.is_texture || !matches!(entry.part, Part::Head | Part::Hair) {
+                continue;
+            }
+            if exclude_sources.contains(&canon(&path)) {
+                continue;
+            }
+            let origin = origin_for_role(entry.role);
+            let id = entry.id.unwrap_or_else(|| {
+                anon += 1;
+                900_000 + anon
+            });
+            let base = format!("{origin}_{id}");
+            let src = path.to_string_lossy().into_owned();
+            let asset = match read_asset_file(&path)
+                .and_then(|b| parse_head_mesh(&path, &b, true))
+            {
+                Ok(a) => a,
+                Err(e) => {
+                    summary.failures.push(format!("{src}: mesh — {e}"));
+                    continue;
+                }
+            };
+            match entry.part {
+                Part::Hair => write_hair_only(&base, origin, &asset, &src, out_dir, opts, summary),
+                // A head file: split head / hair / facial-hair. Geometry-only here.
+                _ => write_head_group(&base, origin, &asset, &[], &src, out_dir, opts, summary),
+            }
+        }
+    }
+}
+
+/// The full appearance catalog: bespoke player heads (with textures) plus the
+/// non-player sweep (generic / staff / unreferenced heads + hair). The sweep skips
+/// any file already written for a bespoke player.
+pub fn export_full_catalog(
+    players: &[PlayerAssets],
+    roots: &crate::assets::AssetRoots,
+    out_dir: &Path,
+    opts: &CatalogOptions,
+) -> Result<HeadCatalogSummary> {
+    let mut summary = export_player_head_catalog(players, out_dir, opts)?;
+    let exclude: HashSet<String> = summary
+        .entries
+        .iter()
+        .map(|e| {
+            std::fs::canonicalize(&e.source)
+                .map(|c| c.to_string_lossy().into_owned())
+                .unwrap_or_else(|_| e.source.clone())
+        })
+        .collect();
+    sweep_nonplayer_heads(roots, &exclude, out_dir, opts, &mut summary);
     Ok(summary)
 }
 
@@ -340,6 +519,7 @@ mod tests {
         let mut summary = HeadCatalogSummary::default();
         write_head_group(
             "ovechkin_alexander",
+            "player",
             &asset,
             &[],
             "player_1083.rx2",
@@ -434,6 +614,86 @@ mod tests {
         eprintln!(
             "Legacy catalog: {} heads, {} hair, {} textures written",
             summary.heads_written, summary.hair_written, summary.textures_written
+        );
+        std::fs::remove_dir_all(&tmp).ok();
+    }
+
+    /// Full catalog (players + non-player sweep) on NHL 09 (mount-gated): it has a
+    /// `coachhead/` folder (staff head + hair meshes) and separate `hair_*` player
+    /// files, so the sweep should capture generic + coach + hair assets alongside
+    /// the bespoke players — and never write a bespoke player's file twice.
+    #[test]
+    fn nhl09_full_catalog_sweeps_generic_and_staff_heads() {
+        use crate::assets::{scan_player_assets, AssetRoots};
+        use crate::Platform;
+        use std::collections::HashSet;
+        use tdb_core::TdbFile;
+        use tdb_defs::FieldMetaIndex;
+
+        let rendering =
+            std::path::Path::new(r"X:\Games\Emulation\Roms\XBOX360\NHL 09\NHL 09 (USA)\rendering");
+        let base = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("..")
+            .join("..")
+            .join("anchors")
+            .join("xbox360")
+            .join("nhl09")
+            .join("databases");
+        if !rendering.join("player").is_dir() || !base.join("nhlng.db").is_file() {
+            eprintln!("skipping: NHL 09 mount/anchor absent");
+            return;
+        }
+        let db_bytes = std::fs::read(base.join("nhlng.db")).unwrap();
+        let db = TdbFile::parse(&db_bytes).expect("parse anchor");
+        let meta =
+            FieldMetaIndex::from_xml(&std::fs::read_to_string(base.join("nhlng-meta.xml")).unwrap())
+                .expect("meta");
+        let rendering_str = rendering.to_string_lossy().into_owned();
+        let roots = AssetRoots::resolve(std::path::Path::new("/unused"), Platform::Xbox)
+            .with_overrides(Some(&rendering_str), None);
+        let players = scan_player_assets(&db, &meta, &roots).expect("scan");
+
+        let tmp = std::env::temp_dir().join(format!("hc_sweep_{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&tmp);
+        let summary = export_full_catalog(
+            &players,
+            &roots,
+            &tmp,
+            &CatalogOptions { game_tag: "nhl09".into(), textures: false },
+        )
+        .expect("full catalog");
+
+        let origins: HashSet<&str> = summary.entries.iter().map(|e| e.origin.as_str()).collect();
+        assert!(origins.contains("player"), "bespoke players captured");
+        assert!(origins.contains("generic"), "generic/shared heads swept");
+        assert!(origins.contains("coach"), "coach heads swept from coachhead/");
+        // Separate hair files are captured as hair assets.
+        assert!(summary.hair_written > 0, "hair assets written");
+        // Names are unique (no file overwritten by the sweep).
+        let names: Vec<&str> = summary.entries.iter().map(|e| e.name.as_str()).collect();
+        let uniq: HashSet<&str> = names.iter().copied().collect();
+        assert_eq!(names.len(), uniq.len(), "duplicate catalog asset names written");
+        // Naming prefixes match the convention.
+        for e in &summary.entries {
+            let ok = e.name.starts_with("coach_")
+                || e.name.starts_with("generic_")
+                || e.name.starts_with("referee_")
+                || e.name.starts_with("trainer_")
+                || e.name.starts_with("commissioner_")
+                || e.origin == "player";
+            assert!(ok, "unexpected name {}", e.name);
+            assert!(e.name.ends_with("_nhl09"));
+        }
+        let n_player = summary.entries.iter().filter(|e| e.origin == "player").count();
+        let n_generic = summary.entries.iter().filter(|e| e.origin == "generic").count();
+        let n_coach = summary.entries.iter().filter(|e| e.origin == "coach").count();
+        eprintln!(
+            "NHL09 full catalog: {} entries (player={n_player}, generic={n_generic}, coach={n_coach}); \
+             heads={}, hair={}, failures={}",
+            summary.entries.len(),
+            summary.heads_written,
+            summary.hair_written,
+            summary.failures.len()
         );
         std::fs::remove_dir_all(&tmp).ok();
     }
