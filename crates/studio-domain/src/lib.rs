@@ -26,6 +26,7 @@ pub mod extract;
 pub mod field_profile;
 pub mod formula;
 pub mod head_census;
+pub mod head_submesh;
 pub mod equipment_piece;
 pub mod equipment_slots;
 pub mod equipment_texture;
@@ -56,6 +57,10 @@ pub use assets::{
 };
 pub use head_preview::{
     decode_eye_texture, decode_head_preview, HeadPreview, PreviewSubmesh, PreviewTexture,
+};
+pub use head_submesh::{
+    classify_submesh, head_asset_indices, partition as partition_submeshes, SubmeshPart,
+    SubmeshPartition,
 };
 pub use kit_preview::{
     decode_kit_preview, goalie_kit_mesh_defaults, kit_mesh_defaults, GoalieKitMeshDefaults,
