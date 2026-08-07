@@ -25,6 +25,7 @@ pub mod discovery;
 pub mod extract;
 pub mod field_profile;
 pub mod formula;
+pub mod head_catalog;
 pub mod head_census;
 pub mod head_submesh;
 pub mod equipment_piece;
@@ -61,6 +62,10 @@ pub use head_preview::{
 pub use head_submesh::{
     classify_submesh, head_asset_indices, partition as partition_submeshes, SubmeshPart,
     SubmeshPartition,
+};
+pub use head_catalog::{
+    catalog_base_from_slug, export_player_head_catalog, write_head_group, CatalogEntry,
+    CatalogOptions, HeadCatalogSummary,
 };
 pub use kit_preview::{
     decode_kit_preview, goalie_kit_mesh_defaults, kit_mesh_defaults, GoalieKitMeshDefaults,
