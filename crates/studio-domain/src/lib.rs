@@ -25,6 +25,7 @@ pub mod discovery;
 pub mod extract;
 pub mod field_profile;
 pub mod formula;
+pub mod head_census;
 pub mod equipment_piece;
 pub mod equipment_slots;
 pub mod equipment_texture;
