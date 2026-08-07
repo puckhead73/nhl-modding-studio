@@ -15,9 +15,11 @@
 //! written geometry-only (no armature — the appearance editor wants the mesh, and
 //! the porting rig is out of scope here).
 //!
-//! `{base}` is the catalog name from the export slug (`last_first_dd_mm_yyyy` →
-//! `last_first`), the date re-appended only when two players collide on the plain
-//! name. The `{game}` token is the workspace `game_id` (`nhl14`, `nhllegacy`, …).
+//! `{base}` for a bespoke player is their full export slug
+//! (`last_first_dd_mm_yyyy`) — the canonical identity that keys the historical
+//! corpus, used wherever the player is identifiable so the asset is unambiguous.
+//! Non-player heads (the Phase-4 sweep) use `{role}_{id}` instead. The `{game}`
+//! token is the workspace `game_id` (`nhl14`, `nhllegacy`, …).
 
 use std::collections::HashSet;
 use std::path::{Path, PathBuf};
@@ -258,18 +260,23 @@ pub fn export_player_head_catalog(
 
     for p in players.iter().filter(|p| p.mesh_path.is_some()) {
         let Some(slug) = p.slug.as_deref() else {
+            // Not identifiable (no usable name/birthdate). Its unique head is still
+            // captured — generically, by id — in the non-player sweep.
             summary.skipped_no_base += 1;
             continue;
         };
-        // Clean base, disambiguated with the full slug (which carries the date) if
-        // two players collide on the plain name.
-        let plain = catalog_base_from_slug(slug);
-        let base = if seen.insert(plain.clone()) {
-            plain
-        } else {
-            seen.insert(slug.to_string());
-            slug.to_string()
-        };
+        // Bespoke assets carry the player's full slug (`last_first_dd_mm_yyyy`) —
+        // the canonical identity that keys the historical corpus, so an identifiable
+        // player's head is unambiguous. The slug is unique per person; a genuine
+        // duplicate means two records describe the same player, so skip the second
+        // rather than overwrite.
+        if !seen.insert(slug.to_string()) {
+            summary
+                .failures
+                .push(format!("{}: slug {slug} already exported — skipped", p.full_name));
+            continue;
+        }
+        let base = slug;
 
         let mesh = p.mesh_path.as_deref().unwrap();
         let asset = match read_asset_file(Path::new(mesh))
@@ -281,7 +288,7 @@ pub fn export_player_head_catalog(
                 continue;
             }
         };
-        write_head_group(&base, "player", &asset, &p.texture_paths, mesh, out_dir, opts, &mut summary);
+        write_head_group(base, "player", &asset, &p.texture_paths, mesh, out_dir, opts, &mut summary);
     }
     Ok(summary)
 }
@@ -606,6 +613,15 @@ mod tests {
             assert!(bytes.len() > 100, "{} too small", e.mesh_file);
             assert_eq!(&bytes[..4], b"glTF", "{} is not a GLB", e.mesh_file);
             assert!(e.name.ends_with("_nhllegacy"), "{} misnamed", e.name);
+            // Bespoke names carry the full player slug (…_dd_mm_yyyy_…), so an
+            // identifiable player's asset is unambiguous.
+            if e.origin == "player" {
+                let has_year = e
+                    .name
+                    .split('_')
+                    .any(|seg| seg.len() == 4 && seg.bytes().all(|b| b.is_ascii_digit()));
+                assert!(has_year, "player asset {} should carry the slug date", e.name);
+            }
             for t in &e.textures {
                 let tb = std::fs::read(tmp.join(t)).unwrap_or_else(|_| panic!("missing {t}"));
                 assert_eq!(&tb[..8], b"\x89PNG\r\n\x1a\n", "{t} is not a PNG");
