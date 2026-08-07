@@ -1372,11 +1372,15 @@ pub struct PlayerAssetsDto {
     pub portrait_id: u64,
     #[ts(type = "number")]
     pub head_id: u64,
-    /// This head model is this player's own (`pPaD == lOnr`) — the only case where naming
-    /// a mesh after them is truthful.
+    /// This head model is this player's own — a uniquely-referenced, non-pool head that
+    /// resolves on disk (== `mesh_path.is_some()`). The only case where naming a mesh after
+    /// them is truthful.
     pub bespoke_head: bool,
-    /// A shared generic head (id >= 60000) reused across many players.
+    /// A shared generic head in the pool id range (>= 60000) — the Legacy/NHL 15 convention.
     pub pool_head: bool,
+    /// This head id is referenced by more than one player — a shared generic head (the
+    /// NHL 08–14 low-id convention), not this player's own.
+    pub head_shared: bool,
     pub portrait_path: Option<String>,
     pub mesh_path: Option<String>,
     /// Every RX2 container holding one of this head's textures: a single bundled texlib on
@@ -1408,6 +1412,14 @@ pub struct AssetExportSummaryDto {
     /// un-portraited players, not the player's own.
     pub portraits_skipped_generic: usize,
     pub skipped_no_slug: usize,
+    /// Heads not written because `pPaD` is a shared pool id (captured generically).
+    pub meshes_skipped_pool: usize,
+    /// Heads not written because `pPaD` is shared by several players (captured generically).
+    pub meshes_skipped_shared: usize,
+    /// Heads not written because the player has no head assigned (`pPaD == 0`).
+    pub meshes_skipped_no_head: usize,
+    /// Heads not written because a non-pool `pPaD` resolved no mesh file on disk.
+    pub meshes_skipped_missing: usize,
     pub failures: Vec<String>,
     #[ts(type = "number")]
     pub bytes_written: u64,

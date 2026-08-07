@@ -48,6 +48,25 @@ PS4 (title ← `sce_sys/param.sfo` CONTENT_ID `…-NHLICEHOCKEY20YY`):
 The gate isn't dropping a handful of edge cases — on Legacy it emits ~15 % of the heads that
 exist, and **zero** hair.
 
+### Phase 1 fix: uniqueness, not a pool threshold (verified across the committed anchors)
+
+Diagnosing the gate against every committed anchor DB + mount showed **two id conventions**, so
+the old `pPaD >= 60000` pool cutoff is not portable:
+
+- **NHL 08–14** pack generic heads into **low, shared** ids (max `pPaD` ~10k–30k; **zero** ids
+  ≥ 60000). A fixed 60000 cutoff catches nothing here, so gating on it would attribute one shared
+  low-id head to thousands of players.
+- **NHL 15 / Legacy** use the **60000+ pool** for generics; bespoke heads sit at low unique ids.
+
+The portable signal is **uniqueness**: a `pPaD` used by exactly **one person** is that person's
+own head; one used by two or more different people is generic — regardless of numeric value.
+Counting *people* (raw name + birth fields), not records, so all-star/legends duplicates of a star
+don't demote their real head. This lands a stable ~250–500 bespoke heads per title (vs the old
+equality's ~250 that also included false-bespoke shared heads), recovers the divergent-id heads the
+equality dropped, and never names a shared head after an individual. Implemented in
+`scan_player_assets`; proven by `assets::tests::phase1_file_truth_recovers_divergent_id_heads`
+(mount-gated). Shared/pool heads are captured once by the Phase-4 sweep, not per player.
+
 ## Verified layout (what lives where)
 
 | Class | NHL 07 | NHL 08/09 | NHL 10 → Legacy | PS4 |

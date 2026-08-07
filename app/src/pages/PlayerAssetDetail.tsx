@@ -66,8 +66,8 @@ function AssetDetail({
           <div className="flex flex-wrap gap-1">
             {player.mesh_path ? (
               <Pill tone="ok">Own head model</Pill>
-            ) : player.pool_head ? (
-              <Pill tone="neutral">Shared pool head</Pill>
+            ) : player.pool_head || player.head_shared ? (
+              <Pill tone="neutral">Shared generic head</Pill>
             ) : (
               <Pill tone="neutral">No head model</Pill>
             )}
@@ -81,7 +81,7 @@ function AssetDetail({
             {player.slug ? null : <Pill tone="warn">Not exportable</Pill>}
           </div>
 
-          {player.pool_head ? (
+          {player.pool_head || player.head_shared ? (
             <p className="text-xs text-slate-500">
               This player uses a generic head model shared with many others, so it isn't exported
               under their name.

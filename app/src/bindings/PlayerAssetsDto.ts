@@ -12,14 +12,20 @@ export type PlayerAssetsDto = { bio_record: number, full_name: string,
  */
 slug: string | null, portrait_id: number, head_id: number, 
 /**
- * This head model is this player's own (`pPaD == lOnr`) — the only case where naming
- * a mesh after them is truthful.
+ * This head model is this player's own — a uniquely-referenced, non-pool head that
+ * resolves on disk (== `mesh_path.is_some()`). The only case where naming a mesh after
+ * them is truthful.
  */
 bespoke_head: boolean, 
 /**
- * A shared generic head (id >= 60000) reused across many players.
+ * A shared generic head in the pool id range (>= 60000) — the Legacy/NHL 15 convention.
  */
-pool_head: boolean, portrait_path: string | null, mesh_path: string | null, 
+pool_head: boolean, 
+/**
+ * This head id is referenced by more than one player — a shared generic head (the
+ * NHL 08–14 low-id convention), not this player's own.
+ */
+head_shared: boolean, portrait_path: string | null, mesh_path: string | null, 
 /**
  * Every RX2 container holding one of this head's textures: a single bundled texlib on
  * Legacy/14/15, or several loose per-raster files on NHL 10. Empty when none ship.

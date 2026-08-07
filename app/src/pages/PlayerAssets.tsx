@@ -154,8 +154,9 @@ export function PlayerAssetsPage() {
       key: "head",
       label: "Head",
       width: "60px",
-      sort: (r) => (r.mesh_path ? 0 : r.pool_head ? 1 : 2),
-      render: (r) => (r.mesh_path ? "✓" : r.pool_head ? "pool" : "—"),
+      sort: (r) => (r.mesh_path ? 0 : r.pool_head || r.head_shared ? 1 : 2),
+      render: (r) =>
+        r.mesh_path ? "✓" : r.pool_head || r.head_shared ? "shared" : "—",
       cellClass: (r) => (r.mesh_path ? "text-emerald-400" : "text-slate-600"),
     },
     {

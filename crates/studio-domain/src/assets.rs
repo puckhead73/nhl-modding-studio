@@ -16,12 +16,16 @@
 //! `kOtt.lOnr` is a *different* field (team-logo art id) — same raw id, other
 //! table. Don't conflate them.
 //!
-//! **A player has a bespoke modelled head iff `pPaD == lOnr`.** Everyone else
-//! shares a generic pool head (ids `>= 60000`, see [`POOL_HEAD_MIN`]) that
-//! belongs to no one player and is therefore not extractable *as* that player.
-//! On the reference Xbox 360 anchor this selects 246 of 5632 players, and all
-//! 246 resolve to a mesh, a texlib **and** a portrait present on disk — the
-//! rule is exact, not a heuristic.
+//! **A player has their own modelled head when a real, non-pool `player_{pPaD}`
+//! mesh resolves on disk.** This is *file-truth*, not the old `pPaD == lOnr`
+//! proxy: that equality was exact only on the Legacy calibration anchor (where
+//! it picked 246 of 5632) and silently dropped every bespoke head whose head-id
+//! space diverges from the portrait-id space — the bulk of the roster on most
+//! titles (Legacy alone ships 1589 head files; see
+//! `docs/audits/head-hair-census.md`). Pool ids (`>= 60000`, see
+//! [`POOL_HEAD_MIN`]) are shared models belonging to no one player; they are
+//! captured generically by the non-player sweep, not *as* a player. PS4 heads are
+//! name-slug keyed (`{slug}.mcd`), so there the test is that slug file's presence.
 //!
 //! **Portraits are decoupled from heads**: 4259 of those same 5632 players have
 //! a portrait. So the portrait set is ~17× the head set, and the two are scanned
@@ -692,10 +696,19 @@ pub struct PlayerAssets {
     pub portrait_id: u64,
     /// `ubPc.pPaD`.
     pub head_id: u64,
-    /// `pPaD == lOnr` — this head model is this player's own.
+    /// A real, **non-pool** head mesh for this player resolves on disk — i.e.
+    /// they have their own modelled head (== `mesh_path.is_some()`). Was the
+    /// `pPaD == lOnr` proxy; now file-truth, so divergent-id bespoke heads count
+    /// (see docs/audits/head-hair-census.md). PS4: the slug `.mcd` exists.
     pub bespoke_head: bool,
-    /// `pPaD >= 60000` — a shared generic head.
+    /// `pPaD >= 60000` — a shared generic/pool head (not this player's own).
+    /// A Legacy/NHL 15 convention; on NHL 08–14 generics are low shared ids
+    /// instead, caught by [`Self::head_shared`].
     pub pool_head: bool,
+    /// This `pPaD` is referenced by more than one player — a shared generic head,
+    /// so it is not attributed to this player even if it isn't in the pool range.
+    /// The portable bespoke-vs-generic signal (see [`scan_player_assets`]).
+    pub head_shared: bool,
     /// Resolved paths, `None` when the file isn't on disk.
     pub portrait_path: Option<String>,
     pub portrait_small_path: Option<String>,
@@ -756,6 +769,35 @@ pub fn scan_player_assets(
     // to hand it the encoding it expects.
     let encoding = probe_birthdate_encoding(db, bio);
 
+    // Distinct *people* per `pPaD` across the whole bio table. A head id used by
+    // exactly one person is that person's own (bespoke); one used by two or more
+    // different people is a generic/pool head — regardless of its numeric value.
+    // This is the portable signal: the 60000 pool cutoff is a Legacy/NHL 15
+    // convention (NHL 08–14 pack generics into LOW shared ids, with no 60000 range
+    // at all — verified across the committed anchors), so uniqueness, not a fixed
+    // threshold, separates bespoke from shared. Counting *people* rather than
+    // records is deliberate: all-star / legends teams duplicate a star's bio, and
+    // those extra entries must not demote their real head to "shared". The person
+    // key is the raw name + birth fields — the same identity the export slug uses.
+    // Mirrors the shared-vs-unique logic of [`mark_generic_portraits`].
+    let person_key = |record: u32| -> String {
+        let first = read_str_by_name(db, meta, bio, record, "firstname");
+        let last = read_str_by_name(db, meta, bio, record, "lastname");
+        let y = f_year.and_then(|f| db.read_u64(bio, record, f)).unwrap_or(0);
+        let m = f_month.and_then(|f| db.read_u64(bio, record, f)).unwrap_or(0);
+        let d = f_day.and_then(|f| db.read_u64(bio, record, f)).unwrap_or(0);
+        format!(
+            "{}|{}|{y}|{m}|{d}",
+            first.trim().to_ascii_lowercase(),
+            last.trim().to_ascii_lowercase()
+        )
+    };
+    let mut head_persons: HashMap<u64, std::collections::HashSet<String>> = HashMap::new();
+    for record in 0..bio.current_records as u32 {
+        let hid = db.read_u64(bio, record, f_head).unwrap_or(0);
+        head_persons.entry(hid).or_default().insert(person_key(record));
+    }
+
     let mut out = Vec::with_capacity(bio.current_records as usize);
     for record in 0..bio.current_records as u32 {
         let portrait_id = db.read_u64(bio, record, f_portrait).unwrap_or(0);
@@ -790,12 +832,34 @@ pub fn scan_player_assets(
         let ps4_slug = (roots.platform() == Platform::Ps4)
             .then(|| ps4_name_slug(first.trim(), last.trim()))
             .flatten();
-        // "This player's own head": on the RenderWare titles, `pPaD == lOnr`; on
-        // PS4, the existence of a name-slug `{slug}.mcd` (pool heads have only a
-        // numeric `generic_player_*`).
-        let bespoke_head = match roots.platform() {
-            Platform::Ps4 => roots.ps4_bespoke_mesh(ps4_slug.as_deref()).is_some(),
-            _ => head_id == portrait_id,
+        let pool_head = head_id >= POOL_HEAD_MIN;
+        let head_shared = head_persons
+            .get(&head_id)
+            .map(|people| people.len() > 1)
+            .unwrap_or(false);
+        // "This player's own head" = a **uniquely-referenced**, non-pool head that
+        // resolves on disk. This replaces the old `pPaD == lOnr` proxy, which was
+        // exact only on the Legacy calibration anchor and silently dropped every
+        // bespoke head whose head-id space diverges from the portrait-id space
+        // (Ovechkin et al. on the titles where they differ). A head id shared by
+        // many players is generic — captured once by the Phase-4 sweep, never
+        // named after one of the sharers. PS4 keeps its slug-file test: its heads
+        // are name-keyed, and a generic there is a numeric `generic_player_*`, so a
+        // resolved `{slug}.mcd` is inherently unique to that player.
+        let own_mesh = match roots.platform() {
+            Platform::Ps4 => roots.ps4_bespoke_mesh(ps4_slug.as_deref()),
+            _ if head_id == 0 || pool_head || head_shared => None,
+            _ => roots.mesh_path(head_id, None),
+        };
+        let bespoke_head = own_mesh.is_some();
+        let texture_paths = if own_mesh.is_some() {
+            roots
+                .texture_paths(head_id, ps4_slug.as_deref())
+                .into_iter()
+                .map(|p| p.to_string_lossy().into_owned())
+                .collect()
+        } else {
+            Vec::new()
         };
         out.push(PlayerAssets {
             bio_record: record,
@@ -804,26 +868,12 @@ pub fn scan_player_assets(
             portrait_id,
             head_id,
             bespoke_head,
-            pool_head: head_id >= POOL_HEAD_MIN,
+            pool_head,
+            head_shared,
             portrait_path: path_str(roots.portrait_path(portrait_id, PORTRAIT_DIR_LARGE)),
             portrait_small_path: path_str(roots.portrait_path(portrait_id, PORTRAIT_DIR_SMALL)),
-            // Only a bespoke head belongs to this player. A pool head resolves
-            // to a real file too, but naming it after this player would be a
-            // lie — 5385 players share those models.
-            mesh_path: path_str(
-                bespoke_head
-                    .then(|| roots.mesh_path(head_id, ps4_slug.as_deref()))
-                    .flatten(),
-            ),
-            texture_paths: if bespoke_head {
-                roots
-                    .texture_paths(head_id, ps4_slug.as_deref())
-                    .into_iter()
-                    .map(|p| p.to_string_lossy().into_owned())
-                    .collect()
-            } else {
-                Vec::new()
-            },
+            mesh_path: path_str(own_mesh),
+            texture_paths,
             // Filled by `mark_generic_portraits` (needs the whole set); a bare
             // scan can't know whether a portrait is shared.
             generic_portrait: false,
@@ -2079,6 +2129,20 @@ pub struct AssetExportSummary {
     pub portraits_skipped_generic: usize,
     /// Players skipped because their bio yields no usable slug.
     pub skipped_no_slug: usize,
+    /// Heads not written because `pPaD` is a shared pool id (`>= 60000`) — the
+    /// mesh is real but belongs to no single player; captured generically by the
+    /// Phase-4 sweep instead. Counted rather than treated as a failure.
+    pub meshes_skipped_pool: usize,
+    /// Heads not written because `pPaD` is shared by several players (a generic
+    /// head packed into a low id, the NHL 08–14 convention) — captured generically
+    /// by the Phase-4 sweep, never named after one of the sharers.
+    pub meshes_skipped_shared: usize,
+    /// Heads not written because the player has no head assigned (`pPaD == 0`).
+    pub meshes_skipped_no_head: usize,
+    /// Heads not written because `pPaD` is a real, non-pool id but no mesh file
+    /// resolves on disk — an incomplete extraction or an unexpected naming scheme.
+    /// This is the anomaly worth chasing (it used to hide behind the equality gate).
+    pub meshes_skipped_missing: usize,
     /// Per-asset failures, already human-readable (player name + reason).
     pub failures: Vec<String>,
     pub bytes_written: u64,
@@ -2158,21 +2222,42 @@ pub fn export_player_assets(
             }
         }
 
-        if let Some(src) = p.mesh_path.as_deref().filter(|_| opts.meshes_glb) {
-            match read_asset_file(Path::new(src))
-                .and_then(|b| parse_head_mesh(Path::new(src), &b, false)) {
-                Ok(asset) => {
-                    let glb = tdb_rx2::playermesh::write_glb_geometry_only(&asset);
-                    let dst = out_dir.join("heads").join(format!("{slug}.glb"));
-                    match write_file(&dst, &glb) {
-                        Ok(n) => {
-                            summary.meshes_written += 1;
-                            summary.bytes_written += n;
+        if opts.meshes_glb {
+            if let Some(src) = p.mesh_path.as_deref() {
+                match read_asset_file(Path::new(src))
+                    .and_then(|b| parse_head_mesh(Path::new(src), &b, false)) {
+                    Ok(asset) => {
+                        let glb = tdb_rx2::playermesh::write_glb_geometry_only(&asset);
+                        let dst = out_dir.join("heads").join(format!("{slug}.glb"));
+                        match write_file(&dst, &glb) {
+                            Ok(n) => {
+                                summary.meshes_written += 1;
+                                summary.bytes_written += n;
+                            }
+                            Err(e) => summary.failures.push(format!("{}: {e}", p.full_name)),
                         }
-                        Err(e) => summary.failures.push(format!("{}: {e}", p.full_name)),
                     }
+                    Err(e) => summary.failures.push(format!("{}: mesh — {e}", p.full_name)),
                 }
-                Err(e) => summary.failures.push(format!("{}: mesh — {e}", p.full_name)),
+            } else if p.pool_head {
+                // Shared pool head — real mesh, but not this player's own.
+                summary.meshes_skipped_pool += 1;
+            } else if p.head_shared {
+                // Generic head packed into a low, shared id (NHL 08–14).
+                summary.meshes_skipped_shared += 1;
+            } else if p.head_id == 0 {
+                summary.meshes_skipped_no_head += 1;
+            } else {
+                // Non-pool `pPaD` that resolved no file: the anomaly the old
+                // equality gate hid. Count it, and name the first few so the
+                // operator can chase a naming-scheme or extraction gap.
+                summary.meshes_skipped_missing += 1;
+                if summary.meshes_skipped_missing <= 20 {
+                    summary.failures.push(format!(
+                        "{}: head {} — no mesh file resolved (non-pool id, missing on disk)",
+                        p.full_name, p.head_id
+                    ));
+                }
             }
         }
 
@@ -5137,6 +5222,7 @@ mod tests {
             head_id: 60000,
             bespoke_head: false,
             pool_head: true,
+            head_shared: false,
             portrait_path,
             portrait_small_path: None,
             mesh_path: None,
@@ -5482,5 +5568,129 @@ mod tests {
         assert_eq!(summary2.raw_copied, 0);
 
         std::fs::remove_dir_all(&tmp).ok();
+    }
+
+    /// Phase 1 gate proof (mount-gated): across the committed title anchors + the
+    /// real rendering mounts, the file-truth rule resolves a head mesh for every
+    /// player whose non-pool `pPaD` has a file on disk — including the divergent-id
+    /// bespoke heads (`pPaD != lOnr`) the old equality silently dropped. Legacy was
+    /// the equality's calibration anchor so it barely moves there; the recovery
+    /// shows up on the titles whose head-id and portrait-id spaces diverge. Reads
+    /// committed DBs (CI-safe); skips titles whose rendering tree isn't mounted.
+    #[test]
+    fn phase1_file_truth_recovers_divergent_id_heads() {
+        use tdb_core::TdbFile;
+        use tdb_defs::FieldMetaIndex;
+
+        // (title, rendering mount) — anchor DB is anchors/xbox360/<title>/databases.
+        let titles: &[(&str, &str)] = &[
+            ("nhl08", r"X:\Games\Emulation\Roms\XBOX360\NHL 08\NHL 08 (USA)\rendering"),
+            ("nhl09", r"X:\Games\Emulation\Roms\XBOX360\NHL 09\NHL 09 (USA)\rendering"),
+            ("nhl10", r"X:\Games\Emulation\Roms\XBOX360\NHL 10\NHL 10\rendering"),
+            ("nhl11", r"X:\Games\Emulation\Roms\XBOX360\NHL 11\NHL 11\rendering"),
+            ("nhl12", r"X:\Games\Emulation\Roms\XBOX360\NHL 12\NHL 12\rendering"),
+            ("nhl13", r"X:\Games\Emulation\Roms\XBOX360\NHL 13\NHL 13\rendering"),
+            ("nhl14", r"X:\Games\Emulation\Roms\XBOX360\NHL 14\NHL 14\rendering"),
+            ("nhl15", r"X:\Games\Emulation\Roms\XBOX360\NHL 15\NHL 15\rendering"),
+            ("nhllegacy", r"X:\Games\Emulation\Roms\XBOX360\NHL Legacy\NHL Legacy\rendering"),
+        ];
+        let repo = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("..").join("..");
+        let mut ran = 0usize;
+        let mut total_recovered = 0usize;
+
+        for (title, rendering) in titles {
+            let rendering = std::path::Path::new(rendering);
+            let base = repo.join("anchors").join("xbox360").join(title).join("databases");
+            if !rendering.join("player").is_dir() || !base.join("nhlng.db").is_file() {
+                eprintln!("{title}: skip (mount or anchor absent)");
+                continue;
+            }
+            ran += 1;
+            let db_bytes = std::fs::read(base.join("nhlng.db")).unwrap();
+            let db = TdbFile::parse(&db_bytes).expect("parse anchor");
+            let meta = FieldMetaIndex::from_xml(
+                &std::fs::read_to_string(base.join("nhlng-meta.xml")).unwrap(),
+            )
+            .expect("meta");
+            let rendering_str = rendering.to_string_lossy().into_owned();
+            let roots = AssetRoots::resolve(std::path::Path::new("/unused"), Platform::Xbox)
+                .with_overrides(Some(&rendering_str), None);
+            let players = scan_player_assets(&db, &meta, &roots).expect("scan");
+
+            let with_mesh = players.iter().filter(|p| p.mesh_path.is_some()).count();
+            let equality_gate = players
+                .iter()
+                .filter(|p| p.head_id == p.portrait_id && p.head_id < POOL_HEAD_MIN)
+                .count();
+            // Heads the uniqueness rule recovers that the equality would have
+            // dropped: a mesh resolved for a head whose id differs from the
+            // portrait id (the divergent-id bespoke heads, e.g. Ovechkin).
+            let recovered = players
+                .iter()
+                .filter(|p| p.mesh_path.is_some() && p.head_id != p.portrait_id)
+                .count();
+            total_recovered += recovered;
+            eprintln!(
+                "{title}: {} players — {with_mesh} own-head ({} shared, {} pool skipped) — equality would pick {equality_gate}, recovered divergent={recovered}",
+                players.len(),
+                players.iter().filter(|p| p.head_shared).count(),
+                players.iter().filter(|p| p.pool_head).count(),
+            );
+
+            // Invariants on every title:
+            // 1. A resolved head is never a shared or pool head — no generic is
+            //    ever attributed to a single player.
+            assert!(
+                players
+                    .iter()
+                    .all(|p| p.mesh_path.is_none() || (!p.pool_head && !p.head_shared)),
+                "{title}: a shared/pool head was attributed to a player"
+            );
+            // 2. A resolved head id is used by exactly one *person* (duplicate
+            //    all-star/legends entries of the same player are allowed to share it).
+            {
+                use std::collections::{HashMap as HM, HashSet};
+                let mut people: HM<u64, HashSet<&str>> = HM::new();
+                for p in &players {
+                    people.entry(p.head_id).or_default().insert(p.full_name.as_str());
+                }
+                for p in players.iter().filter(|p| p.mesh_path.is_some()) {
+                    assert_eq!(
+                        people[&p.head_id].len(),
+                        1,
+                        "{title}: head {} of {} is shared by several people",
+                        p.head_id,
+                        p.full_name
+                    );
+                }
+            }
+            // 3. Every resolved path is a real file.
+            for p in players.iter().filter(|p| p.mesh_path.is_some()) {
+                assert!(
+                    std::path::Path::new(p.mesh_path.as_deref().unwrap()).is_file(),
+                    "{title}: {} mesh_path missing on disk",
+                    p.full_name
+                );
+            }
+            // 4. The bespoke set is a sane fraction of the roster — not the
+            //    over-attribution the raw pool-threshold rule produced (which
+            //    named thousands of shared heads after individuals).
+            assert!(
+                with_mesh < players.len() / 2,
+                "{title}: {with_mesh}/{} resolved — over-attribution, not bespoke-only",
+                players.len()
+            );
+        }
+
+        if ran == 0 {
+            eprintln!("skipping: no title mounts present");
+            return;
+        }
+        // The whole point of Phase 1: somewhere across the mounted titles, real
+        // heads are recovered that the equality gate would have dropped.
+        assert!(
+            total_recovered > 0,
+            "no divergent-id heads recovered across {ran} titles — the fix changed nothing"
+        );
     }
 }

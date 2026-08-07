@@ -1259,6 +1259,7 @@ pub fn player_assets_dto(p: &PlayerAssets) -> PlayerAssetsDto {
         head_id: p.head_id,
         bespoke_head: p.bespoke_head,
         pool_head: p.pool_head,
+        head_shared: p.head_shared,
         portrait_path: p.portrait_path.clone(),
         mesh_path: p.mesh_path.clone(),
         texture_paths: p.texture_paths.clone(),
@@ -1284,6 +1285,10 @@ pub fn asset_export_summary_dto(s: &AssetExportSummary) -> AssetExportSummaryDto
         raw_copied: s.raw_copied,
         portraits_skipped_generic: s.portraits_skipped_generic,
         skipped_no_slug: s.skipped_no_slug,
+        meshes_skipped_pool: s.meshes_skipped_pool,
+        meshes_skipped_shared: s.meshes_skipped_shared,
+        meshes_skipped_no_head: s.meshes_skipped_no_head,
+        meshes_skipped_missing: s.meshes_skipped_missing,
         failures: s.failures.clone(),
         bytes_written: s.bytes_written,
     }
