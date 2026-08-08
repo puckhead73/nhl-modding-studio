@@ -604,6 +604,12 @@ pub enum SkinPolicy {
     /// No palette required (equipment / body parts skin against a shared
     /// bindpose asset).
     Optional,
+    /// Tolerate **any** skin layout: zero chunks (rigid meshes — e.g. the
+    /// standalone hair-style variants some titles ship, `hair_*_aa.rx2`, which
+    /// carry no AnimationSkin at all), one, or several disagreeing copies (keep
+    /// the first). For extraction that only needs positions / UVs / triangles and
+    /// never the rig (the appearance catalog). Never write the result back.
+    GeometryOnly,
 }
 
 pub fn parse_player_mesh(data: &[u8]) -> Result<PlayerAsset, PlayerMeshError> {
@@ -626,6 +632,12 @@ pub fn parse_player_mesh_preview(data: &[u8]) -> Result<PlayerAsset, PlayerMeshE
 /// `docs/body-mesh-spike.md`). `skin` is then an empty palette.
 pub fn parse_equipment_mesh(data: &[u8]) -> Result<PlayerAsset, PlayerMeshError> {
     parse_mesh_impl(data, SkinPolicy::Optional)
+}
+
+/// Geometry-only parse (see [`SkinPolicy::GeometryOnly`]): tolerates any skin
+/// layout, including none. For catalog extraction where only the geometry is used.
+pub fn parse_player_mesh_geometry(data: &[u8]) -> Result<PlayerAsset, PlayerMeshError> {
+    parse_mesh_impl(data, SkinPolicy::GeometryOnly)
 }
 
 fn parse_mesh_impl(data: &[u8], skin_policy: SkinPolicy) -> Result<PlayerAsset, PlayerMeshError> {
@@ -718,9 +730,13 @@ fn parse_mesh_impl(data: &[u8], skin_policy: SkinPolicy) -> Result<PlayerAsset, 
                         skin = Some(decode_animation_skin(data, off, e.size as usize)?);
                     }
                     Some(first) if skin_blocks_agree(first, block) => {}
-                    // The copies genuinely differ. A preview keeps the first
-                    // (geometry is unaffected); an edit refuses.
-                    Some(_) if skin_policy == SkinPolicy::LenientFirst => {}
+                    // The copies genuinely differ. A preview / geometry-only parse
+                    // keeps the first (geometry is unaffected); an edit refuses.
+                    Some(_)
+                        if matches!(
+                            skin_policy,
+                            SkinPolicy::LenientFirst | SkinPolicy::GeometryOnly
+                        ) => {}
                     Some(_) => return Err(PlayerMeshError::SkinPalettesDiffer),
                 }
             }
@@ -759,7 +775,7 @@ fn parse_mesh_impl(data: &[u8], skin_policy: SkinPolicy) -> Result<PlayerAsset, 
 
     let skin = match skin {
         Some(s) => s,
-        None if skin_policy != SkinPolicy::Optional => {
+        None if !matches!(skin_policy, SkinPolicy::Optional | SkinPolicy::GeometryOnly) => {
             return Err(PlayerMeshError::SkinCountMismatch(0))
         }
         None => BonePalette {

@@ -1233,6 +1233,21 @@ pub(crate) fn parse_head_mesh(
     }
 }
 
+/// Decode a head mesh for **geometry-only** use (the appearance catalog): tolerates
+/// any AnimationSkin layout, including none — so rigid meshes like the standalone
+/// hair-style variants (`hair_*_aa.rx2`, no skin chunk) decode instead of being
+/// refused. Positions/UVs/triangles only; the rig is not resolved.
+pub(crate) fn parse_head_mesh_geometry(
+    path: &Path,
+    bytes: &[u8],
+) -> Result<tdb_rx2::playermesh::PlayerAsset> {
+    let err = |e: String| DomainError::Extract(format!("{}: {e}", path.display()));
+    if path.extension().is_some_and(|e| e.eq_ignore_ascii_case("mcd")) {
+        return tdb_rx2::mcd::parse_player_mesh(bytes).map_err(|e| err(e.to_string()));
+    }
+    tdb_rx2::playermesh::parse_player_mesh_geometry(bytes).map_err(|e| err(e.to_string()))
+}
+
 /// PNG magic — the head of a PS4 portrait (`p{id}.png`).
 const PNG_MAGIC: &[u8; 8] = b"\x89PNG\r\n\x1a\n";
 

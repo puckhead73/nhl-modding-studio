@@ -29,7 +29,7 @@ use serde::{Deserialize, Serialize};
 use tdb_rx2::playermesh::PlayerAsset;
 
 use crate::assets::{
-    gnf_to_rgba, linear_to_rgba, parse_head_mesh, read_asset_file, DecodedImage, PlayerAssets,
+    gnf_to_rgba, linear_to_rgba, parse_head_mesh_geometry, read_asset_file, DecodedImage, PlayerAssets,
 };
 use crate::head_submesh::{head_asset_indices, partition};
 use crate::Result;
@@ -207,6 +207,33 @@ fn decode_texture_pngs(path: &Path) -> Vec<(String, Vec<u8>)> {
     out
 }
 
+/// Decode every texture container to PNG under `{base}_{map}_{game}.png` and
+/// return the relative paths. Shared by the head and hair writers.
+fn write_textures(
+    base: &str,
+    game: &str,
+    texture_paths: &[String],
+    out_dir: &Path,
+    summary: &mut HeadCatalogSummary,
+) -> Vec<String> {
+    let mut rel = Vec::new();
+    for src in texture_paths {
+        for (label, png) in decode_texture_pngs(Path::new(src)) {
+            let fname = format!("{base}_{label}_{game}.png");
+            let dst = out_dir.join("textures").join(&fname);
+            match write_out(&dst, &png) {
+                Ok(n) => {
+                    summary.textures_written += 1;
+                    summary.bytes_written += n;
+                    rel.push(format!("textures/{fname}"));
+                }
+                Err(e) => summary.failures.push(format!("{base} texture {label}: {e}")),
+            }
+        }
+    }
+    rel
+}
+
 /// Write the head / hair / facial-hair assets (and shared textures) for one
 /// already-decoded head under `base`. Reused by the player export here and by the
 /// Phase-4 staff/generic sweep.
@@ -224,23 +251,11 @@ pub fn write_head_group(
     let part = partition(asset);
 
     // Textures once, shared by the head + hair entries.
-    let mut texture_rel: Vec<String> = Vec::new();
-    if opts.textures {
-        for src in texture_paths {
-            for (label, png) in decode_texture_pngs(Path::new(src)) {
-                let fname = format!("{base}_{label}_{game}.png");
-                let dst = out_dir.join("textures").join(&fname);
-                match write_out(&dst, &png) {
-                    Ok(n) => {
-                        summary.textures_written += 1;
-                        summary.bytes_written += n;
-                        texture_rel.push(format!("textures/{fname}"));
-                    }
-                    Err(e) => summary.failures.push(format!("{base} texture {label}: {e}")),
-                }
-            }
-        }
-    }
+    let texture_rel = if opts.textures {
+        write_textures(base, game, texture_paths, out_dir, summary)
+    } else {
+        Vec::new()
+    };
 
     // (class, indices) for each mesh asset to write.
     let head_idx = head_asset_indices(&part);
@@ -314,7 +329,7 @@ pub fn export_player_head_catalog(
 
         let mesh = p.mesh_path.as_deref().unwrap();
         let asset = match read_asset_file(Path::new(mesh))
-            .and_then(|b| parse_head_mesh(Path::new(mesh), &b, true))
+            .and_then(|b| parse_head_mesh_geometry(Path::new(mesh), &b))
         {
             Ok(a) => a,
             Err(e) => {
@@ -334,15 +349,22 @@ fn write_hair_only(
     base: &str,
     origin: &str,
     asset: &PlayerAsset,
+    texture_paths: &[String],
     source: &str,
     out_dir: &Path,
     opts: &CatalogOptions,
     summary: &mut HeadCatalogSummary,
 ) {
     if asset.submeshes.is_empty() {
+        summary.failures.push(format!("{source}: decoded to no geometry"));
         return;
     }
     let game = &opts.game_tag;
+    let textures = if opts.textures {
+        write_textures(base, game, texture_paths, out_dir, summary)
+    } else {
+        Vec::new()
+    };
     let glb = tdb_rx2::playermesh::write_glb_geometry_only(asset);
     let fname = format!("{base}_hair_{game}.glb");
     let dst = out_dir.join("heads").join(&fname);
@@ -357,12 +379,40 @@ fn write_hair_only(
                 game: game.clone(),
                 mesh_file: format!("heads/{fname}"),
                 submeshes: asset.submeshes.iter().map(|s| s.name.clone()).collect(),
-                textures: Vec::new(),
+                textures,
                 source: source.to_string(),
             });
         }
         Err(e) => summary.failures.push(format!("{base} hair: {e}")),
     }
+}
+
+/// Index a folder's texture files by head id, split head- vs hair-prefixed, so a
+/// swept head/hair asset can be given its own maps. Returns `(head_tex, hair_tex)`.
+type TexIndex = std::collections::HashMap<u64, Vec<String>>;
+fn folder_textures_by_id(
+    files: &[PathBuf],
+    folder: &str,
+    platform: crate::Platform,
+) -> (TexIndex, TexIndex) {
+    use crate::head_census::classify;
+    let (mut head_tex, mut hair_tex): (TexIndex, TexIndex) = Default::default();
+    for path in files {
+        let Some(fname) = path.file_name().and_then(|s| s.to_str()) else {
+            continue;
+        };
+        let e = classify(folder, fname, platform);
+        let (Some(id), true) = (e.id, e.is_texture) else {
+            continue;
+        };
+        let s = path.to_string_lossy().into_owned();
+        if fname.to_ascii_lowercase().starts_with("hair") {
+            hair_tex.entry(id).or_default().push(s);
+        } else {
+            head_tex.entry(id).or_default().push(s);
+        }
+    }
+    (head_tex, hair_tex)
 }
 
 /// The catalog name prefix for a swept file's role. A shared *player*-folder head
@@ -384,17 +434,13 @@ fn origin_for_role(role: crate::head_census::Role) -> &'static str {
 /// bespoke player's own — generic/pool heads, referees, coaches, trainers, and any
 /// unreferenced head file — and add them to the catalog under `{role}_{id}` names
 /// (`generic_60046_head_{game}`, `referee_31000_head_{game}`, `coach_100_hair_{game}`).
-/// Geometry-only: staff/generic texture resolution differs per role and is a
-/// follow-up; bespoke players already carry textures from the player export.
+/// Textures are resolved **folder-locally** by head id (staff textures live in the
+/// staff folder, not `player/`), so swept heads/hair carry their own maps when
+/// `opts.textures` is set.
 ///
 /// `exclude_sources` are the canonicalized mesh paths already written by the player
 /// export, so a bespoke head sitting in the shared `player/` folder isn't captured
 /// twice.
-///
-/// Known limitation: a few **rigid** `.rx2` hair meshes (e.g. NHL 09 coach hair
-/// style variants `hair_*_aa/ab.rx2`) carry no AnimationSkin chunk, which the mesh
-/// parser currently requires; they're reported as failures rather than captured
-/// (a rigid-`.rx2` parse path is a follow-up). Everything decodable is captured.
 pub fn sweep_nonplayer_heads(
     roots: &crate::assets::AssetRoots,
     exclude_sources: &HashSet<String>,
@@ -438,6 +484,14 @@ pub fn sweep_nonplayer_heads(
         }
         files.sort();
 
+        // Index this folder's texture files by head id (staff textures live in the
+        // staff folder, not `player/`, so this is folder-local by design).
+        let (head_tex, hair_tex) = if opts.textures {
+            folder_textures_by_id(&files, folder, platform)
+        } else {
+            Default::default()
+        };
+
         for path in files {
             let Some(fname) = path.file_name().and_then(|s| s.to_str()) else {
                 continue;
@@ -461,7 +515,7 @@ pub fn sweep_nonplayer_heads(
             let base = format!("{origin}_{id}");
             let src = path.to_string_lossy().into_owned();
             let asset = match read_asset_file(&path)
-                .and_then(|b| parse_head_mesh(&path, &b, true))
+                .and_then(|b| parse_head_mesh_geometry(&path, &b))
             {
                 Ok(a) => a,
                 Err(e) => {
@@ -470,9 +524,16 @@ pub fn sweep_nonplayer_heads(
                 }
             };
             match entry.part {
-                Part::Hair => write_hair_only(&base, origin, &asset, &src, out_dir, opts, summary),
-                // A head file: split head / hair / facial-hair. Geometry-only here.
-                _ => write_head_group(&base, origin, &asset, &[], &src, out_dir, opts, summary),
+                Part::Hair => {
+                    let tx = hair_tex.get(&id).cloned().unwrap_or_default();
+                    write_hair_only(&base, origin, &asset, &tx, &src, out_dir, opts, summary);
+                }
+                // A head file: split head / hair / facial-hair. Head-context textures
+                // (head_/eyes_/texlib_, the bundled set) are shared across its entries.
+                _ => {
+                    let tx = head_tex.get(&id).cloned().unwrap_or_default();
+                    write_head_group(&base, origin, &asset, &tx, &src, out_dir, opts, summary);
+                }
             }
         }
     }
@@ -710,6 +771,8 @@ mod tests {
 
         let tmp = std::env::temp_dir().join(format!("hc_sweep_{}", std::process::id()));
         let _ = std::fs::remove_dir_all(&tmp);
+        // Geometry-only here so the full-tree sweep stays fast; sweep *texture*
+        // resolution is covered by `sweep_resolves_folder_local_textures`.
         let summary = export_full_catalog(
             &players,
             &roots,
@@ -748,6 +811,7 @@ mod tests {
         assert_eq!(manifest.entries.len(), summary.entries.len());
         assert_eq!(manifest.head_count, summary.heads_written);
 
+        assert!(summary.entries.iter().all(|e| e.textures.is_empty()), "geometry-only run");
         let n_player = summary.entries.iter().filter(|e| e.origin == "player").count();
         let n_generic = summary.entries.iter().filter(|e| e.origin == "generic").count();
         let n_coach = summary.entries.iter().filter(|e| e.origin == "coach").count();
@@ -759,6 +823,65 @@ mod tests {
             summary.hair_written,
             summary.failures.len()
         );
+        std::fs::remove_dir_all(&tmp).ok();
+    }
+
+    /// Sweep texture resolution (mount-gated, fast — one head): the coach-head
+    /// folder's textures resolve folder-locally by id, and a swept coach head then
+    /// carries real PNG maps. Covers the path the full-tree sweep is too slow to
+    /// exercise per-asset.
+    #[test]
+    fn sweep_resolves_folder_local_textures() {
+        use crate::assets::{parse_head_mesh_geometry, read_asset_file};
+        use crate::Platform;
+
+        let dir = std::path::Path::new(
+            r"X:\Games\Emulation\Roms\XBOX360\NHL 09\NHL 09 (USA)\rendering\coachhead",
+        );
+        let head = dir.join("head_100.rx2");
+        if !head.is_file() {
+            eprintln!("skipping: NHL 09 coachhead mount absent");
+            return;
+        }
+        let files: Vec<PathBuf> = std::fs::read_dir(dir)
+            .unwrap()
+            .flatten()
+            .map(|e| e.path())
+            .collect();
+
+        // Folder-local index: head 100 has head- and hair-prefixed rasters here.
+        let (head_tex, hair_tex) = folder_textures_by_id(&files, "coachhead", Platform::Xbox);
+        assert!(head_tex.get(&100).is_some_and(|v| !v.is_empty()), "head 100 head textures");
+        assert!(hair_tex.get(&100).is_some_and(|v| !v.is_empty()), "head 100 hair textures");
+        // The `_aa`/`_ab` hair rasters are indexed as textures, not meshes.
+        assert!(
+            hair_tex[&100].iter().any(|p| p.contains("_aa") || p.contains("_ab")),
+            "hair-card rasters classified as textures"
+        );
+
+        // A swept coach head carries those PNG maps.
+        let bytes = read_asset_file(&head).unwrap();
+        let asset = parse_head_mesh_geometry(&head, &bytes).expect("coach head decodes");
+        let tmp = std::env::temp_dir().join(format!("hc_tex_{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&tmp);
+        let mut summary = HeadCatalogSummary::default();
+        write_head_group(
+            "coach_100",
+            "coach",
+            &asset,
+            &head_tex[&100],
+            &head.to_string_lossy(),
+            &tmp,
+            &CatalogOptions { game_tag: "nhl09".into(), textures: true },
+            &mut summary,
+        );
+        assert!(summary.textures_written > 0, "wrote coach head textures");
+        let head_entry = summary.entries.iter().find(|e| e.class == "head").unwrap();
+        assert!(!head_entry.textures.is_empty(), "coach head entry carries textures");
+        for t in &head_entry.textures {
+            let tb = std::fs::read(tmp.join(t)).unwrap_or_else(|_| panic!("missing {t}"));
+            assert_eq!(&tb[..8], b"\x89PNG\r\n\x1a\n", "{t} is a PNG");
+        }
         std::fs::remove_dir_all(&tmp).ok();
     }
 }

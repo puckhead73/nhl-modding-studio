@@ -109,6 +109,9 @@ pub struct CensusReport {
 const MAP_SUFFIXES: &[&str] = &[
     "cm", "nm", "sm", "am", "xm", "rm", "dm", "gm", "bm", "pm", "tm", "im", "om", "em", "lm",
     "cam", "ccm", "cnm", "csm", "cpm", "ctm", "cgm", "cdm", "crm",
+    // Hair-card raster variants (`hair_{id}_0_aa.rx2`, verified `.Raster` internally):
+    // texture atlases, not geometry — the hair *mesh* is the `_0_0_0` file.
+    "aa", "ab",
 ];
 
 /// Equipment name-prefix keywords that share the PS4 `player/` folder (and appear
@@ -204,7 +207,10 @@ pub fn classify(folder: &str, file: &str, platform: Platform) -> CensusEntry {
         .and_then(|s| s.to_str())
         .unwrap_or("");
 
-    let is_texture = matches!(ext, "dds" | "gnf" | "png") || (ext == "rx2" && stem_is_texture(stem));
+    // `texlib_{id}.rx2` is a bundled multi-raster texture container — it carries no
+    // map suffix, so match it by prefix or it reads as a bare-id head mesh.
+    let is_texture = matches!(ext, "dds" | "gnf" | "png")
+        || (ext == "rx2" && (stem.starts_with("texlib") || stem_is_texture(stem)));
     let is_generic = stem.contains("generic_player") || stem.starts_with("generic_");
 
     // Role from folder, refined by the generic marker.
@@ -482,6 +488,11 @@ mod tests {
         assert!(stem_is_texture("coach_0_cam"));
         assert!(stem_is_texture("hand_cnm"));
         assert!(stem_is_texture("head_67_cm"));
+        // Hair-card raster variants are textures, not meshes.
+        assert!(stem_is_texture("hair_100_0_aa"));
+        assert!(stem_is_texture("hair_100_0_ab"));
+        // …but the hair mesh itself (`_0_0_0`) is not a texture.
+        assert!(!stem_is_texture("hair_100_0_0_0"));
         assert!(!stem_is_texture("player_10043"));
         assert!(!stem_is_texture("coachsuit_0_0"));
         assert!(!stem_is_texture("alexander_ovechkin"));
