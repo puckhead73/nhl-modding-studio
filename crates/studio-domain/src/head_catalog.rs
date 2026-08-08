@@ -628,14 +628,27 @@ pub fn sweep_nonplayer_heads(
             if exclude_sources.contains(&canon(&path)) {
                 continue;
             }
-            let origin = origin_for_role(entry.role);
+            let mut origin = origin_for_role(entry.role);
             let id = entry.id.unwrap_or_else(|| {
                 anon += 1;
                 900_000 + anon
             });
-            let base = format!("{origin}_{id}");
-            let src = path.to_string_lossy().into_owned();
             let is_hair = matches!(entry.part, Part::Hair);
+            // A player-folder head with no bio row is `generic_<id>` — unless it's
+            // a *known* retired orphan (a leftover model whose player was removed),
+            // in which case name it for the player it modelled. Title-scoped: an id
+            // means nothing outside the game its list was verified against.
+            let orphan = (origin == "generic" && !is_hair)
+                .then(|| crate::orphan_heads::orphan_head_name(&opts.game_tag, id))
+                .flatten();
+            let base = match orphan {
+                Some(name) => {
+                    origin = "retired";
+                    name.base()
+                }
+                None => format!("{origin}_{id}"),
+            };
+            let src = path.to_string_lossy().into_owned();
             if !seen_base.insert((base.clone(), is_hair)) {
                 summary.failures.push(format!("{src}: base {base} already swept — skipped"));
                 continue;
@@ -938,6 +951,71 @@ mod tests {
         );
         // Filtered to just the head asset's submeshes — not the whole container.
         assert_eq!(preview.submeshes.len(), head.submeshes.len());
+        std::fs::remove_dir_all(&tmp).ok();
+    }
+
+    /// Retired/orphan naming on the real Legacy tree (mount-gated): heads that
+    /// exist on disk but are referenced by no bio row (leftovers) are swept, and
+    /// the ones on the operator-curated orphan list are named for the player they
+    /// modelled with origin `retired` — not left as bare `generic_<id>`.
+    #[test]
+    fn legacy_full_catalog_names_retired_orphan_heads() {
+        use crate::assets::{scan_player_assets, AssetRoots};
+        use crate::Platform;
+        use tdb_core::TdbFile;
+        use tdb_defs::FieldMetaIndex;
+
+        let rendering = std::path::Path::new(
+            r"X:\Games\Emulation\Roms\XBOX360\NHL Legacy\NHL Legacy\rendering",
+        );
+        let base = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("..").join("..").join("anchors").join("xbox360").join("nhllegacy").join("databases");
+        if !rendering.join("player").is_dir() || !base.join("nhlng.db").is_file() {
+            eprintln!("skipping: Legacy mount/anchor absent");
+            return;
+        }
+        let db_bytes = std::fs::read(base.join("nhlng.db")).unwrap();
+        let db = TdbFile::parse(&db_bytes).expect("parse anchor");
+        let meta = FieldMetaIndex::from_xml(
+            &std::fs::read_to_string(base.join("nhlng-meta.xml")).unwrap()).expect("meta");
+        let rendering_str = rendering.to_string_lossy().into_owned();
+        let roots = AssetRoots::resolve(std::path::Path::new("/unused"), Platform::Xbox)
+            .with_overrides(Some(&rendering_str), None);
+        let players = scan_player_assets(&db, &meta, &roots).expect("scan");
+
+        let tmp = std::env::temp_dir().join(format!("hc_retired_{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&tmp);
+        // Geometry-only keeps it fast; naming is independent of texture decode.
+        let summary = export_full_catalog(
+            &players, &roots, &tmp,
+            &CatalogOptions { game_tag: "nhllegacy".into(), textures: false },
+        )
+        .expect("full catalog");
+
+        let retired: Vec<&CatalogEntry> =
+            summary.entries.iter().filter(|e| e.origin == "retired").collect();
+        // The orphan list is verified against this exact anchor, so some of its
+        // heads must land as swept-and-renamed (if none did, the wiring is dead).
+        assert!(!retired.is_empty(), "expected retired orphan heads to be named");
+        // Every retired entry is a real name (never `generic_`/`retired_<id>`), and
+        // its base matches a known orphan for this title.
+        for e in &retired {
+            assert!(!e.name.starts_with("generic_"), "{} still generic", e.name);
+            let base = e.name.trim_end_matches(&format!("_{}_nhllegacy", e.class));
+            assert!(
+                base.contains('_') && !base.chars().next().unwrap().is_ascii_digit(),
+                "retired base {base} should be a name"
+            );
+        }
+        // Spot-check a marquee orphan when its head is present + unreferenced here.
+        if let Some(hull) = summary
+            .entries
+            .iter()
+            .find(|e| e.name == "hull_brett_head_nhllegacy")
+        {
+            assert_eq!(hull.origin, "retired");
+        }
+        eprintln!("Legacy retired orphans named: {}", retired.len());
         std::fs::remove_dir_all(&tmp).ok();
     }
 

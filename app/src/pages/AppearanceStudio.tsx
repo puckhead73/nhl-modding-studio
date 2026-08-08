@@ -31,7 +31,9 @@ import type { CatalogManifestDto } from "../bindings/CatalogManifestDto";
 const LAST_DIR_KEY = "appearance.catalogDir";
 
 type ClassFilter = "all" | "head" | "hair" | "facialhair";
-type OriginFilter = "all" | "player" | "generic" | "coach" | "referee" | "trainer";
+// Origins are discovered from the manifest (player / generic / retired / coach /
+// referee / trainer / commissioner / timekeeper), so this stays open.
+type OriginFilter = string;
 
 const CLASS_LABEL: Record<string, string> = {
   head: "Head",
@@ -41,6 +43,9 @@ const CLASS_LABEL: Record<string, string> = {
 
 const ORIGIN_TONE: Record<string, Tone> = {
   player: "info",
+  // Retired/orphan heads — a real player's leftover model, no longer in the
+  // roster — carry their recovered name; flag them apart from live players.
+  retired: "warn",
 };
 
 export function AppearanceStudioPage() {

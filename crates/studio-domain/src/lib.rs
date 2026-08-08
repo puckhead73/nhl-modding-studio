@@ -33,6 +33,7 @@ pub mod equipment_slots;
 pub mod equipment_texture;
 pub mod head_preview;
 pub mod historical;
+pub mod orphan_heads;
 pub mod kit_preview;
 pub mod import;
 pub mod surfaces;
