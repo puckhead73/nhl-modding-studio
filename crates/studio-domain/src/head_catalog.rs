@@ -82,6 +82,66 @@ pub struct HeadCatalogSummary {
     pub manifest_file: Option<String>,
 }
 
+impl HeadCatalogSummary {
+    /// Fold a worker's tally into this one. Counters sum; `entries` and `failures`
+    /// are appended in call order — so merging partials in work order keeps the
+    /// manifest deterministic even though the decode ran across many threads.
+    fn merge(&mut self, other: HeadCatalogSummary) {
+        self.heads_written += other.heads_written;
+        self.hair_written += other.hair_written;
+        self.facial_hair_written += other.facial_hair_written;
+        self.textures_written += other.textures_written;
+        self.bytes_written += other.bytes_written;
+        self.skipped_no_base += other.skipped_no_base;
+        self.failures.extend(other.failures);
+        self.entries.extend(other.entries);
+        // `manifest_file` is set once by the top-level export, never by a worker.
+    }
+}
+
+/// Fan `work` out across the machine's cores, folding each worker's tally into one.
+/// `process` decodes and writes a single item into a thread-local summary; the merge
+/// happens once at the end, in chunk order, so `entries` stay in `work` order.
+///
+/// The heavy per-item cost — mesh geometry decode and texlib/gnf raster decode — is
+/// CPU-bound and independent per item, so this scales with cores. Every item writes a
+/// uniquely-named file (callers dedup output bases beforehand), so concurrent writes
+/// never target the same path.
+fn run_catalog_workers<T: Sync>(
+    work: &[T],
+    process: impl Fn(&T, &mut HeadCatalogSummary) + Sync,
+) -> HeadCatalogSummary {
+    if work.is_empty() {
+        return HeadCatalogSummary::default();
+    }
+    let threads = std::thread::available_parallelism()
+        .map(|n| n.get())
+        .unwrap_or(4)
+        .min(work.len());
+    let chunk = work.len().div_ceil(threads);
+    let process = &process;
+    let partials: Vec<HeadCatalogSummary> = std::thread::scope(|scope| {
+        let handles: Vec<_> = work
+            .chunks(chunk)
+            .map(|items| {
+                scope.spawn(move || {
+                    let mut s = HeadCatalogSummary::default();
+                    for it in items {
+                        process(it, &mut s);
+                    }
+                    s
+                })
+            })
+            .collect();
+        handles.into_iter().map(|h| h.join().unwrap_or_default()).collect()
+    });
+    let mut merged = HeadCatalogSummary::default();
+    for p in partials {
+        merged.merge(p);
+    }
+    merged
+}
+
 /// The appearance catalog manifest — the database the Appearance Studio reads to
 /// let a user give any player any head + hair + facial-hair combination. Written
 /// as `catalog.json` at the export root.
@@ -304,9 +364,22 @@ pub fn export_player_head_catalog(
     out_dir: &Path,
     opts: &CatalogOptions,
 ) -> Result<HeadCatalogSummary> {
-    let mut summary = HeadCatalogSummary::default();
-    let mut seen: HashSet<String> = HashSet::new();
+    // One decode-and-write unit for a bespoke player: their base name and the
+    // container/textures to read. Owned so it can cross into a worker thread.
+    struct PlayerWork<'a> {
+        base: String,
+        full_name: &'a str,
+        mesh: &'a str,
+        textures: &'a [String],
+    }
 
+    // Pre-pass (single-threaded, cheap): resolve the base, count the un-slugged, and
+    // dedup by slug — the identity bookkeeping that must be deterministic — before the
+    // heavy mesh decode is fanned out. Doing the dedup here also guarantees every work
+    // item owns a unique output base, so the parallel writes never collide.
+    let mut summary = HeadCatalogSummary::default();
+    let mut seen: HashSet<&str> = HashSet::new();
+    let mut work: Vec<PlayerWork> = Vec::new();
     for p in players.iter().filter(|p| p.mesh_path.is_some()) {
         let Some(slug) = p.slug.as_deref() else {
             // Not identifiable (no usable name/birthdate). Its unique head is still
@@ -319,26 +392,34 @@ pub fn export_player_head_catalog(
         // player's head is unambiguous. The slug is unique per person; a genuine
         // duplicate means two records describe the same player, so skip the second
         // rather than overwrite.
-        if !seen.insert(slug.to_string()) {
+        if !seen.insert(slug) {
             summary
                 .failures
                 .push(format!("{}: slug {slug} already exported — skipped", p.full_name));
             continue;
         }
-        let base = slug;
+        work.push(PlayerWork {
+            base: slug.to_string(),
+            full_name: &p.full_name,
+            mesh: p.mesh_path.as_deref().unwrap(),
+            textures: &p.texture_paths,
+        });
+    }
 
-        let mesh = p.mesh_path.as_deref().unwrap();
-        let asset = match read_asset_file(Path::new(mesh))
-            .and_then(|b| parse_head_mesh_geometry(Path::new(mesh), &b))
+    // Fan the decode + write out across cores.
+    let worked = run_catalog_workers(&work, |w, s| {
+        let asset = match read_asset_file(Path::new(w.mesh))
+            .and_then(|b| parse_head_mesh_geometry(Path::new(w.mesh), &b))
         {
             Ok(a) => a,
             Err(e) => {
-                summary.failures.push(format!("{}: mesh — {e}", p.full_name));
-                continue;
+                s.failures.push(format!("{}: mesh — {e}", w.full_name));
+                return;
             }
         };
-        write_head_group(base, "player", &asset, &p.texture_paths, mesh, out_dir, opts, &mut summary);
-    }
+        write_head_group(&w.base, "player", &asset, w.textures, w.mesh, out_dir, opts, s);
+    });
+    summary.merge(worked);
     Ok(summary)
 }
 
@@ -450,6 +531,16 @@ pub fn sweep_nonplayer_heads(
 ) {
     use crate::head_census::{appearance_folders, classify, Part};
 
+    // One decode-and-write unit for a swept head/hair file.
+    struct SweepWork {
+        base: String,
+        origin: &'static str,
+        is_hair: bool,
+        path: PathBuf,
+        src: String,
+        textures: Vec<String>,
+    }
+
     let platform = roots.platform();
     let base_dir = if platform == crate::Platform::Ps4 {
         Path::new(&roots.rendering).join("characters")
@@ -463,7 +554,18 @@ pub fn sweep_nonplayer_heads(
     };
     // Fallback counter for files whose name carries no id.
     let mut anon = 0u64;
+    // Reserve each (base, is_hair) once: a head file and a *separate* hair file for
+    // the same id (era-split 08/09/PS4) legitimately share a base but write different
+    // classes, so they must both survive — but two head files (or two hair files) that
+    // resolve to the same `{role}_{id}` would race to write the same path once decode
+    // is fanned out, so the duplicate is dropped (a skip that was a silent overwrite
+    // before) rather than left to corrupt the file.
+    let mut seen_base: HashSet<(String, bool)> = HashSet::new();
 
+    // Collection pass (single-threaded): walk the tree, classify, exclude,
+    // assign ids/textures, and dedup output bases — all the deterministic
+    // bookkeeping — building a flat work list the decode can fan out over.
+    let mut work: Vec<SweepWork> = Vec::new();
     for folder in appearance_folders(platform) {
         let dir = base_dir.join(folder);
         let Ok(rd) = std::fs::read_dir(&dir) else {
@@ -514,29 +616,40 @@ pub fn sweep_nonplayer_heads(
             });
             let base = format!("{origin}_{id}");
             let src = path.to_string_lossy().into_owned();
-            let asset = match read_asset_file(&path)
-                .and_then(|b| parse_head_mesh_geometry(&path, &b))
-            {
-                Ok(a) => a,
-                Err(e) => {
-                    summary.failures.push(format!("{src}: mesh — {e}"));
-                    continue;
-                }
-            };
-            match entry.part {
-                Part::Hair => {
-                    let tx = hair_tex.get(&id).cloned().unwrap_or_default();
-                    write_hair_only(&base, origin, &asset, &tx, &src, out_dir, opts, summary);
-                }
-                // A head file: split head / hair / facial-hair. Head-context textures
-                // (head_/eyes_/texlib_, the bundled set) are shared across its entries.
-                _ => {
-                    let tx = head_tex.get(&id).cloned().unwrap_or_default();
-                    write_head_group(&base, origin, &asset, &tx, &src, out_dir, opts, summary);
-                }
+            let is_hair = matches!(entry.part, Part::Hair);
+            if !seen_base.insert((base.clone(), is_hair)) {
+                summary.failures.push(format!("{src}: base {base} already swept — skipped"));
+                continue;
             }
+            let textures = if opts.textures {
+                let idx = if is_hair { &hair_tex } else { &head_tex };
+                idx.get(&id).cloned().unwrap_or_default()
+            } else {
+                Vec::new()
+            };
+            work.push(SweepWork { base, origin, is_hair, path, src, textures });
         }
     }
+
+    // Fan the decode + write out across cores. Each unit reads and decodes its own
+    // container (the expensive part) and writes uniquely-named files.
+    let worked = run_catalog_workers(&work, |w, s| {
+        let asset = match read_asset_file(&w.path).and_then(|b| parse_head_mesh_geometry(&w.path, &b)) {
+            Ok(a) => a,
+            Err(e) => {
+                s.failures.push(format!("{}: mesh — {e}", w.src));
+                return;
+            }
+        };
+        if w.is_hair {
+            write_hair_only(&w.base, w.origin, &asset, &w.textures, &w.src, out_dir, opts, s);
+        } else {
+            // A head file: split head / hair / facial-hair. Head-context textures
+            // (head_/eyes_/texlib_, the bundled set) are shared across its entries.
+            write_head_group(&w.base, w.origin, &asset, &w.textures, &w.src, out_dir, opts, s);
+        }
+    });
+    summary.merge(worked);
 }
 
 /// The full appearance catalog: bespoke player heads (with textures) plus the
