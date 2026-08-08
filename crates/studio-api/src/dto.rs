@@ -1464,6 +1464,9 @@ pub struct CatalogEntryDto {
     pub submeshes: Vec<String>,
     /// Catalog-relative paths of the head/hair's shared PNG textures.
     pub textures: Vec<String>,
+    /// Absolute source texture containers those PNGs came from — fed back to the
+    /// viewer so the 3D preview is textured like the game.
+    pub texture_sources: Vec<String>,
     /// The absolute source mesh container this asset was cut from (provenance;
     /// also what the preview decodes and filters to `submeshes`).
     pub source: String,

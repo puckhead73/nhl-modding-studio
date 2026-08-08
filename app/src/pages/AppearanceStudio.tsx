@@ -230,7 +230,13 @@ function Detail({ dir, entry }: { dir: string; entry: CatalogEntryDto }) {
 
         {/* Geometry preview: decoded from the source container, filtered to this
             asset's own submeshes and framed to them. */}
-        <HeadMeshViewer catalogEntry={{ source: entry.source, submeshes: entry.submeshes }} />
+        <HeadMeshViewer
+          catalogEntry={{
+            source: entry.source,
+            submeshes: entry.submeshes,
+            textureSources: entry.texture_sources,
+          }}
+        />
 
         <TextureStrip dir={dir} textures={entry.textures} />
 

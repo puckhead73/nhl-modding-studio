@@ -56,8 +56,9 @@ export function HeadMeshViewer({
   texturePaths?: string[];
   /** Appearance-catalog mode: decode one catalog asset from its source container,
    *  keeping only the submeshes it owns (a head, a merged hair, or facial hair)
-   *  and framing to that subset. Takes precedence over the id / path modes. */
-  catalogEntry?: { source: string; submeshes: string[] };
+   *  and framing to that subset, textured from its source texture containers.
+   *  Takes precedence over the id / path modes. */
+  catalogEntry?: { source: string; submeshes: string[]; textureSources: string[] };
 }) {
   const byCatalog = !!catalogEntry;
   const byPath = !byCatalog && !!meshPaths && meshPaths.length > 0;
@@ -72,6 +73,7 @@ export function HeadMeshViewer({
         ? call("catalog_entry_preview", {
             source: catalogEntry!.source,
             submeshes: catalogEntry!.submeshes,
+            textureSources: catalogEntry!.textureSources,
           })
         : byPath
           ? call("head_preview_paths", {

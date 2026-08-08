@@ -59,8 +59,14 @@ pub struct CatalogEntry {
     pub mesh_file: String,
     /// Submesh names that went into this asset.
     pub submeshes: Vec<String>,
-    /// Relative paths of the textures the head/hair share.
+    /// Relative paths of the exported PNG textures the head/hair share.
     pub textures: Vec<String>,
+    /// Absolute paths of the **source** texture containers (texlib/raster/gnf)
+    /// those PNGs were decoded from — fed back to the viewer so the preview binds
+    /// the same maps the game does (via the proven name-keyed binding). Defaulted
+    /// so catalogs written before this field still read.
+    #[serde(default)]
+    pub texture_sources: Vec<String>,
     /// The source mesh container this came from (provenance).
     pub source: String,
 }
@@ -359,6 +365,7 @@ pub fn write_head_group(
                     mesh_file: format!("heads/{fname}"),
                     submeshes: idx.iter().map(|&i| asset.submeshes[i].name.clone()).collect(),
                     textures: texture_rel.clone(),
+                    texture_sources: texture_paths.to_vec(),
                     source: source.to_string(),
                 });
             }
@@ -472,6 +479,7 @@ fn write_hair_only(
                 mesh_file: format!("heads/{fname}"),
                 submeshes: asset.submeshes.iter().map(|s| s.name.clone()).collect(),
                 textures,
+                texture_sources: texture_paths.to_vec(),
                 source: source.to_string(),
             });
         }
@@ -721,6 +729,7 @@ mod tests {
                 mesh_file: "heads/ovechkin_alexander_17_09_1985_head_nhllegacy.glb".into(),
                 submeshes: vec!["head_.Mesh".into(), "eyel_.Mesh".into()],
                 textures: vec!["textures/ovechkin_alexander_17_09_1985_head_cm_nhllegacy.png".into()],
+                texture_sources: vec![r"X:\rendering\player\texlib_1083.rx2".into()],
                 source: r"X:\rendering\player\player_1083.rx2".into(),
             },
             CatalogEntry {
@@ -731,6 +740,7 @@ mod tests {
                 mesh_file: "heads/coach_100_hair_nhl09.glb".into(),
                 submeshes: vec!["hair_.Mesh".into()],
                 textures: vec![],
+                texture_sources: vec![],
                 source: r"X:\rendering\coachhead\hair_100_0_0_0.rx2".into(),
             },
         ];
@@ -902,6 +912,32 @@ mod tests {
             "Legacy catalog: {} heads, {} hair, {} textures written",
             summary.heads_written, summary.hair_written, summary.textures_written
         );
+
+        // The browser previews an entry by decoding its source filtered to its own
+        // submeshes, textured from `texture_sources`. Prove a head entry both
+        // carries texture sources and binds them — i.e. the preview is textured,
+        // not the bare geometry the "not textured" report was about.
+        let head = summary
+            .entries
+            .iter()
+            .find(|e| e.class == "head")
+            .expect("a head entry");
+        assert!(!head.texture_sources.is_empty(), "head entry records its texture sources");
+        let meshes = vec![std::path::PathBuf::from(&head.source)];
+        let preview = crate::decode_head_preview_named(
+            &meshes,
+            &head.texture_sources,
+            &[],
+            &head.submeshes,
+        )
+        .expect("preview decodes");
+        assert!(!preview.textures.is_empty(), "preview decoded texture maps");
+        assert!(
+            preview.submeshes.iter().any(|s| s.material_index.is_some()),
+            "at least one submesh binds a texture (preview is textured)"
+        );
+        // Filtered to just the head asset's submeshes — not the whole container.
+        assert_eq!(preview.submeshes.len(), head.submeshes.len());
         std::fs::remove_dir_all(&tmp).ok();
     }
 

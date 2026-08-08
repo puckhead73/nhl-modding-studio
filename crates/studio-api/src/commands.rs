@@ -1129,9 +1129,10 @@ pub fn catalog_entry_preview(
     registry: State<'_, Registry>,
     source: String,
     submeshes: Vec<String>,
+    texture_sources: Vec<String>,
 ) -> CmdResult<HeadPreviewDto> {
     registry
-        .catalog_entry_preview(source, submeshes)
+        .catalog_entry_preview(source, submeshes, texture_sources)
         .map_err(|e| e.to_string())
 }
 

@@ -410,9 +410,10 @@ type Commands = {
   };
   // Read a built catalog's catalog.json back for the Appearance Studio browser.
   read_catalog_manifest: { args: { dir: string }; ret: CatalogManifestDto };
-  // Decode one catalog asset (source container filtered to the entry's submeshes).
+  // Decode one catalog asset (source container filtered to the entry's
+  // submeshes), textured from its source texture containers.
   catalog_entry_preview: {
-    args: { source: string; submeshes: string[] };
+    args: { source: string; submeshes: string[]; textureSources: string[] };
     ret: HeadPreviewDto;
   };
   // Read an exported catalog PNG off disk as a `data:image/png;base64,…` URL.

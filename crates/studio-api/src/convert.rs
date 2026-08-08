@@ -1330,6 +1330,7 @@ pub fn catalog_manifest_dto(
                 mesh_file: e.mesh_file.clone(),
                 submeshes: e.submeshes.clone(),
                 textures: e.textures.clone(),
+                texture_sources: e.texture_sources.clone(),
                 source: e.source.clone(),
             })
             .collect(),

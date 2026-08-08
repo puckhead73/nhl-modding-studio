@@ -363,17 +363,20 @@ impl Registry {
 
     /// Decode one catalog asset for the 3D viewer: parse its source container and
     /// keep only the submeshes the entry owns (a head, a merged hair, or facial
-    /// hair), framed to that subset. `source` + `submeshes` come straight from a
-    /// [`crate::dto::CatalogEntryDto`]. Geometry-only — the browser shows the
-    /// exported PNGs separately — so no texture containers are re-resolved here.
+    /// hair), framed to that subset. `source`, `submeshes` and `texture_sources`
+    /// come straight from a [`crate::dto::CatalogEntryDto`] — the texture
+    /// containers are decoded and name-bound so the preview is textured like the
+    /// game (falling back to flat colours when the sources are absent).
     pub fn catalog_entry_preview(
         &self,
         source: String,
         submeshes: Vec<String>,
+        texture_sources: Vec<String>,
     ) -> Result<HeadPreviewDto, ApiError> {
         let meshes = vec![PathBuf::from(&source)];
-        let preview = studio_domain::decode_head_preview_named(&meshes, &[], &[], &submeshes)
-            .map_err(ApiError::Domain)?;
+        let preview =
+            studio_domain::decode_head_preview_named(&meshes, &texture_sources, &[], &submeshes)
+                .map_err(ApiError::Domain)?;
         Ok(convert::head_preview_dto(&preview))
     }
 

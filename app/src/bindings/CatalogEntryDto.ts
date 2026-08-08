@@ -35,6 +35,11 @@ submeshes: Array<string>,
  */
 textures: Array<string>, 
 /**
+ * Absolute source texture containers those PNGs came from — fed back to the
+ * viewer so the 3D preview is textured like the game.
+ */
+texture_sources: Array<string>, 
+/**
  * The absolute source mesh container this asset was cut from (provenance;
  * also what the preview decodes and filters to `submeshes`).
  */
