@@ -43,6 +43,7 @@ import type { AssetRootsArgsDto } from "../bindings/AssetRootsArgsDto";
 import type { PlayerAssetsDto } from "../bindings/PlayerAssetsDto";
 import type { ExportOptionsDto } from "../bindings/ExportOptionsDto";
 import type { AssetExportSummaryDto } from "../bindings/AssetExportSummaryDto";
+import type { HeadCatalogSummaryDto } from "../bindings/HeadCatalogSummaryDto";
 import type { HeadPreviewDto } from "../bindings/HeadPreviewDto";
 import type { KitPreviewDto } from "../bindings/KitPreviewDto";
 import type { EquipmentSlotDto } from "../bindings/EquipmentSlotDto";
@@ -394,6 +395,17 @@ type Commands = {
       options: ExportOptionsDto;
     };
     ret: AssetExportSummaryDto;
+  };
+  // Appearance catalog: every head + hair + facial hair (players + non-players),
+  // GLB + PNG with a catalog.json manifest.
+  export_head_catalog: {
+    args: {
+      projectId: number;
+      roots: AssetRootsArgsDto;
+      outDir: string;
+      textures: boolean;
+    };
+    ret: HeadCatalogSummaryDto;
   };
 
   // ---- Assets: install file browser (decode any picked file/folder) ----

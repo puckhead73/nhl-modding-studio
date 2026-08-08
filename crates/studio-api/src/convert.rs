@@ -1294,6 +1294,22 @@ pub fn asset_export_summary_dto(s: &AssetExportSummary) -> AssetExportSummaryDto
     }
 }
 
+pub fn head_catalog_summary_dto(
+    s: &studio_domain::HeadCatalogSummary,
+) -> crate::dto::HeadCatalogSummaryDto {
+    crate::dto::HeadCatalogSummaryDto {
+        heads_written: s.heads_written,
+        hair_written: s.hair_written,
+        facial_hair_written: s.facial_hair_written,
+        textures_written: s.textures_written,
+        entry_count: s.entries.len(),
+        skipped_no_base: s.skipped_no_base,
+        manifest_file: s.manifest_file.clone(),
+        failures: s.failures.clone(),
+        bytes_written: s.bytes_written,
+    }
+}
+
 pub fn browse_listing_dto(l: &BrowseListing) -> BrowseListingDto {
     BrowseListingDto {
         root: l.root.clone(),

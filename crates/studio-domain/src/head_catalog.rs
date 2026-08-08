@@ -78,6 +78,40 @@ pub struct HeadCatalogSummary {
     pub failures: Vec<String>,
     /// One row per written mesh asset (head/hair/facialhair), for the manifest.
     pub entries: Vec<CatalogEntry>,
+    /// Relative path of the written `catalog.json` manifest, if one was written.
+    pub manifest_file: Option<String>,
+}
+
+/// The appearance catalog manifest — the database the Appearance Studio reads to
+/// let a user give any player any head + hair + facial-hair combination. Written
+/// as `catalog.json` at the export root.
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct CatalogManifest {
+    pub version: u32,
+    pub game: String,
+    pub head_count: usize,
+    pub hair_count: usize,
+    pub facial_hair_count: usize,
+    /// Every catalog asset: name, origin, class, game, mesh file, submeshes,
+    /// textures, and the source container it came from.
+    pub entries: Vec<CatalogEntry>,
+}
+
+/// Write the manifest for a completed export to `{out_dir}/catalog.json`.
+pub fn write_manifest(out_dir: &Path, game: &str, summary: &HeadCatalogSummary) -> Result<()> {
+    let manifest = CatalogManifest {
+        version: 1,
+        game: game.to_string(),
+        head_count: summary.heads_written,
+        hair_count: summary.hair_written,
+        facial_hair_count: summary.facial_hair_written,
+        entries: summary.entries.clone(),
+    };
+    let json = serde_json::to_vec_pretty(&manifest)
+        .map_err(|e| crate::DomainError::Extract(format!("manifest serialize: {e}")))?;
+    let path = out_dir.join("catalog.json");
+    write_out(&path, &json).map_err(|e| crate::DomainError::Extract(format!("manifest write: {e}")))?;
+    Ok(())
 }
 
 /// The catalog base from an export slug (`last_first_dd_mm_yyyy`) — the trailing
@@ -464,6 +498,11 @@ pub fn export_full_catalog(
         })
         .collect();
     sweep_nonplayer_heads(roots, &exclude, out_dir, opts, &mut summary);
+    // The manifest is the whole point — write it even if some assets failed.
+    match write_manifest(out_dir, &opts.game_tag, &summary) {
+        Ok(()) => summary.manifest_file = Some("catalog.json".to_string()),
+        Err(e) => summary.failures.push(format!("manifest: {e}")),
+    }
     Ok(summary)
 }
 
@@ -700,6 +739,15 @@ mod tests {
             assert!(ok, "unexpected name {}", e.name);
             assert!(e.name.ends_with("_nhl09"));
         }
+        // The manifest is written and round-trips with the same entry count.
+        assert_eq!(summary.manifest_file.as_deref(), Some("catalog.json"));
+        let manifest_bytes = std::fs::read(tmp.join("catalog.json")).expect("catalog.json written");
+        let manifest: CatalogManifest =
+            serde_json::from_slice(&manifest_bytes).expect("manifest parses");
+        assert_eq!(manifest.game, "nhl09");
+        assert_eq!(manifest.entries.len(), summary.entries.len());
+        assert_eq!(manifest.head_count, summary.heads_written);
+
         let n_player = summary.entries.iter().filter(|e| e.origin == "player").count();
         let n_generic = summary.entries.iter().filter(|e| e.origin == "generic").count();
         let n_coach = summary.entries.iter().filter(|e| e.origin == "coach").count();

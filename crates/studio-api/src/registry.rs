@@ -326,6 +326,30 @@ impl Registry {
         })
     }
 
+    /// Build the appearance catalog: every player's own head + hair + facial hair,
+    /// plus the non-player sweep (generics, referees, coaches, trainers), written
+    /// as GLB + PNG with a `catalog.json` manifest. The game token comes from the
+    /// workspace `game_id`.
+    pub fn export_head_catalog(
+        &self,
+        id: u32,
+        args: &AssetRootsArgsDto,
+        out_dir: &str,
+        textures: bool,
+    ) -> Result<crate::dto::HeadCatalogSummaryDto, ApiError> {
+        let roots = resolve_roots(args);
+        let out_dir = out_dir.to_string();
+        self.with_workspace(id, |ws| {
+            let game = ws.game_id().unwrap_or("game").to_string();
+            let players = ws.display().player_assets(&roots)?;
+            let opts = studio_domain::CatalogOptions { game_tag: game, textures };
+            let summary =
+                studio_domain::export_full_catalog(&players, &roots, Path::new(&out_dir), &opts)
+                    .map_err(ApiError::Domain)?;
+            Ok(convert::head_catalog_summary_dto(&summary))
+        })
+    }
+
     /// List one directory level of the extracted install for the file browser, rooted at the
     /// install dir (where the game's loose tree lives after onboarding extraction). `rel` is a
     /// forward-slash path relative to that root (`""` = the root); it's resolved safely so the UI

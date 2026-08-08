@@ -1425,6 +1425,26 @@ pub struct AssetExportSummaryDto {
     pub bytes_written: u64,
 }
 
+/// What an appearance-catalog export produced (Phase 5). The full per-asset rows
+/// live in the on-disk `catalog.json`; this carries the totals + failures for the UI.
+#[derive(Serialize, TS)]
+pub struct HeadCatalogSummaryDto {
+    pub heads_written: usize,
+    pub hair_written: usize,
+    pub facial_hair_written: usize,
+    pub textures_written: usize,
+    /// Total catalog assets (rows in the manifest).
+    pub entry_count: usize,
+    /// Bespoke players skipped for lacking a usable name/birthdate (captured
+    /// generically by the sweep instead).
+    pub skipped_no_base: usize,
+    /// Relative path of the written `catalog.json`, if written.
+    pub manifest_file: Option<String>,
+    pub failures: Vec<String>,
+    #[ts(type = "number")]
+    pub bytes_written: u64,
+}
+
 // ---------------------------------------------------------------- file browser
 
 /// One entry in a browsed directory of the extracted install.

@@ -1098,6 +1098,21 @@ pub fn export_assets(
         .map_err(|e| e.to_string())
 }
 
+/// Build the appearance catalog (every head + hair + facial hair, players and
+/// non-players) with a `catalog.json` manifest, into `out_dir`.
+#[tauri::command]
+pub fn export_head_catalog(
+    registry: State<'_, Registry>,
+    project_id: u32,
+    roots: AssetRootsArgsDto,
+    out_dir: String,
+    textures: bool,
+) -> CmdResult<crate::dto::HeadCatalogSummaryDto> {
+    registry
+        .export_head_catalog(project_id, &roots, &out_dir, textures)
+        .map_err(|e| e.to_string())
+}
+
 /// List one directory level of the extracted install for the file browser, rooted at the install
 /// dir. `rel` is a forward-slash path relative to that root (`""` = the root); resolved safely so
 /// the UI can never walk outside the install.

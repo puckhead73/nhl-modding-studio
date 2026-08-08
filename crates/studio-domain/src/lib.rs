@@ -65,7 +65,8 @@ pub use head_submesh::{
 };
 pub use head_catalog::{
     catalog_base_from_slug, export_full_catalog, export_player_head_catalog, sweep_nonplayer_heads,
-    write_head_group, CatalogEntry, CatalogOptions, HeadCatalogSummary,
+    write_head_group, write_manifest, CatalogEntry, CatalogManifest, CatalogOptions,
+    HeadCatalogSummary,
 };
 pub use kit_preview::{
     decode_kit_preview, goalie_kit_mesh_defaults, kit_mesh_defaults, GoalieKitMeshDefaults,
