@@ -350,6 +350,41 @@ impl Registry {
         })
     }
 
+    /// Read a built appearance catalog's `catalog.json` back for the browser. Pure
+    /// filesystem — no project/workspace needed; the catalog is self-describing.
+    pub fn read_catalog_manifest(
+        &self,
+        dir: &str,
+    ) -> Result<crate::dto::CatalogManifestDto, ApiError> {
+        let manifest =
+            studio_domain::read_catalog_manifest(Path::new(dir)).map_err(ApiError::Domain)?;
+        Ok(convert::catalog_manifest_dto(&manifest))
+    }
+
+    /// Decode one catalog asset for the 3D viewer: parse its source container and
+    /// keep only the submeshes the entry owns (a head, a merged hair, or facial
+    /// hair), framed to that subset. `source` + `submeshes` come straight from a
+    /// [`crate::dto::CatalogEntryDto`]. Geometry-only — the browser shows the
+    /// exported PNGs separately — so no texture containers are re-resolved here.
+    pub fn catalog_entry_preview(
+        &self,
+        source: String,
+        submeshes: Vec<String>,
+    ) -> Result<HeadPreviewDto, ApiError> {
+        let meshes = vec![PathBuf::from(&source)];
+        let preview = studio_domain::decode_head_preview_named(&meshes, &[], &[], &submeshes)
+            .map_err(ApiError::Domain)?;
+        Ok(convert::head_preview_dto(&preview))
+    }
+
+    /// Read a PNG file straight off disk as a `data:image/png;base64,…` URL — the
+    /// exported catalog texture thumbnails, which are already PNG (no re-decode).
+    pub fn read_png_data_url(&self, path: &str) -> Result<String, ApiError> {
+        let bytes = std::fs::read(path)
+            .map_err(|e| ApiError::Workspace(format!("read {path}: {e}")))?;
+        Ok(format!("data:image/png;base64,{}", BASE64.encode(&bytes)))
+    }
+
     /// List one directory level of the extracted install for the file browser, rooted at the
     /// install dir (where the game's loose tree lives after onboarding extraction). `rel` is a
     /// forward-slash path relative to that root (`""` = the root); it's resolved safely so the UI

@@ -119,6 +119,9 @@ macro_rules! command_handler {
             $crate::commands::hockey_shop_install_apply,
             $crate::commands::export_assets,
             $crate::commands::export_head_catalog,
+            $crate::commands::read_catalog_manifest,
+            $crate::commands::catalog_entry_preview,
+            $crate::commands::read_png_data_url,
             $crate::commands::browse_install_files,
             $crate::commands::export_install_files,
             $crate::commands::export_team_outfits,
@@ -154,6 +157,7 @@ mod bindings {
         ExportOptionsDto::export_all().expect("export ExportOptionsDto");
         AssetExportSummaryDto::export_all().expect("export AssetExportSummaryDto");
         crate::dto::HeadCatalogSummaryDto::export_all().expect("export HeadCatalogSummaryDto");
+        crate::dto::CatalogManifestDto::export_all().expect("export CatalogManifestDto + deps");
         BrowseListingDto::export_all().expect("export BrowseListingDto + deps");
         FileExportOptionsDto::export_all().expect("export FileExportOptionsDto");
         FileExportSummaryDto::export_all().expect("export FileExportSummaryDto");

@@ -44,6 +44,7 @@ import type { PlayerAssetsDto } from "../bindings/PlayerAssetsDto";
 import type { ExportOptionsDto } from "../bindings/ExportOptionsDto";
 import type { AssetExportSummaryDto } from "../bindings/AssetExportSummaryDto";
 import type { HeadCatalogSummaryDto } from "../bindings/HeadCatalogSummaryDto";
+import type { CatalogManifestDto } from "../bindings/CatalogManifestDto";
 import type { HeadPreviewDto } from "../bindings/HeadPreviewDto";
 import type { KitPreviewDto } from "../bindings/KitPreviewDto";
 import type { EquipmentSlotDto } from "../bindings/EquipmentSlotDto";
@@ -407,6 +408,15 @@ type Commands = {
     };
     ret: HeadCatalogSummaryDto;
   };
+  // Read a built catalog's catalog.json back for the Appearance Studio browser.
+  read_catalog_manifest: { args: { dir: string }; ret: CatalogManifestDto };
+  // Decode one catalog asset (source container filtered to the entry's submeshes).
+  catalog_entry_preview: {
+    args: { source: string; submeshes: string[] };
+    ret: HeadPreviewDto;
+  };
+  // Read an exported catalog PNG off disk as a `data:image/png;base64,…` URL.
+  read_png_data_url: { args: { path: string }; ret: string };
 
   // ---- Assets: install file browser (decode any picked file/folder) ----
   // `rel` is a forward-slash path relative to the install root (`""` = the root).

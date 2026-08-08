@@ -22,6 +22,7 @@ import { FormulasPage } from "./pages/Formulas";
 import { PlayerAssetsPage } from "./pages/PlayerAssets";
 import { PlayerAssetDetail } from "./pages/PlayerAssetDetail";
 import { AssetExportPage } from "./pages/AssetExport";
+import { AppearanceStudioPage } from "./pages/AppearanceStudio";
 import { FileBrowserPage } from "./pages/FileBrowser";
 import { TeamOutfitsPage } from "./pages/TeamOutfits";
 import { HockeyShopPage } from "./pages/HockeyShop";
@@ -122,6 +123,7 @@ export const router = createBrowserRouter([
             ],
           },
           { path: "export", element: <AssetExportPage /> },
+          { path: "appearance", element: <AppearanceStudioPage /> },
           { path: "outfits", element: <TeamOutfitsPage /> },
           { path: "files", element: <FileBrowserPage /> },
           {

@@ -174,6 +174,17 @@ pub fn write_manifest(out_dir: &Path, game: &str, summary: &HeadCatalogSummary) 
     Ok(())
 }
 
+/// Read a previously-written `{dir}/catalog.json` back into a [`CatalogManifest`] —
+/// the source the Appearance-catalog browser lists from.
+pub fn read_catalog_manifest(dir: &Path) -> Result<CatalogManifest> {
+    let path = dir.join("catalog.json");
+    let bytes = std::fs::read(&path).map_err(|e| {
+        crate::DomainError::Extract(format!("read {}: {e}", path.display()))
+    })?;
+    serde_json::from_slice(&bytes)
+        .map_err(|e| crate::DomainError::Extract(format!("parse {}: {e}", path.display())))
+}
+
 /// The catalog base from an export slug (`last_first_dd_mm_yyyy`) — the trailing
 /// `dd_mm_yyyy` dropped, leaving `last_first`. A slug that doesn't carry a trailing
 /// date is returned unchanged.
@@ -692,6 +703,53 @@ mod tests {
         assert_eq!(catalog_base_from_slug("mystery_head"), "mystery_head");
         // A hyphen-free single-token name with a date still strips.
         assert_eq!(catalog_base_from_slug("cher_x_01_02_2000"), "cher_x");
+    }
+
+    #[test]
+    fn manifest_round_trips_through_disk() {
+        // Write a manifest from a summary, then read it back — the browser reads
+        // exactly this file, so the two must agree.
+        let mut summary = HeadCatalogSummary::default();
+        summary.heads_written = 2;
+        summary.hair_written = 1;
+        summary.entries = vec![
+            CatalogEntry {
+                name: "ovechkin_alexander_17_09_1985_head_nhllegacy".into(),
+                origin: "player".into(),
+                class: "head".into(),
+                game: "nhllegacy".into(),
+                mesh_file: "heads/ovechkin_alexander_17_09_1985_head_nhllegacy.glb".into(),
+                submeshes: vec!["head_.Mesh".into(), "eyel_.Mesh".into()],
+                textures: vec!["textures/ovechkin_alexander_17_09_1985_head_cm_nhllegacy.png".into()],
+                source: r"X:\rendering\player\player_1083.rx2".into(),
+            },
+            CatalogEntry {
+                name: "coach_100_hair_nhl09".into(),
+                origin: "coach".into(),
+                class: "hair".into(),
+                game: "nhl09".into(),
+                mesh_file: "heads/coach_100_hair_nhl09.glb".into(),
+                submeshes: vec!["hair_.Mesh".into()],
+                textures: vec![],
+                source: r"X:\rendering\coachhead\hair_100_0_0_0.rx2".into(),
+            },
+        ];
+        let tmp = std::env::temp_dir().join(format!("hc_manifest_{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&tmp);
+        std::fs::create_dir_all(&tmp).unwrap();
+        write_manifest(&tmp, "nhllegacy", &summary).expect("write manifest");
+
+        let m = read_catalog_manifest(&tmp).expect("read manifest");
+        assert_eq!(m.game, "nhllegacy");
+        assert_eq!(m.head_count, 2);
+        assert_eq!(m.hair_count, 1);
+        assert_eq!(m.entries.len(), 2);
+        assert_eq!(m.entries[0].class, "head");
+        assert_eq!(m.entries[0].submeshes, vec!["head_.Mesh", "eyel_.Mesh"]);
+        assert_eq!(m.entries[1].origin, "coach");
+        // A missing catalog.json is an error, not a silent empty.
+        assert!(read_catalog_manifest(&tmp.join("nope")).is_err());
+        std::fs::remove_dir_all(&tmp).ok();
     }
 
     #[test]

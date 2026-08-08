@@ -57,16 +57,17 @@ pub use assets::{
     OutfitExportSummary, OutfitTeam, OutfitTexture, PlayerAssets, TextureContainer, TextureWrite,
 };
 pub use head_preview::{
-    decode_eye_texture, decode_head_preview, HeadPreview, PreviewSubmesh, PreviewTexture,
+    decode_eye_texture, decode_head_preview, decode_head_preview_named, HeadPreview,
+    PreviewSubmesh, PreviewTexture,
 };
 pub use head_submesh::{
     classify_submesh, head_asset_indices, partition as partition_submeshes, SubmeshPart,
     SubmeshPartition,
 };
 pub use head_catalog::{
-    catalog_base_from_slug, export_full_catalog, export_player_head_catalog, sweep_nonplayer_heads,
-    write_head_group, write_manifest, CatalogEntry, CatalogManifest, CatalogOptions,
-    HeadCatalogSummary,
+    catalog_base_from_slug, export_full_catalog, export_player_head_catalog, read_catalog_manifest,
+    sweep_nonplayer_heads, write_head_group, write_manifest, CatalogEntry, CatalogManifest,
+    CatalogOptions, HeadCatalogSummary,
 };
 pub use kit_preview::{
     decode_kit_preview, goalie_kit_mesh_defaults, kit_mesh_defaults, GoalieKitMeshDefaults,

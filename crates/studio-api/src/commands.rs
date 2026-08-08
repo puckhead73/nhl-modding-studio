@@ -1113,6 +1113,34 @@ pub fn export_head_catalog(
         .map_err(|e| e.to_string())
 }
 
+/// Read a built appearance catalog's `catalog.json` back for the browser.
+#[tauri::command]
+pub fn read_catalog_manifest(
+    registry: State<'_, Registry>,
+    dir: String,
+) -> CmdResult<crate::dto::CatalogManifestDto> {
+    registry.read_catalog_manifest(&dir).map_err(|e| e.to_string())
+}
+
+/// Decode one catalog asset (its source container filtered to the entry's
+/// submeshes) for the 3D viewer.
+#[tauri::command]
+pub fn catalog_entry_preview(
+    registry: State<'_, Registry>,
+    source: String,
+    submeshes: Vec<String>,
+) -> CmdResult<HeadPreviewDto> {
+    registry
+        .catalog_entry_preview(source, submeshes)
+        .map_err(|e| e.to_string())
+}
+
+/// Read a PNG off disk as a `data:image/png;base64,…` URL (catalog texture thumbs).
+#[tauri::command]
+pub fn read_png_data_url(registry: State<'_, Registry>, path: String) -> CmdResult<String> {
+    registry.read_png_data_url(&path).map_err(|e| e.to_string())
+}
+
 /// List one directory level of the extracted install for the file browser, rooted at the install
 /// dir. `rel` is a forward-slash path relative to that root (`""` = the root); resolved safely so
 /// the UI can never walk outside the install.

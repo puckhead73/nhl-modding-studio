@@ -1445,6 +1445,42 @@ pub struct HeadCatalogSummaryDto {
     pub bytes_written: u64,
 }
 
+/// One asset row in a built appearance catalog's `catalog.json` — what the
+/// Appearance-catalog browser lists and previews.
+#[derive(Serialize, TS)]
+pub struct CatalogEntryDto {
+    /// File stem, e.g. `ovechkin_alexander_17_09_1985_hair_nhllegacy`.
+    pub name: String,
+    /// `player` (a bespoke player's own head) or a swept role: `generic` /
+    /// `coach` / `referee` / `trainer` / `commissioner`.
+    pub origin: String,
+    /// `head` | `hair` | `facialhair`.
+    pub class: String,
+    /// Game token (`nhl14`, `nhllegacy`, …).
+    pub game: String,
+    /// Catalog-relative path of the written `.glb`.
+    pub mesh_file: String,
+    /// Submesh names that went into this asset (also the filter for its preview).
+    pub submeshes: Vec<String>,
+    /// Catalog-relative paths of the head/hair's shared PNG textures.
+    pub textures: Vec<String>,
+    /// The absolute source mesh container this asset was cut from (provenance;
+    /// also what the preview decodes and filters to `submeshes`).
+    pub source: String,
+}
+
+/// A built appearance catalog read back for browsing — the totals plus every
+/// asset row. Loaded from `{dir}/catalog.json`.
+#[derive(Serialize, TS)]
+pub struct CatalogManifestDto {
+    pub version: u32,
+    pub game: String,
+    pub head_count: usize,
+    pub hair_count: usize,
+    pub facial_hair_count: usize,
+    pub entries: Vec<CatalogEntryDto>,
+}
+
 // ---------------------------------------------------------------- file browser
 
 /// One entry in a browsed directory of the extracted install.

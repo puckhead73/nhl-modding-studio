@@ -42,28 +42,43 @@ export function HeadMeshViewer({
   headId,
   meshPaths,
   texturePaths,
+  catalogEntry,
 }: {
-  roots: AssetRootsArgsDto;
-  headId: number;
+  /** Required only for id-based resolution (`head_preview`); unused in the
+   *  path and catalog modes. */
+  roots?: AssetRootsArgsDto;
+  headId?: number;
   /** Already-resolved mesh path(s). When set, the head is decoded from these
    *  directly (the PS4 bespoke path — name-slug heads a numeric id can't find).
    *  Falls back to id-based resolution when absent (RenderWare titles, which
    *  also carry NHL 09's separate hair mesh the id path merges in). */
   meshPaths?: string[];
   texturePaths?: string[];
+  /** Appearance-catalog mode: decode one catalog asset from its source container,
+   *  keeping only the submeshes it owns (a head, a merged hair, or facial hair)
+   *  and framing to that subset. Takes precedence over the id / path modes. */
+  catalogEntry?: { source: string; submeshes: string[] };
 }) {
-  const byPath = !!meshPaths && meshPaths.length > 0;
+  const byCatalog = !!catalogEntry;
+  const byPath = !byCatalog && !!meshPaths && meshPaths.length > 0;
   const preview = useQuery({
-    queryKey: byPath
-      ? ["headPreviewPaths", meshPaths]
-      : ["headPreview", roots.install_dir, headId],
+    queryKey: byCatalog
+      ? ["catalogEntryPreview", catalogEntry!.source, catalogEntry!.submeshes]
+      : byPath
+        ? ["headPreviewPaths", meshPaths]
+        : ["headPreview", roots?.install_dir, headId],
     queryFn: () =>
-      byPath
-        ? call("head_preview_paths", {
-            meshPaths: meshPaths!,
-            texturePaths: texturePaths ?? [],
+      byCatalog
+        ? call("catalog_entry_preview", {
+            source: catalogEntry!.source,
+            submeshes: catalogEntry!.submeshes,
           })
-        : call("head_preview", { roots, headId }),
+        : byPath
+          ? call("head_preview_paths", {
+              meshPaths: meshPaths!,
+              texturePaths: texturePaths ?? [],
+            })
+          : call("head_preview", { roots: roots!, headId: headId! }),
   });
 
   if (preview.isLoading) {

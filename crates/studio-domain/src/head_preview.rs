@@ -203,6 +203,55 @@ pub fn decode_head_preview(
     })
 }
 
+/// Decode a head, then keep only the submeshes named in `keep` and reframe the
+/// camera over just those — the path the Appearance-catalog browser takes.
+///
+/// A catalog asset (a head, or a merged hair, or facial hair) is a *subset* of the
+/// submeshes in its source container: on NHL 10 → Legacy one `player_*.rx2` carries
+/// both the head-core and the bundled hair, so the head and hair assets share a
+/// source and are told apart only by which submesh names each owns. Decoding the
+/// whole container and retaining the entry's own names gives a faithful preview of
+/// that one asset (framed to it), with no glTF re-reader needed. An empty `keep`
+/// returns the whole head unchanged.
+pub fn decode_head_preview_named(
+    mesh_paths: &[PathBuf],
+    texture_paths: &[String],
+    extra_textures: &[PreviewTexture],
+    keep: &[String],
+) -> Result<HeadPreview> {
+    let mut preview = decode_head_preview(mesh_paths, texture_paths, extra_textures)?;
+    if keep.is_empty() {
+        return Ok(preview);
+    }
+    let keep: std::collections::HashSet<&str> = keep.iter().map(String::as_str).collect();
+    preview.submeshes.retain(|s| keep.contains(s.name.as_str()));
+
+    // Reframe over the retained geometry so a hair-only asset isn't framed for a
+    // whole head (which would leave it tiny in a corner).
+    let mut min = [f32::MAX; 3];
+    let mut max = [f32::MIN; 3];
+    for sm in &preview.submeshes {
+        for p in &sm.positions {
+            for a in 0..3 {
+                min[a] = min[a].min(p[a]);
+                max[a] = max[a].max(p[a]);
+            }
+        }
+    }
+    if min[0] <= max[0] {
+        preview.center = [
+            (min[0] + max[0]) * 0.5,
+            (min[1] + max[1]) * 0.5,
+            (min[2] + max[2]) * 0.5,
+        ];
+        preview.span = (0..3)
+            .map(|a| max[a] - min[a])
+            .fold(0.0_f32, f32::max)
+            .max(f32::MIN_POSITIVE);
+    }
+    Ok(preview)
+}
+
 /// Decode every raster in the given texlib containers to RGBA. A container that
 /// fails to read or parse is skipped rather than sinking the whole preview —
 /// the mesh still renders, just untextured for the affected maps.

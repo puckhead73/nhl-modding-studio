@@ -49,6 +49,7 @@ export const SECTIONS: NavSection[] = [
     subtabs: [
       { to: "assets/players", label: "Player Art" },
       { to: "assets/export", label: "Export" },
+      { to: "assets/appearance", label: "Appearance" },
       { to: "assets/outfits", label: "Team Outfits" },
       { to: "assets/files", label: "File Browser" },
       { to: "assets/textures", label: "Texture Lab" },

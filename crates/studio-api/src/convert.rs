@@ -1310,6 +1310,32 @@ pub fn head_catalog_summary_dto(
     }
 }
 
+pub fn catalog_manifest_dto(
+    m: &studio_domain::CatalogManifest,
+) -> crate::dto::CatalogManifestDto {
+    crate::dto::CatalogManifestDto {
+        version: m.version,
+        game: m.game.clone(),
+        head_count: m.head_count,
+        hair_count: m.hair_count,
+        facial_hair_count: m.facial_hair_count,
+        entries: m
+            .entries
+            .iter()
+            .map(|e| crate::dto::CatalogEntryDto {
+                name: e.name.clone(),
+                origin: e.origin.clone(),
+                class: e.class.clone(),
+                game: e.game.clone(),
+                mesh_file: e.mesh_file.clone(),
+                submeshes: e.submeshes.clone(),
+                textures: e.textures.clone(),
+                source: e.source.clone(),
+            })
+            .collect(),
+    }
+}
+
 pub fn browse_listing_dto(l: &BrowseListing) -> BrowseListingDto {
     BrowseListingDto {
         root: l.root.clone(),
