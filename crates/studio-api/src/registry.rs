@@ -371,11 +371,20 @@ impl Registry {
         &self,
         source: String,
         submeshes: Vec<String>,
-        texture_sources: Vec<String>,
+        texture_sources: Option<Vec<String>>,
     ) -> Result<HeadPreviewDto, ApiError> {
-        let meshes = vec![PathBuf::from(&source)];
+        let src = PathBuf::from(&source);
+        // Prefer the entry's recorded texture containers; when it has none — an
+        // older catalog written before that field, or a caller that didn't send
+        // it — re-resolve them from the source's own folder so the preview is
+        // still textured without a catalog rebuild.
+        let textures = match texture_sources {
+            Some(t) if !t.is_empty() => t,
+            _ => studio_domain::textures_for_source(&src),
+        };
+        let meshes = vec![src];
         let preview =
-            studio_domain::decode_head_preview_named(&meshes, &texture_sources, &[], &submeshes)
+            studio_domain::decode_head_preview_named(&meshes, &textures, &[], &submeshes)
                 .map_err(ApiError::Domain)?;
         Ok(convert::head_preview_dto(&preview))
     }

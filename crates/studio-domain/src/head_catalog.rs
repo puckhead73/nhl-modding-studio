@@ -515,6 +515,50 @@ fn folder_textures_by_id(
     (head_tex, hair_tex)
 }
 
+/// Re-resolve the texture containers for a catalog asset from its **source mesh
+/// path alone** — the fallback the browser preview uses when an entry carries no
+/// `texture_sources` (a catalog built before that field existed, or a stale
+/// arg). The maps live beside the mesh, keyed by the same head id: scan the
+/// source's folder and return every head- and hair-prefixed texture for that id,
+/// so the preview binds them exactly as the exporter would have. Empty when the
+/// mount is gone or nothing matches (the preview then falls back to flat colour).
+pub fn textures_for_source(source: &Path) -> Vec<String> {
+    let (Some(dir), Some(stem)) = (source.parent(), source.file_stem().and_then(|s| s.to_str()))
+    else {
+        return Vec::new();
+    };
+    // Head id = the first numeric run in the stem (`player_1292` → 1292,
+    // `head_100_0_0_0` → 100) — the same rule the census `parse_id` uses.
+    let Some(id) = stem
+        .split(|c: char| !c.is_ascii_digit())
+        .find(|s| !s.is_empty())
+        .and_then(|s| s.parse::<u64>().ok())
+    else {
+        return Vec::new();
+    };
+    let platform = if source.extension().is_some_and(|e| e.eq_ignore_ascii_case("mcd")) {
+        crate::Platform::Ps4
+    } else {
+        crate::Platform::Xbox
+    };
+    let folder = dir.file_name().and_then(|s| s.to_str()).unwrap_or("");
+    let Ok(rd) = std::fs::read_dir(dir) else {
+        return Vec::new();
+    };
+    let files: Vec<PathBuf> = rd.flatten().map(|e| e.path()).filter(|p| p.is_file()).collect();
+    let (head_tex, hair_tex) = folder_textures_by_id(&files, folder, platform);
+    // Union head + hair maps for this id — `pick_submesh_texture` binds each
+    // submesh to the right one by name, so handing it both is safe and lets a
+    // single call texture a head, its bundled hair, or a standalone hair asset.
+    let mut out = head_tex.get(&id).cloned().unwrap_or_default();
+    for t in hair_tex.get(&id).into_iter().flatten() {
+        if !out.contains(t) {
+            out.push(t.clone());
+        }
+    }
+    out
+}
+
 /// The catalog name prefix for a swept file's role. A shared *player*-folder head
 /// (not captured as a bespoke player's own) is generic, so `Player`/`Generic` both
 /// map to `generic`.
@@ -724,6 +768,49 @@ mod tests {
         assert_eq!(catalog_base_from_slug("mystery_head"), "mystery_head");
         // A hyphen-free single-token name with a date still strips.
         assert_eq!(catalog_base_from_slug("cher_x_01_02_2000"), "cher_x");
+    }
+
+    /// The preview's texture fallback (mount-gated): given only a player head's
+    /// source path, `textures_for_source` finds its maps in the same folder — so a
+    /// catalog with no recorded `texture_sources` still previews textured.
+    #[test]
+    fn textures_for_source_resolves_from_the_mount() {
+        let player_dir = std::path::Path::new(
+            r"X:\Games\Emulation\Roms\XBOX360\NHL Legacy\NHL Legacy\rendering\player",
+        );
+        if !player_dir.is_dir() {
+            eprintln!("skipping: Legacy mount absent");
+            return;
+        }
+        // Find any bespoke player head file and resolve its maps by source alone.
+        let Some(head) = std::fs::read_dir(player_dir)
+            .unwrap()
+            .flatten()
+            .map(|e| e.path())
+            .find(|p| {
+                p.file_name()
+                    .and_then(|s| s.to_str())
+                    .is_some_and(|f| f.starts_with("player_") && f.ends_with(".rx2"))
+            })
+        else {
+            eprintln!("skipping: no player_*.rx2 on the mount");
+            return;
+        };
+        let tex = textures_for_source(&head);
+        assert!(!tex.is_empty(), "resolved no maps for {}", head.display());
+        assert!(tex.iter().all(|t| std::path::Path::new(t).is_file()), "a resolved map is missing");
+
+        // And the fallback path actually binds them.
+        let bytes = crate::assets::read_asset_file(&head).unwrap();
+        let asset = crate::assets::parse_head_mesh_geometry(&head, &bytes).unwrap();
+        let keep: Vec<String> = asset.submeshes.iter().map(|s| s.name.clone()).collect();
+        let preview =
+            crate::decode_head_preview_named(&[head.clone()], &tex, &[], &keep).unwrap();
+        assert!(!preview.textures.is_empty(), "fallback decode found no textures");
+        assert!(
+            preview.submeshes.iter().any(|s| s.material_index.is_some()),
+            "fallback preview binds a texture"
+        );
     }
 
     #[test]
