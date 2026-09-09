@@ -1,0 +1,100 @@
+# Target adapter — NHL 15, Xbox 360 (gen7, big-endian, TDB v6).
+#
+# EVIDENCE-BACKED EXAMPLE, DELIBERATELY PARTIAL. Four mappings, each citing in-repo evidence. It is
+# not a claim that this target is fully mapped: `coverage_declared` below states exactly what
+# fraction of the physical schema is mapped, and the unmapped remainder is a recorded gap, never an
+# implied identity mapping.
+#
+# Rules this file is validated against (crates/tdb-canonical):
+#   * every `canonical` resolves to a property in defs/canonical/project-schema.toml;
+#   * every mapping declares BOTH a read and a write transform — a non-identity read with an
+#     unknown write is refused (Q07a.1: "every read transform must have a verified inverse write");
+#   * `provenance` is non-empty unless `confidence = "unknown"`;
+#   * a `default` may not be `unknown` — an unknown target default BLOCKS rather than substituting;
+#   * an adapter may never declare `qualification = "game-verified"`. Qualification comes from the
+#     evidence system (docs/plans/qa-evidence-contract.md), never from a schema file.
+
+schema = "target-adapter/1"
+adapter_version = 1
+canonical_schema_version = 1
+target = "nhl15-xbox360"
+generation = "gen7"
+endian = "big"
+tdb_version = 6
+physical_snapshot = "docs/audits/data/schema/xbox360-nhl15.json"
+
+# 134 tables / 2969 fields exist in the snapshot; 4 fields are mapped here.
+[coverage_declared]
+tables_total = 134
+fields_total = 2969
+fields_mapped = 4
+note = "Representative sample. The unmapped remainder is UNKNOWN, not identity-mapped."
+
+# --------------------------------------------------------------------------------------------
+
+[[mapping]]
+canonical = "player.first_name"
+table = "ubPc"
+field = "unknown"
+read_transform = "string-pool"
+write_transform = "string-pool"
+confidence = "asserted"
+qualification = "implemented"
+provenance = ["docs/audits/nhlng-schema.md"]
+note = "The bio table is `ubPc`; the exact field id is NOT recorded here because no in-repo audit pins it, so it stays the literal `unknown` and this mapping cannot qualify."
+
+[[mapping]]
+canonical = "player.rating_overall"
+table = "unknown"
+field = "unknown"
+# The rating codec is the proven fact; which field carries the stored overall on this title is not
+# pinned by an in-repo audit, so the identity stays unknown while the transform is fully specified.
+read_transform = "offset+36"
+write_transform = "offset-36"
+inverse_verified = true
+storage_bits = 6
+storage_range = [0, 63]
+human_range = [36, 99]
+confidence = "measured"
+# NOT `automated-tested`: the validator refuses that while the table/field identity is `unknown`,
+# and it is right to. The transform is proven; the mapping is not, because nothing says which field
+# this transform applies to on this target.
+qualification = "implemented"
+automated_case = "studio_domain::ratings_write_codec"
+provenance = ["docs/audits/ratings-write-codec.md", "crates/studio-domain/tests/ratings_write_codec.rs"]
+note = "Write is the exact inverse of read, proven per offset regime over real anchors. gen7 6-bit storage uses edit_offset 36; NHL07 gen6 uses 50 and PS4 uses 0 — those are their own adapters' facts, never inherited."
+
+[[mapping]]
+canonical = "player.birth_date"
+table = "ubPc"
+field = "JKLp+Kswi"
+read_transform = "index-origin-0"
+write_transform = "index-origin-0"
+inverse_verified = true
+confidence = "measured"
+qualification = "automated-tested"
+automated_case = "studio_domain::birthdate_encoding"
+provenance = ["crates/studio-domain/tests/birthdate_encoding.rs"]
+note = "Month/day are 0-indexed on NHL 11-21, so canonical (1-indexed) maps with a -1 on write and +1 on read. EA's metadata is byte-identical to the 1-indexed case, so the convention is PROBED from stored values, never assumed from the metadata."
+
+[[mapping]]
+canonical = "player.team"
+table = "ubPc"
+field = "dXSB"
+read_transform = "index-origin-1"
+write_transform = "index-origin-1"
+inverse_verified = false
+confidence = "asserted"
+qualification = "implemented"
+provenance = ["docs/audits/roster-relationships.md"]
+note = "`dXSB` is the main-team reference. Its index origin differs across titles and must be probed per target; `inverse_verified = false` records that no named case has proven the write inverse here, which is why this mapping cannot qualify."
+
+# --------------------------------------------------------------------------------------------
+# Declared omissions: canonical properties this target cannot represent. An omission is REPORTED
+# for approval (Q07a), never silently dropped, and is a different category from an invalid value.
+# --------------------------------------------------------------------------------------------
+
+[[omission]]
+canonical = "player.rating_speed"
+reason = "unknown-field-identity"
+detail = "No in-repo audit pins the speed rating's field id on this target. This is an UNKNOWN that blocks export of the property, not a proof the target lacks it."

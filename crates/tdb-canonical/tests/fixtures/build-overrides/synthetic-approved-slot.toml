@@ -1,0 +1,57 @@
+# SYNTHETIC FIXTURE — every value below is INVENTED.
+#
+# It exercises `build-mapping-override/1` against `synthetic-asset-profile.toml`, whose targets
+# (`fixtureone-synthetic`, `fixturetwo-synthetic`) are not catalog units and whose constraints
+# describe no real game. No real target capability is asserted anywhere in this directory.
+#
+# THE PERMITTED CASE. `fixtureone-synthetic` establishes a 1024x1024 atlas page of 256x256 cells,
+# which is 16 slots. Slot 7 is one of them, so this is a CHOICE WITHIN a proven constraint — not a
+# departure from one. The approval below is bound to this exact source revision, digest, profile
+# version and mapping revision.
+
+schema = "build-mapping-override/1"
+record_version = 1
+synthetic = true
+note = "Synthetic. Selecting a permitted atlas slot; the constraint decides the set, the record only picks from it."
+
+[source]
+asset_id = "synthetic:arena-texture/rink-centre"
+revision = 4
+hash_algorithm = "blake3"
+hash = "9f2c41d0aa7b6e3518cc0d94ef2a6b7710d35c8e4fa1b0c2d3e4f5a6b7c8d9e0"
+
+[mapping]
+target = "fixtureone-synthetic"
+family = "assets-arenas"
+mapping_id = "arena-texture/rink-centre"
+revision = 2
+
+[profile]
+family = "assets-arenas"
+schema = "asset-output-profile/3"
+profile_version = 2
+content_digest = "b9c22dde99e39d34e70b680a31149c5408b52ba7ffda078e477493335ca22170"
+
+[proposal]
+resolution = "operator-selected"
+provenance = ["synthetic:fixture"]
+note = "Synthetic."
+
+[proposal.proposed]
+setting = "atlas-slot"
+[proposal.proposed.operand]
+slot = 7
+
+[proposal.prior]
+absent = false
+[proposal.prior.value]
+setting = "atlas-slot"
+[proposal.prior.value.operand]
+slot = 2
+
+[approval]
+approved_by = "synthetic:operator"
+approved_at = "2026-09-08"
+fingerprint_version = 2
+fingerprint = "9b48c49d1c95bae0abe66e7e36c24675f4d685f888901858a0d49a266144b1cd"
+note = "Synthetic. Approval says a permitted choice was reviewed; it says nothing about whether a converter exists or whether the game accepts the result."

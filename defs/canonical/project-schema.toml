@@ -1,0 +1,124 @@
+# Canonical Project schema — the target-neutral source of truth (Q07a.1).
+#
+# The Project is NOT a game database. Canonical values carry the RICHEST known semantics, so
+# exporting to a poorer target never erases Project data: a target that cannot represent a property
+# omits it in its adapter, and the omission is reported for approval (Q07a). Nothing in this file
+# describes any game's on-disk layout — that belongs in a target adapter
+# (defs/adapters/<target>.toml), never here.
+#
+# Versioning: `version` is the schema version. Adapters declare the schema version they were written
+# against; an adapter written for an older version keeps referring to it and is reported, never
+# silently reinterpreted.
+#
+# COVERAGE. This is version 1 and it is DELIBERATELY PARTIAL. It covers the entities and properties
+# that already have evidence-backed target mappings in this repository. Every further property is a
+# recorded gap, not an omission by design — see docs/validation/c0-06-canonical-project-and-adapters.md
+# §5 for the enumeration. A partial schema that says so is usable; one that pretends to be complete
+# is not.
+
+schema = "canonical-project/1"
+version = 1
+
+# --------------------------------------------------------------------------------------------
+# Value domains. A canonical property's `type` plus an optional `domain` fixes its meaning
+# independently of any target encoding.
+# --------------------------------------------------------------------------------------------
+
+[[domain]]
+id = "rating-0-99"
+kind = "integer"
+description = "A player ability rating on the human 0..99 scale. Canonical storage is ALWAYS the human scale; every target's storage offset and bit width live in its adapter."
+min = 0
+max = 99
+
+[[domain]]
+id = "calendar-date"
+kind = "date"
+description = "A full Gregorian date. Canonical month and day are ALWAYS 1-indexed. A target that stores them 0-indexed declares an index-origin transform in its adapter (this is the NHL 10 vs NHL 11-21 divergence)."
+
+[[domain]]
+id = "person-name"
+kind = "string"
+description = "A person's name as displayed. Canonical encoding is UTF-8 with no length limit; a target's pool encoding and capacity live in its adapter."
+
+[[domain]]
+id = "handedness"
+kind = "enum"
+description = "Shooting/catching hand."
+values = ["left", "right"]
+
+# --------------------------------------------------------------------------------------------
+# Entities.
+# --------------------------------------------------------------------------------------------
+
+[[entity]]
+id = "player"
+description = "A hockey player, identified canonically and independently of any target's record index."
+identity = ["canonical_id"]
+
+[[entity.property]]
+id = "canonical_id"
+type = "string"
+required = true
+description = "Project-scoped stable identity. Never an EA record index and never a target id."
+
+[[entity.property]]
+id = "first_name"
+type = "string"
+domain = "person-name"
+required = true
+
+[[entity.property]]
+id = "last_name"
+type = "string"
+domain = "person-name"
+required = true
+
+[[entity.property]]
+id = "birth_date"
+type = "date"
+domain = "calendar-date"
+required = false
+description = "Full date of birth, month and day 1-indexed."
+
+[[entity.property]]
+id = "shoots"
+type = "enum"
+domain = "handedness"
+required = false
+
+[[entity.property]]
+id = "rating_overall"
+type = "integer"
+domain = "rating-0-99"
+required = false
+description = "Stored overall rating on the human scale. Distinct from any computed estimate; a computed value is never written into this property."
+
+[[entity.property]]
+id = "rating_speed"
+type = "integer"
+domain = "rating-0-99"
+required = false
+
+[[entity.property]]
+id = "team"
+type = "reference"
+references = "team"
+required = false
+description = "Canonical membership. Index origin, sentinel and cardinality rules are per-target adapter facts."
+
+[[entity]]
+id = "team"
+description = "A club."
+identity = ["canonical_id"]
+
+[[entity.property]]
+id = "canonical_id"
+type = "string"
+required = true
+
+[[entity.property]]
+id = "name"
+type = "string"
+domain = "person-name"
+required = true

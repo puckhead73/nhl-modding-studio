@@ -6,6 +6,7 @@ resolver = "2"
 members = [
     "crates/tdb-core",
     "crates/tdb-defs",
+    "crates/tdb-canonical",
     "crates/tdb-enums",
     "crates/tdb-relations",
     "crates/tdb-domain-validation",

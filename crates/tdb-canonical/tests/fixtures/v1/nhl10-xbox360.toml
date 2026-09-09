@@ -1,0 +1,63 @@
+# Target adapter — NHL 10, Xbox 360 (gen7, big-endian, TDB v6).
+#
+# This adapter exists to make one point concretely: **an adjacent title does not inherit its
+# neighbour's facts.** NHL 10 stores birth month/day 1-indexed while NHL 11-21 store them 0-indexed,
+# on both platforms, with byte-identical EA metadata either way. Copying the NHL 15 adapter's
+# transform to NHL 10 would silently move every player's birthday by a day and a month — in the
+# display, the edit form and anything staged back.
+#
+# Same rules and same validator as every other adapter; see defs/adapters/nhl15-xbox360.toml.
+
+schema = "target-adapter/1"
+adapter_version = 1
+canonical_schema_version = 1
+target = "nhl10-xbox360"
+generation = "gen7"
+endian = "big"
+tdb_version = 6
+physical_snapshot = "docs/audits/data/schema/xbox360-nhl10.json"
+
+[coverage_declared]
+tables_total = 0
+fields_total = 0
+fields_mapped = 2
+note = "Table and field totals not read from the snapshot for this example; recorded as 0 = unknown rather than guessed."
+
+[[mapping]]
+canonical = "player.birth_date"
+table = "ubPc"
+field = "JKLp+Kswi"
+# The divergence. Canonical is 1-indexed, and so is this target, so the transform is identity —
+# which is exactly why it must be stated rather than inherited.
+read_transform = "identity"
+write_transform = "identity"
+inverse_verified = true
+confidence = "measured"
+qualification = "automated-tested"
+automated_case = "studio_domain::birthdate_encoding"
+provenance = ["crates/studio-domain/tests/birthdate_encoding.rs"]
+note = "1-indexed on NHL 10, both platforms. Verified 2026-07-17 against all committed anchors. EA metadata is identical to the 0-indexed case (rangelow=0 rangehigh=15), so the convention is decidable only from stored values and is PROBED."
+
+[[mapping]]
+canonical = "player.rating_overall"
+table = "unknown"
+field = "unknown"
+read_transform = "offset+36"
+write_transform = "offset-36"
+inverse_verified = true
+storage_bits = 6
+storage_range = [0, 63]
+human_range = [36, 99]
+confidence = "measured"
+# NOT `automated-tested`: the validator refuses that while the table/field identity is `unknown`,
+# and it is right to. The transform is proven; the mapping is not, because nothing says which field
+# this transform applies to on this target.
+qualification = "implemented"
+automated_case = "studio_domain::ratings_write_codec"
+provenance = ["docs/audits/ratings-write-codec.md", "crates/studio-domain/tests/ratings_write_codec.rs"]
+note = "gen7 6-bit regime, same as NHL 15 — stated here explicitly rather than inherited from it."
+
+[[omission]]
+canonical = "player.shoots"
+reason = "unknown-field-identity"
+detail = "Not pinned by an in-repo audit for this target."

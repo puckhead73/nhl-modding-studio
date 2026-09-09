@@ -1,0 +1,51 @@
+# SYNTHETIC FIXTURE — every value below is INVENTED.
+#
+# THE REFUSED CASE, WITH AN APPROVAL SUPPLIED. `fixtureone-synthetic` establishes raster codec
+# `dxt5`. This record proposes `bc7` and carries a fully bound, entirely valid approval. It is
+# refused anyway: `resolve_build_override` reads the constraint before it reads the approval, so
+# approval is never consulted for a value the target does not accept.
+
+schema = "build-mapping-override/1"
+record_version = 1
+synthetic = true
+note = "Synthetic. A required codec is not a Build setting, and approval does not make it one."
+
+[source]
+asset_id = "synthetic:arena-texture/rink-centre"
+revision = 4
+hash_algorithm = "blake3"
+hash = "9f2c41d0aa7b6e3518cc0d94ef2a6b7710d35c8e4fa1b0c2d3e4f5a6b7c8d9e0"
+
+[mapping]
+target = "fixtureone-synthetic"
+family = "assets-arenas"
+mapping_id = "arena-texture/rink-centre"
+revision = 2
+
+[profile]
+family = "assets-arenas"
+schema = "asset-output-profile/3"
+profile_version = 2
+content_digest = "b9c22dde99e39d34e70b680a31149c5408b52ba7ffda078e477493335ca22170"
+
+[proposal]
+resolution = "operator-selected"
+provenance = ["synthetic:fixture"]
+
+[proposal.proposed]
+setting = "raster-codec"
+[proposal.proposed.operand]
+codec = "bc7"
+
+[proposal.prior]
+absent = false
+[proposal.prior.value]
+setting = "raster-codec"
+[proposal.prior.value.operand]
+codec = "dxt5"
+
+[approval]
+approved_by = "synthetic:operator"
+approved_at = "2026-09-08"
+fingerprint_version = 2
+fingerprint = "296af7072f9ecd402269592d9a8715e19d109038f41194ca38b4e3e5de51bd7e"

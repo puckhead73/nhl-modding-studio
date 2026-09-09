@@ -1,0 +1,42 @@
+# SYNTHETIC FIXTURE — every value below is INVENTED.
+#
+# THE PROPOSAL. A permitted atlas slot on `fixtureone-synthetic` with NO approval. A permitted
+# choice that nobody approved is a proposal, not a mapping: a Build does not act on it. This is the
+# same setting and the same target as `synthetic-approved-slot.toml`, differing only in that the
+# `[approval]` table is absent.
+
+schema = "build-mapping-override/1"
+record_version = 1
+synthetic = true
+note = "Synthetic. Permitted, unapproved."
+
+[source]
+asset_id = "synthetic:arena-texture/rink-centre"
+revision = 4
+hash_algorithm = "blake3"
+hash = "9f2c41d0aa7b6e3518cc0d94ef2a6b7710d35c8e4fa1b0c2d3e4f5a6b7c8d9e0"
+
+[mapping]
+target = "fixtureone-synthetic"
+family = "assets-arenas"
+mapping_id = "arena-texture/rink-side"
+revision = 1
+
+[profile]
+family = "assets-arenas"
+schema = "asset-output-profile/3"
+profile_version = 2
+content_digest = "b9c22dde99e39d34e70b680a31149c5408b52ba7ffda078e477493335ca22170"
+
+[proposal]
+resolution = "automatic-fit"
+provenance = ["synthetic:fixture"]
+
+[proposal.proposed]
+setting = "atlas-slot"
+[proposal.proposed.operand]
+slot = 3
+
+[proposal.prior]
+absent = true
+reason = "Synthetic. A new mapping: nothing occupied this setting before."
