@@ -32,7 +32,11 @@ fn fixture(relative: &str) -> String {
     .unwrap_or_else(|e| panic!("fixture {relative}: {e}"))
 }
 
-const COMMITTED_ADAPTERS: [&str; 2] = ["nhl15-xbox360.toml", "nhl10-xbox360.toml"];
+const COMMITTED_ADAPTERS: [&str; 3] = [
+    "nhl15-xbox360.toml",
+    "nhl10-xbox360.toml",
+    "nhllegacy-xbox360.toml",
+];
 
 // ================================================================== positive
 
@@ -223,20 +227,46 @@ fn an_unfound_field_is_an_unresolved_identity_not_a_proven_absence() {
 }
 
 /// C0-CAN1-R1. Every "this field has no spare code" argument was an inference from a declared
-/// range. None of them is operative any more.
+/// range. None of them is operative any more. C0-REG1a-R1: the one sentinel that IS operative is
+/// Legacy's main-team absence code, measured on its anchor by a named case — listed here by name so
+/// it is the only one.
 #[test]
 fn an_unsupported_no_sentinel_claim_is_not_operative() {
     let mut candidates = 0;
-    for name in COMMITTED_ADAPTERS {
+    // Per adapter, so a new file cannot pass by shifting the total: NHL 15 records the reasoning on
+    // shoots / overall / team, NHL 10 on shoots / speed, Legacy on shoots / overall / speed (its
+    // team sentinel was promoted from the fourth candidate by measurement).
+    let expected_per_adapter = [
+        ("nhl15-xbox360.toml", 3, None),
+        ("nhl10-xbox360.toml", 2, None),
+        ("nhllegacy-xbox360.toml", 3, Some("player.team")),
+    ];
+    assert_eq!(expected_per_adapter.len(), COMMITTED_ADAPTERS.len());
+    for (name, expected, measured_on_this_anchor) in expected_per_adapter {
+        let mut here = 0;
         for mapping in &adapter(name).mappings {
+            if Some(mapping.canonical.as_str()) == measured_on_this_anchor {
+                let sentinel = mapping
+                    .null_sentinel
+                    .established()
+                    .expect("measured by legacy_xbox360_tests");
+                assert_eq!(sentinel.encoding, "literal-code", "{name}");
+                assert_eq!(
+                    mapping.null_sentinel.confidence.as_deref(),
+                    Some("measured"),
+                    "{name}"
+                );
+                continue;
+            }
             assert!(
                 mapping.null_sentinel.established().is_none(),
-                "{name}/{}: no sentinel claim in these adapters rests on more than a declared \
-                 range, so none may be operative",
+                "{name}/{}: no other sentinel claim in these adapters rests on more than a \
+                 declared range, so none may be operative",
                 mapping.canonical
             );
             if let Some(candidate) = &mapping.null_sentinel.candidate {
                 candidates += 1;
+                here += 1;
                 assert_eq!(
                     candidate.confidence.as_deref(),
                     Some("asserted"),
@@ -251,17 +281,19 @@ fn an_unsupported_no_sentinel_claim_is_not_operative() {
                 );
             }
         }
+        assert_eq!(here, expected, "{name}: sentinel candidates");
     }
     assert_eq!(
-        candidates, 5,
+        candidates, 8,
         "the reasoning is preserved on every field it was claimed for"
     );
 }
 
-/// C0-CAN1-R1. A candidate must not reach any derivation.
+/// C0-CAN1-R1. A candidate must not reach any derivation. C0-REG1a-R1: on the one adapter whose
+/// origin is measured on its own anchor the derivation does run — the contrast is the point.
 #[test]
 fn a_candidate_index_origin_does_not_drive_derivation() {
-    for name in COMMITTED_ADAPTERS {
+    for name in ["nhl15-xbox360.toml", "nhl10-xbox360.toml"] {
         let team = adapter(name)
             .mappings
             .into_iter()
@@ -277,6 +309,35 @@ fn a_candidate_index_origin_does_not_drive_derivation() {
             "{name}: a proposed origin must never produce a human range"
         );
     }
+    let legacy_team = adapter("nhllegacy-xbox360.toml")
+        .mappings
+        .into_iter()
+        .find(|m| m.canonical == "player.team")
+        .expect("mapped");
+    assert!(
+        legacy_team.transform.candidate.is_none(),
+        "promoted, so no proposal remains"
+    );
+    // C0-REG1a-R2: the derivation still does not run — for a different reason. `player.team` is a
+    // reference (it carries a `[mapping.foreign_key]` proposal), and a reference has no human range:
+    // the decoded -1..254 shifted to 1-origin would be a numeric interval [0, 255] that is neither
+    // the canonical team domain nor a proven set of valid references.
+    assert!(legacy_team.transform.established().is_some());
+    assert!(legacy_team.foreign_key.candidate.is_some());
+    assert_eq!(
+        human_range(&legacy_team),
+        None,
+        "a reference mapping has no human range"
+    );
+    // The same numeric blocks WITHOUT the reference proposal are what the helper describes: the
+    // numeric encoding's interval, and nothing about teams.
+    let mut numeric_only = legacy_team.clone();
+    numeric_only.foreign_key = Constraint::default();
+    assert_eq!(
+        human_range(&numeric_only),
+        Some([0, 255]),
+        "numeric-encoding information only: decoded -1..254 shifted to 1-origin"
+    );
 
     // Same for a candidate storage block, exercised synthetically.
     let synthetic = parse_adapter(&fixture("synthetic-adapter.toml")).expect("parses");
@@ -447,22 +508,22 @@ fn representation_completeness_is_reported_apart_from_registry_population() {
     let population = registry_population(adapters.iter());
     assert_eq!(
         population.len(),
-        2,
+        COMMITTED_ADAPTERS.len(),
         "the synthetic fixture is excluded from coverage"
     );
     assert!(population.iter().all(|p| p.target != "fixture-synthetic"));
     assert!(
         population.iter().all(|p| p.established_constraints > 0),
-        "both committed adapters declare real constraints"
+        "every committed adapter declares real constraints"
     );
     assert!(
         population.iter().all(|p| p.unknown_constraints > 0),
-        "and both still carry unknowns, which is the honest state"
+        "and every one still carries unknowns, which is the honest state"
     );
     // C0-CAN1-R1: candidates are counted APART from established blocks. A proposal is not coverage.
     assert!(
         population.iter().all(|p| p.candidate_constraints > 0),
-        "both adapters record non-operative proposals"
+        "every adapter records non-operative proposals"
     );
     for p in &population {
         assert!(
@@ -1071,6 +1132,45 @@ fn a_sentinel_must_match_its_encoding_and_its_storage_regime() {
          provenance = [\"x\"]\n[mapping.null_sentinel.value]\nencoding = \"literal-code\"\nraw = 0\n",
     );
     assert!(found.contains(&Rule::SentinelConflict), "{found:?}");
+
+    // C0-REG1a-R2: units. `raw-all-ones` is written -1 by convention and nothing else; a
+    // `literal-code` is the unsigned stored bit pattern, so it is never negative and must fit the
+    // field. The Legacy shape — offset-binary -1..254 with the all-zero pattern as absence — is the
+    // clean case.
+    let team_with = |storage_signedness: &str, encoding: &str, raw: i64| {
+        rules(&format!(
+            "[[mapping]]\ncanonical = \"player.team\"\ntable = \"ubPc\"\nfield = \"dXSB\"\n\
+             read_transform = \"identity\"\nwrite_transform = \"identity\"\n\
+             confidence = \"asserted\"\nqualification = \"implemented\"\nprovenance = [\"x\"]\n\
+             [mapping.storage]\nstate = \"established\"\nconfidence = \"measured\"\nprovenance = [\"x\"]\n\
+             [mapping.storage.value]\nkind = \"fixed-bit-uint\"\nbit_offset = 0\nbit_width = 8\n\
+             signedness = \"{storage_signedness}\"\nrange_low = -1\nrange_high = 254\nendian = \"big\"\n\
+             [mapping.null_sentinel]\nstate = \"established\"\nconfidence = \"measured\"\n\
+             provenance = [\"x\"]\n[mapping.null_sentinel.value]\nencoding = \"{encoding}\"\nraw = {raw}\n"
+        ))
+    };
+    for (signedness, encoding, raw) in [
+        ("neg1-sentinel", "raw-all-ones", 255), // the pattern's numeric value is not the notation
+        ("offset-binary", "literal-code", -1),  // a decoded value is not a stored pattern
+        ("offset-binary", "literal-code", 256), // does not fit 8 bits
+    ] {
+        let found = team_with(signedness, encoding, raw);
+        assert!(
+            found.contains(&Rule::SentinelConflict),
+            "{signedness}/{encoding}/{raw}: {found:?}"
+        );
+    }
+    for (signedness, encoding, raw) in [
+        ("neg1-sentinel", "raw-all-ones", -1),
+        ("offset-binary", "literal-code", 0),
+        ("offset-binary", "literal-code", 255),
+    ] {
+        let found = team_with(signedness, encoding, raw);
+        assert!(
+            !found.contains(&Rule::SentinelConflict),
+            "{signedness}/{encoding}/{raw}: {found:?}"
+        );
+    }
 }
 
 #[test]
@@ -1590,10 +1690,39 @@ fn a_cross_title_only_enum_is_a_candidate_not_a_derivation() {
 }
 
 /// An unproven discriminator must not drive position-specific applicability or companion
-/// requirements — including on the target whose companion audit does cover it.
+/// requirements — including on the target whose companion audit does cover it. C0-REG1a-R1: the
+/// Legacy adapter's discriminator is measured on its own anchor (legacy_xbox360_tests), so there
+/// the dependent constraints ARE operative — and nowhere else.
 #[test]
 fn an_unproven_discriminator_does_not_drive_dependent_constraints() {
-    for name in COMMITTED_ADAPTERS {
+    let legacy = adapter("nhllegacy-xbox360.toml");
+    assert!(legacy
+        .position_discriminator
+        .as_ref()
+        .unwrap()
+        .established()
+        .is_some());
+    assert!(legacy
+        .companion_rules
+        .iter()
+        .all(|r| r.declared.established().is_some()));
+    let predicated: Vec<&str> = legacy
+        .mappings
+        .iter()
+        .filter(|m| {
+            m.applicability
+                .established()
+                .is_some_and(|a| a.kind == "target-predicate")
+        })
+        .map(|m| m.canonical.as_str())
+        .collect();
+    assert_eq!(
+        predicated,
+        ["player.rating_overall", "player.rating_speed"],
+        "the skater-companion ratings, and only those, are position-conditioned"
+    );
+
+    for name in ["nhl15-xbox360.toml", "nhl10-xbox360.toml"] {
         let a = adapter(name);
 
         // The discriminator itself: proposal kept, nothing operative.
@@ -1695,13 +1824,20 @@ fn a_target_supported_derivation_stays_usable() {
         assert_eq!(transform.offset, Some(36), "{name}");
         assert_eq!(human_range(rating), Some([36, 99]), "{name}");
 
-        // Capacity: measured per title, bridged across platforms by a stated, verified identity.
+        // Capacity: measured per title, bridged across platforms by a stated, verified identity —
+        // except on Legacy, where C0-REG1a-R1 read the target's own ROSTER fixture (8 tables, the
+        // team table included) and no bridge is needed.
         let capacities = a
             .capacities
             .iter()
             .filter(|c| c.declared.established().is_some())
             .count();
-        assert_eq!(capacities, 7, "{name}");
+        let expected = if name == "nhllegacy-xbox360.toml" {
+            8
+        } else {
+            7
+        };
+        assert_eq!(capacities, expected, "{name}");
 
         // Field status: measured flags plus an audit whose matrix covers this target.
         assert!(

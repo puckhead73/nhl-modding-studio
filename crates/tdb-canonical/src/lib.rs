@@ -185,6 +185,30 @@ pub const TRANSFORM_KIND: &[&str] = &[
 ];
 
 /// Closed vocabulary: how a target encodes "absent".
+///
+/// **Units of `raw` (C0-REG1a-R2).** `NullSentinelValue::raw` is *the stored code that means
+/// absent*:
+///
+/// * `literal-code` — `raw` is the **unsigned stored bit pattern** of the field, `0 ..= 2^width - 1`,
+///   before any storage decoding. A field whose absence is the all-zero pattern declares `raw = 0`
+///   even when its storage regime would decode that pattern to something else (an offset-binary
+///   field decodes pattern 0 to `range_low`).
+/// * `raw-all-ones` — the pattern is every bit set, and by the convention this vocabulary has always
+///   used it is **written as `raw = -1`**: the value the `neg1-sentinel` regime decodes that pattern
+///   to. That notation is kept as-is for every existing adapter; it is the one encoding whose `raw`
+///   is not a bit pattern, and the validator refuses any other `raw` under it.
+/// * `none` — no sentinel; `raw` is absent.
+///
+/// **Processing order.** A reader that honours a sentinel proceeds in this order, and the inverse
+/// runs it backwards: (1) inspect the stored bits and compare them with the sentinel pattern;
+/// (2) if they match, the canonical value is the sentinel's `canonical_meaning` and nothing further
+/// is decoded; (3) otherwise apply the storage regime's decoding (`unsigned`, `offset-binary`,
+/// `twos-complement`, `neg1-sentinel`) to obtain the decoded value; (4) only then apply the
+/// transform / index mapping (`index-origin`, `linear-offset`, `enum-code`) and, for a reference
+/// property, the parent-key mapping — which for a reference exists only when `[mapping.foreign_key]`
+/// is established. The sentinel is therefore matched on bits, never on a decoded value, which is why
+/// `literal-code` is stated in bit-pattern units. This crate ships the vocabulary and the validator;
+/// it ships no executor of this order — `legacy_xbox360_tests` exercises it with a test helper.
 pub const SENTINEL_ENCODING: &[&str] = &["none", "raw-all-ones", "literal-code"];
 
 /// Closed vocabulary: what the canonical model reads a sentinel as.
@@ -745,7 +769,16 @@ pub(crate) fn check_envelope<T>(
 
 /// The human-facing range a mapping implies. **Derived**, never declared, so a stated storage range
 /// and a stated human range can never contradict each other.
+///
+/// This is a fact about a **numeric** encoding: the decoded storage range shifted by the transform.
+/// A mapping that carries a `[mapping.foreign_key]` block — established or proposed — encodes a
+/// **reference**, and a reference has no human range: its decoded numbers are parent-key indices,
+/// not values a person reads, and the set of *valid* references is the parent table's key set, which
+/// this helper cannot see and must not be mistaken for. Such mappings yield `None` (C0-REG1a-R2).
 pub fn human_range(mapping: &Mapping) -> Option<[i64; 2]> {
+    if mapping.foreign_key.established().is_some() || mapping.foreign_key.candidate.is_some() {
+        return None;
+    }
     let storage = mapping.storage.established()?;
     let transform = mapping.transform.established()?;
     let shift = match transform.kind.as_str() {
@@ -1562,7 +1595,36 @@ fn validate_sentinel(
         _ => {}
     }
     let Some(raw) = sentinel.raw else { return };
+    // Units (see `SENTINEL_ENCODING`): `raw-all-ones` is written -1 by convention; `literal-code`
+    // is the unsigned stored bit pattern and must fit the field.
+    if sentinel.encoding == "raw-all-ones" && raw != -1 {
+        out.push(finding(
+            Rule::SentinelConflict,
+            subject,
+            format!("encoding = \"raw-all-ones\" is written as raw = -1 by convention, not {raw}"),
+        ));
+    }
+    if sentinel.encoding == "literal-code" && raw < 0 {
+        out.push(finding(
+            Rule::SentinelConflict,
+            subject,
+            format!("encoding = \"literal-code\" states the unsigned stored bit pattern; {raw} is not one"),
+        ));
+    }
     if let Some(storage) = mapping.storage.established() {
+        if sentinel.encoding == "literal-code"
+            && storage.bit_width < 63
+            && raw >= (1i64 << storage.bit_width)
+        {
+            out.push(finding(
+                Rule::SentinelConflict,
+                subject,
+                format!(
+                    "literal-code pattern {raw} does not fit in {} bits",
+                    storage.bit_width
+                ),
+            ));
+        }
         if storage.signedness == "neg1-sentinel"
             && (sentinel.encoding != "raw-all-ones" || raw != -1)
         {
@@ -1950,5 +2012,9 @@ pub fn registry_population<'a>(adapters: impl IntoIterator<Item = &'a Adapter>) 
 mod asset_tests;
 #[cfg(test)]
 mod build_override_tests;
+#[cfg(test)]
+mod legacy_xbox360_tests;
+#[cfg(test)]
+mod snapshot_tests;
 #[cfg(test)]
 mod tests;

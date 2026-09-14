@@ -101,7 +101,7 @@ inverse_verified = false
 confidence = "asserted"
 qualification = "unknown"
 provenance = ["SYNTHETIC"]
-note = "SYNTHETIC. Exercises two's-complement signedness, an `opaque` transform whose spelling the validator cannot check, and a literal-code sentinel that is inside the storage range but reserved."
+note = "SYNTHETIC. Exercises two's-complement signedness, an `opaque` transform whose spelling the validator cannot check, and a literal-code sentinel that is inside the storage range but reserved. C0-REG1a-R2: the sentinel `raw` is the unsigned STORED BIT PATTERN (16 = 0b10000, which this 5-bit two's-complement field decodes to -16); it was written as the decoded -16 before the contract fixed the units."
 
 [mapping.storage]
 state = "established"
@@ -142,7 +142,7 @@ provenance = ["SYNTHETIC"]
 derivation = "SYNTHETIC. Premises invented for fixture coverage; this exercises the derivation field itself, not a real argument about a real target."
 [mapping.null_sentinel.value]
 encoding = "literal-code"
-raw = -16
+raw = 16
 canonical_meaning = "unset"
 
 [mapping.string_storage]

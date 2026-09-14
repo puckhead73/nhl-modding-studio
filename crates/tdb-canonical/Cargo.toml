@@ -19,3 +19,8 @@ toml = "0.8"
 # `ASSET_FAMILY` vocabulary still equals the QA matrix's family axis, so a profile can never
 # register itself against a coverage key the ledger does not have.
 tdb-qa = { path = "../tdb-qa" }
+# Test-only as well (package C0-REG1a-R1). The Legacy capacity and semantic cases read the
+# committed Xbox 360 Legacy ROSTER fixture through the production save codec and the TDB parser,
+# so that a capacity is read from the save it is attributed to, not inferred from a neighbour.
+tdb-core = { path = "../tdb-core" }
+tdb-savedata = { path = "../tdb-savedata" }

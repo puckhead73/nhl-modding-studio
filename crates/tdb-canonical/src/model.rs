@@ -294,7 +294,9 @@ pub struct EnumEntry {
 pub struct NullSentinelValue {
     /// [`crate::SENTINEL_ENCODING`].
     pub encoding: String,
-    /// The stored code that means "absent". Required unless `encoding = "none"`.
+    /// The stored code that means "absent". Required unless `encoding = "none"`. Units by encoding
+    /// (see [`crate::SENTINEL_ENCODING`]): for `literal-code` the **unsigned stored bit pattern**
+    /// before any storage decoding; for `raw-all-ones` the conventional `-1`.
     #[serde(default)]
     pub raw: Option<i64>,
     /// [`crate::SENTINEL_MEANING`] — what the canonical model reads the sentinel as.
