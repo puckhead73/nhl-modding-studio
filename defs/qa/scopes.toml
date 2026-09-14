@@ -1,0 +1,120 @@
+# Versioned freshness scope definitions — docs/plans/qa-evidence-contract.md §5.3.
+#
+# A scope names the *implementation* an observation depends on. Its digest is taken over file
+# CONTENT only (R-CONTENT): a file touched without changing bytes invalidates nothing, and one
+# changed byte invalidates exactly the records that declared the containing scope. No date, commit
+# id or mtime participates.
+#
+# If any declared path matches nothing, that scope's digest is the literal `unknown` and every
+# record declaring it is not-fresh (R-FRESH-UNKNOWN). A missing input never produces `fresh`, and a
+# scope is never silently narrowed to whatever happens to exist.
+#
+# Bump `version` when the *meaning* of a scope changes (paths added or removed). Records declaring
+# the old version keep referring to it and are reported against it; they are never rewritten.
+#
+# This is a proposal for the first emitters (contract §9 Q-D — implementation work, not a user
+# decision). It is not a claim that any of these surfaces is verified.
+
+schema = "qa-scopes/1"
+
+# --------------------------------------------------------------------------------------------
+# Shared foundations. Everything that parses or describes a TDB depends on these, so a change here
+# invalidates every scope that shares it.
+# --------------------------------------------------------------------------------------------
+
+[[scope]]
+id = "shared-core"
+# v2 (C0-S2-INT1): v1 declared `defs/metadata/**`, which does not exist in this repository. Under
+# R-FRESH-UNKNOWN one glob matching nothing makes the whole digest `unknown`, and because every
+# other scope shares this one, *every* freshness digest was permanently `unknown` and no
+# observation could ever be fresh. The declared config is now the two definition trees the engine
+# actually loads (`Project::load(..., defs)`); per-title field metadata is not a `defs/` tree — it
+# ships as the `*-meta.xml` beside each anchor database and is not declared here.
+version = 2
+paths = ["crates/tdb-core/src/**", "crates/tdb-defs/src/**"]
+config = ["defs/enums/**", "defs/relationships/**"]
+toolchain = ["rustc-version", "target-triple"]
+
+# --------------------------------------------------------------------------------------------
+# Database read and edit paths.
+# --------------------------------------------------------------------------------------------
+
+[[scope]]
+id = "db-read"
+# v2 (C0-S2-INT1-R1): v1 declared only `view.rs` + `surfaces.rs`, but the read assertions also drive
+# `Capabilities::probe` and `RosterModel::build`, and the coverage-key mapping lives in the emitter
+# test itself. A change to any of those changes what the observation means, so all three are now
+# declared and prior evidence goes stale when they move.
+version = 2
+shared = ["shared-core"]
+paths = [
+  "crates/studio-domain/src/view.rs",
+  "crates/studio-domain/src/surfaces.rs",
+  "crates/studio-domain/src/capabilities.rs",
+  "crates/tdb-relations/src/**",
+]
+schema = ["docs/audits/data/schema/**"]
+mapping = ["crates/studio-domain/tests/surface_matrix.rs"]
+
+[[scope]]
+id = "db-edit"
+# v2 (C0-S2-INT1-R1): the scalar and relational assertions open through `Project::load`, rebuild the
+# entity model, and gate every applied operation on the whole-DB invariant audit — none of which v1
+# declared. The two emitter tests carry the operation → coverage-key mapping and the invariant
+# battery, so they are declared too.
+version = 2
+shared = ["shared-core"]
+paths = [
+  "crates/tdb-edit/src/**",
+  "crates/studio-domain/src/session.rs",
+  "crates/studio-domain/src/project.rs",
+  "crates/tdb-relations/src/**",
+  "crates/tdb-domain-validation/src/**",
+]
+mapping = [
+  "crates/studio-domain/tests/mutation_matrix.rs",
+  "crates/studio-domain/tests/operation_matrix.rs",
+]
+
+# --------------------------------------------------------------------------------------------
+# Save containers. Outer-console packaging (Q04) has no implementation to declare yet, so it has no
+# scope: a `save-outer-package` observation would carry `implementation_digest = "unknown"` and be
+# not-fresh, which is the correct report for an unimplemented required operation.
+# --------------------------------------------------------------------------------------------
+
+[[scope]]
+id = "save-containers"
+# v2 (C0-S2-INT1-R1): the repack proof does not stop at the codec — a ROSTER fixture takes a real
+# `EditSession` scalar edit through `Project::load` and back out again, so the edit seam is part of
+# what the observation depends on. The emitter test carries the detect/extract/repack split and the
+# variant mapping.
+version = 2
+shared = ["shared-core"]
+paths = [
+  "crates/tdb-savedata/src/**",
+  "crates/tdb-edit/src/**",
+  "crates/studio-domain/src/session.rs",
+  "crates/studio-domain/src/project.rs",
+]
+mapping = ["crates/studio-domain/tests/save_matrix.rs"]
+
+# --------------------------------------------------------------------------------------------
+# Assets.
+# --------------------------------------------------------------------------------------------
+
+[[scope]]
+id = "asset-codecs"
+version = 1
+shared = ["shared-core"]
+paths = ["crates/tdb-rx2/src/**", "crates/tdb-archive-codec/src/**", "crates/tdb-archive-big/src/**"]
+
+[[scope]]
+id = "headmesh-convert"
+version = 1
+shared = ["shared-core"]
+paths = ["crates/tdb-headmesh/src/**", "crates/tdb-rx2/src/**"]
+recipe = [
+  "defs/appearance/headmesh-matrix.toml",
+  "defs/appearance/head-uv-classes.toml",
+  "defs/appearance/legacy-bone-names.toml",
+]

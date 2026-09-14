@@ -90,7 +90,10 @@ pub fn snapshot(repo_root: &std::path::Path, a: &MainAnchor) -> Result<SchemaSna
     let mut field_total = 0usize;
     for t in &db.tables {
         let t_raw = t.id.raw();
-        let t_name = meta.as_ref().and_then(|m| m.table_name(&t_raw)).map(|s| s.to_string());
+        let t_name = meta
+            .as_ref()
+            .and_then(|m| m.table_name(&t_raw))
+            .map(|s| s.to_string());
         let mut fields = Vec::with_capacity(t.fields.len());
         for f in &t.fields {
             let f_raw = f.id.raw();

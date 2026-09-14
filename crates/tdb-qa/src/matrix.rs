@@ -70,7 +70,10 @@ fn probe(repo_root: &std::path::Path, u: &CatalogUnit) -> Probes {
         .map(|n| (n, dbdir.join(n)))
         .find(|(_, p)| p.is_file());
     let saves = repo_root.join(format!("anchors/{}/{}/savefiles", u.platform, u.game));
-    let has_saves = saves.is_dir() && std::fs::read_dir(&saves).map(|mut d| d.next().is_some()).unwrap_or(false);
+    let has_saves = saves.is_dir()
+        && std::fs::read_dir(&saves)
+            .map(|mut d| d.next().is_some())
+            .unwrap_or(false);
     Probes {
         has_main_db: repo_root.join(u.schema_target).is_file(),
         has_localization: loc.is_some(),
@@ -105,7 +108,8 @@ fn cell(u: &CatalogUnit, family: &str, p: &Probes) -> Cell {
             automated_test: "",
             manual_case: "",
             last_verified: "",
-            evidence: "no asset fixtures under anchors/ (asset codec fixtures live in crate tests)".into(),
+            evidence: "no asset fixtures under anchors/ (asset codec fixtures live in crate tests)"
+                .into(),
             blocker: "no committed asset fixture".into(),
         };
     }
@@ -294,7 +298,8 @@ fn cell(u: &CatalogUnit, family: &str, p: &Probes) -> Cell {
         && (u.game == "nhl10" || u.game == "nhl11")
         && (u.platform == "ps3" || u.platform == "xbox360")
     {
-        c.blocker = "v1 container write experimental (tag_1c unreversed) — needs in-game validation".into();
+        c.blocker =
+            "v1 container write experimental (tag_1c unreversed) — needs in-game validation".into();
     }
     // PS4 save repack is structurally complete but unverified on-console.
     if family == "save-inner-container" && u.platform == "ps4" {
@@ -304,7 +309,11 @@ fn cell(u: &CatalogUnit, family: &str, p: &Probes) -> Cell {
     // Research copy: flag every row as a non-catalog platform.
     if u.kind == UnitKind::Research {
         let note = "research copy — not a supported catalog platform (compat matrix '—')";
-        c.blocker = if c.blocker.is_empty() { note.into() } else { format!("{note}; {}", c.blocker) };
+        c.blocker = if c.blocker.is_empty() {
+            note.into()
+        } else {
+            format!("{note}; {}", c.blocker)
+        };
     }
 
     c

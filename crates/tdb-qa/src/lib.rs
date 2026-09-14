@@ -15,6 +15,7 @@ use std::path::Path;
 
 pub mod catalog;
 pub mod diff;
+pub mod evidence;
 pub mod manifest;
 pub mod matrix;
 pub mod schema;

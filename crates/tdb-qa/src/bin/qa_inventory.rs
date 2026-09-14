@@ -26,7 +26,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
     std::fs::create_dir_all(&schema_dir)?;
     for a in &anchors {
-        let snap = schema::snapshot(&repo_root, a).map_err(|e| -> Box<dyn std::error::Error> { e.into() })?;
+        let snap = schema::snapshot(&repo_root, a)
+            .map_err(|e| -> Box<dyn std::error::Error> { e.into() })?;
         std::fs::write(schema_dir.join(schema::filename(a)), schema::to_json(&snap))?;
     }
     println!("schema/: {} main-DB snapshots", anchors.len());

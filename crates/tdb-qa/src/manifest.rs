@@ -100,8 +100,10 @@ pub fn build_rows(repo_root: &Path) -> std::io::Result<Vec<ManifestRow>> {
         let mut hasher = Sha256::new();
         hasher.update(&data);
         let sha = hex(&hasher.finalize());
-        let comps: Vec<String> =
-            rel.components().map(|c| c.as_os_str().to_string_lossy().to_string()).collect();
+        let comps: Vec<String> = rel
+            .components()
+            .map(|c| c.as_os_str().to_string_lossy().to_string())
+            .collect();
         // comps = ["anchors", platform, game, sub, ..., filename]
         let platform = comps.get(1).cloned().unwrap_or_default();
         let game = comps.get(2).cloned().unwrap_or_default();
