@@ -32,10 +32,11 @@ fn fixture(relative: &str) -> String {
     .unwrap_or_else(|e| panic!("fixture {relative}: {e}"))
 }
 
-const COMMITTED_ADAPTERS: [&str; 3] = [
+const COMMITTED_ADAPTERS: [&str; 4] = [
     "nhl15-xbox360.toml",
     "nhl10-xbox360.toml",
     "nhllegacy-xbox360.toml",
+    "nhl15-ps3.toml",
 ];
 
 // ================================================================== positive
@@ -240,6 +241,7 @@ fn an_unsupported_no_sentinel_claim_is_not_operative() {
         ("nhl15-xbox360.toml", 3, None),
         ("nhl10-xbox360.toml", 2, None),
         ("nhllegacy-xbox360.toml", 3, Some("player.team")),
+        ("nhl15-ps3.toml", 3, Some("player.team")),
     ];
     assert_eq!(expected_per_adapter.len(), COMMITTED_ADAPTERS.len());
     for (name, expected, measured_on_this_anchor) in expected_per_adapter {
@@ -284,7 +286,7 @@ fn an_unsupported_no_sentinel_claim_is_not_operative() {
         assert_eq!(here, expected, "{name}: sentinel candidates");
     }
     assert_eq!(
-        candidates, 8,
+        candidates, 11,
         "the reasoning is preserved on every field it was claimed for"
     );
 }
@@ -1695,32 +1697,36 @@ fn a_cross_title_only_enum_is_a_candidate_not_a_derivation() {
 /// the dependent constraints ARE operative — and nowhere else.
 #[test]
 fn an_unproven_discriminator_does_not_drive_dependent_constraints() {
-    let legacy = adapter("nhllegacy-xbox360.toml");
-    assert!(legacy
-        .position_discriminator
-        .as_ref()
-        .unwrap()
-        .established()
-        .is_some());
-    assert!(legacy
-        .companion_rules
-        .iter()
-        .all(|r| r.declared.established().is_some()));
-    let predicated: Vec<&str> = legacy
-        .mappings
-        .iter()
-        .filter(|m| {
-            m.applicability
-                .established()
-                .is_some_and(|a| a.kind == "target-predicate")
-        })
-        .map(|m| m.canonical.as_str())
-        .collect();
-    assert_eq!(
-        predicated,
-        ["player.rating_overall", "player.rating_speed"],
-        "the skater-companion ratings, and only those, are position-conditioned"
-    );
+    // Measured on their own anchors (legacy_xbox360_tests, nhl15_ps3_tests — C0-REG1b): there the
+    // dependent constraints ARE operative.
+    for name in ["nhllegacy-xbox360.toml", "nhl15-ps3.toml"] {
+        let measured = adapter(name);
+        assert!(measured
+            .position_discriminator
+            .as_ref()
+            .unwrap()
+            .established()
+            .is_some());
+        assert!(measured
+            .companion_rules
+            .iter()
+            .all(|r| r.declared.established().is_some()));
+        let predicated: Vec<&str> = measured
+            .mappings
+            .iter()
+            .filter(|m| {
+                m.applicability
+                    .established()
+                    .is_some_and(|a| a.kind == "target-predicate")
+            })
+            .map(|m| m.canonical.as_str())
+            .collect();
+        assert_eq!(
+            predicated,
+            ["player.rating_overall", "player.rating_speed"],
+            "{name}: the skater-companion ratings, and only those, are position-conditioned"
+        );
+    }
 
     for name in ["nhl15-xbox360.toml", "nhl10-xbox360.toml"] {
         let a = adapter(name);
@@ -1832,7 +1838,7 @@ fn a_target_supported_derivation_stays_usable() {
             .iter()
             .filter(|c| c.declared.established().is_some())
             .count();
-        let expected = if name == "nhllegacy-xbox360.toml" {
+        let expected = if name == "nhllegacy-xbox360.toml" || name == "nhl15-ps3.toml" {
             8
         } else {
             7

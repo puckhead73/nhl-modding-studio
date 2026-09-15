@@ -2015,6 +2015,10 @@ mod build_override_tests;
 #[cfg(test)]
 mod legacy_xbox360_tests;
 #[cfg(test)]
+mod nhl15_ps3_tests;
+#[cfg(test)]
 mod snapshot_tests;
+#[cfg(test)]
+mod target_evidence;
 #[cfg(test)]
 mod tests;

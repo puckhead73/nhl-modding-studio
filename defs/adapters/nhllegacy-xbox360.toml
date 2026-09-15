@@ -437,7 +437,7 @@ note = "The stored codes for handedness are not established on this target by co
 confidence = "asserted"
 provenance = [
   "defs/enums/handedness.toml#entries",
-  "crates/tdb-canonical/src/legacy_xbox360_tests.rs#handedness_distribution_matches_the_enum_files_source_but_no_label_is_established",
+  "crates/tdb-canonical/src/legacy_xbox360_tests.rs#handedness_counts_match_the_enum_files_reported_counts_but_no_label_is_established",
 ]
 note = "PROPOSED, NOT OPERATIVE. Operator-confirmed 0=Left / 1=Right against a 22-player anchor set on an `NHL Legacy default.db` (21/22 match) that is not in this repository. OBSERVED on this anchor (C0-REG1a-R1, case `handedness_counts_match_the_enum_files_reported_counts_but_no_label_is_established`): the stored histogram is exactly {0: 3781, 1: 1851}, the same counts the enum file reports for its source (`Left = 3781`, `Right = 1851`). Matching counts prove matching counts only — not identical records, not file identity, not content equivalence (C0-REG1a-R2 wording) — and do NOT show which code is `left`. To promote this, confirm the code against a named player on `anchors/xbox360/nhllegacy/databases/nhlng.db` whose hand is supported by evidence independent of this enum — none is held in this repository."
 [mapping.enumeration.candidate.value]

@@ -38,10 +38,11 @@ fn adapter(name: &str) -> Adapter {
 }
 
 /// The committed adapters, each of which must name a snapshot and agree with its anchor.
-const COMMITTED_ADAPTERS: [&str; 3] = [
+const COMMITTED_ADAPTERS: [&str; 4] = [
     "nhl15-xbox360.toml",
     "nhl10-xbox360.toml",
     "nhllegacy-xbox360.toml",
+    "nhl15-ps3.toml",
 ];
 
 /// Resolve `physical_snapshot = "docs/audits/data/schema/<platform>-<game>.json"` to the anchor it
@@ -550,7 +551,7 @@ fn the_legacy_adapter_states_its_own_facts_and_not_nhl15s() {
 fn registry_population_counts_the_legacy_adapter_apart() {
     let adapters: Vec<Adapter> = COMMITTED_ADAPTERS.iter().map(|n| adapter(n)).collect();
     let population = registry_population(adapters.iter());
-    assert_eq!(population.len(), 3);
+    assert_eq!(population.len(), 4);
     let legacy = population
         .iter()
         .find(|p| p.target == "nhllegacy-xbox360")
