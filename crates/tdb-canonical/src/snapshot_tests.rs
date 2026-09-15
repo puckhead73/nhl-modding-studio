@@ -38,7 +38,7 @@ fn adapter(name: &str) -> Adapter {
 }
 
 /// The committed adapters, each of which must name a snapshot and agree with its anchor.
-const COMMITTED_ADAPTERS: [&str; 14] = [
+const COMMITTED_ADAPTERS: [&str; 21] = [
     "nhl15-xbox360.toml",
     "nhl10-xbox360.toml",
     "nhllegacy-xbox360.toml",
@@ -53,6 +53,13 @@ const COMMITTED_ADAPTERS: [&str; 14] = [
     "nhl12-ps3.toml",
     "nhl11-ps3.toml",
     "nhl10-ps3.toml",
+    "nhl15-ps4.toml",
+    "nhl16-ps4.toml",
+    "nhl17-ps4.toml",
+    "nhl18-ps4.toml",
+    "nhl19-ps4.toml",
+    "nhl20-ps4.toml",
+    "nhl21-ps4.toml",
 ];
 
 /// Resolve `physical_snapshot = "docs/audits/data/schema/<platform>-<game>.json"` to the anchor it
@@ -136,6 +143,14 @@ fn table<'a>(snap: &'a SchemaSnapshot, id: &str) -> Option<&'a TableSnapshot> {
 
 fn field<'a>(table: &'a TableSnapshot, id: &str) -> Option<&'a FieldSnapshot> {
     table.fields.iter().find(|f| f.canonical_id == id)
+}
+
+/// A physical block's value wherever the adapter carries it: established, or — on an adapter whose
+/// anchor attribution is unresolved (C0-REG4-R1: `nhl19-ps4`, `nhl20-ps4`) — as the candidate of an
+/// unknown block. A candidate is not operative, but it restates the anchor's bytes and must agree
+/// with them just the same; checking only established blocks would let a wrong candidate through.
+fn physical<T>(c: &Constraint<T>) -> Option<&T> {
+    c.established().or_else(|| c.candidate_value())
 }
 
 /// Every disagreement between what the adapter restates and what the anchor holds, one line each.
@@ -309,14 +324,14 @@ fn discrepancies(adapter: &Adapter, snap: &SchemaSnapshot) -> Vec<String> {
         let Some(table_id) = m.table.as_deref() else {
             continue;
         };
-        let transform_kind = m.transform.established().map(|t| t.kind.as_str());
+        let transform_kind = physical(&m.transform).map(|t| t.kind.as_str());
         if let Some(field_id) = m.field.as_deref() {
             check_field(
                 format!("mapping {}", m.canonical),
                 table_id,
                 field_id,
-                m.storage.established(),
-                m.status.established(),
+                physical(&m.storage),
+                physical(&m.status),
                 transform_kind,
                 &mut mapped,
                 &mut out,
@@ -327,7 +342,7 @@ fn discrepancies(adapter: &Adapter, snap: &SchemaSnapshot) -> Vec<String> {
                 format!("mapping {} component {}", m.canonical, c.role),
                 table_id,
                 &c.field,
-                c.storage.established(),
+                physical(&c.storage),
                 None,
                 None,
                 &mut mapped,
@@ -363,7 +378,7 @@ fn discrepancies(adapter: &Adapter, snap: &SchemaSnapshot) -> Vec<String> {
     // against the decoded save by the target's own fixture case, when one exists; where none exists
     // (NHL 15, NHL 10) that verification is explicitly incomplete, not approximated.
     for cap in &adapter.capacities {
-        let Some(v) = cap.declared.established() else {
+        let Some(v) = physical(&cap.declared) else {
             continue;
         };
         let Some(t) = table(snap, &cap.table) else {

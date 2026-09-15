@@ -40,10 +40,11 @@ const T: Target = Target {
     main_anchor_sha256: "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
     // The committed vanilla Xbox 360 Legacy ROSTER save (already outside its STFS wrapper: it starts
     // with the `RosterFile` container magic).
-    roster_fixture:
-        "anchors/xbox360/nhllegacy/savefiles/ROSTER 20260627060052/ROSTER 20260627060052",
-    roster_fixture_sha256: "65a04268a2d1321ee495bd0c2d1509748c2d12ec3495a038d7a567f616ad7d21",
-    roster_payload_sha256: "aeadd37cb4a74c39ec3972a161f83e5abf37cf3cf5c40c6eadad0160877796db",
+    roster: Some(RosterFixture {
+        path: "anchors/xbox360/nhllegacy/savefiles/ROSTER 20260627060052/ROSTER 20260627060052",
+        sha256: "65a04268a2d1321ee495bd0c2d1509748c2d12ec3495a038d7a567f616ad7d21",
+        payload_sha256: "aeadd37cb4a74c39ec3972a161f83e5abf37cf3cf5c40c6eadad0160877796db",
+    }),
 };
 
 /// As decoded by `tdb_savedata`: magic `RosterFile`, version word 4 with a zlib body at 0x30, the
@@ -131,7 +132,7 @@ fn a_capacity_that_is_not_the_fixtures_is_reported() {
     );
 
     let found = mutate("eGlu", &|c| {
-        c.declared.provenance.retain(|p| p != T.roster_fixture)
+        c.declared.provenance.retain(|p| p != T.roster_fixture())
     });
     assert_eq!(
         found,
@@ -207,7 +208,7 @@ fn main_team_pointer_is_the_roster_slot_team_plus_one_and_zero_when_unrostered()
     let db = TdbFile::parse(&main).unwrap();
     let snap = T.main_snapshot();
     let slots = roster_slots_by_bio_record(&db, &snap);
-    let counts = main_team_measurement(&db, &snap, &slots, MainTeamEncoding::SlotTeamPlusOne);
+    let counts = main_team_measurement(&db, &snap, &slots, MainTeamEncoding::SlotTeamPlusOne, 8);
     assert_eq!(
         counts,
         MainTeamCounts {
@@ -225,6 +226,7 @@ fn main_team_pointer_is_the_roster_slot_team_plus_one_and_zero_when_unrostered()
         &T.adapter(),
         "main_team_pointer_is_the_roster_slot_team_plus_one_and_zero_when_unrostered",
         MainTeamEncoding::SlotTeamPlusOne,
+        8,
     );
 }
 
@@ -368,6 +370,7 @@ fn team_name_edit_round_trips_on_a_disposable_copy() {
         &T.adapter(),
         "legacy_xbox360_tests",
         "team_name_edit_round_trips_on_a_disposable_copy",
+        50,
     );
 }
 

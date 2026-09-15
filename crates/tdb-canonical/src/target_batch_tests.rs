@@ -67,7 +67,7 @@ struct Expect {
     module: &'static str,
     framing: RosterFraming,
     main_meta: &'static str,
-    main_meta_sha256: &'static str,
+    main_meta_text_sha256: &'static str,
     twin: Option<Twin>,
     /// (table, max_records, current_records) as stored in the fixture's directory.
     capacities: &'static [(&'static str, u16, u16)],
@@ -157,7 +157,7 @@ mod run {
         for cap in &mut unattributed.capacities {
             cap.declared
                 .provenance
-                .retain(|p| p != e.target.roster_fixture);
+                .retain(|p| p != e.target.roster_fixture());
         }
         let found = e.target.roster_capacity_discrepancies(&unattributed, &save);
         assert_eq!(found.len(), e.capacities.len());
@@ -185,7 +185,7 @@ mod run {
         let mine = e.target.main_anchor_bytes();
         let theirs = std::fs::read(repo_root().join(twin.main)).unwrap();
         assert_eq!(mine, theirs, "main DB");
-        let my_meta = read_pinned(e.main_meta, e.main_meta_sha256);
+        let my_meta = read_pinned_text(e.main_meta, e.main_meta_text_sha256);
         let their_meta = std::fs::read(repo_root().join(twin.meta)).unwrap();
         assert_eq!(my_meta, their_meta, "metadata");
 
@@ -360,7 +360,7 @@ mod run {
         let db = TdbFile::parse(&main).unwrap();
         let snap = e.target.main_snapshot();
         let slots = roster_slots_by_bio_record(&db, &snap);
-        let counts = main_team_measurement(&db, &snap, &slots, e.main_team_encoding);
+        let counts = main_team_measurement(&db, &snap, &slots, e.main_team_encoding, 8);
         assert_eq!(counts, e.main_team);
         match e.main_team_encoding {
             MainTeamEncoding::SlotTeamPlusOne => assert_eq!(counts.plus_one, counts.rostered),
@@ -373,6 +373,7 @@ mod run {
             &e.target.adapter(),
             &e.case(case),
             e.main_team_encoding,
+            8,
         );
     }
 
@@ -464,7 +465,7 @@ mod run {
         let (offset, record0, record1, replacement) = e.team_name;
         team_name_round_trip(&original, offset, record0, record1, replacement);
         let a = e.target.adapter();
-        assert_team_name_declared(&e.target, &a, "target_batch_tests", &e.case(case));
+        assert_team_name_declared(&e.target, &a, "target_batch_tests", &e.case(case), 50);
         assert_eq!(
             mapping(&a, "team.name")
                 .storage
@@ -567,11 +568,11 @@ mod nhllegacy_ps3 {
             main_anchor: "anchors/ps3/nhllegacy/databases/nhlng.db",
             main_anchor_sha256: "105d2186da3d1f0f3d3ea8a350ead42ac9d5d802ca9fd37652c39bb4e1f1c230",
             // The committed vanilla PS3 Legacy ROSTER save (`SYS-DATA`; `PS3RosterFile` at byte 0).
-            roster_fixture: "anchors/ps3/nhllegacy/savefiles/BLUS315400200 - ROSTER/SYS-DATA",
-            roster_fixture_sha256:
-                "c079ec4b5ae7ce2aa5b678373a5cb250c5762eb333f7dfe8bb05a35080744cb9",
-            roster_payload_sha256:
-                "469a13460b793841599908e5835b80f567aefce7b3b86e74ab66dca1348c2b25",
+            roster: Some(RosterFixture {
+                path: "anchors/ps3/nhllegacy/savefiles/BLUS315400200 - ROSTER/SYS-DATA",
+                sha256: "c079ec4b5ae7ce2aa5b678373a5cb250c5762eb333f7dfe8bb05a35080744cb9",
+                payload_sha256: "469a13460b793841599908e5835b80f567aefce7b3b86e74ab66dca1348c2b25",
+            }),
         },
         module: "nhllegacy_ps3",
         // Version word 4 with a zlib body at 0x30; inflate size exceeds `db_size` by the 4-byte
@@ -587,7 +588,7 @@ mod nhllegacy_ps3 {
             table_count: 39,
         },
         main_meta: "anchors/ps3/nhllegacy/databases/nhlng-meta.xml",
-        main_meta_sha256: "99062a42cd2eb3e665d912cd69f013e6a6cd9391cc7691b93a678d9b258eb6de",
+        main_meta_text_sha256: "9eefdbc22c9f2724a8d778dfd8ef0e408040cd2bfca86c60737a7e3713d16819",
         twin: Some(Twin {
             main: "anchors/xbox360/nhllegacy/databases/nhlng.db",
             meta: "anchors/xbox360/nhllegacy/databases/nhlng-meta.xml",
@@ -662,12 +663,11 @@ mod nhl14_xbox360 {
             main_anchor: "anchors/xbox360/nhl14/databases/nhlng.db",
             main_anchor_sha256: "84e1bdff74281102c5cf16de4cdfdb8c5b81027e5d219da8c74bb3b28e935867",
             // Already outside its STFS wrapper: `RosterFile` at byte 0.
-            roster_fixture:
-                "anchors/xbox360/nhl14/savefiles/ROSTER 20260627054746/ROSTER 20260627054746",
-            roster_fixture_sha256:
-                "20f144d761b0ff6f838010e2e4cd10ff088226a99bcd7c431fe67f9f62dae4ae",
-            roster_payload_sha256:
-                "700b8e790d29529da90e46b13a85d1880da430b8da9d1bf00092363ccf673541",
+            roster: Some(RosterFixture {
+                path: "anchors/xbox360/nhl14/savefiles/ROSTER 20260627054746/ROSTER 20260627054746",
+                sha256: "20f144d761b0ff6f838010e2e4cd10ff088226a99bcd7c431fe67f9f62dae4ae",
+                payload_sha256: "700b8e790d29529da90e46b13a85d1880da430b8da9d1bf00092363ccf673541",
+            }),
         },
         module: "nhl14_xbox360",
         // Version word 2 with a zlib body at 0x30 — resolved to ZlibV4 by the body marker.
@@ -682,7 +682,7 @@ mod nhl14_xbox360 {
             table_count: 38,
         },
         main_meta: "anchors/xbox360/nhl14/databases/nhlng-meta.xml",
-        main_meta_sha256: "d1f9318e50008161ae4bc8dbbb95ef6e4ddf01eb27d8f2faa3e39383cf1b1c22",
+        main_meta_text_sha256: "65cbf0e8f0bf8a4983ccd54a3f1fc3e633e7972bef624cc2aaa6c23cd57cddf4",
         twin: Some(Twin {
             main: "anchors/ps3/nhl14/databases/nhlng.db",
             meta: "anchors/ps3/nhl14/databases/nhlng-meta.xml",
@@ -756,11 +756,11 @@ mod nhl14_ps3 {
             game: "nhl14",
             main_anchor: "anchors/ps3/nhl14/databases/nhlng.db",
             main_anchor_sha256: "84e1bdff74281102c5cf16de4cdfdb8c5b81027e5d219da8c74bb3b28e935867",
-            roster_fixture: "anchors/ps3/nhl14/savefiles/BLUS311790200 - ROSTER/SYS-DATA",
-            roster_fixture_sha256:
-                "e54e9621f070402fb2294f468ba649fecb92b1b671bcf9633c25c5c0d3b48ce2",
-            roster_payload_sha256:
-                "c84fadef0a098cbc19efa523a42b87c9b76f338934c04a683c0917078ac9ffad",
+            roster: Some(RosterFixture {
+                path: "anchors/ps3/nhl14/savefiles/BLUS311790200 - ROSTER/SYS-DATA",
+                sha256: "e54e9621f070402fb2294f468ba649fecb92b1b671bcf9633c25c5c0d3b48ce2",
+                payload_sha256: "c84fadef0a098cbc19efa523a42b87c9b76f338934c04a683c0917078ac9ffad",
+            }),
         },
         module: "nhl14_ps3",
         framing: RosterFraming {
@@ -774,7 +774,7 @@ mod nhl14_ps3 {
             table_count: 38,
         },
         main_meta: "anchors/ps3/nhl14/databases/nhlng-meta.xml",
-        main_meta_sha256: "d1f9318e50008161ae4bc8dbbb95ef6e4ddf01eb27d8f2faa3e39383cf1b1c22",
+        main_meta_text_sha256: "65cbf0e8f0bf8a4983ccd54a3f1fc3e633e7972bef624cc2aaa6c23cd57cddf4",
         twin: Some(Twin {
             main: "anchors/xbox360/nhl14/databases/nhlng.db",
             meta: "anchors/xbox360/nhl14/databases/nhlng-meta.xml",
@@ -870,12 +870,11 @@ mod nhl13_xbox360 {
             game: "nhl13",
             main_anchor: "anchors/xbox360/nhl13/databases/nhlng.db",
             main_anchor_sha256: "64460a156dfd459255494ac08d7aa8f4db71204c3ece5035431611a27f9822fb",
-            roster_fixture:
-                "anchors/xbox360/nhl13/savefiles/ROSTER 20260627051601/ROSTER 20260627051601",
-            roster_fixture_sha256:
-                "d4bd2f7c3066da07bf1e9d742a1f97bf38ee952ed257ccf900f07970605fe52e",
-            roster_payload_sha256:
-                "0e16b80e046b8697294993a4c176b8949e62418d3db8e09850408de214b36ad6",
+            roster: Some(RosterFixture {
+                path: "anchors/xbox360/nhl13/savefiles/ROSTER 20260627051601/ROSTER 20260627051601",
+                sha256: "d4bd2f7c3066da07bf1e9d742a1f97bf38ee952ed257ccf900f07970605fe52e",
+                payload_sha256: "0e16b80e046b8697294993a4c176b8949e62418d3db8e09850408de214b36ad6",
+            }),
         },
         module: "nhl13_xbox360",
         // Version word 0: a raw big-endian TDB body at 0x2C (RawV2), no compressed-size word; the
@@ -891,7 +890,7 @@ mod nhl13_xbox360 {
             table_count: 36,
         },
         main_meta: "anchors/xbox360/nhl13/databases/nhlng-meta.xml",
-        main_meta_sha256: "c5b9994e6079707bfa71c451e2f462f46c8849f8161f602d1b044b05c75956fc",
+        main_meta_text_sha256: "be0829a6eb91ba63d075dc8e668d641ce0322c7ac7d91443f976358fb706c0c8",
         twin: None,
         capacities: &[
             ("ubPc", 6946, 5412),
@@ -973,12 +972,11 @@ mod nhl12_xbox360 {
             game: "nhl12",
             main_anchor: "anchors/xbox360/nhl12/databases/nhlng.db",
             main_anchor_sha256: "94b31ff282f976b1c46b2ac6d261a7ac1b38a15de79046ba721871353369411d",
-            roster_fixture:
-                "anchors/xbox360/nhl12/savefiles/ROSTER 20260627052113/ROSTER 20260627052113",
-            roster_fixture_sha256:
-                "5b361a29516a74c8ed328494783b8fa39fb872c25f050018f78b39c089f9a607",
-            roster_payload_sha256:
-                "9b8c75bf7f127797d7c76ba1edd284a1a141b69a3938035228b62db42a3ba5e9",
+            roster: Some(RosterFixture {
+                path: "anchors/xbox360/nhl12/savefiles/ROSTER 20260627052113/ROSTER 20260627052113",
+                sha256: "5b361a29516a74c8ed328494783b8fa39fb872c25f050018f78b39c089f9a607",
+                payload_sha256: "9b8c75bf7f127797d7c76ba1edd284a1a141b69a3938035228b62db42a3ba5e9",
+            }),
         },
         module: "nhl12_xbox360",
         // Version word 2 with the `DB` marker at 0x2C — resolved to RawV2 by that marker, not the
@@ -994,7 +992,7 @@ mod nhl12_xbox360 {
             table_count: 36,
         },
         main_meta: "anchors/xbox360/nhl12/databases/nhlng-meta.xml",
-        main_meta_sha256: "ddaaff54deeb5b646bfd4b70eed6247028eda41a4ff9fc317ef5971fcb593894",
+        main_meta_text_sha256: "8288938f361c2a4dac17b4be5c2e316b1de32dfd75eead3d106632001cc36df9",
         twin: None,
         capacities: &[
             ("ubPc", 6898, 5395),
@@ -1070,12 +1068,12 @@ mod nhl11_xbox360 {
             game: "nhl11",
             main_anchor: "anchors/xbox360/nhl11/databases/nhlng.db",
             main_anchor_sha256: "461f8d641c50baea0074735906caaf567057da89578ffd2963b9bb3e80dc3c88",
-            roster_fixture:
-                "anchors/xbox360/nhl11/savefiles/ROSTER1 20260627054323/ROSTER1 20260627054323",
-            roster_fixture_sha256:
-                "8508fc99f2acee88e0399c78af3e6183ede2bdd36c2a55176f8a5dc7d23e011e",
-            roster_payload_sha256:
-                "17ba7cd0522bb7ec2f2e52a9aff82af2a361491adfde52434fb6202e8ec8daa0",
+            roster: Some(RosterFixture {
+                path:
+                    "anchors/xbox360/nhl11/savefiles/ROSTER1 20260627054323/ROSTER1 20260627054323",
+                sha256: "8508fc99f2acee88e0399c78af3e6183ede2bdd36c2a55176f8a5dc7d23e011e",
+                payload_sha256: "17ba7cd0522bb7ec2f2e52a9aff82af2a361491adfde52434fb6202e8ec8daa0",
+            }),
         },
         module: "nhl11_xbox360",
         // Version word 1: a 32-byte header with one checksum and no size words, raw big-endian TDB
@@ -1092,7 +1090,7 @@ mod nhl11_xbox360 {
             table_count: 32,
         },
         main_meta: "anchors/xbox360/nhl11/databases/nhlng-meta.xml",
-        main_meta_sha256: "a83aae929fcd22dae91f2d3cf9e1afbe6a25ce0abadbc4986e486ea56b2d6f5f",
+        main_meta_text_sha256: "8e65c37eaf96027f35d51c1f6035067becb47d251bba8a39cd34a29362c71fd7",
         twin: None,
         capacities: &[
             ("ubPc", 5910, 5310),
@@ -1191,11 +1189,11 @@ mod nhl13_ps3 {
             main_anchor: "anchors/ps3/nhl13/databases/nhlng.db",
             main_anchor_sha256: "64460a156dfd459255494ac08d7aa8f4db71204c3ece5035431611a27f9822fb",
             // The committed vanilla PS3 NHL 13 ROSTER save (`SYS-DATA`; `PS3RosterFile` at byte 0).
-            roster_fixture: "anchors/ps3/nhl13/savefiles/BLUS310030200 - ROSTER/SYS-DATA",
-            roster_fixture_sha256:
-                "afa16f8f0033c6a78e49c0316c12b1b8f82ebf8a3258ce201d4772f5148347f2",
-            roster_payload_sha256:
-                "c2cf144d1d2d3dcc2cc0009c306f2665470a70cf18c1311f6f78da3ee8d80f56",
+            roster: Some(RosterFixture {
+                path: "anchors/ps3/nhl13/savefiles/BLUS310030200 - ROSTER/SYS-DATA",
+                sha256: "afa16f8f0033c6a78e49c0316c12b1b8f82ebf8a3258ce201d4772f5148347f2",
+                payload_sha256: "c2cf144d1d2d3dcc2cc0009c306f2665470a70cf18c1311f6f78da3ee8d80f56",
+            }),
         },
         module: "nhl13_ps3",
         // Version word 0 with a raw big-endian TDB body at 0x2C (RawV2): the header carries the
@@ -1211,7 +1209,7 @@ mod nhl13_ps3 {
             table_count: 36,
         },
         main_meta: "anchors/ps3/nhl13/databases/nhlng-meta.xml",
-        main_meta_sha256: "c5b9994e6079707bfa71c451e2f462f46c8849f8161f602d1b044b05c75956fc",
+        main_meta_text_sha256: "be0829a6eb91ba63d075dc8e668d641ce0322c7ac7d91443f976358fb706c0c8",
         twin: Some(Twin {
             main: "anchors/xbox360/nhl13/databases/nhlng.db",
             meta: "anchors/xbox360/nhl13/databases/nhlng-meta.xml",
@@ -1302,11 +1300,11 @@ mod nhl12_ps3 {
             game: "nhl12",
             main_anchor: "anchors/ps3/nhl12/databases/nhlng.db",
             main_anchor_sha256: "94b31ff282f976b1c46b2ac6d261a7ac1b38a15de79046ba721871353369411d",
-            roster_fixture: "anchors/ps3/nhl12/savefiles/BLUS307910200 - ROSTER/SYS-DATA",
-            roster_fixture_sha256:
-                "28132930801e92aedb82bb539c2314f35186399aeb1d169d2bfca74c8d00e3b1",
-            roster_payload_sha256:
-                "7074044057d51157a31ac42a14c5b7424066d4004f08c43c6e790263efd07e20",
+            roster: Some(RosterFixture {
+                path: "anchors/ps3/nhl12/savefiles/BLUS307910200 - ROSTER/SYS-DATA",
+                sha256: "28132930801e92aedb82bb539c2314f35186399aeb1d169d2bfca74c8d00e3b1",
+                payload_sha256: "7074044057d51157a31ac42a14c5b7424066d4004f08c43c6e790263efd07e20",
+            }),
         },
         module: "nhl12_ps3",
         // Version word 2 with the `DB` marker at 0x2C — resolved to RawV2 by that marker, not the
@@ -1322,7 +1320,7 @@ mod nhl12_ps3 {
             table_count: 36,
         },
         main_meta: "anchors/ps3/nhl12/databases/nhlng-meta.xml",
-        main_meta_sha256: "ddaaff54deeb5b646bfd4b70eed6247028eda41a4ff9fc317ef5971fcb593894",
+        main_meta_text_sha256: "8288938f361c2a4dac17b4be5c2e316b1de32dfd75eead3d106632001cc36df9",
         twin: Some(Twin {
             main: "anchors/xbox360/nhl12/databases/nhlng.db",
             meta: "anchors/xbox360/nhl12/databases/nhlng-meta.xml",
@@ -1403,11 +1401,11 @@ mod nhl11_ps3 {
             game: "nhl11",
             main_anchor: "anchors/ps3/nhl11/databases/nhlng.db",
             main_anchor_sha256: "461f8d641c50baea0074735906caaf567057da89578ffd2963b9bb3e80dc3c88",
-            roster_fixture: "anchors/ps3/nhl11/savefiles/BLUS305680200 - ROSTER/SYS-DATA",
-            roster_fixture_sha256:
-                "c18a39f683fa2438009c433854937dd423f107f128eb8195db522d167a35be9a",
-            roster_payload_sha256:
-                "77d2dcb3cfe4e38b624b603eb88b1bf79bba1fb82b51a633366090deef1aa47e",
+            roster: Some(RosterFixture {
+                path: "anchors/ps3/nhl11/savefiles/BLUS305680200 - ROSTER/SYS-DATA",
+                sha256: "c18a39f683fa2438009c433854937dd423f107f128eb8195db522d167a35be9a",
+                payload_sha256: "77d2dcb3cfe4e38b624b603eb88b1bf79bba1fb82b51a633366090deef1aa47e",
+            }),
         },
         module: "nhl11_ps3",
         // Version word 1: a 32-byte header with one checksum and no size words, raw big-endian TDB
@@ -1424,7 +1422,7 @@ mod nhl11_ps3 {
             table_count: 32,
         },
         main_meta: "anchors/ps3/nhl11/databases/nhlng-meta.xml",
-        main_meta_sha256: "a83aae929fcd22dae91f2d3cf9e1afbe6a25ce0abadbc4986e486ea56b2d6f5f",
+        main_meta_text_sha256: "8e65c37eaf96027f35d51c1f6035067becb47d251bba8a39cd34a29362c71fd7",
         twin: Some(Twin {
             main: "anchors/xbox360/nhl11/databases/nhlng.db",
             meta: "anchors/xbox360/nhl11/databases/nhlng-meta.xml",
@@ -1515,11 +1513,11 @@ mod nhl10_ps3 {
             game: "nhl10",
             main_anchor: "anchors/ps3/nhl10/databases/nhlng.db",
             main_anchor_sha256: "e87b8c806b1d351ae504b9bf0b54c070e999a880e88773328e72f2c4f988d703",
-            roster_fixture: "anchors/ps3/nhl10/savefiles/BLUS303450200 - ROSTER/SYS-DATA",
-            roster_fixture_sha256:
-                "ceba4776d80edd22ca31220f4c01074824a75a7f43ec61388f7e12fd3deee155",
-            roster_payload_sha256:
-                "d2f68d6b380e92d2cd85d92dd49a2c8678d003d800596667fe1b0ab29d941541",
+            roster: Some(RosterFixture {
+                path: "anchors/ps3/nhl10/savefiles/BLUS303450200 - ROSTER/SYS-DATA",
+                sha256: "ceba4776d80edd22ca31220f4c01074824a75a7f43ec61388f7e12fd3deee155",
+                payload_sha256: "d2f68d6b380e92d2cd85d92dd49a2c8678d003d800596667fe1b0ab29d941541",
+            }),
         },
         module: "nhl10_ps3",
         // Version word 1 (RawV1, as NHL 11): 32-byte header, one checksum, no size words, raw
@@ -1536,7 +1534,7 @@ mod nhl10_ps3 {
             table_count: 25,
         },
         main_meta: "anchors/ps3/nhl10/databases/nhlng-meta.xml",
-        main_meta_sha256: "6c335a62678d58fd5a32651e364e9e913495de5a17f2aca1b049d712f8134964",
+        main_meta_text_sha256: "fdc418c8596f0a62654d8cc57d364d697c3ddc0a2c43220d5c05ca12c0e2855c",
         // The Xbox 360 NHL 10 adapter (C0-CAN1) carries audit-derived capacities over seven tables,
         // not fixture-measured ones over eight, so the twin *capacity* case has no counterpart to
         // relabel from and is not declared here; the identity observation still is.

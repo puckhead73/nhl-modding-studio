@@ -28,10 +28,19 @@ pub(crate) struct Target {
     pub game: &'static str,
     pub main_anchor: &'static str,
     pub main_anchor_sha256: &'static str,
-    pub roster_fixture: &'static str,
-    pub roster_fixture_sha256: &'static str,
-    /// The inner TDB `extract_db` yields from the fixture.
-    pub roster_payload_sha256: &'static str,
+    /// The committed ROSTER fixture the production save codec decodes for this target, or `None`
+    /// when the target has no such fixture — either none is committed, or the committed one is not
+    /// decoded by the committed codec (C0-REG4: PS4 NHL 15 / 20 / 21). A `None` here is a
+    /// recorded gap the per-target module names by case; it never lets a capacity case run.
+    pub roster: Option<RosterFixture>,
+}
+
+/// A committed ROSTER fixture, pinned by outer and decoded-payload identity.
+pub(crate) struct RosterFixture {
+    pub path: &'static str,
+    pub sha256: &'static str,
+    /// The inner TDB the production codec yields from the fixture.
+    pub payload_sha256: &'static str,
 }
 
 /// The save container framing a fixture is expected to show, as decoded by `tdb_savedata`. The
@@ -64,6 +73,45 @@ pub(crate) fn read_pinned(rel: &str, expected_sha256: &str) -> Vec<u8> {
         sha256_hex(&bytes),
         expected_sha256,
         "{rel}: not the committed bytes"
+    );
+    bytes
+}
+
+/// **Text identity** of a committed metadata XML (C0-REG4-R1): SHA-256 over the bytes after every
+/// CRLF pair (`0x0D 0x0A`) is replaced by LF (`0x0A`). Nothing else is touched — a lone CR, a byte
+/// order mark, trailing whitespace and every other byte count — so two representations agree under
+/// this rule exactly when they are the same text modulo CRLF/LF line endings. The metadata XMLs are
+/// committed as LF blobs and checked out as CRLF under `core.autocrlf=true`, so a *byte* hash of
+/// the checked-out file is a property of the checkout, not of the repository; this digest is the
+/// same on both, and equals the raw blob's SHA-256 wherever the blob is LF. It is **not** byte
+/// identity and is never reported as such; binary anchors (databases, saves) keep [`read_pinned`].
+pub(crate) fn text_identity_sha256(bytes: &[u8]) -> String {
+    let mut normalised = Vec::with_capacity(bytes.len());
+    let mut i = 0;
+    while i < bytes.len() {
+        if bytes[i] == b'\r' && bytes.get(i + 1) == Some(&b'\n') {
+            i += 1;
+            continue;
+        }
+        normalised.push(bytes[i]);
+        i += 1;
+    }
+    sha256_hex(&normalised)
+}
+
+/// Read a committed text file and pin its text identity (see [`text_identity_sha256`]). Returns
+/// the bytes exactly as read — callers that compare two such files compare what the checkout
+/// holds, and say so.
+pub(crate) fn read_pinned_text(rel: &str, expected_text_sha256: &str) -> Vec<u8> {
+    read_pinned_text_at(&repo_root().join(rel), rel, expected_text_sha256)
+}
+
+pub(crate) fn read_pinned_text_at(path: &Path, label: &str, expected_text_sha256: &str) -> Vec<u8> {
+    let bytes = std::fs::read(path).unwrap_or_else(|e| panic!("{label}: {e}"));
+    assert_eq!(
+        text_identity_sha256(&bytes),
+        expected_text_sha256,
+        "{label}: not the committed text (LF-normalised digest)"
     );
     bytes
 }
@@ -151,6 +199,20 @@ impl Target {
         snapshot(&repo_root(), anchor).expect("the anchor parses with its metadata")
     }
 
+    /// The decodable ROSTER fixture's path; a target without one has no capacity case to cite it.
+    pub(crate) fn roster_fixture(&self) -> &'static str {
+        self.roster_fixture_identity().path
+    }
+
+    fn roster_fixture_identity(&self) -> &RosterFixture {
+        self.roster.as_ref().unwrap_or_else(|| {
+            panic!(
+                "{}: no ROSTER fixture the committed codec decodes is declared for this target",
+                self.target
+            )
+        })
+    }
+
     pub(crate) fn cites(&self, provenance: &[String], case: &str) -> bool {
         provenance
             .iter()
@@ -160,7 +222,8 @@ impl Target {
     /// The decoded ROSTER fixture: identity and framing asserted on the way in, through the
     /// production save codec.
     pub(crate) fn decoded_roster_fixture(&self, framing: &RosterFraming) -> Vec<u8> {
-        let outer = read_pinned(self.roster_fixture, self.roster_fixture_sha256);
+        let fixture = self.roster_fixture_identity();
+        let outer = read_pinned(fixture.path, fixture.sha256);
         assert_eq!(outer.len(), framing.outer_len);
         let container =
             tdb_savedata::SaveContainer::parse(&outer).expect("the container header parses");
@@ -179,7 +242,7 @@ impl Target {
             .extract_db()
             .expect("the body yields a TDB (inflated for ZlibV4, sliced for the raw variants)");
         assert_eq!(inner.len(), framing.inner_len);
-        assert_eq!(sha256_hex(&inner), self.roster_payload_sha256);
+        assert_eq!(sha256_hex(&inner), fixture.payload_sha256);
         let save = TdbFile::parse(&inner).expect("the inner TDB parses");
         assert!(save.header_crc_ok() && save.size_ok());
         assert_eq!(save.endian, tdb_core::Endian::Big);
@@ -213,7 +276,7 @@ impl Target {
                 .declared
                 .provenance
                 .iter()
-                .any(|p| p == self.roster_fixture)
+                .any(|p| p == self.roster_fixture())
             {
                 out.push(format!(
                     "capacity {}: provenance does not name the fixture it was read from",
@@ -330,6 +393,194 @@ impl Target {
             );
         }
     }
+}
+
+// ============================================================== PS4 (gen8) mechanics
+
+/// The framing a PS4 `DATA` ROSTER fixture is expected to show through the committed production
+/// codec (`tdb_savedata::ps4_extract_roster`: record stream, LZ4 frame, little-endian TDB v6).
+/// `size_ok` is stated per fixture because the committed `RosterCustom0` saves are re-serialized
+/// files (`size_ok = false`, as the roster-capacity audit records) while the NHL 16 ROSTER is
+/// pristine.
+pub(crate) struct Ps4RosterFraming {
+    pub outer_len: usize,
+    pub inner_len: usize,
+    pub table_count: usize,
+    pub size_ok: bool,
+}
+
+impl Target {
+    /// The decoded PS4 ROSTER fixture: identity, codec recognition and framing asserted on the way
+    /// in, through the committed production PS4 codec. Separate from [`Target::decoded_roster_fixture`]
+    /// because the container is a different format (no `PS3RosterFile` / `RosterFile` header, no
+    /// version word, an LZ4 frame instead of zlib or raw) and the inner TDB is little-endian.
+    pub(crate) fn decoded_ps4_roster_fixture(&self, framing: &Ps4RosterFraming) -> Vec<u8> {
+        let fixture = self.roster_fixture_identity();
+        let outer = read_pinned(fixture.path, fixture.sha256);
+        assert_eq!(outer.len(), framing.outer_len);
+        assert!(
+            tdb_savedata::is_ps4_save(&outer),
+            "the committed codec recognises the DATA stream"
+        );
+        let inner =
+            tdb_savedata::ps4_extract_roster(&outer).expect("the LZ4 roster record decodes");
+        assert_eq!(inner.len(), framing.inner_len);
+        assert_eq!(sha256_hex(&inner), fixture.payload_sha256);
+        let save = TdbFile::parse(&inner).expect("the inner TDB parses");
+        assert!(save.header_crc_ok(), "header CRC recomputes");
+        assert_eq!(
+            save.size_ok(),
+            framing.size_ok,
+            "pristine or re-serialized, as recorded"
+        );
+        assert_eq!(save.endian, tdb_core::Endian::Little);
+        assert_eq!(save.tables.len(), framing.table_count);
+        inner
+    }
+
+    /// Every disagreement between a `main-db-max-records` capacity and the main anchor it must have
+    /// been read from. A capacity attributed to any other file — a ROSTER save included — is
+    /// reported as not this anchor's. Ceiling >= population is checked within THIS source and
+    /// nowhere against another file. The PS4 counterpart of
+    /// [`Target::roster_capacity_discrepancies`]: on gen8 the main DB carries the slack, so its own
+    /// directory is the file a capacity is read from; a save's directory is a separate measurement
+    /// and never substitutes for it or is substituted by it.
+    pub(crate) fn main_db_capacity_discrepancies(
+        &self,
+        adapter: &Adapter,
+        main: &TdbFile,
+    ) -> Vec<String> {
+        let mut out = Vec::new();
+        for cap in &adapter.capacities {
+            let Some(v) = cap.declared.established() else {
+                out.push(format!("capacity {}: not established", cap.table));
+                continue;
+            };
+            if v.source != "main-db-max-records" {
+                out.push(format!(
+                    "capacity {}: source {} is not the main anchor this case parses",
+                    cap.table, v.source
+                ));
+                continue;
+            }
+            if !cap
+                .declared
+                .provenance
+                .iter()
+                .any(|p| p == self.main_anchor)
+            {
+                out.push(format!(
+                    "capacity {}: provenance does not name the anchor it was read from",
+                    cap.table
+                ));
+            }
+            let Some(t) = main.table_canonical(&cap.table) else {
+                out.push(format!(
+                    "capacity {}: table not in the main anchor",
+                    cap.table
+                ));
+                continue;
+            };
+            if v.ceiling_records != u32::from(t.max_records) {
+                out.push(format!(
+                    "capacity {}: ceiling_records {} vs anchor max_records {}",
+                    cap.table, v.ceiling_records, t.max_records
+                ));
+            }
+            if v.population_records != u32::from(t.current_records) {
+                out.push(format!(
+                    "capacity {}: population_records {} vs anchor current_records {}",
+                    cap.table, v.population_records, t.current_records
+                ));
+            }
+            if t.max_records < t.current_records {
+                out.push(format!(
+                    "capacity {}: anchor max_records {} below its own current_records {}",
+                    cap.table, t.max_records, t.current_records
+                ));
+            }
+        }
+        out
+    }
+
+    /// The whole main-DB capacity case for a PS4 target: the anchor's directory as read, and the
+    /// adapter declaring exactly that, attributed to this anchor, measured, with the note saying
+    /// what a directory capacity is not and that it is not the save's capacity.
+    pub(crate) fn assert_capacities_are_the_main_anchors(
+        &self,
+        main: &TdbFile,
+        expected: &[(&str, u16, u16)],
+        capacity_case: &str,
+    ) {
+        for (id, max, cur) in expected {
+            let t = table(main, id);
+            assert_eq!(
+                (t.max_records, t.current_records),
+                (*max, *cur),
+                "{id}: (max_records, current_records)"
+            );
+        }
+        let a = self.adapter();
+        assert_eq!(
+            self.main_db_capacity_discrepancies(&a, main),
+            Vec::<String>::new()
+        );
+        assert_eq!(a.capacities.len(), expected.len());
+        for cap in &a.capacities {
+            assert_eq!(
+                cap.declared.state,
+                ConstraintState::Established,
+                "{}",
+                cap.table
+            );
+            assert_eq!(
+                cap.declared.confidence.as_deref(),
+                Some("measured"),
+                "{}",
+                cap.table
+            );
+            assert!(
+                self.cites(&cap.declared.provenance, capacity_case),
+                "{}: cites this case",
+                cap.table
+            );
+            assert!(
+                cap.declared
+                    .note
+                    .contains("not a demonstrated runtime limit"),
+                "{}: the note says what a directory capacity is not",
+                cap.table
+            );
+            assert!(
+                cap.declared.note.contains("NOT a substitute"),
+                "{}: the note says the main-DB figure does not stand in for the save's",
+                cap.table
+            );
+        }
+    }
+}
+
+/// The eight roster-core tables' directories in a decoded save against the main anchor's, as an
+/// observation about two files: (table, save max, save cur, main max, main cur).
+pub(crate) fn directory_comparison(
+    save: &TdbFile,
+    main: &TdbFile,
+    tables: &[&str],
+) -> Vec<(String, u16, u16, u16, u16)> {
+    tables
+        .iter()
+        .map(|id| {
+            let s = table(save, id);
+            let m = table(main, id);
+            (
+                id.to_string(),
+                s.max_records,
+                s.current_records,
+                m.max_records,
+                m.current_records,
+            )
+        })
+        .collect()
 }
 
 // ============================================================== position / companions
@@ -590,13 +841,17 @@ pub(crate) enum MainTeamEncoding {
 /// Per rostered player exactly one slot must carry the encoded pattern (`team + 1` or `team`, by
 /// `encoding`); under `SlotTeamPlusOne` no rostered player may store 0, under `SlotTeamAsIs` the
 /// count of rostered rows storing 0 is simply what team code 0 holds. Each un-rostered player is
-/// counted by whether it stores 0. Containment of every slot code in the team table's key set is
-/// asserted as an observation.
+/// counted by whether it stores 0 — an un-rostered row storing a non-zero pattern is counted, not
+/// refused (C0-REG4: the PS4 anchors hold some). Containment of every slot code in the team
+/// table's key set is asserted as an observation. `bit_width` is the field's width on this anchor
+/// (8 on every gen7 title; 8, 9 or 10 across the PS4 titles), so the all-ones pattern is the
+/// target's own and never a carried `0xFF`.
 pub(crate) fn main_team_measurement(
     db: &TdbFile,
     snap: &SchemaSnapshot,
     slots: &BTreeMap<u32, Vec<u64>>,
     encoding: MainTeamEncoding,
+    bit_width: u32,
 ) -> MainTeamCounts {
     let bio = table(db, "ubPc");
     let dxsb = field(db, bio, "dXSB");
@@ -604,7 +859,8 @@ pub(crate) fn main_team_measurement(
         meta_field(snap, "ubPc", "dXSB").name.as_deref(),
         Some("team")
     );
-    assert_eq!(dxsb.bit_width, 8);
+    assert_eq!(dxsb.bit_width, bit_width, "this anchor's width");
+    let all_ones = (1u64 << bit_width) - 1;
     let mut c = MainTeamCounts {
         rostered: 0,
         plus_one: 0,
@@ -616,7 +872,7 @@ pub(crate) fn main_team_measurement(
     };
     for i in 0..u32::from(bio.current_records) {
         let raw = read(db, bio, i, &dxsb);
-        if raw == 0xFF {
+        if raw == all_ones {
             c.all_ones += 1;
         }
         match slots.get(&i) {
@@ -661,23 +917,27 @@ pub(crate) fn main_team_measurement(
 
 /// The adapter declares the main-team encoding as measured, keeps the parent a candidate, keeps
 /// the mapping blocked on that, and has no human range (it is a reference). Under
-/// `SlotTeamPlusOne` the storage is the offset-binary `-1..254` field and the absence code 0 is
-/// established; under `SlotTeamAsIs` the storage is the unsigned `0..255` field and no absence
-/// code is established — pattern 0 is team code 0 as much as it is "no team", so the sentinel
-/// block must stay unknown with its ambiguity recorded.
+/// `SlotTeamPlusOne` the storage is the offset-binary `-1..2^w-2` field (`-1..254` at the gen7
+/// width of 8) and the absence code 0 is established; under `SlotTeamAsIs` the storage is the
+/// unsigned `0..2^w-1` field and no absence code is established — pattern 0 is team code 0 as
+/// much as it is "no team", so the sentinel block must stay unknown with its ambiguity recorded.
+/// `bit_width` is the field's width on this anchor, as measured.
 pub(crate) fn assert_main_team_declared(
     t: &Target,
     a: &Adapter,
     case: &str,
     encoding: MainTeamEncoding,
+    bit_width: u32,
 ) {
     let m = mapping(a, "player.team");
     let st = m.storage.established().expect("storage established");
+    assert_eq!(st.bit_width, bit_width, "this anchor's width");
     assert!(t.cites(&m.storage.provenance, case));
+    let top = (1i64 << bit_width) - 1;
     if encoding == MainTeamEncoding::SlotTeamAsIs {
         assert_eq!(
             (st.signedness.as_str(), st.range_low, st.range_high),
-            ("unsigned", 0, 255)
+            ("unsigned", 0, top)
         );
         assert_eq!(
             (m.read_transform.as_str(), m.write_transform.as_str()),
@@ -724,7 +984,7 @@ pub(crate) fn assert_main_team_declared(
     }
     assert_eq!(
         (st.signedness.as_str(), st.range_low, st.range_high),
-        ("offset-binary", -1, 254)
+        ("offset-binary", -1, top - 1)
     );
     assert_eq!(
         (m.read_transform.as_str(), m.write_transform.as_str()),
@@ -880,6 +1140,47 @@ pub(crate) fn codec_round_trip_over_anchor(
     (absent, coded)
 }
 
+/// The same pipeline over an anchor on which some un-rostered bio rows store a non-zero pattern
+/// (C0-REG4: the PS4 anchors). Absence ⇔ no roster slot still holds for pattern 0; every rostered
+/// row decodes to one of its slot codes; an un-rostered row with a non-zero pattern decodes to a
+/// team code that resolves to NO roster slot, and is returned by pattern so the caller can assert
+/// exactly which patterns those are rather than have them silently pass. The inverse restores every
+/// pattern. Returns (absent, coded and rostered, coded-but-unrostered by stored pattern).
+pub(crate) fn codec_round_trip_over_anchor_with_unrostered_pointers(
+    m: &Mapping,
+    db: &TdbFile,
+    slots: &BTreeMap<u32, Vec<u64>>,
+) -> (usize, usize, BTreeMap<u64, usize>) {
+    let width = m.storage.established().unwrap().bit_width;
+    for pattern in 0..(1u64 << width) {
+        assert_eq!(encode_stored(m, decode_stored(m, pattern)), pattern);
+    }
+    let bio = table(db, "ubPc");
+    let dxsb = field(db, bio, "dXSB");
+    let (mut absent, mut coded) = (0usize, 0usize);
+    let mut unrostered: BTreeMap<u64, usize> = BTreeMap::new();
+    for i in 0..u32::from(bio.current_records) {
+        let pattern = read(db, bio, i, &dxsb);
+        let value = decode_stored(m, pattern);
+        match (value, slots.get(&i)) {
+            (Decoded::Absent, None) => absent += 1,
+            (Decoded::TeamCode(code), Some(teams)) => {
+                assert!(
+                    teams.contains(&code),
+                    "bio record {i}: code {code} in {teams:?}"
+                );
+                coded += 1;
+            }
+            (Decoded::TeamCode(_), None) => *unrostered.entry(pattern).or_default() += 1,
+            (Decoded::Absent, Some(teams)) => {
+                panic!("bio record {i}: absent but rostered on {teams:?}")
+            }
+        }
+        assert_eq!(encode_stored(m, value), pattern, "bio record {i}");
+    }
+    (absent, coded, unrostered)
+}
+
 // ============================================================== team.name
 
 /// `kOtt.YmkJ` (at `field_bit_offset`, the target's own) read / edit / serialize / reopen on an
@@ -889,10 +1190,36 @@ pub(crate) fn codec_round_trip_over_anchor(
 /// record 1; the only differing bytes are the field span of record 0 and the one CRC word that
 /// hashes this table's body; every other kOtt record's every field and every other table's record
 /// block compare equal; a second no-op serialization is stable; a 51-byte value is refused with
-/// nothing written and a 50-byte value is accepted.
+/// nothing written and a 50-byte value is accepted. The gen7 / NHL 15 PS4 shape of
+/// [`kott_string_round_trip`]: the 400-bit `fullname` field.
 pub(crate) fn team_name_round_trip(
     original: &[u8],
     field_bit_offset: u32,
+    vanilla: &str,
+    vanilla_record_1: &str,
+    replacement: &str,
+) {
+    kott_string_round_trip(
+        original,
+        "YmkJ",
+        field_bit_offset,
+        400,
+        vanilla,
+        vanilla_record_1,
+        replacement,
+    )
+}
+
+/// The same read / edit / serialize / reopen discipline over any inline-string field of `kOtt`
+/// (`field_id`, at `field_bit_offset` and `field_bit_width` — all the target's own): the over-budget
+/// value refused is `capacity + 1` bytes and the accepted one exactly `capacity` bytes, where
+/// capacity is the field's byte width. C0-REG4 exercises the 320- and 256-bit `teamname` fields of
+/// the PS4 titles with it; the gen7 modules keep calling [`team_name_round_trip`].
+pub(crate) fn kott_string_round_trip(
+    original: &[u8],
+    field_id: &str,
+    field_bit_offset: u32,
+    field_bit_width: u32,
     vanilla: &str,
     vanilla_record_1: &str,
     replacement: &str,
@@ -904,12 +1231,13 @@ pub(crate) fn team_name_round_trip(
         "an unedited copy re-serializes byte-identically"
     );
     let kott = table(&db, "kOtt");
-    let name = field(&db, kott, "YmkJ");
+    let name = field(&db, kott, field_id);
     assert_eq!(
         (name.kind, name.bit_offset, name.bit_width),
-        (0, field_bit_offset, 400),
+        (0, field_bit_offset, field_bit_width),
         "the field sits where this target's snapshot says (the offset differs across titles)"
     );
+    let capacity = (field_bit_width / 8) as usize;
     let record = 0;
     assert_eq!(
         db.read_inline_str(kott, record, &name).unwrap(),
@@ -917,7 +1245,7 @@ pub(crate) fn team_name_round_trip(
         "byte-transparent"
     );
 
-    assert!(replacement.len() < 50);
+    assert!(replacement.len() < capacity);
     let mut edited = original.to_vec();
     assert!(db.set_inline_str(&mut edited, kott, record, &name, replacement));
     db.recompute_crcs(&mut edited);
@@ -994,11 +1322,11 @@ pub(crate) fn team_name_round_trip(
     assert_eq!(reopened.serialize(), edited);
 
     let mut untouched = edited.clone();
-    let fifty_one = "x".repeat(51);
-    assert!(!reopened.set_inline_str(&mut untouched, kott2, record, &name, &fifty_one));
+    let over = "x".repeat(capacity + 1);
+    assert!(!reopened.set_inline_str(&mut untouched, kott2, record, &name, &over));
     assert_eq!(untouched, edited);
-    let fifty = "y".repeat(50);
-    assert!(reopened.set_inline_str(&mut untouched, kott2, record, &name, &fifty));
+    let exact = "y".repeat(capacity);
+    assert!(reopened.set_inline_str(&mut untouched, kott2, record, &name, &exact));
     assert_eq!(
         reopened
             .read_inline_str(kott2, record, &name)
@@ -1010,12 +1338,19 @@ pub(crate) fn team_name_round_trip(
     assert_eq!(
         full.read_inline_str(table(&full, "kOtt"), record, &name)
             .unwrap(),
-        fifty.as_bytes()
+        exact.as_bytes()
     );
 }
 
-/// The adapter claims exactly the round-trip behaviour and names the case.
-pub(crate) fn assert_team_name_declared(t: &Target, a: &Adapter, module: &str, case: &str) {
+/// The adapter claims exactly the round-trip behaviour and names the case; `byte_capacity` is the
+/// mapped field's budget on this target (50 for every `fullname` mapping).
+pub(crate) fn assert_team_name_declared(
+    t: &Target,
+    a: &Adapter,
+    module: &str,
+    case: &str,
+    byte_capacity: u32,
+) {
     let m = mapping(a, "team.name");
     assert_eq!(m.qualification, "automated-tested");
     assert!(m.inverse_verified);
@@ -1031,7 +1366,7 @@ pub(crate) fn assert_team_name_declared(t: &Target, a: &Adapter, module: &str, c
     assert!(t.cites(&m.status.provenance, case));
     assert_eq!(
         m.string_storage.established().unwrap().byte_capacity,
-        Some(50)
+        Some(byte_capacity)
     );
 }
 
@@ -1116,4 +1451,117 @@ pub(crate) fn candidate_blocks(a: &Adapter) -> Vec<String> {
         .candidate
         .is_none());
     unknown
+}
+
+// ============================================================== line-ending portability
+
+/// The text-identity rule, proven on one committed metadata XML: the LF and CRLF representations
+/// (and a mixed one) agree with each other and with the pin; a substantive change to the XML does
+/// not; a byte hash of the checked-out file is not what is pinned. The disposable copies are
+/// written to a scratch directory so that the pinned read runs against real files in both
+/// representations, whatever line endings this checkout happens to have.
+#[cfg(test)]
+mod line_endings {
+    use super::*;
+
+    const XML: &str = "anchors/ps4/nhl15/databases/nhl_game-meta.xml";
+    /// SHA-256 of the committed LF blob = its text identity.
+    const XML_TEXT_SHA256: &str =
+        "2baa3399343a8d17da42731162963d6b272b651a5d1a4e1639d06b48d694a1c4";
+
+    fn lf(bytes: &[u8]) -> Vec<u8> {
+        let mut out = Vec::with_capacity(bytes.len());
+        let mut i = 0;
+        while i < bytes.len() {
+            if bytes[i] == b'\r' && bytes.get(i + 1) == Some(&b'\n') {
+                i += 1;
+                continue;
+            }
+            out.push(bytes[i]);
+            i += 1;
+        }
+        out
+    }
+
+    fn crlf(lf_bytes: &[u8]) -> Vec<u8> {
+        let mut out = Vec::with_capacity(lf_bytes.len() * 2);
+        for &b in lf_bytes {
+            if b == b'\n' {
+                out.push(b'\r');
+            }
+            out.push(b);
+        }
+        out
+    }
+
+    #[test]
+    fn lf_and_crlf_representations_have_the_same_text_identity_and_it_is_the_pin() {
+        let as_checked_out = std::fs::read(repo_root().join(XML)).unwrap();
+        let lf_form = lf(&as_checked_out);
+        let crlf_form = crlf(&lf_form);
+        assert_ne!(lf_form, crlf_form, "two different byte representations");
+        assert_eq!(text_identity_sha256(&lf_form), XML_TEXT_SHA256);
+        assert_eq!(text_identity_sha256(&crlf_form), XML_TEXT_SHA256);
+        assert_eq!(
+            sha256_hex(&lf_form),
+            XML_TEXT_SHA256,
+            "the LF form is the blob"
+        );
+        assert_ne!(
+            sha256_hex(&crlf_form),
+            XML_TEXT_SHA256,
+            "a byte hash of the CRLF form is a checkout property, not the pin"
+        );
+        // A mixed representation (only the first line CRLF) is the same text.
+        let mut mixed = lf_form.clone();
+        let first_nl = mixed.iter().position(|&b| b == b'\n').unwrap();
+        mixed.insert(first_nl, b'\r');
+        assert_eq!(text_identity_sha256(&mixed), XML_TEXT_SHA256);
+        // Whatever this checkout holds, the pinned read accepts it.
+        assert_eq!(lf(&read_pinned_text(XML, XML_TEXT_SHA256)), lf_form);
+    }
+
+    #[test]
+    fn a_substantive_xml_change_fails_the_pin_in_either_representation() {
+        let lf_form = lf(&std::fs::read(repo_root().join(XML)).unwrap());
+        let needle = b"firstname";
+        let at = lf_form
+            .windows(needle.len())
+            .position(|w| w == needle)
+            .expect("the bio table's firstname descriptor is in the metadata");
+        let mut changed = lf_form.clone();
+        changed[at..at + needle.len()].copy_from_slice(b"firstnamX");
+        assert_ne!(text_identity_sha256(&changed), XML_TEXT_SHA256);
+        assert_ne!(text_identity_sha256(&crlf(&changed)), XML_TEXT_SHA256);
+        // A lone CR is content, not a line ending, and is not normalised away.
+        let mut lone_cr = lf_form.clone();
+        lone_cr.insert(at, b'\r');
+        assert_ne!(text_identity_sha256(&lone_cr), XML_TEXT_SHA256);
+    }
+
+    #[test]
+    fn the_pinned_read_accepts_lf_and_crlf_disposable_copies_and_refuses_a_changed_one() {
+        let lf_form = lf(&std::fs::read(repo_root().join(XML)).unwrap());
+        let dir =
+            std::env::temp_dir().join(format!("tdb-canonical-line-endings-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let lf_path = dir.join("meta-lf.xml");
+        let crlf_path = dir.join("meta-crlf.xml");
+        let changed_path = dir.join("meta-changed.xml");
+        std::fs::write(&lf_path, &lf_form).unwrap();
+        std::fs::write(&crlf_path, crlf(&lf_form)).unwrap();
+        let mut changed = crlf(&lf_form);
+        let at = changed.windows(9).position(|w| w == b"firstname").unwrap();
+        changed[at] = b'F';
+        std::fs::write(&changed_path, &changed).unwrap();
+
+        let a = read_pinned_text_at(&lf_path, "lf copy", XML_TEXT_SHA256);
+        let b = read_pinned_text_at(&crlf_path, "crlf copy", XML_TEXT_SHA256);
+        assert_ne!(a, b, "the bytes read differ; the text identity does not");
+        let refused = std::panic::catch_unwind(|| {
+            read_pinned_text_at(&changed_path, "changed copy", XML_TEXT_SHA256)
+        });
+        assert!(refused.is_err(), "a substantive change is refused");
+        let _ = std::fs::remove_dir_all(&dir);
+    }
 }

@@ -32,7 +32,7 @@ fn fixture(relative: &str) -> String {
     .unwrap_or_else(|e| panic!("fixture {relative}: {e}"))
 }
 
-const COMMITTED_ADAPTERS: [&str; 14] = [
+const COMMITTED_ADAPTERS: [&str; 21] = [
     "nhl15-xbox360.toml",
     "nhl10-xbox360.toml",
     "nhllegacy-xbox360.toml",
@@ -47,14 +47,23 @@ const COMMITTED_ADAPTERS: [&str; 14] = [
     "nhl12-ps3.toml",
     "nhl11-ps3.toml",
     "nhl10-ps3.toml",
+    "nhl15-ps4.toml",
+    "nhl16-ps4.toml",
+    "nhl17-ps4.toml",
+    "nhl18-ps4.toml",
+    "nhl19-ps4.toml",
+    "nhl20-ps4.toml",
+    "nhl21-ps4.toml",
 ];
 
 /// The adapters whose capacities, discriminator and companion rule are measured on their own anchor
-/// and ROSTER fixture by a per-target module (C0-REG1a/b, C0-REG2, C0-REG3). The other two
+/// by a per-target module — on the gen7 targets the capacities come from the target's own ROSTER
+/// fixture (C0-REG1a/b, C0-REG2, C0-REG3); on the PS4 targets from the target's own main anchor,
+/// whose directory is not packed on that generation (C0-REG4, `target_ps4_tests`). The other two
 /// (`nhl15-xbox360`, `nhl10-xbox360`) still carry seven audit-derived capacities and candidate
 /// discriminators. The team *sentinel* is measured on all of these but `nhl10-ps3`, where the
 /// as-is encoding leaves no distinguishable absence code (see `target_batch_tests::nhl10_ps3`).
-const MEASURED_ON_OWN_ANCHOR: [&str; 12] = [
+const MEASURED_ON_OWN_ANCHOR: [&str; 17] = [
     "nhllegacy-xbox360.toml",
     "nhl15-ps3.toml",
     "nhllegacy-ps3.toml",
@@ -67,6 +76,32 @@ const MEASURED_ON_OWN_ANCHOR: [&str; 12] = [
     "nhl12-ps3.toml",
     "nhl11-ps3.toml",
     "nhl10-ps3.toml",
+    "nhl15-ps4.toml",
+    "nhl16-ps4.toml",
+    "nhl17-ps4.toml",
+    "nhl18-ps4.toml",
+    "nhl21-ps4.toml",
+];
+
+/// The adapters whose anchor attribution is unresolved (C0-REG4-R1): the files committed under
+/// `anchors/ps4/nhl19/` and `anchors/ps4/nhl20/` are byte-identical and no committed capture
+/// provenance says which title either is. Every measurement they carry is a candidate under an
+/// unknown block; they are registered representation, never target coverage, and every sweep that
+/// asserts an established fact takes the "nothing established" branch for them.
+const ATTRIBUTION_UNRESOLVED: [&str; 2] = ["nhl19-ps4.toml", "nhl20-ps4.toml"];
+
+/// The gen8 (PS4) adapters: little-endian `nhl_game.db`, 7-bit ratings with no offset, main-DB
+/// capacities. Where a sweep below asserts a gen7 fact (the 6-bit offset-36 regime, a ROSTER-save
+/// capacity source), these take the branch their own evidence supports; the gen7 assertions keep
+/// their meaning for the gen7 adapters.
+const GEN8_ADAPTERS: [&str; 7] = [
+    "nhl15-ps4.toml",
+    "nhl16-ps4.toml",
+    "nhl17-ps4.toml",
+    "nhl18-ps4.toml",
+    "nhl19-ps4.toml",
+    "nhl20-ps4.toml",
+    "nhl21-ps4.toml",
 ];
 
 // ================================================================== positive
@@ -273,6 +308,9 @@ fn an_unsupported_no_sentinel_claim_is_not_operative() {
     // encoding leaves NO distinguishable absence code (pattern 0 is team code 0 as much as
     // "un-rostered"), so its team sentinel stays a candidate — a measured ambiguity whose
     // "no absence encoding" reading is asserted, not a range inference.
+    // C0-REG4: the seven PS4 adapters measure their team sentinel on their own anchors (pattern 0 on
+    // un-rostered rows only, at the target's own width) and record the two rating sentinels as
+    // range inferences over the 7-bit 0..99 field, plus shoots.
     let expected_per_adapter = [
         ("nhl15-xbox360.toml", 3, None),
         ("nhl10-xbox360.toml", 2, None),
@@ -288,6 +326,15 @@ fn an_unsupported_no_sentinel_claim_is_not_operative() {
         ("nhl12-ps3.toml", 2, Some("player.team")),
         ("nhl11-ps3.toml", 2, Some("player.team")),
         ("nhl10-ps3.toml", 3, None),
+        ("nhl15-ps4.toml", 3, Some("player.team")),
+        ("nhl16-ps4.toml", 3, Some("player.team")),
+        ("nhl17-ps4.toml", 3, Some("player.team")),
+        ("nhl18-ps4.toml", 3, Some("player.team")),
+        // Attribution unresolved (C0-REG4-R1): the team sentinel measured on the bytes is a
+        // candidate too — a measured one, kept apart below — so four candidates, none established.
+        ("nhl19-ps4.toml", 4, None),
+        ("nhl20-ps4.toml", 4, None),
+        ("nhl21-ps4.toml", 3, Some("player.team")),
     ];
     assert_eq!(expected_per_adapter.len(), COMMITTED_ADAPTERS.len());
     for (name, expected, measured_on_this_anchor) in expected_per_adapter {
@@ -315,12 +362,22 @@ fn an_unsupported_no_sentinel_claim_is_not_operative() {
             if let Some(candidate) = &mapping.null_sentinel.candidate {
                 candidates += 1;
                 here += 1;
-                assert_eq!(
-                    candidate.confidence.as_deref(),
-                    Some("asserted"),
-                    "{name}/{}: a range inference is asserted, never measured",
-                    mapping.canonical
-                );
+                if ATTRIBUTION_UNRESOLVED.contains(&name) && mapping.canonical == "player.team" {
+                    // Measured on the bytes, unattributed to the title: a measured candidate
+                    // that drives nothing (`target_ps4_tests::<module>::attribution`).
+                    assert_eq!(candidate.confidence.as_deref(), Some("measured"), "{name}");
+                    assert!(mapping
+                        .null_sentinel
+                        .note
+                        .contains("ATTRIBUTION UNRESOLVED"));
+                } else {
+                    assert_eq!(
+                        candidate.confidence.as_deref(),
+                        Some("asserted"),
+                        "{name}/{}: a range inference is asserted, never measured",
+                        mapping.canonical
+                    );
+                }
                 assert!(!candidate.provenance.is_empty());
                 assert!(
                     candidate.note.contains("NOT OPERATIVE"),
@@ -331,8 +388,10 @@ fn an_unsupported_no_sentinel_claim_is_not_operative() {
         }
         assert_eq!(here, expected, "{name}: sentinel candidates");
     }
+    // 37 across the fourteen gen7 adapters (C0-REG3) plus 3 on each of the seven PS4 adapters
+    // (C0-REG4) plus the two unattributed team sentinels (C0-REG4-R1).
     assert_eq!(
-        candidates, 37,
+        candidates, 60,
         "the reasoning is preserved on every field it was claimed for"
     );
 }
@@ -425,13 +484,20 @@ fn supported_existing_constraints_still_validate() {
             >= 7
     );
 
-    // The birth-date case still qualifies on both targets.
+    // The birth-date case still qualifies on every attributed target; on the two unattributed
+    // ones the same measurement is a candidate and qualifies nothing (C0-REG4-R1).
     for name in COMMITTED_ADAPTERS {
         let birth = adapter(name)
             .mappings
             .into_iter()
             .find(|m| m.canonical == "player.birth_date")
             .expect("mapped");
+        if ATTRIBUTION_UNRESOLVED.contains(&name) {
+            assert_eq!(birth.qualification, "blocked", "{name}");
+            assert!(birth.transform.established().is_none(), "{name}");
+            assert!(birth.transform.candidate_value().is_some(), "{name}");
+            continue;
+        }
         assert_eq!(birth.qualification, "automated-tested", "{name}");
         assert!(birth.transform.established().is_some(), "{name}");
     }
@@ -486,8 +552,13 @@ fn a_composite_property_names_every_field_it_spans() {
         let roles: Vec<&str> = birth.components.iter().map(|c| c.role.as_str()).collect();
         assert_eq!(roles, ["year", "month", "day"], "{name}");
         for component in &birth.components {
+            let carried = if ATTRIBUTION_UNRESOLVED.contains(&name) {
+                component.storage.candidate_value().is_some()
+            } else {
+                component.storage.established().is_some()
+            };
             assert!(
-                component.storage.established().is_some(),
+                carried,
                 "{name}: component {} carries its own storage",
                 component.role
             );
@@ -560,9 +631,17 @@ fn representation_completeness_is_reported_apart_from_registry_population() {
         "the synthetic fixture is excluded from coverage"
     );
     assert!(population.iter().all(|p| p.target != "fixture-synthetic"));
+    // C0-REG4-R1: the two attribution-unresolved adapters establish nothing — that is their
+    // honest state — and are reported apart (`registered_representation_is_reported_apart…`).
+    let unattributed: BTreeSet<&str> = ATTRIBUTION_UNRESOLVED
+        .iter()
+        .map(|n| n.trim_end_matches(".toml"))
+        .collect();
     assert!(
-        population.iter().all(|p| p.established_constraints > 0),
-        "every committed adapter declares real constraints"
+        population
+            .iter()
+            .all(|p| (p.established_constraints > 0) != unattributed.contains(p.target.as_str())),
+        "every attributed adapter declares real constraints; the unattributed ones declare none"
     );
     assert!(
         population.iter().all(|p| p.unknown_constraints > 0),
@@ -579,6 +658,59 @@ fn representation_completeness_is_reported_apart_from_registry_population() {
             "{}: a candidate only ever sits on an unknown block",
             p.target
         );
+    }
+}
+
+/// C0-REG4-R1. Registered representation and established target coverage are two different
+/// counts. The two adapters whose anchor bytes cannot be attributed to their title (byte-identical
+/// `nhl19` / `nhl20` folders, no capture provenance) are in the registry — every measurement is
+/// there as a candidate — and contribute **nothing** to coverage: nothing established, every
+/// mapping blocked, no human range, no editable scalar. The attributed adapters are the coverage.
+#[test]
+fn registered_representation_is_reported_apart_from_established_target_coverage() {
+    let adapters: Vec<Adapter> = COMMITTED_ADAPTERS.iter().map(|n| adapter(n)).collect();
+    let population = registry_population(adapters.iter());
+    let (mut registered_only, mut established) = (Vec::new(), Vec::new());
+    for p in &population {
+        if p.established_constraints == 0 {
+            registered_only.push(p.target.as_str());
+        } else {
+            established.push(p.target.as_str());
+        }
+    }
+    assert_eq!(registered_only, ["nhl19-ps4", "nhl20-ps4"]);
+    assert_eq!(
+        established.len(),
+        COMMITTED_ADAPTERS.len() - ATTRIBUTION_UNRESOLVED.len()
+    );
+    for name in ATTRIBUTION_UNRESOLVED {
+        let a = adapter(name);
+        assert_eq!(
+            validate_adapter(&a, &schema()),
+            vec![],
+            "{name}: still a valid document"
+        );
+        for m in &a.mappings {
+            assert_eq!(m.qualification, "blocked", "{name}/{}", m.canonical);
+            assert!(transform_unresolved(m), "{name}/{}", m.canonical);
+            assert_eq!(human_range(m), None, "{name}/{}", m.canonical);
+            assert_eq!(scalar_editable(m), None, "{name}/{}", m.canonical);
+            assert!(
+                field_identity_established(m),
+                "{name}/{}: the field is named — representation, not coverage",
+                m.canonical
+            );
+        }
+        let p = population.iter().find(|p| p.target == a.target).unwrap();
+        assert!(p.candidate_constraints > 0 && p.candidate_constraints <= p.unknown_constraints);
+        // Coverage is stated as a fraction of fields *named*, and the file says what that is.
+        assert!(mapped_fraction(&a).is_some());
+        assert!(a
+            .coverage_declared
+            .as_ref()
+            .unwrap()
+            .note
+            .contains("REGISTERED AS REPRESENTATION ONLY"));
     }
 }
 
@@ -1726,14 +1858,22 @@ fn a_cross_title_only_enum_is_a_candidate_not_a_derivation() {
         assert_eq!(shoots.qualification, "blocked", "{name}");
         assert!(shoots.transform.established().is_none(), "{name}");
 
-        // The independently supported physical facts are untouched.
-        let storage = shoots
-            .storage
-            .established()
-            .expect("{name}: the bit layout is measured on this target and stays");
+        // The independently supported physical facts are untouched — established, or (attribution
+        // unresolved) carried as the candidate of an unknown block.
+        let unattributed = ATTRIBUTION_UNRESOLVED.contains(&name);
+        let storage = if unattributed {
+            shoots.storage.candidate_value()
+        } else {
+            shoots.storage.established()
+        }
+        .expect("{name}: the bit layout is measured on this target and stays");
         assert_eq!(storage.bit_width, 1);
         assert_eq!((storage.range_low, storage.range_high), (0, 1));
-        assert!(shoots.status.established().is_some(), "{name}");
+        assert_eq!(
+            shoots.status.established().is_some(),
+            !unattributed,
+            "{name}"
+        );
     }
 }
 
@@ -1875,6 +2015,24 @@ fn a_target_supported_derivation_stays_usable() {
             .iter()
             .find(|m| m.canonical == "player.rating_speed")
             .expect("mapped");
+        if ATTRIBUTION_UNRESOLVED.contains(&name) {
+            // C0-REG4-R1: the bytes are unattributed, so the derivation — sound on the bytes — is
+            // a candidate and nothing is usable: no established transform, no human range, no
+            // established capacity or status, and the mapping is blocked.
+            assert_eq!(rating.qualification, "blocked", "{name}");
+            assert!(transform_unresolved(rating), "{name}");
+            assert!(rating.transform.established().is_none(), "{name}");
+            let candidate = rating.transform.candidate_value().expect("the measurement");
+            assert_eq!(candidate.kind, "identity", "{name}");
+            assert_eq!(human_range(rating), None, "{name}");
+            assert!(a
+                .capacities
+                .iter()
+                .all(|c| c.declared.established().is_none()
+                    && c.declared.candidate_value().is_some()));
+            assert!(a.mappings.iter().all(|m| m.status.established().is_none()));
+            continue;
+        }
         if name == "nhl10-ps3.toml" || name == "nhl10-xbox360.toml" {
             // C0-REG3: on the NHL 10 PS3 anchor the audit's by-name rule and the production probe
             // the audit designates as the offset's source (`sixbit_rating_offset`) disagree — no
@@ -1893,6 +2051,22 @@ fn a_target_supported_derivation_stays_usable() {
                 .expect("the probe's result");
             assert_eq!(candidate.value.as_ref().unwrap().offset, Some(50), "{name}");
             assert_eq!(human_range(rating), None, "{name}");
+        } else if GEN8_ADAPTERS.contains(&name) {
+            // C0-REG4: the PS4 ratings are 7-bit 0..99 fields whose stored value IS the rating —
+            // the audit's PS4 row and the engine's (0, 99) → offset 0 classification, over the
+            // measured 7-bit range and the stored values (which reach 99) on each anchor. The
+            // gen7 offset-36 rule was not carried here; `target_ps4_tests::*::seven_bit_ratings…`
+            // measures each anchor.
+            let transform = rating
+                .transform
+                .established()
+                .expect("a platform-scoped audit rule over a measured premise stays operative");
+            assert_eq!(
+                (transform.kind.as_str(), transform.offset),
+                ("identity", None),
+                "{name}"
+            );
+            assert_eq!(human_range(rating), Some([0, 99]), "{name}");
         } else {
             let transform = rating
                 .transform
@@ -1904,7 +2078,8 @@ fn a_target_supported_derivation_stays_usable() {
 
         // Capacity: measured per title, bridged across platforms by a stated, verified identity —
         // except on Legacy, where C0-REG1a-R1 read the target's own ROSTER fixture (8 tables, the
-        // team table included) and no bridge is needed.
+        // team table included) and no bridge is needed. C0-REG4: the PS4 adapters read the eight
+        // tables off their own main anchor (`main-db-max-records`), never off a save.
         let capacities = a
             .capacities
             .iter()
@@ -1916,6 +2091,23 @@ fn a_target_supported_derivation_stays_usable() {
             7
         };
         assert_eq!(capacities, expected, "{name}");
+        let expected_source = if GEN8_ADAPTERS.contains(&name) {
+            "main-db-max-records"
+        } else {
+            "roster-save-max-records"
+        };
+        for c in a
+            .capacities
+            .iter()
+            .filter(|c| c.declared.established().is_some())
+        {
+            assert_eq!(
+                c.declared.established().unwrap().source,
+                expected_source,
+                "{name}/{}: the ceiling is read from the file its generation exposes it in",
+                c.table
+            );
+        }
 
         // Field status: measured flags plus an audit whose matrix covers this target.
         assert!(

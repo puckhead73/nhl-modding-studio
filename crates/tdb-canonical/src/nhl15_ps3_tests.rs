@@ -35,9 +35,11 @@ const T: Target = Target {
     main_anchor_sha256: "028ae06ad2b25bf59aae37249b96144add014664771403e0313b5e3054b03398",
     // The committed vanilla PS3 NHL 15 ROSTER save, as extracted from its PS3 save directory
     // (`SYS-DATA`; the `PS3RosterFile` container magic is at byte 0).
-    roster_fixture: "anchors/ps3/nhl15/savefiles/BLUS314360200 - ROSTER/SYS-DATA",
-    roster_fixture_sha256: "fd234dc030586fb1366ebace47cf805cfd1aa38ac49cf1f9d52783b3d3a2f98c",
-    roster_payload_sha256: "362c40ded18e17f3e412557d5a141096c819684138440c8facfc443fdf974d1e",
+    roster: Some(RosterFixture {
+        path: "anchors/ps3/nhl15/savefiles/BLUS314360200 - ROSTER/SYS-DATA",
+        sha256: "fd234dc030586fb1366ebace47cf805cfd1aa38ac49cf1f9d52783b3d3a2f98c",
+        payload_sha256: "362c40ded18e17f3e412557d5a141096c819684138440c8facfc443fdf974d1e",
+    }),
 };
 
 /// As decoded by `tdb_savedata`: magic `PS3RosterFile`, **version word 2** with a zlib body at 0x30
@@ -56,7 +58,9 @@ const FRAMING: RosterFraming = RosterFraming {
 };
 
 const MAIN_META: &str = "anchors/ps3/nhl15/databases/nhlng-meta.xml";
-const MAIN_META_SHA256: &str = "bc0588daa82306c28f9129b0a33f6d5f46b80c4824f825be81b8a0a3139cb4de";
+/// Text-identity digest (LF-normalised, see `target_evidence::text_identity_sha256`), not a byte hash.
+const MAIN_META_TEXT_SHA256: &str =
+    "a5510dace9dd7864a8366bfb7c810c141ae82e59bacf9a7078e08f2918f32c7b";
 
 // ============================================================== 0. identity
 
@@ -69,7 +73,7 @@ fn the_ps3_main_db_and_metadata_are_byte_identical_to_xbox360s_and_nothing_rests
     let ps3 = T.main_anchor_bytes();
     let x360 = std::fs::read(repo_root().join("anchors/xbox360/nhl15/databases/nhlng.db")).unwrap();
     assert_eq!(ps3, x360, "main DB");
-    let ps3_meta = read_pinned(MAIN_META, MAIN_META_SHA256);
+    let ps3_meta = read_pinned_text(MAIN_META, MAIN_META_TEXT_SHA256);
     let x360_meta =
         std::fs::read(repo_root().join("anchors/xbox360/nhl15/databases/nhlng-meta.xml")).unwrap();
     assert_eq!(ps3_meta, x360_meta, "metadata");
@@ -285,7 +289,7 @@ fn main_team_pointer_is_the_roster_slot_team_plus_one_and_zero_when_unrostered()
     let db = TdbFile::parse(&main).unwrap();
     let snap = T.main_snapshot();
     let slots = roster_slots_by_bio_record(&db, &snap);
-    let counts = main_team_measurement(&db, &snap, &slots, MainTeamEncoding::SlotTeamPlusOne);
+    let counts = main_team_measurement(&db, &snap, &slots, MainTeamEncoding::SlotTeamPlusOne, 8);
     assert_eq!(
         counts,
         MainTeamCounts {
@@ -303,6 +307,7 @@ fn main_team_pointer_is_the_roster_slot_team_plus_one_and_zero_when_unrostered()
         &T.adapter(),
         "main_team_pointer_is_the_roster_slot_team_plus_one_and_zero_when_unrostered",
         MainTeamEncoding::SlotTeamPlusOne,
+        8,
     );
 }
 
@@ -399,6 +404,7 @@ fn team_name_edit_round_trips_on_a_disposable_copy() {
         &T.adapter(),
         "nhl15_ps3_tests",
         "team_name_edit_round_trips_on_a_disposable_copy",
+        50,
     );
 }
 

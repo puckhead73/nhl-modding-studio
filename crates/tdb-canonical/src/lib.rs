@@ -2046,4 +2046,6 @@ mod target_batch_tests;
 #[cfg(test)]
 mod target_evidence;
 #[cfg(test)]
+mod target_ps4_tests;
+#[cfg(test)]
 mod tests;
