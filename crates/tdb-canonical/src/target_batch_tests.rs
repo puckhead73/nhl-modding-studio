@@ -1,6 +1,7 @@
-//! Six gen7 targets (package C0-REG2): NHL Legacy PS3, NHL 14 Xbox 360, NHL 14 PS3, NHL 13 Xbox
-//! 360, NHL 12 Xbox 360 and NHL 11 Xbox 360 — semantic and capacity declarations checked against
-//! **each target's own committed evidence**, through the mechanics of `target_evidence`.
+//! Ten gen7 targets — six from package C0-REG2 (NHL Legacy PS3, NHL 14 Xbox 360, NHL 14 PS3, NHL 13
+//! Xbox 360, NHL 12 Xbox 360, NHL 11 Xbox 360) and four from C0-REG3 (NHL 10, 11, 12 and 13 on
+//! PS3) — semantic and capacity declarations checked against **each target's own committed
+//! evidence**, through the mechanics of `target_evidence`.
 //!
 //! One measurement runner exists per fact; every target supplies its identities and its
 //! expectations in an [`Expect`] and declares the same named cases through the `cases!` macro, so
@@ -11,24 +12,30 @@
 //!
 //! * capacities on the committed ROSTER fixture, decoded by the production save codec through the
 //!   container variant the discriminator resolves for it (`ZlibV4` for NHL 14 / Legacy, `RawV2`
-//!   for NHL 12 / 13, `RawV1` for NHL 11 — whose *write* path is experimental; only reads happen
-//!   here) — the fixture's own directory, not the roster-capacity audit's table;
-//! * for the two titles whose PS3 and Xbox 360 main DB and metadata are byte-identical (NHL 14,
-//!   Legacy), that identity asserted **directly** on the bytes as an observation with nothing built
-//!   on it, and the twin fixture's identical directory figures shown to be told apart by provenance;
-//! * birth-date index origin, from the stored value ranges;
+//!   for NHL 12 / 13, `RawV1` for NHL 10 / 11 — whose *write* path is experimental; only reads
+//!   happen here) — the fixture's own directory, not the roster-capacity audit's table;
+//! * for the titles whose PS3 and Xbox 360 main DB and metadata are byte-identical (NHL 10 through
+//!   14, Legacy), that identity asserted **directly** on the bytes as an observation with nothing
+//!   built on it, and the twin fixture's identical directory figures shown to be told apart by
+//!   provenance;
+//! * birth-date index origin, from the stored value ranges — 0-origin on NHL 11 onwards, 1-origin
+//!   on NHL 10, each read off its own anchor;
 //! * the position discriminator and companion rule, labels from EA's metadata table names;
-//! * the main-team pointer's encoding and absence pattern, from the metadata-declared roster key;
+//! * the main-team pointer's encoding, from the metadata-declared roster key: slot team + 1 with
+//!   pattern 0 = un-rostered on NHL 11 onwards; the slot team as-is on NHL 10, where pattern 0 is
+//!   also team code 0 and so no absence code is established;
 //! * `team.name` read / edit / serialize / reopen on an in-memory copy, at the field offset the
-//!   target's own snapshot records (336 / 352 / 360 across these titles);
+//!   target's own snapshot records (336 / 352 / 360 / 680 across these titles);
 //! * the sentinel → storage-decode → index-mapping order over every `ubPc.dXSB` pattern, with the
 //!   **test helper** of `target_evidence` — no production adapter executor exists or is claimed.
 //!
 //! Each case ends by asserting that the adapter declares exactly what was measured. What a case
 //! could NOT establish stays a candidate: handedness (no independently supported label here) and the
-//! main-team parent table (containment plus a name is not a foreign key). NHL 11 and NHL 12 carry no
+//! main-team parent table (containment plus a name is not a foreign key). NHL 10, 11 and 12 carry no
 //! `player.rating_overall` mapping — their skater block has no field named for it — and record that
-//! as `unknown-field-identity`, not absence.
+//! as `unknown-field-identity`, not absence. On NHL 10 the 6-bit rating offset itself is unresolved:
+//! the ratings audit names the title under 36 while the production probe resolves 50 on its anchor,
+//! and the adapter records the disagreement as a blocked mapping rather than picking a side.
 
 use super::*;
 use crate::target_evidence::*;
@@ -66,8 +73,12 @@ struct Expect {
     capacities: &'static [(&'static str, u16, u16)],
     /// Bit offsets of the day / month / year components on this anchor.
     birth_offsets: (u32, u32, u32),
+    /// The stored index origin of month and day (0 on NHL 11 onwards, 1 on NHL 10), measured from
+    /// the stored ranges — never from the metadata, which is identical either way.
+    birth_origin: u64,
     /// (skaters, goalies) by companion ownership.
     partition: (usize, usize),
+    main_team_encoding: MainTeamEncoding,
     main_team: MainTeamCounts,
     /// The largest `ubPc.dXSB` pattern stored on the anchor.
     largest_pattern: u64,
@@ -253,18 +264,36 @@ mod run {
             .all(|f| f.ends_with("provenance does not name the fixture it was read from")));
     }
 
-    /// The birth-date index origin, measured directly on this anchor: stored months span 0..=11 and
-    /// days 0..=30, which a 1-origin encoding could not produce. The adapter's `index-origin-0` is
-    /// that measurement, corroborated by the named `studio-domain` case that lists this anchor.
+    /// The birth-date index origin, measured directly on this anchor from the stored ranges: months
+    /// 0..=11 and days 0..=30 (which a 1-origin encoding could not produce) on the 0-origin titles,
+    /// months 1..=12 and days 1..=31 (which a 0-origin encoding could not produce) on NHL 10. The
+    /// adapter's transform — `index-origin-0` or `identity` — is that measurement, corroborated by
+    /// the named `studio-domain` case that lists this anchor.
     pub(super) fn birth_date(e: &Expect, case: &str) {
         let main = e.target.main_anchor_bytes();
         let db = TdbFile::parse(&main).unwrap();
         let [year, month, day] = birth_date_ranges(&db, &e.target.main_snapshot());
-        assert_eq!((month, day), ((0, 11), (0, 30)));
+        let o = e.birth_origin;
+        assert_eq!((month, day), ((o, o + 11), (o, o + 30)));
         assert!(year.0 >= 1 && year.1 <= 255);
         let a = e.target.adapter();
         let m = mapping(&a, "player.birth_date");
-        assert_eq!(m.transform.established().unwrap().index_origin, Some(0));
+        let tr = m.transform.established().unwrap();
+        match o {
+            0 => {
+                assert_eq!(
+                    (tr.kind.as_str(), tr.index_origin),
+                    ("index-origin", Some(0))
+                );
+                assert_eq!(m.read_transform, "index-origin-0");
+            }
+            1 => {
+                assert_eq!((tr.kind.as_str(), tr.index_origin), ("identity", None));
+                assert_eq!(m.read_transform, "identity");
+            }
+            _ => unreachable!(),
+        }
+        assert_eq!(m.write_transform, m.read_transform);
         assert_eq!(m.transform.confidence.as_deref(), Some("measured"));
         assert!(e.target.cites(&m.transform.provenance, &e.case(case)));
         assert!(e.target.cites(&m.provenance, &e.case(case)));
@@ -318,26 +347,42 @@ mod run {
     }
 
     /// The main-team pointer `ubPc.dXSB` against the roster reached through the metadata-declared
-    /// key: for each rostered player exactly one slot carries `team == pattern - 1`; every
-    /// un-rostered player stores 0; the all-ones pattern is stored nowhere. Where `same > 0`, a
-    /// player is rostered on two adjacent team codes — the `pattern - 1` slot is still unique.
-    /// ESTABLISHED: the encoding and the absence pattern. NOT ESTABLISHED: that the codes index
-    /// `kOtt.vfEq`; the mapping stays blocked on the parent.
+    /// key, under the encoding measured for this anchor. `SlotTeamPlusOne`: for each rostered
+    /// player exactly one slot carries `team == pattern - 1`; every un-rostered player stores 0;
+    /// the all-ones pattern is stored nowhere; where `same > 0`, a player is rostered on two
+    /// adjacent team codes and the `pattern - 1` slot is still unique. `SlotTeamAsIs`: exactly one
+    /// slot carries `team == pattern`, no slot `team == pattern - 1`, and pattern 0 is both team
+    /// code 0 and what every un-rostered player stores. ESTABLISHED: the encoding, and (plus-one
+    /// only) the absence pattern. NOT ESTABLISHED: that the codes index `kOtt.vfEq`; the mapping
+    /// stays blocked on the parent.
     pub(super) fn main_team(e: &Expect, case: &str) {
         let main = e.target.main_anchor_bytes();
         let db = TdbFile::parse(&main).unwrap();
         let snap = e.target.main_snapshot();
         let slots = roster_slots_by_bio_record(&db, &snap);
-        let counts = main_team_measurement(&db, &snap, &slots);
+        let counts = main_team_measurement(&db, &snap, &slots, e.main_team_encoding);
         assert_eq!(counts, e.main_team);
-        assert_main_team_declared(&e.target, &e.target.adapter(), &e.case(case));
+        match e.main_team_encoding {
+            MainTeamEncoding::SlotTeamPlusOne => assert_eq!(counts.plus_one, counts.rostered),
+            MainTeamEncoding::SlotTeamAsIs => {
+                assert_eq!((counts.same, counts.plus_one), (counts.rostered, 0))
+            }
+        }
+        assert_main_team_declared(
+            &e.target,
+            &e.target.adapter(),
+            &e.case(case),
+            e.main_team_encoding,
+        );
     }
 
     /// The `SENTINEL_ENCODING` processing order over every stored `ubPc.dXSB` pattern on this
     /// anchor, with the test helper: pattern 0 is absence before any decode; every non-zero
     /// pattern decodes to exactly one of that player's roster slot team codes; the inverse restores
-    /// each pattern. Codec behaviour only; no production executor is claimed.
+    /// each pattern. Codec behaviour only; no production executor is claimed. Only the plus-one
+    /// regime has an established sentinel to order, so only those targets declare this case.
     pub(super) fn codec_order(e: &Expect, _case: &str) {
+        assert_eq!(e.main_team_encoding, MainTeamEncoding::SlotTeamPlusOne);
         let a = e.target.adapter();
         let m = mapping(&a, "player.team");
         assert_eq!(m.foreign_key.state, ConstraintState::Unknown);
@@ -475,6 +520,10 @@ mod run {
             "nhl13_xbox360::",
             "nhl12_xbox360::",
             "nhl11_xbox360::",
+            "nhl13_ps3::",
+            "nhl12_ps3::",
+            "nhl11_ps3::",
+            "nhl10_ps3::",
         ] {
             if other.trim_end_matches("::") != e.module {
                 assert!(!text.contains(other), "{}: cites {other}", e.target.target);
@@ -557,7 +606,9 @@ mod nhllegacy_ps3 {
             ("kOtt", 252, 252),
         ],
         birth_offsets: (958, 975, 816),
+        birth_origin: 0,
         partition: (5066, 566),
+        main_team_encoding: MainTeamEncoding::SlotTeamPlusOne,
         main_team: MainTeamCounts {
             rostered: 5110,
             plus_one: 5110,
@@ -650,7 +701,9 @@ mod nhl14_xbox360 {
             ("kOtt", 246, 246),
         ],
         birth_offsets: (943, 961, 800),
+        birth_origin: 0,
         partition: (4851, 523),
+        main_team_encoding: MainTeamEncoding::SlotTeamPlusOne,
         main_team: MainTeamCounts {
             rostered: 4989,
             plus_one: 4989,
@@ -740,7 +793,9 @@ mod nhl14_ps3 {
             ("kOtt", 246, 246),
         ],
         birth_offsets: (943, 961, 800),
+        birth_origin: 0,
         partition: (4851, 523),
+        main_team_encoding: MainTeamEncoding::SlotTeamPlusOne,
         main_team: MainTeamCounts {
             rostered: 4989,
             plus_one: 4989,
@@ -849,7 +904,9 @@ mod nhl13_xbox360 {
             ("kOtt", 248, 248),
         ],
         birth_offsets: (938, 954, 768),
+        birth_origin: 0,
         partition: (4875, 537),
+        main_team_encoding: MainTeamEncoding::SlotTeamPlusOne,
         main_team: MainTeamCounts {
             rostered: 5008,
             plus_one: 5008,
@@ -950,9 +1007,11 @@ mod nhl12_xbox360 {
             ("kOtt", 243, 243),
         ],
         birth_offsets: (1128, 1136, 984),
+        birth_origin: 0,
         partition: (4821, 574),
         // Two players are rostered on two adjacent team codes, so two slots also satisfy
         // `team == pattern`; each of those players still has exactly one `pattern - 1` slot.
+        main_team_encoding: MainTeamEncoding::SlotTeamPlusOne,
         main_team: MainTeamCounts {
             rostered: 4995,
             plus_one: 4995,
@@ -1046,8 +1105,10 @@ mod nhl11_xbox360 {
             ("kOtt", 242, 242),
         ],
         birth_offsets: (1126, 1134, 984),
+        birth_origin: 0,
         partition: (4760, 550),
         // One player is rostered on two adjacent team codes (see NHL 12).
+        main_team_encoding: MainTeamEncoding::SlotTeamPlusOne,
         main_team: MainTeamCounts {
             rostered: 4923,
             plus_one: 4923,
@@ -1088,23 +1149,626 @@ mod nhl11_xbox360 {
         super::overall_name_search(&E, 2);
     }
 
-    /// The RawV1 container: the read path used above is the production one and the write path is
-    /// declared experimental by the codec itself. The adapter's capacity notes say so.
     #[test]
     fn the_rawv1_write_path_is_experimental_and_the_adapter_says_so() {
-        assert!(ContainerVersion::RawV1.write_is_experimental());
-        let text = std::fs::read_to_string(
-            repo_root()
-                .join("defs/adapters")
-                .join(E.target.adapter_file),
-        )
-        .unwrap();
-        assert!(text.contains("WRITE path for this container is experimental"));
-        let save_matrix =
-            std::fs::read_to_string(repo_root().join("docs/audits/data/save-matrix.csv")).unwrap();
-        assert!(save_matrix.contains(
-            "xbox360,nhl11,ROSTER1 20260627054323,roster,v1,yes,yes,experimental-roundtrip"
+        super::rawv1_write_is_experimental(
+            &E,
+            "xbox360,nhl11,ROSTER1 20260627054323,roster,v1,yes,yes,experimental-roundtrip",
+        );
+    }
+}
+
+/// The RawV1 container: the read path used by the runners is the production one and the write path
+/// is declared experimental by the codec itself. The adapter's capacity notes say so, and the
+/// save-matrix row the adapter cites records the fixture as `experimental-roundtrip`.
+fn rawv1_write_is_experimental(e: &Expect, save_matrix_row: &str) {
+    assert_eq!(e.framing.version, ContainerVersion::RawV1);
+    assert!(ContainerVersion::RawV1.write_is_experimental());
+    let text = std::fs::read_to_string(
+        repo_root()
+            .join("defs/adapters")
+            .join(e.target.adapter_file),
+    )
+    .unwrap();
+    assert!(text.contains("WRITE path for this container is experimental"));
+    let save_matrix =
+        std::fs::read_to_string(repo_root().join("docs/audits/data/save-matrix.csv")).unwrap();
+    assert!(save_matrix.contains(save_matrix_row));
+}
+
+// ============================================================== NHL 13, PS3 (C0-REG3)
+
+mod nhl13_ps3 {
+    use super::*;
+
+    const E: Expect = Expect {
+        target: Target {
+            adapter_file: "nhl13-ps3.toml",
+            target: "nhl13-ps3",
+            cases_file: CASES_FILE,
+            platform: "ps3",
+            game: "nhl13",
+            main_anchor: "anchors/ps3/nhl13/databases/nhlng.db",
+            main_anchor_sha256: "64460a156dfd459255494ac08d7aa8f4db71204c3ece5035431611a27f9822fb",
+            // The committed vanilla PS3 NHL 13 ROSTER save (`SYS-DATA`; `PS3RosterFile` at byte 0).
+            roster_fixture: "anchors/ps3/nhl13/savefiles/BLUS310030200 - ROSTER/SYS-DATA",
+            roster_fixture_sha256:
+                "afa16f8f0033c6a78e49c0316c12b1b8f82ebf8a3258ce201d4772f5148347f2",
+            roster_payload_sha256:
+                "c2cf144d1d2d3dcc2cc0009c306f2665470a70cf18c1311f6f78da3ee8d80f56",
+        },
+        module: "nhl13_ps3",
+        // Version word 0 with a raw big-endian TDB body at 0x2C (RawV2): the header carries the
+        // uncompressed size and no compressed size.
+        framing: RosterFraming {
+            outer_len: 2_180_292,
+            magic: "PS3RosterFile",
+            version: ContainerVersion::RawV2,
+            version_word: 0,
+            uncompressed_size: Some(2_180_248),
+            compressed_size: None,
+            inner_len: 2_180_248,
+            table_count: 36,
+        },
+        main_meta: "anchors/ps3/nhl13/databases/nhlng-meta.xml",
+        main_meta_sha256: "c5b9994e6079707bfa71c451e2f462f46c8849f8161f602d1b044b05c75956fc",
+        twin: Some(Twin {
+            main: "anchors/xbox360/nhl13/databases/nhlng.db",
+            meta: "anchors/xbox360/nhl13/databases/nhlng-meta.xml",
+            anchor_prefix: "anchors/xbox360/",
+            snapshot_name: "xbox360-nhl13.json",
+            adapter_file: "nhl13-xbox360.toml",
+        }),
+        // A different fixture from the Xbox 360 one (other outer and payload hashes) with the same
+        // directory figures — the twin case shows provenance, not the numbers, tells them apart.
+        capacities: &[
+            ("ubPc", 6946, 5412),
+            ("ZBac", 8907, 5874),
+            ("eGlu", 10457, 5446),
+            ("dSvy", 6407, 4875),
+            ("xmja", 6407, 4875),
+            ("mHuy", 839, 537),
+            ("fMVl", 839, 537),
+            ("kOtt", 248, 248),
+        ],
+        birth_offsets: (938, 954, 768),
+        birth_origin: 0,
+        partition: (4875, 537),
+        main_team_encoding: MainTeamEncoding::SlotTeamPlusOne,
+        main_team: MainTeamCounts {
+            rostered: 5008,
+            plus_one: 5008,
+            same: 0,
+            unrostered_zero: 404,
+            unrostered_other: 0,
+            all_ones: 0,
+            team_keys: 248,
+        },
+        largest_pattern: 214,
+        handedness: (958, &[(0, 3621), (1, 1791)]),
+        team_name: (
+            336,
+            "Anaheim Ducks™",
+            "Winnipeg Jets™",
+            "Mighty Ducks of Anaheim™",
+        ),
+        rated: BOTH_RATINGS,
+        population: EIGHT_MAPPINGS,
+        candidates: CANDIDATES_WITH_OVERALL,
+        mapped_fraction: (10, 2843),
+    };
+
+    cases!(E:
+        capacities_are_the_observed_directory_of_the_committed_roster_fixture => run::capacities,
+        a_capacity_that_is_not_read_from_this_fixture_is_reported => run::capacity_misattribution_is_reported,
+        the_ps3_main_db_and_metadata_are_byte_identical_to_xbox360s_and_nothing_rests_on_it => run::twin_identity,
+        a_capacity_carried_from_the_xbox360_adapter_is_reported_against_this_fixture => run::twin_capacity_provenance,
+        birth_date_month_and_day_are_stored_zero_origin_on_this_anchor => run::birth_date,
+        position_codes_partition_the_bio_table_exactly_as_the_metadata_named_companions_do => run::position,
+        main_team_pointer_is_the_roster_slot_team_plus_one_and_zero_when_unrostered => run::main_team,
+        stored_zero_is_absence_and_nonzero_patterns_decode_to_team_codes => run::codec_order,
+        handedness_histogram_is_recorded_but_no_label_is_established => run::handedness,
+        team_name_edit_round_trips_on_a_disposable_copy => run::team_name,
+        the_adapters_population_reflects_exactly_these_measurements => run::ledger,
+    );
+
+    /// The `p_*` ratings of this title, by id, on this snapshot (NHL 14 onwards name them `c_*`).
+    #[test]
+    fn the_ratings_map_to_this_titles_p_prefixed_fields() {
+        let a = E.target.adapter();
+        let snap = E.target.main_snapshot();
+        for (canonical, id, name) in [
+            ("player.rating_overall", "bPyZ", "p_overall"),
+            ("player.rating_speed", "qPWY", "p_speed"),
+        ] {
+            let m = mapping(&a, canonical);
+            assert_eq!(m.field.as_deref(), Some(id));
+            assert_eq!(meta_field(&snap, "dSvy", id).name.as_deref(), Some(name));
+        }
+    }
+}
+
+// ============================================================== NHL 12, PS3 (C0-REG3)
+
+mod nhl12_ps3 {
+    use super::*;
+
+    const E: Expect = Expect {
+        target: Target {
+            adapter_file: "nhl12-ps3.toml",
+            target: "nhl12-ps3",
+            cases_file: CASES_FILE,
+            platform: "ps3",
+            game: "nhl12",
+            main_anchor: "anchors/ps3/nhl12/databases/nhlng.db",
+            main_anchor_sha256: "94b31ff282f976b1c46b2ac6d261a7ac1b38a15de79046ba721871353369411d",
+            roster_fixture: "anchors/ps3/nhl12/savefiles/BLUS307910200 - ROSTER/SYS-DATA",
+            roster_fixture_sha256:
+                "28132930801e92aedb82bb539c2314f35186399aeb1d169d2bfca74c8d00e3b1",
+            roster_payload_sha256:
+                "7074044057d51157a31ac42a14c5b7424066d4004f08c43c6e790263efd07e20",
+        },
+        module: "nhl12_ps3",
+        // Version word 2 with the `DB` marker at 0x2C — resolved to RawV2 by that marker, not the
+        // word (the same word means ZlibV4 on the NHL 14 fixtures).
+        framing: RosterFraming {
+            outer_len: 2_350_856,
+            magic: "PS3RosterFile",
+            version: ContainerVersion::RawV2,
+            version_word: 2,
+            uncompressed_size: Some(2_350_812),
+            compressed_size: None,
+            inner_len: 2_350_812,
+            table_count: 36,
+        },
+        main_meta: "anchors/ps3/nhl12/databases/nhlng-meta.xml",
+        main_meta_sha256: "ddaaff54deeb5b646bfd4b70eed6247028eda41a4ff9fc317ef5971fcb593894",
+        twin: Some(Twin {
+            main: "anchors/xbox360/nhl12/databases/nhlng.db",
+            meta: "anchors/xbox360/nhl12/databases/nhlng-meta.xml",
+            anchor_prefix: "anchors/xbox360/",
+            snapshot_name: "xbox360-nhl12.json",
+            adapter_file: "nhl12-xbox360.toml",
+        }),
+        capacities: &[
+            ("ubPc", 6898, 5395),
+            ("ZBac", 8283, 5779),
+            ("eGlu", 7853, 5349),
+            ("dSvy", 6324, 4821),
+            ("xmja", 6324, 4821),
+            ("mHuy", 874, 574),
+            ("fMVl", 874, 574),
+            ("kOtt", 243, 243),
+        ],
+        birth_offsets: (1128, 1136, 984),
+        birth_origin: 0,
+        partition: (4821, 574),
+        main_team_encoding: MainTeamEncoding::SlotTeamPlusOne,
+        // Two players are rostered on two adjacent team codes each; their `pattern - 1` slot is
+        // still unique.
+        main_team: MainTeamCounts {
+            rostered: 4995,
+            plus_one: 4995,
+            same: 2,
+            unrostered_zero: 400,
+            unrostered_other: 0,
+            all_ones: 0,
+            team_keys: 243,
+        },
+        largest_pattern: 211,
+        handedness: (1140, &[(0, 3613), (1, 1782)]),
+        team_name: (
+            336,
+            "Anaheim Ducks™",
+            "Winnipeg Jets™",
+            "Mighty Ducks of Anaheim™",
+        ),
+        rated: SPEED_ONLY,
+        population: SEVEN_MAPPINGS,
+        candidates: CANDIDATES_WITHOUT_OVERALL,
+        mapped_fraction: (9, 2593),
+    };
+
+    cases!(E:
+        capacities_are_the_observed_directory_of_the_committed_roster_fixture => run::capacities,
+        a_capacity_that_is_not_read_from_this_fixture_is_reported => run::capacity_misattribution_is_reported,
+        the_ps3_main_db_and_metadata_are_byte_identical_to_xbox360s_and_nothing_rests_on_it => run::twin_identity,
+        a_capacity_carried_from_the_xbox360_adapter_is_reported_against_this_fixture => run::twin_capacity_provenance,
+        birth_date_month_and_day_are_stored_zero_origin_on_this_anchor => run::birth_date,
+        position_codes_partition_the_bio_table_exactly_as_the_metadata_named_companions_do => run::position,
+        main_team_pointer_is_the_roster_slot_team_plus_one_and_zero_when_unrostered => run::main_team,
+        stored_zero_is_absence_and_nonzero_patterns_decode_to_team_codes => run::codec_order,
+        handedness_histogram_is_recorded_but_no_label_is_established => run::handedness,
+        team_name_edit_round_trips_on_a_disposable_copy => run::team_name,
+        the_adapters_population_reflects_exactly_these_measurements => run::ledger,
+    );
+
+    #[test]
+    fn no_skater_block_field_is_named_for_an_overall_on_this_snapshot() {
+        super::overall_name_search(&E, 2);
+    }
+}
+
+// ============================================================== NHL 11, PS3 (C0-REG3)
+
+mod nhl11_ps3 {
+    use super::*;
+
+    const E: Expect = Expect {
+        target: Target {
+            adapter_file: "nhl11-ps3.toml",
+            target: "nhl11-ps3",
+            cases_file: CASES_FILE,
+            platform: "ps3",
+            game: "nhl11",
+            main_anchor: "anchors/ps3/nhl11/databases/nhlng.db",
+            main_anchor_sha256: "461f8d641c50baea0074735906caaf567057da89578ffd2963b9bb3e80dc3c88",
+            roster_fixture: "anchors/ps3/nhl11/savefiles/BLUS305680200 - ROSTER/SYS-DATA",
+            roster_fixture_sha256:
+                "c18a39f683fa2438009c433854937dd423f107f128eb8195db522d167a35be9a",
+            roster_payload_sha256:
+                "77d2dcb3cfe4e38b624b603eb88b1bf79bba1fb82b51a633366090deef1aa47e",
+        },
+        module: "nhl11_ps3",
+        // Version word 1: a 32-byte header with one checksum and no size words, raw big-endian TDB
+        // body at 0x20 (RawV1). Its WRITE path is experimental (`tag_1c` is un-reversed); this
+        // module only reads.
+        framing: RosterFraming {
+            outer_len: 1_935_216,
+            magic: "PS3RosterFile",
+            version: ContainerVersion::RawV1,
+            version_word: 1,
+            uncompressed_size: None,
+            compressed_size: None,
+            inner_len: 1_935_184,
+            table_count: 32,
+        },
+        main_meta: "anchors/ps3/nhl11/databases/nhlng-meta.xml",
+        main_meta_sha256: "a83aae929fcd22dae91f2d3cf9e1afbe6a25ce0abadbc4986e486ea56b2d6f5f",
+        twin: Some(Twin {
+            main: "anchors/xbox360/nhl11/databases/nhlng.db",
+            meta: "anchors/xbox360/nhl11/databases/nhlng-meta.xml",
+            anchor_prefix: "anchors/xbox360/",
+            snapshot_name: "xbox360-nhl11.json",
+            adapter_file: "nhl11-xbox360.toml",
+        }),
+        capacities: &[
+            ("ubPc", 5910, 5310),
+            ("ZBac", 7093, 5593),
+            ("eGlu", 7728, 5228),
+            ("dSvy", 5260, 4760),
+            ("xmja", 5260, 4760),
+            ("mHuy", 650, 550),
+            ("fMVl", 650, 550),
+            ("kOtt", 242, 242),
+        ],
+        birth_offsets: (1126, 1134, 984),
+        birth_origin: 0,
+        partition: (4760, 550),
+        main_team_encoding: MainTeamEncoding::SlotTeamPlusOne,
+        main_team: MainTeamCounts {
+            rostered: 4923,
+            plus_one: 4923,
+            same: 1,
+            unrostered_zero: 387,
+            unrostered_other: 0,
+            all_ones: 0,
+            team_keys: 242,
+        },
+        largest_pattern: 210,
+        handedness: (1138, &[(0, 3580), (1, 1730)]),
+        team_name: (
+            360,
+            "Anaheim Ducks™",
+            "Atlanta Thrashers®",
+            "Mighty Ducks of Anaheim™",
+        ),
+        rated: SPEED_ONLY,
+        population: SEVEN_MAPPINGS,
+        candidates: CANDIDATES_WITHOUT_OVERALL,
+        mapped_fraction: (9, 2514),
+    };
+
+    cases!(E:
+        capacities_are_the_observed_directory_of_the_committed_roster_fixture => run::capacities,
+        a_capacity_that_is_not_read_from_this_fixture_is_reported => run::capacity_misattribution_is_reported,
+        the_ps3_main_db_and_metadata_are_byte_identical_to_xbox360s_and_nothing_rests_on_it => run::twin_identity,
+        a_capacity_carried_from_the_xbox360_adapter_is_reported_against_this_fixture => run::twin_capacity_provenance,
+        birth_date_month_and_day_are_stored_zero_origin_on_this_anchor => run::birth_date,
+        position_codes_partition_the_bio_table_exactly_as_the_metadata_named_companions_do => run::position,
+        main_team_pointer_is_the_roster_slot_team_plus_one_and_zero_when_unrostered => run::main_team,
+        stored_zero_is_absence_and_nonzero_patterns_decode_to_team_codes => run::codec_order,
+        handedness_histogram_is_recorded_but_no_label_is_established => run::handedness,
+        team_name_edit_round_trips_on_a_disposable_copy => run::team_name,
+        the_adapters_population_reflects_exactly_these_measurements => run::ledger,
+    );
+
+    #[test]
+    fn no_skater_block_field_is_named_for_an_overall_on_this_snapshot() {
+        super::overall_name_search(&E, 2);
+    }
+
+    #[test]
+    fn the_rawv1_write_path_is_experimental_and_the_adapter_says_so() {
+        super::rawv1_write_is_experimental(
+            &E,
+            "ps3,nhl11,BLUS305680200 - ROSTER,roster,v1,yes,yes,experimental-roundtrip",
+        );
+    }
+}
+
+// ============================================================== NHL 10, PS3 (C0-REG3)
+
+/// The earliest gen7 title in the catalog, and the one whose regimes differ: birth month/day are
+/// stored 1-origin, the main-team pointer stores the slot's team code as-is over a `0..255` field,
+/// and the 6-bit rating offset is contested between the ratings audit (36, by title name) and the
+/// production probe (50, by the values this anchor stores). Nothing below is carried from NHL 11.
+mod nhl10_ps3 {
+    use super::*;
+
+    const E: Expect = Expect {
+        target: Target {
+            adapter_file: "nhl10-ps3.toml",
+            target: "nhl10-ps3",
+            cases_file: CASES_FILE,
+            platform: "ps3",
+            game: "nhl10",
+            main_anchor: "anchors/ps3/nhl10/databases/nhlng.db",
+            main_anchor_sha256: "e87b8c806b1d351ae504b9bf0b54c070e999a880e88773328e72f2c4f988d703",
+            roster_fixture: "anchors/ps3/nhl10/savefiles/BLUS303450200 - ROSTER/SYS-DATA",
+            roster_fixture_sha256:
+                "ceba4776d80edd22ca31220f4c01074824a75a7f43ec61388f7e12fd3deee155",
+            roster_payload_sha256:
+                "d2f68d6b380e92d2cd85d92dd49a2c8678d003d800596667fe1b0ab29d941541",
+        },
+        module: "nhl10_ps3",
+        // Version word 1 (RawV1, as NHL 11): 32-byte header, one checksum, no size words, raw
+        // big-endian body at 0x20; 25 tables in the save. Read only — the write path is
+        // experimental.
+        framing: RosterFraming {
+            outer_len: 1_610_252,
+            magic: "PS3RosterFile",
+            version: ContainerVersion::RawV1,
+            version_word: 1,
+            uncompressed_size: None,
+            compressed_size: None,
+            inner_len: 1_610_220,
+            table_count: 25,
+        },
+        main_meta: "anchors/ps3/nhl10/databases/nhlng-meta.xml",
+        main_meta_sha256: "6c335a62678d58fd5a32651e364e9e913495de5a17f2aca1b049d712f8134964",
+        // The Xbox 360 NHL 10 adapter (C0-CAN1) carries audit-derived capacities over seven tables,
+        // not fixture-measured ones over eight, so the twin *capacity* case has no counterpart to
+        // relabel from and is not declared here; the identity observation still is.
+        twin: Some(Twin {
+            main: "anchors/xbox360/nhl10/databases/nhlng.db",
+            meta: "anchors/xbox360/nhl10/databases/nhlng-meta.xml",
+            anchor_prefix: "anchors/xbox360/",
+            snapshot_name: "xbox360-nhl10.json",
+            adapter_file: "nhl10-xbox360.toml",
+        }),
+        capacities: &[
+            ("ubPc", 4533, 3933),
+            ("ZBac", 5688, 4188),
+            ("eGlu", 6219, 3719),
+            ("dSvy", 3999, 3499),
+            ("xmja", 3999, 3499),
+            ("mHuy", 534, 434),
+            ("fMVl", 534, 434),
+            ("kOtt", 182, 182),
+        ],
+        birth_offsets: (1400, 1408, 1304),
+        birth_origin: 1,
+        partition: (3499, 434),
+        main_team_encoding: MainTeamEncoding::SlotTeamAsIs,
+        // `same` is the count of rostered players whose pattern equals a slot's team code; no
+        // slot carries `pattern - 1`. The 494 un-rostered rows store 0 — and so do the 28 rostered
+        // rows on team code 0 (see the ambiguity case).
+        main_team: MainTeamCounts {
+            rostered: 3439,
+            plus_one: 0,
+            same: 3439,
+            unrostered_zero: 494,
+            unrostered_other: 0,
+            all_ones: 0,
+            team_keys: 182,
+        },
+        largest_pattern: 151,
+        handedness: (1412, &[(0, 2771), (1, 1162)]),
+        team_name: (
+            680,
+            "Anaheim Ducks™",
+            "Atlanta Thrashers®",
+            "Mighty Ducks of Anaheim™",
+        ),
+        rated: SPEED_ONLY,
+        // Seven mappings and one omission as NHL 11 / 12, less the two blocks NHL 10 cannot
+        // establish: the team sentinel and the speed transform each move from established to
+        // unknown-with-candidate.
+        population: (7, 1, 38, 28, 7),
+        candidates: &[
+            "player.shoots.transform",
+            "player.shoots.enumeration",
+            "player.shoots.null_sentinel",
+            "player.rating_speed.transform",
+            "player.rating_speed.null_sentinel",
+            "player.team.null_sentinel",
+            "player.team.foreign_key",
+        ],
+        mapped_fraction: (9, 1769),
+    };
+
+    cases!(E:
+        capacities_are_the_observed_directory_of_the_committed_roster_fixture => run::capacities,
+        a_capacity_that_is_not_read_from_this_fixture_is_reported => run::capacity_misattribution_is_reported,
+        the_ps3_main_db_and_metadata_are_byte_identical_to_xbox360s_and_nothing_rests_on_it => run::twin_identity,
+        birth_date_month_and_day_are_stored_one_origin_on_this_anchor => run::birth_date,
+        position_codes_partition_the_bio_table_exactly_as_the_metadata_named_companions_do => run::position,
+        main_team_pointer_is_the_roster_slot_team_as_is_and_zero_is_also_team_zero => run::main_team,
+        handedness_histogram_is_recorded_but_no_label_is_established => run::handedness,
+        team_name_edit_round_trips_on_a_disposable_copy => run::team_name,
+        the_adapters_population_reflects_exactly_these_measurements => run::ledger,
+    );
+
+    /// No field named for an overall anywhere in this snapshot — not even the draft-pick
+    /// `pickoverall` of NHL 11 onwards. Zero hits is the strongest a name search can say, and it
+    /// still says nothing about absence.
+    #[test]
+    fn no_skater_block_field_is_named_for_an_overall_on_this_snapshot() {
+        super::overall_name_search(&E, 0);
+    }
+
+    #[test]
+    fn the_rawv1_write_path_is_experimental_and_the_adapter_says_so() {
+        super::rawv1_write_is_experimental(
+            &E,
+            "ps3,nhl10,BLUS303450200 - ROSTER,roster,v1,yes,yes,experimental-roundtrip",
+        );
+    }
+
+    /// Under the as-is encoding pattern 0 is team code 0, and team code 0 is a real club on this
+    /// anchor (`kOtt` record 0, key 0, `Anaheim Ducks™`): its 28 rostered players store 0, exactly
+    /// as the 494 un-rostered players do. No stored code separates the two, so the adapter keeps
+    /// the sentinel unknown, records both counts, and offers "no absence encoding" only as an
+    /// asserted candidate citing this case.
+    #[test]
+    fn stored_zero_is_team_code_zero_as_much_as_it_is_unrostered_so_no_absence_code_is_established()
+    {
+        let main = E.target.main_anchor_bytes();
+        let db = TdbFile::parse(&main).unwrap();
+        let snap = E.target.main_snapshot();
+        let kott = table(&db, "kOtt");
+        let key = field(&db, kott, "vfEq");
+        let name = field(&db, kott, "YmkJ");
+        assert_eq!(read(&db, kott, 0, &key), 0, "team code 0 is a real team");
+        assert_eq!(
+            db.read_inline_str(kott, 0, &name).unwrap(),
+            "Anaheim Ducks™".as_bytes()
+        );
+
+        let slots = roster_slots_by_bio_record(&db, &snap);
+        let bio = table(&db, "ubPc");
+        let dxsb = field(&db, bio, "dXSB");
+        let on_team_zero: Vec<u32> = slots
+            .iter()
+            .filter(|(_, teams)| teams.contains(&0))
+            .map(|(rec, _)| *rec)
+            .collect();
+        assert_eq!(on_team_zero.len(), 28);
+        assert!(on_team_zero
+            .iter()
+            .all(|&rec| read(&db, bio, rec, &dxsb) == 0));
+        let unrostered_zero = (0..u32::from(bio.current_records))
+            .filter(|rec| !slots.contains_key(rec) && read(&db, bio, *rec, &dxsb) == 0)
+            .count();
+        assert_eq!(unrostered_zero, 494);
+        assert_eq!(
+            (0..u32::from(bio.current_records))
+                .filter(|rec| !slots.contains_key(rec))
+                .count(),
+            494,
+            "every un-rostered row stores 0"
+        );
+
+        let a = E.target.adapter();
+        let m = mapping(&a, "player.team");
+        assert_eq!(m.null_sentinel.state, ConstraintState::Unknown);
+        for n in ["28", "494", "team code 0"] {
+            assert!(m.null_sentinel.note.contains(n), "{n}");
+        }
+        let c = m.null_sentinel.candidate.as_ref().unwrap();
+        assert_eq!(c.value.as_ref().unwrap().encoding, "none");
+        assert_eq!(c.confidence.as_deref(), Some("asserted"));
+        assert!(E.target.cites(
+            &c.provenance,
+            &E.case("stored_zero_is_team_code_zero_as_much_as_it_is_unrostered_so_no_absence_code_is_established")
         ));
+        assert!(E.target.cites(
+            &m.provenance,
+            &E.case("stored_zero_is_team_code_zero_as_much_as_it_is_unrostered_so_no_absence_code_is_established")
+        ));
+        assert_eq!(validate_adapter(&a, &schema_for_validation()), vec![]);
+    }
+
+    /// The two committed sources for the 6-bit rating offset disagree on this anchor. The ratings
+    /// audit's regime table names NHL 10 under offset 36; the production probe it designates as the
+    /// offset's source (`sixbit_rating_offset`) returns 36 only when a skater or goalie 6-bit
+    /// field stores a value above 49 and otherwise 50 — and on this anchor the largest such value
+    /// is 49. Measured here: the maximum over every 6-bit field of `dSvy` and `mHuy`, the stored
+    /// range of `p_speed`, and that both sources say what they are cited for. The adapter records a
+    /// blocked mapping with the probe's result as a derived candidate; neither offset is operative.
+    #[test]
+    fn the_six_bit_rating_regime_is_unresolved_on_this_anchor_because_the_audit_and_the_probe_disagree(
+    ) {
+        let main = E.target.main_anchor_bytes();
+        let db = TdbFile::parse(&main).unwrap();
+        let snap = E.target.main_snapshot();
+        let mut six_bit_fields = BTreeMap::new();
+        let mut largest = 0;
+        for tbl in ["dSvy", "mHuy"] {
+            let t = table(&db, tbl);
+            let mut n = 0;
+            for f in t.fields.iter().filter(|f| f.bit_width == 6) {
+                n += 1;
+                for rec in 0..u32::from(t.current_records) {
+                    largest = largest.max(read(&db, t, rec, f));
+                }
+            }
+            six_bit_fields.insert(tbl, n);
+        }
+        assert_eq!(six_bit_fields, BTreeMap::from([("dSvy", 24), ("mHuy", 21)]));
+        assert_eq!(largest, 49, "the probe's threshold is `> 49`");
+        let skater = table(&db, "dSvy");
+        let speed = field(&db, skater, "qPWY");
+        assert_eq!(
+            meta_field(&snap, "dSvy", "qPWY").name.as_deref(),
+            Some("p_speed")
+        );
+        let (lo, hi) = (0..u32::from(skater.current_records))
+            .map(|rec| read(&db, skater, rec, &speed))
+            .fold((u64::MAX, 0), |(lo, hi), v| (lo.min(v), hi.max(v)));
+        assert_eq!((lo, hi), (2, 47));
+
+        // The two sources, as cited.
+        let audit = std::fs::read_to_string(repo_root().join("docs/audits/ratings-write-codec.md"))
+            .unwrap();
+        assert!(audit.contains("NHL 10 → Legacy / 11–21 (PS3/X360) 6-bit | 0..63 | **36**"));
+        let probe =
+            std::fs::read_to_string(repo_root().join("crates/studio-domain/src/view.rs")).unwrap();
+        assert!(probe.contains("fn sixbit_rating_offset"));
+        assert!(probe.contains("> 49"));
+        assert!(probe.contains("return 36;"));
+        assert!(probe.contains("50 // no 6-bit rating exceeds 49"));
+
+        let a = E.target.adapter();
+        let m = mapping(&a, "player.rating_speed");
+        assert_eq!(m.qualification, "blocked");
+        assert!(transform_unresolved(m));
+        assert_eq!(m.transform.state, ConstraintState::Unknown);
+        assert!(m.automated_case.is_none());
+        let c = m
+            .transform
+            .candidate
+            .as_ref()
+            .expect("the probe's result is a candidate");
+        assert_eq!(c.confidence.as_deref(), Some("derived"));
+        let v = c.value.as_ref().unwrap();
+        assert_eq!((v.kind.as_str(), v.offset), ("linear-offset", Some(50)));
+        let case = E.case(
+            "the_six_bit_rating_regime_is_unresolved_on_this_anchor_because_the_audit_and_the_probe_disagree",
+        );
+        assert!(E.target.cites(&c.provenance, &case));
+        assert!(E.target.cites(&m.provenance, &case));
+        for s in ["36", "50", "49", "nhl10-xbox360"] {
+            assert!(m.note.contains(s), "{s}");
+        }
+        assert!(m.note.contains("NOT amended"));
+        assert_eq!(
+            human_range(m),
+            None,
+            "no human range while the transform is unknown"
+        );
+        assert_eq!(validate_adapter(&a, &schema_for_validation()), vec![]);
     }
 }
 

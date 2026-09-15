@@ -32,7 +32,7 @@ fn fixture(relative: &str) -> String {
     .unwrap_or_else(|e| panic!("fixture {relative}: {e}"))
 }
 
-const COMMITTED_ADAPTERS: [&str; 10] = [
+const COMMITTED_ADAPTERS: [&str; 14] = [
     "nhl15-xbox360.toml",
     "nhl10-xbox360.toml",
     "nhllegacy-xbox360.toml",
@@ -43,13 +43,18 @@ const COMMITTED_ADAPTERS: [&str; 10] = [
     "nhl13-xbox360.toml",
     "nhl12-xbox360.toml",
     "nhl11-xbox360.toml",
+    "nhl13-ps3.toml",
+    "nhl12-ps3.toml",
+    "nhl11-ps3.toml",
+    "nhl10-ps3.toml",
 ];
 
-/// The adapters whose capacities, discriminator, companion rule and team sentinel are measured on
-/// their own anchor and ROSTER fixture by a per-target module (C0-REG1a/b, C0-REG2). The other two
+/// The adapters whose capacities, discriminator and companion rule are measured on their own anchor
+/// and ROSTER fixture by a per-target module (C0-REG1a/b, C0-REG2, C0-REG3). The other two
 /// (`nhl15-xbox360`, `nhl10-xbox360`) still carry seven audit-derived capacities and candidate
-/// discriminators.
-const MEASURED_ON_OWN_ANCHOR: [&str; 8] = [
+/// discriminators. The team *sentinel* is measured on all of these but `nhl10-ps3`, where the
+/// as-is encoding leaves no distinguishable absence code (see `target_batch_tests::nhl10_ps3`).
+const MEASURED_ON_OWN_ANCHOR: [&str; 12] = [
     "nhllegacy-xbox360.toml",
     "nhl15-ps3.toml",
     "nhllegacy-ps3.toml",
@@ -58,6 +63,10 @@ const MEASURED_ON_OWN_ANCHOR: [&str; 8] = [
     "nhl13-xbox360.toml",
     "nhl12-xbox360.toml",
     "nhl11-xbox360.toml",
+    "nhl13-ps3.toml",
+    "nhl12-ps3.toml",
+    "nhl11-ps3.toml",
+    "nhl10-ps3.toml",
 ];
 
 // ================================================================== positive
@@ -260,6 +269,10 @@ fn an_unsupported_no_sentinel_claim_is_not_operative() {
     // team sentinel was promoted from the fourth candidate by measurement).
     // C0-REG2: the six batch adapters measure their team sentinel on their own anchors too; NHL 11
     // and NHL 12 map no stored overall, so they record one rating candidate fewer.
+    // C0-REG3: the PS3 NHL 11–13 adapters likewise. NHL 10 PS3 measures that its as-is main-team
+    // encoding leaves NO distinguishable absence code (pattern 0 is team code 0 as much as
+    // "un-rostered"), so its team sentinel stays a candidate — a measured ambiguity whose
+    // "no absence encoding" reading is asserted, not a range inference.
     let expected_per_adapter = [
         ("nhl15-xbox360.toml", 3, None),
         ("nhl10-xbox360.toml", 2, None),
@@ -271,6 +284,10 @@ fn an_unsupported_no_sentinel_claim_is_not_operative() {
         ("nhl13-xbox360.toml", 3, Some("player.team")),
         ("nhl12-xbox360.toml", 2, Some("player.team")),
         ("nhl11-xbox360.toml", 2, Some("player.team")),
+        ("nhl13-ps3.toml", 3, Some("player.team")),
+        ("nhl12-ps3.toml", 2, Some("player.team")),
+        ("nhl11-ps3.toml", 2, Some("player.team")),
+        ("nhl10-ps3.toml", 3, None),
     ];
     assert_eq!(expected_per_adapter.len(), COMMITTED_ADAPTERS.len());
     for (name, expected, measured_on_this_anchor) in expected_per_adapter {
@@ -315,7 +332,7 @@ fn an_unsupported_no_sentinel_claim_is_not_operative() {
         assert_eq!(here, expected, "{name}: sentinel candidates");
     }
     assert_eq!(
-        candidates, 27,
+        candidates, 37,
         "the reasoning is preserved on every field it was claimed for"
     );
 }
@@ -1726,8 +1743,8 @@ fn a_cross_title_only_enum_is_a_candidate_not_a_derivation() {
 /// the dependent constraints ARE operative — and nowhere else.
 #[test]
 fn an_unproven_discriminator_does_not_drive_dependent_constraints() {
-    // Measured on their own anchors (legacy_xbox360_tests, nhl15_ps3_tests — C0-REG1b; the six
-    // target_batch_tests modules — C0-REG2): there the dependent constraints ARE operative.
+    // Measured on their own anchors (legacy_xbox360_tests, nhl15_ps3_tests — C0-REG1b; the ten
+    // target_batch_tests modules — C0-REG2 / C0-REG3): there the dependent constraints ARE operative.
     for name in MEASURED_ON_OWN_ANCHOR {
         let measured = adapter(name);
         assert!(measured
@@ -1858,12 +1875,31 @@ fn a_target_supported_derivation_stays_usable() {
             .iter()
             .find(|m| m.canonical == "player.rating_speed")
             .expect("mapped");
-        let transform = rating
-            .transform
-            .established()
-            .expect("a title-scoped audit rule over a measured premise stays operative");
-        assert_eq!(transform.offset, Some(36), "{name}");
-        assert_eq!(human_range(rating), Some([36, 99]), "{name}");
+        if name == "nhl10-ps3.toml" {
+            // C0-REG3: on the NHL 10 PS3 anchor the audit's by-name rule and the production probe
+            // the audit designates as the offset's source (`sixbit_rating_offset`) disagree — no
+            // skater/goalie 6-bit value exceeds 49 there, so the probe resolves 50. A derivation
+            // whose own premises conflict on the target is not operative; the adapter records the
+            // disagreement as a blocked mapping with the probe's result as a candidate (see
+            // `target_batch_tests::nhl10_ps3`). The byte-identical `nhl10-xbox360` adapter still
+            // declares 36 and is left as it is by that package — a recorded finding.
+            assert_eq!(rating.qualification, "blocked", "{name}");
+            assert!(rating.transform.established().is_none(), "{name}");
+            let candidate = rating
+                .transform
+                .candidate
+                .as_ref()
+                .expect("the probe's result");
+            assert_eq!(candidate.value.as_ref().unwrap().offset, Some(50), "{name}");
+            assert_eq!(human_range(rating), None, "{name}");
+        } else {
+            let transform = rating
+                .transform
+                .established()
+                .expect("a title-scoped audit rule over a measured premise stays operative");
+            assert_eq!(transform.offset, Some(36), "{name}");
+            assert_eq!(human_range(rating), Some([36, 99]), "{name}");
+        }
 
         // Capacity: measured per title, bridged across platforms by a stated, verified identity —
         // except on Legacy, where C0-REG1a-R1 read the target's own ROSTER fixture (8 tables, the

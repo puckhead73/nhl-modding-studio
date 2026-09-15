@@ -575,13 +575,28 @@ pub(crate) struct MainTeamCounts {
     pub team_keys: usize,
 }
 
-/// Per rostered player exactly one slot must carry `team == pattern - 1`, none `team == pattern`;
-/// each un-rostered player is counted by whether it stores 0. Containment of every slot code in the
-/// team table's key set is asserted as an observation.
+/// How a target stores the main-team pointer relative to the roster slot's team code. Measured
+/// per anchor by [`main_team_measurement`]; a title's regime is never carried to a neighbour.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub(crate) enum MainTeamEncoding {
+    /// The stored pattern is the slot's team code + 1, and pattern 0 is stored on every un-rostered
+    /// player and on no rostered one (NHL 11 → Legacy anchors).
+    SlotTeamPlusOne,
+    /// The stored pattern is the slot's team code as-is. Pattern 0 is then also team code 0, so a
+    /// rostered player on that team and an un-rostered player store the same bits (NHL 10 anchors).
+    SlotTeamAsIs,
+}
+
+/// Per rostered player exactly one slot must carry the encoded pattern (`team + 1` or `team`, by
+/// `encoding`); under `SlotTeamPlusOne` no rostered player may store 0, under `SlotTeamAsIs` the
+/// count of rostered rows storing 0 is simply what team code 0 holds. Each un-rostered player is
+/// counted by whether it stores 0. Containment of every slot code in the team table's key set is
+/// asserted as an observation.
 pub(crate) fn main_team_measurement(
     db: &TdbFile,
     snap: &SchemaSnapshot,
     slots: &BTreeMap<u32, Vec<u64>>,
+    encoding: MainTeamEncoding,
 ) -> MainTeamCounts {
     let bio = table(db, "ubPc");
     let dxsb = field(db, bio, "dXSB");
@@ -607,13 +622,20 @@ pub(crate) fn main_team_measurement(
         match slots.get(&i) {
             Some(teams) => {
                 c.rostered += 1;
-                assert_ne!(raw, 0, "bio record {i} is rostered but stores 0");
-                let hits = teams.iter().filter(|&&t| t + 1 == raw).count();
-                c.plus_one += hits;
-                c.same += teams.iter().filter(|&&t| t == raw).count();
+                let plus_one = teams.iter().filter(|&&t| t + 1 == raw).count();
+                let same = teams.iter().filter(|&&t| t == raw).count();
+                c.plus_one += plus_one;
+                c.same += same;
+                let hits = match encoding {
+                    MainTeamEncoding::SlotTeamPlusOne => {
+                        assert_ne!(raw, 0, "bio record {i} is rostered but stores 0");
+                        plus_one
+                    }
+                    MainTeamEncoding::SlotTeamAsIs => same,
+                };
                 assert_eq!(
                     hits, 1,
-                    "bio record {i}: exactly one of its slots {teams:?} is its main team (raw {raw})"
+                    "bio record {i}: exactly one of its slots {teams:?} is its main team (raw {raw}, {encoding:?})"
                 );
             }
             None => {
@@ -637,16 +659,73 @@ pub(crate) fn main_team_measurement(
     c
 }
 
-/// The adapter declares the main-team encoding and absence code as measured, keeps the parent a
-/// candidate, keeps the mapping blocked on that, and has no human range (it is a reference).
-pub(crate) fn assert_main_team_declared(t: &Target, a: &Adapter, case: &str) {
+/// The adapter declares the main-team encoding as measured, keeps the parent a candidate, keeps
+/// the mapping blocked on that, and has no human range (it is a reference). Under
+/// `SlotTeamPlusOne` the storage is the offset-binary `-1..254` field and the absence code 0 is
+/// established; under `SlotTeamAsIs` the storage is the unsigned `0..255` field and no absence
+/// code is established — pattern 0 is team code 0 as much as it is "no team", so the sentinel
+/// block must stay unknown with its ambiguity recorded.
+pub(crate) fn assert_main_team_declared(
+    t: &Target,
+    a: &Adapter,
+    case: &str,
+    encoding: MainTeamEncoding,
+) {
     let m = mapping(a, "player.team");
     let st = m.storage.established().expect("storage established");
+    assert!(t.cites(&m.storage.provenance, case));
+    if encoding == MainTeamEncoding::SlotTeamAsIs {
+        assert_eq!(
+            (st.signedness.as_str(), st.range_low, st.range_high),
+            ("unsigned", 0, 255)
+        );
+        assert_eq!(
+            (m.read_transform.as_str(), m.write_transform.as_str()),
+            ("index-origin-0", "index-origin-0")
+        );
+        assert_eq!(m.qualification, "blocked");
+        assert!(!m.inverse_verified);
+        let tr = m.transform.established().expect("transform established");
+        assert_eq!(
+            (tr.kind.as_str(), tr.index_origin),
+            ("index-origin", Some(0))
+        );
+        assert_eq!(m.transform.confidence.as_deref(), Some("measured"));
+        assert!(t.cites(&m.transform.provenance, case));
+        assert_eq!(human_range(m), None);
+        assert_eq!(m.null_sentinel.state, ConstraintState::Unknown);
+        let c = m
+            .null_sentinel
+            .candidate
+            .as_ref()
+            .expect("the ambiguity is recorded as a candidate, not silence");
+        assert_eq!(c.confidence.as_deref(), Some("asserted"));
+        assert!(t.cites(&c.provenance, case));
+        assert!(c.note.contains("NOT OPERATIVE"));
+        assert!(
+            m.null_sentinel.note.contains("team code 0"),
+            "the unknown block says why: pattern 0 is also a team"
+        );
+        assert_eq!(m.foreign_key.state, ConstraintState::Unknown);
+        let fk = m
+            .foreign_key
+            .candidate_value()
+            .expect("the parent proposal is kept");
+        assert_eq!(
+            (
+                fk.parent_table.as_str(),
+                fk.parent_key_field.as_str(),
+                fk.index_origin
+            ),
+            ("kOtt", "vfEq", Some(0))
+        );
+        assert!(m.note.contains("parent"), "the blocker names what is left");
+        return;
+    }
     assert_eq!(
         (st.signedness.as_str(), st.range_low, st.range_high),
         ("offset-binary", -1, 254)
     );
-    assert!(t.cites(&m.storage.provenance, case));
     assert_eq!(
         (m.read_transform.as_str(), m.write_transform.as_str()),
         ("index-origin-0", "index-origin-0")

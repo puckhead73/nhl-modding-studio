@@ -207,7 +207,7 @@ fn main_team_pointer_is_the_roster_slot_team_plus_one_and_zero_when_unrostered()
     let db = TdbFile::parse(&main).unwrap();
     let snap = T.main_snapshot();
     let slots = roster_slots_by_bio_record(&db, &snap);
-    let counts = main_team_measurement(&db, &snap, &slots);
+    let counts = main_team_measurement(&db, &snap, &slots, MainTeamEncoding::SlotTeamPlusOne);
     assert_eq!(
         counts,
         MainTeamCounts {
@@ -224,6 +224,7 @@ fn main_team_pointer_is_the_roster_slot_team_plus_one_and_zero_when_unrostered()
         &T,
         &T.adapter(),
         "main_team_pointer_is_the_roster_slot_team_plus_one_and_zero_when_unrostered",
+        MainTeamEncoding::SlotTeamPlusOne,
     );
 }
 
