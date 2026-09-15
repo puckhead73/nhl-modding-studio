@@ -275,23 +275,33 @@ note = "The table is a fixed-width record block, so the field is present on ever
 kind = "all-records"
 
 # --- ratings that DO exist here: the gen6-era `p_*` skater block --------------------------------
+# QUARANTINE (C0-AS4, 2026-09-15). Previously `offset+36` at `derived`, resting on the ratings audit's
+# by-name regime row. C0-REG3 measured, on the byte-identical PS3 NHL 10 anchor, that the production
+# probe the same audit designates as the offset's source (`studio_domain::view::sixbit_rating_offset`)
+# resolves 50 there, not 36: no 6-bit field on the skater or goalie block stores a value above 49.
+# The named case below re-measures that on THIS file. Two committed sources therefore disagree about
+# this title, and a derivation whose premises conflict on the target is not operative. Neither 36 nor
+# 50 is chosen here — not by the stored distribution, not by realism, not by agreement with the probe.
+# The probe's result is retained as a non-operative candidate; the production codec and the audit are
+# left as they are. What would resolve it is an independent witness of the GAME's interpretation
+# (C1 finding, see docs/receipts/c0-as4-composite-resolution.md).
 
 [[mapping]]
 canonical = "player.rating_speed"
 table = "dSvy"
 field = "qPWY"
-read_transform = "offset+36"
-write_transform = "offset-36"
-inverse_verified = true
-confidence = "derived"
-qualification = "implemented"
-automated_case = "studio_domain::ratings_write_codec"
+read_transform = "unresolved"
+write_transform = "unresolved"
+inverse_verified = false
+confidence = "measured"
+qualification = "blocked"
 provenance = [
-  "docs/audits/ratings-write-codec.md",
-  "crates/studio-domain/tests/ratings_write_codec.rs",
   "docs/audits/data/schema/xbox360-nhl10.json#dSvy.qPWY",
+  "crates/tdb-canonical/src/nhl10_ratings_conflict_tests.rs#the_xbox360_anchor_stores_the_same_six_bit_maximum_and_the_adapter_records_the_same_conflict",
+  "docs/audits/ratings-write-codec.md",
+  "crates/studio-domain/src/view.rs#sixbit_rating_offset",
 ]
-note = "gen7 6-bit regime, edit_offset 36 — stated here explicitly rather than inherited from NHL 15. Note the field naming differs: NHL 10's skater ratings are `p_*` (`p_speed`), NHL 15's are `c_*` (`c_speed`), so the field id differs too."
+note = "BLOCKER: the rating offset regime is not established for this target because two committed sources disagree ON THIS ANCHOR. (a) The ratings-write-codec audit's regime table scopes the 6-bit / offset-36 row to `NHL 10 -> Legacy / 11-21 (PS3/X360)`, naming this title. (b) The production probe the same audit designates as the offset's source, `studio_domain::view::sixbit_rating_offset`, returns 36 only when some 6-bit field on the skater or goalie block stores a value above 49 and otherwise 50; MEASURED on this anchor by the named case (C0-AS4), the largest value stored in any of the 24 six-bit `dSvy` fields and 21 six-bit `mHuy` fields is 49, so the probe resolves 50 here, and `p_speed` itself spans 2..47 (human 38..83 under 36, 52..97 under 50). What is MEASURED here: that `dSvy.qPWY` is named `p_speed` in this snapshot, its layout, and the stored maximum. What is NOT: which offset the game applies. The named case `ratings_write_codec.rs` ran the 6-bit regime on nhl14/ps3, not here, and is no longer cited as a case for this field. Same state as `nhl10-ps3` (byte-identical main DB), asserted by the named consistency case. Field naming: NHL 10's skater ratings are `p_*` (`p_speed`), NHL 15's are `c_*`, so the field id differs too."
 
 [mapping.storage]
 state = "established"
@@ -320,13 +330,19 @@ updatable = true
 structural = false
 
 [mapping.transform]
-state = "established"
+state = "unknown"
+note = "Unusable while the offset regime is unresolved: the audit's regime table (36, by title name) and the production probe (50, by the values stored on this anchor) disagree, and nothing in the repository decides between them for this title. Previously established at `derived` with offset 36 (C0-CAN1-R2); withdrawn by C0-AS4 on the measurement in the named case."
+[mapping.transform.candidate]
 confidence = "derived"
-provenance = ["docs/audits/ratings-write-codec.md"]
-derivation = "PREMISES. (1) MEASURED on this target: the field is 6-bit with declared range 0..63 (see [mapping.storage]). (2) MEASURED on this target: the title is gen7 — NHL 07 is the only gen6 title in the catalog and it ships a different database entirely. (3) ESTABLISHED and applicable to this target BY NAME: the ratings-write-codec audit's regime table states the offset per regime and scopes the 6-bit/offset-36 row to `NHL 10 -> Legacy / 11-21 (PS3/X360)`, which names this title; the offset is resolved by a per-database probe (`sixbit_rating_offset`), not a hardcoded constant, so it is determined from the target rather than assumed from a neighbour. CONCLUSION: edit_offset is 36 here, and write is the exact inverse of read. NOT ESTABLISHED: the named case `ratings_write_codec.rs` ran the gen7 6-bit regime on nhl14/ps3, not on this target, which is why this is derived and not measured."
-[mapping.transform.value]
+provenance = [
+  "crates/studio-domain/src/view.rs#sixbit_rating_offset",
+  "crates/tdb-canonical/src/nhl10_ratings_conflict_tests.rs#the_xbox360_anchor_stores_the_same_six_bit_maximum_and_the_adapter_records_the_same_conflict",
+  "docs/audits/ratings-write-codec.md",
+]
+note = "PROPOSED, NOT OPERATIVE. PREMISES. (1) MEASURED on this anchor by the named case: no 6-bit field on `dSvy` (24 fields) or `mHuy` (21 fields) stores a value above 49. (2) REPOSITORY SOURCE: `sixbit_rating_offset` returns 50 exactly when premise (1) holds, and `read_field` swaps that value in as the edit offset for every 6-bit rating of the loaded database. CONCLUSION (proposed): the application would read and write this field with offset 50 on this anchor, giving human 52..97 for the stored 2..47. NOT ESTABLISHED: that 50 is what the GAME applies — the audit's regime table says 36 for this title by name, and a probe rule is a heuristic, not an observation of the title. The competing proposal (36) is recorded in the audit and in the mapping note; a candidate block holds one value, and the probe's is held here because it is the one measured against these bytes, not because it is preferred."
+[mapping.transform.candidate.value]
 kind = "linear-offset"
-offset = 36
+offset = 50
 
 # CORRECTION (C0-CAN1-R2). This predicate selects skater rows by position CODE. The code
 # assignment comes from `defs/enums/position.toml`, whose stated anchor is NHL Legacy

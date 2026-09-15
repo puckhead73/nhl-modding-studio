@@ -1875,14 +1875,15 @@ fn a_target_supported_derivation_stays_usable() {
             .iter()
             .find(|m| m.canonical == "player.rating_speed")
             .expect("mapped");
-        if name == "nhl10-ps3.toml" {
+        if name == "nhl10-ps3.toml" || name == "nhl10-xbox360.toml" {
             // C0-REG3: on the NHL 10 PS3 anchor the audit's by-name rule and the production probe
             // the audit designates as the offset's source (`sixbit_rating_offset`) disagree — no
             // skater/goalie 6-bit value exceeds 49 there, so the probe resolves 50. A derivation
             // whose own premises conflict on the target is not operative; the adapter records the
             // disagreement as a blocked mapping with the probe's result as a candidate (see
-            // `target_batch_tests::nhl10_ps3`). The byte-identical `nhl10-xbox360` adapter still
-            // declares 36 and is left as it is by that package — a recorded finding.
+            // `target_batch_tests::nhl10_ps3`). C0-AS4 measured the same on the byte-identical
+            // Xbox 360 file and quarantined `nhl10-xbox360` the same way
+            // (`nhl10_ratings_conflict_tests`).
             assert_eq!(rating.qualification, "blocked", "{name}");
             assert!(rating.transform.established().is_none(), "{name}");
             let candidate = rating
