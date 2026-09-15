@@ -36,6 +36,16 @@ fn repo_root() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR")).join("../..")
 }
 
+/// The one fixture every synthetic run attributes (C0-EMIT1-R2/R3): a real, read-only repository
+/// file. A run that attributes nothing — or whose executed observations carry no identity among
+/// its inputs — can never be fresh, so the emitters here attribute this file and hash every
+/// executed observation with it. What the file is does not matter to these cases.
+fn attribute_scopes_file(ev: &mut Emitter) -> String {
+    let digest = tdb_qa::evidence::emit::file_digest(&repo_root().join("defs/qa/scopes.toml"));
+    ev.input_digest("defs/qa/scopes.toml", digest.clone());
+    digest.unwrap_or_default()
+}
+
 fn sandbox(name: &str) -> PathBuf {
     use std::sync::atomic::{AtomicU32, Ordering};
     static COUNTER: AtomicU32 = AtomicU32::new(0);
@@ -55,6 +65,7 @@ const CASE: &str = "tdb_qa::evidence_discovery::synthetic";
 fn try_set_of(root: &Path) -> Result<EvidenceSet, String> {
     let runs = store::load_runs(root).map_err(|e| e.to_string())?;
     let journals = journal::load_journals(root, &runs).map_err(|e| e.to_string())?;
+    let fixtures = tdb_qa::evidence::store::verify_fixture_inputs(&repo_root(), &runs).states;
     Ok(EvidenceSet {
         runs,
         journals,
@@ -62,6 +73,7 @@ fn try_set_of(root: &Path) -> Result<EvidenceSet, String> {
         legacy: store::load_legacy(root).map_err(|e| e.to_string())?,
         implementation: std::collections::BTreeMap::new(),
         current_scope_digests: tdb_qa::evidence::emit::scope_digests(&repo_root()),
+        current_input_digests: fixtures,
         declared_universe: vocab::catalog_universe(),
     })
 }
@@ -81,8 +93,16 @@ fn row_of(root: &Path, k: &str) -> merge::SummaryRow {
 /// Seal one run recording `outcome` on `READ`. Requires `ROOT_ENV` to be set.
 fn sealed_run(outcome: Outcome, detail: &str) -> PathBuf {
     let mut ev = Emitter::from_env("synthetic", "db-read", &repo_root());
+    let fixture = attribute_scopes_file(&mut ev);
     let key = ev.declare(READ);
-    ev.observe(&key, &format!("{CASE}#{detail}"), outcome, detail);
+    ev.observe_hashed(
+        &key,
+        &format!("{CASE}#{detail}"),
+        outcome,
+        &fixture,
+        "",
+        detail,
+    );
     ev.finish().expect("sealed")
 }
 

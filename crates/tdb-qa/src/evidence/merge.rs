@@ -9,7 +9,8 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use super::key::CoverageKey;
 use super::model::{
-    EvidenceSet, ManualRecord, ManualResult, Observation, Outcome, ProcedureKind, Run, RunState,
+    EvidenceSet, InputState, ManualRecord, ManualResult, Observation, Outcome, ProcedureKind, Run,
+    RunState,
 };
 use super::vocab::{self, Applicability};
 
@@ -198,6 +199,112 @@ fn run_freshness(run: &Run, current: &BTreeMap<(String, u32), String>) -> Freshn
     )
 }
 
+/// The run-level fixture verdict (C0-EMIT1-R2): what the run attributed against what discovery
+/// found now.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct FixtureVerdict {
+    pub freshness: Freshness,
+    /// One token per reason the verdict is not `Fresh`, in the `unresolved` vocabulary.
+    pub findings: Vec<String>,
+}
+
+impl FixtureVerdict {
+    /// The provenance rendering: `verified`, `stale`, or `unknown`, followed by the findings.
+    pub fn render(&self) -> String {
+        let head = match self.freshness {
+            Freshness::Fresh => "verified",
+            Freshness::Stale => "stale",
+            Freshness::Unknown => "unknown",
+        };
+        if self.findings.is_empty() {
+            head.to_string()
+        } else {
+            format!("{head}:{}", self.findings.join(";"))
+        }
+    }
+}
+
+/// Compare a run's attributed fixtures with their current content. **Run-level and
+/// conservative**: one changed fixture stales every observation the run made, and a run that
+/// attributes nothing — or that carries an executed observation with no fixture identity, or
+/// one whose `fixture_sha256` is not among its attributed inputs — cannot be fresh at all. Absence of an attribution is never read as "no
+/// fixture was needed": the emitters consume fixtures on every executed case, so an
+/// unattributed run is a legacy record that stays readable and cited but qualifies nothing.
+pub fn run_fixture_verdict(run: &Run, current: &BTreeMap<String, InputState>) -> FixtureVerdict {
+    let inputs = &run.manifest.input_digests;
+    let run_id = run.run_id();
+    if inputs.is_empty() {
+        return FixtureVerdict {
+            freshness: Freshness::Unknown,
+            findings: vec![format!("fixture-attribution-missing:{run_id}")],
+        };
+    }
+    let mut findings = Vec::new();
+    let mut freshness = Freshness::Fresh;
+    let mut worsen = |f: Freshness| {
+        freshness = combine(&[freshness, f]);
+    };
+
+    // Every *executed* observation (pass, fail, refused-clean) in this fixture-backed capture
+    // model ran over a fixture, so each must carry that fixture's identity and the identity must
+    // be one the run attributed (C0-EMIT1-R3). An empty hash on an executed observation is a
+    // missing identity, never "no fixture was needed"; a skip and a deliberate non-attempt carry
+    // none and are not judged here.
+    let attributed: BTreeSet<&str> = inputs.values().map(String::as_str).collect();
+    let executed = run.observations.iter().filter(|o| o.outcome.is_executed());
+    let (mut identity_missing, mut unattributed) = (0usize, 0usize);
+    for o in executed {
+        if o.fixture_sha256.is_empty() {
+            identity_missing += 1;
+        } else if !attributed.contains(o.fixture_sha256.as_str()) {
+            unattributed += 1;
+        }
+    }
+    if identity_missing > 0 {
+        findings.push(format!(
+            "fixture-identity-missing:{run_id}:{identity_missing}"
+        ));
+        worsen(Freshness::Unknown);
+    }
+    if unattributed > 0 {
+        findings.push(format!(
+            "fixture-unattributed-observations:{run_id}:{unattributed}"
+        ));
+        worsen(Freshness::Unknown);
+    }
+
+    for (path, captured) in inputs {
+        if captured == "unknown" || captured.is_empty() {
+            findings.push(format!("fixture-digest-unknown:{path}"));
+            worsen(Freshness::Unknown);
+            continue;
+        }
+        match current.get(path) {
+            None => {
+                findings.push(format!("fixture-unverified:{path}"));
+                worsen(Freshness::Unknown);
+            }
+            Some(InputState::Missing) => {
+                findings.push(format!("fixture-missing:{path}"));
+                worsen(Freshness::Unknown);
+            }
+            Some(InputState::Unreadable(reason)) => {
+                findings.push(format!("fixture-unreadable:{path}:{reason}"));
+                worsen(Freshness::Unknown);
+            }
+            Some(InputState::Present(now)) if now != captured => {
+                findings.push(format!("fixture-changed:{path}"));
+                worsen(Freshness::Stale);
+            }
+            Some(InputState::Present(_)) => {}
+        }
+    }
+    FixtureVerdict {
+        freshness,
+        findings,
+    }
+}
+
 fn record_freshness(record: &ManualRecord, current: &BTreeMap<(String, u32), String>) -> Freshness {
     digest_freshness(
         &record.implementation_digest,
@@ -341,10 +448,17 @@ fn automated_view(set: &EvidenceSet, key: &CoverageKey) -> AutoView {
             detail,
         });
 
-        let run_fresh = run_freshness(run, &set.current_scope_digests);
+        // Implementation freshness and fixture freshness are independent inputs; `Unknown`
+        // dominates `Stale` dominates `Fresh` across both (C0-EMIT1-R2).
+        let fixtures = run_fixture_verdict(run, &set.current_input_digests);
+        let run_fresh = combine(&[
+            run_freshness(run, &set.current_scope_digests),
+            fixtures.freshness,
+        ]);
         if active {
             any_active_declaring = true;
             freshness.push(run_fresh);
+            unresolved.extend(fixtures.findings.iter().cloned());
             selected_outcomes.extend(observations.iter().map(|o| o.outcome));
         } else if observations.iter().any(|o| o.outcome.is_executed()) {
             executed_outside_selection = true;

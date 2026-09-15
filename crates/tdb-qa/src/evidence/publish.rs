@@ -147,8 +147,14 @@ pub struct DivergenceRow {
 pub struct Provenance {
     pub schema: String,
     pub tool_version: String,
-    /// Run manifests, manual record digests, the legacy freeze digest.
+    /// Run manifests, manual record digests, the legacy freeze digest — and, under `fixture:<path>`,
+    /// the current state of every fixture a run attributed when this set was built
+    /// (`sha256:<hex>` / `missing` / `unreadable:<reason>`; C0-EMIT1-R2).
     pub merge_input_digests: BTreeMap<String, String>,
+    /// Per run id, the fixture verdict the merge used: `verified`, `stale:<findings>` or
+    /// `unknown:<findings>` (C0-EMIT1-R2). Absent in sidecars written before schema 2.
+    #[serde(default)]
+    pub fixture_verification: BTreeMap<String, String>,
     pub scope_definitions_digest: String,
     pub output_digest: String,
 }
@@ -159,6 +165,8 @@ pub struct Provenance {
 pub struct BuildInputs {
     pub tool_version: String,
     pub merge_input_digests: BTreeMap<String, String>,
+    /// Per run id, the rendered [`super::merge::FixtureVerdict`] (C0-EMIT1-R2).
+    pub fixture_verification: BTreeMap<String, String>,
     pub scope_definitions_digest: String,
     pub divergence: Vec<DivergenceRow>,
     /// Executed cases with no coverage key, from every run and journal (see [`UNMAPPED`]).
@@ -293,9 +301,12 @@ pub fn build(merged: &Merged, inputs: &BuildInputs) -> OutputSet {
         .iter()
         .map(|(name, contents)| {
             let provenance = Provenance {
-                schema: "qa-evidence-provenance/1".into(),
+                // Schema 2 (C0-EMIT1-R2) adds `fixture_verification` and the `fixture:` entries;
+                // a schema-1 sidecar still parses (the field defaults to empty).
+                schema: "qa-evidence-provenance/2".into(),
                 tool_version: inputs.tool_version.clone(),
                 merge_input_digests: inputs.merge_input_digests.clone(),
+                fixture_verification: inputs.fixture_verification.clone(),
                 scope_definitions_digest: inputs.scope_definitions_digest.clone(),
                 output_digest: sha256_prefixed(contents.as_bytes()),
             };

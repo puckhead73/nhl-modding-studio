@@ -53,6 +53,7 @@ fn inputs() -> BuildInputs {
             "synthetic-run".to_string(),
             "sha256:aa".to_string(),
         )]),
+        fixture_verification: BTreeMap::new(),
         scope_definitions_digest: "sha256:bb".into(),
         divergence: Vec::new(),
         unmapped: Vec::new(),

@@ -29,6 +29,16 @@ fn repo_root() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR")).join("../..")
 }
 
+/// The one fixture every synthetic run attributes (C0-EMIT1-R2/R3): a real, read-only repository
+/// file. A run that attributes nothing — or whose executed observations carry no identity among
+/// its inputs — can never be fresh, so the emitters here attribute this file and hash every
+/// executed observation with it. What the file is does not matter to these cases.
+fn attribute_scopes_file(ev: &mut Emitter) -> String {
+    let digest = tdb_qa::evidence::emit::file_digest(&repo_root().join("defs/qa/scopes.toml"));
+    ev.input_digest("defs/qa/scopes.toml", digest.clone());
+    digest.unwrap_or_default()
+}
+
 /// A synthetic root, unique per process and per call. Never a repository or game path.
 fn sandbox(name: &str) -> PathBuf {
     use std::sync::atomic::{AtomicU32, Ordering};
@@ -71,10 +81,18 @@ fn without_the_opt_in_variable_an_emitter_creates_no_file_at_all() {
     let root = sandbox("default-mode");
 
     let mut ev = Emitter::from_env("synthetic", "db-read", &repo_root());
+    let fixture = attribute_scopes_file(&mut ev);
     assert!(!ev.is_enabled(), "no opt-in variable, no observation");
     assert_eq!(ev.journal_dir(), None);
     let key = ev.declare(READ);
-    ev.observe(&key, CASE, Outcome::Pass, "would have been recorded");
+    ev.observe_hashed(
+        &key,
+        CASE,
+        Outcome::Pass,
+        &fixture,
+        "",
+        "would have been recorded",
+    );
     assert_eq!(ev.finish(), None);
 
     assert_eq!(count_files(&root), 0, "the sandbox must be untouched");
@@ -116,6 +134,7 @@ fn a_completed_run_separates_a_pass_from_an_absent_fixture() {
     std::env::set_var(ROOT_ENV, &root);
     let dir = {
         let mut ev = Emitter::from_env("synthetic", "db-read", &repo_root());
+        let fixture = attribute_scopes_file(&mut ev);
         assert!(ev.is_enabled());
         let read = ev.declare(READ);
         let repack = ev.declare(REPACK);
@@ -123,10 +142,12 @@ fn a_completed_run_separates_a_pass_from_an_absent_fixture() {
         let value = ev.case(&read, CASE, || 41 + 1);
         assert_eq!(value, 42, "case returns the closure's value unchanged");
         ev.observe_hashed(&read, CASE, Outcome::Pass, &"b".repeat(64), "", "read ok");
-        ev.observe(
+        ev.observe_hashed(
             &repack,
             CASE,
             Outcome::SkippedMissingFixture,
+            &fixture,
+            "",
             "no fixture present",
         );
         ev.finish().expect("sealed")
@@ -172,9 +193,17 @@ fn a_panicking_case_records_an_executed_failure_keeps_the_earlier_work_and_resum
     std::panic::set_hook(Box::new(|_| {})); // the panic below is expected; keep the log readable
     let escaped = std::panic::catch_unwind(|| {
         let mut ev = Emitter::from_env("synthetic", "db-read", &repo_root());
+        let fixture = attribute_scopes_file(&mut ev);
         let read = ev.declare(READ);
         let repack = ev.declare(REPACK);
-        ev.observe(&read, CASE, Outcome::Pass, "recorded before the failure");
+        ev.observe_hashed(
+            &read,
+            CASE,
+            Outcome::Pass,
+            &fixture,
+            "",
+            "recorded before the failure",
+        );
         ev.case(&repack, CASE, || {
             assert_eq!(1, 2, "the deliberate failure");
         });
@@ -247,8 +276,16 @@ fn a_run_that_is_never_sealed_leaves_an_observable_journal_and_no_run() {
     std::env::set_var(ROOT_ENV, &root);
     let journal = {
         let mut ev = Emitter::from_env("synthetic", "db-read", &repo_root());
+        let fixture = attribute_scopes_file(&mut ev);
         let read = ev.declare(READ);
-        ev.observe(&read, CASE, Outcome::Pass, "recorded before the kill");
+        ev.observe_hashed(
+            &read,
+            CASE,
+            Outcome::Pass,
+            &fixture,
+            "",
+            "recorded before the kill",
+        );
         let dir = ev.journal_dir().expect("enabled").to_path_buf();
         // A hard kill runs no destructor. `forget` reproduces exactly that: the sink is dropped
         // from scope without `Drop` ever running.
@@ -290,8 +327,16 @@ fn repeated_runs_are_all_retained() {
     let mut dirs = Vec::new();
     for detail in ["first", "second"] {
         let mut ev = Emitter::from_env("synthetic", "db-read", &repo_root());
+        let fixture = attribute_scopes_file(&mut ev);
         let read = ev.declare(READ);
-        ev.observe(&read, &format!("{CASE}#{detail}"), Outcome::Pass, detail);
+        ev.observe_hashed(
+            &read,
+            &format!("{CASE}#{detail}"),
+            Outcome::Pass,
+            &fixture,
+            "",
+            detail,
+        );
         dirs.push(ev.finish().expect("sealed"));
     }
     std::env::remove_var(ROOT_ENV);
@@ -303,6 +348,154 @@ fn repeated_runs_are_all_retained() {
     assert!(validate(&set_of(&root)).is_empty());
 }
 
+// ------------------------------------------------------------------ emitter wiring ------
+//
+// C0-EMIT1 — two behaviours the four `studio-domain` matrix emitters rely on that the cases above
+// do not pin down: the drift assertion at the end of every emitter panics *outside* any
+// `Emitter::case` and deliberately never calls `finish()`, and `save_matrix` declares its
+// variant-bearing keys *after* observation has begun, because the variant is the codec the bytes
+// classify to and is not known up front.
+
+#[test]
+fn a_panic_outside_any_case_is_sealed_failed_by_the_drop_guard_with_every_observation_kept() {
+    let _guard = env_lock();
+    let root = sandbox("drift-panic");
+    std::env::set_var(ROOT_ENV, &root);
+    let previous = std::panic::take_hook();
+    std::panic::set_hook(Box::new(|_| {}));
+    let escaped = std::panic::catch_unwind(|| {
+        let mut ev = Emitter::from_env("synthetic", "db-read", &repo_root());
+        let fixture = attribute_scopes_file(&mut ev);
+        let read = ev.declare(READ);
+        let repack = ev.declare(REPACK);
+        ev.observe_hashed(
+            &read,
+            CASE,
+            Outcome::Pass,
+            &fixture,
+            "",
+            "every case passed",
+        );
+        ev.observe_hashed(
+            &repack,
+            CASE,
+            Outcome::Pass,
+            &fixture,
+            "",
+            "every case passed",
+        );
+        // The emitters' committed-CSV drift guard: a panic after the last observation, outside
+        // any case, with `ev` still alive and `finish()` never reached.
+        panic!("surface-capabilities.csv drift — synthetic");
+    });
+    std::panic::set_hook(previous);
+    std::env::remove_var(ROOT_ENV);
+    assert!(escaped.is_err(), "the drift panic must still propagate");
+
+    let runs = store::load_runs(&root).expect("load");
+    assert_eq!(runs.len(), 1, "the drop guard sealed exactly one run");
+    let run = &runs[0];
+    assert_eq!(
+        run.state,
+        RunState::Failed,
+        "a drift failure never yields a completed run, even though every observation passed"
+    );
+    assert_eq!(
+        run.observations.len(),
+        2,
+        "the observations made before the drift panic are all retained"
+    );
+    assert!(
+        run.observations.iter().all(|o| o.outcome == Outcome::Pass),
+        "no fabricated failure observation is added for a panic outside a case"
+    );
+    assert!(
+        !root.join("auto/in-progress").exists() || count_files(&root.join("auto/in-progress")) == 0,
+        "the journal is removed once the drop guard has sealed the run"
+    );
+
+    // §4.2: a `failed` run selects nothing, so its passes qualify nothing.
+    let merged = merge::merge(&set_of(&root));
+    for key in [READ, REPACK] {
+        let row = merged.row(key).expect("row");
+        assert_eq!(
+            row.automated,
+            AutomatedAxis::ExecutedUnselected,
+            "{key}: executed only inside a failed run"
+        );
+        assert_ne!(
+            row.qualification,
+            Qualification::AutomatedQualified,
+            "{key}: a pass recorded by a run that then failed its drift guard must not qualify"
+        );
+    }
+}
+
+#[test]
+fn a_key_declared_after_observation_has_begun_is_persisted_and_stays_below_its_parent() {
+    let _guard = env_lock();
+    let root = sandbox("late-variant");
+    std::env::set_var(ROOT_ENV, &root);
+    const VARIANT: &str = "nhl15-ps3/save-inner-container/container-repack/v4";
+    let journal = {
+        let mut ev = Emitter::from_env("synthetic", "save-containers", &repo_root());
+        let fixture = attribute_scopes_file(&mut ev);
+        let parent = ev.declare(REPACK);
+        ev.observe_hashed(
+            &parent,
+            CASE,
+            Outcome::NotAttempted,
+            &fixture,
+            "",
+            "variant-less parent left unsatisfied",
+        );
+        // Only now is the codec known, so only now can the variant key be declared.
+        let variant = ev.declare(VARIANT);
+        let declared =
+            std::fs::read_to_string(ev.journal_dir().expect("enabled").join("keys-declared.txt"))
+                .expect("declared");
+        assert!(
+            declared.contains(VARIANT),
+            "a late declaration is persisted before its observation, like an early one"
+        );
+        ev.observe_hashed(
+            &variant,
+            CASE,
+            Outcome::Pass,
+            &fixture,
+            "",
+            "identity repack round-trips",
+        );
+        ev.finish().expect("sealed")
+    };
+    std::env::remove_var(ROOT_ENV);
+    assert!(journal.is_dir());
+
+    let runs = store::load_runs(&root).expect("load");
+    assert_eq!(runs.len(), 1);
+    let run = &runs[0];
+    assert_eq!(run.state, RunState::Completed);
+    assert_eq!(
+        run.keys_declared.len(),
+        2,
+        "both keys are declared on the sealed run"
+    );
+    assert_eq!(run.observations.len(), 2);
+    assert!(validate(&set_of(&root)).is_empty(), "the run validates");
+
+    // Conservative parent/variant handling: the variant cell has no declared applicability and is
+    // withheld; the variant-less parent is exactly what the emitter said it was, never promoted by
+    // the variant's pass.
+    let merged = merge::merge(&set_of(&root));
+    let variant_row = merged.row(VARIANT).expect("variant row");
+    assert_eq!(variant_row.automated, AutomatedAxis::Pass);
+    assert_eq!(variant_row.qualification, Qualification::Withheld);
+    assert_eq!(variant_row.reason, "unknown-applicability");
+    let parent_row = merged.row(REPACK).expect("parent row");
+    assert_eq!(parent_row.automated, AutomatedAxis::DeclaredNotExecuted);
+    assert_ne!(parent_row.qualification, Qualification::AutomatedQualified);
+}
+
 // ------------------------------------------------------------------ qualification ------
 
 #[test]
@@ -312,8 +505,9 @@ fn a_completed_pass_qualifies_only_while_its_implementation_digest_is_current() 
     std::env::set_var(ROOT_ENV, &root);
     {
         let mut ev = Emitter::from_env("synthetic", "db-read", &repo_root());
+        let fixture = attribute_scopes_file(&mut ev);
         let read = ev.declare(READ);
-        ev.observe(&read, CASE, Outcome::Pass, "read ok");
+        ev.observe_hashed(&read, CASE, Outcome::Pass, &fixture, "", "read ok");
         ev.finish().expect("sealed");
     }
     std::env::remove_var(ROOT_ENV);
@@ -360,13 +554,16 @@ fn a_completed_pass_qualifies_only_while_its_implementation_digest_is_current() 
 /// The evidence set a merge runs over, assembled from a sandbox root and the real repository's
 /// current scope digests — the same two inputs `qa-evidence` uses.
 fn set_of(root: &Path) -> EvidenceSet {
+    let runs = store::load_runs(root).expect("runs");
+    let fixtures = tdb_qa::evidence::store::verify_fixture_inputs(&repo_root(), &runs).states;
     EvidenceSet {
         journals: Vec::new(),
-        runs: store::load_runs(root).expect("runs"),
+        runs,
         manual: store::load_manual(root).expect("manual"),
         legacy: store::load_legacy(root).expect("legacy"),
         implementation: BTreeMap::new(),
         current_scope_digests: tdb_qa::evidence::emit::scope_digests(&repo_root()),
+        current_input_digests: fixtures,
         declared_universe: vocab::catalog_universe(),
     }
 }

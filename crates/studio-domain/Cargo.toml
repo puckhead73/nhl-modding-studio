@@ -30,3 +30,6 @@ image = { version = "0.25", default-features = false, features = ["png"] }
 # Synthetic in-memory FHM corpus for the Roster Builder orchestration tests (bundled SQLite is
 # already compiled for `tdb-fhm-store`, so this adds no new native build).
 rusqlite = { version = "0.31", features = ["bundled"] }
+# Layer-A QA observation for the four matrix emitters (docs/plans/qa-evidence-contract.md). Test-only,
+# opt-in via QA_EVIDENCE_ROOT: with the variable unset nothing is written and no file is created.
+tdb-qa = { path = "../tdb-qa" }

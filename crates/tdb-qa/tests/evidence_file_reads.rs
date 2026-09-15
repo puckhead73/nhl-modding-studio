@@ -30,6 +30,16 @@ fn repo_root() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR")).join("../..")
 }
 
+/// The one fixture every synthetic run attributes (C0-EMIT1-R2/R3): a real, read-only repository
+/// file. A run that attributes nothing — or whose executed observations carry no identity among
+/// its inputs — can never be fresh, so the emitters here attribute this file and hash every
+/// executed observation with it. What the file is does not matter to these cases.
+fn attribute_scopes_file(ev: &mut Emitter) -> String {
+    let digest = tdb_qa::evidence::emit::file_digest(&repo_root().join("defs/qa/scopes.toml"));
+    ev.input_digest("defs/qa/scopes.toml", digest.clone());
+    digest.unwrap_or_default()
+}
+
 fn sandbox(name: &str) -> PathBuf {
     use std::sync::atomic::{AtomicU32, Ordering};
     static COUNTER: AtomicU32 = AtomicU32::new(0);
@@ -50,12 +60,13 @@ const CASE: &str = "tdb_qa::evidence_file_reads::synthetic";
 fn full_run(root: &Path) -> PathBuf {
     std::env::set_var(ROOT_ENV, root);
     let mut ev = Emitter::from_env("synthetic", "db-read", &repo_root());
+    let fixture = attribute_scopes_file(&mut ev);
     let key = ev.declare(READ);
     ev.observe_faceted(
         &key,
         &format!("{CASE}#faceted"),
         Outcome::Pass,
-        "",
+        &fixture,
         "",
         "a faceted observation",
         &[("codec", "raw"), ("container-version", "v4")],
@@ -315,11 +326,14 @@ fn r5_an_unreadable_state_marker_cannot_erase_a_failure_or_qualify_anything() {
     let root = sandbox("r5-state-no-erasure");
     std::env::set_var(ROOT_ENV, &root);
     let mut ev = Emitter::from_env("synthetic", "db-read", &repo_root());
+    let fixture = attribute_scopes_file(&mut ev);
     let key = ev.declare(READ);
-    ev.observe(
+    ev.observe_hashed(
         &key,
         &format!("{CASE}#fail"),
         Outcome::Fail,
+        &fixture,
+        "",
         "an executed failure",
     );
     let dir = ev.finish().expect("sealed");
@@ -338,13 +352,16 @@ fn r5_an_unreadable_state_marker_cannot_erase_a_failure_or_qualify_anything() {
 
     // And the downgrade cannot grant anything: an interrupted run is never selectable, so the key
     // is not qualified, and the executed failure still shows up as unreviewed (row 4a).
+    let runs = store::load_runs(&root).expect("runs");
+    let fixtures = tdb_qa::evidence::store::verify_fixture_inputs(&repo_root(), &runs).states;
     let set = tdb_qa::evidence::model::EvidenceSet {
-        runs: store::load_runs(&root).expect("runs"),
+        runs,
         journals: Vec::new(),
         manual: Vec::new(),
         legacy: Vec::new(),
         implementation: std::collections::BTreeMap::new(),
         current_scope_digests: tdb_qa::evidence::emit::scope_digests(&repo_root()),
+        current_input_digests: fixtures,
         declared_universe: tdb_qa::evidence::vocab::catalog_universe(),
     };
     let row = tdb_qa::evidence::merge::merge(&set)

@@ -30,9 +30,74 @@ id = "shared-core"
 # observation could ever be fresh. The declared config is now the two definition trees the engine
 # actually loads (`Project::load(..., defs)`); per-title field metadata is not a `defs/` tree — it
 # ships as the `*-meta.xml` beside each anchor database and is not declared here.
-version = 2
+# v3 (C0-EMIT1-R1): that last sentence was the gap. Every emitter reads a per-title `*-meta.xml`
+# (`nhlng-meta.xml` / `nhl_game-meta.xml` / `NHL07NG-meta.xml`; `save_matrix` may even fall back to
+# the sibling platform's copy), every codec decision the assertions make flows from it, and the
+# merge compares no fixture digest against current content — so a metadata edit left every
+# dependent row `fresh`. The glob subset has no `*.xml` form and a directory prefix over `anchors/`
+# would hash ~660 MB of databases and save fixtures on every emitter start, CLI call and test, so
+# every `*-meta.xml` under `anchors/` is listed literally (the localisation metas ride along;
+# harmless). A changed, missing or unreadable file in this list makes every scope stale or
+# `unknown`. The list cannot fall behind silently: `evidence_freshness` asserts that every
+# `*-meta.xml` present under `anchors/` appears here.
+version = 3
 paths = ["crates/tdb-core/src/**", "crates/tdb-defs/src/**"]
 config = ["defs/enums/**", "defs/relationships/**"]
+schema = [
+  "anchors/ps3/nhl07/databases/NHL07NG-meta.xml",
+  "anchors/ps3/nhl07/databases/nhl_eng_us-meta.xml",
+  "anchors/ps3/nhl08/databases/nhl_eng_us-meta.xml",
+  "anchors/ps3/nhl08/databases/nhlng-meta.xml",
+  "anchors/ps3/nhl09/databases/nhl_eng_us-meta.xml",
+  "anchors/ps3/nhl09/databases/nhlng-meta.xml",
+  "anchors/ps3/nhl10/databases/nhlng-meta.xml",
+  "anchors/ps3/nhl11/databases/nhl_eng_us-meta.xml",
+  "anchors/ps3/nhl11/databases/nhlng-meta.xml",
+  "anchors/ps3/nhl12/databases/nhl_eng_us-meta.xml",
+  "anchors/ps3/nhl12/databases/nhlng-meta.xml",
+  "anchors/ps3/nhl13/databases/nhl_eng_us-meta.xml",
+  "anchors/ps3/nhl13/databases/nhlng-meta.xml",
+  "anchors/ps3/nhl14/databases/nhl_eng_us-meta.xml",
+  "anchors/ps3/nhl14/databases/nhlng-meta.xml",
+  "anchors/ps3/nhl15/databases/nhl_eng_us-meta.xml",
+  "anchors/ps3/nhl15/databases/nhlng-meta.xml",
+  "anchors/ps3/nhllegacy/databases/nhl_eng_us-meta.xml",
+  "anchors/ps3/nhllegacy/databases/nhlng-meta.xml",
+  "anchors/ps4/nhl15/databases/eng_us-meta.xml",
+  "anchors/ps4/nhl15/databases/nhl_game-meta.xml",
+  "anchors/ps4/nhl16/databases/eng_us-meta.xml",
+  "anchors/ps4/nhl16/databases/nhl_game-meta.xml",
+  "anchors/ps4/nhl17/databases/eng_us-meta.xml",
+  "anchors/ps4/nhl17/databases/nhl_game-meta.xml",
+  "anchors/ps4/nhl18/databases/eng_us-meta.xml",
+  "anchors/ps4/nhl18/databases/nhl_game-meta.xml",
+  "anchors/ps4/nhl19/databases/eng_us-meta.xml",
+  "anchors/ps4/nhl19/databases/nhl_game-meta.xml",
+  "anchors/ps4/nhl20/databases/eng_us-meta.xml",
+  "anchors/ps4/nhl20/databases/nhl_game-meta.xml",
+  "anchors/ps4/nhl21/databases/eng_us-meta.xml",
+  "anchors/ps4/nhl21/databases/nhl_game-meta.xml",
+  "anchors/xbox360/nhl07/databases/NHL07NG-meta.xml",
+  "anchors/xbox360/nhl07/databases/nhl_eng_us-meta.xml",
+  "anchors/xbox360/nhl08/databases/nhl_eng_us-meta.xml",
+  "anchors/xbox360/nhl08/databases/nhlng-meta.xml",
+  "anchors/xbox360/nhl09/databases/nhl_eng_us-meta.xml",
+  "anchors/xbox360/nhl09/databases/nhlng-meta.xml",
+  "anchors/xbox360/nhl10/databases/nhl_eng_us-meta.xml",
+  "anchors/xbox360/nhl10/databases/nhlng-meta.xml",
+  "anchors/xbox360/nhl11/databases/nhl_eng_us-meta.xml",
+  "anchors/xbox360/nhl11/databases/nhlng-meta.xml",
+  "anchors/xbox360/nhl12/databases/nhl_eng_us-meta.xml",
+  "anchors/xbox360/nhl12/databases/nhlng-meta.xml",
+  "anchors/xbox360/nhl13/databases/nhl_eng_us-meta.xml",
+  "anchors/xbox360/nhl13/databases/nhlng-meta.xml",
+  "anchors/xbox360/nhl14/databases/nhl_eng_us-meta.xml",
+  "anchors/xbox360/nhl14/databases/nhlng-meta.xml",
+  "anchors/xbox360/nhl15/databases/nhl_eng_us-meta.xml",
+  "anchors/xbox360/nhl15/databases/nhlng-meta.xml",
+  "anchors/xbox360/nhllegacy/databases/nhl_eng_us-meta.xml",
+  "anchors/xbox360/nhllegacy/databases/nhlng-meta.xml",
+]
 toolchain = ["rustc-version", "target-triple"]
 
 # --------------------------------------------------------------------------------------------
@@ -45,12 +110,17 @@ id = "db-read"
 # `Capabilities::probe` and `RosterModel::build`, and the coverage-key mapping lives in the emitter
 # test itself. A change to any of those changes what the observation means, so all three are now
 # declared and prior evidence goes stale when they move.
-version = 2
+# v3 (C0-EMIT1-R1): `Capabilities::probe` calls `attributes::{rating_label, rating_offset,
+# rating_suffix, is_gen6_style_schema}` and `view::probe_main_team_encoding`; `attributes.rs` was
+# not declared. `view.rs` also imports `assets::probe_birthdate_encoding`, but only for the
+# player/bio views the read assertions never reach, so `assets.rs` stays out.
+version = 3
 shared = ["shared-core"]
 paths = [
   "crates/studio-domain/src/view.rs",
   "crates/studio-domain/src/surfaces.rs",
   "crates/studio-domain/src/capabilities.rs",
+  "crates/studio-domain/src/attributes.rs",
   "crates/tdb-relations/src/**",
 ]
 schema = ["docs/audits/data/schema/**"]
@@ -62,14 +132,33 @@ id = "db-edit"
 # entity model, and gate every applied operation on the whole-DB invariant audit — none of which v1
 # declared. The two emitter tests carry the operation → coverage-key mapping and the invariant
 # battery, so they are declared too.
-version = 2
+# v3 (C0-EMIT1): `Project::load` builds the enum registry that every `EditSession` operation and
+# `validate_invariants` consult, and `strategy-edit` resolves the cell it edits through
+# `team_tabs.rs`. v2 declared the enum *definitions* (`defs/enums/**`, via `shared-core`) but not
+# the registry code, so a change to `tdb-enums` or `team_tabs.rs` could not make prior evidence
+# stale.
+# v4 (C0-EMIT1-R1): the closure of what the edit assertions execute, at file granularity.
+# `set_field` mirrors strategy edits through `view::read_u64_by_studio`; `team_strategies` (the
+# `strategy-edit` cell picker) runs `view::read_field` + `view::team_name_by_id`, and `read_field`
+# consults `attributes::{is_gen6_style_schema, synthetic_enum}`; every `Result` the assertions
+# match on is shaped by `error.rs`. `view.rs`, `attributes.rs` and `error.rs` were not declared.
+# `tdb-savedata` is imported by `project.rs` but `detect_source` returns before reaching it for
+# the loose databases these two emitters feed, so it is not declared here (it is in
+# `save-containers`). `assets.rs` is reachable only through view functions the edit path never
+# calls and stays out.
+version = 4
 shared = ["shared-core"]
 paths = [
   "crates/tdb-edit/src/**",
   "crates/studio-domain/src/session.rs",
   "crates/studio-domain/src/project.rs",
+  "crates/studio-domain/src/team_tabs.rs",
+  "crates/studio-domain/src/view.rs",
+  "crates/studio-domain/src/attributes.rs",
+  "crates/studio-domain/src/error.rs",
   "crates/tdb-relations/src/**",
   "crates/tdb-domain-validation/src/**",
+  "crates/tdb-enums/src/**",
 ]
 mapping = [
   "crates/studio-domain/tests/mutation_matrix.rs",
@@ -88,13 +177,27 @@ id = "save-containers"
 # `EditSession` scalar edit through `Project::load` and back out again, so the edit seam is part of
 # what the observation depends on. The emitter test carries the detect/extract/repack split and the
 # variant mapping.
-version = 2
+# v3 (C0-EMIT1): the same `Project::load` seam builds the enum registry the semantic roster edit
+# goes through; declared for the same reason as in `db-edit` v3.
+# v4 (C0-EMIT1-R1): the ROSTER semantic edit is `Project::load` → `EditSession::set_field` →
+# `save` → reopen, i.e. the same seam `db-edit` v4 declares: `EditTransaction::commit` runs the
+# `tdb-domain-validation` invariants over a `tdb-relations` model, `set_field` consults
+# `team_tabs`/`view`/`attributes`, and `error.rs` shapes every result. v3 listed only a subset of
+# that closure; the list is now the `db-edit` closure plus the container codec.
+version = 4
 shared = ["shared-core"]
 paths = [
   "crates/tdb-savedata/src/**",
   "crates/tdb-edit/src/**",
   "crates/studio-domain/src/session.rs",
   "crates/studio-domain/src/project.rs",
+  "crates/studio-domain/src/team_tabs.rs",
+  "crates/studio-domain/src/view.rs",
+  "crates/studio-domain/src/attributes.rs",
+  "crates/studio-domain/src/error.rs",
+  "crates/tdb-relations/src/**",
+  "crates/tdb-domain-validation/src/**",
+  "crates/tdb-enums/src/**",
 ]
 mapping = ["crates/studio-domain/tests/save_matrix.rs"]
 

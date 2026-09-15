@@ -234,6 +234,28 @@ fn load(options: &Options) -> Result<(EvidenceSet, BuildInputs), String> {
         store::manual_digest(&options.root).map_err(|e| e.to_string())?,
     );
 
+    // C0-EMIT1-R2 — every fixture a run attributes is hashed now, once per resolved file, and
+    // compared by the merge against what the run captured. The states ride in the merge inputs
+    // under `fixture:` so the provenance sidecar records what was compared and `publish`'s A30
+    // re-verification refuses if a fixture moved between build and publish.
+    let fixtures = store::verify_fixture_inputs(&options.repo, &runs);
+    for (path, state) in &fixtures.states {
+        merge_input_digests.insert(format!("fixture:{path}"), state.render());
+    }
+    let mut fixture_verification = BTreeMap::new();
+    for run in &runs {
+        fixture_verification.insert(
+            run.run_id().to_string(),
+            merge::run_fixture_verdict(run, &fixtures.states).render(),
+        );
+    }
+    eprintln!(
+        "fixtures: {} attributed path(s), {} file(s) hashed, {} byte(s)",
+        fixtures.states.len(),
+        fixtures.files_hashed,
+        fixtures.bytes_hashed
+    );
+
     // Unmapped executions from both layers, kept machine-readable and attributed to their source.
     let mut unmapped = Vec::new();
     for run in &runs {
@@ -259,11 +281,13 @@ fn load(options: &Options) -> Result<(EvidenceSet, BuildInputs), String> {
         legacy,
         implementation: BTreeMap::new(),
         current_scope_digests,
+        current_input_digests: fixtures.states,
         declared_universe: vocab::catalog_universe(),
     };
     let inputs = BuildInputs {
         tool_version: format!("qa-evidence/{}", env!("CARGO_PKG_VERSION")),
         merge_input_digests,
+        fixture_verification,
         scope_definitions_digest: scopes_digest,
         divergence: Vec::new(),
         unmapped,

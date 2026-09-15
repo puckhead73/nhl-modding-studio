@@ -3370,6 +3370,7 @@ dependencies = [
  "tdb-fhm",
  "tdb-fhm-store",
  "tdb-formula",
+ "tdb-qa",
  "tdb-relations",
  "tdb-rx2",
  "tdb-savedata",

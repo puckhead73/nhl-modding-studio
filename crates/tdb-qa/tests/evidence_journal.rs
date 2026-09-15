@@ -30,6 +30,16 @@ fn repo_root() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR")).join("../..")
 }
 
+/// The one fixture every synthetic run attributes (C0-EMIT1-R2/R3): a real, read-only repository
+/// file. A run that attributes nothing — or whose executed observations carry no identity among
+/// its inputs — can never be fresh, so the emitters here attribute this file and hash every
+/// executed observation with it. What the file is does not matter to these cases.
+fn attribute_scopes_file(ev: &mut Emitter) -> String {
+    let digest = tdb_qa::evidence::emit::file_digest(&repo_root().join("defs/qa/scopes.toml"));
+    ev.input_digest("defs/qa/scopes.toml", digest.clone());
+    digest.unwrap_or_default()
+}
+
 fn sandbox(name: &str) -> PathBuf {
     use std::sync::atomic::{AtomicU32, Ordering};
     static COUNTER: AtomicU32 = AtomicU32::new(0);
@@ -58,6 +68,7 @@ fn set_of(root: &Path) -> EvidenceSet {
 fn try_set_of(root: &Path) -> Result<EvidenceSet, String> {
     let runs = store::load_runs(root).map_err(|e| e.to_string())?;
     let journals = journal::load_journals(root, &runs).map_err(|e| e.to_string())?;
+    let fixtures = tdb_qa::evidence::store::verify_fixture_inputs(&repo_root(), &runs).states;
     Ok(EvidenceSet {
         runs,
         journals,
@@ -65,6 +76,7 @@ fn try_set_of(root: &Path) -> Result<EvidenceSet, String> {
         legacy: store::load_legacy(root).map_err(|e| e.to_string())?,
         implementation: BTreeMap::new(),
         current_scope_digests: tdb_qa::evidence::emit::scope_digests(&repo_root()),
+        current_input_digests: fixtures,
         declared_universe: vocab::catalog_universe(),
     })
 }
@@ -80,9 +92,17 @@ fn row_of(set: &EvidenceSet, k: &str) -> merge::SummaryRow {
 /// Run one emitter to completion, recording `outcome` on every listed key. Requires `ROOT_ENV` set.
 fn sealed_run(keys: &[&str], outcome: Outcome, detail: &str) -> PathBuf {
     let mut ev = Emitter::from_env("synthetic", "db-read", &repo_root());
+    let fixture = attribute_scopes_file(&mut ev);
     for k in keys {
         let parsed = ev.declare(k);
-        ev.observe(&parsed, &format!("{CASE}#{detail}"), outcome, detail);
+        ev.observe_hashed(
+            &parsed,
+            &format!("{CASE}#{detail}"),
+            outcome,
+            &fixture,
+            "",
+            detail,
+        );
     }
     ev.finish().expect("sealed")
 }
@@ -670,6 +690,7 @@ fn check_and_build_leave_the_journal_bytes_untouched() {
     let inputs = publish::BuildInputs {
         tool_version: "synthetic".into(),
         merge_input_digests: BTreeMap::new(),
+        fixture_verification: BTreeMap::new(),
         scope_definitions_digest: "unknown".into(),
         divergence: Vec::new(),
         unmapped: Vec::new(),
@@ -775,15 +796,30 @@ fn a_persistence_failure_makes_the_workflow_non_success_and_retains_what_was_wri
     std::panic::set_hook(Box::new(|_| {}));
     let outcome = std::panic::catch_unwind(|| {
         let mut ev = Emitter::from_env("synthetic", "db-read", &repo_root());
+        let fixture = attribute_scopes_file(&mut ev);
         let read = ev.declare(READ);
-        ev.observe(&read, CASE, Outcome::Pass, "persisted before the fault");
+        ev.observe_hashed(
+            &read,
+            CASE,
+            Outcome::Pass,
+            &fixture,
+            "",
+            "persisted before the fault",
+        );
 
         let dir = ev.journal_dir().expect("enabled").to_path_buf();
         std::fs::remove_file(dir.join("observations.csv")).expect("remove");
         std::fs::create_dir(dir.join("observations.csv")).expect("plant");
 
         let repack = ev.declare(REPACK);
-        ev.observe(&repack, CASE, Outcome::Pass, "this one cannot be persisted");
+        ev.observe_hashed(
+            &repack,
+            CASE,
+            Outcome::Pass,
+            &fixture,
+            "",
+            "this one cannot be persisted",
+        );
         unreachable!("a persistence failure must not be swallowed");
     });
     std::panic::set_hook(previous);
@@ -817,8 +853,9 @@ fn an_unmapped_execution_is_published_verbatim_and_qualifies_nothing() {
     std::env::set_var(ROOT_ENV, &root);
     let run = {
         let mut ev = Emitter::from_env("synthetic", "db-read", &repo_root());
+        let fixture = attribute_scopes_file(&mut ev);
         let read = ev.declare(READ);
-        ev.observe(&read, CASE, Outcome::Pass, "mapped");
+        ev.observe_hashed(&read, CASE, Outcome::Pass, &fixture, "", "mapped");
         ev.observe_unmapped(
             "nhl15-ps3",
             "retire-unretire-jersey",
@@ -842,6 +879,7 @@ fn an_unmapped_execution_is_published_verbatim_and_qualifies_nothing() {
     let inputs = publish::BuildInputs {
         tool_version: "synthetic".into(),
         merge_input_digests: BTreeMap::new(),
+        fixture_verification: BTreeMap::new(),
         scope_definitions_digest: "unknown".into(),
         divergence: Vec::new(),
         unmapped: vec![publish::UnmappedRow {
@@ -875,12 +913,13 @@ fn a_variant_cell_is_never_required_and_never_satisfies_its_parent() {
     std::env::set_var(ROOT_ENV, &root);
     {
         let mut ev = Emitter::from_env("synthetic", "save-containers", &repo_root());
+        let fixture = attribute_scopes_file(&mut ev);
         let v4 = ev.declare(REPACK_V4);
         ev.observe_faceted(
             &v4,
             CASE,
             Outcome::Pass,
-            "",
+            &fixture,
             "",
             "repacked",
             &[("codec", "v4"), ("save-mode", "roster")],
@@ -975,8 +1014,14 @@ fn changing_the_assertion_or_mapping_logic_makes_prior_evidence_stale() {
          invalidate it exactly as changing the implementation does"
     );
 
+    // The run's one attributed fixture is unchanged, so the only thing that moved is the
+    // implementation digest — and that alone must read as `stale`, not `unknown`.
     let set = EvidenceSet {
         current_scope_digests: BTreeMap::from([(("db-read".to_string(), 2), changed)]),
+        current_input_digests: BTreeMap::from([(
+            SYNTHETIC_FIXTURE.to_string(),
+            tdb_qa::evidence::model::InputState::Present(SYNTHETIC_FIXTURE_SHA.to_string()),
+        )]),
         ..declared_pass(&first)
     };
     let row = row_of(&set, READ);
@@ -985,7 +1030,12 @@ fn changing_the_assertion_or_mapping_logic_makes_prior_evidence_stale() {
     assert_eq!(row.reason, "stale-evidence");
 }
 
-/// An in-memory completed run that passed [`READ`] with `digest` as its implementation digest.
+const SYNTHETIC_FIXTURE: &str = "anchors/synthetic/databases/synthetic.db";
+const SYNTHETIC_FIXTURE_SHA: &str =
+    "4444444444444444444444444444444444444444444444444444444444444444";
+
+/// An in-memory completed run that passed [`READ`] with `digest` as its implementation digest,
+/// attributing one synthetic fixture (C0-EMIT1-R2: an unattributed run is never fresh).
 fn declared_pass(digest: &str) -> EvidenceSet {
     use tdb_qa::evidence::model::{Observation, RunManifest, SupersedeMode};
     let k = key(READ);
@@ -999,7 +1049,10 @@ fn declared_pass(digest: &str) -> EvidenceSet {
             scope_id: "db-read".into(),
             scope_version: 2,
             implementation_digest: digest.to_string(),
-            input_digests: BTreeMap::new(),
+            input_digests: BTreeMap::from([(
+                SYNTHETIC_FIXTURE.to_string(),
+                SYNTHETIC_FIXTURE_SHA.to_string(),
+            )]),
             supersedes: Vec::new(),
             supersede_mode: SupersedeMode::None,
             supersede_keys: Vec::new(),
@@ -1013,7 +1066,7 @@ fn declared_pass(digest: &str) -> EvidenceSet {
             key: k,
             case_id: CASE.into(),
             outcome: Outcome::Pass,
-            fixture_sha256: String::new(),
+            fixture_sha256: SYNTHETIC_FIXTURE_SHA.to_string(),
             output_sha256: String::new(),
             detail: String::new(),
         }],
@@ -1027,6 +1080,7 @@ fn declared_pass(digest: &str) -> EvidenceSet {
         legacy: Vec::new(),
         implementation: BTreeMap::new(),
         current_scope_digests: BTreeMap::new(),
+        current_input_digests: BTreeMap::new(),
         declared_universe: vocab::catalog_universe(),
     }
 }

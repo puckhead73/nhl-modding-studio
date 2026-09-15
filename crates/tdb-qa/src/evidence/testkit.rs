@@ -9,8 +9,8 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use super::key::CoverageKey;
 use super::model::{
-    EvidenceSet, ManualRecord, ManualResult, Observation, Outcome, ProcedureKind, Run, RunManifest,
-    RunState, SupersedeMode,
+    EvidenceSet, InputState, ManualRecord, ManualResult, Observation, Outcome, ProcedureKind, Run,
+    RunManifest, RunState, SupersedeMode,
 };
 
 /// The synthetic "current" implementation digest. A run or record carrying it is fresh; carrying
@@ -22,6 +22,11 @@ pub const STALE_DIGEST: &str =
     "sha256:2222222222222222222222222222222222222222222222222222222222222222";
 /// The synthetic freshness scope every builder declares.
 pub const SCOPE: &str = "synthetic-scope";
+/// The one fixture every synthetic run attributes (C0-EMIT1-R2): a run that attributes nothing
+/// can never be fresh, so the builders attribute this path and [`default_set`] presents it as
+/// current with [`FIXTURE_DIGEST`]. Bare hex, the form the emitters record.
+pub const FIXTURE_PATH: &str = "anchors/synthetic/databases/synthetic.db";
+pub const FIXTURE_DIGEST: &str = "3333333333333333333333333333333333333333333333333333333333333333";
 
 /// Parse a key, panicking on a malformed literal — test code only.
 pub fn key(raw: &str) -> CoverageKey {
@@ -37,17 +42,28 @@ pub fn default_set() -> EvidenceSet {
         legacy: Vec::new(),
         implementation: BTreeMap::new(),
         current_scope_digests: BTreeMap::from([((SCOPE.to_string(), 1), FRESH_DIGEST.to_string())]),
+        current_input_digests: BTreeMap::from([(
+            FIXTURE_PATH.to_string(),
+            InputState::Present(FIXTURE_DIGEST.to_string()),
+        )]),
         declared_universe: BTreeSet::new(),
     }
 }
 
-/// One observation with no fixture or output hash.
+/// One observation with no output hash. An **executed** outcome (pass, fail, refused-clean)
+/// carries the synthetic fixture's identity, [`FIXTURE_DIGEST`], because an executed observation
+/// without one can never be fresh (C0-EMIT1-R3); a skip or a deliberate non-attempt carries none,
+/// exactly as the emitters record them.
 pub fn observation(key_raw: &str, case_id: &str, outcome: Outcome) -> Observation {
     Observation {
         key: key(key_raw),
         case_id: case_id.to_string(),
         outcome,
-        fixture_sha256: String::new(),
+        fixture_sha256: if outcome.is_executed() {
+            FIXTURE_DIGEST.to_string()
+        } else {
+            String::new()
+        },
         output_sha256: String::new(),
         detail: String::new(),
     }
@@ -64,7 +80,7 @@ fn manifest(run_id: &str) -> RunManifest {
         scope_id: SCOPE.to_string(),
         scope_version: 1,
         implementation_digest: FRESH_DIGEST.to_string(),
-        input_digests: BTreeMap::new(),
+        input_digests: BTreeMap::from([(FIXTURE_PATH.to_string(), FIXTURE_DIGEST.to_string())]),
         supersedes: Vec::new(),
         supersede_mode: SupersedeMode::None,
         supersede_keys: Vec::new(),

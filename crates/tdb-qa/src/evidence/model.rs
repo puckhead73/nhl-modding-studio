@@ -444,6 +444,31 @@ impl LegacyClaim {
 
 /// Everything the merge reads. Assembling it is the caller's job, which is what keeps the merge
 /// pure and testable.
+/// What discovery found at a fixture path a run attributes (C0-EMIT1-R2).
+///
+/// Only `Present` can agree with a captured digest. `Missing` is the one reading of absence
+/// (R-ABSENT); everything else that is not a readable regular file under the repository —
+/// a directory, a link or reparse point, an unreadable file, an absolute or escaping path — is
+/// `Unreadable` with the reason, and is never fresh.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum InputState {
+    /// The file's current SHA-256 (bare hex, the form the emitters record).
+    Present(String),
+    Missing,
+    Unreadable(String),
+}
+
+impl InputState {
+    /// The provenance rendering: `sha256:<hex>`, `missing`, or `unreadable:<reason>`.
+    pub fn render(&self) -> String {
+        match self {
+            InputState::Present(hex) => format!("sha256:{hex}"),
+            InputState::Missing => "missing".to_string(),
+            InputState::Unreadable(reason) => format!("unreadable:{reason}"),
+        }
+    }
+}
+
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
 pub struct EvidenceSet {
     pub runs: Vec<Run>,
@@ -457,6 +482,11 @@ pub struct EvidenceSet {
     /// Current freshness digest per `(scope_id, scope_version)`. Absent means `unknown`
     /// (R-FRESH-UNKNOWN).
     pub current_scope_digests: BTreeMap<(String, u32), String>,
+    /// The current content of every fixture a run attributes in its `input_digests`, keyed by the
+    /// run's repository-relative path. Computed by discovery (`store::verify_fixture_inputs`),
+    /// never by the merge, so the merge stays a pure function. A path a run names that is absent
+    /// here was not verified, which is `unknown` — never fresh (C0-EMIT1-R2).
+    pub current_input_digests: BTreeMap<String, InputState>,
     /// Keys that must appear in the output even with no evidence at all, so a required cell can
     /// never be hidden by the absence of an emitter (R-CITE-ALL).
     pub declared_universe: BTreeSet<CoverageKey>,

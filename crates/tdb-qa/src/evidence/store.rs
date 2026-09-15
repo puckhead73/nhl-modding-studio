@@ -880,6 +880,157 @@ pub fn collect_scope_contents(
     Ok(out)
 }
 
+/// What one fixture-verification pass did, for reporting (C0-EMIT1-R2).
+#[derive(Debug, Clone, Default, PartialEq, Eq)]
+pub struct FixtureVerification {
+    /// Current state per attributed repository-relative path, exactly as the runs name them.
+    pub states: BTreeMap<String, super::model::InputState>,
+    /// Distinct files whose bytes were actually hashed in this pass.
+    pub files_hashed: usize,
+    pub bytes_hashed: u64,
+}
+
+/// Hash every fixture the given runs attribute in their `input_digests`, **once per resolved
+/// file per invocation**, and classify what stands at each path now (C0-EMIT1-R2, R3).
+///
+/// Only explicitly referenced inputs are read — never a directory walk — and nothing but the
+/// bytes is trusted: no manifest, timestamp or size stands in for content. Only a readable
+/// regular file reached through plain directories under the repository is `Present`:
+///
+/// * the repository root itself must canonicalize, or nothing is verified (fail closed);
+/// * an attributed path must be repository-relative — no absolute path, prefix, root or `..`;
+/// * **every** component below the repository root is classified without following links
+///   (`symlink_metadata` + [`super::paths::entry_kind_of`]): a symlink, junction or other
+///   reparse point at any ancestor or at the file itself is refused, even one that redirects to
+///   another location inside the repository; an ancestor that is not a directory is refused;
+/// * the final entry must be a regular file whose canonical path lies under the repository
+///   root, and a canonicalization failure is refused rather than approximated.
+///
+/// Every refusal is `Unreadable` with its reason; `Missing` is the one reading of absence. None
+/// of these is an error for the caller: a missing or unreadable anchor is a legitimate state the
+/// merge reports as not-fresh, not a reason to refuse the build. The classification and the read
+/// are separate operations, so this is discovery-time verification, not a race-proof guarantee
+/// against a writer that changes the file between the two.
+pub fn verify_fixture_inputs(repo_root: &Path, runs: &[Run]) -> FixtureVerification {
+    use super::model::InputState;
+    use super::paths::{entry_kind_of, EntryKind};
+    use std::path::Component;
+
+    let mut states: BTreeMap<String, InputState> = BTreeMap::new();
+    let mut by_resolved: BTreeMap<PathBuf, InputState> = BTreeMap::new();
+    let mut files_hashed = 0usize;
+    let mut bytes_hashed = 0u64;
+
+    let repo = match repo_root.canonicalize() {
+        Ok(repo) => repo,
+        Err(e) => {
+            // Fail closed: with no trustworthy root nothing can be attributed to it.
+            for run in runs {
+                for rel in run.manifest.input_digests.keys() {
+                    states.entry(rel.clone()).or_insert_with(|| {
+                        InputState::Unreadable(format!("repository root cannot be resolved: {e}"))
+                    });
+                }
+            }
+            return FixtureVerification {
+                states,
+                files_hashed,
+                bytes_hashed,
+            };
+        }
+    };
+
+    for run in runs {
+        for rel in run.manifest.input_digests.keys() {
+            if states.contains_key(rel) {
+                continue;
+            }
+            let state = classify_fixture(&repo, rel, &mut by_resolved, |bytes| {
+                files_hashed += 1;
+                bytes_hashed += bytes as u64;
+            });
+            states.insert(rel.clone(), state);
+        }
+    }
+
+    /// One attributed path, walked component by component below the canonical repository root.
+    fn classify_fixture(
+        repo: &Path,
+        rel: &str,
+        by_resolved: &mut BTreeMap<PathBuf, InputState>,
+        mut on_hashed: impl FnMut(usize),
+    ) -> InputState {
+        let relative = Path::new(rel);
+        let components: Vec<Component> = relative.components().collect();
+        if components.is_empty()
+            || relative.is_absolute()
+            || components
+                .iter()
+                .any(|c| !matches!(c, Component::Normal(_)))
+        {
+            return InputState::Unreadable("not a repository-relative path".into());
+        }
+        let mut current = repo.to_path_buf();
+        let last = components.len() - 1;
+        for (i, component) in components.iter().enumerate() {
+            current.push(component);
+            let kind = match fs::symlink_metadata(&current) {
+                Err(e) if e.kind() == std::io::ErrorKind::NotFound => {
+                    return InputState::Missing;
+                }
+                Err(e) => return InputState::Unreadable(format!("metadata: {e}")),
+                // `entry_kind_of` refuses every reparse point (symlink, junction, mount point)
+                // before classifying, so an aliased ancestor never gets a chance to redirect.
+                Ok(metadata) => match entry_kind_of(&current, &metadata) {
+                    Ok(kind) => kind,
+                    Err(e) => return InputState::Unreadable(e.to_string()),
+                },
+            };
+            match (i == last, kind) {
+                (false, EntryKind::Dir) => {}
+                (false, _) => {
+                    return InputState::Unreadable(format!(
+                        "ancestor {} is not a directory",
+                        current.display()
+                    ))
+                }
+                (true, EntryKind::File) => {}
+                (true, EntryKind::Dir) => {
+                    return InputState::Unreadable("a directory, not a file".into())
+                }
+                (true, EntryKind::Other) => {
+                    return InputState::Unreadable("not a regular file".into())
+                }
+            }
+        }
+        let resolved = match current.canonicalize() {
+            Ok(resolved) => resolved,
+            Err(e) => return InputState::Unreadable(format!("cannot be resolved: {e}")),
+        };
+        if !resolved.starts_with(repo) {
+            return InputState::Unreadable("resolves outside the repository".into());
+        }
+        if let Some(seen) = by_resolved.get(&resolved) {
+            return seen.clone();
+        }
+        let state = match fs::read(&current) {
+            Ok(bytes) => {
+                on_hashed(bytes.len());
+                InputState::Present(sha256_hex(&bytes))
+            }
+            Err(e) => InputState::Unreadable(format!("read: {e}")),
+        };
+        by_resolved.insert(resolved, state.clone());
+        state
+    }
+
+    FixtureVerification {
+        states,
+        files_hashed,
+        bytes_hashed,
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
