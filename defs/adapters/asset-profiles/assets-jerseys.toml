@@ -66,8 +66,8 @@
 #      established. Chain order is a declared reading order; it says nothing about what the game
 #      loads — `[runtime_lookup]` is still unknown and still required.
 
-schema = "asset-output-profile/4"
-profile_version = 2
+schema = "asset-output-profile/5"
+profile_version = 3
 family = "assets-jerseys"
 note = """
 Nothing on any target is established. One target is represented (NHL Legacy, Xbox 360): the DB
@@ -562,3 +562,38 @@ note = "Q10: a release replacement preserves the original dimensions and encoded
 operation = "install"
 requires = ["container", "install", "runtime_lookup", "resolution_chain:kit-thumbnail"]
 note = "The chain requirement is met only by an OPERATIVE chain; the candidate above does not meet it, and `runtime_lookup` is required independently of it."
+
+
+# ===================================================== NHL Legacy Recompiled (by reference)
+
+[[target_profile]]
+target = "legacyrecomp-recomp"
+reuses = "nhllegacy-xbox360"
+note = """
+Q47 (user direction, 2026-09-15; package C0-AS5): Legacy Recompiled uses the same jersey files and the
+same asset definitions as Legacy Xbox 360. This profile therefore inherits, BY REFERENCE and without
+a copy, the SHARED definitions of `nhllegacy-xbox360` — identity, container, path families and
+naming, the geometry/codec blocks, variants, resolution chains and the operation requirements
+(`asset_reuse::SHARED_BLOCKS` / `SHARED_TABLES`), with the corpora those blocks cite — in exactly
+the states they have there: what is a candidate or unknown on Legacy Xbox 360 is a candidate or
+unknown here, and nothing inherited becomes operative by being inherited. The reuse is the user's
+attributed decision, not a measurement: no Recompiled file was hashed or inspected for it, no corpus
+is declared here, and no provenance bridge is claimed. DESTINATION behaviour is this target's own
+and is UNKNOWN below: where a Recompiled installation keeps these files, how they are written there
+and what its runtime reads have not been inspected (FR4: no Recompiled installation, anchor or save
+fixture is committed). Nothing here says anything about Recompiled's database (its database unit
+stays absent from the registry) or about a reference-update capability. Qualification is not
+inherited: no automated case, evidence cell or runtime record of Legacy Xbox 360 applies here.
+"""
+
+[target_profile.discovery]
+state = "unknown"
+note = "Where a Legacy Recompiled installation keeps this family's files is not inspected (FR4). Not inherited from Legacy Xbox 360 by design: a destination root is the destination's own fact."
+
+[target_profile.install]
+state = "unknown"
+note = "How this family's files are written into a Recompiled installation is not inspected. Not inherited: an install kind, size policy or backup rule observed on an Xbox 360 tree is that tree's. While this is unknown, creation through any inherited resolution chain stays refused (`CreationSupport` reads this block, on this target)."
+
+[target_profile.runtime_lookup]
+state = "unknown"
+note = "What the Recompiled runtime reads for this family is not inspected. Not inherited: runtime evidence is a trace, a disassembly or a load test on the destination itself, never a folder listing and never another target's record."

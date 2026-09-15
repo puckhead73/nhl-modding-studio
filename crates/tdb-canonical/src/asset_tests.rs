@@ -79,15 +79,18 @@ fn variant<'a>(t: &'a TargetProfile, id: &str) -> &'a AssetVariant {
 #[test]
 fn the_committed_asset_profile_satisfies_the_contract() {
     let profile = committed_profile();
-    // The portrait profile is a `/3` document and stays one: `/4` (C0-AS4) validates it in place
-    // under its own rules, so this is also the compatibility check.
-    assert_eq!(profile.schema, ASSET_PROFILE_SCHEMA_V3);
+    // The portrait profile was a `/3` document through C0-AS4 (validated in place under its own
+    // rules); C0-AS5 moved it to `/5` for the Recompiled reference. `/3` compatibility is checked
+    // on the synthetic fixtures below and in `asset_resolution_tests`.
+    assert_eq!(profile.schema, ASSET_PROFILE_SCHEMA);
     assert!(ASSET_PROFILE_SCHEMAS_NATIVE.contains(&profile.schema.as_str()));
     let findings = validate_asset_profile(&profile);
     assert_eq!(findings, vec![], "{findings:?}");
     // C0-POR1 added `nhllegacy-ps3`, whose measured copy is the only genuine shipping tree of the
-    // three and therefore carries the strongest portrait evidence in the repository.
-    assert_eq!(profile.targets.len(), 3);
+    // three declared targets and therefore carries the strongest portrait evidence in the
+    // repository; C0-AS5 added `legacyrecomp-recomp` by reference (nothing declared, nothing
+    // operative).
+    assert_eq!(profile.targets.len(), 4);
 }
 
 #[test]
@@ -112,7 +115,18 @@ fn the_committed_profile_establishes_only_what_its_evidence_scope_supports() {
     // `force = "observed-source-format"` and none of them authorises refusing a Build anything.
     let profile = committed_profile();
     let population = asset_registry_population(std::iter::once(&profile));
-    assert_eq!(population.len(), 3);
+    // Three declared targets and one registered by reference (C0-AS5: `legacyrecomp-recomp`
+    // reuses `nhllegacy-xbox360`, so its row carries the Xbox 360 counts and is reported apart).
+    assert_eq!(population.len(), 4);
+    let by_reference = population
+        .iter()
+        .find(|r| r.target == "legacyrecomp-recomp")
+        .unwrap();
+    assert_eq!(
+        by_reference.reused_from.as_deref(),
+        Some("nhllegacy-xbox360")
+    );
+    assert_eq!(by_reference.established_constraints, 0);
 
     let expected: [(&str, &[&str]); 3] = [
         // Invariant across all 18 663 inspected files INCLUDING the backup-labelled group and the
@@ -596,8 +610,8 @@ fn the_logo_and_jersey_profiles_represent_their_families_and_establish_nothing()
                 .iter()
                 .map(|t| t.target.as_str())
                 .collect::<Vec<_>>(),
-            ["nhllegacy-xbox360"],
-            "{file}: one represented target"
+            ["nhllegacy-xbox360", "legacyrecomp-recomp"],
+            "{file}: one represented target, and Recompiled by reference to it (C0-AS5)"
         );
         assert!(
             profile
@@ -607,8 +621,17 @@ fn the_logo_and_jersey_profiles_represent_their_families_and_establish_nothing()
         );
 
         let population = asset_registry_population(std::iter::once(&profile));
-        assert_eq!(population.len(), 1);
+        assert_eq!(population.len(), 2);
+        // The reference row repeats the Xbox 360 counts (it inherits those definitions) and
+        // establishes nothing of its own either; the declared row is what is checked below.
+        assert_eq!(
+            population[1].reused_from.as_deref(),
+            Some("nhllegacy-xbox360"),
+            "{file}"
+        );
+        assert_eq!(population[1].established_constraints, 0, "{file}");
         let p = &population[0];
+        assert_eq!(p.reused_from, None);
         assert_eq!(
             (
                 p.established_constraints,
@@ -678,8 +701,8 @@ fn the_synthetic_fixture_is_excluded_from_registry_population() {
     let population = asset_registry_population([&committed, &synthetic]);
     assert_eq!(
         population.len(),
-        3,
-        "only the committed profile's three targets are counted"
+        4,
+        "only the committed profile's targets are counted (three declared, one by reference)"
     );
     assert!(population.iter().all(|p| !p.target.contains("fixture")));
 }
@@ -1731,6 +1754,13 @@ fn every_asset_rule_has_a_stable_diagnosable_name() {
         Rule::AssetVariantBlockConflict,
         Rule::AssetPropertyEvidenceConflict,
         Rule::AssetPathFamilyUnresolved,
+        Rule::AssetProvenanceBridgeInvalid,
+        Rule::AssetCompositeInvalid,
+        Rule::AssetResolutionChainInvalid,
+        Rule::AssetReuseUnresolved,
+        Rule::AssetReuseSelfReference,
+        Rule::AssetReuseChain,
+        Rule::AssetReuseConflict,
     ];
     let names: BTreeSet<&str> = all.iter().map(Rule::as_str).collect();
     assert_eq!(names.len(), all.len());
@@ -2136,7 +2166,11 @@ fn an_unknown_runtime_lookup_blocks_discovery_and_install_on_every_committed_tar
     // placement in one installed copy; R1 withdrew that, and the reason was `patch.big` - present
     // at USRDIR root, never opened, and able to shadow every loose portrait.
     let profile = committed_profile();
-    for t in &profile.targets {
+    for declared in &profile.targets {
+        // C0-AS5: the Recompiled target inherits its operations by reference; readiness is
+        // evaluated on the effective profile, whose `runtime_lookup` is Recompiled's own (unknown).
+        let resolved = resolve_target(&profile, &declared.target).unwrap();
+        let t = &resolved.profile;
         assert!(
             t.runtime_lookup.established().is_none(),
             "{}: no trace, disassembly or load test exists for any target",

@@ -106,7 +106,7 @@ use crate::asset_resolution::{
 use crate::{
     check_identity, check_vocab, finding, ConstraintState, Finding, Rule, ASSET_PROFILE_SCHEMA,
     ASSET_PROFILE_SCHEMAS_NATIVE, ASSET_PROFILE_SCHEMA_LEGACY, ASSET_PROFILE_SCHEMA_PREVIOUS,
-    ASSET_PROFILE_SCHEMA_V3, CANDIDATE_CONFIDENCE, OPERATIVE_CONFIDENCE,
+    ASSET_PROFILE_SCHEMA_V3, ASSET_PROFILE_SCHEMA_V4, CANDIDATE_CONFIDENCE, OPERATIVE_CONFIDENCE,
 };
 
 // ============================================================= vocabularies
@@ -1089,6 +1089,12 @@ pub struct TargetProfile {
     pub target: String,
     #[serde(default)]
     pub note: String,
+    /// `/5` (C0-AS5): the target profile in this document whose **shared definitions** this one
+    /// inherits — see [`crate::asset_reuse`] for exactly which blocks and tables are shared and
+    /// which stay this target's own. A reusing profile declares only its destination blocks; the
+    /// effective profile is assembled by [`crate::resolve_target`], never read off this struct.
+    #[serde(default)]
+    pub reuses: Option<String>,
 
     /// The inspected corpora every established block on this target must cite.
     #[serde(default, rename = "corpus")]
@@ -1479,8 +1485,22 @@ pub fn validate_asset_profile(profile: &AssetProfile) -> Vec<Finding> {
         };
         out.push(finding(Rule::UnsupportedSchema, &profile.family, detail));
     }
-    // A `/3` document is validated under its own rules, and the only thing `/4` adds for it is a
-    // refusal: a construct `/3` cannot spell is not silently read under `/4`'s meaning.
+    // An older document is validated under its own rules, and the only thing a newer schema adds
+    // for it is a refusal: a construct it cannot spell is not silently read under the newer meaning.
+    if profile.schema == ASSET_PROFILE_SCHEMA_V3 || profile.schema == ASSET_PROFILE_SCHEMA_V4 {
+        for target in &profile.targets {
+            if target.reuses.is_some() {
+                out.push(finding(
+                    Rule::UnsupportedSchema,
+                    format!("{}/{}", profile.family, target.target),
+                    format!(
+                        "`reuses` is an {ASSET_PROFILE_SCHEMA} construct; a document that uses it \
+                         must declare schema = {ASSET_PROFILE_SCHEMA:?}"
+                    ),
+                ));
+            }
+        }
+    }
     if profile.schema == ASSET_PROFILE_SCHEMA_V3 {
         for target in &profile.targets {
             let subject = format!("{}/{}", profile.family, target.target);
@@ -1510,8 +1530,8 @@ pub fn validate_asset_profile(profile: &AssetProfile) -> Vec<Finding> {
                     Rule::UnsupportedSchema,
                     &subject,
                     format!(
-                        "{construct} is an {ASSET_PROFILE_SCHEMA} construct; a document that uses \
-                         it must declare schema = {ASSET_PROFILE_SCHEMA:?}"
+                        "{construct} is an {ASSET_PROFILE_SCHEMA_V4} construct; a document that \
+                         uses it must declare schema = {ASSET_PROFILE_SCHEMA_V4:?} or newer"
                     ),
                 ));
             }
@@ -1563,12 +1583,94 @@ pub fn validate_asset_profile(profile: &AssetProfile) -> Vec<Finding> {
                 "declared more than once in this profile",
             ));
         }
-        validate_target(target, &classes, &subject, &mut out);
+        if target.reuses.is_none() {
+            validate_target(target, &classes, &subject, &mut out);
+            continue;
+        }
+        // `/5`: a reusing target is validated in three steps (C0-AS5-CLOSE). (1) The declaration
+        // itself: reference structure, local declaration conflicts and evidence ownership
+        // (`reuse_source`), then its own corpora and destination blocks against ITS OWN corpora —
+        // a destination block cannot gain attribution by citing an inherited source corpus. (2)
+        // The shared definitions are resolved. (3) Cross-field requirements — an archive install
+        // needing the container, class applicability, the chains, the geometry — are checked on
+        // the EFFECTIVE profile, where the inherited blocks are present with their source
+        // provenance attached. Validating the raw declaration as a whole would report the
+        // inherited container missing (the defect this sequencing corrects).
+        validate_reuser_declaration(target, &subject, &mut out);
+        match crate::asset_reuse::reuse_source(profile, target) {
+            Ok(_) => {
+                if let Ok(resolved) = crate::asset_reuse::resolve_target(profile, &target.target) {
+                    validate_target(
+                        &resolved.profile,
+                        &classes,
+                        &format!("{subject} (resolved via `reuses`)"),
+                        &mut out,
+                    );
+                }
+            }
+            Err(e) => {
+                let rule = match &e {
+                    crate::asset_reuse::ReuseError::SelfReference { .. } => {
+                        Rule::AssetReuseSelfReference
+                    }
+                    crate::asset_reuse::ReuseError::SourceReuses { .. } => Rule::AssetReuseChain,
+                    crate::asset_reuse::ReuseError::ConflictingLocalDeclarations { .. }
+                    | crate::asset_reuse::ReuseError::CorpusIdCollision { .. } => {
+                        Rule::AssetReuseConflict
+                    }
+                    _ => Rule::AssetReuseUnresolved,
+                };
+                out.push(finding(rule, &subject, e.to_string()));
+            }
+        }
     }
 
     out.sort();
     out.dedup();
     out
+}
+
+/// Step (1) for a reusing target: what its own declaration must satisfy on its own. Its corpora
+/// are validated as declared; its destination blocks (`discovery`, `install`, `runtime_lookup`)
+/// are held to the evidence envelope **against those corpora only** — the source's corpora are not
+/// in scope here, so a destination block citing one is `asset-corpus-undeclared` — and to their
+/// own vocabularies. Cross-field requirements (an archive install's container, class
+/// applicability of inherited blocks, chains, geometry) are deferred to the effective profile.
+/// Shared blocks are absent on a valid declaration; if any is present, `reuse_source` reports the
+/// conflict and nothing here reads it.
+fn validate_reuser_declaration(target: &TargetProfile, subject: &str, out: &mut Vec<Finding>) {
+    let corpora = validate_corpora(out, subject, target);
+    let ctx = EnvelopeContext {
+        corpora: &corpora,
+        subject,
+    };
+    ctx.check(out, "discovery", &target.discovery);
+    ctx.check(out, "install", &target.install);
+    ctx.check(out, "runtime_lookup", &target.runtime_lookup);
+    if let Some(v) = target.discovery.established() {
+        check_vocab(out, subject, "[discovery].scope", &v.scope, DISCOVERY_SCOPE);
+        check_identity(out, subject, "[discovery].root", &v.root);
+    }
+    if let Some(v) = target.runtime_lookup.established() {
+        check_vocab(
+            out,
+            subject,
+            "[runtime_lookup].source",
+            &v.source,
+            RUNTIME_SOURCE,
+        );
+        check_vocab(
+            out,
+            subject,
+            "[runtime_lookup].patch_precedence",
+            &v.patch_precedence,
+            PATCH_PRECEDENCE,
+        );
+        check_identity(out, subject, "[runtime_lookup].evidence", &v.evidence);
+    }
+    if let Some(v) = target.install.established() {
+        validate_install_value(out, subject, v);
+    }
 }
 
 fn validate_sources(profile: &AssetProfile, out: &mut Vec<Finding>) -> BTreeSet<String> {
@@ -3867,6 +3969,24 @@ fn validate_install(
     target: &TargetProfile,
     v: &InstallValue,
 ) {
+    validate_install_value(out, subject, v);
+    // Cross-field: an archive install needs the container it writes into. On a reusing target
+    // this runs on the effective profile, where an inherited container is present.
+    if ARCHIVE_INSTALL_KIND.contains(&v.kind.as_str()) && target.container.established().is_none() {
+        out.push(finding(
+            Rule::AssetConstraintDependencyUnmet,
+            subject,
+            format!(
+                "[install].kind = {:?} writes into an archive, but [container] is not established",
+                v.kind
+            ),
+        ));
+    }
+}
+
+/// The install block's own vocabularies and internal bounds — everything about the value that
+/// does not depend on another block.
+fn validate_install_value(out: &mut Vec<Finding>, subject: &str, v: &InstallValue) {
     check_vocab(out, subject, "[install].kind", &v.kind, INSTALL_KIND);
     check_vocab(
         out,
@@ -3878,16 +3998,6 @@ fn validate_install(
     check_vocab(out, subject, "[install].repack", &v.repack, REPACK_RULE);
     check_vocab(out, subject, "[install].backup", &v.backup, BACKUP_RULE);
 
-    if ARCHIVE_INSTALL_KIND.contains(&v.kind.as_str()) && target.container.established().is_none() {
-        out.push(finding(
-            Rule::AssetConstraintDependencyUnmet,
-            subject,
-            format!(
-                "[install].kind = {:?} writes into an archive, but [container] is not established",
-                v.kind
-            ),
-        ));
-    }
     if v.kind == "loose-file" && v.repack != "not-required" {
         out.push(finding(
             Rule::AssetBoundsInconsistent,
@@ -4273,6 +4383,11 @@ pub fn asset_representation_completeness() -> (usize, usize) {
 pub struct AssetPopulation {
     pub family: String,
     pub target: String,
+    /// `/5`: the target whose shared definitions this row's counts come from, when the target
+    /// reuses one. Such a row is **registered by reference**: the counts describe inherited
+    /// definitions, and the destination blocks (`discovery`, `install`, `runtime_lookup`) are the
+    /// target's own — reported apart from targets that declare everything themselves.
+    pub reused_from: Option<String>,
     /// Blocks in the `established` state, target-level, whatever their scope. The headline number,
     /// and on its own a **misleading** one: see `operative_constraints` below.
     pub established_constraints: usize,
@@ -4318,7 +4433,14 @@ pub fn asset_registry_population<'a>(
 ) -> Vec<AssetPopulation> {
     let mut out = Vec::new();
     for profile in profiles.into_iter().filter(|p| !p.synthetic) {
-        for target in &profile.targets {
+        for declared in &profile.targets {
+            // A reusing target is counted on its effective profile; one whose reference cannot
+            // be followed is counted as declared (nothing inherited).
+            let resolved = crate::asset_reuse::resolve_target(profile, &declared.target).ok();
+            let (target, reused_from) = match &resolved {
+                Some(r) => (&r.profile, r.reused_from.clone()),
+                None => (declared, None),
+            };
             let mut established = 0usize;
             let mut operative = 0usize;
             let mut specimen = 0usize;
@@ -4374,6 +4496,7 @@ pub fn asset_registry_population<'a>(
             out.push(AssetPopulation {
                 family: profile.family.clone(),
                 target: target.target.clone(),
+                reused_from,
                 established_constraints: established,
                 operative_constraints: operative,
                 specimen_observations: specimen,

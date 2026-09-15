@@ -173,23 +173,31 @@ fn parse_ok(text: &str) -> AssetProfile {
 
 // ============================================================ compatibility
 
-/// The two committed `/3` profiles stay `/3` and validate in place with no finding; the jersey
-/// profile moved to `/4`. Nothing in a `/3` document is read differently.
+/// The committed profiles validate in place with no finding. C0-AS5 moved all three to `/5` (each
+/// carries the Recompiled reference); `/3` and `/4` documents still validate under their own
+/// rules, and nothing in them is read differently — the synthetic `/4` fixture below stays clean.
 #[test]
 fn the_committed_profiles_validate_under_their_own_schemas() {
-    for (file, schema) in [
-        ("assets-portraits.toml", ASSET_PROFILE_SCHEMA_V3),
-        ("assets-logos.toml", ASSET_PROFILE_SCHEMA_V3),
-        ("assets-jerseys.toml", ASSET_PROFILE_SCHEMA),
+    for file in [
+        "assets-portraits.toml",
+        "assets-logos.toml",
+        "assets-jerseys.toml",
     ] {
         let p = profile(file);
-        assert_eq!(p.schema, schema, "{file}");
+        assert_eq!(p.schema, ASSET_PROFILE_SCHEMA, "{file}");
         let findings = validate_asset_profile(&p);
         assert_eq!(findings, vec![], "{file}: {findings:?}");
     }
+    let v4 = parse_ok(&synthetic(ESTABLISHED, ""));
+    assert_eq!(v4.schema, ASSET_PROFILE_SCHEMA_V4);
+    assert_eq!(validate_asset_profile(&v4), vec![]);
     assert_eq!(
         ASSET_PROFILE_SCHEMAS_NATIVE,
-        [ASSET_PROFILE_SCHEMA, ASSET_PROFILE_SCHEMA_V3]
+        [
+            ASSET_PROFILE_SCHEMA,
+            ASSET_PROFILE_SCHEMA_V4,
+            ASSET_PROFILE_SCHEMA_V3
+        ]
     );
 }
 
@@ -205,6 +213,9 @@ fn a_v3_document_may_not_use_v4_constructs() {
         .filter(|f| f.rule == Rule::UnsupportedSchema)
         .collect();
     assert_eq!(schema.len(), 3, "{findings:?}");
+    assert!(schema
+        .iter()
+        .all(|f| f.detail.contains(ASSET_PROFILE_SCHEMA_V4)));
     let details: Vec<&str> = schema.iter().map(|f| f.detail.as_str()).collect();
     assert!(details.iter().any(|d| d.contains("[[resolution_chain]]")));
     assert!(details
@@ -219,7 +230,8 @@ fn a_v3_document_may_not_use_v4_constructs() {
 /// The `/1` and `/2` transitions still land on the current schema string.
 #[test]
 fn the_older_transitions_upgrade_to_the_current_schema() {
-    assert_eq!(ASSET_PROFILE_SCHEMA, "asset-output-profile/4");
+    assert_eq!(ASSET_PROFILE_SCHEMA, "asset-output-profile/5");
+    assert_eq!(ASSET_PROFILE_SCHEMA_V4, "asset-output-profile/4");
     assert_eq!(ASSET_PROFILE_SCHEMA_V3, "asset-output-profile/3");
     assert_eq!(ASSET_PROFILE_SCHEMA_PREVIOUS, "asset-output-profile/2");
 }

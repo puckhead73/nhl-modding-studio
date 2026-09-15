@@ -48,6 +48,7 @@ use std::collections::{BTreeMap, BTreeSet};
 
 pub mod asset;
 pub mod asset_resolution;
+pub mod asset_reuse;
 pub mod asset_v1;
 pub mod asset_v2;
 pub mod build_override;
@@ -69,6 +70,10 @@ pub use asset::{
     PLACEMENT_BLOCK, Q07A1_ASSET_REPRESENTATION, REQUIRABLE_BLOCK_PROPERTY, RUNTIME_SOURCE,
     SCOPE_FORCE, SELECTOR_DIMENSION, UNATTRIBUTABLE_CORPUS_KIND, VARIANT_BLOCK,
     VARIANT_OPTIONAL_BLOCK,
+};
+pub use asset_reuse::{
+    resolve_target, reuse_source, shared_declarations, ResolvedTarget, ReuseError,
+    DESTINATION_BLOCKS, LOCAL_EVIDENCE_TABLES, SHARED_BLOCKS, SHARED_TABLES,
 };
 pub use asset_v1::{
     parse_asset_profile_v1, upgrade_asset_profile_v1, AssetProfileV1, AssetUpgrade,
@@ -106,14 +111,23 @@ pub const ADAPTER_SCHEMA: &str = "target-adapter/2";
 /// The previous adapter schema. Accepted only through [`upgrade_v1`], never validated in place.
 pub const ADAPTER_SCHEMA_PREVIOUS: &str = "target-adapter/1";
 /// The asset output profile schema id this crate validates natively.
-pub const ASSET_PROFILE_SCHEMA: &str = "asset-output-profile/4";
-/// The `/3` schema. `/4` adds only optional structures (a composite identity, resolution chains, the
-/// `composite-id` path token), so a `/3` document is validated **in place under exactly its own
-/// rules**, plus one: it may not use a `/4` construct while claiming `/3`. Nothing in a `/3`
-/// document is reinterpreted; see [`ASSET_PROFILE_SCHEMAS_NATIVE`].
+///
+/// `/5` (C0-AS5) adds one optional key: `reuses = "<target id>"` on a `[[target_profile]]`, which
+/// inherits another target's shared definitions in the same document (see [`asset_reuse`]).
+pub const ASSET_PROFILE_SCHEMA: &str = "asset-output-profile/5";
+/// The `/4` schema: composite identities, resolution chains, the `composite-id` token. Validated in
+/// place under its own rules, plus one: it may not use `reuses` while claiming `/4`.
+pub const ASSET_PROFILE_SCHEMA_V4: &str = "asset-output-profile/4";
+/// The `/3` schema. `/4` and `/5` add only optional structures, so a `/3` document is validated
+/// **in place under exactly its own rules**, plus one: it may not use a `/4` or `/5` construct while
+/// claiming `/3`. Nothing in a `/3` document is reinterpreted; see [`ASSET_PROFILE_SCHEMAS_NATIVE`].
 pub const ASSET_PROFILE_SCHEMA_V3: &str = "asset-output-profile/3";
 /// The schemas validated in place. Order is newest first.
-pub const ASSET_PROFILE_SCHEMAS_NATIVE: &[&str] = &[ASSET_PROFILE_SCHEMA, ASSET_PROFILE_SCHEMA_V3];
+pub const ASSET_PROFILE_SCHEMAS_NATIVE: &[&str] = &[
+    ASSET_PROFILE_SCHEMA,
+    ASSET_PROFILE_SCHEMA_V4,
+    ASSET_PROFILE_SCHEMA_V3,
+];
 /// The schema of a target Build mapping override record (Q07a.3a).
 pub const BUILD_OVERRIDE_SCHEMA: &str = "build-mapping-override/1";
 /// The previous asset profile schema. Accepted only through
@@ -490,6 +504,14 @@ pub enum Rule {
     /// shared in one chain and owned in another, two families with the same template, or an
     /// operation that writes through a read-only chain.
     AssetResolutionChainInvalid,
+    /// `/5`: `reuses` names no target profile of this document.
+    AssetReuseUnresolved,
+    /// `/5`: `reuses` names the target itself.
+    AssetReuseSelfReference,
+    /// `/5`: the reused profile itself reuses another — references do not chain.
+    AssetReuseChain,
+    /// `/5`: a reusing target declares shared content of its own; nothing is merged.
+    AssetReuseConflict,
 
     // ------------------------------------------- the Build mapping override layer
     /// An override record missing an identity, a revision, a digest or a citation it needs to be
@@ -572,6 +594,10 @@ impl Rule {
             Rule::AssetProvenanceBridgeInvalid => "asset-provenance-bridge-invalid",
             Rule::AssetCompositeInvalid => "asset-composite-invalid",
             Rule::AssetResolutionChainInvalid => "asset-resolution-chain-invalid",
+            Rule::AssetReuseUnresolved => "asset-reuse-unresolved",
+            Rule::AssetReuseSelfReference => "asset-reuse-self-reference",
+            Rule::AssetReuseChain => "asset-reuse-chain",
+            Rule::AssetReuseConflict => "asset-reuse-conflict",
             Rule::OverrideRecordIncomplete => "override-record-incomplete",
             Rule::OverridePriorConflict => "override-prior-conflict",
             Rule::OverrideApprovalUnbound => "override-approval-unbound",
@@ -2029,6 +2055,8 @@ pub fn registry_population<'a>(adapters: impl IntoIterator<Item = &'a Adapter>) 
 
 #[cfg(test)]
 mod asset_resolution_tests;
+#[cfg(test)]
+mod asset_reuse_tests;
 #[cfg(test)]
 mod asset_tests;
 #[cfg(test)]

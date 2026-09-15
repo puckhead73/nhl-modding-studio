@@ -99,12 +99,13 @@
 #   copy is not evidence of what the GAME loads, and `patch.big` — which could shadow the loose
 #   files entirely — was never opened. It blocks `discover` and `install` everywhere.
 #
-# COVERAGE. One family, three target profiles. Six established constraints: four on
+# COVERAGE. One family, three declared target profiles and one by reference (`legacyrecomp-recomp`
+# reuses `nhllegacy-xbox360`, C0-AS5 / Q47). Six established constraints: four on
 # `nhllegacy-ps3` at target level and in one of its variants, none anywhere else. See
 # docs/validation/c0-06-canonical-project-and-adapters.md.
 
-schema = "asset-output-profile/3"
-profile_version = 3
+schema = "asset-output-profile/5"
+profile_version = 4
 family = "assets-portraits"
 note = """
 Everything established here is established at `observed-source-format`, on one target, over one
@@ -1409,3 +1410,38 @@ requires = [
 [[target_profile.operation]]
 operation = "install"
 requires = ["container", "install", "runtime_lookup"]
+
+
+# ===================================================== NHL Legacy Recompiled (by reference)
+
+[[target_profile]]
+target = "legacyrecomp-recomp"
+reuses = "nhllegacy-xbox360"
+note = """
+Q47 (user direction, 2026-09-15; package C0-AS5): Legacy Recompiled uses the same portrait files and the
+same asset definitions as Legacy Xbox 360. This profile therefore inherits, BY REFERENCE and without
+a copy, the SHARED definitions of `nhllegacy-xbox360` — identity, container, path families and
+naming, the geometry/codec blocks, variants, resolution chains and the operation requirements
+(`asset_reuse::SHARED_BLOCKS` / `SHARED_TABLES`), with the corpora those blocks cite — in exactly
+the states they have there: what is a candidate or unknown on Legacy Xbox 360 is a candidate or
+unknown here, and nothing inherited becomes operative by being inherited. The reuse is the user's
+attributed decision, not a measurement: no Recompiled file was hashed or inspected for it, no corpus
+is declared here, and no provenance bridge is claimed. DESTINATION behaviour is this target's own
+and is UNKNOWN below: where a Recompiled installation keeps these files, how they are written there
+and what its runtime reads have not been inspected (FR4: no Recompiled installation, anchor or save
+fixture is committed). Nothing here says anything about Recompiled's database (its database unit
+stays absent from the registry) or about a reference-update capability. Qualification is not
+inherited: no automated case, evidence cell or runtime record of Legacy Xbox 360 applies here.
+"""
+
+[target_profile.discovery]
+state = "unknown"
+note = "Where a Legacy Recompiled installation keeps this family's files is not inspected (FR4). Not inherited from Legacy Xbox 360 by design: a destination root is the destination's own fact."
+
+[target_profile.install]
+state = "unknown"
+note = "How this family's files are written into a Recompiled installation is not inspected. Not inherited: an install kind, size policy or backup rule observed on an Xbox 360 tree is that tree's. While this is unknown, creation through any inherited resolution chain stays refused (`CreationSupport` reads this block, on this target)."
+
+[target_profile.runtime_lookup]
+state = "unknown"
+note = "What the Recompiled runtime reads for this family is not inspected. Not inherited: runtime evidence is a trace, a disassembly or a load test on the destination itself, never a folder listing and never another target's record."
