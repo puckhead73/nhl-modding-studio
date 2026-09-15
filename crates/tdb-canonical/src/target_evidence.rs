@@ -34,13 +34,17 @@ pub(crate) struct Target {
     pub roster_payload_sha256: &'static str,
 }
 
-/// The save container framing a fixture is expected to show, as decoded by `tdb_savedata`.
+/// The save container framing a fixture is expected to show, as decoded by `tdb_savedata`. The
+/// variant is the one the discriminator resolves (by body marker, not by the version word alone);
+/// the size words exist only on the variants whose header carries them (`RawV2` has the
+/// uncompressed size and no compressed size; `RawV1` has neither).
 pub(crate) struct RosterFraming {
     pub outer_len: usize,
     pub magic: &'static str,
+    pub version: tdb_savedata::ContainerVersion,
     pub version_word: u32,
-    pub uncompressed_size: u32,
-    pub compressed_size: u32,
+    pub uncompressed_size: Option<u32>,
+    pub compressed_size: Option<u32>,
     pub inner_len: usize,
     pub table_count: usize,
 }
@@ -163,17 +167,17 @@ impl Target {
         let h = &container.header;
         assert_eq!(h.magic, framing.magic);
         assert_eq!(h.save_type, tdb_savedata::SaveType::Roster);
-        assert_eq!(h.version, tdb_savedata::ContainerVersion::ZlibV4);
+        assert_eq!(h.version, framing.version);
         assert_eq!(h.version_word, framing.version_word);
-        assert_eq!(h.uncompressed_size, Some(framing.uncompressed_size));
-        assert_eq!(h.compressed_size, Some(framing.compressed_size));
+        assert_eq!(h.uncompressed_size, framing.uncompressed_size);
+        assert_eq!(h.compressed_size, framing.compressed_size);
         assert!(
             container.checksums_valid(),
             "both container checksums recompute"
         );
         let inner = container
             .extract_db()
-            .expect("the zlib body inflates to a TDB");
+            .expect("the body yields a TDB (inflated for ZlibV4, sliced for the raw variants)");
         assert_eq!(inner.len(), framing.inner_len);
         assert_eq!(sha256_hex(&inner), self.roster_payload_sha256);
         let save = TdbFile::parse(&inner).expect("the inner TDB parses");
@@ -431,13 +435,15 @@ pub(crate) fn position_codes_by_partition(
     (codes(&part.skaters), codes(&part.goalies))
 }
 
-/// The adapter's discriminator, companion rule and the two ratings' applicability declare exactly
-/// the measured partition and cite the named case.
+/// The adapter's discriminator, companion rule and the applicability of every rating in `rated`
+/// (the skater-companion properties this adapter maps — a title without a stored overall maps one)
+/// declare exactly the measured partition and cite the named case.
 pub(crate) fn assert_discriminator_declared(
     t: &Target,
     a: &Adapter,
     skater_codes: &[i64],
     goalie_codes: &[i64],
+    rated: &[&str],
     case: &str,
 ) {
     let disc = a.position_discriminator.as_ref().expect("declared");
@@ -481,7 +487,8 @@ pub(crate) fn assert_discriminator_declared(
         ]
     );
 
-    for canonical in ["player.rating_overall", "player.rating_speed"] {
+    assert!(!rated.is_empty());
+    for &canonical in rated {
         let m = mapping(a, canonical);
         let ap = m
             .applicability
@@ -796,8 +803,9 @@ pub(crate) fn codec_round_trip_over_anchor(
 
 // ============================================================== team.name
 
-/// `kOtt.YmkJ` read / edit / serialize / reopen on an in-memory copy of `original`: the unedited
-/// copy re-serializes byte-identically; record 0 reads `vanilla`; after `set_inline_str` +
+/// `kOtt.YmkJ` (at `field_bit_offset`, the target's own) read / edit / serialize / reopen on an
+/// in-memory copy of `original`: the unedited copy re-serializes byte-identically; record 0 reads
+/// `vanilla`; after `set_inline_str` +
 /// `recompute_crcs` the reopened copy reads `replacement` on record 0 and `vanilla_record_1` on
 /// record 1; the only differing bytes are the field span of record 0 and the one CRC word that
 /// hashes this table's body; every other kOtt record's every field and every other table's record
@@ -805,6 +813,7 @@ pub(crate) fn codec_round_trip_over_anchor(
 /// nothing written and a 50-byte value is accepted.
 pub(crate) fn team_name_round_trip(
     original: &[u8],
+    field_bit_offset: u32,
     vanilla: &str,
     vanilla_record_1: &str,
     replacement: &str,
@@ -817,7 +826,11 @@ pub(crate) fn team_name_round_trip(
     );
     let kott = table(&db, "kOtt");
     let name = field(&db, kott, "YmkJ");
-    assert_eq!((name.kind, name.bit_offset, name.bit_width), (0, 352, 400));
+    assert_eq!(
+        (name.kind, name.bit_offset, name.bit_width),
+        (0, field_bit_offset, 400),
+        "the field sits where this target's snapshot says (the offset differs across titles)"
+    );
     let record = 0;
     assert_eq!(
         db.read_inline_str(kott, record, &name).unwrap(),

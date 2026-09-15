@@ -51,9 +51,10 @@ const T: Target = Target {
 const FRAMING: RosterFraming = RosterFraming {
     outer_len: 2_456_120,
     magic: "RosterFile",
+    version: tdb_savedata::ContainerVersion::ZlibV4,
     version_word: 4,
-    uncompressed_size: 2_456_076,
-    compressed_size: 722_116,
+    uncompressed_size: Some(2_456_076),
+    compressed_size: Some(722_116),
     inner_len: 2_456_072,
     table_count: 39,
 };
@@ -182,6 +183,7 @@ fn position_codes_partition_the_bio_table_exactly_as_the_metadata_named_companio
         &a,
         &[0, 1, 2, 3],
         &[4],
+        &["player.rating_overall", "player.rating_speed"],
         "position_codes_partition_the_bio_table_exactly_as_the_metadata_named_companions_do",
     );
     assert_eq!(validate_adapter(&a, &schema_for_validation()), vec![]);
@@ -355,6 +357,7 @@ fn team_name_edit_round_trips_on_a_disposable_copy() {
     // `®` keeps the multi-byte case in the round trip: the ® is two UTF-8 bytes.
     team_name_round_trip(
         &original,
+        352,
         "Anaheim Ducks®",
         "Winnipeg Jets™",
         "Mighty Ducks of Anaheim®",

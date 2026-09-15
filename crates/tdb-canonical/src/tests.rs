@@ -32,11 +32,32 @@ fn fixture(relative: &str) -> String {
     .unwrap_or_else(|e| panic!("fixture {relative}: {e}"))
 }
 
-const COMMITTED_ADAPTERS: [&str; 4] = [
+const COMMITTED_ADAPTERS: [&str; 10] = [
     "nhl15-xbox360.toml",
     "nhl10-xbox360.toml",
     "nhllegacy-xbox360.toml",
     "nhl15-ps3.toml",
+    "nhllegacy-ps3.toml",
+    "nhl14-xbox360.toml",
+    "nhl14-ps3.toml",
+    "nhl13-xbox360.toml",
+    "nhl12-xbox360.toml",
+    "nhl11-xbox360.toml",
+];
+
+/// The adapters whose capacities, discriminator, companion rule and team sentinel are measured on
+/// their own anchor and ROSTER fixture by a per-target module (C0-REG1a/b, C0-REG2). The other two
+/// (`nhl15-xbox360`, `nhl10-xbox360`) still carry seven audit-derived capacities and candidate
+/// discriminators.
+const MEASURED_ON_OWN_ANCHOR: [&str; 8] = [
+    "nhllegacy-xbox360.toml",
+    "nhl15-ps3.toml",
+    "nhllegacy-ps3.toml",
+    "nhl14-xbox360.toml",
+    "nhl14-ps3.toml",
+    "nhl13-xbox360.toml",
+    "nhl12-xbox360.toml",
+    "nhl11-xbox360.toml",
 ];
 
 // ================================================================== positive
@@ -237,11 +258,19 @@ fn an_unsupported_no_sentinel_claim_is_not_operative() {
     // Per adapter, so a new file cannot pass by shifting the total: NHL 15 records the reasoning on
     // shoots / overall / team, NHL 10 on shoots / speed, Legacy on shoots / overall / speed (its
     // team sentinel was promoted from the fourth candidate by measurement).
+    // C0-REG2: the six batch adapters measure their team sentinel on their own anchors too; NHL 11
+    // and NHL 12 map no stored overall, so they record one rating candidate fewer.
     let expected_per_adapter = [
         ("nhl15-xbox360.toml", 3, None),
         ("nhl10-xbox360.toml", 2, None),
         ("nhllegacy-xbox360.toml", 3, Some("player.team")),
         ("nhl15-ps3.toml", 3, Some("player.team")),
+        ("nhllegacy-ps3.toml", 3, Some("player.team")),
+        ("nhl14-xbox360.toml", 3, Some("player.team")),
+        ("nhl14-ps3.toml", 3, Some("player.team")),
+        ("nhl13-xbox360.toml", 3, Some("player.team")),
+        ("nhl12-xbox360.toml", 2, Some("player.team")),
+        ("nhl11-xbox360.toml", 2, Some("player.team")),
     ];
     assert_eq!(expected_per_adapter.len(), COMMITTED_ADAPTERS.len());
     for (name, expected, measured_on_this_anchor) in expected_per_adapter {
@@ -251,7 +280,7 @@ fn an_unsupported_no_sentinel_claim_is_not_operative() {
                 let sentinel = mapping
                     .null_sentinel
                     .established()
-                    .expect("measured by legacy_xbox360_tests");
+                    .expect("measured by the per-target module on its own anchor");
                 assert_eq!(sentinel.encoding, "literal-code", "{name}");
                 assert_eq!(
                     mapping.null_sentinel.confidence.as_deref(),
@@ -286,7 +315,7 @@ fn an_unsupported_no_sentinel_claim_is_not_operative() {
         assert_eq!(here, expected, "{name}: sentinel candidates");
     }
     assert_eq!(
-        candidates, 11,
+        candidates, 27,
         "the reasoning is preserved on every field it was claimed for"
     );
 }
@@ -1697,9 +1726,9 @@ fn a_cross_title_only_enum_is_a_candidate_not_a_derivation() {
 /// the dependent constraints ARE operative — and nowhere else.
 #[test]
 fn an_unproven_discriminator_does_not_drive_dependent_constraints() {
-    // Measured on their own anchors (legacy_xbox360_tests, nhl15_ps3_tests — C0-REG1b): there the
-    // dependent constraints ARE operative.
-    for name in ["nhllegacy-xbox360.toml", "nhl15-ps3.toml"] {
+    // Measured on their own anchors (legacy_xbox360_tests, nhl15_ps3_tests — C0-REG1b; the six
+    // target_batch_tests modules — C0-REG2): there the dependent constraints ARE operative.
+    for name in MEASURED_ON_OWN_ANCHOR {
         let measured = adapter(name);
         assert!(measured
             .position_discriminator
@@ -1721,9 +1750,15 @@ fn an_unproven_discriminator_does_not_drive_dependent_constraints() {
             })
             .map(|m| m.canonical.as_str())
             .collect();
+        // The skater-companion ratings this adapter maps, and only those: NHL 11 / 12 map no
+        // stored overall, so there the list is the speed rating alone.
+        let expected: Vec<&str> = ["player.rating_overall", "player.rating_speed"]
+            .into_iter()
+            .filter(|c| measured.mappings.iter().any(|m| m.canonical == *c))
+            .collect();
+        assert!(expected.contains(&"player.rating_speed"), "{name}");
         assert_eq!(
-            predicated,
-            ["player.rating_overall", "player.rating_speed"],
+            predicated, expected,
             "{name}: the skater-companion ratings, and only those, are position-conditioned"
         );
     }
@@ -1838,7 +1873,7 @@ fn a_target_supported_derivation_stays_usable() {
             .iter()
             .filter(|c| c.declared.established().is_some())
             .count();
-        let expected = if name == "nhllegacy-xbox360.toml" || name == "nhl15-ps3.toml" {
+        let expected = if MEASURED_ON_OWN_ANCHOR.contains(&name) {
             8
         } else {
             7

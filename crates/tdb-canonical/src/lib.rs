@@ -2019,6 +2019,8 @@ mod nhl15_ps3_tests;
 #[cfg(test)]
 mod snapshot_tests;
 #[cfg(test)]
+mod target_batch_tests;
+#[cfg(test)]
 mod target_evidence;
 #[cfg(test)]
 mod tests;

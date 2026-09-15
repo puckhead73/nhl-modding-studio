@@ -47,9 +47,10 @@ const T: Target = Target {
 const FRAMING: RosterFraming = RosterFraming {
     outer_len: 2_259_432,
     magic: "PS3RosterFile",
+    version: tdb_savedata::ContainerVersion::ZlibV4,
     version_word: 2,
-    uncompressed_size: 2_259_388,
-    compressed_size: 704_009,
+    uncompressed_size: Some(2_259_388),
+    compressed_size: Some(704_009),
     inner_len: 2_259_384,
     table_count: 38,
 };
@@ -263,6 +264,7 @@ fn position_codes_partition_the_bio_table_exactly_as_the_metadata_named_companio
         &a,
         &[0, 1, 2, 3],
         &[4],
+        &["player.rating_overall", "player.rating_speed"],
         "position_codes_partition_the_bio_table_exactly_as_the_metadata_named_companions_do",
     );
     assert_eq!(validate_adapter(&a, &schema_for_validation()), vec![]);
@@ -386,6 +388,7 @@ fn team_name_edit_round_trips_on_a_disposable_copy() {
     let original = T.main_anchor_bytes();
     team_name_round_trip(
         &original,
+        352,
         "Anaheim Ducks®",
         "Winnipeg Jets™",
         "Mighty Ducks of Anaheim®",
