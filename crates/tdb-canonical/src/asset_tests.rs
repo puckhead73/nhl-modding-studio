@@ -553,7 +553,112 @@ fn no_committed_asset_profile_is_a_synthetic_fixture() {
         );
         seen += 1;
     }
-    assert_eq!(seen, 1, "one family has a profile; thirteen do not");
+    assert_eq!(
+        seen, 3,
+        "three families have a profile (portraits populated; logos and jerseys represented, C0-REG2); eleven do not"
+    );
+}
+
+/// C0-REG2: the logo and uniform profiles are REPRESENTATION, not coverage. Each parses, validates
+/// clean, declares one target (NHL Legacy Xbox 360 - the only target with committed records for
+/// either family), and establishes NOTHING: no block at target or variant level, no operative
+/// constraint, no specimen observation. What they carry is the evidence at its real scope -
+/// corpora, path families, candidates - and a population that says zero in every established
+/// column while the candidate column is non-zero. A later revision that promotes a block must
+/// change these numbers deliberately.
+#[test]
+fn the_logo_and_jersey_profiles_represent_their_families_and_establish_nothing() {
+    let expected: [(&str, &str, usize, usize, usize); 2] = [
+        // family, file, path families, variants, candidates (target-level blocks and variant
+        // correlated blocks carrying a proposal; a variant's container proposal is not counted)
+        ("assets-logos", "assets-logos.toml", 2, 2, 4),
+        ("assets-jerseys", "assets-jerseys.toml", 3, 3, 2),
+    ];
+    for (family, file, families, variants, candidates) in expected {
+        let text =
+            std::fs::read_to_string(repo_root().join("defs/adapters/asset-profiles").join(file))
+                .unwrap();
+        let profile = parse_asset_profile(&text).unwrap_or_else(|e| panic!("{file}: {e}"));
+        assert_eq!(profile.family, family);
+        assert!(!profile.synthetic);
+        let findings = validate_asset_profile(&profile);
+        assert_eq!(findings, vec![], "{file}: {findings:?}");
+        assert_eq!(
+            profile
+                .targets
+                .iter()
+                .map(|t| t.target.as_str())
+                .collect::<Vec<_>>(),
+            ["nhllegacy-xbox360"],
+            "{file}: one represented target"
+        );
+        assert!(
+            profile
+                .note
+                .contains("Nothing on any target is established"),
+            "{file}: the profile says what it is"
+        );
+
+        let population = asset_registry_population(std::iter::once(&profile));
+        assert_eq!(population.len(), 1);
+        let p = &population[0];
+        assert_eq!(
+            (
+                p.established_constraints,
+                p.operative_constraints,
+                p.specimen_observations,
+                p.target_required_constraints,
+                p.established_variant_constraints,
+                p.operative_variant_constraints,
+            ),
+            (0, 0, 0, 0, 0, 0),
+            "{file}: representation establishes nothing"
+        );
+        assert_eq!(p.unknown_constraints, ASSET_BLOCK.len(), "{file}");
+        assert_eq!(p.candidate_constraints, candidates, "{file}");
+        assert_eq!(p.declared_variants, variants, "{file}");
+        assert_eq!(
+            (p.declared_path_families, p.unresolved_path_families),
+            (families, families),
+            "{file}: every family is unresolved"
+        );
+        assert_eq!(
+            (p.declared_corpora, p.unattributable_corpora),
+            (2, 1),
+            "{file}: the shipping archives are attributable, the derived tree is not"
+        );
+
+        // No operation's requirements are met, and none is missing a declaration.
+        let t = target(&profile, "nhllegacy-xbox360");
+        assert_eq!(t.operations.len(), 6, "{file}");
+        for declaration in &t.operations {
+            assert!(
+                matches!(
+                    operation_constraint_readiness(t, None, declaration),
+                    OperationReadiness::BlockedByUnknownConstraints(_)
+                ),
+                "{file}: {} is blocked",
+                declaration.operation
+            );
+        }
+        // Every placement block is unknown with no operative content, and no candidate on a
+        // placement block claims more than a specimen observation.
+        for block in PLACEMENT_BLOCK {
+            assert!(!established_by_name(t, block), "{file}: {block}");
+        }
+        assert_eq!(
+            t.discovery
+                .candidate
+                .as_ref()
+                .and_then(|c| c.scope.as_deref()),
+            Some("specimen-observation"),
+            "{file}: a summary line is not a corpus invariant"
+        );
+        // Identity: the DB half is measured, the file half is prose, and a candidate would need an
+        // invented ambiguity policy - so the block is unknown with provenance and no proposal.
+        assert!(t.identity.candidate.is_none() && !t.identity.provenance.is_empty());
+        assert!(t.install.candidate.is_none() && t.runtime_lookup.candidate.is_none());
+    }
 }
 
 #[test]

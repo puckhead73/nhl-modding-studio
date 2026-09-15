@@ -1,0 +1,417 @@
+# Per-family asset output profile — team logos (Q07a.1). Schema `asset-output-profile/3`.
+#
+# Package C0-REG2 (2026-09-15). REPRESENTATION, NOT ESTABLISHED COVERAGE. This file registers the
+# logo family against the existing contract from the evidence the repository already holds, and
+# every constraint block on every target is `unknown`: nothing here is operative, nothing decides a
+# Build, and no operation's requirements are met. What the file does is put the evidence that DOES
+# exist in the place the contract has for it — corpora, path families, candidates with their scope
+# and their corpus — so the gap is enumerated rather than implied, and so the next measurement has
+# a block to promote instead of a page to write.
+#
+# ---------------------------------------------------------------------------------------------
+# THE EVIDENCE THIS FILE RESTS ON, ALL OF IT COMMITTED
+#
+#   docs/audits/data/assets/nhllegacy/xbox360/identities.csv   252 team rows: record, `kOtt.lOnr`
+#       (`artid`), the texlib stem that id names, and the four name fields — GENERATED FROM THE
+#       COMMITTED ANCHOR and drift-guarded by `studio_domain::assets::tests::legacy_x360_team_logo_identity_map`
+#       (reads `anchors/xbox360/nhllegacy/databases/nhlng.db` only, runs in CI). That case also
+#       asserts the artid space is not the record index (max artid > 252 records; Red Wings = 10).
+#   docs/audits/data/assets/nhllegacy/xbox360/archives.csv     the 13 shipping `*.big` archives of
+#       the Xbox 360 title: `EB\0\3` container, version tag 0x00000400, entry count and size each,
+#       with the recorder's ONE-LINE summary of what each holds (`cacherender.big`: "rendering
+#       (stock logos texlib, players, equipment)"). Entry NAMES were not committed.
+#   docs/audits/data/assets/nhllegacy/xbox360/capability.csv   one row: "extracted .rx2 write
+#       verified: lossless round-trip + magenta edit re-decoded on texlib_10_0_0 (2026-08-03)",
+#       format "texlib RX2 (RW4xb2) DXT5", install = external. ONE SPECIMEN, in a derived tree.
+#   crates/studio-domain/src/assets.rs  (`decode_team_logo`)   repository source: the FE crest at
+#       `fe/ion/artassets/teamlogos/t{artid}.big` (a BIGF archive decoded through the portrait
+#       chain) is the primary logo; `rendering/logo/texlib_{artid}_0_0.rx2` (also `_0`, none) is
+#       the in-rink art — a wide 256x128 wordmark plus mostly-empty crest slots — and a fallback.
+#       Source prose says "verified against the real install (t10, t1)"; that verification is not a
+#       committed record and is cited here as ASSERTED.
+#   docs/receipts/c0-close-emit-development-transition.md §6.2  the inventory that placed these.
+#
+# WHAT NONE OF IT IS: a census of logo files with digests, a member listing of any shipping archive,
+# a decode of any archived (as opposed to extracted) logo, a load test, or anything on any target
+# other than NHL Legacy Xbox 360. PS3 Legacy's installed copy (the one attributable portrait corpus)
+# was inspected for portraits only, and no PS4 logo path exists in repository code at all.
+#
+# ---------------------------------------------------------------------------------------------
+# SCOPE DISCIPLINE, APPLIED
+#
+#   * The `_compiled` tree the specimen came from is a DERIVED tree (see the portrait profile's
+#     `xbox360-compiled-tree`): not attributable, so nothing measured there can be operative, and
+#     — being a [PLACEMENT_BLOCK] — nothing about where a logo SITS can be taken from it at all.
+#     The shipping archives ARE attributable, but the committed record of them is 13 headers and a
+#     summary line, not a member census; "cacherender.big holds the logo texlibs" is the recorder's
+#     prose and is recorded as a candidate with `confidence = "asserted"`.
+#   * The DB-side identity (`kOtt.lOnr` names the art) is measured on the committed anchor. The
+#     binding of that number to a FILE rests on source prose, so `[identity]` stays unknown, with
+#     its provenance and a note recording exactly which half is measured and which is asserted.
+#   * Extracted-file placement is not archive placement and not runtime placement. `install =
+#     external` in the capability CSV means Studio overwrote a file in an extracted tree; it says
+#     nothing about writing a shipping archive or about what the game loads. `[install]` and
+#     `[runtime_lookup]` are unknown with no candidate value.
+#   * Two forms (FE crest, rink texlib) are declared as `[[variant]]` entries selected by path
+#     family, so a reader cannot pair the crest's container with the texlib's codec.
+
+schema = "asset-output-profile/3"
+profile_version = 1
+family = "assets-logos"
+note = """
+Nothing on any target is established. One target is represented (NHL Legacy, Xbox 360), because
+it is the only one with committed logo records: a DB-side identity map generated from the anchor,
+the shipping-archive listing, and one extracted specimen. Every block is unknown; the candidates
+carry the evidence at the scope it actually has.
+"""
+
+[[canonical_source]]
+role = "crest"
+class = "raster"
+interchange = "rgba8"
+retention = "unmodified"
+description = "The full-colour team crest as authored: a lossless RGBA image at the highest available resolution, retained unmodified. The FE `teamlogos/t{artid}.big` form is derived from it."
+
+[[canonical_source]]
+role = "rink-art"
+class = "raster"
+interchange = "rgba8"
+retention = "unmodified"
+description = "The in-rink logo art (wordmark and secondary marks) that the `rendering/logo` texlib carries, as authored and retained unmodified. Whether one canonical image or several feed that texlib's slots is not established; one role is declared so the family has a place to record it."
+
+# =============================================================== NHL Legacy, Xbox 360
+
+[[target_profile]]
+target = "nhllegacy-xbox360"
+note = """
+Represented from committed records; nothing established. Two corpora are declared because two
+different things were looked at: the title's own shipping archives (attributable, but recorded
+only as headers and a summary line) and the derived `_compiled` tree (not attributable, and the
+only place a logo file was actually opened).
+"""
+
+[[target_profile.corpus]]
+id = "xbox360-shipping-archives"
+kind = "observed-installed-copy"
+attribution = "attributable-to-target"
+build_identification = "incomplete"
+identity_source = "each archive's own `EB\\0\\3` header (version tag 0x00000400, the 16-byte-entry variant `tdb_archive_big::eb::KNOWN_VERSION_TAGS` names for this title), beside the title's XEX2 EXECUTION_INFO header (title id `454109EC`) recorded by C0-POR1 for the sibling tree"
+inspected_files = 13
+groups = ["shipping-archives"]
+limitations = [
+    "Thirteen archive HEADERS and their entry counts were recorded. No member name, offset, digest or payload was committed, so which archive holds a given logo rests on the recorder's one-line `primary_contents` summary and nothing else.",
+    "In-archive payloads on this variant are `chunklzx`-wrapped where compressed, and `tdb_archive_codec` does not decode LZX (`eb::decode_payload` reports it as unsupported). No archived logo has been decoded by Studio.",
+    "A title id plus an archive version tag is not a build: no patch level, disc revision or executable build string was established.",
+    "No shipping manifest was checked. Whether any archive shadows another (a `patch`-style precedence) was not examined.",
+]
+provenance = [
+    "docs/audits/data/assets/nhllegacy/xbox360/archives.csv",
+    "crates/tdb-archive-big/src/eb.rs#KNOWN_VERSION_TAGS",
+    "docs/receipts/c0-por1-portrait-measurements.md",
+]
+
+[[target_profile.corpus]]
+id = "xbox360-compiled-tree"
+kind = "derived-tree"
+attribution = "not-attributable"
+build_identification = "incomplete"
+identity_source = "the title's own XEX2 EXECUTION_INFO header — title id `454109EC`, media id `3CF2A23F`, executable `nhlzf.exe` — as recorded by C0-POR1 for this same tree"
+inspected_files = 1
+groups = ["current"]
+limitations = [
+    "A DERIVED tree (`_compiled\\` beside the shipping archives): an extraction or a rebuild, not something the title ships. No provenance bridge to an archive member exists, so no placement fact can come from it.",
+    "For THIS family exactly one file is named in a committed record: `rendering/logo/texlib_10_0_0.rx2`, round-tripped and edited on 2026-08-03 (capability.csv). One file is a specimen, not a corpus invariant, and `inspected_files` says 1 for that reason even though the tree holds many more.",
+    "The FE crest form (`teamlogos/t{artid}.big`) is named only in repository source prose; no committed record names a crest file that was opened.",
+]
+provenance = [
+    "docs/audits/data/assets/nhllegacy/xbox360/capability.csv#logos",
+    "docs/receipts/c0-por1-portrait-measurements.md",
+]
+
+# ---- the two observed path shapes ----------------------------------------------------------
+
+[[target_profile.path_family]]
+id = "fe-crest"
+template = "fe/ion/artassets/teamlogos/t{team-id}.big"
+tokens = ["team-id"]
+case = "lower"
+bucket_resolution = "unknown"
+note = """
+`{team-id}` is the ART id `kOtt.lOnr`, NOT the team key `kOtt.vfEq` — identities.csv records both
+and the identity-map case asserts they diverge. The template is repository source (`decode_team_logo`
+joins exactly this path); no committed census lists the crest files, so `bucket_resolution` stays
+unknown rather than `template-only`, which would claim the template is known to resolve every id.
+"""
+
+[[target_profile.path_family]]
+id = "rink-texlib"
+template = "rendering/logo/texlib_{team-id}_0_0.rx2"
+tokens = ["team-id"]
+case = "lower"
+bucket_resolution = "unknown"
+note = """
+Same token, same source. The code also tries `texlib_{artid}.rx2` and `texlib_{artid}_0.rx2`, which
+says the suffix is not established as fixed; the `_0_0` spelling is the one the committed specimen
+carries (`texlib_10_0_0`). One family is declared with that spelling rather than three families
+nobody observed.
+"""
+
+# ---- the two forms, kept apart -------------------------------------------------------------
+
+[[target_profile.variant]]
+id = "fe-crest"
+note = "The front-end crest. Selected by path family alone. Everything below is a candidate from source prose."
+
+[[target_profile.variant.selector]]
+dimension = "path-family"
+equals = "fe-crest"
+
+[target_profile.variant.container]
+state = "unknown"
+note = "Repository source decodes this file through the portrait chain (`decode_portrait`), which on Xbox 360 is BIGF -> RefPack -> XPR2. No committed record names a crest file that was opened, so the chain is a proposal here."
+
+[target_profile.variant.container.candidate]
+confidence = "asserted"
+provenance = ["crates/studio-domain/src/assets.rs#decode_team_logo"]
+note = "PROPOSED, NOT OPERATIVE. Promoting it needs a crest file read from an attributable corpus with the layers recorded, as C0-POR1 did for portraits."
+
+[target_profile.variant.container.candidate.value]
+outermost_layer_examined = false
+
+[[target_profile.variant.container.candidate.value.layer]]
+format = "bigf"
+index = "name-table"
+
+[[target_profile.variant.container.candidate.value.layer]]
+format = "xpr2"
+index = "none"
+
+[target_profile.variant.raster]
+state = "unknown"
+note = "Nothing committed decodes a crest. The portrait chain's XPR2 member is DXT-class on that family; carrying that over to a different family would be an analogy, not a measurement."
+
+[target_profile.variant.dimensions]
+state = "unknown"
+note = "Source prose calls the crest \"the full-colour 256x256 team logo\". A comment is not a header read."
+
+[target_profile.variant.dimensions.candidate]
+confidence = "asserted"
+provenance = ["crates/studio-domain/src/assets.rs#decode_team_logo"]
+note = "PROPOSED, NOT OPERATIVE."
+
+[target_profile.variant.dimensions.candidate.value]
+width = 256
+height = 256
+variant = "crest"
+
+[target_profile.variant.mipmaps]
+state = "unknown"
+note = "Not examined on any crest file."
+
+[target_profile.variant.tiling]
+state = "unknown"
+note = "Not examined. An XPR2 member on Xbox 360 may be tiled; nothing here says whether the crest is."
+
+[[target_profile.variant]]
+id = "rink-texlib"
+note = "The in-rink art texlib. Selected by path family alone. The one committed specimen is of this form."
+
+[[target_profile.variant.selector]]
+dimension = "path-family"
+equals = "rink-texlib"
+
+[target_profile.variant.container]
+state = "unknown"
+note = "The specimen is a RenderWare `RW4` texture library holding several named rasters (`tdb_rx2::texlib::parse`). One specimen from a derived tree: recorded, not operative."
+
+[target_profile.variant.container.candidate]
+confidence = "measured"
+scope = "specimen-observation"
+corpus = "xbox360-compiled-tree"
+provenance = ["docs/audits/data/assets/nhllegacy/xbox360/capability.csv#logos"]
+note = "PROPOSED, NOT OPERATIVE. `texlib_10_0_0.rx2` parsed as an RW4 texlib, round-tripped losslessly and re-decoded after an edit. The outermost layer for this file inside the SHIPPING title is an `EB\\0\\3` archive member (see [container] at target level), which the extracted specimen cannot show."
+
+[target_profile.variant.container.candidate.value]
+outermost_layer_examined = false
+
+[[target_profile.variant.container.candidate.value.layer]]
+format = "rw4"
+index = "name-table"
+note = "A texture library: several rasters, each named internally."
+
+[target_profile.variant.raster]
+state = "unknown"
+note = "One specimen, DXT5 per the capability record's format column. A specimen observation from a derived tree."
+
+[target_profile.variant.raster.candidate]
+confidence = "measured"
+scope = "specimen-observation"
+corpus = "xbox360-compiled-tree"
+provenance = ["docs/audits/data/assets/nhllegacy/xbox360/capability.csv#logos"]
+note = "PROPOSED, NOT OPERATIVE. To promote: a corpus invariant over the rink texlibs of an attributable corpus."
+
+[target_profile.variant.raster.candidate.value]
+codec = "dxt5"
+channels = ["r", "g", "b", "a"]
+
+[target_profile.variant.dimensions]
+state = "unknown"
+note = "Source prose: a wide 256x128 wordmark plus crest slots. A texlib carries several rasters of possibly different sizes, so even a measured value would need the raster named; none is."
+
+[target_profile.variant.mipmaps]
+state = "unknown"
+note = "Not recorded for the specimen."
+
+[target_profile.variant.tiling]
+state = "unknown"
+note = "The specimen decoded through `texlib` (which de-tiles Xbox 360 rasters); whether the stored surface is tiled was not recorded."
+
+# ---- target-level blocks ------------------------------------------------------------------
+
+[target_profile.discovery]
+state = "unknown"
+note = """
+The only attributable placement evidence is a summary line: `cacherender.big` — "rendering (stock
+logos texlib, players, equipment)". That is where the recorder says the texlibs sit inside the
+shipping title; no member listing was committed to check it against, and no FE crest archive is
+named at all. Extracted-tree placement (`rendering/logo/`, `fe/ion/artassets/teamlogos/`) is what
+the code walks, and it is not archive placement.
+"""
+
+[target_profile.discovery.candidate]
+confidence = "asserted"
+scope = "specimen-observation"
+corpus = "xbox360-shipping-archives"
+provenance = ["docs/audits/data/assets/nhllegacy/xbox360/archives.csv#cacherender.big"]
+note = "PROPOSED, NOT OPERATIVE. `archive-member` under `cacherender.big` for the rink texlibs, per the recorder's summary. Promoting it needs the archive's member table read and the logo members located by name — the FR14 item."
+
+[target_profile.discovery.candidate.value]
+scope = "archive-member"
+root = "cacherender.big"
+recursive = true
+
+[target_profile.identity]
+state = "unknown"
+provenance = [
+    "docs/audits/data/assets/nhllegacy/xbox360/identities.csv",
+    "crates/studio-domain/src/assets.rs#legacy_x360_team_logo_identity_map",
+    "crates/studio-domain/src/assets.rs#decode_team_logo",
+]
+note = """
+Half measured, half asserted, and the block needs both. MEASURED on the committed anchor: the team
+row's `kOtt.lOnr` (`artid`) is a sparse id space reaching past the 252 records, distinct from the
+key, with the Red Wings row carrying 10 — `legacy_x360_team_logo_identity_map` generates
+identities.csv from the anchor and asserts exactly that. ASSERTED: that `t{artid}.big` and
+`texlib_{artid}_0_0.rx2` are the files that id names — repository source prose ("verified against
+the real install"), with no committed record of the check. `ambiguity` is a Studio behaviour
+choice and is not proposed here.
+
+What would be proposed — key `numeric-id`, source `kOtt.lOnr`. No value is carried because `IdentityValue.ambiguity` would have to be invented. To promote: a committed record tying at least the specimen's id to its row and its file, and a decision on the ambiguity policy. — is left in prose rather than as a `[candidate]`: the contract requires a candidate to carry a value table, and the value's `ambiguity` field cannot be filled without inventing a Studio behaviour choice.
+"""
+
+[target_profile.container]
+state = "unknown"
+note = """
+Carried by the variants for the inner layers (BIGF/XPR2 for the crest, RW4 for the texlib). The
+OUTER layer inside the shipping title — an `EB\\0\\3` archive with 16-byte file-table entries —
+is what the attributable corpus shows for every one of its 13 archives, but which archive holds
+which logo is the summary line again. Declaring the outer layer at target level while the inner
+chain differs per variant would also collide with the variants deciding [container]; the contract
+allows exactly one level to decide it, and the inner chain is the one the specimen supports.
+"""
+
+[target_profile.path_rule]
+state = "unknown"
+note = "Both families carry `bucket_resolution = \"unknown\"`, and the rule cannot be established through an unresolved family. The `_0_0` suffix of the texlib family is itself unresolved (the code tries three spellings)."
+
+[target_profile.raster]
+state = "unknown"
+note = "Carried by the variants."
+
+[target_profile.dimensions]
+state = "unknown"
+note = "Carried by the variants."
+
+[target_profile.mipmaps]
+state = "unknown"
+note = "Carried by the variants."
+
+[target_profile.tiling]
+state = "unknown"
+note = "Carried by the variants."
+
+[target_profile.compression]
+state = "unknown"
+note = """
+Two layers, neither established. Inside the shipping archives, compressed payloads on this EB
+variant are `chunklzx` (LZX), which Studio does not decode — so no archived logo's wrapper has been
+read. Inside the FE crest's BIGF, the portrait chain's member is RefPack; that is the crest's by
+analogy only. The extracted texlib specimen carried no stream wrapper, which is a fact about the
+extracted file.
+"""
+
+[target_profile.compression.candidate]
+confidence = "asserted"
+provenance = [
+    "crates/tdb-archive-big/src/eb.rs#decode_payload",
+    "docs/audits/data/assets/nhllegacy/xbox360/archives.csv",
+]
+note = "PROPOSED, NOT OPERATIVE: `lzx` for archived members on this EB variant, per the reader's own documentation of the payload magics it meets (`chunkzip` / `chunklzx`). No logo member was opened."
+
+[target_profile.compression.candidate.value]
+payload = "lzx"
+deterministic = false
+
+[target_profile.atlas]
+state = "unknown"
+note = "A rink texlib holds a wordmark plus crest slots — several rasters in one library — so one FILE carries more than one asset; whether one SURFACE does was not examined. Neither `sharing` value is supported by a committed record."
+
+[target_profile.install]
+state = "unknown"
+note = """
+`install = external` in the capability record means the verified write landed in an extracted
+tree, through `studio_api::registry::import_texture` (safe-join, one-time `.bak`). No shipping
+archive was written for this family. The repository DOES hold an archive-level write capability
+for EB archives — `tdb_archive_big::eb::EbFile::replace_payload_in_place` / `replace_payload`,
+committed, verified against a PS4 `data0.big` (Phase 5.4) — and it is not wired to this family,
+and the per-entry `+12` checksum it preserves verbatim is unidentified. No value is proposed: the
+kind depends on which of those paths a Build takes, and that is undecided.
+"""
+
+[target_profile.runtime_lookup]
+state = "unknown"
+note = "What the game loads — an archive member, the extracted file a modder dropped beside it, or a patched copy — was not traced, disassembled or load-tested. Blocks `discover` and `install`."
+
+[[target_profile.operation]]
+operation = "discover"
+requires = ["discovery", "runtime_lookup"]
+
+[[target_profile.operation]]
+operation = "identify"
+requires = ["identity"]
+
+[[target_profile.operation]]
+operation = "preview"
+requires = ["container", "raster.codec", "dimensions", "tiling"]
+
+[[target_profile.operation]]
+operation = "export"
+requires = ["container", "raster.codec", "dimensions", "tiling", "mipmaps"]
+
+[[target_profile.operation]]
+operation = "replace"
+requires = [
+    "container",
+    "raster.codec",
+    "raster.color_space",
+    "dimensions",
+    "tiling",
+    "mipmaps",
+    "compression",
+    "atlas.kind",
+]
+note = "Q10: a release replacement preserves the original dimensions and encoded format, so both are prerequisites."
+
+[[target_profile.operation]]
+operation = "install"
+requires = ["container", "install", "runtime_lookup"]
