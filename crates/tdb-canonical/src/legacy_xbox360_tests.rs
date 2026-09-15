@@ -185,6 +185,7 @@ fn position_codes_partition_the_bio_table_exactly_as_the_metadata_named_companio
         &[0, 1, 2, 3],
         &[4],
         &["player.rating_overall", "player.rating_speed"],
+        GEN7_COMPANIONS,
         "position_codes_partition_the_bio_table_exactly_as_the_metadata_named_companions_do",
     );
     assert_eq!(validate_adapter(&a, &schema_for_validation()), vec![]);

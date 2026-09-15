@@ -593,6 +593,23 @@ pub(crate) struct CompanionPartition {
 }
 
 pub(crate) fn companion_partition(db: &TdbFile, snap: &SchemaSnapshot) -> CompanionPartition {
+    let (part, uncovered) = companion_partition_with(db, snap, &["dSvy", "xmja", "mHuy", "fMVl"]);
+    assert!(
+        uncovered.is_empty(),
+        "every bio row has companions (rows without: {uncovered:?})"
+    );
+    part
+}
+
+/// The partition over an explicit companion set (gen6 NHL 07 has no equipment tables), returning
+/// the bio rows that own no companion row at all instead of refusing them (C0-REG5: NHL 09 holds
+/// four such rows). Every companion is still one row per key, every key still resolves to a bio
+/// row, and the companions of one role still cover one set.
+pub(crate) fn companion_partition_with(
+    db: &TdbFile,
+    snap: &SchemaSnapshot,
+    companion_ids: &[&str],
+) -> (CompanionPartition, BTreeSet<u32>) {
     // Independent labels: the metadata names say which companion tables are for skaters and which
     // for goalies. This is the only place a label enters, and it is EA's, not an enum file's.
     let role = |id: &str| -> &'static str {
@@ -603,15 +620,10 @@ pub(crate) fn companion_partition(db: &TdbFile, snap: &SchemaSnapshot) -> Compan
             _ => panic!("{id}: metadata name {name:?} does not label the table"),
         }
     };
-    let companions = [
-        ("dSvy", role("dSvy")),
-        ("xmja", role("xmja")),
-        ("mHuy", role("mHuy")),
-        ("fMVl", role("fMVl")),
-    ];
-    assert_eq!(
-        companions.iter().map(|c| c.1).collect::<Vec<_>>(),
-        ["skater", "skater", "goalie", "goalie"]
+    let companions: Vec<(&str, &'static str)> =
+        companion_ids.iter().map(|id| (*id, role(id))).collect();
+    assert!(
+        companions.iter().any(|c| c.1 == "skater") && companions.iter().any(|c| c.1 == "goalie")
     );
 
     let bio = table(db, "ubPc");
@@ -659,12 +671,14 @@ pub(crate) fn companion_partition(db: &TdbFile, snap: &SchemaSnapshot) -> Compan
     let skaters = same(&by_role["skater"]);
     let goalies = same(&by_role["goalie"]);
     assert!(skaters.is_disjoint(&goalies));
+    let uncovered: BTreeSet<u32> = (0..u32::from(bio.current_records))
+        .filter(|i| !skaters.contains(i) && !goalies.contains(i))
+        .collect();
     assert_eq!(
-        skaters.len() + goalies.len(),
-        bio_by_key.len(),
-        "every bio row has companions"
+        skaters.len() + goalies.len() + uncovered.len(),
+        bio_by_key.len()
     );
-    CompanionPartition { skaters, goalies }
+    (CompanionPartition { skaters, goalies }, uncovered)
 }
 
 /// The position codes stored on each half of the partition, and the per-row check that the code
@@ -686,15 +700,27 @@ pub(crate) fn position_codes_by_partition(
     (codes(&part.skaters), codes(&part.goalies))
 }
 
+/// The four companions of every NHL 08 → NHL 21 anchor, one-to-one by position.
+pub(crate) const GEN7_COMPANIONS: &[(&str, &str, &str)] = &[
+    ("dSvy", "one-to-one", "position-skater"),
+    ("xmja", "one-to-one", "position-skater"),
+    ("mHuy", "one-to-one", "position-goalie"),
+    ("fMVl", "one-to-one", "position-goalie"),
+];
+
 /// The adapter's discriminator, companion rule and the applicability of every rating in `rated`
 /// (the skater-companion properties this adapter maps — a title without a stored overall maps one)
-/// declare exactly the measured partition and cite the named case.
+/// declare exactly the measured partition and cite the named case. `companions` is the measured
+/// (table, cardinality, applies_when) set — [`GEN7_COMPANIONS`] on every NHL 08+ anchor; two
+/// companions on gen6 NHL 07, and `zero-or-one` skater companions where an anchor holds bio rows
+/// without any (C0-REG5).
 pub(crate) fn assert_discriminator_declared(
     t: &Target,
     a: &Adapter,
     skater_codes: &[i64],
     goalie_codes: &[i64],
     rated: &[&str],
+    companions: &[(&str, &str, &str)],
     case: &str,
 ) {
     let disc = a.position_discriminator.as_ref().expect("declared");
@@ -728,15 +754,7 @@ pub(crate) fn assert_discriminator_declared(
             )
         })
         .collect();
-    assert_eq!(
-        declared,
-        [
-            ("dSvy", "one-to-one", "position-skater"),
-            ("xmja", "one-to-one", "position-skater"),
-            ("mHuy", "one-to-one", "position-goalie"),
-            ("fMVl", "one-to-one", "position-goalie"),
-        ]
-    );
+    assert_eq!(declared, companions);
 
     assert!(!rated.is_empty());
     for &canonical in rated {
@@ -1224,13 +1242,38 @@ pub(crate) fn kott_string_round_trip(
     vanilla_record_1: &str,
     replacement: &str,
 ) {
+    inline_string_round_trip(
+        original,
+        "kOtt",
+        field_id,
+        field_bit_offset,
+        field_bit_width,
+        vanilla,
+        vanilla_record_1,
+        replacement,
+    )
+}
+
+/// The same discipline over an inline-string field of any table (`table_id`): C0-REG5 exercises
+/// gen6 NHL 07's `stockteamtable.fullname` with it, the table its thin team index points at.
+#[allow(clippy::too_many_arguments)]
+pub(crate) fn inline_string_round_trip(
+    original: &[u8],
+    table_id: &str,
+    field_id: &str,
+    field_bit_offset: u32,
+    field_bit_width: u32,
+    vanilla: &str,
+    vanilla_record_1: &str,
+    replacement: &str,
+) {
     let db = TdbFile::parse(original).unwrap();
     assert_eq!(
         db.serialize(),
         original,
         "an unedited copy re-serializes byte-identically"
     );
-    let kott = table(&db, "kOtt");
+    let kott = table(&db, table_id);
     let name = field(&db, kott, field_id);
     assert_eq!(
         (name.kind, name.bit_offset, name.bit_width),
@@ -1252,7 +1295,7 @@ pub(crate) fn kott_string_round_trip(
 
     let reopened = TdbFile::parse(&edited).unwrap();
     assert!(reopened.header_crc_ok() && reopened.size_ok());
-    let kott2 = table(&reopened, "kOtt");
+    let kott2 = table(&reopened, table_id);
     assert_eq!(
         reopened.read_inline_str(kott2, record, &name).unwrap(),
         replacement.as_bytes()
@@ -1336,10 +1379,159 @@ pub(crate) fn kott_string_round_trip(
     );
     let full = TdbFile::parse(&untouched).unwrap();
     assert_eq!(
-        full.read_inline_str(table(&full, "kOtt"), record, &name)
+        full.read_inline_str(table(&full, table_id), record, &name)
             .unwrap(),
         exact.as_bytes()
     );
+}
+
+// ============================================================== candidate-only mechanics
+//
+// For a target whose bytes cannot be attributed to it (C0-REG4-R1: the byte-identical `nhl19` /
+// `nhl20` folders) or that is a research copy outside the shipping targets (C0-REG5: `nhl07-ps3`),
+// the adapter carries every measured block as `state = "unknown"` + `[*.candidate]`. These helpers
+// assert that shape — value present, confidence as measured, the reason stated on the block, "NOT
+// OPERATIVE" on the candidate — and hand the candidate back so the runner can compare it with the
+// measurement.
+
+/// The reasons an unknown block may give for carrying a measurement only as a candidate.
+pub(crate) const NON_OPERATIVE_REASONS: &[&str] = &["ATTRIBUTION UNRESOLVED", "RESEARCH COPY"];
+
+pub(crate) fn candidate_of<'a, T>(c: &'a Constraint<T>, what: &str) -> &'a Candidate<T> {
+    assert_eq!(c.state, ConstraintState::Unknown, "{what}: not established");
+    assert!(c.value.is_none() && c.confidence.is_none(), "{what}");
+    assert!(
+        NON_OPERATIVE_REASONS.iter().any(|r| c.note.contains(r)),
+        "{what}: the unknown block says why"
+    );
+    let cand = c
+        .candidate
+        .as_ref()
+        .unwrap_or_else(|| panic!("{what}: the measurement is preserved as a candidate"));
+    assert!(cand.value.is_some(), "{what}: candidate carries the value");
+    assert!(cand.note.contains("NOT OPERATIVE"), "{what}");
+    assert!(!cand.provenance.is_empty(), "{what}");
+    cand
+}
+
+pub(crate) fn candidate_value<'a, T>(c: &'a Constraint<T>, what: &str) -> &'a T {
+    candidate_of(c, what).value.as_ref().unwrap()
+}
+
+/// The capacity block's note and provenance wherever they live: on the established block, or on
+/// the candidate of an unresolved one.
+pub(crate) fn capacity_note_and_provenance(
+    cap: &CapacityDecl,
+    unresolved: bool,
+) -> (&str, &[String]) {
+    if unresolved {
+        let c = candidate_of(&cap.declared, &format!("capacity {}", cap.table));
+        (c.note.as_str(), &c.provenance)
+    } else {
+        (cap.declared.note.as_str(), &cap.declared.provenance)
+    }
+}
+
+/// A copy of the adapter with every unknown-with-candidate block promoted to established (value,
+/// confidence and provenance from the candidate). **Test-only**: it says what the measurements would
+/// declare *if* the bytes were attributed, so that the measured numbers can be checked through the
+/// established-only mechanics; nothing in the tree ever reads such a copy.
+pub(crate) fn promoted(a: &Adapter) -> Adapter {
+    fn lift<T: Clone>(c: &mut Constraint<T>) {
+        if c.state == ConstraintState::Unknown {
+            if let Some(cand) = c.candidate.take() {
+                // Only a demoted measurement is lifted — the unknown block says why it is one; a
+                // candidate the attributed adapter would carry anyway (an asserted range
+                // inference, the parent proposal) stays one.
+                if !NON_OPERATIVE_REASONS.iter().any(|r| c.note.contains(r)) {
+                    c.candidate = Some(cand);
+                    return;
+                }
+                if let Some(v) = cand.value {
+                    c.state = ConstraintState::Established;
+                    c.value = Some(v);
+                    c.confidence = cand.confidence;
+                    c.provenance = cand.provenance;
+                    c.note = cand.note;
+                } else {
+                    c.candidate = Some(cand);
+                }
+            }
+        }
+    }
+    let mut a = a.clone();
+    for m in &mut a.mappings {
+        lift(&mut m.storage);
+        lift(&mut m.status);
+        lift(&mut m.transform);
+        lift(&mut m.null_sentinel);
+        lift(&mut m.string_storage);
+        lift(&mut m.applicability);
+        for c in &mut m.components {
+            lift(&mut c.storage);
+        }
+    }
+    for c in &mut a.capacities {
+        lift(&mut c.declared);
+    }
+    for r in &mut a.companion_rules {
+        lift(&mut r.declared);
+    }
+    if let Some(d) = &mut a.position_discriminator {
+        lift(d);
+    }
+    for m in &mut a.mappings {
+        if let Some(t) = m.transform.established() {
+            let spelling = match t.kind.as_str() {
+                "index-origin" => format!("index-origin-{}", t.index_origin.unwrap()),
+                "linear-offset" => format!("offset{:+}", t.offset.unwrap()),
+                other => other.to_string(),
+            };
+            m.read_transform = spelling.clone();
+            m.write_transform = spelling;
+        }
+    }
+    a
+}
+
+/// The unresolved adapter's blocks with a candidate, in declaration order, mappings first then
+/// capacities, companion rule and discriminator — the counterpart of `candidate_blocks`, which
+/// refuses non-mapping candidates because on an attributed target they never exist.
+pub(crate) fn all_candidate_blocks(a: &Adapter) -> Vec<String> {
+    let mut out = Vec::new();
+    for m in &a.mappings {
+        for (block, present) in [
+            ("storage", m.storage.candidate.is_some()),
+            ("status", m.status.candidate.is_some()),
+            ("transform", m.transform.candidate.is_some()),
+            ("enumeration", m.enumeration.candidate.is_some()),
+            ("null_sentinel", m.null_sentinel.candidate.is_some()),
+            ("string_storage", m.string_storage.candidate.is_some()),
+            ("foreign_key", m.foreign_key.candidate.is_some()),
+            ("applicability", m.applicability.candidate.is_some()),
+        ] {
+            if present {
+                out.push(format!("{}.{block}", m.canonical));
+            }
+        }
+    }
+    for c in &a.capacities {
+        if c.declared.candidate.is_some() {
+            out.push(format!("capacity.{}", c.table));
+        }
+    }
+    for r in &a.companion_rules {
+        if r.declared.candidate.is_some() {
+            out.push(format!("companion_rule.{}", r.primary_table));
+        }
+    }
+    if a.position_discriminator
+        .as_ref()
+        .is_some_and(|d| d.candidate.is_some())
+    {
+        out.push("position_discriminator".into());
+    }
+    out
 }
 
 /// The adapter claims exactly the round-trip behaviour and names the case; `byte_capacity` is the

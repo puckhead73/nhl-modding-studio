@@ -178,140 +178,6 @@ const ROSTER_CORE: [&str; 8] = [
     "ubPc", "ZBac", "eGlu", "dSvy", "xmja", "mHuy", "fMVl", "kOtt",
 ];
 
-// ============================================================== candidate-only mechanics
-//
-// For an attribution-unresolved target the adapter carries every measured block as
-// `state = "unknown"` + `[*.candidate]`. These helpers assert that shape — value present, confidence
-// as measured, the attribution stated on the block, "NOT OPERATIVE" on the candidate — and hand the
-// candidate back so the runner can compare it with the measurement.
-
-fn candidate_of<'a, T>(c: &'a Constraint<T>, what: &str) -> &'a Candidate<T> {
-    assert_eq!(c.state, ConstraintState::Unknown, "{what}: not established");
-    assert!(c.value.is_none() && c.confidence.is_none(), "{what}");
-    assert!(
-        c.note.contains("ATTRIBUTION UNRESOLVED"),
-        "{what}: the unknown block says why"
-    );
-    let cand = c
-        .candidate
-        .as_ref()
-        .unwrap_or_else(|| panic!("{what}: the measurement is preserved as a candidate"));
-    assert!(cand.value.is_some(), "{what}: candidate carries the value");
-    assert!(cand.note.contains("NOT OPERATIVE"), "{what}");
-    assert!(!cand.provenance.is_empty(), "{what}");
-    cand
-}
-
-fn candidate_value<'a, T>(c: &'a Constraint<T>, what: &str) -> &'a T {
-    candidate_of(c, what).value.as_ref().unwrap()
-}
-
-/// The capacity block's note and provenance wherever they live: on the established block, or on
-/// the candidate of an unresolved one.
-fn capacity_note_and_provenance(cap: &CapacityDecl, unresolved: bool) -> (&str, &[String]) {
-    if unresolved {
-        let c = candidate_of(&cap.declared, &format!("capacity {}", cap.table));
-        (c.note.as_str(), &c.provenance)
-    } else {
-        (cap.declared.note.as_str(), &cap.declared.provenance)
-    }
-}
-
-/// A copy of the adapter with every unknown-with-candidate block promoted to established (value,
-/// confidence and provenance from the candidate). **Test-only**: it says what the measurements would
-/// declare *if* the bytes were attributed, so that the measured numbers can be checked through the
-/// established-only mechanics; nothing in the tree ever reads such a copy.
-fn promoted(a: &Adapter) -> Adapter {
-    fn lift<T: Clone>(c: &mut Constraint<T>) {
-        if c.state == ConstraintState::Unknown {
-            if let Some(cand) = c.candidate.take() {
-                if let Some(v) = cand.value {
-                    c.state = ConstraintState::Established;
-                    c.value = Some(v);
-                    c.confidence = cand.confidence;
-                    c.provenance = cand.provenance;
-                    c.note = cand.note;
-                } else {
-                    c.candidate = Some(cand);
-                }
-            }
-        }
-    }
-    let mut a = a.clone();
-    for m in &mut a.mappings {
-        lift(&mut m.storage);
-        lift(&mut m.status);
-        lift(&mut m.transform);
-        lift(&mut m.null_sentinel);
-        lift(&mut m.string_storage);
-        lift(&mut m.applicability);
-        for c in &mut m.components {
-            lift(&mut c.storage);
-        }
-    }
-    for c in &mut a.capacities {
-        lift(&mut c.declared);
-    }
-    for r in &mut a.companion_rules {
-        lift(&mut r.declared);
-    }
-    if let Some(d) = &mut a.position_discriminator {
-        lift(d);
-    }
-    for m in &mut a.mappings {
-        if let Some(t) = m.transform.established() {
-            let spelling = match t.kind.as_str() {
-                "index-origin" => format!("index-origin-{}", t.index_origin.unwrap()),
-                "linear-offset" => format!("offset{:+}", t.offset.unwrap()),
-                other => other.to_string(),
-            };
-            m.read_transform = spelling.clone();
-            m.write_transform = spelling;
-        }
-    }
-    a
-}
-
-/// The unresolved adapter's blocks with a candidate, in declaration order, mappings first then
-/// capacities, companion rule and discriminator — the counterpart of `candidate_blocks`, which
-/// refuses non-mapping candidates because on an attributed target they never exist.
-fn all_candidate_blocks(a: &Adapter) -> Vec<String> {
-    let mut out = Vec::new();
-    for m in &a.mappings {
-        for (block, present) in [
-            ("storage", m.storage.candidate.is_some()),
-            ("status", m.status.candidate.is_some()),
-            ("transform", m.transform.candidate.is_some()),
-            ("enumeration", m.enumeration.candidate.is_some()),
-            ("null_sentinel", m.null_sentinel.candidate.is_some()),
-            ("string_storage", m.string_storage.candidate.is_some()),
-            ("foreign_key", m.foreign_key.candidate.is_some()),
-            ("applicability", m.applicability.candidate.is_some()),
-        ] {
-            if present {
-                out.push(format!("{}.{block}", m.canonical));
-            }
-        }
-    }
-    for c in &a.capacities {
-        if c.declared.candidate.is_some() {
-            out.push(format!("capacity.{}", c.table));
-        }
-    }
-    for r in &a.companion_rules {
-        if r.declared.candidate.is_some() {
-            out.push(format!("companion_rule.{}", r.primary_table));
-        }
-    }
-    if a.position_discriminator
-        .as_ref()
-        .is_some_and(|d| d.candidate.is_some())
-    {
-        out.push("position_discriminator".into());
-    }
-    out
-}
-
 mod run {
     use super::*;
 
@@ -882,6 +748,7 @@ mod run {
                 &[0, 1, 2, 3],
                 &[4],
                 &rated,
+                GEN7_COMPANIONS,
                 &e.case(case),
             );
         } else {
@@ -891,6 +758,7 @@ mod run {
                 &[0, 1, 2, 3],
                 &[4],
                 &rated,
+                GEN7_COMPANIONS,
                 &e.case(case),
             );
         }

@@ -32,7 +32,7 @@ fn fixture(relative: &str) -> String {
     .unwrap_or_else(|e| panic!("fixture {relative}: {e}"))
 }
 
-const COMMITTED_ADAPTERS: [&str; 21] = [
+const COMMITTED_ADAPTERS: [&str; 27] = [
     "nhl15-xbox360.toml",
     "nhl10-xbox360.toml",
     "nhllegacy-xbox360.toml",
@@ -54,6 +54,12 @@ const COMMITTED_ADAPTERS: [&str; 21] = [
     "nhl19-ps4.toml",
     "nhl20-ps4.toml",
     "nhl21-ps4.toml",
+    "nhl07-xbox360.toml",
+    "nhl08-xbox360.toml",
+    "nhl09-xbox360.toml",
+    "nhl08-ps3.toml",
+    "nhl09-ps3.toml",
+    "nhl07-ps3.toml",
 ];
 
 /// The adapters whose capacities, discriminator and companion rule are measured on their own anchor
@@ -63,7 +69,7 @@ const COMMITTED_ADAPTERS: [&str; 21] = [
 /// (`nhl15-xbox360`, `nhl10-xbox360`) still carry seven audit-derived capacities and candidate
 /// discriminators. The team *sentinel* is measured on all of these but `nhl10-ps3`, where the
 /// as-is encoding leaves no distinguishable absence code (see `target_batch_tests::nhl10_ps3`).
-const MEASURED_ON_OWN_ANCHOR: [&str; 17] = [
+const MEASURED_ON_OWN_ANCHOR: [&str; 22] = [
     "nhllegacy-xbox360.toml",
     "nhl15-ps3.toml",
     "nhllegacy-ps3.toml",
@@ -81,6 +87,11 @@ const MEASURED_ON_OWN_ANCHOR: [&str; 17] = [
     "nhl17-ps4.toml",
     "nhl18-ps4.toml",
     "nhl21-ps4.toml",
+    "nhl07-xbox360.toml",
+    "nhl08-xbox360.toml",
+    "nhl09-xbox360.toml",
+    "nhl08-ps3.toml",
+    "nhl09-ps3.toml",
 ];
 
 /// The adapters whose anchor attribution is unresolved (C0-REG4-R1): the files committed under
@@ -89,6 +100,29 @@ const MEASURED_ON_OWN_ANCHOR: [&str; 17] = [
 /// unknown block; they are registered representation, never target coverage, and every sweep that
 /// asserts an established fact takes the "nothing established" branch for them.
 const ATTRIBUTION_UNRESOLVED: [&str; 2] = ["nhl19-ps4.toml", "nhl20-ps4.toml"];
+
+/// The NHL 07 PS3 research copy (C0-REG5): registered under its registry identity as
+/// representation only — its bytes are the Xbox 360 anchor's, the scope excludes it from the
+/// shipping targets, and no PS3 capture is recorded — so, like the two above, it establishes nothing.
+const RESEARCH_COPIES: [&str; 1] = ["nhl07-ps3.toml"];
+
+/// Every adapter that is registered representation only (unattributed or research).
+fn non_operative(name: &str) -> bool {
+    ATTRIBUTION_UNRESOLVED.contains(&name) || RESEARCH_COPIES.contains(&name)
+}
+
+/// The early-generation adapters (C0-REG5): gen6 NHL 07 and the gen7 v1-era NHL 08 / 09. Their
+/// ROSTER fixtures decode through the RawV3 codec; NHL 09's carry the ceiling, NHL 07's and
+/// NHL 08's yield a TDB without the roster core (capacities unknown, not substituted); the rating
+/// regime is the audit's gen6 row on NHL 07 and unnamed — a candidate — on NHL 08 / 09.
+const EARLY_ADAPTERS: [&str; 6] = [
+    "nhl07-xbox360.toml",
+    "nhl08-xbox360.toml",
+    "nhl09-xbox360.toml",
+    "nhl08-ps3.toml",
+    "nhl09-ps3.toml",
+    "nhl07-ps3.toml",
+];
 
 /// The gen8 (PS4) adapters: little-endian `nhl_game.db`, 7-bit ratings with no offset, main-DB
 /// capacities. Where a sweep below asserts a gen7 fact (the 6-bit offset-36 regime, a ROSTER-save
@@ -335,6 +369,14 @@ fn an_unsupported_no_sentinel_claim_is_not_operative() {
         ("nhl19-ps4.toml", 4, None),
         ("nhl20-ps4.toml", 4, None),
         ("nhl21-ps4.toml", 3, Some("player.team")),
+        // C0-REG5: shoots, the speed rating, and the as-is main-team pointer whose pattern 0 is
+        // team code 0 (no absence code, as on NHL 10) — three asserted candidates each.
+        ("nhl07-xbox360.toml", 3, None),
+        ("nhl08-xbox360.toml", 3, None),
+        ("nhl09-xbox360.toml", 3, None),
+        ("nhl08-ps3.toml", 3, None),
+        ("nhl09-ps3.toml", 3, None),
+        ("nhl07-ps3.toml", 3, None),
     ];
     assert_eq!(expected_per_adapter.len(), COMMITTED_ADAPTERS.len());
     for (name, expected, measured_on_this_anchor) in expected_per_adapter {
@@ -389,9 +431,10 @@ fn an_unsupported_no_sentinel_claim_is_not_operative() {
         assert_eq!(here, expected, "{name}: sentinel candidates");
     }
     // 37 across the fourteen gen7 adapters (C0-REG3) plus 3 on each of the seven PS4 adapters
-    // (C0-REG4) plus the two unattributed team sentinels (C0-REG4-R1).
+    // (C0-REG4) plus the two unattributed team sentinels (C0-REG4-R1) plus 3 on each of the six
+    // early-generation adapters (C0-REG5).
     assert_eq!(
-        candidates, 60,
+        candidates, 78,
         "the reasoning is preserved on every field it was claimed for"
     );
 }
@@ -492,7 +535,7 @@ fn supported_existing_constraints_still_validate() {
             .into_iter()
             .find(|m| m.canonical == "player.birth_date")
             .expect("mapped");
-        if ATTRIBUTION_UNRESOLVED.contains(&name) {
+        if non_operative(name) {
             assert_eq!(birth.qualification, "blocked", "{name}");
             assert!(birth.transform.established().is_none(), "{name}");
             assert!(birth.transform.candidate_value().is_some(), "{name}");
@@ -552,7 +595,7 @@ fn a_composite_property_names_every_field_it_spans() {
         let roles: Vec<&str> = birth.components.iter().map(|c| c.role.as_str()).collect();
         assert_eq!(roles, ["year", "month", "day"], "{name}");
         for component in &birth.components {
-            let carried = if ATTRIBUTION_UNRESOLVED.contains(&name) {
+            let carried = if non_operative(name) {
                 component.storage.candidate_value().is_some()
             } else {
                 component.storage.established().is_some()
@@ -635,6 +678,7 @@ fn representation_completeness_is_reported_apart_from_registry_population() {
     // honest state — and are reported apart (`registered_representation_is_reported_apart…`).
     let unattributed: BTreeSet<&str> = ATTRIBUTION_UNRESOLVED
         .iter()
+        .chain(RESEARCH_COPIES.iter())
         .map(|n| n.trim_end_matches(".toml"))
         .collect();
     assert!(
@@ -678,12 +722,16 @@ fn registered_representation_is_reported_apart_from_established_target_coverage(
             established.push(p.target.as_str());
         }
     }
-    assert_eq!(registered_only, ["nhl19-ps4", "nhl20-ps4"]);
+    assert_eq!(registered_only, ["nhl19-ps4", "nhl20-ps4", "nhl07-ps3"]);
     assert_eq!(
         established.len(),
-        COMMITTED_ADAPTERS.len() - ATTRIBUTION_UNRESOLVED.len()
+        COMMITTED_ADAPTERS.len() - ATTRIBUTION_UNRESOLVED.len() - RESEARCH_COPIES.len()
     );
-    for name in ATTRIBUTION_UNRESOLVED {
+    for name in ATTRIBUTION_UNRESOLVED
+        .iter()
+        .chain(RESEARCH_COPIES.iter())
+        .copied()
+    {
         let a = adapter(name);
         assert_eq!(
             validate_adapter(&a, &schema()),
@@ -1860,7 +1908,7 @@ fn a_cross_title_only_enum_is_a_candidate_not_a_derivation() {
 
         // The independently supported physical facts are untouched — established, or (attribution
         // unresolved) carried as the candidate of an unknown block.
-        let unattributed = ATTRIBUTION_UNRESOLVED.contains(&name);
+        let unattributed = non_operative(name);
         let storage = if unattributed {
             shoots.storage.candidate_value()
         } else {
@@ -1909,9 +1957,14 @@ fn an_unproven_discriminator_does_not_drive_dependent_constraints() {
             .collect();
         // The skater-companion ratings this adapter maps, and only those: NHL 11 / 12 map no
         // stored overall, so there the list is the speed rating alone.
-        let expected: Vec<&str> = ["player.rating_overall", "player.rating_speed"]
+        // C0-REG5: gen6 NHL 07 keeps its team names on the stock team table reached through
+        // the thin `kOtt` index, so its `team.name` mapping is predicated on `kOtt.table` too.
+        let expected: Vec<&str> = ["player.rating_overall", "player.rating_speed", "team.name"]
             .into_iter()
-            .filter(|c| measured.mappings.iter().any(|m| m.canonical == *c))
+            .filter(|c| {
+                measured.mappings.iter().any(|m| m.canonical == *c)
+                    && (*c != "team.name" || name == "nhl07-xbox360.toml")
+            })
             .collect();
         assert!(expected.contains(&"player.rating_speed"), "{name}");
         assert_eq!(
@@ -2015,21 +2068,31 @@ fn a_target_supported_derivation_stays_usable() {
             .iter()
             .find(|m| m.canonical == "player.rating_speed")
             .expect("mapped");
-        if ATTRIBUTION_UNRESOLVED.contains(&name) {
-            // C0-REG4-R1: the bytes are unattributed, so the derivation — sound on the bytes — is
+        if non_operative(name) {
+            // C0-REG4-R1 / C0-REG5: the bytes are unattributed (or a research copy), so the derivation — sound on the bytes — is
             // a candidate and nothing is usable: no established transform, no human range, no
             // established capacity or status, and the mapping is blocked.
             assert_eq!(rating.qualification, "blocked", "{name}");
             assert!(transform_unresolved(rating), "{name}");
             assert!(rating.transform.established().is_none(), "{name}");
             let candidate = rating.transform.candidate_value().expect("the measurement");
-            assert_eq!(candidate.kind, "identity", "{name}");
+            let expected_kind = if RESEARCH_COPIES.contains(&name) {
+                "linear-offset"
+            } else {
+                "identity"
+            };
+            assert_eq!(candidate.kind, expected_kind, "{name}");
             assert_eq!(human_range(rating), None, "{name}");
             assert!(a
                 .capacities
                 .iter()
-                .all(|c| c.declared.established().is_none()
-                    && c.declared.candidate_value().is_some()));
+                .all(|c| c.declared.established().is_none()));
+            assert!(
+                a.capacities
+                    .iter()
+                    .all(|c| c.declared.candidate_value().is_some()
+                        != RESEARCH_COPIES.contains(&name))
+            );
             assert!(a.mappings.iter().all(|m| m.status.established().is_none()));
             continue;
         }
@@ -2050,6 +2113,23 @@ fn a_target_supported_derivation_stays_usable() {
                 .as_ref()
                 .expect("the probe's result");
             assert_eq!(candidate.value.as_ref().unwrap().offset, Some(50), "{name}");
+            assert_eq!(human_range(rating), None, "{name}");
+        } else if name == "nhl07-xbox360.toml" {
+            // C0-REG5: the gen6 regime — the audit names NHL07 gen6 under 50 by title and the
+            // probe resolves 50 on the bytes (no 6-bit value above 49).
+            let transform = rating.transform.established().expect("gen6 regime");
+            assert_eq!(transform.offset, Some(50), "{name}");
+            assert_eq!(human_range(rating), Some([50, 113]), "{name}");
+        } else if EARLY_ADAPTERS.contains(&name) {
+            // C0-REG5: NHL 08 / 09 are named by no audit row; the probe's result is a candidate.
+            assert_eq!(rating.qualification, "blocked", "{name}");
+            assert!(rating.transform.established().is_none(), "{name}");
+            let candidate = rating
+                .transform
+                .candidate_value()
+                .expect("the probe's result");
+            let expected = if name.starts_with("nhl08") { 36 } else { 50 };
+            assert_eq!(candidate.offset, Some(expected), "{name}");
             assert_eq!(human_range(rating), None, "{name}");
         } else if GEN8_ADAPTERS.contains(&name) {
             // C0-REG4: the PS4 ratings are 7-bit 0..99 fields whose stored value IS the rating —
@@ -2085,7 +2165,11 @@ fn a_target_supported_derivation_stays_usable() {
             .iter()
             .filter(|c| c.declared.established().is_some())
             .count();
-        let expected = if MEASURED_ON_OWN_ANCHOR.contains(&name) {
+        let expected = if name.starts_with("nhl07") || name.starts_with("nhl08") {
+            // C0-REG5: the ROSTER fixture decodes to a TDB without the roster core (NHL 08, NHL 07
+            // Xbox 360) or none is committed; every capacity is unknown, none substituted.
+            0
+        } else if MEASURED_ON_OWN_ANCHOR.contains(&name) {
             8
         } else {
             7

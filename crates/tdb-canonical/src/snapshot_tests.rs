@@ -38,7 +38,7 @@ fn adapter(name: &str) -> Adapter {
 }
 
 /// The committed adapters, each of which must name a snapshot and agree with its anchor.
-const COMMITTED_ADAPTERS: [&str; 21] = [
+const COMMITTED_ADAPTERS: [&str; 27] = [
     "nhl15-xbox360.toml",
     "nhl10-xbox360.toml",
     "nhllegacy-xbox360.toml",
@@ -60,6 +60,12 @@ const COMMITTED_ADAPTERS: [&str; 21] = [
     "nhl19-ps4.toml",
     "nhl20-ps4.toml",
     "nhl21-ps4.toml",
+    "nhl07-xbox360.toml",
+    "nhl08-xbox360.toml",
+    "nhl09-xbox360.toml",
+    "nhl08-ps3.toml",
+    "nhl09-ps3.toml",
+    "nhl07-ps3.toml",
 ];
 
 /// Resolve `physical_snapshot = "docs/audits/data/schema/<platform>-<game>.json"` to the anchor it

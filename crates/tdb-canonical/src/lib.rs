@@ -2044,6 +2044,8 @@ mod snapshot_tests;
 #[cfg(test)]
 mod target_batch_tests;
 #[cfg(test)]
+mod target_early_tests;
+#[cfg(test)]
 mod target_evidence;
 #[cfg(test)]
 mod target_ps4_tests;

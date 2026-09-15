@@ -1,0 +1,949 @@
+# Target adapter — NHL 07, PlayStation 3 (gen6, big-endian, TDB v6). Schema `target-adapter/2`.
+#
+# Package C0-REG5 (2026-09-15). EVIDENCE-BACKED AND DELIBERATELY PARTIAL: 8 canonical properties
+# over 9 physical fields, every number read from THIS target's committed snapshot
+# (`docs/audits/data/schema/ps3-nhl07.json`) and every non-physical fact cited to an audit row,
+# matrix row, named case or fixture that names NHL 07 on PlayStation 3. The later-generation
+# adapters were STRUCTURAL references only (which blocks exist, in what shape); no field identity,
+# origin, transform, sentinel rule, companion rule or capacity figure was carried from any of them —
+# a shared field name or a matching layout is not semantic proof. Measured here instead: the gen6 table model is its own: no equipment companions (`xmja` / `fMVl` do not exist), a thin `exhibitionteams` index whose names live on `stockteamtable`, 1280-bit name fields, a 7-bit main-team pointer and a 6-bit year.
+#
+# RESEARCH COPY — NOT A SHIPPING TARGET (docs/01-scope-and-compatibility.md: "NHL 07 PS3 is a
+# research copy: its anchor is part of the 27-anchor set ... It is not one of the 27 shipping targets
+# and is not a completion gate"; C0-05 register: every write and acceptance cell on it is
+# not-applicable). This file is registered under the existing registry identity `nhl07-ps3` as
+# REPRESENTATION ONLY: MEASURED DIRECTLY (C0-REG5), `anchors/ps3/nhl07/databases/NHL07NG.db` (sha256 67a00bea…) and
+# `anchors/ps3/nhl07/databases/NHL07NG-meta.xml` (text-identical, LF-normalised digest) are byte-identical to the
+# Xbox 360 NHL 07 anchor's files, no save is committed under this folder, and no committed record
+# describes a PlayStation 3 capture — so nothing here is a fact about a PS3 release of NHL 07.
+# Consequently EVERY block below is `state = "unknown"` with the measurement preserved as a
+# `[*.candidate]` (confidence as measured on the bytes), every mapping is `blocked` with unresolved
+# transforms, and no canonical API yields a usable mapping from this file (`human_range`,
+# `scalar_editable` and `registry_population` report nothing established; case
+# `nhl07_ps3::the_research_copy_is_byte_identical_to_the_xbox360_anchor_and_establishes_no_ps3_release`).
+# The physical facts are FIXTURE FACTS about the bytes at this path (gen6 table model: no equipment
+# companions, thin team index); they promote, if ever, only with a scope decision that makes NHL 07
+# PS3 a target and a PS3 capture to attribute them to. The identity itself
+# carries NO save capacity, deployment behaviour or runtime conclusion across targets, and nothing
+# in this file rests on it: this adapter cites only this folder's own paths and rendering.
+#
+# MEASURED DIRECTLY (C0-REG5): the main anchor `anchors/ps3/nhl07/databases/NHL07NG.db` (sha256 67a00bea…)
+# parses as a big-endian TDB v6 with 90 tables, header CRC and size valid, PACKED on every table.
+# No save fixture is committed under this folder: the save capacity is MISSING-FIXTURE on this
+# target, and the packed main DB is NOT read off as a substitute.
+#
+# Semantics are measured on this anchor by the named cases in
+# `crates/tdb-canonical/src/target_early_tests.rs` (module `nhl07_ps3`), with expected labels taken from EA's
+# metadata names and declared foreign keys — never from the enum or probe under test. Handedness
+# stays blocked (no independently supported label exists here), the main-team parent table stays a
+# candidate, no absence code is established for the as-is main-team pointer, and `team.name` is mapped to `stockteamtable.fullname` (`HqzU.YmkJ`), reached from the thin `kOtt` index through `(table, teamid)` — a join the contract cannot state as a block.
+#
+# The mapped set is a representative sample over the roster core and the team table; the unmapped
+# remainder is a recorded gap, never an implied identity mapping. Adding this file does not make the
+# target complete, supported or game-verified.
+#
+# Rules this file is validated against (crates/tdb-canonical): see the head of
+# defs/adapters/nhl15-xbox360.toml — identical contract, `target-adapter/2`.
+#
+# Confidence, per fact:
+#   measured — read directly out of committed evidence (the schema snapshot, an audit's table, a
+#              matrix row for `ps3,nhl07`, a named case that lists this anchor or this fixture);
+#   derived  — a measured fact on other material plus a stated argument that it carries here;
+#   asserted — recorded from repository source/prose with a citation, not independently measured.
+
+schema = "target-adapter/2"
+adapter_version = 2
+canonical_schema_version = 1
+target = "nhl07-ps3"
+generation = "gen6"
+endian = "big"
+tdb_version = 6
+physical_snapshot = "docs/audits/data/schema/ps3-nhl07.json"
+
+# 90 tables / 1813 fields exist in the snapshot; 9 physical fields are mapped here (the three
+# birth-date components count individually). The field total is read from this target's own
+# snapshot.
+[coverage_declared]
+tables_total = 90
+fields_total = 1813
+fields_mapped = 9
+note = "Representative sample over the roster core and the team table, REGISTERED AS REPRESENTATION ONLY: every block is a candidate — NHL 07 PS3 is a research copy, not a target (C0-REG5). The unmapped remainder is UNKNOWN, not identity-mapped."
+
+# --------------------------------------------------------------------------------------------
+# Target tables. Every `table` reference in this file must resolve here.
+# --------------------------------------------------------------------------------------------
+
+[[table]]
+id = "ubPc"
+name = "exhibitionplayerbiotable"
+provenance = ["docs/audits/data/schema/ps3-nhl07.json#ubPc"]
+
+[[table]]
+id = "ZBac"
+name = "exhibitionplayers"
+provenance = ["docs/audits/data/schema/ps3-nhl07.json#ZBac"]
+
+[[table]]
+id = "eGlu"
+name = "exhibitionrostertable"
+provenance = ["docs/audits/data/schema/ps3-nhl07.json#eGlu"]
+
+[[table]]
+id = "kOtt"
+name = "exhibitionteams"
+provenance = ["docs/audits/data/schema/ps3-nhl07.json#kOtt"]
+
+[[table]]
+id = "dSvy"
+name = "exhibitionskaterai"
+provenance = ["docs/audits/data/schema/ps3-nhl07.json#dSvy"]
+
+[[table]]
+id = "mHuy"
+name = "exhibitiongoalieai"
+provenance = ["docs/audits/data/schema/ps3-nhl07.json#mHuy"]
+
+[[table]]
+id = "HqzU"
+name = "stockteamtable"
+provenance = ["docs/audits/data/schema/ps3-nhl07.json#HqzU"]
+
+# --------------------------------------------------------------------------------------------
+# Mappings.
+# --------------------------------------------------------------------------------------------
+
+# --- names: inline fixed-width text, NOT a string pool -----------------------------------------
+# The snapshot records `kind_code = 0` / `meta_type = "string"` with a byte-aligned width, and
+# `tdb_core::TdbFile::read_inline_str` / `set_inline_str` implement exactly that: a fixed-width,
+# NUL-padded, byte-budgeted field inside the record.
+
+[[mapping]]
+canonical = "player.first_name"
+table = "ubPc"
+field = "HdeP"
+read_transform = "unresolved"
+write_transform = "unresolved"
+inverse_verified = false
+confidence = "measured"
+qualification = "blocked"
+provenance = [
+  "docs/audits/data/schema/ps3-nhl07.json#ubPc.HdeP",
+  "docs/audits/scalar-mutation-audit.md#string-policy",
+  "docs/audits/data/mutation-matrix.csv#ps3,nhl07,inline-string",
+]
+note = "BLOCKED (C0-REG5, research copy): the table and field identity, layout and behaviour below are measured on the committed bytes, but NHL 07 PS3 is a research copy outside the shipping targets and no committed evidence attributes these bytes to a PS3 release, so no block is operative and the mapping cannot be used for a target. Identified by the field's metadata name `firstname` on `exhibitionplayerbiotable`, measured in this snapshot (1280 bits = 160 bytes on this title; the later titles' 200-bit name fields are not this one). The inline-string codec round-trips on THIS anchor (mutation-matrix row `ps3,nhl07,inline-string,BvZb,DbIl`), but no named case exercises this field, so inverse_verified stays false."
+
+[mapping.storage]
+state = "unknown"
+note = "RESEARCH COPY, NOT A TARGET (C0-REG5): measured on the committed bytes at `anchors/ps3/nhl07/databases/NHL07NG.db`, which are byte-identical to the Xbox 360 NHL 07 anchor and are registered under `nhl07-ps3` as a research copy that the scope excludes from the shipping targets; no committed record describes a PlayStation 3 capture. This is a FIXTURE FACT about those bytes and NOT an operative NHL 07 PS3 constraint. The measurement is preserved as the candidate; it promotes only with a scope decision and an attributed PS3 capture (case `nhl07_ps3::the_research_copy_is_byte_identical_to_the_xbox360_anchor_and_establishes_no_ps3_release`)."
+[mapping.storage.candidate]
+confidence = "measured"
+provenance = ["docs/audits/data/schema/ps3-nhl07.json#ubPc.HdeP"]
+note = "PROPOSED, NOT OPERATIVE — a fixture fact about a research copy, not a target constraint. "
+[mapping.storage.candidate.value]
+kind = "inline-string"
+bit_offset = 1280
+bit_width = 1280
+signedness = "not-applicable"
+range_low = 0
+range_high = 0
+endian = "big"
+
+[mapping.status]
+state = "unknown"
+note = "RESEARCH COPY, NOT A TARGET (C0-REG5): measured on the committed bytes at `anchors/ps3/nhl07/databases/NHL07NG.db`, which are byte-identical to the Xbox 360 NHL 07 anchor and are registered under `nhl07-ps3` as a research copy that the scope excludes from the shipping targets; no committed record describes a PlayStation 3 capture. This is a FIXTURE FACT about those bytes and NOT an operative NHL 07 PS3 constraint. The measurement is preserved as the candidate; it promotes only with a scope decision and an attributed PS3 capture (case `nhl07_ps3::the_research_copy_is_byte_identical_to_the_xbox360_anchor_and_establishes_no_ps3_release`)."
+[mapping.status.candidate]
+confidence = "derived"
+provenance = [
+  "docs/audits/data/schema/ps3-nhl07.json#ubPc.HdeP",
+  "docs/audits/scalar-mutation-audit.md#negative-gates-read-only--identity",
+  "docs/audits/data/mutation-matrix.csv#ps3,nhl07",
+]
+note = "PROPOSED, NOT OPERATIVE — a fixture fact about a research copy, not a target constraint.  DERIVATION AS MEASURED/ARGUED ON THE BYTES: PREMISES. (1) MEASURED on this target: the snapshot records key = false and updatable = true for this field. (2) ESTABLISHED and applicable to this target: the scalar mutation audit enumerates which field classes are structural (eGlu slot/jersey/captaincy fields and companion-link pointers) and proves the remainder editable as scalars through the production seam over all 27 anchors, and mutation-matrix.csv carries 5 rows for `ps3,nhl07`, so its scope covers THIS title and platform rather than a neighbour. CONCLUSION: this field is not in a structural class, so `structural = false`. NOT ESTABLISHED: no named case exercises this specific field, so the block is derived rather than measured."
+[mapping.status.candidate.value]
+key = false
+updatable = true
+structural = false
+
+[mapping.transform]
+state = "unknown"
+note = "RESEARCH COPY, NOT A TARGET (C0-REG5): measured on the committed bytes at `anchors/ps3/nhl07/databases/NHL07NG.db`, which are byte-identical to the Xbox 360 NHL 07 anchor and are registered under `nhl07-ps3` as a research copy that the scope excludes from the shipping targets; no committed record describes a PlayStation 3 capture. This is a FIXTURE FACT about those bytes and NOT an operative NHL 07 PS3 constraint. The measurement is preserved as the candidate; it promotes only with a scope decision and an attributed PS3 capture (case `nhl07_ps3::the_research_copy_is_byte_identical_to_the_xbox360_anchor_and_establishes_no_ps3_release`)."
+[mapping.transform.candidate]
+confidence = "measured"
+provenance = [
+  "docs/audits/data/schema/ps3-nhl07.json#ubPc.HdeP (kind_code = 0, meta_type = string)",
+  "docs/audits/scalar-mutation-audit.md#string-policy",
+]
+note = "PROPOSED, NOT OPERATIVE — a fixture fact about a research copy, not a target constraint. "
+[mapping.transform.candidate.value]
+kind = "inline-string"
+
+[mapping.string_storage]
+state = "unknown"
+note = "RESEARCH COPY, NOT A TARGET (C0-REG5): measured on the committed bytes at `anchors/ps3/nhl07/databases/NHL07NG.db`, which are byte-identical to the Xbox 360 NHL 07 anchor and are registered under `nhl07-ps3` as a research copy that the scope excludes from the shipping targets; no committed record describes a PlayStation 3 capture. This is a FIXTURE FACT about those bytes and NOT an operative NHL 07 PS3 constraint. The measurement is preserved as the candidate; it promotes only with a scope decision and an attributed PS3 capture (case `nhl07_ps3::the_research_copy_is_byte_identical_to_the_xbox360_anchor_and_establishes_no_ps3_release`)."
+[mapping.string_storage.candidate]
+confidence = "measured"
+provenance = [
+  "docs/audits/data/schema/ps3-nhl07.json#ubPc.HdeP",
+  "docs/audits/scalar-mutation-audit.md#string-policy",
+  "crates/tdb-core/src/lib.rs#set_inline_str",
+]
+note = "PROPOSED, NOT OPERATIVE — a fixture fact about a research copy, not a target constraint. 1280 bits = a 160-byte budget. The budget is BYTES, not characters: a multi-byte UTF-8 value trimmed to the budget round-trips, and one byte over is rejected at entry with no truncation and no write."
+[mapping.string_storage.candidate.value]
+storage = "inline-fixed"
+byte_capacity = 160
+encoding = "byte-transparent"
+padding = "nul-fill"
+over_capacity = "reject"
+
+[mapping.applicability]
+state = "unknown"
+note = "RESEARCH COPY, NOT A TARGET (C0-REG5): measured on the committed bytes at `anchors/ps3/nhl07/databases/NHL07NG.db`, which are byte-identical to the Xbox 360 NHL 07 anchor and are registered under `nhl07-ps3` as a research copy that the scope excludes from the shipping targets; no committed record describes a PlayStation 3 capture. This is a FIXTURE FACT about those bytes and NOT an operative NHL 07 PS3 constraint. The measurement is preserved as the candidate; it promotes only with a scope decision and an attributed PS3 capture (case `nhl07_ps3::the_research_copy_is_byte_identical_to_the_xbox360_anchor_and_establishes_no_ps3_release`)."
+[mapping.applicability.candidate]
+confidence = "measured"
+provenance = ["docs/audits/data/schema/ps3-nhl07.json#ubPc.record_len_bytes"]
+note = "PROPOSED, NOT OPERATIVE — a fixture fact about a research copy, not a target constraint. The table is a fixed-width record block (508 bytes per record), so the field is present on every record; that is what \"all-records\" asserts and it is what the snapshot shows."
+[mapping.applicability.candidate.value]
+kind = "all-records"
+
+[[mapping]]
+canonical = "player.last_name"
+table = "ubPc"
+field = "QbMR"
+read_transform = "unresolved"
+write_transform = "unresolved"
+inverse_verified = false
+confidence = "measured"
+qualification = "blocked"
+provenance = [
+  "docs/audits/data/schema/ps3-nhl07.json#ubPc.QbMR",
+  "docs/audits/scalar-mutation-audit.md#string-policy",
+  "docs/audits/data/mutation-matrix.csv#ps3,nhl07,inline-string",
+]
+note = "BLOCKED (C0-REG5, research copy): the table and field identity, layout and behaviour below are measured on the committed bytes, but NHL 07 PS3 is a research copy outside the shipping targets and no committed evidence attributes these bytes to a PS3 release, so no block is operative and the mapping cannot be used for a target. Identified by the field's metadata name `lastname` on `exhibitionplayerbiotable`, measured in this snapshot (1280 bits = 160 bytes on this title; the later titles' 200-bit name fields are not this one). The inline-string codec round-trips on THIS anchor (mutation-matrix row `ps3,nhl07,inline-string,BvZb,DbIl`), but no named case exercises this field, so inverse_verified stays false."
+
+[mapping.storage]
+state = "unknown"
+note = "RESEARCH COPY, NOT A TARGET (C0-REG5): measured on the committed bytes at `anchors/ps3/nhl07/databases/NHL07NG.db`, which are byte-identical to the Xbox 360 NHL 07 anchor and are registered under `nhl07-ps3` as a research copy that the scope excludes from the shipping targets; no committed record describes a PlayStation 3 capture. This is a FIXTURE FACT about those bytes and NOT an operative NHL 07 PS3 constraint. The measurement is preserved as the candidate; it promotes only with a scope decision and an attributed PS3 capture (case `nhl07_ps3::the_research_copy_is_byte_identical_to_the_xbox360_anchor_and_establishes_no_ps3_release`)."
+[mapping.storage.candidate]
+confidence = "measured"
+provenance = ["docs/audits/data/schema/ps3-nhl07.json#ubPc.QbMR"]
+note = "PROPOSED, NOT OPERATIVE — a fixture fact about a research copy, not a target constraint. "
+[mapping.storage.candidate.value]
+kind = "inline-string"
+bit_offset = 2560
+bit_width = 1280
+signedness = "not-applicable"
+range_low = 0
+range_high = 0
+endian = "big"
+
+[mapping.status]
+state = "unknown"
+note = "RESEARCH COPY, NOT A TARGET (C0-REG5): measured on the committed bytes at `anchors/ps3/nhl07/databases/NHL07NG.db`, which are byte-identical to the Xbox 360 NHL 07 anchor and are registered under `nhl07-ps3` as a research copy that the scope excludes from the shipping targets; no committed record describes a PlayStation 3 capture. This is a FIXTURE FACT about those bytes and NOT an operative NHL 07 PS3 constraint. The measurement is preserved as the candidate; it promotes only with a scope decision and an attributed PS3 capture (case `nhl07_ps3::the_research_copy_is_byte_identical_to_the_xbox360_anchor_and_establishes_no_ps3_release`)."
+[mapping.status.candidate]
+confidence = "derived"
+provenance = [
+  "docs/audits/data/schema/ps3-nhl07.json#ubPc.QbMR",
+  "docs/audits/scalar-mutation-audit.md#negative-gates-read-only--identity",
+  "docs/audits/data/mutation-matrix.csv#ps3,nhl07",
+]
+note = "PROPOSED, NOT OPERATIVE — a fixture fact about a research copy, not a target constraint.  DERIVATION AS MEASURED/ARGUED ON THE BYTES: PREMISES. (1) MEASURED on this target: the snapshot records key = false and updatable = true for this field. (2) ESTABLISHED and applicable to this target: the scalar mutation audit enumerates which field classes are structural (eGlu slot/jersey/captaincy fields and companion-link pointers) and proves the remainder editable as scalars through the production seam over all 27 anchors, and mutation-matrix.csv carries 5 rows for `ps3,nhl07`, so its scope covers THIS title and platform rather than a neighbour. CONCLUSION: this field is not in a structural class, so `structural = false`. NOT ESTABLISHED: no named case exercises this specific field, so the block is derived rather than measured."
+[mapping.status.candidate.value]
+key = false
+updatable = true
+structural = false
+
+[mapping.transform]
+state = "unknown"
+note = "RESEARCH COPY, NOT A TARGET (C0-REG5): measured on the committed bytes at `anchors/ps3/nhl07/databases/NHL07NG.db`, which are byte-identical to the Xbox 360 NHL 07 anchor and are registered under `nhl07-ps3` as a research copy that the scope excludes from the shipping targets; no committed record describes a PlayStation 3 capture. This is a FIXTURE FACT about those bytes and NOT an operative NHL 07 PS3 constraint. The measurement is preserved as the candidate; it promotes only with a scope decision and an attributed PS3 capture (case `nhl07_ps3::the_research_copy_is_byte_identical_to_the_xbox360_anchor_and_establishes_no_ps3_release`)."
+[mapping.transform.candidate]
+confidence = "measured"
+provenance = [
+  "docs/audits/data/schema/ps3-nhl07.json#ubPc.QbMR (kind_code = 0, meta_type = string)",
+  "docs/audits/scalar-mutation-audit.md#string-policy",
+]
+note = "PROPOSED, NOT OPERATIVE — a fixture fact about a research copy, not a target constraint. "
+[mapping.transform.candidate.value]
+kind = "inline-string"
+
+[mapping.string_storage]
+state = "unknown"
+note = "RESEARCH COPY, NOT A TARGET (C0-REG5): measured on the committed bytes at `anchors/ps3/nhl07/databases/NHL07NG.db`, which are byte-identical to the Xbox 360 NHL 07 anchor and are registered under `nhl07-ps3` as a research copy that the scope excludes from the shipping targets; no committed record describes a PlayStation 3 capture. This is a FIXTURE FACT about those bytes and NOT an operative NHL 07 PS3 constraint. The measurement is preserved as the candidate; it promotes only with a scope decision and an attributed PS3 capture (case `nhl07_ps3::the_research_copy_is_byte_identical_to_the_xbox360_anchor_and_establishes_no_ps3_release`)."
+[mapping.string_storage.candidate]
+confidence = "measured"
+provenance = [
+  "docs/audits/data/schema/ps3-nhl07.json#ubPc.QbMR",
+  "docs/audits/scalar-mutation-audit.md#string-policy",
+  "crates/tdb-core/src/lib.rs#set_inline_str",
+]
+note = "PROPOSED, NOT OPERATIVE — a fixture fact about a research copy, not a target constraint. 1280 bits = a 160-byte budget. The budget is BYTES, not characters: a multi-byte UTF-8 value trimmed to the budget round-trips, and one byte over is rejected at entry with no truncation and no write."
+[mapping.string_storage.candidate.value]
+storage = "inline-fixed"
+byte_capacity = 160
+encoding = "byte-transparent"
+padding = "nul-fill"
+over_capacity = "reject"
+
+[mapping.applicability]
+state = "unknown"
+note = "RESEARCH COPY, NOT A TARGET (C0-REG5): measured on the committed bytes at `anchors/ps3/nhl07/databases/NHL07NG.db`, which are byte-identical to the Xbox 360 NHL 07 anchor and are registered under `nhl07-ps3` as a research copy that the scope excludes from the shipping targets; no committed record describes a PlayStation 3 capture. This is a FIXTURE FACT about those bytes and NOT an operative NHL 07 PS3 constraint. The measurement is preserved as the candidate; it promotes only with a scope decision and an attributed PS3 capture (case `nhl07_ps3::the_research_copy_is_byte_identical_to_the_xbox360_anchor_and_establishes_no_ps3_release`)."
+[mapping.applicability.candidate]
+confidence = "measured"
+provenance = ["docs/audits/data/schema/ps3-nhl07.json#ubPc.record_len_bytes"]
+note = "PROPOSED, NOT OPERATIVE — a fixture fact about a research copy, not a target constraint. The table is a fixed-width record block (508 bytes per record), so the field is present on every record; that is what \"all-records\" asserts and it is what the snapshot shows."
+[mapping.applicability.candidate.value]
+kind = "all-records"
+
+# --- birth date: one canonical value over three target fields ----------------------------------
+# MEASURED ON THIS TARGET (C0-REG5): the named case reads the stored value ranges of the three
+# components directly on this anchor — months 1..=12 and days 1..=31, which a 0-origin store could
+# not produce — so month/day are 1-indexed here and the transform is the identity. No studio-domain
+# probe lists this anchor (`birthdate_encoding.rs` probes NHL 10 and NHL 11-21 only, and its prose
+# calls NHL 10 "the series' only 1-indexed title" — a statement this measurement contradicts for
+# NHL 07/08/09; recorded as a finding, not repaired). The origin is PROBED from stored values, never
+# assumed from the metadata (which declares month 0..15 / day 0..31 either way) and never carried
+# from NHL 10. The year field is 6 bits wide on this title (stored 0..29); its base is not
+# established here.
+
+[[mapping]]
+canonical = "player.birth_date"
+table = "ubPc"
+read_transform = "unresolved"
+write_transform = "unresolved"
+inverse_verified = false
+confidence = "measured"
+qualification = "blocked"
+provenance = [
+  "crates/tdb-canonical/src/target_early_tests.rs#nhl07_ps3::birth_date_month_and_day_are_stored_one_origin_on_this_anchor",
+  "docs/audits/data/schema/ps3-nhl07.json#ubPc.qFnd",
+  "docs/audits/data/schema/ps3-nhl07.json#ubPc.JKLp",
+  "docs/audits/data/schema/ps3-nhl07.json#ubPc.Kswi",
+]
+note = "BLOCKED (C0-REG5, research copy): the table and field identity, layout and behaviour below are measured on the committed bytes, but NHL 07 PS3 is a research copy outside the shipping targets and no committed evidence attributes these bytes to a PS3 release, so no block is operative and the mapping cannot be used for a target. Month/day are 1-indexed on this anchor (measured by the C0-REG5 case as stored ranges month 1..=12 / day 1..=31), so canonical (1-indexed) maps with NO shift in either direction: the transform is identity, and its inverse is the same identity — which is what `inverse_verified` records. The year field is a raw 6-bit count (stored 0..29) whose base is not established here. NOTE the component offsets are read from THIS snapshot (day 3996, month 4005, year 3966); neighbouring titles differ."
+
+[mapping.transform]
+state = "unknown"
+note = "RESEARCH COPY, NOT A TARGET (C0-REG5): measured on the committed bytes at `anchors/ps3/nhl07/databases/NHL07NG.db`, which are byte-identical to the Xbox 360 NHL 07 anchor and are registered under `nhl07-ps3` as a research copy that the scope excludes from the shipping targets; no committed record describes a PlayStation 3 capture. This is a FIXTURE FACT about those bytes and NOT an operative NHL 07 PS3 constraint. The measurement is preserved as the candidate; it promotes only with a scope decision and an attributed PS3 capture (case `nhl07_ps3::the_research_copy_is_byte_identical_to_the_xbox360_anchor_and_establishes_no_ps3_release`)."
+[mapping.transform.candidate]
+confidence = "measured"
+provenance = ["crates/tdb-canonical/src/target_early_tests.rs#nhl07_ps3::birth_date_month_and_day_are_stored_one_origin_on_this_anchor"]
+note = "PROPOSED, NOT OPERATIVE — a fixture fact about a research copy, not a target constraint. "
+[mapping.transform.candidate.value]
+kind = "identity"
+
+[mapping.status]
+state = "unknown"
+note = "RESEARCH COPY, NOT A TARGET (C0-REG5): measured on the committed bytes at `anchors/ps3/nhl07/databases/NHL07NG.db`, which are byte-identical to the Xbox 360 NHL 07 anchor and are registered under `nhl07-ps3` as a research copy that the scope excludes from the shipping targets; no committed record describes a PlayStation 3 capture. This is a FIXTURE FACT about those bytes and NOT an operative NHL 07 PS3 constraint. The measurement is preserved as the candidate; it promotes only with a scope decision and an attributed PS3 capture (case `nhl07_ps3::the_research_copy_is_byte_identical_to_the_xbox360_anchor_and_establishes_no_ps3_release`)."
+[mapping.status.candidate]
+confidence = "derived"
+provenance = [
+  "docs/audits/data/schema/ps3-nhl07.json#ubPc.qFnd",
+  "docs/audits/data/schema/ps3-nhl07.json#ubPc.JKLp",
+  "docs/audits/data/schema/ps3-nhl07.json#ubPc.Kswi",
+  "docs/audits/scalar-mutation-audit.md#negative-gates-read-only--identity",
+  "docs/audits/data/mutation-matrix.csv#ps3,nhl07",
+]
+note = "PROPOSED, NOT OPERATIVE — a fixture fact about a research copy, not a target constraint.  DERIVATION AS MEASURED/ARGUED ON THE BYTES: PREMISES. (1) MEASURED on this target: the snapshot records key = false and updatable = true for all three component fields. (2) ESTABLISHED and applicable to this target: the scalar mutation audit enumerates which field classes are structural (eGlu slot/jersey/captaincy fields and companion-link pointers) and proves the remainder editable as scalars through the production seam over all 27 anchors, and mutation-matrix.csv carries 5 rows for `ps3,nhl07`, so its scope covers THIS title and platform rather than a neighbour. CONCLUSION: none of these fields is in a structural class, so `structural = false`. NOT ESTABLISHED: the named case probes the stored index origin; it does not perform an edit on these fields, so the block is derived rather than measured."
+[mapping.status.candidate.value]
+key = false
+updatable = true
+structural = false
+
+[mapping.applicability]
+state = "unknown"
+note = "RESEARCH COPY, NOT A TARGET (C0-REG5): measured on the committed bytes at `anchors/ps3/nhl07/databases/NHL07NG.db`, which are byte-identical to the Xbox 360 NHL 07 anchor and are registered under `nhl07-ps3` as a research copy that the scope excludes from the shipping targets; no committed record describes a PlayStation 3 capture. This is a FIXTURE FACT about those bytes and NOT an operative NHL 07 PS3 constraint. The measurement is preserved as the candidate; it promotes only with a scope decision and an attributed PS3 capture (case `nhl07_ps3::the_research_copy_is_byte_identical_to_the_xbox360_anchor_and_establishes_no_ps3_release`)."
+[mapping.applicability.candidate]
+confidence = "measured"
+provenance = ["docs/audits/data/schema/ps3-nhl07.json#ubPc.record_len_bytes"]
+note = "PROPOSED, NOT OPERATIVE — a fixture fact about a research copy, not a target constraint. The table is a fixed-width record block (508 bytes per record), so the field is present on every record; that is what \"all-records\" asserts and it is what the snapshot shows."
+[mapping.applicability.candidate.value]
+kind = "all-records"
+
+[[mapping.component]]
+role = "year"
+field = "qFnd"
+[mapping.component.storage]
+state = "unknown"
+note = "RESEARCH COPY, NOT A TARGET (C0-REG5): measured on the committed bytes at `anchors/ps3/nhl07/databases/NHL07NG.db`, which are byte-identical to the Xbox 360 NHL 07 anchor and are registered under `nhl07-ps3` as a research copy that the scope excludes from the shipping targets; no committed record describes a PlayStation 3 capture. This is a FIXTURE FACT about those bytes and NOT an operative NHL 07 PS3 constraint. The measurement is preserved as the candidate; it promotes only with a scope decision and an attributed PS3 capture (case `nhl07_ps3::the_research_copy_is_byte_identical_to_the_xbox360_anchor_and_establishes_no_ps3_release`)."
+[mapping.component.storage.candidate]
+confidence = "measured"
+provenance = ["docs/audits/data/schema/ps3-nhl07.json#ubPc.qFnd"]
+note = "PROPOSED, NOT OPERATIVE — a fixture fact about a research copy, not a target constraint. "
+[mapping.component.storage.candidate.value]
+kind = "fixed-bit-uint"
+bit_offset = 3966
+bit_width = 6
+signedness = "unsigned"
+range_low = 0
+range_high = 63
+endian = "big"
+
+[[mapping.component]]
+role = "month"
+field = "JKLp"
+[mapping.component.storage]
+state = "unknown"
+note = "RESEARCH COPY, NOT A TARGET (C0-REG5): measured on the committed bytes at `anchors/ps3/nhl07/databases/NHL07NG.db`, which are byte-identical to the Xbox 360 NHL 07 anchor and are registered under `nhl07-ps3` as a research copy that the scope excludes from the shipping targets; no committed record describes a PlayStation 3 capture. This is a FIXTURE FACT about those bytes and NOT an operative NHL 07 PS3 constraint. The measurement is preserved as the candidate; it promotes only with a scope decision and an attributed PS3 capture (case `nhl07_ps3::the_research_copy_is_byte_identical_to_the_xbox360_anchor_and_establishes_no_ps3_release`)."
+[mapping.component.storage.candidate]
+confidence = "measured"
+provenance = ["docs/audits/data/schema/ps3-nhl07.json#ubPc.JKLp"]
+note = "PROPOSED, NOT OPERATIVE — a fixture fact about a research copy, not a target constraint. "
+[mapping.component.storage.candidate.value]
+kind = "fixed-bit-uint"
+bit_offset = 4005
+bit_width = 4
+signedness = "unsigned"
+range_low = 0
+range_high = 15
+endian = "big"
+
+[[mapping.component]]
+role = "day"
+field = "Kswi"
+[mapping.component.storage]
+state = "unknown"
+note = "RESEARCH COPY, NOT A TARGET (C0-REG5): measured on the committed bytes at `anchors/ps3/nhl07/databases/NHL07NG.db`, which are byte-identical to the Xbox 360 NHL 07 anchor and are registered under `nhl07-ps3` as a research copy that the scope excludes from the shipping targets; no committed record describes a PlayStation 3 capture. This is a FIXTURE FACT about those bytes and NOT an operative NHL 07 PS3 constraint. The measurement is preserved as the candidate; it promotes only with a scope decision and an attributed PS3 capture (case `nhl07_ps3::the_research_copy_is_byte_identical_to_the_xbox360_anchor_and_establishes_no_ps3_release`)."
+[mapping.component.storage.candidate]
+confidence = "measured"
+provenance = ["docs/audits/data/schema/ps3-nhl07.json#ubPc.Kswi"]
+note = "PROPOSED, NOT OPERATIVE — a fixture fact about a research copy, not a target constraint. "
+[mapping.component.storage.candidate.value]
+kind = "fixed-bit-uint"
+bit_offset = 3996
+bit_width = 5
+signedness = "unsigned"
+range_low = 0
+range_high = 31
+endian = "big"
+
+# --- handedness: identity and layout measured; stored-code meaning NOT established here ---------
+# `defs/enums/handedness.toml` states its anchor as "NHL Legacy default.db" — a file that is not in
+# this repository and, for this adapter, a different title. A code assignment confirmed on another
+# file is a candidate here however well the field ids and widths match; no named case confirms the
+# codes against this anchor. The observed histogram is recorded as counts and nothing more.
+
+[[mapping]]
+canonical = "player.shoots"
+table = "ubPc"
+field = "GRkp"
+read_transform = "unresolved"
+write_transform = "unresolved"
+inverse_verified = false
+confidence = "measured"
+qualification = "blocked"
+provenance = ["docs/audits/data/schema/ps3-nhl07.json#ubPc.GRkp"]
+note = "BLOCKED (C0-REG5, research copy): the table and field identity, layout and behaviour below are measured on the committed bytes, but NHL 07 PS3 is a research copy outside the shipping targets and no committed evidence attributes these bytes to a PS3 release, so no block is operative and the mapping cannot be used for a target. BLOCKER: the handedness stored codes are not established for this target by evidence in this repository. The snapshot measures that `ubPc.GRkp` exists, is named `handedness` and is 1 bit wide with a declared range of 0..1. Which code means `left` is recorded only in `defs/enums/handedness.toml`, whose anchor is a file (`NHL Legacy default.db`) not committed here."
+
+[mapping.storage]
+state = "unknown"
+note = "RESEARCH COPY, NOT A TARGET (C0-REG5): measured on the committed bytes at `anchors/ps3/nhl07/databases/NHL07NG.db`, which are byte-identical to the Xbox 360 NHL 07 anchor and are registered under `nhl07-ps3` as a research copy that the scope excludes from the shipping targets; no committed record describes a PlayStation 3 capture. This is a FIXTURE FACT about those bytes and NOT an operative NHL 07 PS3 constraint. The measurement is preserved as the candidate; it promotes only with a scope decision and an attributed PS3 capture (case `nhl07_ps3::the_research_copy_is_byte_identical_to_the_xbox360_anchor_and_establishes_no_ps3_release`)."
+[mapping.storage.candidate]
+confidence = "measured"
+provenance = ["docs/audits/data/schema/ps3-nhl07.json#ubPc.GRkp"]
+note = "PROPOSED, NOT OPERATIVE — a fixture fact about a research copy, not a target constraint. "
+[mapping.storage.candidate.value]
+kind = "fixed-bit-uint"
+bit_offset = 4009
+bit_width = 1
+signedness = "unsigned"
+range_low = 0
+range_high = 1
+endian = "big"
+
+[mapping.status]
+state = "unknown"
+note = "RESEARCH COPY, NOT A TARGET (C0-REG5): measured on the committed bytes at `anchors/ps3/nhl07/databases/NHL07NG.db`, which are byte-identical to the Xbox 360 NHL 07 anchor and are registered under `nhl07-ps3` as a research copy that the scope excludes from the shipping targets; no committed record describes a PlayStation 3 capture. This is a FIXTURE FACT about those bytes and NOT an operative NHL 07 PS3 constraint. The measurement is preserved as the candidate; it promotes only with a scope decision and an attributed PS3 capture (case `nhl07_ps3::the_research_copy_is_byte_identical_to_the_xbox360_anchor_and_establishes_no_ps3_release`)."
+[mapping.status.candidate]
+confidence = "derived"
+provenance = [
+  "docs/audits/data/schema/ps3-nhl07.json#ubPc.GRkp",
+  "docs/audits/scalar-mutation-audit.md#negative-gates-read-only--identity",
+  "docs/audits/data/mutation-matrix.csv#ps3,nhl07",
+]
+note = "PROPOSED, NOT OPERATIVE — a fixture fact about a research copy, not a target constraint.  DERIVATION AS MEASURED/ARGUED ON THE BYTES: PREMISES. (1) MEASURED on this target: the snapshot records key = false and updatable = true for this field. (2) ESTABLISHED and applicable to this target: the scalar mutation audit enumerates which field classes are structural (eGlu slot/jersey/captaincy fields and companion-link pointers) and proves the remainder editable as scalars through the production seam over all 27 anchors, and mutation-matrix.csv carries 5 rows for `ps3,nhl07`, so its scope covers THIS title and platform rather than a neighbour. CONCLUSION: this field is not in a structural class, so `structural = false`. NOT ESTABLISHED: no named case exercises this specific field, so the block is derived rather than measured."
+[mapping.status.candidate.value]
+key = false
+updatable = true
+structural = false
+
+[mapping.transform]
+state = "unknown"
+note = "Unusable while the stored codes are not established on this target."
+[mapping.transform.candidate]
+confidence = "asserted"
+provenance = ["defs/enums/handedness.toml"]
+note = "PROPOSED, NOT OPERATIVE. Promotes together with the enumeration."
+[mapping.transform.candidate.value]
+kind = "enum-code"
+
+[mapping.enumeration]
+state = "unknown"
+note = "The stored codes for handedness are not established on this target by committed evidence."
+[mapping.enumeration.candidate]
+confidence = "asserted"
+provenance = [
+  "defs/enums/handedness.toml#entries",
+  "crates/tdb-canonical/src/target_early_tests.rs#nhl07_ps3::handedness_histogram_is_recorded_but_no_label_is_established",
+]
+note = "PROPOSED, NOT OPERATIVE. Operator-confirmed 0=Left / 1=Right against a 22-player anchor set on an `NHL Legacy default.db` (21/22 match) — a file that is not in this repository. OBSERVED on this anchor (C0-REG5, case `nhl07_ps3::handedness_histogram_is_recorded_but_no_label_is_established`): the stored histogram is {0: 1549, 1: 701}. Those are counts and nothing more — they do not show which code is `left`, and no enum file reports counts for this title to compare with. To promote this, confirm the code against a named player on `anchors/ps3/nhl07/databases/NHL07NG.db` whose hand is supported by evidence independent of this enum — none is held in this repository."
+[mapping.enumeration.candidate.value]
+[[mapping.enumeration.candidate.value.entry]]
+code = 0
+canonical = "left"
+[[mapping.enumeration.candidate.value.entry]]
+code = 1
+canonical = "right"
+
+[mapping.null_sentinel]
+state = "unknown"
+note = "Whether this target can encode `absent` for handedness is not established. Export blocks rather than assuming every stored 0 is a genuine left shot."
+[mapping.null_sentinel.candidate]
+confidence = "asserted"
+provenance = ["docs/audits/data/schema/ps3-nhl07.json#ubPc.GRkp"]
+note = "PROPOSED, NOT OPERATIVE. The field is 1 bit with a declared range of 0..1 and the vocabulary has two values, so no code is left spare. A declared range alone cannot show the game carries no separate absence signal."
+[mapping.null_sentinel.candidate.value]
+encoding = "none"
+
+[mapping.applicability]
+state = "unknown"
+note = "RESEARCH COPY, NOT A TARGET (C0-REG5): measured on the committed bytes at `anchors/ps3/nhl07/databases/NHL07NG.db`, which are byte-identical to the Xbox 360 NHL 07 anchor and are registered under `nhl07-ps3` as a research copy that the scope excludes from the shipping targets; no committed record describes a PlayStation 3 capture. This is a FIXTURE FACT about those bytes and NOT an operative NHL 07 PS3 constraint. The measurement is preserved as the candidate; it promotes only with a scope decision and an attributed PS3 capture (case `nhl07_ps3::the_research_copy_is_byte_identical_to_the_xbox360_anchor_and_establishes_no_ps3_release`)."
+[mapping.applicability.candidate]
+confidence = "measured"
+provenance = ["docs/audits/data/schema/ps3-nhl07.json#ubPc.record_len_bytes"]
+note = "PROPOSED, NOT OPERATIVE — a fixture fact about a research copy, not a target constraint. The table is a fixed-width record block (508 bytes per record), so the field is present on every record; that is what \"all-records\" asserts and it is what the snapshot shows."
+[mapping.applicability.candidate.value]
+kind = "all-records"
+
+# --- ratings: the skater companion's 6-bit cells under the gen6 regime ---------------------------
+# MEASURED on this anchor (C0-REG5): no 6-bit field on `dSvy` (21 fields) or `mHuy` (16 fields) stores a
+# value above 49; `p_speed` spans 2..49. The ratings-write-codec audit's regime table names
+# **NHL07 gen6** under offset 50 by title, the production probe (`sixbit_rating_offset`) resolves 50
+# on these bytes by its own rule, and the named gen6 case asserted both on the byte-identical
+# research copy. The three sources agree; the offset-36 regime of NHL 10 -> Legacy is a different
+# row and was not carried here. No field on this snapshot is named for an overall (see the omission).
+
+[[mapping]]
+canonical = "player.rating_speed"
+table = "dSvy"
+field = "qPWY"
+read_transform = "unresolved"
+write_transform = "unresolved"
+inverse_verified = false
+confidence = "derived"
+qualification = "blocked"
+provenance = [
+  "docs/audits/ratings-write-codec.md",
+  "crates/studio-domain/tests/ratings_write_codec.rs#ratings_write_is_inverse_of_read_gen6",
+  "crates/studio-domain/src/view.rs#sixbit_rating_offset",
+  "docs/audits/data/schema/ps3-nhl07.json#dSvy.qPWY",
+  "crates/tdb-canonical/src/target_early_tests.rs#nhl07_ps3::the_gen6_six_bit_rating_regime_resolves_offset_50_on_this_anchor",
+]
+note = "BLOCKED (C0-REG5, research copy): the table and field identity, layout and behaviour below are measured on the committed bytes, but NHL 07 PS3 is a research copy outside the shipping targets and no committed evidence attributes these bytes to a PS3 release, so no block is operative and the mapping cannot be used for a target. That `dSvy.qPWY` is the stored speed rating is DERIVED from the field's EA metadata name `p_speed` in this snapshot. The gen6 6-bit regime resolves edit_offset 50 on this anchor (measured maximum 49 over every 6-bit skater and goalie field; the audit names NHL07 gen6 under 50; the probe's rule yields 50). The named case `ratings_write_is_inverse_of_read_gen6` ran on THIS file and asserted a resolved offset of 50 with a byte-identical write-back; it reads a skater's first rating cell rather than this field specifically, so the mapping is `implemented`, not `automated-tested`. The human range 50..113 is DERIVED by the validator from the transform and the storage range — it is never declared; the audit's stated scale is 50..99."
+
+[mapping.storage]
+state = "unknown"
+note = "RESEARCH COPY, NOT A TARGET (C0-REG5): measured on the committed bytes at `anchors/ps3/nhl07/databases/NHL07NG.db`, which are byte-identical to the Xbox 360 NHL 07 anchor and are registered under `nhl07-ps3` as a research copy that the scope excludes from the shipping targets; no committed record describes a PlayStation 3 capture. This is a FIXTURE FACT about those bytes and NOT an operative NHL 07 PS3 constraint. The measurement is preserved as the candidate; it promotes only with a scope decision and an attributed PS3 capture (case `nhl07_ps3::the_research_copy_is_byte_identical_to_the_xbox360_anchor_and_establishes_no_ps3_release`)."
+[mapping.storage.candidate]
+confidence = "measured"
+provenance = ["docs/audits/data/schema/ps3-nhl07.json#dSvy.qPWY"]
+note = "PROPOSED, NOT OPERATIVE — a fixture fact about a research copy, not a target constraint. "
+[mapping.storage.candidate.value]
+kind = "fixed-bit-uint"
+bit_offset = 55
+bit_width = 6
+signedness = "unsigned"
+range_low = 0
+range_high = 63
+endian = "big"
+
+[mapping.status]
+state = "unknown"
+note = "RESEARCH COPY, NOT A TARGET (C0-REG5): measured on the committed bytes at `anchors/ps3/nhl07/databases/NHL07NG.db`, which are byte-identical to the Xbox 360 NHL 07 anchor and are registered under `nhl07-ps3` as a research copy that the scope excludes from the shipping targets; no committed record describes a PlayStation 3 capture. This is a FIXTURE FACT about those bytes and NOT an operative NHL 07 PS3 constraint. The measurement is preserved as the candidate; it promotes only with a scope decision and an attributed PS3 capture (case `nhl07_ps3::the_research_copy_is_byte_identical_to_the_xbox360_anchor_and_establishes_no_ps3_release`)."
+[mapping.status.candidate]
+confidence = "derived"
+provenance = [
+  "docs/audits/data/schema/ps3-nhl07.json#dSvy.qPWY",
+  "docs/audits/scalar-mutation-audit.md#negative-gates-read-only--identity",
+  "docs/audits/data/mutation-matrix.csv#ps3,nhl07",
+]
+note = "PROPOSED, NOT OPERATIVE — a fixture fact about a research copy, not a target constraint.  DERIVATION AS MEASURED/ARGUED ON THE BYTES: PREMISES. (1) MEASURED on this target: the snapshot records key = false and updatable = true for this field. (2) ESTABLISHED and applicable to this target: the scalar mutation audit enumerates which field classes are structural (eGlu slot/jersey/captaincy fields and companion-link pointers) and proves the remainder editable as scalars through the production seam over all 27 anchors, and mutation-matrix.csv carries 5 rows for `ps3,nhl07`, so its scope covers THIS title and platform rather than a neighbour. CONCLUSION: this field is not in a structural class, so `structural = false`. NOT ESTABLISHED: no named case exercises this specific field, so the block is derived rather than measured."
+[mapping.status.candidate.value]
+key = false
+updatable = true
+structural = false
+
+[mapping.transform]
+state = "unknown"
+note = "RESEARCH COPY, NOT A TARGET (C0-REG5): measured on the committed bytes at `anchors/ps3/nhl07/databases/NHL07NG.db`, which are byte-identical to the Xbox 360 NHL 07 anchor and are registered under `nhl07-ps3` as a research copy that the scope excludes from the shipping targets; no committed record describes a PlayStation 3 capture. This is a FIXTURE FACT about those bytes and NOT an operative NHL 07 PS3 constraint. The measurement is preserved as the candidate; it promotes only with a scope decision and an attributed PS3 capture (case `nhl07_ps3::the_research_copy_is_byte_identical_to_the_xbox360_anchor_and_establishes_no_ps3_release`)."
+[mapping.transform.candidate]
+confidence = "derived"
+provenance = [
+  "docs/audits/ratings-write-codec.md",
+  "crates/studio-domain/src/view.rs#sixbit_rating_offset",
+  "crates/tdb-canonical/src/target_early_tests.rs#nhl07_ps3::the_gen6_six_bit_rating_regime_resolves_offset_50_on_this_anchor",
+]
+note = "PROPOSED, NOT OPERATIVE — a fixture fact about a research copy, not a target constraint.  DERIVATION AS MEASURED/ARGUED ON THE BYTES: PREMISES. (1) MEASURED on this target: the field is 6-bit with declared range 0..63 (see [mapping.storage]), and no 6-bit field on `dSvy` or `mHuy` stores a value above 49 on this anchor (C0-REG5 case). (2) MEASURED on this target: the snapshot records generation = gen6 and db = NHL07NG.db. (3) ESTABLISHED and applicable to this target BY NAME: the ratings-write-codec audit's regime table carries a `NHL07 gen6 6-bit | 0..63 | 50` row naming this title, and designates `sixbit_rating_offset` as the per-database probe, whose rule (no 6-bit rating above 49 -> 50) is satisfied by premise (1). CONCLUSION: edit_offset is 50 here, and write is the exact inverse of read. NOT ESTABLISHED: a write through this specific field on this anchor (the named gen6 case used the first rating cell), which is why this is derived and not measured."
+[mapping.transform.candidate.value]
+kind = "linear-offset"
+offset = 50
+
+[mapping.null_sentinel]
+state = "unknown"
+note = "Whether any stored code on this field is reserved for `absent` is not established on this target."
+[mapping.null_sentinel.candidate]
+confidence = "asserted"
+provenance = ["docs/audits/data/schema/ps3-nhl07.json#dSvy.qPWY"]
+note = "PROPOSED, NOT OPERATIVE. The declared range 0..63 has no gap. To promote this, show that a stored 0 on this anchor is a real rating rather than an unrated marker."
+[mapping.null_sentinel.candidate.value]
+encoding = "none"
+
+[mapping.applicability]
+state = "unknown"
+note = "RESEARCH COPY, NOT A TARGET (C0-REG5): measured on the committed bytes at `anchors/ps3/nhl07/databases/NHL07NG.db`, which are byte-identical to the Xbox 360 NHL 07 anchor and are registered under `nhl07-ps3` as a research copy that the scope excludes from the shipping targets; no committed record describes a PlayStation 3 capture. This is a FIXTURE FACT about those bytes and NOT an operative NHL 07 PS3 constraint. The measurement is preserved as the candidate; it promotes only with a scope decision and an attributed PS3 capture (case `nhl07_ps3::the_research_copy_is_byte_identical_to_the_xbox360_anchor_and_establishes_no_ps3_release`)."
+[mapping.applicability.candidate]
+confidence = "measured"
+provenance = [
+  "crates/tdb-canonical/src/target_early_tests.rs#nhl07_ps3::position_codes_partition_the_bio_table_exactly_as_the_metadata_named_companions_do",
+  "docs/audits/data/schema/ps3-nhl07.json#dSvy.wBIz",
+  "docs/audits/data/schema/ps3-nhl07.json#ubPc.vjla",
+]
+note = "PROPOSED, NOT OPERATIVE — a fixture fact about a research copy, not a target constraint. MEASURED on this anchor (C0-REG5): the bio rows that own a `dSvy` row (one each, keyed by `wBIz`) are exactly the 2015 rows whose position code is in {0, 1, 2, 3}; the 235 rows with code 4 own none. `dSvy` is labelled a skater table by its EA metadata name `exhibitionskaterai`. Established together with [position_discriminator]."
+[mapping.applicability.candidate.value]
+kind = "target-predicate"
+table = "ubPc"
+field = "vjla"
+codes = [0, 1, 2, 3]
+
+# --- main team: identity, bit layout and ENCODING measured; ABSENCE CODE and parent NOT established --
+# C0-REG5: the named case walks the roster graph through the metadata-declared foreign key
+# `eGlu.XSWT -> exhibitionplayers` and the `playerid` join, and compares every rostered player's slot
+# team code with its bio row: all 2176 store the slot team code AS-IS (exactly one of their
+# slots; none stores slot team + 1), and all 74 un-rostered players store 0. The field is 7
+# bits wide here (declared 0..127), measured on this snapshot. Because team code 0 is a real team on
+# this anchor (`kOtt` record 0, key 0, whose name is reached through the thin team index (`HqzU` record 0, `Anaheim Ducks™`)), the 26 rostered players on it store the same
+# pattern 0 as the un-rostered players: no stored code distinguishes absence, and no absence code
+# is declared. The parent stays a candidate — a stronger one here, because the ROSTER table`s own team field is declared to `exhibitionteams` in the metadata.
+
+[[mapping]]
+canonical = "player.team"
+table = "ubPc"
+field = "dXSB"
+read_transform = "unresolved"
+write_transform = "unresolved"
+inverse_verified = false
+confidence = "measured"
+qualification = "blocked"
+provenance = [
+  "docs/audits/data/schema/ps3-nhl07.json#ubPc.dXSB",
+  "crates/tdb-canonical/src/target_early_tests.rs#nhl07_ps3::main_team_pointer_is_the_roster_slot_team_as_is_and_zero_is_also_team_zero",
+  "crates/tdb-canonical/src/target_early_tests.rs#nhl07_ps3::stored_zero_is_team_code_zero_as_much_as_it_is_unrostered_so_no_absence_code_is_established",
+]
+note = "BLOCKED (C0-REG5, research copy): the table and field identity, layout and behaviour below are measured on the committed bytes, but NHL 07 PS3 is a research copy outside the shipping targets and no committed evidence attributes these bytes to a PS3 release, so no block is operative and the mapping cannot be used for a target. BLOCKER: the parent table this pointer indexes is not established for this target (see [mapping.foreign_key]), and no absence code is established (see [mapping.null_sentinel]). MEASURED (C0-REG5): `ubPc.dXSB` exists, is named `team`, is laid out at offset 3856 / width 7 / declared range 0..127, stores the roster slot's team code AS-IS for every one of the 2176 rostered players and 0 for every one of the 74 un-rostered ones — where 0 is also the team code of `kOtt` record 0, stored by 26 rostered players. A canonical `player.team` is a reference to a team entity; until the parent is established, that reference cannot be resolved operatively, so the mapping stays blocked. No edit through this field is exercised by any named case, so `inverse_verified` stays false."
+
+[mapping.storage]
+state = "unknown"
+note = "RESEARCH COPY, NOT A TARGET (C0-REG5): measured on the committed bytes at `anchors/ps3/nhl07/databases/NHL07NG.db`, which are byte-identical to the Xbox 360 NHL 07 anchor and are registered under `nhl07-ps3` as a research copy that the scope excludes from the shipping targets; no committed record describes a PlayStation 3 capture. This is a FIXTURE FACT about those bytes and NOT an operative NHL 07 PS3 constraint. The measurement is preserved as the candidate; it promotes only with a scope decision and an attributed PS3 capture (case `nhl07_ps3::the_research_copy_is_byte_identical_to_the_xbox360_anchor_and_establishes_no_ps3_release`)."
+[mapping.storage.candidate]
+confidence = "measured"
+provenance = [
+  "docs/audits/data/schema/ps3-nhl07.json#ubPc.dXSB",
+  "crates/tdb-canonical/src/target_early_tests.rs#nhl07_ps3::main_team_pointer_is_the_roster_slot_team_as_is_and_zero_is_also_team_zero",
+]
+note = "PROPOSED, NOT OPERATIVE — a fixture fact about a research copy, not a target constraint. MEASURED on this target: bit offset 3856, width 7, declared range 0..127, unsigned. NOT the offset-binary -1..254 field of the NHL 11 -> Legacy anchors: the declared range differs and so does what is stored (see [mapping.transform]). The all-ones pattern is stored on none of 2250 rows."
+[mapping.storage.candidate.value]
+kind = "fixed-bit-uint"
+bit_offset = 3856
+bit_width = 7
+signedness = "unsigned"
+range_low = 0
+range_high = 127
+endian = "big"
+
+[mapping.status]
+state = "unknown"
+note = "RESEARCH COPY, NOT A TARGET (C0-REG5): measured on the committed bytes at `anchors/ps3/nhl07/databases/NHL07NG.db`, which are byte-identical to the Xbox 360 NHL 07 anchor and are registered under `nhl07-ps3` as a research copy that the scope excludes from the shipping targets; no committed record describes a PlayStation 3 capture. This is a FIXTURE FACT about those bytes and NOT an operative NHL 07 PS3 constraint. The measurement is preserved as the candidate; it promotes only with a scope decision and an attributed PS3 capture (case `nhl07_ps3::the_research_copy_is_byte_identical_to_the_xbox360_anchor_and_establishes_no_ps3_release`)."
+[mapping.status.candidate]
+confidence = "derived"
+provenance = [
+  "docs/audits/data/schema/ps3-nhl07.json#ubPc.dXSB",
+  "docs/audits/scalar-mutation-audit.md#negative-gates-read-only--identity",
+  "docs/audits/data/mutation-matrix.csv#ps3,nhl07",
+]
+note = "PROPOSED, NOT OPERATIVE — a fixture fact about a research copy, not a target constraint.  DERIVATION AS MEASURED/ARGUED ON THE BYTES: PREMISES. (1) MEASURED on this target: the snapshot records key = false and updatable = true for this field. (2) ESTABLISHED and applicable to this target: the scalar mutation audit enumerates which field classes are structural (eGlu slot/jersey/captaincy fields and companion-link pointers) and proves the remainder editable as scalars through the production seam over all 27 anchors, and mutation-matrix.csv carries 5 rows for `ps3,nhl07`, so its scope covers THIS title and platform rather than a neighbour. CONCLUSION: this field is not in a structural class, so `structural = false`. NOT ESTABLISHED: no named case exercises this specific field, so the block is derived rather than measured."
+[mapping.status.candidate.value]
+key = false
+updatable = true
+structural = false
+
+[mapping.transform]
+state = "unknown"
+note = "RESEARCH COPY, NOT A TARGET (C0-REG5): measured on the committed bytes at `anchors/ps3/nhl07/databases/NHL07NG.db`, which are byte-identical to the Xbox 360 NHL 07 anchor and are registered under `nhl07-ps3` as a research copy that the scope excludes from the shipping targets; no committed record describes a PlayStation 3 capture. This is a FIXTURE FACT about those bytes and NOT an operative NHL 07 PS3 constraint. The measurement is preserved as the candidate; it promotes only with a scope decision and an attributed PS3 capture (case `nhl07_ps3::the_research_copy_is_byte_identical_to_the_xbox360_anchor_and_establishes_no_ps3_release`)."
+[mapping.transform.candidate]
+confidence = "measured"
+provenance = [
+  "crates/tdb-canonical/src/target_early_tests.rs#nhl07_ps3::main_team_pointer_is_the_roster_slot_team_as_is_and_zero_is_also_team_zero",
+  "docs/audits/data/schema/ps3-nhl07.json#eGlu.XSWT (fk_parent = exhibitionplayers)",
+  "docs/audits/data/schema/ps3-nhl07.json#ZBac.ykFq (playerid)",
+]
+note = "PROPOSED, NOT OPERATIVE — a fixture fact about a research copy, not a target constraint. MEASURED on this anchor (C0-REG5): the stored bit pattern IS the roster slot's team code. For each of the 2176 rostered players exactly one of its roster slots (reached through the metadata-declared `eGlu.XSWT -> exhibitionplayers` key and the `playerid` join) carries `team == pattern`, and none carries `team == pattern - 1`. The first team index is 0, hence `index-origin-0`, over the unsigned decoded value of [mapping.storage]; there is no +1 anywhere. No runtime probe's expectation was used: the case compares bytes with bytes."
+[mapping.transform.candidate.value]
+kind = "index-origin"
+index_origin = 0
+
+[mapping.null_sentinel]
+state = "unknown"
+note = "No absence code is established. MEASURED on this anchor (C0-REG5, `nhl07_ps3::stored_zero_is_team_code_zero_as_much_as_it_is_unrostered_so_no_absence_code_is_established`): all 74 un-rostered bio rows store pattern 0 — and so do the 26 rostered players whose roster slot is team code 0 (`kOtt` record 0, key 0, whose name is reached through the thin team index (`HqzU` record 0, `Anaheim Ducks™`)), because under the as-is encoding pattern 0 IS team code 0. The stored bits therefore cannot tell `absent` from team code 0, and the all-ones pattern is stored nowhere. What the game does with a 0 on an un-rostered player (no team, or team 0) is not observed."
+[mapping.null_sentinel.candidate]
+confidence = "asserted"
+provenance = [
+  "crates/tdb-canonical/src/target_early_tests.rs#nhl07_ps3::stored_zero_is_team_code_zero_as_much_as_it_is_unrostered_so_no_absence_code_is_established",
+  "crates/tdb-canonical/src/target_early_tests.rs#nhl07_ps3::main_team_pointer_is_the_roster_slot_team_as_is_and_zero_is_also_team_zero",
+  "docs/audits/data/schema/ps3-nhl07.json#ubPc.dXSB",
+]
+note = "PROPOSED, NOT OPERATIVE. The measured ambiguity (pattern 0 shared by 74 un-rostered rows and 26 rows rostered on team code 0) is consistent with this field carrying NO absence encoding at all — the game may treat every un-rostered player as belonging to team 0 until rostered. That interpretation is asserted, not measured: to promote it, observe what the game shows for such a player, or find a controlled write that the game reads as `no team`."
+[mapping.null_sentinel.candidate.value]
+encoding = "none"
+
+[mapping.foreign_key]
+state = "unknown"
+note = "Nothing in the repository establishes the parent this bio-table field points at."
+[mapping.foreign_key.candidate]
+confidence = "derived"
+provenance = [
+  "crates/tdb-canonical/src/target_early_tests.rs#nhl07_ps3::main_team_pointer_is_the_roster_slot_team_as_is_and_zero_is_also_team_zero",
+  "docs/audits/data/schema/ps3-nhl07.json#eGlu.dXSB",
+  "docs/audits/data/schema/ps3-nhl07.json#kOtt.vfEq",
+]
+note = "PROPOSED, NOT OPERATIVE. PREMISES. (1) MEASURED on this snapshot: EA's metadata declares the ROSTER table's team field `eGlu.dXSB` with `fkparenttable = exhibitionteams` (`kOtt`); it declares no key on the bio table's `ubPc.dXSB`. (2) MEASURED on this anchor (C0-REG5, case `nhl07_ps3::main_team_pointer_is_the_roster_slot_team_as_is_and_zero_is_also_team_zero`): `ubPc.dXSB` equals a roster slot's `eGlu.dXSB` code for every one of the 2176 rostered players, and every such code is contained in the `kOtt.vfEq` key set (93 keys, largest 92). CONCLUSION PROPOSED: the bio field indexes the same parent the declared roster key does. NOT ESTABLISHED: the bio field itself carries no declaration, and equality with a declared reference on rostered rows does not fix what the field means on the 74 un-rostered rows. To promote this, a metadata declaration on `ubPc.dXSB` or a controlled edit observed on the team the code names is needed. `index_origin` is stated over the unsigned decoded value (decoded 0 = `vfEq` 0), consistent with [mapping.transform]."
+[mapping.foreign_key.candidate.value]
+parent_table = "kOtt"
+parent_key_field = "vfEq"
+declaration = "implicit-by-name"
+index_origin = 0
+
+[mapping.applicability]
+state = "unknown"
+note = "RESEARCH COPY, NOT A TARGET (C0-REG5): measured on the committed bytes at `anchors/ps3/nhl07/databases/NHL07NG.db`, which are byte-identical to the Xbox 360 NHL 07 anchor and are registered under `nhl07-ps3` as a research copy that the scope excludes from the shipping targets; no committed record describes a PlayStation 3 capture. This is a FIXTURE FACT about those bytes and NOT an operative NHL 07 PS3 constraint. The measurement is preserved as the candidate; it promotes only with a scope decision and an attributed PS3 capture (case `nhl07_ps3::the_research_copy_is_byte_identical_to_the_xbox360_anchor_and_establishes_no_ps3_release`)."
+[mapping.applicability.candidate]
+confidence = "measured"
+provenance = ["docs/audits/data/schema/ps3-nhl07.json#ubPc.record_len_bytes"]
+note = "PROPOSED, NOT OPERATIVE — a fixture fact about a research copy, not a target constraint. The table is a fixed-width record block (508 bytes per record), so the field is present on every record; that is what \"all-records\" asserts and it is what the snapshot shows."
+[mapping.applicability.candidate.value]
+kind = "all-records"
+
+# --- team name: on the STOCK TEAM TABLE, reached through the thin team index (gen6) ----------------
+# NHL 07's `exhibitionteams` (`kOtt`) is a 4-byte (table, division, teamid, index) row with no name
+# field; the name lives on `stockteamtable` (`HqzU`, 93 rows here) keyed by `index` = `kOtt.teamid`
+# when `kOtt.table` = 0 (`customteamtable` `fLEY` when 1; 0 rows). The join is measured by the named
+# case and implemented by the engine's `team_name_source` thin shape; the contract cannot state a
+# join path as a block, which is recorded on the mapping and in the receipt as a representation
+# limit. Storage, codec and byte budget are measured on `HqzU.YmkJ` (2048 bits = 256 bytes).
+
+[[mapping]]
+canonical = "team.name"
+table = "HqzU"
+field = "YmkJ"
+read_transform = "unresolved"
+write_transform = "unresolved"
+inverse_verified = false
+confidence = "derived"
+qualification = "blocked"
+provenance = [
+  "docs/audits/data/schema/ps3-nhl07.json#HqzU.YmkJ",
+  "crates/studio-domain/src/view.rs#team_name_source (thin shape: (RREB, mCXg) -> stockteamtable / customteamtable)",
+  "docs/audits/scalar-mutation-audit.md#string-policy",
+  "docs/audits/data/mutation-matrix.csv#ps3,nhl07,inline-string",
+  "crates/tdb-canonical/src/target_early_tests.rs#nhl07_ps3::team_name_lives_on_the_stock_team_table_reached_through_the_thin_team_index_and_round_trips",
+]
+note = "BLOCKED (C0-REG5, research copy): the table and field identity, layout and behaviour below are measured on the committed bytes, but NHL 07 PS3 is a research copy outside the shipping targets and no committed evidence attributes these bytes to a PS3 release, so no block is operative and the mapping cannot be used for a target. SEMANTICS DERIVED, LAYOUT MEASURED, BEHAVIOUR AUTOMATED-TESTED. THIN TEAM MODEL (gen6). `kOtt` (`exhibitionteams`) is a 4-byte index row — `table` (RREB, 1 bit), `division`, `teamid` (mCXg) and `index` (vfEq) — that carries no name; the names live on `stockteamtable` (`HqzU`, RREB = 0) and `customteamtable` (`fLEY`, RREB = 1, 0 rows on this anchor). MEASURED on this anchor (C0-REG5): all 93 `kOtt` rows store RREB = 0, every `kOtt.mCXg` resolves to exactly one `HqzU.vfEq` key (93/93, and to the row of the same index), and `HqzU.YmkJ` is named `fullname`. The engine's `team_name_source` implements exactly this join at HEAD (thin shape: `(table discriminator, teamid)` into the name-bearing table). REPRESENTATION LIMIT, recorded: `target-adapter/2` has no block for a join path from an entity's primary table to a field on another table; the join is stated here in prose and enforced by the named case, and the [mapping.applicability] predicate (`kOtt.RREB` = 0) records which `kOtt` rows this stock-table mapping covers. `shortname` (QNTI) and `abbrname` (xsnn) on `HqzU` are NOT mapped. The named case (C0-REG5) reads the vanilla value of record 0 (`Anaheim Ducks™`), overwrites it through `tdb_core::set_inline_str` on an in-memory copy, recomputes the CRC scopes, reopens and reads it back, shows that only the field span and one CRC word changed, that a second no-op serialization is byte-identical, and that a 257-byte value is refused with nothing written. It exercises THIS field on THIS anchor and nothing else: no UI path, no save container, no runtime acceptance."
+
+[mapping.storage]
+state = "unknown"
+note = "RESEARCH COPY, NOT A TARGET (C0-REG5): measured on the committed bytes at `anchors/ps3/nhl07/databases/NHL07NG.db`, which are byte-identical to the Xbox 360 NHL 07 anchor and are registered under `nhl07-ps3` as a research copy that the scope excludes from the shipping targets; no committed record describes a PlayStation 3 capture. This is a FIXTURE FACT about those bytes and NOT an operative NHL 07 PS3 constraint. The measurement is preserved as the candidate; it promotes only with a scope decision and an attributed PS3 capture (case `nhl07_ps3::the_research_copy_is_byte_identical_to_the_xbox360_anchor_and_establishes_no_ps3_release`)."
+[mapping.storage.candidate]
+confidence = "measured"
+provenance = ["docs/audits/data/schema/ps3-nhl07.json#HqzU.YmkJ"]
+note = "PROPOSED, NOT OPERATIVE — a fixture fact about a research copy, not a target constraint. "
+[mapping.storage.candidate.value]
+kind = "inline-string"
+bit_offset = 2048
+bit_width = 2048
+signedness = "not-applicable"
+range_low = 0
+range_high = 0
+endian = "big"
+
+[mapping.status]
+state = "unknown"
+note = "RESEARCH COPY, NOT A TARGET (C0-REG5): measured on the committed bytes at `anchors/ps3/nhl07/databases/NHL07NG.db`, which are byte-identical to the Xbox 360 NHL 07 anchor and are registered under `nhl07-ps3` as a research copy that the scope excludes from the shipping targets; no committed record describes a PlayStation 3 capture. This is a FIXTURE FACT about those bytes and NOT an operative NHL 07 PS3 constraint. The measurement is preserved as the candidate; it promotes only with a scope decision and an attributed PS3 capture (case `nhl07_ps3::the_research_copy_is_byte_identical_to_the_xbox360_anchor_and_establishes_no_ps3_release`)."
+[mapping.status.candidate]
+confidence = "measured"
+provenance = [
+  "docs/audits/data/schema/ps3-nhl07.json#HqzU.YmkJ",
+  "crates/tdb-canonical/src/target_early_tests.rs#nhl07_ps3::team_name_lives_on_the_stock_team_table_reached_through_the_thin_team_index_and_round_trips",
+]
+note = "PROPOSED, NOT OPERATIVE — a fixture fact about a research copy, not a target constraint. MEASURED (C0-REG5): the snapshot records key = false and updatable = true for this field, and the named case writes it as a scalar on an in-memory copy of this anchor and reopens the result with every other byte of every record unchanged."
+[mapping.status.candidate.value]
+key = false
+updatable = true
+structural = false
+
+[mapping.transform]
+state = "unknown"
+note = "RESEARCH COPY, NOT A TARGET (C0-REG5): measured on the committed bytes at `anchors/ps3/nhl07/databases/NHL07NG.db`, which are byte-identical to the Xbox 360 NHL 07 anchor and are registered under `nhl07-ps3` as a research copy that the scope excludes from the shipping targets; no committed record describes a PlayStation 3 capture. This is a FIXTURE FACT about those bytes and NOT an operative NHL 07 PS3 constraint. The measurement is preserved as the candidate; it promotes only with a scope decision and an attributed PS3 capture (case `nhl07_ps3::the_research_copy_is_byte_identical_to_the_xbox360_anchor_and_establishes_no_ps3_release`)."
+[mapping.transform.candidate]
+confidence = "measured"
+provenance = [
+  "docs/audits/data/schema/ps3-nhl07.json#HqzU.YmkJ (kind_code = 0, meta_type = string)",
+  "docs/audits/scalar-mutation-audit.md#string-policy",
+]
+note = "PROPOSED, NOT OPERATIVE — a fixture fact about a research copy, not a target constraint. "
+[mapping.transform.candidate.value]
+kind = "inline-string"
+
+[mapping.string_storage]
+state = "unknown"
+note = "RESEARCH COPY, NOT A TARGET (C0-REG5): measured on the committed bytes at `anchors/ps3/nhl07/databases/NHL07NG.db`, which are byte-identical to the Xbox 360 NHL 07 anchor and are registered under `nhl07-ps3` as a research copy that the scope excludes from the shipping targets; no committed record describes a PlayStation 3 capture. This is a FIXTURE FACT about those bytes and NOT an operative NHL 07 PS3 constraint. The measurement is preserved as the candidate; it promotes only with a scope decision and an attributed PS3 capture (case `nhl07_ps3::the_research_copy_is_byte_identical_to_the_xbox360_anchor_and_establishes_no_ps3_release`)."
+[mapping.string_storage.candidate]
+confidence = "measured"
+provenance = [
+  "docs/audits/data/schema/ps3-nhl07.json#HqzU.YmkJ",
+  "docs/audits/scalar-mutation-audit.md#string-policy",
+  "crates/tdb-core/src/lib.rs#set_inline_str",
+]
+note = "PROPOSED, NOT OPERATIVE — a fixture fact about a research copy, not a target constraint. 2048 bits = a 256-byte budget. The budget is BYTES, not characters: a multi-byte UTF-8 value trimmed to the budget round-trips, and one byte over is rejected at entry with no truncation and no write."
+[mapping.string_storage.candidate.value]
+storage = "inline-fixed"
+byte_capacity = 256
+encoding = "byte-transparent"
+padding = "nul-fill"
+over_capacity = "reject"
+
+[mapping.applicability]
+state = "unknown"
+note = "RESEARCH COPY, NOT A TARGET (C0-REG5): measured on the committed bytes at `anchors/ps3/nhl07/databases/NHL07NG.db`, which are byte-identical to the Xbox 360 NHL 07 anchor and are registered under `nhl07-ps3` as a research copy that the scope excludes from the shipping targets; no committed record describes a PlayStation 3 capture. This is a FIXTURE FACT about those bytes and NOT an operative NHL 07 PS3 constraint. The measurement is preserved as the candidate; it promotes only with a scope decision and an attributed PS3 capture (case `nhl07_ps3::the_research_copy_is_byte_identical_to_the_xbox360_anchor_and_establishes_no_ps3_release`)."
+[mapping.applicability.candidate]
+confidence = "measured"
+provenance = [
+  "crates/tdb-canonical/src/target_early_tests.rs#nhl07_ps3::team_name_lives_on_the_stock_team_table_reached_through_the_thin_team_index_and_round_trips",
+  "docs/audits/data/schema/ps3-nhl07.json#kOtt.RREB",
+  "docs/audits/data/schema/ps3-nhl07.json#kOtt.mCXg",
+  "docs/audits/data/schema/ps3-nhl07.json#HqzU.vfEq",
+]
+note = "PROPOSED, NOT OPERATIVE — a fixture fact about a research copy, not a target constraint. MEASURED on this anchor (C0-REG5): every `kOtt` row stores `table` (RREB) = 0 and its `teamid` (mCXg) resolves to one `stockteamtable` (`HqzU`) row by `index` (vfEq), so this mapping — a field on `HqzU` — applies to the team rows whose discriminator selects the stock table; a row with RREB = 1 would be a `customteamtable` (`fLEY`) team, of which this anchor has none. The predicate is stated on the team entity's primary table."
+[mapping.applicability.candidate.value]
+kind = "target-predicate"
+table = "kOtt"
+field = "RREB"
+codes = [0]
+
+[[omission]]
+canonical = "player.rating_overall"
+reason = "unknown-field-identity"
+detail = "DISCOVERY NOTE, NOT PROOF OF ABSENCE. A name search over this target's committed snapshot (C0-REG5) found 0 fields whose metadata name contains `overall` across all 90 tables / 1813 fields — not on the skater block `dSvy`, not on the draft-pick tables of NHL 11 onwards (which this title lacks), nowhere. NHL 13's snapshot carries `dSvy.bPyZ` (`p_overall`) and NHL 14+ carry `dSvy.eWUF` (`c_overall`); this title's skater block is the `p_*` set without an overall. That records where the search looked and what it did not find. It does not prove the target lacks a stored overall: a name search cannot establish semantic absence. To move this to `target-absent`, identify the target's complete rating representation and show the value is not carried anywhere in it."
+provenance = ["docs/audits/data/schema/ps3-nhl07.json"]
+
+# --------------------------------------------------------------------------------------------
+# Capacity. The main DB is PACKED (max_records == current_records — measured in this snapshot for
+# every table: 90 of 90), so it does not expose a ceiling, and the ceiling that a ROSTER
+# save would carry is NOT measurable on this target: no save fixture is committed. Every table below is
+# therefore UNKNOWN — recorded, not read off the packed main DB (which would understate it) and not
+# carried from any other title. No codec research was done.
+# --------------------------------------------------------------------------------------------
+
+[[capacity]]
+table = "ubPc"
+[capacity.declared]
+state = "unknown"
+note = "SAVE CAPACITY MISSING-FIXTURE: no save of any kind is committed under `anchors/ps3/nhl07/` (the QA matrix records `missing-fixture` for this research copy: the save is user-supplied), so this table's save capacity is NOT measured, and the packed main DB's figure is NOT read off as a substitute, which would understate it (case `crates/tdb-canonical/src/target_early_tests.rs#nhl07_ps3::no_save_fixture_is_committed_so_the_save_capacity_is_missing_fixture`). The main anchor's own directory for this table is packed: max_records = current_records = 2250 (`docs/audits/data/schema/ps3-nhl07.json#ubPc`), a population, not a ceiling."
+
+[[capacity]]
+table = "ZBac"
+[capacity.declared]
+state = "unknown"
+note = "SAVE CAPACITY MISSING-FIXTURE: no save of any kind is committed under `anchors/ps3/nhl07/` (the QA matrix records `missing-fixture` for this research copy: the save is user-supplied), so this table's save capacity is NOT measured, and the packed main DB's figure is NOT read off as a substitute, which would understate it (case `crates/tdb-canonical/src/target_early_tests.rs#nhl07_ps3::no_save_fixture_is_committed_so_the_save_capacity_is_missing_fixture`). The main anchor's own directory for this table is packed: max_records = current_records = 2790 (`docs/audits/data/schema/ps3-nhl07.json#ZBac`), a population, not a ceiling."
+
+[[capacity]]
+table = "eGlu"
+[capacity.declared]
+state = "unknown"
+note = "SAVE CAPACITY MISSING-FIXTURE: no save of any kind is committed under `anchors/ps3/nhl07/` (the QA matrix records `missing-fixture` for this research copy: the save is user-supplied), so this table's save capacity is NOT measured, and the packed main DB's figure is NOT read off as a substitute, which would understate it (case `crates/tdb-canonical/src/target_early_tests.rs#nhl07_ps3::no_save_fixture_is_committed_so_the_save_capacity_is_missing_fixture`). The main anchor's own directory for this table is packed: max_records = current_records = 2516 (`docs/audits/data/schema/ps3-nhl07.json#eGlu`), a population, not a ceiling."
+
+[[capacity]]
+table = "kOtt"
+[capacity.declared]
+state = "unknown"
+note = "SAVE CAPACITY MISSING-FIXTURE: no save of any kind is committed under `anchors/ps3/nhl07/` (the QA matrix records `missing-fixture` for this research copy: the save is user-supplied), so this table's save capacity is NOT measured, and the packed main DB's figure is NOT read off as a substitute, which would understate it (case `crates/tdb-canonical/src/target_early_tests.rs#nhl07_ps3::no_save_fixture_is_committed_so_the_save_capacity_is_missing_fixture`). The main anchor's own directory for this table is packed: max_records = current_records = 93 (`docs/audits/data/schema/ps3-nhl07.json#kOtt`), a population, not a ceiling."
+
+[[capacity]]
+table = "dSvy"
+[capacity.declared]
+state = "unknown"
+note = "SAVE CAPACITY MISSING-FIXTURE: no save of any kind is committed under `anchors/ps3/nhl07/` (the QA matrix records `missing-fixture` for this research copy: the save is user-supplied), so this table's save capacity is NOT measured, and the packed main DB's figure is NOT read off as a substitute, which would understate it (case `crates/tdb-canonical/src/target_early_tests.rs#nhl07_ps3::no_save_fixture_is_committed_so_the_save_capacity_is_missing_fixture`). The main anchor's own directory for this table is packed: max_records = current_records = 2015 (`docs/audits/data/schema/ps3-nhl07.json#dSvy`), a population, not a ceiling."
+
+[[capacity]]
+table = "mHuy"
+[capacity.declared]
+state = "unknown"
+note = "SAVE CAPACITY MISSING-FIXTURE: no save of any kind is committed under `anchors/ps3/nhl07/` (the QA matrix records `missing-fixture` for this research copy: the save is user-supplied), so this table's save capacity is NOT measured, and the packed main DB's figure is NOT read off as a substitute, which would understate it (case `crates/tdb-canonical/src/target_early_tests.rs#nhl07_ps3::no_save_fixture_is_committed_so_the_save_capacity_is_missing_fixture`). The main anchor's own directory for this table is packed: max_records = current_records = 235 (`docs/audits/data/schema/ps3-nhl07.json#mHuy`), a population, not a ceiling."
+
+# --------------------------------------------------------------------------------------------
+# Companion / cardinality — GEN6 MODEL. A Player is the `ubPc` bio row plus TWO companion rows that
+# SHARE its primary key `wBIz` (measured: `wBIz`, named `game_id`, is the key field on ubPc and on
+# both companions in this snapshot). There are NO equipment companions on this title: `xmja`
+# (`exhibitionskaterequipment`) and `fMVl` (`exhibitiongoalieequipment`) do not exist in this
+# snapshot, and the NHL 08+ four-companion rule was NOT carried here. MEASURED on this anchor
+# (C0-REG5): each companion table holds one row per key, every key resolves to a bio row, the table
+# EA names `exhibitionskaterai` holds exactly 2015 players and the one it names `exhibitiongoalieai`
+# exactly 235, the sets are disjoint and together cover all 2250 bio rows.
+# --------------------------------------------------------------------------------------------
+
+[[companion_rule]]
+primary_table = "ubPc"
+[companion_rule.declared]
+state = "unknown"
+note = "RESEARCH COPY, NOT A TARGET (C0-REG5): measured on the committed bytes at `anchors/ps3/nhl07/databases/NHL07NG.db`, which are byte-identical to the Xbox 360 NHL 07 anchor and are registered under `nhl07-ps3` as a research copy that the scope excludes from the shipping targets; no committed record describes a PlayStation 3 capture. This is a FIXTURE FACT about those bytes and NOT an operative NHL 07 PS3 constraint. The measurement is preserved as the candidate; it promotes only with a scope decision and an attributed PS3 capture (case `nhl07_ps3::the_research_copy_is_byte_identical_to_the_xbox360_anchor_and_establishes_no_ps3_release`)."
+[companion_rule.declared.candidate]
+confidence = "measured"
+provenance = [
+  "crates/tdb-canonical/src/target_early_tests.rs#nhl07_ps3::position_codes_partition_the_bio_table_exactly_as_the_metadata_named_companions_do",
+  "docs/audits/data/schema/ps3-nhl07.json#dSvy (exhibitionskaterai)",
+  "docs/audits/data/schema/ps3-nhl07.json#mHuy (exhibitiongoalieai)",
+  "docs/audits/data/operation-matrix.csv#ps3,nhl07",
+]
+note = "PROPOSED, NOT OPERATIVE — a fixture fact about a research copy, not a target constraint. MEASURED on this anchor by the named case (C0-REG5); the skater/goalie label of each companion is EA's metadata table name, not an enum file. One-to-one: 2015 distinct keys in dSvy, 235 in mHuy, none duplicated, all resolving to a bio row. Two companions only: the equipment tables of NHL 08 onwards are absent from this gen6 snapshot. operation-matrix.csv (create-skater / create-goalie / clone / delete on `ps3,nhl07`) is retained as corroboration; the roster-relationships audit was verified on nhl11 -> legacy anchors only and is not relied on here."
+[companion_rule.declared.candidate.value]
+shared_key_field = "wBIz"
+[[companion_rule.declared.candidate.value.companion]]
+table = "dSvy"
+cardinality = "one-to-one"
+applies_when = "position-skater"
+[[companion_rule.declared.candidate.value.companion]]
+table = "mHuy"
+cardinality = "one-to-one"
+applies_when = "position-goalie"
+
+# The 3-bit width and 0..7 range are measured in the snapshot. The code ASSIGNMENT is MEASURED on
+# this anchor (C0-REG5): the 235 bio rows that own rows in the metadata-named goalie companion
+# table all store 4 and nothing else; the 2015 that own skater companion rows store exactly
+# {0, 1, 2, 3} (462 / 406 / 432 / 715); no row is unassigned. `defs/enums/position.toml` (an
+# uncommitted `NHL Legacy default.db`, five named players) was NOT the source of the expected labels
+# — EA's metadata table names were — and it agrees. What 0..3 mean individually is NOT established here.
+[position_discriminator]
+state = "unknown"
+note = "RESEARCH COPY, NOT A TARGET (C0-REG5): measured on the committed bytes at `anchors/ps3/nhl07/databases/NHL07NG.db`, which are byte-identical to the Xbox 360 NHL 07 anchor and are registered under `nhl07-ps3` as a research copy that the scope excludes from the shipping targets; no committed record describes a PlayStation 3 capture. This is a FIXTURE FACT about those bytes and NOT an operative NHL 07 PS3 constraint. The measurement is preserved as the candidate; it promotes only with a scope decision and an attributed PS3 capture (case `nhl07_ps3::the_research_copy_is_byte_identical_to_the_xbox360_anchor_and_establishes_no_ps3_release`)."
+[position_discriminator.candidate]
+confidence = "measured"
+provenance = [
+  "crates/tdb-canonical/src/target_early_tests.rs#nhl07_ps3::position_codes_partition_the_bio_table_exactly_as_the_metadata_named_companions_do",
+  "docs/audits/data/schema/ps3-nhl07.json#ubPc.vjla",
+  "docs/audits/data/schema/ps3-nhl07.json#mHuy (exhibitiongoalieai)",
+  "docs/audits/data/schema/ps3-nhl07.json#dSvy (exhibitionskaterai)",
+]
+note = "PROPOSED, NOT OPERATIVE — a fixture fact about a research copy, not a target constraint. MEASURED on this anchor: goalie code {4} and skater codes {0, 1, 2, 3} partition the 2250 bio rows exactly as ownership of a row in the EA-named goalie / skater companion tables does. Codes 5..7 of the 3-bit field are stored on no row. The per-code labels of 0..3 (centre, wings, defence) are not established here and are not declared."
+[position_discriminator.candidate.value]
+table = "ubPc"
+field = "vjla"
+skater_codes = [0, 1, 2, 3]
+goalie_codes = [4]

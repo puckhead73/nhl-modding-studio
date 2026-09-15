@@ -342,7 +342,15 @@ mod run {
         assert_eq!(goalie_codes, BTreeSet::from([4]));
 
         let a = e.target.adapter();
-        assert_discriminator_declared(&e.target, &a, &[0, 1, 2, 3], &[4], e.rated, &e.case(case));
+        assert_discriminator_declared(
+            &e.target,
+            &a,
+            &[0, 1, 2, 3],
+            &[4],
+            e.rated,
+            GEN7_COMPANIONS,
+            &e.case(case),
+        );
         assert_eq!(validate_adapter(&a, &schema_for_validation()), vec![]);
     }
 
