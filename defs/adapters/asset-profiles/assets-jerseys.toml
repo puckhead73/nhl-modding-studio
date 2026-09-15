@@ -1,11 +1,13 @@
-# Per-family asset output profile — uniforms / jersey kits (Q07a.1). Schema `asset-output-profile/3`.
+# Per-family asset output profile — uniforms / jersey kits (Q07a.1). Schema `asset-output-profile/4`.
 #
-# Package C0-REG2 (2026-09-15). REPRESENTATION, NOT ESTABLISHED COVERAGE. Every constraint block on
-# every target is `unknown`; no operation's requirements are met; nothing here decides a Build. The
-# file registers the uniform family against the existing contract from committed evidence so the
-# gap is enumerated in the contract's own terms, and it records — in notes, where the contract has
-# no field — the two facts this family needs that the contract cannot yet spell (see the receipt,
-# docs/receipts/c0-reg2-database-asset-registry.md, §B.4).
+# Package C0-REG2 (2026-09-15), revised by C0-AS4 (2026-09-15) to `asset-output-profile/4`.
+# REPRESENTATION, NOT ESTABLISHED COVERAGE. Every constraint block on every target is `unknown`; no
+# operation's requirements are met; nothing here decides a Build. The file registers the uniform
+# family against the contract from committed evidence so the gap is enumerated in the contract's
+# own terms. `/4` lets the two facts C0-REG2 could only put in prose be SPELLED — a composite kit
+# id built from named `xjgw` fields, and an ordered thumbnail fallback with shared-file write
+# exclusion — and C0-AS4 MEASURED the composite on the committed anchor (below). Spelling a fact is
+# not establishing it: both stay candidates, for the reasons each block gives.
 #
 # ---------------------------------------------------------------------------------------------
 # THE EVIDENCE THIS FILE RESTS ON, ALL OF IT COMMITTED
@@ -45,27 +47,33 @@
 # identity SOURCE, which is a reference, not an ownership claim.
 #
 # ---------------------------------------------------------------------------------------------
-# WHAT THE CONTRACT CANNOT SPELL FOR THIS FAMILY (recorded, not worked around silently)
+# THE TWO C0-REG2 GAPS, NOW SPELLED (`/4`) — AND WHAT SPELLING THEM DOES NOT ESTABLISH
 #
-#   1. THE KIT ID. A kit is `{style}_{teamartid}_{variant}` — three DB fields — and `PATH_TOKEN`
-#      has `team-id` and `variant` but no `style` and no composite. The families below use
-#      `{variant}` as a stand-in for the WHOLE kit id and say so in their notes. That is a
-#      representation gap, not an observation, and `bucket_resolution` stays unknown partly for it.
-#   2. THE SHARED FALLBACK. `jersey_{id}.big` falls back to `custom.big` / `customhome.big` /
-#      `customaway.big`, which every custom kit shares and which a per-kit replace must never write.
-#      No block records a resolution chain or a shared-member write restriction: `runtime_lookup`
-#      has patch precedence only, `atlas.sharing` is about surfaces, `install` has no target
-#      exclusion. Recorded in [install] and [runtime_lookup] notes. The chain itself is known from
-#      WORKING-TREE source only (above); the gap in the contract is independent of that.
+#   1. THE KIT ID is `[identity.candidate.value.composite]`: `{style}_{art}_{variant}` from
+#      `xjgw.cVLR`, `xjgw.GDQL`, `xjgw.FccT`, rendered decimal, and the families substitute
+#      `{composite-id}`. MEASURED on the committed anchor (C0-AS4, the named case): 703 rows render
+#      698 DISTINCT ids — three tuples are shared by more than one row (`1_19_3` by teams 19 and
+#      216, `1_21_4` by teams 21 and 217, `1_255_0` by four rows on teams 220 and 221), so the id
+#      is NOT unique and rows do NOT correspond one-to-one with files; `teamartid` equals the row's
+#      own team's `kOtt.lOnr` on all 703 rows; nine rows store `teamartid = 0` and they are the
+#      nine rows of team key 0 (whose `lOnr` is 0) — a value, not a missing part, and no part has
+#      an established null code. The identity stays a CANDIDATE: no committed record places a
+#      rendered id beside a real file (no member listing, `chunklzx` undecoded), and D7 is open.
+#   2. THE SHARED FALLBACK is `[[resolution_chain]] kit-thumbnail`: `fe-thumbnail` (owned), then
+#      `fe-thumbnail-custom` / `-customhome` / `-customaway` (shared), read-write. It is a CANDIDATE
+#      whose only source is WORKING-TREE code (`jersey_thumbnail`, not at any baseline); it enables
+#      no operation, and the `/4` rules already refuse a write to any shared step even if it were
+#      established. Chain order is a declared reading order; it says nothing about what the game
+#      loads — `[runtime_lookup]` is still unknown and still required.
 
-schema = "asset-output-profile/3"
-profile_version = 1
+schema = "asset-output-profile/4"
+profile_version = 2
 family = "assets-jerseys"
 note = """
 Nothing on any target is established. One target is represented (NHL Legacy, Xbox 360): the DB
-half of a kit is measured in the committed snapshot, the file half rests on repository source and
-one unnamed extracted-tree write. Every block is unknown; two contract gaps are recorded in the
-header rather than papered over.
+half of a kit is measured in the committed snapshot and its composite id measured on the anchor
+(C0-AS4), the file half rests on repository source and one unnamed extracted-tree write. Every
+block is unknown; the composite identity and the thumbnail resolution chain are candidates.
 """
 
 [[canonical_source]]
@@ -155,17 +163,19 @@ provenance = [
 
 [[target_profile.path_family]]
 id = "outfit-texlib"
-template = "rendering/jersey/texlib_{variant}.rx2"
-tokens = ["variant"]
+template = "rendering/jersey/texlib_{composite-id}.rx2"
+tokens = ["composite-id"]
 case = "lower"
 bucket_resolution = "unknown"
 note = """
-`{variant}` STANDS IN FOR THE WHOLE KIT ID `{style}_{teamartid}_{variant}` (`xjgw.cVLR`,
-`xjgw.GDQL`, `xjgw.FccT`), because `PATH_TOKEN` has no `style` token and no composite token — gap 1
-in the header. The bundle holds several named rasters (`jersey_*_cm`, `font_*_cm`, on some titles
-`pant_*`), so one file carries more than one canonical role. Template from repository source
-(`export_team_outfits` / `list_team_outfits`); the team-id token position is derived per folder at
-runtime because it differs by title, which is a second reason no rule is declared.
+`{composite-id}` is the rendered `[identity.candidate.value.composite]` — `{style}_{art}_{variant}`
+from the `xjgw` row. MEASURED (C0-AS4): rendering it for all 703 rows yields three path collisions
+under this template (`texlib_1_19_3.rx2`, `texlib_1_21_4.rx2`, `texlib_1_255_0.rx2`, each named by
+two or four rows), so a row does not own a bundle one-to-one; the identity's `ambiguity = "reject"`
+refuses to bind those rows. The bundle holds several named rasters (`jersey_*_cm`, `font_*_cm`, on
+some titles `pant_*`), so one file carries more than one canonical role. Template from repository
+source (`export_team_outfits` / `list_team_outfits`); that a rendered id names a REAL file is not
+in any committed record, which is why `bucket_resolution` stays unknown.
 """
 
 [[target_profile.path_family]]
@@ -178,18 +188,88 @@ note = "Loose single-raster socks. `{variant}` is again the kit-id stand-in; the
 
 [[target_profile.path_family]]
 id = "fe-thumbnail"
-template = "fe/ion/artassets/jerseys/jersey_{variant}.big"
-tokens = ["variant"]
+template = "fe/ion/artassets/jerseys/jersey_{composite-id}.big"
+tokens = ["composite-id"]
 case = "lower"
 bucket_resolution = "unknown"
 note = """
-The jersey-select thumbnail, `{variant}` = the kit id. KNOWN FROM WORKING-TREE SOURCE ONLY
-(`jersey_thumbnail`, not at baseline 52a12fd): when the kit has no stock art the game resolves
-`custom.big`, then `customhome.big`, then `customaway.big` — shared by every custom kit. That chain
-is gap 2 in the header: a resolution rule the contract cannot carry, whose shared members a per-kit
-replacement must not write. Declared so the form has a place; nothing committed names one of these
-files.
+The jersey-select thumbnail a kit OWNS, named by the same composite id (and therefore carrying
+the same three measured collisions as the bundle). KNOWN FROM WORKING-TREE SOURCE ONLY
+(`jersey_thumbnail`, not at any baseline): the owned step of `[[resolution_chain]] kit-thumbnail`.
+Declared so the form has a place; nothing committed names one of these files.
 """
+
+# The three SHARED fallback thumbnails. Literal templates (no token): the file is one file for every
+# kit that falls back to it, which is exactly why a per-kit write must never resolve to it. All
+# three are known from WORKING-TREE source only and establish nothing.
+[[target_profile.path_family]]
+id = "fe-thumbnail-custom"
+template = "fe/ion/artassets/jerseys/custom.big"
+case = "lower"
+bucket_resolution = "unknown"
+note = "Shared fallback (WORKING TREE ONLY, `jersey_thumbnail`). `bucket_resolution` stays unknown because no committed record shows the file exists in any tree."
+
+[[target_profile.path_family]]
+id = "fe-thumbnail-customhome"
+template = "fe/ion/artassets/jerseys/customhome.big"
+case = "lower"
+bucket_resolution = "unknown"
+note = "Shared fallback (WORKING TREE ONLY, `jersey_thumbnail`)."
+
+[[target_profile.path_family]]
+id = "fe-thumbnail-customaway"
+template = "fe/ion/artassets/jerseys/customaway.big"
+case = "lower"
+bucket_resolution = "unknown"
+note = "Shared fallback (WORKING TREE ONLY, `jersey_thumbnail`)."
+
+# ---- the declared reading order over those families (`/4`) ----------------------------------
+
+[[target_profile.resolution_chain]]
+id = "kit-thumbnail"
+purpose = "read-write"
+note = """
+The order the working-tree thumbnail code reads: the kit's own file, then the three shared
+defaults. Declared read-write so the `/4` write rule is visible on it: a write resolves ONLY the
+owned step (`fe-thumbnail`) — never a shared step, whatever a read found, and never a rendered
+path that equals any shared step's once separators are normalised; a path that differs from a
+shared one only in case is refused as undetermined, because declared casing is a rendering rule
+and says nothing about the destination's case sensitivity (C0-AS4-CLOSE). It
+creates a missing owned file only for the one shape the resolver can describe end to end: a
+`loose-file` [install] with [container] decided absent and no reference to update (C0-AS4-R1);
+a described archive install or container format, or an `updates_references` install, is reported
+as unsupported creation, not implied support. Chain order is a declared reading order; it is NOT
+evidence of the game's lookup, which stays with [runtime_lookup].
+"""
+
+[target_profile.resolution_chain.declared]
+state = "unknown"
+note = "UNKNOWN: the chain's only source is working-tree code that is not at any baseline, so it is recorded as a candidate and enables nothing. Promoting it needs, at least, a committed observation that the four files exist in an attributable corpus and that more than one kit resolves to each shared one."
+
+[target_profile.resolution_chain.declared.candidate]
+confidence = "asserted"
+provenance = [
+    "WORKING TREE ONLY, NOT AT BASELINE: crates/studio-domain/src/assets.rs#jersey_thumbnail (candidate list `jersey_{style}_{art_id}_{variant}.big`, `custom.big`, `customhome.big`, `customaway.big`, with a `stock` flag on the first)",
+]
+note = "PROPOSED, NOT OPERATIVE. Recorded from uncommitted source and labelled as such; that source's own comment claims the game's menu resolves the same way, and that claim is NOT carried here."
+
+[target_profile.resolution_chain.declared.candidate.value]
+
+[[target_profile.resolution_chain.declared.candidate.value.step]]
+family = "fe-thumbnail"
+ownership = "owned"
+
+[[target_profile.resolution_chain.declared.candidate.value.step]]
+family = "fe-thumbnail-custom"
+ownership = "shared"
+
+[[target_profile.resolution_chain.declared.candidate.value.step]]
+family = "fe-thumbnail-customhome"
+ownership = "shared"
+
+[[target_profile.resolution_chain.declared.candidate.value.step]]
+family = "fe-thumbnail-customaway"
+ownership = "shared"
 
 # ---- forms --------------------------------------------------------------------------------
 
@@ -328,8 +408,66 @@ file half — that `texlib_{style}_{art}_{variant}` is the bundle a row names �
 source exercised by synthetic naming tests (`outfit_output_name…`), not a committed observation
 of a real file beside its row. `ambiguity` is a Studio behaviour choice and is not proposed.
 
-What would be proposed — key `composite`, source `xjgw.cVLR + xjgw.GDQL + xjgw.FccT` (by `xjgw.mCXg` team). No value is carried because `IdentityValue.ambiguity` would have to be invented and because decision D7 has not assigned the `uniforms` rows to this family. — is left in prose rather than as a `[candidate]`: the contract requires a candidate to carry a value table, and the value's `ambiguity` field cannot be filled without inventing a Studio behaviour choice.
+C0-AS4 (`/4`) carries the proposal as a candidate with a value: key `composite`, built from the
+three fields below, `ambiguity = "reject"` — the contract's own rule that an ambiguous match is
+never bound silently, which the measured collisions make a live case rather than a hypothetical.
+It stays a candidate because no committed record places a rendered id beside a real file
+(`chunklzx` undecoded, no member listing) and because D7 is undecided.
 """
+
+[target_profile.identity.candidate]
+confidence = "measured"
+scope = "specimen-observation"
+corpus = "xbox360-shipping-archives"
+provenance = [
+    "docs/audits/data/schema/xbox360-nhllegacy.json#xjgw",
+    "crates/tdb-canonical/src/asset_resolution_tests.rs#legacy_x360_xjgw_composite_tuples_are_measured_not_assumed_unique",
+    "crates/studio-domain/src/assets.rs#export_team_outfits",
+]
+note = """
+PROPOSED, NOT OPERATIVE. MEASURED on the committed anchor `anchors/xbox360/nhllegacy/databases/nhlng.db`
+by the named case (C0-AS4): `xjgw` has 703 rows; `cVLR` (style, 1 bit) stores 0..1, `GDQL`
+(teamartid, 15 bits) stores 0..421, `FccT` (variant, 5 bits) stores 0..20; neither field wider
+than one bit stores its all-ones pattern (the 1-bit style's all-ones is its value 1); rendering `{style}_{art}_{variant}` for every row gives 698 distinct ids — the
+tuples `1_19_3`, `1_21_4` and `1_255_0` are each shared by two or four rows (teams 19/216, 21/217,
+220/221), so the id is NOT unique and rows do not map one-to-one to files; `GDQL` equals the row's
+own team's `kOtt.lOnr` on all 703 rows; the nine rows with `GDQL = 0` are the nine rows of team key
+0, whose `lOnr` is 0 — a value. `scope = specimen-observation` and the shipping-archive corpus are
+named because the measurement is of the database bytes only: whether the rendered id names a file
+in that corpus is not observed. `confidence = measured` describes the tuple measurement, not the
+file binding. To promote this: a committed member listing (or extracted-tree census with a
+provenance bridge) showing a rendered id beside its file, and decision D7.
+"""
+
+[target_profile.identity.candidate.value]
+key = "composite"
+source = "xjgw (stockteamjerseys): one row per kit, keyed by mCXg teamid"
+ambiguity = "reject"
+
+[target_profile.identity.candidate.value.composite]
+format = "{style}_{art}_{variant}"
+note = "Rendered decimal, unpadded, matching the working-tree and repository-source spellings `texlib_{style}_{art}_{variant}` / `jersey_{style}_{art_id}_{variant}`. No part declares a null code: no evidence establishes one, and the measured zeros are values."
+
+[[target_profile.identity.candidate.value.composite.part]]
+name = "style"
+table = "xjgw"
+field = "cVLR"
+render = "decimal"
+note = "`style`, 1 bit, stored 0..1 (290 rows 0, 413 rows 1)."
+
+[[target_profile.identity.candidate.value.composite.part]]
+name = "art"
+table = "xjgw"
+field = "GDQL"
+render = "decimal"
+note = "`teamartid`, 15 bits, stored 0..421; equals the row's team's `kOtt.lOnr` on every row. Nine rows store 0 (team key 0); no null code is established."
+
+[[target_profile.identity.candidate.value.composite.part]]
+name = "variant"
+table = "xjgw"
+field = "FccT"
+render = "decimal"
+note = "`variant`, 5 bits, stored 0..20 (173 rows 0). `ddOX` fevariant is a separate field with the same stored range and is not part of the id."
 
 [target_profile.container]
 state = "unknown"
@@ -337,7 +475,7 @@ note = "Carried by the variants for the inner layers. The outer `EB\\0\\3` layer
 
 [target_profile.path_rule]
 state = "unknown"
-note = "All three families are unresolved, and the kit id itself cannot be spelled in tokens (gap 1)."
+note = "Every family is unresolved: the composite id is now spelled (`/4`) but no committed record binds a rendered id to a real file, and the three measured collisions mean the template alone cannot resolve a unique path for every row."
 
 [target_profile.raster]
 state = "unknown"
@@ -376,18 +514,19 @@ note = "A bundle carries body, font sheet and (on some titles) pants as separate
 state = "unknown"
 note = """
 `install = external`: the recorded write landed in an extracted tree through `import_texture`.
-Two facts a kit install needs have no field: (a) the shared fallback thumbnails (`custom*.big`)
-must never be written by a per-kit replace — gap 2 — and (b) an "Add New Jersey" is a DB row
-(`xjgw`) plus cloned files, which is `updates_references` in the other direction (the files
-follow the row). Both (a) and (b) are exercised only by WORKING-TREE code (`jersey_thumbnail`,
-`clone_kit_textures`, an `xjgw` clone in `workspace.rs`) that is not at baseline 52a12fd. The
-committed EB archive-write capability (`tdb_archive_big::eb::EbFile::replace_payload*`) is not
-wired to this family.
+Of the two facts a kit install needs, (a) — the shared fallback thumbnails (`custom*.big`) must
+never be written by a per-kit replace — is now spelled by `[[resolution_chain]] kit-thumbnail`
+(`/4`), whose write rule resolves only the owned step; (b) — an "Add New Jersey" is a DB row
+(`xjgw`) plus cloned files, `updates_references` in the other direction (the files follow the
+row) — still has no field. Both are exercised only by WORKING-TREE code (`jersey_thumbnail`,
+`clone_kit_textures`, an `xjgw` clone in `workspace.rs`) that is not at any baseline. The committed
+EB archive-write capability (`tdb_archive_big::eb::EbFile::replace_payload*`) is not wired to this
+family, and no archive installation is implemented or claimed.
 """
 
 [target_profile.runtime_lookup]
 state = "unknown"
-note = "What the game loads was not traced or load-tested. For the thumbnail the game's own fallback chain (`jersey_{id}.big` -> `custom.big` -> `customhome.big` -> `customaway.big`, per working-tree source) is a lookup rule the contract cannot carry (gap 2); it is recorded here so it is not lost."
+note = "What the game loads was not traced or load-tested. The thumbnail order is now spelled as `[[resolution_chain]] kit-thumbnail` (`/4`), and that chain is a declared reading order taken from working-tree source — it is NOT evidence of the game's lookup, which only a trace, a disassembly or a load test would be. This block stays unknown independently of the chain and every operation that needs it stays blocked."
 
 [[target_profile.operation]]
 operation = "discover"
@@ -421,4 +560,5 @@ note = "Q10: a release replacement preserves the original dimensions and encoded
 
 [[target_profile.operation]]
 operation = "install"
-requires = ["container", "install", "runtime_lookup"]
+requires = ["container", "install", "runtime_lookup", "resolution_chain:kit-thumbnail"]
+note = "The chain requirement is met only by an OPERATIVE chain; the candidate above does not meet it, and `runtime_lookup` is required independently of it."

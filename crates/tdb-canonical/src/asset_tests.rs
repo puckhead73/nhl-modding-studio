@@ -79,7 +79,10 @@ fn variant<'a>(t: &'a TargetProfile, id: &str) -> &'a AssetVariant {
 #[test]
 fn the_committed_asset_profile_satisfies_the_contract() {
     let profile = committed_profile();
-    assert_eq!(profile.schema, ASSET_PROFILE_SCHEMA);
+    // The portrait profile is a `/3` document and stays one: `/4` (C0-AS4) validates it in place
+    // under its own rules, so this is also the compatibility check.
+    assert_eq!(profile.schema, ASSET_PROFILE_SCHEMA_V3);
+    assert!(ASSET_PROFILE_SCHEMAS_NATIVE.contains(&profile.schema.as_str()));
     let findings = validate_asset_profile(&profile);
     assert_eq!(findings, vec![], "{findings:?}");
     // C0-POR1 added `nhllegacy-ps3`, whose measured copy is the only genuine shipping tree of the
@@ -568,13 +571,17 @@ fn no_committed_asset_profile_is_a_synthetic_fixture() {
 /// change these numbers deliberately.
 #[test]
 fn the_logo_and_jersey_profiles_represent_their_families_and_establish_nothing() {
-    let expected: [(&str, &str, usize, usize, usize); 2] = [
+    let expected: [(&str, &str, usize, usize, usize, bool); 2] = [
         // family, file, path families, variants, candidates (target-level blocks and variant
-        // correlated blocks carrying a proposal; a variant's container proposal is not counted)
-        ("assets-logos", "assets-logos.toml", 2, 2, 4),
-        ("assets-jerseys", "assets-jerseys.toml", 3, 3, 2),
+        // correlated blocks carrying a proposal; a variant's container proposal is not counted),
+        // whether [identity] carries a candidate.
+        ("assets-logos", "assets-logos.toml", 2, 2, 4, false),
+        // C0-AS4 (`/4`): three shared-fallback families and a measured composite-identity
+        // candidate were added; the chain is a candidate too and is counted apart (see
+        // asset_resolution_tests).
+        ("assets-jerseys", "assets-jerseys.toml", 6, 3, 3, true),
     ];
-    for (family, file, families, variants, candidates) in expected {
+    for (family, file, families, variants, candidates, identity_candidate) in expected {
         let text =
             std::fs::read_to_string(repo_root().join("defs/adapters/asset-profiles").join(file))
                 .unwrap();
@@ -654,9 +661,12 @@ fn the_logo_and_jersey_profiles_represent_their_families_and_establish_nothing()
             Some("specimen-observation"),
             "{file}: a summary line is not a corpus invariant"
         );
-        // Identity: the DB half is measured, the file half is prose, and a candidate would need an
-        // invented ambiguity policy - so the block is unknown with provenance and no proposal.
-        assert!(t.identity.candidate.is_none() && !t.identity.provenance.is_empty());
+        // Identity: the DB half is measured and the file half is prose. On the logo profile the
+        // block is unknown with provenance and no proposal; on the jersey profile `/4` lets the
+        // measured composite be carried as a candidate, and it is still unknown.
+        assert!(!t.identity.provenance.is_empty());
+        assert_eq!(t.identity.candidate.is_some(), identity_candidate, "{file}");
+        assert!(t.identity.established().is_none());
         assert!(t.install.candidate.is_none() && t.runtime_lookup.candidate.is_none());
     }
 }

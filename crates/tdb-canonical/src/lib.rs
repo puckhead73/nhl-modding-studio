@@ -47,6 +47,7 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 pub mod asset;
+pub mod asset_resolution;
 pub mod asset_v1;
 pub mod asset_v2;
 pub mod build_override;
@@ -105,7 +106,14 @@ pub const ADAPTER_SCHEMA: &str = "target-adapter/2";
 /// The previous adapter schema. Accepted only through [`upgrade_v1`], never validated in place.
 pub const ADAPTER_SCHEMA_PREVIOUS: &str = "target-adapter/1";
 /// The asset output profile schema id this crate validates natively.
-pub const ASSET_PROFILE_SCHEMA: &str = "asset-output-profile/3";
+pub const ASSET_PROFILE_SCHEMA: &str = "asset-output-profile/4";
+/// The `/3` schema. `/4` adds only optional structures (a composite identity, resolution chains, the
+/// `composite-id` path token), so a `/3` document is validated **in place under exactly its own
+/// rules**, plus one: it may not use a `/4` construct while claiming `/3`. Nothing in a `/3`
+/// document is reinterpreted; see [`ASSET_PROFILE_SCHEMAS_NATIVE`].
+pub const ASSET_PROFILE_SCHEMA_V3: &str = "asset-output-profile/3";
+/// The schemas validated in place. Order is newest first.
+pub const ASSET_PROFILE_SCHEMAS_NATIVE: &[&str] = &[ASSET_PROFILE_SCHEMA, ASSET_PROFILE_SCHEMA_V3];
 /// The schema of a target Build mapping override record (Q07a.3a).
 pub const BUILD_OVERRIDE_SCHEMA: &str = "build-mapping-override/1";
 /// The previous asset profile schema. Accepted only through
@@ -473,6 +481,15 @@ pub enum Rule {
     /// bridge to itself, a bridge to another unattributable corpus, or one declared on a corpus
     /// that already claims attribution and therefore bridges nothing.
     AssetProvenanceBridgeInvalid,
+    /// A composite identity that cannot construct an id: a placeholder with no part, a part the
+    /// format never uses, a duplicate or malformed part name, an unknown rendering, a part on an
+    /// undeclared table or field, or a `composite-id` token with no composite behind it.
+    AssetCompositeInvalid,
+    /// A resolution chain that cannot resolve safely: an undeclared family, an unknown purpose or
+    /// ownership, a duplicate id, no step, a write chain with no owned step, a family that is
+    /// shared in one chain and owned in another, two families with the same template, or an
+    /// operation that writes through a read-only chain.
+    AssetResolutionChainInvalid,
 
     // ------------------------------------------- the Build mapping override layer
     /// An override record missing an identity, a revision, a digest or a citation it needs to be
@@ -553,6 +570,8 @@ impl Rule {
             Rule::AssetPropertyEvidenceConflict => "asset-property-evidence-conflict",
             Rule::AssetPathFamilyUnresolved => "asset-path-family-unresolved",
             Rule::AssetProvenanceBridgeInvalid => "asset-provenance-bridge-invalid",
+            Rule::AssetCompositeInvalid => "asset-composite-invalid",
+            Rule::AssetResolutionChainInvalid => "asset-resolution-chain-invalid",
             Rule::OverrideRecordIncomplete => "override-record-incomplete",
             Rule::OverridePriorConflict => "override-prior-conflict",
             Rule::OverrideApprovalUnbound => "override-approval-unbound",
@@ -2008,6 +2027,8 @@ pub fn registry_population<'a>(adapters: impl IntoIterator<Item = &'a Adapter>) 
         .collect()
 }
 
+#[cfg(test)]
+mod asset_resolution_tests;
 #[cfg(test)]
 mod asset_tests;
 #[cfg(test)]

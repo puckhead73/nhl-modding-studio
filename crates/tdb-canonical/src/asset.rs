@@ -99,10 +99,14 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use serde::Deserialize;
 
+use crate::asset_resolution::{
+    format_placeholders, is_part_name, ownership_sets, parse_render, CompositeIdentity,
+    ResolutionChain, CHAIN_PURPOSE, CHAIN_REQUIREMENT_PREFIX, COMPOSITE_TOKEN, STEP_OWNERSHIP,
+};
 use crate::{
     check_identity, check_vocab, finding, ConstraintState, Finding, Rule, ASSET_PROFILE_SCHEMA,
-    ASSET_PROFILE_SCHEMA_LEGACY, ASSET_PROFILE_SCHEMA_PREVIOUS, CANDIDATE_CONFIDENCE,
-    OPERATIVE_CONFIDENCE,
+    ASSET_PROFILE_SCHEMAS_NATIVE, ASSET_PROFILE_SCHEMA_LEGACY, ASSET_PROFILE_SCHEMA_PREVIOUS,
+    ASSET_PROFILE_SCHEMA_V3, CANDIDATE_CONFIDENCE, OPERATIVE_CONFIDENCE,
 };
 
 // ============================================================= vocabularies
@@ -235,6 +239,10 @@ pub const BLOCK_CLASS: &[(&str, &str)] = &[
 ///
 /// `game-acceptance` is **absent on purpose**, and naming it is refused by
 /// [`Rule::AdapterClaimsGameVerified`]: a schema file can never promote support.
+/// The operations that put bytes into the target: those may require a resolution chain only if it
+/// is declared for writing, and resolve only its owned step.
+pub const WRITING_OPERATION: &[&str] = &["import", "replace", "rebuild", "install"];
+
 pub const ASSET_OPERATION: &[&str] = &[
     "discover", "identify", "preview", "export", "import", "replace", "rebuild", "install",
 ];
@@ -422,8 +430,16 @@ pub const CONTAINER_FORMAT: &[&str] = &[
 /// Closed vocabulary: how a container layer addresses its members.
 pub const INDEX_KIND: &[&str] = &["none", "name-table", "offset-table", "chunk-table"];
 
-/// Closed vocabulary: the substitutable parts of an on-disk path.
-pub const PATH_TOKEN: &[&str] = &["player-slug", "numeric-id", "team-id", "variant"];
+/// Closed vocabulary: the substitutable parts of an on-disk path. `composite-id` (`/4`) is the
+/// rendered `[identity.value.composite]` of the same target, and a template may use it only when
+/// that composite is declared.
+pub const PATH_TOKEN: &[&str] = &[
+    "player-slug",
+    "numeric-id",
+    "team-id",
+    "variant",
+    COMPOSITE_TOKEN,
+];
 
 /// Closed vocabulary: path case handling.
 pub const PATH_CASE: &[&str] = &["lower", "upper", "preserve"];
@@ -1085,6 +1101,10 @@ pub struct TargetProfile {
     /// [`VARIANT_OPTIONAL_BLOCK`] may be decided at either level, but never at both.
     #[serde(default, rename = "variant")]
     pub variants: Vec<AssetVariant>,
+    /// `/4`: ordered reading/writing orders over the declared path families, each in its own
+    /// evidence envelope. An unknown or specimen-scoped chain enables nothing.
+    #[serde(default, rename = "resolution_chain")]
+    pub resolution_chains: Vec<ResolutionChain>,
 
     #[serde(default)]
     pub discovery: AssetConstraint<DiscoveryValue>,
@@ -1167,6 +1187,10 @@ pub struct IdentityValue {
     pub source: String,
     /// One of [`AMBIGUITY_POLICY`].
     pub ambiguity: String,
+    /// `/4`: how a `key = "composite"` id is built from named fields. Required exactly when the key
+    /// is `composite`; refused under any other key.
+    #[serde(default)]
+    pub composite: Option<CompositeIdentity>,
 }
 
 /// The container nesting, outermost first, with how each layer indexes its members.
@@ -1439,7 +1463,7 @@ pub fn parse_asset_profile(text: &str) -> Result<AssetProfile, toml::de::Error> 
 pub fn validate_asset_profile(profile: &AssetProfile) -> Vec<Finding> {
     let mut out = Vec::new();
 
-    if profile.schema != ASSET_PROFILE_SCHEMA {
+    if !ASSET_PROFILE_SCHEMAS_NATIVE.contains(&profile.schema.as_str()) {
         let detail = if profile.schema == ASSET_PROFILE_SCHEMA_PREVIOUS {
             format!(
                 "{ASSET_PROFILE_SCHEMA_PREVIOUS} documents are not validated in place; run the \
@@ -1454,6 +1478,44 @@ pub fn validate_asset_profile(profile: &AssetProfile) -> Vec<Finding> {
             format!("expected {ASSET_PROFILE_SCHEMA}")
         };
         out.push(finding(Rule::UnsupportedSchema, &profile.family, detail));
+    }
+    // A `/3` document is validated under its own rules, and the only thing `/4` adds for it is a
+    // refusal: a construct `/3` cannot spell is not silently read under `/4`'s meaning.
+    if profile.schema == ASSET_PROFILE_SCHEMA_V3 {
+        for target in &profile.targets {
+            let subject = format!("{}/{}", profile.family, target.target);
+            let mut used: Vec<String> = Vec::new();
+            if !target.resolution_chains.is_empty() {
+                used.push("[[resolution_chain]]".into());
+            }
+            if target
+                .identity
+                .value
+                .as_ref()
+                .or(target.identity.candidate_value())
+                .is_some_and(|v| v.composite.is_some())
+            {
+                used.push("[identity.value.composite]".into());
+            }
+            for family in &target.path_families {
+                if family.tokens.iter().any(|t| t == COMPOSITE_TOKEN) {
+                    used.push(format!(
+                        "path family {:?} token {COMPOSITE_TOKEN:?}",
+                        family.id
+                    ));
+                }
+            }
+            for construct in used {
+                out.push(finding(
+                    Rule::UnsupportedSchema,
+                    &subject,
+                    format!(
+                        "{construct} is an {ASSET_PROFILE_SCHEMA} construct; a document that uses \
+                         it must declare schema = {ASSET_PROFILE_SCHEMA:?}"
+                    ),
+                ));
+            }
+        }
     }
     if profile.profile_version == 0 {
         out.push(finding(
@@ -1743,6 +1805,21 @@ fn validate_target(
             AMBIGUITY_POLICY,
         );
     }
+    // The composite is checked wherever it is written - an established value or a candidate - so a
+    // proposal that could never construct an id is reported before anyone promotes it.
+    for (where_, v) in [
+        ("[identity.value]", target.identity.value.as_ref()),
+        (
+            "[identity.candidate.value]",
+            target.identity.candidate_value(),
+        ),
+    ] {
+        if let Some(v) = v {
+            validate_composite_declaration(out, subject, where_, v);
+        }
+    }
+    validate_composite_token_use(out, subject, target);
+    validate_resolution_chains(out, subject, target, &families, &ctx);
     if let Some(v) = target.path_rule.established() {
         validate_path_rule(out, subject, target, &families, v);
     }
@@ -2893,6 +2970,319 @@ fn validate_path_rule(
                 )),
             }
         }
+        // The same rule for a composite: the rendered id is the identity spelled into the path,
+        // and an established path rule through it needs an established composite behind it.
+        if family.tokens.iter().any(|t| t == COMPOSITE_TOKEN) {
+            match target.identity.established() {
+                Some(identity) if identity.key == "composite" && identity.composite.is_some() => {}
+                Some(identity) => out.push(finding(
+                    Rule::AssetConstraintDependencyUnmet,
+                    subject,
+                    format!(
+                        "path family {id:?} substitutes {COMPOSITE_TOKEN:?}, but [identity].key is \
+                         {:?} with no composite",
+                        identity.key
+                    ),
+                )),
+                None => out.push(finding(
+                    Rule::AssetConstraintDependencyUnmet,
+                    subject,
+                    format!(
+                        "path family {id:?} substitutes {COMPOSITE_TOKEN:?}, but [identity] is not \
+                         established"
+                    ),
+                )),
+            }
+        }
+    }
+}
+
+/// `/4`: a composite identity that can construct an id, wherever it is written.
+fn validate_composite_declaration(
+    out: &mut Vec<Finding>,
+    subject: &str,
+    where_: &str,
+    v: &IdentityValue,
+) {
+    let Some(composite) = &v.composite else {
+        if v.key == "composite" {
+            out.push(finding(
+                Rule::AssetCompositeInvalid,
+                subject,
+                format!("{where_}.key is \"composite\" but no [composite] table says how the id is built"),
+            ));
+        }
+        return;
+    };
+    if v.key != "composite" {
+        out.push(finding(
+            Rule::AssetCompositeInvalid,
+            subject,
+            format!(
+                "{where_} declares a [composite] table under key {:?}; a composite id needs key \
+                 \"composite\"",
+                v.key
+            ),
+        ));
+    }
+    let block = format!("{where_}.composite");
+    if composite.parts.is_empty() {
+        out.push(finding(
+            Rule::AssetCompositeInvalid,
+            subject,
+            format!("{block} declares no [[part]], so no id can be built"),
+        ));
+    }
+    let mut names: BTreeSet<&str> = BTreeSet::new();
+    let mut sources: BTreeSet<(&str, &str)> = BTreeSet::new();
+    for part in &composite.parts {
+        let which = format!("{block}.part:{}", part.name);
+        if !is_part_name(&part.name) {
+            out.push(finding(
+                Rule::AssetCompositeInvalid,
+                subject,
+                format!("{which}: part names are [a-z][a-z0-9-]*"),
+            ));
+        }
+        if !names.insert(part.name.as_str()) {
+            out.push(finding(
+                Rule::AssetCompositeInvalid,
+                subject,
+                format!("{which} is declared twice"),
+            ));
+        }
+        check_identity(out, subject, &format!("{which}.table"), &part.table);
+        check_identity(out, subject, &format!("{which}.field"), &part.field);
+        if part.table.is_empty() || part.field.is_empty() {
+            out.push(finding(
+                Rule::AssetCompositeInvalid,
+                subject,
+                format!("{which} names no table or no field"),
+            ));
+        }
+        if !sources.insert((part.table.as_str(), part.field.as_str())) {
+            out.push(finding(
+                Rule::AssetCompositeInvalid,
+                subject,
+                format!(
+                    "{which} reads {}.{}, which another part already reads",
+                    part.table, part.field
+                ),
+            ));
+        }
+        if parse_render(&part.render).is_none() {
+            out.push(finding(
+                Rule::AssetCompositeInvalid,
+                subject,
+                format!(
+                    "{which}.render = {:?} is not one of {:?} (zero-padded takes a width 1..=16 as \
+                     \"zero-padded:<n>\")",
+                    part.render, COMPOSITE_RENDER_DOC
+                ),
+            ));
+        }
+    }
+    let placeholders = format_placeholders(&composite.format);
+    let mut used: BTreeSet<&str> = BTreeSet::new();
+    for placeholder in &placeholders {
+        if !names.contains(placeholder.as_str()) {
+            out.push(finding(
+                Rule::AssetCompositeInvalid,
+                subject,
+                format!("{block}.format substitutes {{{placeholder}}}, which no part declares"),
+            ));
+        }
+        if !used.insert(placeholder.as_str()) {
+            out.push(finding(
+                Rule::AssetCompositeInvalid,
+                subject,
+                format!("{block}.format substitutes {{{placeholder}}} twice"),
+            ));
+        }
+    }
+    for name in &names {
+        if !used.contains(name) {
+            out.push(finding(
+                Rule::AssetCompositeInvalid,
+                subject,
+                format!("{block} declares part {name:?}, which the format never uses"),
+            ));
+        }
+    }
+    if placeholders.is_empty() {
+        out.push(finding(
+            Rule::AssetCompositeInvalid,
+            subject,
+            format!(
+                "{block}.format substitutes nothing, so every instance would render the same id"
+            ),
+        ));
+    }
+    if composite.format.matches('{').count() != composite.format.matches('}').count() {
+        out.push(finding(
+            Rule::AssetCompositeInvalid,
+            subject,
+            format!("{block}.format has an unbalanced brace"),
+        ));
+    }
+}
+
+const COMPOSITE_RENDER_DOC: &[&str] = crate::asset_resolution::COMPOSITE_RENDER;
+
+/// `/4`: a template may substitute `composite-id` only when the target writes down a composite
+/// somewhere - established or proposed. (Whether it may be *established* through it is
+/// [`validate_path_rule`]'s question.)
+fn validate_composite_token_use(out: &mut Vec<Finding>, subject: &str, target: &TargetProfile) {
+    let declared = target
+        .identity
+        .value
+        .as_ref()
+        .or(target.identity.candidate_value())
+        .is_some_and(|v| v.composite.is_some());
+    for family in &target.path_families {
+        if family.tokens.iter().any(|t| t == COMPOSITE_TOKEN) && !declared {
+            out.push(finding(
+                Rule::AssetCompositeInvalid,
+                format!("{subject}#path_family:{}", family.id),
+                format!(
+                    "the template substitutes {{{COMPOSITE_TOKEN}}}, but [identity] declares no \
+                     composite (neither established nor as a candidate) to render it from"
+                ),
+            ));
+        }
+    }
+}
+
+/// `/4`: chains resolve through declared families, in one evidence envelope each, with ownership
+/// that is consistent across every chain of the target.
+fn validate_resolution_chains(
+    out: &mut Vec<Finding>,
+    subject: &str,
+    target: &TargetProfile,
+    families: &BTreeSet<String>,
+    ctx: &EnvelopeContext<'_>,
+) {
+    let mut ids: BTreeSet<&str> = BTreeSet::new();
+    for chain in &target.resolution_chains {
+        let which = format!("{subject}#resolution_chain:{}", chain.id);
+        check_identity(out, &which, "[resolution_chain].id", &chain.id);
+        if !ids.insert(chain.id.as_str()) {
+            out.push(finding(
+                Rule::AssetResolutionChainInvalid,
+                &which,
+                "two [[resolution_chain]] entries share an id",
+            ));
+        }
+        check_vocab(
+            out,
+            &which,
+            "[resolution_chain].purpose",
+            &chain.purpose,
+            CHAIN_PURPOSE,
+        );
+        ctx.check(
+            out,
+            &format!("resolution_chain:{}", chain.id),
+            &chain.declared,
+        );
+        for (where_, value) in [
+            (
+                "[resolution_chain.declared.value]",
+                chain.declared.value.as_ref(),
+            ),
+            (
+                "[resolution_chain.declared.candidate.value]",
+                chain.declared.candidate_value(),
+            ),
+        ] {
+            let Some(value) = value else {
+                continue;
+            };
+            if value.steps.is_empty() {
+                out.push(finding(
+                    Rule::AssetResolutionChainInvalid,
+                    &which,
+                    format!("{where_} declares no [[step]], so nothing resolves"),
+                ));
+            }
+            let mut seen: BTreeSet<&str> = BTreeSet::new();
+            for step in &value.steps {
+                check_vocab(
+                    out,
+                    &which,
+                    &format!("{where_}.step.ownership"),
+                    &step.ownership,
+                    STEP_OWNERSHIP,
+                );
+                if !families.contains(&step.family) {
+                    out.push(finding(
+                        Rule::AssetResolutionChainInvalid,
+                        &which,
+                        format!(
+                            "{where_} steps through path family {:?}, which this target does not \
+                             declare",
+                            step.family
+                        ),
+                    ));
+                }
+                if !seen.insert(step.family.as_str()) {
+                    out.push(finding(
+                        Rule::AssetResolutionChainInvalid,
+                        &which,
+                        format!("{where_} steps through path family {:?} twice", step.family),
+                    ));
+                }
+            }
+            if matches!(chain.purpose.as_str(), "write" | "read-write")
+                && !value.steps.iter().any(|s| s.ownership == "owned")
+            {
+                out.push(finding(
+                    Rule::AssetResolutionChainInvalid,
+                    &which,
+                    format!(
+                        "{where_} is declared for writing but has no owned step: every file it \
+                         resolves is shared, and a write to a shared file changes every asset that \
+                         falls back to it"
+                    ),
+                ));
+            }
+        }
+    }
+    // A family is shared or owned for the whole target. Calling a shared file owned in a second
+    // chain is exactly the alias that would make it writable.
+    let (shared, owned) = ownership_sets(target);
+    for family in shared.intersection(&owned) {
+        out.push(finding(
+            Rule::AssetResolutionChainInvalid,
+            subject,
+            format!(
+                "path family {family:?} is a shared step in one resolution chain and an owned step \
+                 in another; a shared file does not become writable through a second chain"
+            ),
+        ));
+    }
+    // Two families with the same template are one file under two names - the alias a write
+    // exclusion on one of them would not see.
+    if !target.resolution_chains.is_empty() {
+        let mut by_template: BTreeMap<&str, Vec<&str>> = BTreeMap::new();
+        for family in &target.path_families {
+            by_template
+                .entry(family.template.as_str())
+                .or_default()
+                .push(family.id.as_str());
+        }
+        for (template, ids) in by_template {
+            if ids.len() > 1 {
+                out.push(finding(
+                    Rule::AssetResolutionChainInvalid,
+                    subject,
+                    format!(
+                        "path families {ids:?} share the template {template:?}; with resolution \
+                         chains declared, one file may not carry two ownership labels"
+                    ),
+                ));
+            }
+        }
     }
 }
 
@@ -3572,6 +3962,39 @@ fn validate_operations(
         }
         let mut required: BTreeSet<&str> = BTreeSet::new();
         for entry in &declaration.requires {
+            if let Some(chain_id) = entry.strip_prefix(CHAIN_REQUIREMENT_PREFIX) {
+                if !required.insert(entry.as_str()) {
+                    out.push(finding(
+                        Rule::AssetBoundsInconsistent,
+                        &which,
+                        format!("requires {entry:?} twice"),
+                    ));
+                }
+                match target.resolution_chains.iter().find(|c| c.id == chain_id) {
+                    None => out.push(finding(
+                        Rule::AssetResolutionChainInvalid,
+                        &which,
+                        format!(
+                            "requires resolution chain {chain_id:?}, which this target does not \
+                             declare"
+                        ),
+                    )),
+                    Some(chain) => {
+                        let writes = WRITING_OPERATION.contains(&declaration.operation.as_str());
+                        if writes && chain.purpose == "read" {
+                            out.push(finding(
+                                Rule::AssetResolutionChainInvalid,
+                                &which,
+                                format!(
+                                    "a writing operation requires resolution chain {chain_id:?}, \
+                                     whose purpose is \"read\""
+                                ),
+                            ));
+                        }
+                    }
+                }
+                continue;
+            }
             let (block, property) = split_requirement(entry);
             check_vocab(out, &which, "requires", block, ASSET_BLOCK);
             if let Some(property) = property {
@@ -3801,6 +4224,14 @@ pub fn operation_constraint_readiness(
         .requires
         .iter()
         .filter(|entry| {
+            // A chain requirement is met only by an operative chain: a candidate or a
+            // specimen-scoped order is a proposal about files, not a rule the target follows.
+            if let Some(chain_id) = entry.strip_prefix(CHAIN_REQUIREMENT_PREFIX) {
+                return !target
+                    .resolution_chains
+                    .iter()
+                    .any(|c| c.id == chain_id && c.declared.is_operative());
+            }
             let (block, property) = split_requirement(entry);
             let Some(state) = states.iter().find(|s| s.block == block) else {
                 return true;
@@ -3876,6 +4307,10 @@ pub struct AssetPopulation {
     /// Corpora that cannot support an established fact about this target.
     pub unattributable_corpora: usize,
     pub declared_operations: usize,
+    /// `/4`: resolution chains declared on this target, and those operative (established at a
+    /// scope that speaks for the target). A candidate chain counts in the first and not the second.
+    pub declared_resolution_chains: usize,
+    pub operative_resolution_chains: usize,
 }
 
 pub fn asset_registry_population<'a>(
@@ -3963,6 +4398,12 @@ pub fn asset_registry_population<'a>(
                     .filter(|c| c.attribution != "attributable-to-target")
                     .count(),
                 declared_operations: target.operations.len(),
+                declared_resolution_chains: target.resolution_chains.len(),
+                operative_resolution_chains: target
+                    .resolution_chains
+                    .iter()
+                    .filter(|c| c.declared.is_operative())
+                    .count(),
             });
         }
     }

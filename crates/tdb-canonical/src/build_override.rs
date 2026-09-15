@@ -69,7 +69,7 @@ use crate::asset::{
 };
 use crate::{
     check_identity, check_vocab, finding, is_placeholder, Finding, Rule, ASSET_FAMILY,
-    ASSET_PROFILE_SCHEMA, BUILD_OVERRIDE_SCHEMA,
+    ASSET_PROFILE_SCHEMAS_NATIVE, BUILD_OVERRIDE_SCHEMA,
 };
 
 // ============================================================= vocabularies
@@ -154,7 +154,7 @@ pub struct MappingIdentity {
 #[serde(deny_unknown_fields)]
 pub struct ProfileIdentity {
     pub family: String,
-    /// Must be [`ASSET_PROFILE_SCHEMA`] — a record cannot claim to have been checked against a
+    /// Must be one of [`ASSET_PROFILE_SCHEMAS_NATIVE`] — a record cannot claim to have been checked against a
     /// schema this crate does not validate.
     pub schema: String,
     pub profile_version: u32,
@@ -1161,11 +1161,11 @@ pub fn validate_build_override(record: &BuildOverride) -> Vec<Finding> {
         &record.profile.family,
         ASSET_FAMILY,
     );
-    if record.profile.schema != ASSET_PROFILE_SCHEMA {
+    if !ASSET_PROFILE_SCHEMAS_NATIVE.contains(&record.profile.schema.as_str()) {
         out.push(finding(
             Rule::UnsupportedSchema,
             &subject,
-            format!("[profile].schema: expected {ASSET_PROFILE_SCHEMA}"),
+            format!("[profile].schema: expected one of {ASSET_PROFILE_SCHEMAS_NATIVE:?}"),
         ));
     }
     if record.profile.profile_version == 0 {
