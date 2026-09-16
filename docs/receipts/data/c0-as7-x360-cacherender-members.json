@@ -1,0 +1,71 @@
+{
+  "record": "c0-as7-eb-members/1",
+  "package": "C0-AS7",
+  "label": "c0-as7-x360-cacherender-members",
+  "specimen": {
+    "corpus": "xbox360-shipping-archives",
+    "target": "nhllegacy-xbox360",
+    "relative_path": "cacherender.big",
+    "identity": "the title root's own default.xex XEX2 EXECUTION_INFO header (title id 454109EC, media id 3CF2A23F, executable nhlzf.exe) as recorded by C0-POR1 for this copy; the archive is read from that title root, beside the derived _compiled tree POR1 inventoried"
+  },
+  "archive": {
+    "size_bytes": 1458552880,
+    "sha256": "e05179835ff2099b01a3085c335f6b8d6cb8de52cd5cf7ecee23e948d586d6d2",
+    "header": {
+      "magic": "EB\\0\\3",
+      "version": "0x00000400",
+      "entry_size": 16,
+      "file_count": 12845,
+      "name_table_offset": 218416,
+      "name_slot": 35,
+      "dir_slot": 24,
+      "dir_count": 42,
+      "archive_size": 1458552880,
+      "table_end": 669008
+    }
+  },
+  "reader": {
+    "crate": "tdb-archive-big",
+    "module": "crates/tdb-archive-big/src/eb.rs",
+    "module_sha256": "ccac20ac4b89ca9faa84b37c76284a0ae95bafbf81f6a3348e63926db0db53c1",
+    "tool": "crates/tdb-archive-big/examples/as7_eb_members.rs",
+    "tool_sha256": "4d8578eec2349ed223fbb98cf8c2f84ccf7c42bc3a663aa1c855d641fed71103",
+    "source_commit": "9e02acfe7e50e0737970fccf3b7d4321bef00f4b"
+  },
+  "counts": {
+    "entries": 12845,
+    "distinct_paths": 12845,
+    "duplicate_paths": 0,
+    "stored_size_sum": 1457796638,
+    "first_payload_offset": 669008,
+    "last_payload_end": 1458552880,
+    "last_end_equals_archive_size": true,
+    "archive_size_equals_file_size": true,
+    "unaligned_offsets": 0,
+    "entries_beyond_file": 0,
+    "stored_magic": {
+      "chunklzx": 12844,
+      "hex:3c3f786d6c207665": 1
+    },
+    "decoded_form": {
+      "chunklzx-unsupported": 12844,
+      "raw": 1
+    },
+    "top_level_directories": {
+      "rendering": 12845
+    }
+  },
+  "loose_root": null,
+  "members_csv": "c0-as7-x360-cacherender-members.csv",
+  "members_csv_sha256": "f281a5916a442fbed95e251626235204df8b6bb29c3598030fe7a0165b268a65",
+  "limitations": [
+    "A member table read through the reader's name and directory tables. Names are the literal NUL-terminated ASCII strings those tables hold; nothing is inferred or hashed.",
+    "`stored_magic` is the first eight bytes at each entry's stored offset, labelled by the magics the reader documents. It is an observation of the stored form, not a decode, and not a codec claim for the bytes behind the magic.",
+    "`decoded_form` is what `eb::decode_payload` did with the stored bytes: `raw` passed them through, `chunkzip` inflated them through the committed codec, `chunklzx-unsupported` means the codec is not implemented and no decoded identity exists. A successful inflate is an observation about these bytes and this codec; it establishes no target-wide codec.",
+    "Loose-file cells compare a decoded member with whatever sits at the same relative path (and its `.bak` sibling) under the loose root at read time. `loose_present = false` means the OS reported NotFound; the root was validated as a readable directory first, and any other read failure aborts the run before a record is written. Equality is a content observation; it says nothing about which of the two the game loads.",
+    "`word_4` and `word_12` are the file-table words the reader does not interpret (the latter documented as an unidentified per-entry checksum). Recorded verbatim.",
+    "`decode_error` is the committed codec's own error text where `decoded_form` is `decode-error`; it records that THIS codec did not inflate THESE bytes and nothing about why the bytes are as they are.",
+    "Nothing was written or extracted; decoded bytes were hashed in memory and dropped. The record establishes no installation rule, runtime binding or precedence between archives or between an archive and a loose file.",
+    "The copy's identity is the one the specimen field cites; a title id plus an archive version tag is not a build."
+  ]
+}

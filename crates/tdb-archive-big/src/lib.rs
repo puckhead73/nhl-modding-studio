@@ -37,6 +37,7 @@
 #![warn(rust_2018_idioms)]
 
 pub mod eb;
+pub mod loose;
 
 use std::collections::HashMap;
 

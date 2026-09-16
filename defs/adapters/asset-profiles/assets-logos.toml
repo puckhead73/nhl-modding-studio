@@ -20,6 +20,13 @@
 #       the Xbox 360 title: `EB\0\3` container, version tag 0x00000400, entry count and size each,
 #       with the recorder's ONE-LINE summary of what each holds (`cacherender.big`: "rendering
 #       (stock logos texlib, players, equipment)"). Entry NAMES were not committed.
+#   docs/receipts/data/c0-as7-x360-cacherender-members.csv     (C0-AS7) the MEMBER TABLE of that
+#       archive — 12 845 literal paths with offsets, stored sizes and digests — read through the
+#       committed `tdb_archive_big::eb` reader from the title root's own copy (archive SHA-256
+#       e05179835ff2099b01a3085c335f6b8d6cb8de52cd5cf7ecee23e948d586d6d2), and its sibling for
+#       `nocacherender.big`. Joined to the anchor in docs/receipts/data/c0-as7-x360-member-join.csv,
+#       re-derived on every run of the named `tdb-canonical` case. Every member of both is
+#       `chunklzx`-stored except one XML; no member was decoded.
 #   docs/audits/data/assets/nhllegacy/xbox360/capability.csv   one row: "extracted .rx2 write
 #       verified: lossless round-trip + magenta edit re-decoded on texlib_10_0_0 (2026-08-03)",
 #       format "texlib RX2 (RW4xb2) DXT5", install = external. ONE SPECIMEN, in a derived tree.
@@ -56,13 +63,18 @@
 #     family, so a reader cannot pair the crest's container with the texlib's codec.
 
 schema = "asset-output-profile/5"
-profile_version = 2
+profile_version = 3
 family = "assets-logos"
 note = """
 Nothing on any target is established. One target is represented (NHL Legacy, Xbox 360), because
 it is the only one with committed logo records: a DB-side identity map generated from the anchor,
-the shipping-archive listing, and one extracted specimen. Every block is unknown; the candidates
-carry the evidence at the scope it actually has.
+the shipping-archive listing, one extracted specimen and — since C0-AS7 (profile_version 3) — the
+member table of `cacherender.big` itself, which locates the rink texlibs by literal name on an
+attributable corpus and joins them to the anchor. Every block is still unknown: the discovery
+candidate is now measured rather than asserted, but one root cannot describe both path families
+(the FE crests are in neither render archive), and the identity's file half holds for 180 of the
+218 stored art ids under the declared `_0_0` spelling, not for all of them. The candidates carry
+the evidence at the scope it actually has.
 """
 
 [[canonical_source]]
@@ -99,7 +111,7 @@ identity_source = "each archive's own `EB\\0\\3` header (version tag 0x00000400,
 inspected_files = 13
 groups = ["shipping-archives"]
 limitations = [
-    "Thirteen archive HEADERS and their entry counts were recorded. No member name, offset, digest or payload was committed, so which archive holds a given logo rests on the recorder's one-line `primary_contents` summary and nothing else.",
+    "Thirteen archive HEADERS and their entry counts were recorded by the audit; at that stage no member name, offset, digest or payload was committed, so which archive held a given logo rested on the recorder's one-line `primary_contents` summary. Since C0-AS7 two of the thirteen — `cacherender.big` (12 845 members) and `nocacherender.big` (3 237) — have their MEMBER TABLES committed (docs/receipts/data/c0-as7-x360-{cacherender,nocacherender}-members.csv: literal path, offset, stored size, stored SHA-256 per member; archive digests in the sibling .json), so placement inside THOSE TWO is measured; the other ELEVEN archives (boot, cache, nocache, data0, cacheboot, cachemovie, cacheoverlay, renderboot, audioboot, audioboot2, cacheaudio) are still headers and a summary line only, and every `fe/` family is in one of them. No member of either has been decoded.",
     "In-archive payloads on this variant are `chunklzx`-wrapped where compressed, and `tdb_archive_codec` does not decode LZX (`eb::decode_payload` reports it as unsupported). No archived logo has been decoded by Studio.",
     "A title id plus an archive version tag is not a build: no patch level, disc revision or executable build string was established.",
     "No shipping manifest was checked. Whether any archive shadows another (a `patch`-style precedence) was not examined.",
@@ -141,6 +153,9 @@ note = """
 and the identity-map case asserts they diverge. The template is repository source (`decode_team_logo`
 joins exactly this path); no committed census lists the crest files, so `bucket_resolution` stays
 unknown rather than `template-only`, which would claim the template is known to resolve every id.
+C0-AS7 listed `cacherender.big` and `nocacherender.big` in full: NO member of either sits under
+`fe/`, so where the crest archives live inside the shipping title is still unobserved (the eleven
+other archives were not opened).
 """
 
 [[target_profile.path_family]]
@@ -154,7 +169,24 @@ Same token, same source. The code also tries `texlib_{artid}.rx2` and `texlib_{a
 says the suffix is not established as fixed; the `_0_0` spelling is the one the committed specimen
 carries (`texlib_10_0_0`). One family is declared with that spelling rather than three families
 nobody observed.
+
+C0-AS7 LOCATED THE FAMILY BY LITERAL NAME in `cacherender.big` (the observed bucket below): the
+archive's `rendering/logo/` directory holds 1 926 members, every one shaped `texlib_N_N_N.rx2`.
+Under this template's `_0_0` spelling 307 members match, one per first component; the 218 distinct
+`kOtt.lOnr` values the anchor stores meet a `_0_0` member for 180 of them and NOT for 38 (listed
+in the join record), while all 218 meet SOME `texlib_{artid}_{a}_{b}` member — the second and
+third components vary per id (348 distinct first components, 130 of them stored by no team row,
+including a 20000-20085 block; under the `_0_0` spelling 307 first components, 127 unstored). So the template is not the whole grammar, the trailing components
+are not established as fixed, and `bucket_resolution` stays unknown.
 """
+
+[[target_profile.path_family.observed_bucket]]
+directory = "rendering/logo"
+census = "docs/receipts/data/c0-as7-x360-cacherender-members.csv"
+census_digest = "f281a5916a442fbed95e251626235204df8b6bb29c3598030fe7a0165b268a65"
+scope = "inspected-corpus-invariant"
+corpus = "xbox360-shipping-archives"
+note = "The directory inside `cacherender.big`, not a loose directory: 1 926 members, all `texlib_N_N_N.rx2`, all stored `chunklzx`. The join to `kOtt.lOnr` is docs/receipts/data/c0-as7-x360-member-join.csv. Membership, not a rule; the members were listed, none was decoded."
 
 # ---- the two forms, kept apart -------------------------------------------------------------
 
@@ -271,19 +303,25 @@ note = "The specimen decoded through `texlib` (which de-tiles Xbox 360 rasters);
 [target_profile.discovery]
 state = "unknown"
 note = """
-The only attributable placement evidence is a summary line: `cacherender.big` — "rendering (stock
-logos texlib, players, equipment)". That is where the recorder says the texlibs sit inside the
-shipping title; no member listing was committed to check it against, and no FE crest archive is
-named at all. Extracted-tree placement (`rendering/logo/`, `fe/ion/artassets/teamlogos/`) is what
-the code walks, and it is not archive placement.
+C0-AS7 read the member tables of `cacherender.big` and `nocacherender.big` (the FR14 item): the
+rink texlibs ARE members of `cacherender.big` under `rendering/logo/` (1 926 of them), and neither
+archive holds any `fe/` member, so the FE crest family's archive is still unnamed. The block stays
+unknown because `DiscoveryValue` is one root per target and this family has two path families in
+two different, and partly unobserved, places; a root of `cacherender.big` would misdescribe the
+crests. Extracted-tree placement (`rendering/logo/`, `fe/ion/artassets/teamlogos/`) is what the
+code walks, and it is not archive placement.
 """
 
 [target_profile.discovery.candidate]
-confidence = "asserted"
-scope = "specimen-observation"
+confidence = "measured"
+scope = "inspected-corpus-invariant"
 corpus = "xbox360-shipping-archives"
-provenance = ["docs/audits/data/assets/nhllegacy/xbox360/archives.csv#cacherender.big"]
-note = "PROPOSED, NOT OPERATIVE. `archive-member` under `cacherender.big` for the rink texlibs, per the recorder's summary. Promoting it needs the archive's member table read and the logo members located by name — the FR14 item."
+provenance = [
+    "docs/receipts/data/c0-as7-x360-cacherender-members.csv",
+    "docs/receipts/data/c0-as7-x360-nocacherender-members.csv",
+    "crates/tdb-canonical/src/asset_census_tests.rs#legacy_x360_member_tables_join_to_the_anchor_and_the_join_record_matches",
+]
+note = "PROPOSED, NOT OPERATIVE. `archive-member` under `cacherender.big` — now MEASURED for the rink texlibs by the member listing (every `rendering/logo/` member of the two render archives is in this one), and still only a proposal for the target because the FE crests are elsewhere and what the runtime reads is unobserved. Promoting it needs either a per-family discovery in the contract or the crest archive located, and `[runtime_lookup]`."
 
 [target_profile.discovery.candidate.value]
 scope = "archive-member"
@@ -296,15 +334,19 @@ provenance = [
     "docs/audits/data/assets/nhllegacy/xbox360/identities.csv",
     "crates/studio-domain/src/assets.rs#legacy_x360_team_logo_identity_map",
     "crates/studio-domain/src/assets.rs#decode_team_logo",
+    "docs/receipts/data/c0-as7-x360-member-join.csv",
+    "crates/tdb-canonical/src/asset_census_tests.rs#legacy_x360_member_tables_join_to_the_anchor_and_the_join_record_matches",
 ]
 note = """
 Half measured, half asserted, and the block needs both. MEASURED on the committed anchor: the team
 row's `kOtt.lOnr` (`artid`) is a sparse id space reaching past the 252 records, distinct from the
 key, with the Red Wings row carrying 10 — `legacy_x360_team_logo_identity_map` generates
-identities.csv from the anchor and asserts exactly that. ASSERTED: that `t{artid}.big` and
-`texlib_{artid}_0_0.rx2` are the files that id names — repository source prose ("verified against
-the real install"), with no committed record of the check. `ambiguity` is a Studio behaviour
-choice and is not proposed here.
+identities.csv from the anchor and asserts exactly that. The RINK half is now OBSERVED on the
+attributable corpus (C0-AS7): 180 of the 218 distinct stored art ids name a
+`rendering/logo/texlib_{artid}_0_0.rx2` member of `cacherender.big`, 38 do not, and all 218 name
+a member with some other trailing pair — so the id-to-file rule is more than the declared
+template and is not total under it. The CREST half (`t{artid}.big`) is still repository source
+prose with no member located. `ambiguity` is a Studio behaviour choice and is not proposed here.
 
 What would be proposed — key `numeric-id`, source `kOtt.lOnr`. No value is carried because `IdentityValue.ambiguity` would have to be invented. To promote: a committed record tying at least the specimen's id to its row and its file, and a decision on the ambiguity policy. — is left in prose rather than as a `[candidate]`: the contract requires a candidate to carry a value table, and the value's `ambiguity` field cannot be filled without inventing a Studio behaviour choice.
 """

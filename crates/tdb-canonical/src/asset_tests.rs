@@ -702,13 +702,22 @@ fn the_logo_and_jersey_profiles_represent_their_families_and_establish_nothing()
         for block in PLACEMENT_BLOCK {
             assert!(!established_by_name(t, block), "{file}: {block}");
         }
+        // C0-AS7 read the whole member table of the archive the candidate names, so the
+        // candidate's scope is now a corpus invariant (measured) - and it is STILL a candidate,
+        // because one discovery root cannot describe a family whose declared path families sit in
+        // two archives and one unobserved place.
+        let discovery = t.discovery.candidate.as_ref().unwrap();
         assert_eq!(
-            t.discovery
-                .candidate
-                .as_ref()
-                .and_then(|c| c.scope.as_deref()),
-            Some("specimen-observation"),
-            "{file}: a summary line is not a corpus invariant"
+            (discovery.scope.as_deref(), discovery.confidence.as_deref()),
+            (Some("inspected-corpus-invariant"), Some("measured")),
+            "{file}: the member listing is a corpus invariant; the block stays unknown"
+        );
+        assert!(
+            discovery
+                .provenance
+                .iter()
+                .any(|p| p.starts_with("docs/receipts/data/c0-as7-x360-")),
+            "{file}: the candidate cites the C0-AS7 member record"
         );
         // Identity: the DB half is measured and the file half is prose. On the logo profile the
         // block is unknown with provenance and no proposal; on the jersey profile `/4` lets the

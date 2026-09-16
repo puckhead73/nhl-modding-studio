@@ -47,6 +47,7 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 pub mod asset;
+pub mod asset_census;
 pub mod asset_resolution;
 pub mod asset_reuse;
 pub mod asset_v1;
@@ -2058,6 +2059,8 @@ pub fn registry_population<'a>(adapters: impl IntoIterator<Item = &'a Adapter>) 
         .collect()
 }
 
+#[cfg(test)]
+mod asset_census_tests;
 #[cfg(test)]
 mod asset_coverage_tests;
 #[cfg(test)]

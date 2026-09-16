@@ -25,6 +25,18 @@
 #              on each (`ubPc.lOnr`, with the collisions the anchor actually stores). Establishes
 #              nothing: the census holds id RANGES, not ids, so no anchor id was placed beside its
 #              file. See docs/receipts/c0-as6-asset-family-coverage.md.
+#   C0-AS7     this revision (profile_version 6). MEASURES the FILE half on `nhllegacy-ps3`: a
+#              per-id census of the same installed copy (18 663 files, each hashed) joined to the
+#              anchor, and `patch.big` at that copy's USRDIR root opened through the committed EB
+#              reader. The join does NOT support promoting `[identity]`: 4 500 of the 5 449 non-zero
+#              anchor ids have a loose current `playerheads` file and 949 do not (350 outside the
+#              observed regular ranges, 599 inside them); `patch.big` supplies 33 of the 949. The
+#              candidate stays a candidate with the join cited. `[discovery]` and `[runtime_lookup]`
+#              stay unknown: `patch.big` is now READ — 83 portrait members at the same relative
+#              paths as the loose tree, 23 of them colliding with a loose file of different content —
+#              and which copy the game loads is still not observed. On `nhllegacy-xbox360` the two
+#              render archives were listed and hold no `fe/ion/artassets` member; the other eleven
+#              shipping archives were not opened. See docs/receipts/c0-as7-asset-evidence-measurements.md.
 #
 #   docs/receipts/c0-por1-portrait-measurements.md   (measurements, with an appended corrections log)
 #   docs/receipts/c0-por1-r1-evidence-scope.md       (the correction, and the rules used below)
@@ -102,8 +114,10 @@
 #   reinstates it.
 #
 #   RUNTIME LOOKUP. New block, unknown on every target. Observed file placement in one installed
-#   copy is not evidence of what the GAME loads, and `patch.big` — which could shadow the loose
-#   files entirely — was never opened. It blocks `discover` and `install` everywhere.
+#   copy is not evidence of what the GAME loads. C0-AS7 opened `patch.big` on the PS3 copy (it
+#   carries 83 portrait members beside 8 localization databases and 328 `rendering/` members);
+#   what the runtime does with a member that also exists loose was not traced, so the block
+#   still blocks `discover` and `install` everywhere.
 #
 # COVERAGE. One family, three declared target profiles and one by reference (`legacyrecomp-recomp`
 # reuses `nhllegacy-xbox360`, C0-AS5 / Q47). Six established constraints: four on
@@ -112,7 +126,7 @@
 # docs/validation/c0-06-canonical-project-and-adapters.md.
 
 schema = "asset-output-profile/5"
-profile_version = 5
+profile_version = 6
 family = "assets-portraits"
 note = """
 Everything established here is established at `observed-source-format`, on one target, over one
@@ -172,6 +186,10 @@ note = """
 `{variant}` stands for the bucket directory, and `bucket_resolution = "unknown"` records that NOTHING
 computes it. The [[observed_bucket]] entries below record that the directory was seen and point at
 the census that holds which ids were seen inside it; that is membership, and it is not a function.
+Since C0-AS7 that census is the committed PER-ID record of this copy (one row per file: bucket,
+name, label, id, size, SHA-256, and the BIGF member table's texture-member sizes), which supersedes
+the C0-POR1 range summary the entries cited before; the ranges it shows are the same
+(`p0_4000` 1-3999, `p4001_8000` 4001-7998, `p8001_12000` 8003-12401, `silhouettes` 60000-60003).
 C0-POR1 turned the mismatch between `p8001_12000` and the ids inside it into the finding "the rule
 is not the literal folder-name ranges"; R1 withdrew that, because no candidate rule was ever
 formulated or tested. A folder label is not evidence of the rule behind it.
@@ -184,30 +202,30 @@ who needs the membership finds it there, where it is recorded as an observation.
 
 [[target_profile.path_family.observed_bucket]]
 directory = "p0_4000"
-census = "docs/receipts/data/c0-por1-portrait-specimens.json#path_and_id_observations.observed_bucket_membership"
-census_digest = "23964c81140fca35c8862a3449930714dcb1d39cc41eae0d9cb601f3eb443eb2"
+census = "docs/receipts/data/c0-as7-ps3-portrait-census.csv"
+census_digest = "46cb5f1c1dde59d3c1b2ef20552987dd562564ddd60f5c78e9c13b92da3b2732"
 scope = "inspected-corpus-invariant"
 corpus = "ps3-installed-copy"
 
 [[target_profile.path_family.observed_bucket]]
 directory = "p4001_8000"
-census = "docs/receipts/data/c0-por1-portrait-specimens.json#path_and_id_observations.observed_bucket_membership"
-census_digest = "23964c81140fca35c8862a3449930714dcb1d39cc41eae0d9cb601f3eb443eb2"
+census = "docs/receipts/data/c0-as7-ps3-portrait-census.csv"
+census_digest = "46cb5f1c1dde59d3c1b2ef20552987dd562564ddd60f5c78e9c13b92da3b2732"
 scope = "inspected-corpus-invariant"
 corpus = "ps3-installed-copy"
 
 [[target_profile.path_family.observed_bucket]]
 directory = "p8001_12000"
-census = "docs/receipts/data/c0-por1-portrait-specimens.json#path_and_id_observations.observed_bucket_membership"
-census_digest = "23964c81140fca35c8862a3449930714dcb1d39cc41eae0d9cb601f3eb443eb2"
+census = "docs/receipts/data/c0-as7-ps3-portrait-census.csv"
+census_digest = "46cb5f1c1dde59d3c1b2ef20552987dd562564ddd60f5c78e9c13b92da3b2732"
 scope = "inspected-corpus-invariant"
 corpus = "ps3-installed-copy"
 note = "248 ids in this folder exceed 12 000. An observation about membership, recorded in the census because it is what was seen — not because it implies a rule."
 
 [[target_profile.path_family.observed_bucket]]
 directory = "silhouettes"
-census = "docs/receipts/data/c0-por1-portrait-specimens.json#path_and_id_observations.observed_bucket_membership"
-census_digest = "23964c81140fca35c8862a3449930714dcb1d39cc41eae0d9cb601f3eb443eb2"
+census = "docs/receipts/data/c0-as7-ps3-portrait-census.csv"
+census_digest = "46cb5f1c1dde59d3c1b2ef20552987dd562564ddd60f5c78e9c13b92da3b2732"
 scope = "inspected-corpus-invariant"
 corpus = "ps3-installed-copy"
 
@@ -227,29 +245,29 @@ The directory spellings are the real ones. The C0-POR1 package scoped `playerhea
 
 [[target_profile.path_family.observed_bucket]]
 directory = "p0_4000"
-census = "docs/receipts/data/c0-por1-portrait-specimens.json#path_and_id_observations.observed_bucket_membership"
-census_digest = "23964c81140fca35c8862a3449930714dcb1d39cc41eae0d9cb601f3eb443eb2"
+census = "docs/receipts/data/c0-as7-ps3-portrait-census.csv"
+census_digest = "46cb5f1c1dde59d3c1b2ef20552987dd562564ddd60f5c78e9c13b92da3b2732"
 scope = "inspected-corpus-invariant"
 corpus = "ps3-installed-copy"
 
 [[target_profile.path_family.observed_bucket]]
 directory = "p4001_8000"
-census = "docs/receipts/data/c0-por1-portrait-specimens.json#path_and_id_observations.observed_bucket_membership"
-census_digest = "23964c81140fca35c8862a3449930714dcb1d39cc41eae0d9cb601f3eb443eb2"
+census = "docs/receipts/data/c0-as7-ps3-portrait-census.csv"
+census_digest = "46cb5f1c1dde59d3c1b2ef20552987dd562564ddd60f5c78e9c13b92da3b2732"
 scope = "inspected-corpus-invariant"
 corpus = "ps3-installed-copy"
 
 [[target_profile.path_family.observed_bucket]]
 directory = "p8001_12000"
-census = "docs/receipts/data/c0-por1-portrait-specimens.json#path_and_id_observations.observed_bucket_membership"
-census_digest = "23964c81140fca35c8862a3449930714dcb1d39cc41eae0d9cb601f3eb443eb2"
+census = "docs/receipts/data/c0-as7-ps3-portrait-census.csv"
+census_digest = "46cb5f1c1dde59d3c1b2ef20552987dd562564ddd60f5c78e9c13b92da3b2732"
 scope = "inspected-corpus-invariant"
 corpus = "ps3-installed-copy"
 
 [[target_profile.path_family.observed_bucket]]
 directory = "silhouettes"
-census = "docs/receipts/data/c0-por1-portrait-specimens.json#path_and_id_observations.observed_bucket_membership"
-census_digest = "23964c81140fca35c8862a3449930714dcb1d39cc41eae0d9cb601f3eb443eb2"
+census = "docs/receipts/data/c0-as7-ps3-portrait-census.csv"
+census_digest = "46cb5f1c1dde59d3c1b2ef20552987dd562564ddd60f5c78e9c13b92da3b2732"
 scope = "inspected-corpus-invariant"
 corpus = "ps3-installed-copy"
 
@@ -518,7 +536,16 @@ provenance = [
     "docs/receipts/c0-por1-portrait-measurements.md",
     "docs/receipts/c0-por1-r1-evidence-scope.md",
 ]
-note = "Observed placement in one installed copy, offered as a proposal. Promoting it needs evidence about what the game actually loads, including the role of `patch.big`."
+note = """
+Observed placement in one installed copy, offered as a proposal. C0-AS7 opened `patch.big` at the
+same copy's USRDIR root (SHA-256 d2d26273a742cc21667b56e483b089ae15c23b462c335bea2dcf38405dc9bbe0,
+an `EB\\0\\3` archive of the 16-byte-entry variant, 459 members): it carries 83 portrait members
+stored raw as `BIGF` under the SAME relative paths as the loose tree (58 `playerheads`, 25
+`playerheadssmall`); 23 of those paths also exist loose, and in every one of the 23 the loose file's
+bytes differ from the member's. So this copy holds two candidate sources for some ids and the
+proposal `loose-tree` describes only one of them. Promoting it needs evidence about what the game
+actually loads — a trace or load test — not another listing; see `[runtime_lookup]`.
+"""
 
 [target_profile.discovery.candidate.value]
 scope = "loose-tree"
@@ -530,7 +557,9 @@ state = "unknown"
 provenance = [
     "crates/tdb-canonical/src/asset_coverage_tests.rs#legacy_portrait_id_field_is_measured_on_the_anchor",
     "docs/audits/data/schema/ps3-nhllegacy.json#ubPc.lOnr",
-    "docs/receipts/data/c0-por1-portrait-specimens.json#path_and_id_observations",
+    "docs/receipts/data/c0-as7-ps3-portrait-census.csv",
+    "docs/receipts/data/c0-as7-ps3-portrait-join.csv",
+    "crates/tdb-canonical/src/asset_census_tests.rs#ps3_portrait_census_joins_to_the_legacy_anchor_and_the_join_record_matches",
 ]
 note = """
 The filename shape IS a corpus invariant: all 18 663 files match `p{digits}.big` or
@@ -540,9 +569,13 @@ policy that C0-POR1 had filled in with nothing behind it.
 
 C0-AS6 MEASURES the database half on the committed anchor `anchors/ps3/nhllegacy/databases/nhlng.db`
 (byte-identical to the Xbox 360 anchor — one SHA-256, asserted by the named case) and carries it as
-the candidate below. What it does NOT do is place any anchor id beside a file: the census records
-bucket membership as id RANGES, not as ids, so "id 4321 has a file" is not in any committed record
-and the block stays unknown. The `reject` policy is now grounded the way C0-AS4 grounded it for
+the candidate below. C0-AS7 then placed every anchor id beside the census of this copy, per id,
+and the join is what keeps the block UNKNOWN rather than what promotes it: of the 5 449 distinct
+non-zero ids the anchor stores, 4 500 name a loose current `playerheads` file and 949 do not —
+350 lie outside the observed regular ranges (12403..12814) and 599 lie inside them (1..12401) with
+no file in this copy. The binding "`ubPc.lOnr` = N names `p{N}.big`" therefore holds for most rows
+of this specimen and fails for 949 of them, which is not an inspected-corpus invariant, and the
+runtime's own lookup is unobserved. The `reject` policy is grounded the way C0-AS4 grounded it for
 jerseys: the anchor stores three portrait ids on two players each, so an ambiguous match is a
 live case and the contract's own rule (C4: never silently bind an ambiguous match) applies rather
 than being invented.
@@ -555,7 +588,10 @@ corpus = "ps3-installed-copy"
 provenance = [
     "crates/tdb-canonical/src/asset_coverage_tests.rs#legacy_portrait_id_field_is_measured_on_the_anchor",
     "docs/audits/data/schema/ps3-nhllegacy.json#ubPc.lOnr",
-    "docs/receipts/data/c0-por1-portrait-specimens.json#path_and_id_observations",
+    "docs/receipts/data/c0-as7-ps3-portrait-census.csv",
+    "docs/receipts/data/c0-as7-ps3-portrait-join.csv",
+    "docs/receipts/data/c0-as7-ps3-patch-members.csv",
+    "crates/tdb-canonical/src/asset_census_tests.rs#ps3_portrait_census_joins_to_the_legacy_anchor_and_the_join_record_matches",
 ]
 note = """
 PROPOSED, NOT OPERATIVE. MEASURED on the committed anchor by the named case (C0-AS6): `ubPc.lOnr`
@@ -566,11 +602,23 @@ census's observed bucket membership — `p0_4000` ids 1-3999, `p4001_8000` ids 4
 `p8001_12000` ids 8003-12401, `silhouettes` ids 60000-60003 — the anchor's distinct non-zero ids
 fall 1 313 / 1 201 / 2 585 into the three bucket ranges and NONE into the silhouette range, while
 350 distinct ids (12403..12814) lie ABOVE the highest id observed in either Gen7 copy: for those
-350 no portrait file was seen in this copy at all. `scope = specimen-observation` because the
-measurement is of the database bytes and of published ranges, not of a file beside an id.
-`confidence = measured` describes that measurement, not the file binding. To promote: a per-id
-census of the copy (ids, not ranges, with digests) joined to the anchor, and the 350 unmatched ids
-accounted for (absent, elsewhere, or in `patch.big`).
+350 no portrait file was seen in this copy at all.
+
+C0-AS7 DID THE PER-ID JOIN (the census and join records cited above, re-derived on every test run
+by the named case). Per folder of this copy: `playerheads` holds 9 228 current files over ids
+1-12401 plus 60000-60003, no id with two current files, 103 backup-labelled siblings, no `p0`;
+4 500 anchor ids have a current file, 949 do not — the 350 in 12403..12814 (OUTSIDE the observed
+regular ranges; not "above the silhouette range", which begins at 60000) and 599 inside 1..12401,
+listed by id in the join record; 4 728 current files name ids no anchor row stores.
+`playerheadssmall`: 9 229 files, 4 501 / 948 (350 + 598). `patch.big` (the D3 record) carries 58
+`playerheads` and 25 `playerheadssmall` members: 45 / 12 of them name anchor ids, 13 name ids no
+row stores (8323, 12508, and 12816-12832 — eleven ABOVE the anchor's highest id), and 33 / 1 of
+them are anchor ids that have NO loose file (28 of the 33 are among the 350, at 12633-12666). That
+leaves 916 / 947 anchor ids in neither the loose tree nor `patch.big`, 322 / 350 of them among the
+350. `scope = specimen-observation` because these are counts over one copy joined to one anchor;
+`confidence = measured` describes that join. The candidate is not promoted because the binding is
+not total on this specimen and the runtime's lookup is unobserved; what would promote it is a
+trace or load test showing the lookup, with the 949 accounted for by the game's own behaviour.
 """
 
 [target_profile.identity.candidate.value]
@@ -725,10 +773,19 @@ note = "Nothing was tested. No file was written, no replacement was installed an
 
 [target_profile.runtime_lookup]
 state = "unknown"
+provenance = [
+    "docs/receipts/data/c0-as7-ps3-patch-members.csv",
+    "docs/receipts/data/c0-as7-ps3-patch-overlap.csv",
+    "crates/tdb-canonical/src/asset_census_tests.rs#ps3_patch_members_overlap_the_loose_tree_as_the_record_says",
+]
 note = """
 THE BLOCKER `/2` HAD NOWHERE TO PUT. What the game loads, and what wins when two copies of an asset
-exist, is unknown on this target: `patch.big` sits at USRDIR root, was never opened, and could
-shadow or supersede every loose portrait in this copy. No trace, disassembly or load test exists.
+exist, is unknown on this target. C0-AS7 opened `patch.big` (USRDIR root; `EB\\0\\3`, 459 members,
+digest in the record): it holds 83 portrait members, 23 of which share a relative path with a loose
+file whose bytes differ, and 60 of which have no loose counterpart — so both `patch-member` and
+`loose-file` are live candidates for `source` and a `patch_precedence` exists to be determined. The
+archive's contents do not determine it: no trace, disassembly or load test exists, and a listing
+never can. No value is proposed.
 
 This is why `[discovery]` was demoted and stays demoted, and why `discover` and `install` are blocked
 here regardless of anything else in this file.
@@ -1082,7 +1139,12 @@ kind = "xbox360-tiled"
 
 [target_profile.discovery]
 state = "unknown"
-note = "A derived tree's loose-file placement is a property of the extraction. Establishing this needs the portrait members located inside the shipping archives."
+provenance = [
+    "docs/receipts/data/c0-as7-x360-cacherender-members.csv",
+    "docs/receipts/data/c0-as7-x360-nocacherender-members.csv",
+    "crates/tdb-canonical/src/asset_census_tests.rs#legacy_x360_member_tables_join_to_the_anchor_and_the_join_record_matches",
+]
+note = "A derived tree's loose-file placement is a property of the extraction. Establishing this needs the portrait members located inside the shipping archives. C0-AS7 listed two of the thirteen through the committed EB reader — `cacherender.big` (12 845 members) and `nocacherender.big` (3 237) — and NEITHER holds a `fe/ion/artassets` member: every member of both sits under `rendering/`. The portrait members are in one of the eleven archives not opened (the recorder's summary names `cache.big` / `nocache.big`), and that remains unobserved."
 
 [target_profile.identity]
 state = "unknown"
@@ -1193,7 +1255,7 @@ note = "C0-AS1's finding stands: the capability CSV's `install` column is the un
 
 [target_profile.runtime_lookup]
 state = "unknown"
-note = "Unknown, and further from an answer than on PS3: the portrait members were never located inside the shipping archives at all, so nothing is known about where the runtime reads them from or what a patch layer would do."
+note = "Unknown, and further from an answer than on PS3: the portrait members were never located inside the shipping archives at all (C0-AS7 established only that they are NOT in the two render archives), so nothing is known about where the runtime reads them from or what a patch layer would do."
 
 [[target_profile.operation]]
 operation = "discover"

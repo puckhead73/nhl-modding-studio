@@ -1,0 +1,48 @@
+{
+  "record": "c0-as7-portrait-census/1",
+  "package": "C0-AS7",
+  "label": "c0-as7-ps3-portrait-census",
+  "specimen": {
+    "corpus": "ps3-installed-copy",
+    "target": "nhllegacy-ps3",
+    "relative_root": "fe/ion/artassets",
+    "identity": "the copy's own PARAM.SFO (TITLE NHL Legacy, TITLE_ID BLUS31540, APP_VER 01.01) as recorded by C0-POR1 for this copy"
+  },
+  "tool": {
+    "crate": "tdb-canonical",
+    "module": "crates/tdb-canonical/src/asset_census.rs",
+    "module_sha256": "65d8fe4f80fc98e13f0627b14e9641d4ae7a86d3e8a8377872875801a6146eb5",
+    "example": "crates/tdb-canonical/examples/as7_portrait_census.rs",
+    "example_sha256": "914f083c99a3743e4d05347a556f428cf192a4f0eaf5000be17751e3a14d46f1",
+    "source_commit": "9e02acfe7e50e0737970fccf3b7d4321bef00f4b"
+  },
+  "counts": {
+    "files": 18663,
+    "by_folder_and_label": {
+      "playerheads": { "backup-labelled": 103, "current": 9228 },
+      "playerheadssmall": { "backup-labelled": 103, "current": 9229 }
+    },
+    "by_bucket": {
+      "playerheads/p0_4000": 3087,
+      "playerheads/p4001_8000": 3196,
+      "playerheads/p8001_12000": 3044,
+      "playerheads/silhouettes": 4,
+      "playerheadssmall/p0_4000": 3089,
+      "playerheadssmall/p4001_8000": 3196,
+      "playerheadssmall/p8001_12000": 3043,
+      "playerheadssmall/silhouettes": 4
+    },
+    "label_other": 0,
+    "not_bigf": 0,
+    "bigf_member_count_not_six": 0,
+    "bigf_without_refpack_declared_size": 0
+  },
+  "census_csv": "c0-as7-ps3-portrait-census.csv",
+  "census_csv_sha256": "46cb5f1c1dde59d3c1b2ef20552987dd562564ddd60f5c78e9c13b92da3b2732",
+  "limitations": [
+    "Every file under the two folders was opened read-only and hashed; the numeric id is read from the file name only. Nothing binds a name to a database field here — the join to the anchor is a separate, re-derivable record.",
+    "`label` is the file name's: `current` is `p<digits>.big`, `backup-labelled` is `p<digits>.big.bak`. Neither says who wrote the bytes or when.",
+    "The `bigf_*` and `texture_*` cells come from the archive's own member table and the RefPack header of member 3 (the texture position C0-POR1 measured); nothing was decompressed, so the declared size is what the header says, not a measured payload.",
+    "This copy was recorded by C0-POR1-R1 as an observed installed copy that is not established to be pristine or complete; `patch.big` at its root is measured separately (D3). The census describes this copy, not the target."
+  ]
+}
