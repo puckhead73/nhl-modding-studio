@@ -56,20 +56,21 @@ pub mod model;
 pub mod v1;
 
 pub use asset::{
-    asset_registry_population, asset_representation_completeness, block_states,
+    asset_bearing_families, asset_family_coverage, asset_registry_population,
+    asset_representation_completeness, block_states, family_category,
     operation_constraint_readiness, parse_asset_profile, select_variant, selected_variant,
     validate_asset_profile, AssetCandidate, AssetConstraint, AssetPopulation, AssetProfile,
     AssetVariant, AtlasValue, AudioValue, BlockState, CanonicalSource, CompressionValue,
-    ContainerLayer, ContainerValue, Corpus, DimensionsValue, DiscoveryValue, IdentityValue,
-    InstallValue, MeshLayoutValue, MipmapValue, ObservedBucket, OperationDecl, OperationReadiness,
-    PathFamily, PathRuleValue, PropertyEvidence, ProvenanceBridge, RasterValue, RigValue,
-    RuntimeLookupValue, SelectorClause, TargetProfile, TilingValue, UvValue, VariantQuery,
-    VariantSelection, VertexAttribute, ASSET_BLOCK, ASSET_FAMILY, ASSET_OPERATION, ATLAS_SHARING,
-    BRIDGE_METHOD, BUCKET_RESOLUTION, BUILD_IDENTIFICATION, CONSTRAINT_FORCE, CORPUS_ATTRIBUTION,
-    CORPUS_KIND, EVIDENCE_SCOPE, OPERATIVE_SCOPE, OPTIONAL_BLOCK_PROPERTY, PATCH_PRECEDENCE,
-    PLACEMENT_BLOCK, Q07A1_ASSET_REPRESENTATION, REQUIRABLE_BLOCK_PROPERTY, RUNTIME_SOURCE,
-    SCOPE_FORCE, SELECTOR_DIMENSION, UNATTRIBUTABLE_CORPUS_KIND, VARIANT_BLOCK,
-    VARIANT_OPTIONAL_BLOCK,
+    ContainerLayer, ContainerValue, Corpus, DimensionsValue, DiscoveryValue, FamilyCoverage,
+    FamilyCoverageStatus, IdentityValue, InstallValue, MeshLayoutValue, MipmapValue,
+    ObservedBucket, OperationDecl, OperationReadiness, PathFamily, PathRuleValue, PropertyEvidence,
+    ProvenanceBridge, RasterValue, RigValue, RuntimeLookupValue, SelectorClause, TargetProfile,
+    TilingValue, UvValue, VariantQuery, VariantSelection, VertexAttribute, ASSET_BEARING_CATEGORY,
+    ASSET_BLOCK, ASSET_FAMILY, ASSET_OPERATION, ATLAS_SHARING, BRIDGE_METHOD, BUCKET_RESOLUTION,
+    BUILD_IDENTIFICATION, CONSTRAINT_FORCE, CORPUS_ATTRIBUTION, CORPUS_KIND, EVIDENCE_SCOPE,
+    FAMILY_CATEGORY, OPERATIVE_SCOPE, OPTIONAL_BLOCK_PROPERTY, PATCH_PRECEDENCE, PLACEMENT_BLOCK,
+    Q07A1_ASSET_REPRESENTATION, REQUIRABLE_BLOCK_PROPERTY, RUNTIME_SOURCE, SCOPE_FORCE,
+    SELECTOR_DIMENSION, UNATTRIBUTABLE_CORPUS_KIND, VARIANT_BLOCK, VARIANT_OPTIONAL_BLOCK,
 };
 pub use asset_reuse::{
     resolve_target, reuse_source, shared_declarations, ResolvedTarget, ReuseError,
@@ -443,6 +444,9 @@ pub enum Rule {
     // ------------------------------------------------- the asset profile layer
     /// A profile registering itself against a family the QA matrix does not track.
     AssetFamilyUnknown,
+    /// A profile registering itself against a tracked family that is a database, save or
+    /// onboarding workflow - a category with no raster, mesh or audio to profile (C0-AS6).
+    AssetFamilyNotAssetBearing,
     /// Two `[[target_profile]]` entries for the same target in one profile.
     DuplicateTargetProfile,
     /// Two `[[canonical_source]]` entries sharing a role.
@@ -575,6 +579,7 @@ impl Rule {
             Rule::DerivationUnexplained => "derivation-unexplained",
             Rule::UnresolvedTransformConflict => "unresolved-transform-conflict",
             Rule::AssetFamilyUnknown => "unknown-asset-family",
+            Rule::AssetFamilyNotAssetBearing => "asset-family-not-asset-bearing",
             Rule::DuplicateTargetProfile => "duplicate-target-profile",
             Rule::DuplicateSourceRole => "duplicate-source-role",
             Rule::AssetBoundsInconsistent => "asset-bounds-inconsistent",
@@ -2053,6 +2058,8 @@ pub fn registry_population<'a>(adapters: impl IntoIterator<Item = &'a Adapter>) 
         .collect()
 }
 
+#[cfg(test)]
+mod asset_coverage_tests;
 #[cfg(test)]
 mod asset_resolution_tests;
 #[cfg(test)]

@@ -134,6 +134,53 @@ pub const ASSET_FAMILY: &[&str] = &[
     "assets-audio",
 ];
 
+/// Which **coverage category** each of the fourteen families belongs to (package C0-AS6).
+///
+/// The QA matrix tracks fourteen feature families on one axis, and seven of them are not asset
+/// families at all: two are database workflows, three are save-container workflows and two are
+/// onboarding workflows. They have no raster, mesh or audio to profile, and an output profile for
+/// one of them would be a category error rather than coverage - so [`validate_asset_profile`]
+/// refuses it ([`Rule::AssetFamilyNotAssetBearing`]). Coverage of the registry is therefore
+/// reported over the **seven asset-bearing families**, never over fourteen, and the seven
+/// workflow categories are owned by other roadmap deliverables (C1 database parity, C2 saves and
+/// containers, onboarding under C1/C6), not by this registry.
+pub const FAMILY_CATEGORY: &[(&str, &str)] = &[
+    ("db-presentation", "database"),
+    ("db-operations", "database"),
+    ("save-raw-db", "save"),
+    ("save-inner-container", "save"),
+    ("save-outer-package", "save"),
+    ("onboarding-install", "onboarding"),
+    ("onboarding-localization", "onboarding"),
+    ("assets-portraits", "asset"),
+    ("assets-logos", "asset"),
+    ("assets-jerseys", "asset"),
+    ("assets-equipment", "asset"),
+    ("assets-heads", "asset"),
+    ("assets-arenas", "asset"),
+    ("assets-audio", "asset"),
+];
+
+/// The category a family may carry an asset output profile under.
+pub const ASSET_BEARING_CATEGORY: &str = "asset";
+
+/// The category of one family, or `None` for a family the matrix does not track.
+pub fn family_category(family: &str) -> Option<&'static str> {
+    FAMILY_CATEGORY
+        .iter()
+        .find(|(f, _)| *f == family)
+        .map(|(_, c)| *c)
+}
+
+/// The families that can carry an asset output profile, in matrix order.
+pub fn asset_bearing_families() -> Vec<&'static str> {
+    FAMILY_CATEGORY
+        .iter()
+        .filter(|(_, c)| *c == ASSET_BEARING_CATEGORY)
+        .map(|(f, _)| *f)
+        .collect()
+}
+
 /// Closed vocabulary: what kind of thing a canonical source is. It decides which constraint blocks
 /// a target profile may even declare.
 pub const ASSET_CLASS: &[&str] = &["raster", "mesh", "audio"];
@@ -1550,6 +1597,20 @@ pub fn validate_asset_profile(profile: &AssetProfile) -> Vec<Finding> {
             &profile.family,
             format!("not one of the {} tracked families", ASSET_FAMILY.len()),
         ));
+    } else if let Some(category) = family_category(&profile.family) {
+        // A tracked family that is a database, save or onboarding workflow has nothing an output
+        // profile could describe. Refusing it keeps "families without a profile" a statement
+        // about the seven asset-bearing families and nothing else.
+        if category != ASSET_BEARING_CATEGORY {
+            out.push(finding(
+                Rule::AssetFamilyNotAssetBearing,
+                &profile.family,
+                format!(
+                    "a `{category}` workflow family; only the {} asset-bearing families carry an asset output profile",
+                    asset_bearing_families().len()
+                ),
+            ));
+        }
     }
 
     let classes = validate_sources(profile, &mut out);
@@ -4368,6 +4429,99 @@ pub fn operation_constraint_readiness(
 }
 
 // ==================================================== coverage, reported apart
+
+/// How far one asset-bearing family has come in the registry. The three states are ordered and
+/// **none of them is support**: a populated family has at least one operative block on one
+/// declared target, which authorises reproducing an observed source format there and nothing
+/// more.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+pub enum FamilyCoverageStatus {
+    /// No committed profile for the family.
+    Absent,
+    /// A profile exists and every block on every target is unknown or a specimen observation:
+    /// the gap is enumerated in the contract's terms, and nothing decides a Build.
+    Represented,
+    /// At least one declared (not by-reference) target carries an operative established block.
+    Populated,
+}
+
+impl FamilyCoverageStatus {
+    pub fn as_str(self) -> &'static str {
+        match self {
+            FamilyCoverageStatus::Absent => "absent",
+            FamilyCoverageStatus::Represented => "represented",
+            FamilyCoverageStatus::Populated => "populated",
+        }
+    }
+}
+
+/// One asset-bearing family's registry coverage (package C0-AS6). Reported **only** for the
+/// families in [`ASSET_BEARING_CATEGORY`]: a database, save or onboarding family never appears
+/// here, because "no profile" is not a gap for a family that cannot carry one.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct FamilyCoverage {
+    pub family: String,
+    pub status: FamilyCoverageStatus,
+    /// Targets that declare their own definitions.
+    pub declared_targets: Vec<String>,
+    /// Targets registered by reference (`/5` `reuses`), reported apart: they inherit definitions
+    /// and establish nothing of their own.
+    pub by_reference_targets: Vec<String>,
+    /// Operative established blocks summed over the declared targets (target level and variants).
+    pub operative_constraints: usize,
+    /// Established blocks at specimen scope, summed over the declared targets. True statements
+    /// about named files, operative for nothing.
+    pub specimen_observations: usize,
+    /// Unknown blocks carrying a non-operative proposal, summed over the declared targets.
+    pub candidate_constraints: usize,
+}
+
+/// Registry coverage over the seven asset-bearing families, in matrix order, from the profiles
+/// given. Synthetic fixtures are excluded exactly as in [`asset_registry_population`]; a
+/// workflow-category profile, which validation refuses anyway, is ignored rather than counted.
+pub fn asset_family_coverage<'a>(
+    profiles: impl IntoIterator<Item = &'a AssetProfile>,
+) -> Vec<FamilyCoverage> {
+    let profiles: Vec<&AssetProfile> = profiles.into_iter().filter(|p| !p.synthetic).collect();
+    let population = asset_registry_population(profiles.iter().copied());
+    asset_bearing_families()
+        .into_iter()
+        .map(|family| {
+            let rows: Vec<&AssetPopulation> =
+                population.iter().filter(|p| p.family == family).collect();
+            let declared: Vec<&AssetPopulation> = rows
+                .iter()
+                .copied()
+                .filter(|p| p.reused_from.is_none())
+                .collect();
+            let has_profile = profiles.iter().any(|p| p.family == family);
+            let operative: usize = declared
+                .iter()
+                .map(|p| p.operative_constraints + p.operative_variant_constraints)
+                .sum();
+            let status = if !has_profile {
+                FamilyCoverageStatus::Absent
+            } else if operative > 0 {
+                FamilyCoverageStatus::Populated
+            } else {
+                FamilyCoverageStatus::Represented
+            };
+            FamilyCoverage {
+                family: family.to_string(),
+                status,
+                declared_targets: declared.iter().map(|p| p.target.clone()).collect(),
+                by_reference_targets: rows
+                    .iter()
+                    .filter(|p| p.reused_from.is_some())
+                    .map(|p| p.target.clone())
+                    .collect(),
+                operative_constraints: operative,
+                specimen_observations: declared.iter().map(|p| p.specimen_observations).sum(),
+                candidate_constraints: declared.iter().map(|p| p.candidate_constraints).sum(),
+            }
+        })
+        .collect()
+}
 
 /// **Format completeness** — how many of the asset constraints Q07a.1 names the profile format can
 /// express. A statement about the schema, and about nothing else.

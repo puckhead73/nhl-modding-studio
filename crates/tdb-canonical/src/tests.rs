@@ -2352,6 +2352,7 @@ fn every_rule_has_a_stable_diagnosable_name() {
         Rule::CandidateIncomplete,
         Rule::UnresolvedTransformConflict,
         Rule::DerivationUnexplained,
+        Rule::AssetFamilyNotAssetBearing,
     ];
     let names: BTreeSet<&str> = all.iter().map(Rule::as_str).collect();
     assert_eq!(names.len(), all.len(), "rule names are unique");

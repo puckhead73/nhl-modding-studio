@@ -307,10 +307,36 @@ fn the_committed_profile_establishes_only_what_its_evidence_scope_supports() {
             t.raster.established().is_none(),
             "{name}: raster is per variant"
         );
-        assert!(
-            t.identity.candidate.is_none(),
-            "{name}: identity carried a fabricated ambiguity policy"
+        // R1 removed a `reject` ambiguity policy C0-POR1 had filled in with nothing behind it.
+        // C0-AS6 put a candidate back - MEASURED on the committed anchor (`ubPc.lOnr`, with the
+        // collisions the anchor stores grounding `reject` the way C0-AS4 grounded it for jerseys)
+        // - and the block itself stays unknown: no anchor id was placed beside a file.
+        let identity = t
+            .identity
+            .candidate
+            .as_ref()
+            .unwrap_or_else(|| panic!("{name}: the C0-AS6 identity candidate"));
+        assert!(t.identity.established().is_none(), "{name}: identity");
+        assert_eq!(identity.confidence.as_deref(), Some("measured"), "{name}");
+        assert_eq!(
+            identity.scope.as_deref(),
+            Some("specimen-observation"),
+            "{name}: the database bytes were measured, not a file beside an id"
         );
+        assert!(
+            identity
+                .provenance
+                .iter()
+                .any(|p| p.ends_with("#legacy_portrait_id_field_is_measured_on_the_anchor")),
+            "{name}: the candidate names the case that measured it"
+        );
+        let value = identity.value.as_ref().expect("a value");
+        assert_eq!(
+            (value.key.as_str(), value.ambiguity.as_str()),
+            ("numeric-id", "reject"),
+            "{name}"
+        );
+        assert!(value.source.starts_with("ubPc.lOnr"), "{name}");
         assert!(t.path_rule.established().is_none(), "{name}: path_rule");
         assert!(t.install.established().is_none(), "{name}: install");
         // Both portrait path families are recorded, and neither resolves.
@@ -571,8 +597,8 @@ fn no_committed_asset_profile_is_a_synthetic_fixture() {
         seen += 1;
     }
     assert_eq!(
-        seen, 3,
-        "three families have a profile (portraits populated; logos and jerseys represented, C0-REG2); eleven do not"
+        seen, 4,
+        "four of the seven asset-bearing families have a profile (portraits populated; logos,          jerseys and equipment represented); heads, arenas and audio do not - see          asset_coverage_tests"
     );
 }
 

@@ -16,9 +16,15 @@
 #              only portrait source in the repository was an operations CSV, which is `asserted`.
 #   C0-POR1    read bytes from three supplied private copies and promoted 14 blocks on 3 targets.
 #   C0-POR1-R1 found most of those over-scoped and cut them to 3, on one target.
-#   C0-AS3     this revision. Schema `asset-output-profile/3`. It does not re-measure anything: it
-#              represents what POR1/R1 already recorded at the scope that evidence actually has,
-#              which `/2` could not express without over-claiming.
+#   C0-AS3     Schema `asset-output-profile/3`. It does not re-measure anything: it represents what
+#              POR1/R1 already recorded at the scope that evidence actually has, which `/2` could
+#              not express without over-claiming.
+#   C0-AS5     Schema `/5`; `legacyrecomp-recomp` registered by reference (Q47).
+#   C0-AS6     this revision (profile_version 5). MEASURES the database half of `[identity]` on
+#              the committed anchors of all three declared targets and carries it as a CANDIDATE
+#              on each (`ubPc.lOnr`, with the collisions the anchor actually stores). Establishes
+#              nothing: the census holds id RANGES, not ids, so no anchor id was placed beside its
+#              file. See docs/receipts/c0-as6-asset-family-coverage.md.
 #
 #   docs/receipts/c0-por1-portrait-measurements.md   (measurements, with an appended corrections log)
 #   docs/receipts/c0-por1-r1-evidence-scope.md       (the correction, and the rules used below)
@@ -101,11 +107,12 @@
 #
 # COVERAGE. One family, three declared target profiles and one by reference (`legacyrecomp-recomp`
 # reuses `nhllegacy-xbox360`, C0-AS5 / Q47). Six established constraints: four on
-# `nhllegacy-ps3` at target level and in one of its variants, none anywhere else. See
+# `nhllegacy-ps3` at target level and in one of its variants, none anywhere else. C0-AS6 adds a
+# measured identity CANDIDATE on each declared target and establishes nothing further. See
 # docs/validation/c0-06-canonical-project-and-adapters.md.
 
 schema = "asset-output-profile/5"
-profile_version = 4
+profile_version = 5
 family = "assets-portraits"
 note = """
 Everything established here is established at `observed-source-format`, on one target, over one
@@ -520,13 +527,56 @@ recursive = true
 
 [target_profile.identity]
 state = "unknown"
+provenance = [
+    "crates/tdb-canonical/src/asset_coverage_tests.rs#legacy_portrait_id_field_is_measured_on_the_anchor",
+    "docs/audits/data/schema/ps3-nhllegacy.json#ubPc.lOnr",
+    "docs/receipts/data/c0-por1-portrait-specimens.json#path_and_id_observations",
+]
 note = """
 The filename shape IS a corpus invariant: all 18 663 files match `p{digits}.big` or
-`p{digits}.big.bak`, zero exceptions. Two things still block the block. The binding of that number to
-a database field (`ubPc.lOnr` is used for this elsewhere in the application) was never examined. And
-`IdentityValue.ambiguity` is a Studio behaviour choice rather than anything measurable here —
-C0-POR1 filled it with `reject`; R1 removed the candidate rather than carry a fabricated field.
+`p{digits}.big.bak`, zero exceptions. What blocked the block until C0-AS6 was that the binding of
+that number to a database field had never been examined; R1 also removed a `reject` ambiguity
+policy that C0-POR1 had filled in with nothing behind it.
+
+C0-AS6 MEASURES the database half on the committed anchor `anchors/ps3/nhllegacy/databases/nhlng.db`
+(byte-identical to the Xbox 360 anchor — one SHA-256, asserted by the named case) and carries it as
+the candidate below. What it does NOT do is place any anchor id beside a file: the census records
+bucket membership as id RANGES, not as ids, so "id 4321 has a file" is not in any committed record
+and the block stays unknown. The `reject` policy is now grounded the way C0-AS4 grounded it for
+jerseys: the anchor stores three portrait ids on two players each, so an ambiguous match is a
+live case and the contract's own rule (C4: never silently bind an ambiguous match) applies rather
+than being invented.
 """
+
+[target_profile.identity.candidate]
+confidence = "measured"
+scope = "specimen-observation"
+corpus = "ps3-installed-copy"
+provenance = [
+    "crates/tdb-canonical/src/asset_coverage_tests.rs#legacy_portrait_id_field_is_measured_on_the_anchor",
+    "docs/audits/data/schema/ps3-nhllegacy.json#ubPc.lOnr",
+    "docs/receipts/data/c0-por1-portrait-specimens.json#path_and_id_observations",
+]
+note = """
+PROPOSED, NOT OPERATIVE. MEASURED on the committed anchor by the named case (C0-AS6): `ubPc.lOnr`
+(metadata name `artid`, 16 bits) over 5 632 player rows stores 5 450 distinct values in 0..12814;
+180 rows store 0 (a value — no absence code is established); no row stores the all-ones pattern;
+ids 2, 7 and 12 are each stored by two rows (a live ambiguity, hence `reject`). Set against the
+census's observed bucket membership — `p0_4000` ids 1-3999, `p4001_8000` ids 4001-7998,
+`p8001_12000` ids 8003-12401, `silhouettes` ids 60000-60003 — the anchor's distinct non-zero ids
+fall 1 313 / 1 201 / 2 585 into the three bucket ranges and NONE into the silhouette range, while
+350 distinct ids (12403..12814) lie ABOVE the highest id observed in either Gen7 copy: for those
+350 no portrait file was seen in this copy at all. `scope = specimen-observation` because the
+measurement is of the database bytes and of published ranges, not of a file beside an id.
+`confidence = measured` describes that measurement, not the file binding. To promote: a per-id
+census of the copy (ids, not ranges, with digests) joined to the anchor, and the 350 unmatched ids
+accounted for (absent, elsewhere, or in `patch.big`).
+"""
+
+[target_profile.identity.candidate.value]
+key = "numeric-id"
+source = "ubPc.lOnr (artid): one portrait id per player row"
+ambiguity = "reject"
 
 [target_profile.container]
 state = "established"
@@ -1036,7 +1086,26 @@ note = "A derived tree's loose-file placement is a property of the extraction. E
 
 [target_profile.identity]
 state = "unknown"
-note = "All 18 457 archives match `p{digits}.big`, zero exceptions — but the binding of that number to a database field was never examined, and `ambiguity` is a behaviour choice rather than a measurement."
+provenance = [
+    "crates/tdb-canonical/src/asset_coverage_tests.rs#legacy_portrait_id_field_is_measured_on_the_anchor",
+    "docs/audits/data/schema/xbox360-nhllegacy.json#ubPc.lOnr",
+]
+note = "All 18 457 archives match `p{digits}.big`, zero exceptions. The database half is MEASURED by C0-AS6 on `anchors/xbox360/nhllegacy/databases/nhlng.db` — the same bytes as the PS3 anchor — and carried as the candidate below; the file half is unobserved per id, and this corpus is a derived tree besides, so the block stays unknown."
+
+[target_profile.identity.candidate]
+confidence = "measured"
+scope = "specimen-observation"
+corpus = "xbox360-compiled-tree"
+provenance = [
+    "crates/tdb-canonical/src/asset_coverage_tests.rs#legacy_portrait_id_field_is_measured_on_the_anchor",
+    "docs/audits/data/schema/xbox360-nhllegacy.json#ubPc.lOnr",
+]
+note = "PROPOSED, NOT OPERATIVE. The same measurement as on `nhllegacy-ps3` (the two anchors are byte-identical): 5 632 rows, 5 450 distinct `ubPc.lOnr` values in 0..12814, 180 zeros, ids 2 / 7 / 12 each on two rows, 350 distinct ids above the highest id the census observed in this tree (12401). Recorded against the derived tree's census ranges for the same reason as on PS3; nothing here becomes attributable by being measured on the anchor, because the FILE side is still this tree."
+
+[target_profile.identity.candidate.value]
+key = "numeric-id"
+source = "ubPc.lOnr (artid): one portrait id per player row"
+ambiguity = "reject"
 
 [target_profile.container]
 state = "unknown"
@@ -1303,7 +1372,26 @@ note = "The tree is an extraction; where these files live in the shipped title w
 
 [target_profile.identity]
 state = "unknown"
-note = "All 10 421 filenames match `p{digits}.gnf` with zero exceptions, but the binding to a database field was never examined and `ambiguity` is not measurable here."
+provenance = [
+    "crates/tdb-canonical/src/asset_coverage_tests.rs#legacy_portrait_id_field_is_measured_on_the_anchor",
+    "docs/audits/data/schema/ps4-nhl21.json#ubPc.lOnr",
+]
+note = "All 10 421 filenames match `p{digits}.gnf` with zero exceptions. The database half is MEASURED by C0-AS6 on `anchors/ps4/nhl21/databases/nhl_game.db` and carried below; the census records no id range for this tree, so not even a range comparison exists, and the block stays unknown."
+
+[target_profile.identity.candidate]
+confidence = "measured"
+scope = "specimen-observation"
+corpus = "ps4-extracted-tree"
+provenance = [
+    "crates/tdb-canonical/src/asset_coverage_tests.rs#legacy_portrait_id_field_is_measured_on_the_anchor",
+    "docs/audits/data/schema/ps4-nhl21.json#ubPc.lOnr",
+]
+note = "PROPOSED, NOT OPERATIVE. MEASURED on the committed anchor: `ubPc.lOnr` (`artid`, 16 bits) over 7 247 player rows stores 7 244 distinct values in 1..21813, no zeros, no all-ones; ids 5, 12 and 16 are each stored by two rows (the live ambiguity behind `reject`). The tree holds 10 421 files against 7 244 distinct ids, so at least 3 177 files name no rostered player — or the id space is not what this proposes; nothing here decides which. To promote: the tree's ids (not just its count) joined to the anchor."
+
+[target_profile.identity.candidate.value]
+key = "numeric-id"
+source = "ubPc.lOnr (artid): one portrait id per player row"
+ambiguity = "reject"
 
 [target_profile.container]
 state = "unknown"
