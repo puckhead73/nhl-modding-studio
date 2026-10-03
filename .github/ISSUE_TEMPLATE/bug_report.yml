@@ -1,0 +1,167 @@
+name: Bug report
+description: Report a problem found while testing NHL Modding Studio.
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use one report per issue and give it a short, descriptive title. "Unknown" or "Not applicable" is fine where needed.
+        For layout bugs, attach the whole Studio window. For incorrect data or assets, include the affected entity's name and ID if shown.
+
+  - type: input
+    id: build
+    attributes:
+      label: Studio build
+      description: Use the release/archive name if the internal application version differs.
+      placeholder: "e.g. v0.1 / r76"
+    validations:
+      required: true
+
+  - type: input
+    id: windows
+    attributes:
+      label: Windows version
+      placeholder: "e.g. Windows 11 24H2"
+    validations:
+      required: true
+
+  - type: input
+    id: game-platform
+    attributes:
+      label: Game and platform
+      placeholder: "e.g. NHL 21 / PS4, or Not applicable"
+    validations:
+      required: true
+
+  - type: input
+    id: display
+    attributes:
+      label: Window size and display scaling
+      description: Useful for clipping, scrolling, or other layout problems.
+      placeholder: "e.g. 1200 x 800 window, 125% display scaling"
+
+  - type: dropdown
+    id: project-source
+    attributes:
+      label: How was the project started?
+      options:
+        - Fresh baseline
+        - My files
+        - Existing project
+        - Not applicable
+        - Unknown
+    validations:
+      required: true
+
+  - type: dropdown
+    id: inputs
+    attributes:
+      label: Inputs attached
+      description: Select all that apply; leave empty if none or unknown.
+      multiple: true
+      options:
+        - Database
+        - Dictionary
+        - Roster save
+        - Game assets
+
+  - type: dropdown
+    id: fresh-project
+    attributes:
+      label: Does it also happen in a new project?
+      options:
+        - Not tested
+        - "Yes"
+        - "No"
+        - Not applicable
+      default: 0
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Include the page, selected item, and actions that trigger the issue.
+      placeholder: |
+        1. Open...
+        2. Select...
+        3. Click...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+      placeholder: What should have happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual result and exact error
+      description: Describe what happened and paste the complete error message, if any.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: frequency
+    attributes:
+      label: Frequency
+      options:
+        - Every time
+        - Sometimes
+        - Once
+        - Unknown
+    validations:
+      required: true
+
+  - type: input
+    id: restart
+    attributes:
+      label: Does restarting Studio change the result?
+      placeholder: "Yes / No / Not tested — add details if useful"
+
+  - type: dropdown
+    id: impact
+    attributes:
+      label: Impact
+      description: Select all that apply.
+      multiple: true
+      options:
+        - Cosmetic
+        - Inconvenient
+        - Blocks a task
+        - Crash
+        - Incorrect or lost data
+        - Unknown
+    validations:
+      required: true
+
+  - type: textarea
+    id: workaround
+    attributes:
+      label: Can you continue working? Any workaround?
+
+  - type: textarea
+    id: persistence
+    attributes:
+      label: Save or deployment details
+      description: Fill this in only if saving, packaging, installation, deployment, or recovery is involved.
+      placeholder: |
+        Action used: Save project / Build package / Install or Deploy / Restore
+        What was changed:
+        Did the change persist after closing and reopening?
+        Were any destination files affected?
+
+  - type: textarea
+    id: attachments
+    attributes:
+      label: Screenshots, recordings, logs, or example files
+      description: Drag files here. Include the smallest example that reproduces the problem, if shareable. Remove personal information from diagnostics before uploading.
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Other notes
+      placeholder: Anything unusual immediately before the issue?

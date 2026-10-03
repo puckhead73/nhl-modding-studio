@@ -1,0 +1,2 @@
+# Route the normal New issue flow through the bug-report form.
+blank_issues_enabled: false
