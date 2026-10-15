@@ -108,7 +108,13 @@ historical players on computed overall, backed by a `legends_cache.db` sidecar.
 Shipped and committed on the current branch:
 
 - **Texture read and write** through `tdb-rx2`: the Xbox 360 BIGF to RefPack to XPR2 portrait chain,
-  texlib RX2 DXT, PS4 GNF, BC4 and BC5, and full mip-chain regeneration on replace.
+  texlib RX2 DXT, PS4 GNF, BC4 and BC5. *(Corrected 15 Oct 2026, PS4 roadmap P0-6: the original
+  "full mip-chain regeneration on replace" did not hold everywhere.)* Mip handling differs by path:
+  - **PS4 GNF:** rebuilds the whole chain on same-size replaces since 13 Oct 2026; before that only
+    the base level was rewritten. Unmeasured layouts still get a disclosed base-only write.
+  - **Xbox 360 `RW4xb2` DXT:** a disclosed partial replacement at the shipped size. Mipped rasters
+    refuse a resize.
+  - **GNF and XPR2 resize paths:** re-emit the chain.
 - **Portraits and logos** browse, decode, preview, export, and replace on extracted files.
 - **Team Outfits and Uniforms:** a full-kit 3D preview on the shared 122-bone bind-pose rig, jersey
   and equipment textures, goalie gear swap-in, and a live nameplate editor with a verified jersey
@@ -159,8 +165,13 @@ parity, and it gates write paths for every title.
 - **Texture Lab** is still a placeholder route. The codec layer beneath it exists.
 - **Localization editing**, the type-66 pool-fit string table, is not built. Localization databases
   are discovered and listed only.
-- **Audio (Phase 6.6)** is entirely unbuilt, including its bank-layout spike. That covers menu,
-  in-game, play-by-play, and public-address preview and replace with bundled codecs.
+- **Audio (Phase 6.6)** has no replacement or encoding anywhere. *(Corrected 15 Oct 2026, PS4
+  roadmap P0-6: this snapshot said audio was "entirely unbuilt".)* Read-side work has landed since:
+  - **Gen7:** EALayer3 speech and SFX diagnostic preview, EA-XMA preview through the bundled XMA
+    helper, goal-horn source listing, and the name-call / speech catalogue on NHL 11–Legacy.
+  - **PS4:** SND10 bank listing, EA-MP3 diagnostic preview (NHL 15–17), rink-announcer EA-Speex
+    preview, goal-horn and song catalogues (NHL 17–21) and commentary contexts.
+  - **Not built:** NHL 18–21 EA-Opus speech is refused, and there is no PS4 player-name binding.
 - **Portrait and logo import (Phase 6.1):** the universal player slug and EA/FHM normalization are
   already implemented and used by Player Assets/headmesh export. The source-library index, portrait
   import/match review, on-import format converter, and logo icon generator remain open. Decode,

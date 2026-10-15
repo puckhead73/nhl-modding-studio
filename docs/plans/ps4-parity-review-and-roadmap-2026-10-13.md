@@ -24,11 +24,14 @@ There are three main gaps:
 3. **No PS4 audio is editable, and most of it cannot even be previewed.** NHL 18–21 speech uses
    EA-Opus, which Studio refuses to preview, and no encoder exists for EA-MP3 or EA-Opus.
 
-There are also four correctness defects to fix first:
-- the GNF same-size replace leaves the old image in the lower mips;
-- the PS4 trailer CRC is written inside the trailer on the older roster-save path;
-- the committed NHL 20 anchor is really NHL 19;
-- the NHL 15 save codec and the save-matrix test are uncommitted, and that test fails.
+There are also four correctness defects to fix first. *(Status 15 Oct: only the NHL 20 anchor
+remains; see Wave 0.)*
+- the GNF same-size replace leaves the old image in the lower mips (fixed, P0-1);
+- the PS4 trailer CRC is written inside the trailer on the older roster-save path (**not a
+  defect**: disproved by test, P0-2);
+- the committed NHL 20 anchor is really NHL 19 (open, P0-4);
+- the NHL 15 save codec and the save-matrix test are uncommitted, and that test fails (resolved,
+  P0-3).
 
 Apart from the NHL21-E1 league rename the user accepted, **no PS4 cell is game-verified**. Every
 status below is implemented or automated-tested at most.
@@ -83,7 +86,7 @@ column is game-verified unless explicitly said.
 | Bundled dictionary | ⛔ NHL 19, 21 (no `eng_us` anchor); NHL 20 unavailable | ✅ | |
 | Roster save extract/edit/repack | ✅T NHL 16–21; NHL 15 chunkzip **uncommitted** | ✅T (v2/v4; v1 experimental) | Structural only; record-header tag, `INDEX`/`param.sfo` 🔬 |
 | Save Editor (identify, overlay, edit) | ✅T | ✅T | Growth refused when a trailer is present |
-| **Trailer CRC on NHL 17–19 roster path** | ⛔ **defect** | — | EOF CRC lands inside the 18–20-byte trailer; Save Editor avoids it, older roster/package path does not |
+| Trailer CRC on NHL 17–19 roster path | ✅T (P0-2) | — | Not a defect: `Project` splits the trailer at the declared TDB size, so the EOF CRC lands at the TDB's end. Roster-save growth rewrites the trailer's embedded size (`48a9e85`) |
 | Mode saves (Season/Franchise/BeAGM) | 🟨 read-only / 🔬 roster source | 🟨 | Save-matrix classification conflicts with the Save Editor record |
 | Settings/Profile saves | ⛔ opaque | ⛔ (container v5) | |
 | NHL 20/21 vanilla roster save | missing-fixture | — | Only ThreeOnThree saves committed |
@@ -108,7 +111,7 @@ column is game-verified unless explicitly said.
 | GNF BC4/BC5 | 🟨 small BC5 de-tile drifts | ✅ | |
 | GNF BC6H | ⛔ UnsupportedFormat | — | 2,821 files; size rule modelled, decoder absent |
 | GNF two-stream (NHL 15: 1,115 files; NHL 19: 5,342) | 🟨 first stream decode; write refused | — | |
-| **GNF same-size replace** | ✅T/✅P, **defect: lower mips not regenerated** | ✅T (full chain) | `gnf.rs:266-291`; resize path regenerates correctly |
+| GNF same-size replace | ✅T/✅P (full chain since P0-1) | ✅T (full chain) | `gnf::replace_chain_same_size`; unmeasured layouts get a disclosed base-only write |
 | GNF resize | ✅P (6 real NHL 16/21 sources) | 🟨 (mipped XPR refused) | Runtime card R31-GNF-1 open |
 | Texture history/undo | ✅T | ✅T | |
 
@@ -182,7 +185,7 @@ acceptance under shadPS4. A wave closes per target, never by a representative ti
 | P0-3 | Review and commit the NHL 15 chunkzip save codec; regenerate the save matrix through the authorized generator path (not hand-edited) so its test passes | D (generator run needs explicit authorization) | Save matrix shows NHL 15 roster as edit-roundtrip. **Complete 15 Oct (approved by user):** codec, test and CSV landed in `d5576cc`. `tdb-savedata` 15/15 and `save_matrix_over_all_fixtures` pass against the committed CSV (compare mode, so no regeneration was needed). NHL 15 ROSTER and BEAGM rows read `edit-roundtrip` |
 | P0-4 | Replace the aliased `anchors/ps4/nhl20` with the genuine CUSA15439 DB/dictionary (owner decision on EA-data policy); make NHL 19/20 adapters operative | D + decision | NHL 20 tests run unignored |
 | P0-5 | Resolve the NHL 19 title id (CUSA11126 vs 11116) and the NHL 16 team-name binding | R → D | Discovery and adapter agree with installs |
-| P0-6 | Correct stale docs: `ps4-gnf-texture.md`, `ps4-rsf-mesh.md`, `arena_assets.rs` header, `assets-logos.toml:44`, STATE-OF-THE-REPO audio/mip claims, `cross-platform-format-audit.md` | D | No stale "read-only"/"excluded" claims |
+| P0-6 | Correct stale docs: `ps4-gnf-texture.md`, `ps4-rsf-mesh.md`, `arena_assets.rs` header, `assets-logos.toml:44`, STATE-OF-THE-REPO audio/mip claims, `cross-platform-format-audit.md` | D | No stale "read-only"/"excluded" claims. **Done 15 Oct (uncommitted, pending review):** all six corrected, plus `05-save-data.md` (PS4 pointer), `ps4-save-container.md` (template claim corrected, roster-trailer section added), register FR15 (resolution noted) and this roadmap's own P0-1/P0-2 rows. Historical records were annotated, not rewritten |
 
 ### Wave 1 — Delivery path: make PS4 edits reach the game
 

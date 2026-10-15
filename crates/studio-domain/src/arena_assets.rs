@@ -27,9 +27,11 @@
 //!
 //! Venues are **named directories** (`rendering/stadiums/<market>/…`) and no arena column reaches
 //! those names (`arenaname` never matches; `cityname` matches only 22 directories per title). The
-//! binding runs through the Attrib / VLT vault, which Studio does not read yet, so on PS4 this
-//! module lists the shipped venue directories and the numbered `stadiums/common/` ice families as
-//! evidence, labels `arenaartid` a candidate key, and claims no binding.
+//! binding runs through the Attrib / VLT vault. Studio has a vault reader (`ps4_vault`, used for
+//! heads, hair and goalie masks), but this module does not walk the vault live: it lists each
+//! arena's vault level from the research-derived table `defs/arena/ps4-venue-levels.json`
+//! (R73), alongside the shipped venue directories and the numbered `stadiums/common/` ice
+//! families as evidence. It offers no reassignment.
 //!
 //! Nothing here writes; nothing claims what the console draws.
 
@@ -96,7 +98,7 @@ pub struct AssetFamily {
 pub enum ArenaAssetContract {
     /// Gen7 file-name rule (R62); `jumbotron` false on NHL 09 / 10 / 11.
     Gen7 { extension: String, jumbotron_shipped: bool, source: String },
-    /// PS4: named venue directories, vault-bound (R64); Studio does not read the vault.
+    /// PS4: named venue directories, vault-bound (R64); listed from the R73 table, not a live vault walk.
     Ps4VaultReference { reason: String },
     /// Nothing measured (NHL 07 / 08, unknown titles).
     Unmeasured { reason: String },
@@ -121,7 +123,7 @@ pub fn arena_asset_contract(game_id: Option<&str>, platform: Platform) -> ArenaA
         Platform::Xbox | Platform::Recomp => "rx2",
         Platform::Ps4 => {
             return ArenaAssetContract::Ps4VaultReference {
-                reason: "PS4 venues are named directories under `rendering/stadiums/` selected through the Attrib / VLT vault (research 2026-09-21 pm handoff R64): no arena column names them, and Studio does not read the vault yet — the shipped venue directories and the numbered `stadiums/common/` ice families are listed as evidence only".into(),
+                reason: "PS4 venues are named directories under `rendering/stadiums/` selected through the Attrib / VLT vault (research 2026-09-21 pm handoff R64): no arena column names them, and this card does not read the vault live — each arena's vault level comes from a research-derived table, and the shipped venue directories and the numbered `stadiums/common/` ice families are listed as evidence only".into(),
             }
         }
     };

@@ -1,5 +1,28 @@
 # Cross-Platform Format Audit (Xbox360 + PS4)
 
+> **Superseded statements (15 Oct 2026, PS4 roadmap P0-6).** The body below is kept as the
+> original evidence record. Several of its scope and status lines no longer hold:
+>
+> - **"NHL16 is excluded from the project."** Superseded. PS4 scope is NHL 15–21: seven shipping
+>   targets, NHL 15 and NHL 16 included ([scope](../01-scope-and-compatibility.md)).
+>   - NHL 16 has its own anchor. Its roster save is a bare LZ4 frame with no `01` codec byte.
+>   - NHL 15's roster save is `chunkzip`, editable since `d5576cc`
+>     ([save container spec](../formats/ps4-save-container.md)).
+> - **"Write-back … is deferred."** Superseded, and implemented at structural level:
+>   - PS3/Xbox 360 v2/v4 container repack;
+>   - PS4 record-stream rebuild with LZ4 / `chunkzip` re-compression;
+>   - NHL 17–19 roster trailer handling (`48a9e85`).
+>
+>   None of this is accepted in game; the [save matrix](data/save-matrix.csv) records the
+>   current per-fixture results.
+> - **"Xbox360 save container ⬜ net-new."** Superseded: it is the PS3 v1/v2/v4 container (as
+>   this audit itself found), and it is implemented.
+> - **"The live edited roster on PS4 likely lives in the save data, with `nhl_game.db` as the
+>   base/template."** Superseded as a working assumption. Studio edits `nhl_game.db` as the main
+>   database, the same role as `nhlng.db`. NHL21-E1 changed a league name in `nhl_game.db`
+>   (installed inside `inxp_00.big`), and the user accepted it in game. Roster saves remain a
+>   separate, editable file.
+
 > **Verification status: VERIFIED.** The TDB v6 read+write core extends across the whole matrix.
 > Checked the Xbox360 (nhl10–15+legacy) and PS4 (**nhl17–21**) anchors against the verified spec
 > ([../formats/tdb-v6-format.md](../formats/tdb-v6-format.md)). Every DB parses; size + CRC verify.

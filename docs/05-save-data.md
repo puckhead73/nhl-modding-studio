@@ -3,6 +3,11 @@
 > **Superseded for PS3 by the VERIFIED spec:** [formats/ps3-save-container.md](formats/ps3-save-container.md)
 > (structure + read/extract verified against every anchor save). This draft remains for general/
 > cross-platform context.
+>
+> **Superseded for PS4 (15 Oct 2026, P0-6)** by [formats/ps4-save-container.md](formats/ps4-save-container.md).
+> That spec covers NHL 15 `chunkzip`, NHL 16 bare LZ4, NHL 17–21 `01`+LZ4 and the NHL 17–19
+> roster trailer. Per-fixture status lives in [audits/data/save-matrix.csv](audits/data/save-matrix.csv).
+> Statements below marked `[UNVERIFIED]` about PS4 are not current.
 
 > Engine home: the `tdb-savedata` crate ([DESIGN.md](DESIGN.md#engine-crate-set-consolidated)).
 > Sequencing: [ROADMAP.md](ROADMAP.md) (PS3/Xbox parity in Phases 1–8; **PS4 is net-new in Phase 9**).

@@ -41,7 +41,9 @@
 # WHAT NONE OF IT IS: a census of logo files with digests, a member listing of any shipping archive,
 # a decode of any archived (as opposed to extracted) logo, a load test, or anything on any target
 # other than NHL Legacy Xbox 360. PS3 Legacy's installed copy (the one attributable portrait corpus)
-# was inspected for portraits only, and no PS4 logo path exists in repository code at all.
+# was inspected for portraits only. (Corrected 15 Oct 2026, PS4 roadmap P0-6: when this profile was
+# written no PS4 logo path existed in repository code; PS4 league/team logo resolution now lives in
+# studio-domain `league_logos.rs` / `team_logos.rs`, but this profile still declares no PS4 target.)
 #
 # ---------------------------------------------------------------------------------------------
 # SCOPE DISCIPLINE, APPLIED

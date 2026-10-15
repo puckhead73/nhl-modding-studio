@@ -4,10 +4,19 @@ The texture format for the PS4 "Kettle" asset stack (NHL 15 → 21) — player-h
 maps, hair, logos, stadium art. The single largest asset class (≈49k files on
 NHL 15). Each `.gnf` wraps one GNM (GCN/Liverpool) texture.
 
-Status: **decode verified** for BC1/BC2/BC3 and **BC7** (`crates/tdb-rx2/src/gnf.rs`)
-— a real Ovechkin head `cm` map and a real NHL 16 BC7 player portrait both
-reconstruct exactly (seamless, no tile drift). BC4/BC5 (normal/roughness) decode is
-a known follow-up (see [Open items](#open-items)). All values little-endian.
+Status (corrected 15 Oct 2026, PS4 parity roadmap P0-6):
+- **Decode verified** for BC1/BC2/BC3 and **BC7** (`crates/tdb-rx2/src/gnf.rs`). A real
+  Ovechkin head `cm` map and a real NHL 16 BC7 player portrait both reconstruct exactly
+  (seamless, no tile drift).
+- BC4/BC5 decode through dedicated decoders, but the small (512-px) BC5 de-tile still
+  drifts.
+- BC6H (`0x28`) is refused.
+- Only the first stream of a two-stream file is decoded.
+- **Write implemented and automated-tested**, not runtime-accepted:
+  - same-size replace in every decoded format, regenerating the full mip chain;
+  - resize under the measured header rule.
+
+  See [Write](#write). All values little-endian.
 
 ## Header (verified on real NHL 15 files)
 
@@ -117,10 +126,46 @@ Keyed by the player-bio `lOnr` (portrait id), single size (no separate HUD set).
     padding rule is still unknown.
   - Impact is limited to a panel thumbnail: only the diffuse `cm` binds to the
     model, and it renders correctly.
-- **Mip levels beyond base.** Only the base mip is de-tiled today.
-- **Write-back.** Read-only. Re-tiling + GNF re-wrap for texture replacement is a
-  separate effort, and depends on whether ShadPS4 honors loose `.gnf` overrides
-  vs requiring repack into the `EB\0\3` `game*.big`.
+- **Mip levels beyond base (decode).** Only the base mip is de-tiled for preview/export.
+  Writes handle the whole chain (below).
+- **BC6H (`0x28`).** 2 821 files across the titles. The size rule models its 16-byte
+  block, but there is no decoder or encoder, so decode and resize refuse.
+- **Two-stream files** (NHL 15: 1 115, NHL 19: 5 342). Only the first stream decodes.
+  Resize refuses them, and same-size writes touch only the first stream's base level
+  (disclosed, see below).
+- **Runtime acceptance.** No GNF write has been verified in game. Resized output is card
+  R31-GNF-1. Whether shadPS4 or a console honours loose `.gnf` overrides is unknown; the
+  archive member route writes into the `EB\0\3` archives the game reads.
+
+## Write
+
+Every decoded format is writable. Encoders:
+- BC1–3: texpresso, via `tdb_archive_codec::compress_bc`;
+- BC7: mode 6, `tdb_rx2::bc7`;
+- BC4/BC5: `tdb_rx2::bc45`.
+
+Entry point: `studio_domain::replace_gnf_texture_noted`. One policy, `gnf_write_policy`,
+decides both the write and the pre-Apply plan, so the Replace dialog shows the same refusal
+or disclosure the write returns.
+
+- **Same size, measured layout** (passes `check_resize_rule`, more than one level): every
+  level is re-encoded from the replacement through `gnf::replace_chain_same_size`. The
+  256-byte header is kept verbatim and edge-tile padding is preserved, so an unchanged chain
+  reproduces the file byte for byte. This was added 13 Oct 2026; before then only the base
+  level was rewritten and the old image survived in the smaller mips.
+- **Same size, single level:** base rewrite (`gnf::replace_base_mip`), which is complete.
+- **Same size, unmeasured layout with lower levels** (multi-stream, cube, …): base only. The
+  plan and the result both carry a disclosure that the smaller levels keep the original
+  image.
+- **Changed size:** `gnf::replace_resized` recomputes `width`/`height`, `last_level`,
+  `pitch`, `d7` and `streamSize`, and re-emits the micro-tiled chain. It refuses non-tiling-13,
+  cube, volume, BC6H and multi-stream files, and any size the header cannot hold. Tested on
+  six real NHL 16/21 BC1/BC3/BC5 sources.
+
+Tests: `gnf::resize_tests::*`, `assets::tests::ps4_gnf_*` (including
+`ps4_gnf_same_size_replace_rewrites_every_mip_level`), `studio-api` `loose_texture_route`,
+`texture_review_binding`, `gnf_real_resize` and `nhl15..21_ps4_textures_qa` (private
+fixtures, ignored by default).
 
 ## Related
 

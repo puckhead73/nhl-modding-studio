@@ -61,8 +61,34 @@ Decompressing the frame yields a **little-endian TDB v6** at offset 0:
 - Records decode correctly — `StEO` (arenas) → "Anaheim, CA", "Winnipeg, MB", "Calgary, AB", … (the
   31 NHL cities), confirming the LE read path end-to-end.
 
-> **This is where the live PS4 roster lives** — recall the base `nhl_game.db` holds default/template
-> values; the edited roster is the LE TDB inside this LZ4 record.
+> **This is the PS4 roster save's database.** *(Corrected 15 Oct 2026, P0-6: an earlier line
+> called the base `nhl_game.db` a default/template only.)* Studio edits `nhl_game.db` as the main
+> database, in the role `nhlng.db` plays on PS3/Xbox 360. NHL21-E1 changed it inside `inxp_00.big`
+> and the user accepted the result in game. The roster save is a separate, editable file.
+
+## Data after the TDB (the roster trailer)
+
+The decompressed roster payload can carry bytes after the TDB's declared size (`db_size` at TDB
+`+0x08`). Studio splits them off at that size when it opens the save, edits only the TDB (so every
+TDB CRC, including EOF, is computed at the TDB's own end) and re-appends them when it saves
+(`studio_domain::Project`, `Source::Ps4Save`).
+
+| Save (anchor) | Bytes after the TDB | Content |
+|---|---|---|
+| NHL 17 `RosterCustom0` | 20 | `D9 2E B7 58` · `00 00 00 00` · **`u64` LE = TDB size** · `02 00 01 00` |
+| NHL 18 / 19 `RosterCustom0` | 18 | `D9 2E B7 58` · `00 00 00 00` · **`u64` LE = TDB size** · `01 00` |
+| NHL 18 / 20 / 21 `ThreeOnThree0` | 15–17 k | JSON (`{"DefaultPlayers":…`) |
+| NHL 15 / 16 BeAGM, NHL 16 Season | 160–370 k | mostly zero padding |
+| NHL 15 / 16 ROSTER | 0 | — |
+
+The embedded size equals the TDB size on all three roster anchors (measured 13–14 Oct 2026).
+When an edit changes the TDB length (for example capacity normalization), Studio rewrites that
+`u64` **only** when the trailer has exactly this form and the stored size equals the old length.
+The tail bytes (`02 00 01 00` / `01 00`, meaning unknown) are kept verbatim. Every other trailer
+form refuses a size change. Tests: `studio-domain` `session.rs`
+`ps4_roster_edit_keeps_the_trailer_outside_the_crc_scope` and
+`ps4_roster_growth_rewrites_the_trailer_size` (`48a9e85`). Runtime acceptance of a grown save is
+**unverified**.
 
 ## Verified vs deferred
 

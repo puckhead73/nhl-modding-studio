@@ -184,8 +184,20 @@ decoder skips these (they are not full submeshes).
   one INDX; the greedy validator assigns it to the first eye, leaving the second
   without triangles. Low impact (geometry is intact); revisit with the `TIEW`
   table.
-- **Write-back.** Read-only today. An RSF re-emit (for mesh replacement) is a
-  separate effort, mirroring the RW4 `container.rs`/`pack.rs` write path.
+- **Write-back** (corrected 15 Oct 2026, P0-6). This is no longer read-only at the codec
+  level.
+  - `crates/tdb-rx2/src/mcd_write.rs` is a bounded, fail-closed **editor**, not a general
+    serializer. It tiles the file into typed and opaque regions, so a no-op serialize is
+    byte-identical. It edits vertex positions only, and only for fingerprinted donors
+    (`nhl19-jack_eichel-base`, `nhl19-jack_eichel-patch91`). It is covered by synthetic
+    tests.
+  - `crates/tdb-headmesh/src/pack_mcd.rs` packs a converted head into such a donor, keeping
+    the donor's topology and weights.
+  - It is used by the head-mesh workstream's library and examples. The NHL 19 head imports
+    the user reported working in game were installed by out-of-tree scripts.
+  - **There is no Studio route.** Mesh replacement in Studio waits for the external
+    head-converter integration (CLAUDE.md headmesh direction).
+  - Topology change, weight transfer and non-donor files are refused.
 
 ## Related
 
